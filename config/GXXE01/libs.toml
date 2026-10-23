@@ -308,6 +308,9 @@ cflags = [
 [[lib.object]]
 name = "game/menuInfoWindow.cpp"
 completed = true
+# The message control list loop keeps its natural register schedule only
+# with the peephole pass off.
+extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
 name = "game/menuPtSpriteWork.cpp"
