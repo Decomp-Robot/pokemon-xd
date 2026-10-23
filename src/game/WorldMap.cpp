@@ -1,78 +1,87 @@
 #include <WorldMap.h>
 
-extern f32 lbl_804E7E90;
-extern f32 lbl_804EA704;
-extern const f32 lbl_804EBEEC;  /* 0.0f */
-extern const f32 lbl_804EBEE8;  /* 2*pi */
-extern const f32 lbl_804EBEF0;  /* pi/2 */
-extern const f32 lbl_804EBEF4;  /* 3*pi/2 */
-extern const f32 lbl_804EBEF8;  /* 1.0f */
-extern const f32 lbl_804EBEFC;  /* 60.0f */
-extern const f32 lbl_804EBF20;  /* pi */
-extern const f32 lbl_804EBF24;  /* 0.25f */
-extern const f32 lbl_804EBF00;  /* 0.5f */
-extern const f32 lbl_804EBF10;  /* pi/180 */
-extern const f32 lbl_804EBF14;
-extern const f32 lbl_804EBF18;
-extern const f32 lbl_804EBF1C;
-extern const f32 lbl_804E7E88;
-extern const f32 lbl_804E7E8C;
-extern f32 lbl_804E7E94;
-extern const f32 lbl_804E7E98;
-extern const f32 lbl_804E7E9C;
-extern f32 lbl_804E7EA4;
-extern const f32 lbl_804E7EAC;
-extern bool lbl_804E7EA0;
-extern u8 lbl_804E7EA8;
-extern u8 lbl_804E7EB0;
-extern u8 lbl_804E7EB1;
-extern u8 lbl_804E7EB2;
-extern const u8 lbl_804E7EB3;
-extern bool lbl_804EA708;
-extern u8 lbl_804EA709;
-extern u8 lbl_804EA70A;
-extern const s16 lbl_804EA700;
-extern const u8 lbl_804EA6FE;
-extern const s16 lbl_80428080[0x20];
-extern u32 lbl_804EA6F8;
-extern WorldMapAnimeRecord* lbl_804E7E80[2];
-extern WorldMapScooterData lbl_803122F8[7];
-extern GSgfxLayerID lbl_804EFC90;
-extern GSgfxLayerID lbl_804EFC94;
-extern void* lbl_804E893C;
+extern f32 worldMapCamAccel;
+extern f32 worldMapCamSpeed;
+/* Float constants of the map module's shared sdata2 pool. */
+extern const f32 worldMapFloatZero;          /* 0.0f */
+extern const f32 worldMapFloatOne;           /* 1.0f */
+extern const f32 worldMapFloatHalf;          /* 0.5f */
+extern const f32 worldMapPi;                 /* pi */
+extern const f32 worldMapTwoPi;              /* 2*pi */
+extern const f32 worldMapHalfPi;             /* pi/2 */
+extern const f32 worldMapThreeHalfPi;        /* 3*pi/2 */
+extern const f32 worldMapFloatQuarter;       /* 0.25f */
+extern const f32 worldMapDegToRad;           /* pi/180 */
+/* Move-demo camera projection: scale and screen centre of the offscreen pass. */
+extern const f32 worldMapProjectionScale;    /* -240.0f */
+extern const f32 worldMapScreenCenterX;      /* 320.0f */
+extern const f32 worldMapScreenCenterY;      /* 240.0f */
+/* The move demo ends this many frames before the map motion finishes. */
+extern const f32 worldMapDemoEndLeadFrames;  /* 60.0f */
+/* Maximum ribbon distance CheckPadIndex links a pad direction through. */
+extern const f32 worldMapRibbonDistMax;
+extern f32 worldMapPadAngleMax;
+extern const f32 worldMapPadWindowAngle;
+extern const f32 worldMapPadWindowStep;
+extern f32 worldMapDemoSpeed;
+extern const f32 worldMapDemoGlow;
+extern bool worldMapHeroVisible;
+extern u8 worldMapDemoEarlyEnd;
+extern u8 worldMapGlowParam0;
+extern u8 worldMapGlowParam2;
+extern u8 worldMapGlowParam4;
+extern const u8 worldMapScooterFree[0x05];
+extern bool worldMapDemoLoop;
+extern u8 worldMapGlowParam1;
+extern u8 worldMapGlowParam3[0x06];
+extern const s16 worldMapCursorCnt;
+extern const u8 worldMapMenuOpen;
+extern const s16 worldMapCursorTable[0x20];
+extern u32 worldMapMoveDemoActive;
+extern WorldMapAnimeRecord* worldMapAnimeTables[2];
+extern WorldMapScooterData worldMapScooterData[7];
+extern GSgfxLayerID worldMapModelLayer;
+extern GSgfxLayerID worldMapScooterLayer;
+
+/* Save block the scooter types are unlocked against; the flag value the last
+ * scooters need sits at +0x888. The rest of the block is not recovered. */
+struct WorldMapUnlockData {
+    u8 _000[0x888];              // 0x000-0x887: unknown.
+    u32 scooterUnlockFlagValue;  // 0x888: flag value the special scooters need.
+};
+extern WorldMapUnlockData* worldMapScooterUnlockData;
 
 extern "C" long getRibbonCnt(WorldMap* map);
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
-extern "C" void zz_010f6b0_(tagWINDOW_WORK* window, long a);
+extern "C" void menuCursorNormal(tagWINDOW_WORK* window, long a);
 extern "C" u16 windowGetKeyRepeat();
 extern "C" s8 fadeCheck(long a);
 extern "C" void fadeSet(long a, f32 b);
 extern "C" s32 windowGetActiveID();
-extern "C" s32 menuOpenCustom(s32 menu, s32 window, void* work, ...);
-extern "C" void menuClose(s32 menu);
-extern "C" void menuCloseSync(s32 menu, s32 a);
-extern "C" void zz_005ee78_(long a);
-extern "C" u8 zz_005ee80_();
+extern "C" int menuOpenCustom(int menu, int window, void* work, int a, int b, int c, ...);
+extern "C" int menuClose(int menu);
+extern "C" int menuCloseSync(int menu, int a);
+extern "C" void menuScriptSetWorldMapFlag(long a);
+extern "C" u8 menuScriptGetWorldMapFlag();
 extern "C" void msgctrlSetValue(long win, long value);
 extern "C" void floorPop();
 extern "C" void heroMovePoolCounter(long a, long b);
-extern "C" void _recoveryEventSetSE__FUl(unsigned long id);
+/* Recovery event sound helper of the camera play-back system. */
+void _recoveryEventSetSE(unsigned long id);
 extern "C" void GSthreadSwitch();
 extern "C" void GSfsysFree(long id);
 extern "C" void GSfsysPreRead(long id);
-extern "C" void* zz_roomID_get_map_data(void* res);
-extern "C" unsigned long zz_room_data_get_fsys_gid_for_language(void* data);
-extern "C" Hero* zz_get_trainer_data_start_offset(long a, long b);
+extern "C" void* roomIDGetMapData(void* res);
+extern "C" unsigned long roomDataGetFsysGidForLanguage(void* data);
+extern "C" Hero* getTrainerDataStartOffset(long a, long b);
 extern "C" void* GSresGetResource(unsigned long id, unsigned long res);
 extern "C" void GSsndPlayNow(long id);
-extern "C" f32 zz_00133ac_(WorldMap* map);
-extern "C" void zz_01202e0_(void* p, long a);
+extern "C" f32 worldMapGetFrameSec(WorldMap* map);
+extern "C" void floorUnlinkWithSE(void* p, long a);
 extern "C" void floorSetFadeScript(long a, long b);
-extern "C" long zz_current_map_get_group_id();
+extern "C" long getCurrentMapGroupId();
 extern "C" void GSmemFree(void* p);
-extern "C" void* __nw__FUl(unsigned long size);
-extern "C" void __destroy_new_array(void* p, void* dtor);
 extern "C" void* GSresGetResourceAllGroup(void* res);
 extern "C" void GSresFreeResourceAllGroup(void* res);
 extern "C" void GSresFreeResource(long id, unsigned long res);
@@ -87,8 +96,8 @@ extern "C" void* GScameraGetProjMatrixPtr(void* cam);
 extern "C" void GSparticleGeneratorSetCamera(void* gen, void* cam);
 extern "C" void GSgfxVideoSetLockFrameRate(long rate);
 extern "C" void GSgfxLayerFindByID(long id);
-extern "C" void zz_00ebff8_(void* cam);
-extern "C" void zz_00f765c_(unsigned long layer, void* cam);
+extern "C" void GScameraIsAnimationRunning(void* cam);
+extern "C" void GSgfxLayerSetCamera(unsigned long layer, void* cam);
 extern "C" unsigned long floorOpenModel(WorldMap* map, unsigned long id);
 extern "C" void GSmodelSetShadowFlags(void* res, long flags);
 extern "C" void GSmodelSetShadowLight(void* res, void* light);
@@ -96,8 +105,8 @@ extern "C" void GSmodelSetShadowSurface(void* res, long a, void* b);
 extern "C" void GSmodelSetBoundCheck(void* res, long a);
 extern "C" unsigned long GSflagGet(long flag);
 extern "C" unsigned long HSD_Rand();
-extern "C" u8 zz_019e000_(long id);
-extern "C" void zz_009e3b0_(WorldMap* map, unsigned long a, long b);
+extern "C" u8 GSfsysWait(long id);
+extern "C" void ReleaseModelPartPaticle(WorldMap* map, unsigned long a, long b);
 
 extern "C" double atan2(double y, double x);
 extern "C" double tan(double x);
@@ -106,15 +115,70 @@ extern "C" void PSMTXMultVec(void* mtx, GSvec* src, GSvec* dst);
 extern "C" f32 PSVECDistance(GSvec* a, GSvec* b);
 extern "C" void* memset(void* dst, long c, unsigned long n);
 
-/* Empty map helper; the original build left a single blr here. */
-extern "C" void zz_0010558_(WorldMap* map)
+/* Window key bits (tagWINDOW_KEY::mKeyRepeat) the map cursor walks with. */
+enum {
+    worldMapKeyUp        = 0x01,
+    worldMapKeyDown      = 0x02,
+    worldMapKeyLeft      = 0x04,
+    worldMapKeyRight     = 0x08,
+    worldMapKeyUpLeft    = 0x05,
+    worldMapKeyUpRight   = 0x09,
+    worldMapKeyDownLeft  = 0x06,
+    worldMapKeyDownRight = 0x0A,
+};
+
+/* fsys group the map loads and frees its resources through. */
+enum { worldMapFsysID = 0x9E6 };
+
+/* Model ids of the move demo. Moving from the map whose model is
+ * worldMapDemoSetAMapModel plays the 0x1B4A set, every other map the
+ * 0x1FDA set; each set is the demo map model plus its three sub models. */
+enum {
+    worldMapDemoSetAMapModel = 0x1B4A0400,
+    worldMapDemoSetAModel0   = 0x1B4A1000,
+    worldMapDemoSetAModel1   = 0x1B4A1001,
+    worldMapDemoSetAModel2   = 0x1B4A1002,
+    worldMapDemoSetAModel3   = 0x1B4A1603,
+    worldMapDemoSetBModel0   = 0x1FDA1000,
+    worldMapDemoSetBModel1   = 0x1FDA1001,
+    worldMapDemoSetBModel2   = 0x1FDA1002,
+    worldMapDemoSetBModel3   = 0x1FDA1602,
+    /* Hero model hidden once the demo fade-out finished. */
+    worldMapHeroModel        = 0x18530200,
+};
+
+/* Particle resource groups the scooters emit from their three parts. */
+enum {
+    worldMapScooterParticle0        = 0x20D01400,
+    worldMapScooterParticle1        = 0x20CF1400,
+    worldMapSpecialScooterParticle0 = 0x213E1400,
+    worldMapSpecialScooterParticle1 = 0x213D1400,
+};
+
+/* The map menu window and the message shown once its move demo finished,
+ * the scooter recovery sounds (special scooters get their own) and the
+ * floor fade script started after the demo changed the map. */
+enum {
+    worldMapMenuID             = 0x54,
+    worldMapMsgWindowID        = 0x59,
+    worldMapDemoEndMsgID       = 0x1772,
+    worldMapScooterSeID        = 0x5B2,
+    worldMapSpecialScooterSeID = 0x5DC,
+    worldMapMoveFadeScriptID   = 0x5960008,
+};
+
+/* Save flag the scooter types are unlocked against (see getScooterType). */
+enum { worldMapScooterUnlockFlag = 0x3C4 };
+
+/* Empty map setup hook; Init calls it before the map data is read. */
+extern "C" void worldMapInitDummy(WorldMap* map)
 {
 }
 
 /* Forward pad input to the active window unless the map owns the menu. */
 void WorldMap::Button(tagWINDOW_WORK* window)
 {
-    if (_1C != 1) {
+    if (mMenuMode != 1) {
         menuButtonNormal(window);
     }
 }
@@ -123,9 +187,9 @@ void WorldMap::Button(tagWINDOW_WORK* window)
  * move demo is running. */
 void WorldMap::Cursor(tagWINDOW_WORK* window)
 {
-    if (lbl_804EA6FE != 0) {
-        zz_010f6b0_(window, 1);
-    } else if (mModelWork->_00 == 0) {
+    if (worldMapMenuOpen != 0) {
+        menuCursorNormal(window, 1);
+    } else if (mModelWork->mScriptFlag == 0) {
         ControlPad(window);
     }
 }
@@ -139,36 +203,38 @@ void WorldMap::ControlPad(tagWINDOW_WORK* window)
     s32 iconID;
     s8 next;
 
+    /* Reads the shared key state (the result stays unused), then walks its
+     * repeat bits. */
     windowGetKeyState();
     key = windowGetKeyRepeat();
     dir = -1;
-    iconID = lbl_80428080[mModelWork->cursor];
+    iconID = worldMapCursorTable[mModelWork->cursor];
 
     if (fadeCheck(0) != 0) {
         return;
     }
-    if (_1C == 1) {
+    if (mMenuMode == 1) {
         return;
     }
-    if (mModelWork->_48 == 1) {
+    if (mModelWork->mModelLoading == 1) {
         return;
     }
     GetModelID(iconID);
-    if (key == 8) {
+    if (key == worldMapKeyRight) {
         dir = 0;
-    } else if (key == 10) {
+    } else if (key == worldMapKeyDownRight) {
         dir = 1;
-    } else if (key == 2) {
+    } else if (key == worldMapKeyDown) {
         dir = 2;
-    } else if (key == 6) {
+    } else if (key == worldMapKeyDownLeft) {
         dir = 3;
-    } else if (key == 4) {
+    } else if (key == worldMapKeyLeft) {
         dir = 4;
-    } else if (key == 5) {
+    } else if (key == worldMapKeyUpLeft) {
         dir = 5;
-    } else if (key == 1) {
+    } else if (key == worldMapKeyUp) {
         dir = 6;
-    } else if (key == 9) {
+    } else if (key == worldMapKeyUpRight) {
         dir = 7;
     }
     WorldMapIconWork* icon = &mIcons[iconID];
@@ -176,12 +242,12 @@ void WorldMap::ControlPad(tagWINDOW_WORK* window)
     if (dir < 0) {
         return;
     }
-    next = icon->_14[dir];
+    next = icon->mNext[dir];
     if (next < 0) {
         return;
     }
-    for (s16 i = 0; i < lbl_804EA700; i++) {
-        if (lbl_80428080[i] == next) {
+    for (s16 i = 0; i < worldMapCursorCnt; i++) {
+        if (worldMapCursorTable[i] == next) {
             mModelWork->cursor = i;
             window->cursor = i;
             SetCursorPosition(i, 1);
@@ -196,20 +262,20 @@ void WorldMap::Release()
 {
     if (mModelWork->mScooterModel != 0) {
         for (s32 i = 0; i < 3; i++) {
-            if (mModelWork->_84[i] != 0) {
-                zz_009e3b0_(this, mModelWork->_84[i], 1);
+            if (mModelWork->mParticleGen[i] != 0) {
+                ReleaseModelPartPaticle(this, mModelWork->mParticleGen[i], 1);
             }
         }
         ModelDetach(mModelWork->mScooterModel);
-        if (lbl_804E7EB3 != 0 && GSresGetResourceAllGroup((void*)mModelWork->mScooterModel) != 0) {
-            UnloadModel(0x9E6, ((WorldMapScooterData*)mModelWork->mScooter)->mModelRes);
+        if (worldMapScooterFree[0] != 0 && GSresGetResourceAllGroup((void*)mModelWork->mScooterModel) != 0) {
+            UnloadModel(worldMapFsysID, ((WorldMapScooterData*)mModelWork->mScooter)->mModelRes);
             GSresFreeResourceAllGroup((void*)mModelWork->mScooterMotion);
         }
-    } else if (mModelWork->_00 == 0) {
-        while (zz_019e000_(0x9E6) == 0) {
+    } else if (mModelWork->mScriptFlag == 0) {
+        while (GSfsysWait(worldMapFsysID) == 0) {
             GSthreadSwitch();
         }
-        GSresFreeResource(0x9E6, ((WorldMapScooterData*)mModelWork->mScooter)->mModelRes);
+        GSresFreeResource(worldMapFsysID, ((WorldMapScooterData*)mModelWork->mScooter)->mModelRes);
     }
     if (mModelWork != 0) {
         GSmemFree(mModelWork);
@@ -230,34 +296,34 @@ WorldMapIconWork::~WorldMapIconWork()
 }
 
 /* Draw the move-demo map: the offscreen model plus the four floor sub models
- * and their particle generators. */
+ * and their particle generators. Kept out of line so the per-frame move-demo
+ * loops stay small (see dbgMenuItemCreate.c for the same pragma). */
 #pragma dont_inline on
 void WorldMap::RenderMoveDemoModel()
 {
-    if (lbl_804EA6F8 != 0) {
-        u32 model = mModelWork->_54;
-        void* cam = (void*)mModelWork->mAnimeFrames;
+    if (worldMapMoveDemoActive != 0) {
+        u32 model = mModelWork->mDemoModel1;
+        void* cam = mModelWork->mAnimeCamera;
 
-        if (model == 0x1B4A1001 && mDemoEffect != 0) {
-            mDemoEffect->mIntensity = lbl_804E7EAC;
+        if (model == worldMapDemoSetAModel1 && mDemoEffect != 0) {
+            mDemoEffect->mIntensity = worldMapDemoGlow;
         }
         renderOffscreenData(mModelWork->mOffscreenAlpha);
         GSgfxLayerFindByID(0);
-        zz_00ebff8_(cam);
-        zz_00f765c_(floorOpenModel(this, mModelWork->_54), cam);
-        zz_00f765c_(floorOpenModel(this, mModelWork->_58), cam);
-        zz_00f765c_(floorOpenModel(this, mModelWork->mScooterModel), cam);
-        zz_00f765c_(floorOpenModel(this, mModelWork->_70), cam);
+        GScameraIsAnimationRunning(cam);
+        GSgfxLayerSetCamera(floorOpenModel(this, mModelWork->mDemoModel1), cam);
+        GSgfxLayerSetCamera(floorOpenModel(this, mModelWork->mDemoModel2), cam);
+        GSgfxLayerSetCamera(floorOpenModel(this, mModelWork->mScooterModel), cam);
+        GSgfxLayerSetCamera(floorOpenModel(this, mModelWork->mDemoMapModel), cam);
         for (s32 i = 0; i < 3; i++) {
-            if (mModelWork->_84[i] != 0) {
-                GSresGetResourceAllGroup((void*)mModelWork->_78[i]);
-                GSparticleGeneratorSetCamera((void*)mModelWork->_84[i], cam);
+            if (mModelWork->mParticleGen[i] != 0) {
+                GSresGetResourceAllGroup((void*)mModelWork->mParticleRes[i]);
+                GSparticleGeneratorSetCamera((void*)mModelWork->mParticleGen[i], cam);
             }
         }
         GScameraGetAnimFrame(cam);
     }
 }
-
 #pragma dont_inline reset
 
 /* Play the map-to-map move demo until its animation finished. */
@@ -274,75 +340,75 @@ void WorldMap::moveDemo(long from, long to)
 
     mDemoEffect = new glowEffect();
     GSgfxVideoSetLockFrameRate(1);
-    WorldMapIconWork* iconTo = &mIcons[lbl_80428080[to]];
-    WorldMapIconWork* iconFrom = &mIcons[lbl_80428080[from]];
+    WorldMapIconWork* iconTo = &mIcons[worldMapCursorTable[to]];
+    WorldMapIconWork* iconFrom = &mIcons[worldMapCursorTable[from]];
     angle = (f32)atan2(iconTo->screen.y - iconFrom->screen.y, iconTo->screen.x - iconFrom->screen.x);
-    if (angle < lbl_804EBEEC) {
-        angle = lbl_804EBEE8 + angle;
+    if (angle < worldMapFloatZero) {
+        angle = worldMapTwoPi + angle;
     }
-    if (!(angle >= lbl_804EBEF0 && angle < lbl_804EBEF4)) {
+    if (!(angle >= worldMapHalfPi && angle < worldMapThreeHalfPi)) {
         anime += 2;
     }
-    data = SearchData(lbl_80428080[from]);
+    data = SearchData(worldMapCursorTable[from]);
     mModelWork->mMapModelID = data->mModelID;
-    if (data->mModelID == 0x1B4A0400) {
-        mModelWork->_50 = 0x1B4A1000;
-        mModelWork->_54 = 0x1B4A1001;
-        mModelWork->_58 = 0x1B4A1002;
-        mModelWork->_5C = 0x1B4A1603;
-        mModelWork->mAnime = (u8*)lbl_804E7E80[0] + anime * 0x10;
+    if (data->mModelID == worldMapDemoSetAMapModel) {
+        mModelWork->mDemoModel0 = worldMapDemoSetAModel0;
+        mModelWork->mDemoModel1 = worldMapDemoSetAModel1;
+        mModelWork->mDemoModel2 = worldMapDemoSetAModel2;
+        mModelWork->mDemoModel3 = worldMapDemoSetAModel3;
+        mModelWork->mAnime = &worldMapAnimeTables[0][anime];
     } else {
-        mModelWork->_50 = 0x1FDA1000;
-        mModelWork->_54 = 0x1FDA1001;
-        mModelWork->_58 = 0x1FDA1002;
-        mModelWork->_5C = 0x1FDA1602;
-        mModelWork->mAnime = (u8*)lbl_804E7E80[1] + anime * 0x10;
+        mModelWork->mDemoModel0 = worldMapDemoSetBModel0;
+        mModelWork->mDemoModel1 = worldMapDemoSetBModel1;
+        mModelWork->mDemoModel2 = worldMapDemoSetBModel2;
+        mModelWork->mDemoModel3 = worldMapDemoSetBModel3;
+        mModelWork->mAnime = &worldMapAnimeTables[1][anime];
     }
     setNullModel();
     readScooter();
     GSthreadSwitch();
-    SetModel((unsigned long)zz_current_map_get_group_id(), mModelWork->mMapModelID, true);
+    SetModel((unsigned long)getCurrentMapGroupId(), mModelWork->mMapModelID, true);
     GSthreadSwitch();
     ObjectVisibility(mModelWork->mMapModelID, true);
-    mModelWork->mOffscreenAlpha = lbl_804EBEF8;
+    mModelWork->mOffscreenAlpha = worldMapFloatOne;
     initializeOffscreenData();
-    if (mModelWork->_54 == 0x1B4A1001 && mDemoEffect != 0) {
-        mDemoEffect->mIntensity = lbl_804EBEEC;
-        mDemoEffect->_10 = lbl_804E7EB0;
-        mDemoEffect->_11 = lbl_804EA709;
-        mDemoEffect->_12 = lbl_804E7EB1;
-        mDemoEffect->_13 = lbl_804EA70A;
-        mDemoEffect->_14 = lbl_804E7EB2;
+    if (mModelWork->mDemoModel1 == worldMapDemoSetAModel1 && mDemoEffect != 0) {
+        mDemoEffect->mIntensity = worldMapFloatZero;
+        mDemoEffect->mParam0 = worldMapGlowParam0;
+        mDemoEffect->mParam1 = worldMapGlowParam1;
+        mDemoEffect->mParam2 = worldMapGlowParam2;
+        mDemoEffect->mParam3 = worldMapGlowParam3[0];
+        mDemoEffect->mParam4 = worldMapGlowParam4;
         mDemoEffect->Start();
     }
     resA = GSresGetResourceAllGroup((void*)((WorldMapScooterData*)mModelWork->mScooter)->mMotionRes);
-    resB = GSresGetResourceAllGroup((void*)mModelWork->_58);
-    resC = GSresGetResourceAllGroup((void*)mModelWork->_5C);
+    resB = GSresGetResourceAllGroup((void*)mModelWork->mDemoModel2);
+    resC = GSresGetResourceAllGroup((void*)mModelWork->mDemoModel3);
     res[0] = resB;
     GSmodelSetShadowFlags(resA, 1);
     GSmodelSetShadowLight(resA, resC);
     GSmodelSetShadowSurface(resA, 1, res);
-    SetMotion(mModelWork->_70, 0, lbl_804EBEEC, lbl_804EA708);
-    frames = GetAnimeFrameCount(mModelWork->_70, 0);
-    mModelWork->mAnimeFrames = _cameraPlayAnime(((WorldMapAnimeRecord*)mModelWork->mAnime)->mCamera, 0, lbl_804EA708);
+    SetMotion(mModelWork->mDemoMapModel, 0, worldMapFloatZero, worldMapDemoLoop);
+    frames = GetAnimeFrameCount(mModelWork->mDemoMapModel, 0);
+    mModelWork->mAnimeCamera = _cameraPlayAnime(((WorldMapAnimeRecord*)mModelWork->mAnime)->mCamera, 0, worldMapDemoLoop);
     if (mModelWork->mScooterIndex >= 4) {
-        GSsndPlayNow(0x5DC);
+        GSsndPlayNow(worldMapSpecialScooterSeID);
     } else {
-        GSsndPlayNow(0x5B2);
+        GSsndPlayNow(worldMapScooterSeID);
     }
     for (;;) {
-        f32 dt = zz_00133ac_(this) / lbl_804E7EA4;
+        f32 dt = worldMapGetFrameSec(this) / worldMapDemoSpeed;
 
         MainControl(to);
         RenderMoveDemoModel();
-        if (lbl_804EBEEC != mModelWork->mOffscreenAlpha) {
+        if (worldMapFloatZero != mModelWork->mOffscreenAlpha) {
             mModelWork->mOffscreenAlpha -= dt;
-            if (mModelWork->mOffscreenAlpha < lbl_804EBEEC) {
-                mModelWork->mOffscreenAlpha = lbl_804EBEEC;
-                ObjectVisibility(0x18530200, lbl_804E7EA0);
+            if (mModelWork->mOffscreenAlpha < worldMapFloatZero) {
+                mModelWork->mOffscreenAlpha = worldMapFloatZero;
+                ObjectVisibility(worldMapHeroModel, worldMapHeroVisible);
             }
         }
-        if (lbl_804E7EA8 && frames - lbl_804EBEFC < GetAnimeFrame(mModelWork->_70)) {
+        if (worldMapDemoEarlyEnd && frames - worldMapDemoEndLeadFrames < GetAnimeFrame(mModelWork->mDemoMapModel)) {
             break;
         }
         GSthreadSwitch();
@@ -351,57 +417,57 @@ void WorldMap::moveDemo(long from, long to)
 
 unsigned long WorldMap::readScooter()
 {
-    if (mModelWork->_00 != 0) {
+    if (mModelWork->mScriptFlag != 0) {
         return 0;
     }
-    mModelWork->mScooter = &lbl_803122F8[mModelWork->mScooterIndex];
+    mModelWork->mScooter = &worldMapScooterData[mModelWork->mScooterIndex];
     WorldMapScooterData* scooter = (WorldMapScooterData*)mModelWork->mScooter;
     u32 motionRes = scooter->mMotionRes;
     u32 modelRes = scooter->mModelRes;
 
-    while (zz_019e000_(0x9E6) == 0) {
+    while (GSfsysWait(worldMapFsysID) == 0) {
         GSthreadSwitch();
     }
-    GSfsysFree(0x9E6);
-    SetModel(0x9E6, modelRes, false);
+    GSfsysFree(worldMapFsysID);
+    SetModel(worldMapFsysID, modelRes, false);
     ObjectVisibility(modelRes, true);
     mModelWork->mScooterMotion = modelRes;
-    SetMotion(mModelWork->mScooterModel = motionRes, 8, lbl_804EBEEC, true);
-    if (mModelWork->_70 != 0 && mModelWork->mScooterModel != 0) {
-        ModelAttach(mModelWork->mScooterModel, mModelWork->_70,
-                    ((WorldMapAnimeRecord*)mModelWork->mAnime)->_0A, GS_ATTACH_MODE_7);
+    SetMotion(mModelWork->mScooterModel = motionRes, 8, worldMapFloatZero, true);
+    if (mModelWork->mDemoMapModel != 0 && mModelWork->mScooterModel != 0) {
+        ModelAttach(mModelWork->mScooterModel, mModelWork->mDemoMapModel,
+                    ((WorldMapAnimeRecord*)mModelWork->mAnime)->mPart, GS_ATTACH_MODE_7);
     }
-    GSgfxLayerID layer = lbl_804EFC94;
+    GSgfxLayerID layer = worldMapScooterLayer;
     SetLayerID(mModelWork->mScooterModel, 1, &layer);
     if (mModelWork->mScooterIndex >= 4) {
-        mModelWork->_78[0] = 0x213E1400;
-        mModelWork->_78[1] = 0x213D1400;
-        mModelWork->_78[2] = 0x213D1400;
-        mModelWork->_84[0] = (u32)SetModelPartPaticle(
-            mModelWork->mScooterModel, mModelWork->_78[0],
-            ((WorldMapScooterData*)mModelWork->mScooter)->_08,
+        mModelWork->mParticleRes[0] = worldMapSpecialScooterParticle0;
+        mModelWork->mParticleRes[1] = worldMapSpecialScooterParticle1;
+        mModelWork->mParticleRes[2] = worldMapSpecialScooterParticle1;
+        mModelWork->mParticleGen[0] = (u32)SetModelPartPaticle(
+            mModelWork->mScooterModel, mModelWork->mParticleRes[0],
+            ((WorldMapScooterData*)mModelWork->mScooter)->mPart0,
             GS_ATTACH_MODE_4, false, true, false);
-        mModelWork->_84[1] = (u32)SetModelPartPaticle(
-            mModelWork->mScooterModel, mModelWork->_78[1],
-            ((WorldMapScooterData*)mModelWork->mScooter)->_0C,
+        mModelWork->mParticleGen[1] = (u32)SetModelPartPaticle(
+            mModelWork->mScooterModel, mModelWork->mParticleRes[1],
+            ((WorldMapScooterData*)mModelWork->mScooter)->mPart1,
             GS_ATTACH_MODE_4, false, true, false);
-        mModelWork->_84[2] = (u32)SetModelPartPaticle(
-            mModelWork->mScooterModel, mModelWork->_78[2],
-            ((WorldMapScooterData*)mModelWork->mScooter)->_10,
+        mModelWork->mParticleGen[2] = (u32)SetModelPartPaticle(
+            mModelWork->mScooterModel, mModelWork->mParticleRes[2],
+            ((WorldMapScooterData*)mModelWork->mScooter)->mPart2,
             GS_ATTACH_MODE_4, false, true, false);
     } else {
-        mModelWork->_78[0] = 0x20D01400;
-        mModelWork->_78[1] = 0x20CF1400;
-        mModelWork->_78[2] = 0x20CF1400;
-        mModelWork->_84[0] = (u32)SetModelPartPaticle(
-            mModelWork->mScooterModel, mModelWork->_78[0],
-            ((WorldMapScooterData*)mModelWork->mScooter)->_08,
+        mModelWork->mParticleRes[0] = worldMapScooterParticle0;
+        mModelWork->mParticleRes[1] = worldMapScooterParticle1;
+        mModelWork->mParticleRes[2] = worldMapScooterParticle1;
+        mModelWork->mParticleGen[0] = (u32)SetModelPartPaticle(
+            mModelWork->mScooterModel, mModelWork->mParticleRes[0],
+            ((WorldMapScooterData*)mModelWork->mScooter)->mPart0,
             GS_ATTACH_MODE_4, false, true, false);
-        mModelWork->_84[1] = (u32)SetModelPartPaticle(
-            mModelWork->mScooterModel, mModelWork->_78[1],
-            ((WorldMapScooterData*)mModelWork->mScooter)->_0C,
+        mModelWork->mParticleGen[1] = (u32)SetModelPartPaticle(
+            mModelWork->mScooterModel, mModelWork->mParticleRes[1],
+            ((WorldMapScooterData*)mModelWork->mScooter)->mPart1,
             GS_ATTACH_MODE_4, false, true, false);
-        mModelWork->_84[2] = 0;
+        mModelWork->mParticleGen[2] = 0;
     }
     GSmodelSetBoundCheck(GSresGetResourceAllGroup((void*)motionRes), 0);
     return motionRes;
@@ -413,13 +479,13 @@ s32 WorldMap::getScooterType()
     s32 type;
 
     type = 0;
-    hero = zz_get_trainer_data_start_offset(0, 2);
+    hero = getTrainerDataStartOffset(0, 2);
 
     if (hero != 0) {
         u32 unlocked;
         u8 follower;
 
-        if (GSflagGet(0x3C4) < *(u32*)((u8*)lbl_804E893C + 0x888)) {
+        if (GSflagGet(worldMapScooterUnlockFlag) < worldMapScooterUnlockData->scooterUnlockFlagValue) {
             unlocked = 0;
         } else {
             unlocked = 1;
@@ -471,48 +537,48 @@ void WorldMap::setNullModel()
     long group;
 
     anime = (WorldMapAnimeRecord*)mModelWork->mAnime;
-    model = anime->_04;
-    res = anime->_00;
-    group = zz_current_map_get_group_id();
+    model = anime->mModelID;
+    res = anime->mModelRes;
+    group = getCurrentMapGroupId();
     mModelWork->mModelRes = res;
-    mModelWork->_70 = model;
+    mModelWork->mDemoMapModel = model;
     SetModel(group, res, false);
-    GSgfxLayerID layer = lbl_804EFC90;
-    SetLayerID(mModelWork->_70, 1, &layer);
-    GSmodelSetBoundCheck(GSresGetResourceAllGroup((void*)mModelWork->_70), 0);
+    GSgfxLayerID layer = worldMapModelLayer;
+    SetLayerID(mModelWork->mDemoMapModel, 1, &layer);
+    GSmodelSetBoundCheck(GSresGetResourceAllGroup((void*)mModelWork->mDemoMapModel), 0);
 }
 
-long _cameraPlayAnime(unsigned long model, long loop, bool flag)
+void* _cameraPlayAnime(unsigned long cameraRes, long startFrame, bool loop)
 {
-    void* camera = GSresGetResourceAllGroup((void*)model);
+    void* camera = GSresGetResourceAllGroup((void*)cameraRes);
 
     GScameraSetAnimIndex(camera, 0);
-    if (flag) {
+    if (loop) {
         GScameraSetAnimType(camera, 1);
     } else {
         GScameraSetAnimType(camera, 0);
     }
-    GScameraSetAnimRate(camera, lbl_804EBF00);
-    GScameraSetAnimFrame(camera, (f32)loop);
+    GScameraSetAnimRate(camera, worldMapFloatHalf);
+    GScameraSetAnimFrame(camera, startFrame);
     GScameraStartAnimation(camera);
-    return (long)camera;
+    return camera;
 }
 
 /* Map loop entry: the move-demo variant while the demo map is loaded, the
  * regular one otherwise. */
 void WorldMap::Main()
 {
-    if (mModelWork->_00 != 0) {
+    if (mModelWork->mScriptFlag != 0) {
         MainSub2();
     } else {
         MainSub();
     }
 }
 
-/* Map helper without recovered callers; it forwards zz_005ee80_(). */
-extern "C" u8 zz_0011408_(WorldMap* map)
+/* Map helper without recovered callers; it forwards menuScriptGetWorldMapFlag(). */
+extern "C" u8 getWorldMapScriptFlag(WorldMap* map)
 {
-    return zz_005ee80_();
+    return menuScriptGetWorldMapFlag();
 }
 
 /* Close the map menu again (the move demo already ran). */
@@ -520,13 +586,13 @@ void WorldMap::MainSub2()
 {
     WorldMapWork* work = mModelWork;
 
-    menuOpenCustom(0x54, windowGetActiveID(), (u8*)work + 0x2C, 0, 1, 0);
-    if (lbl_804EA6F8 != 0) {
+    menuOpenCustom(worldMapMenuID, windowGetActiveID(), &work->mMenuIndex, 0, 1, 0);
+    if (worldMapMoveDemoActive != 0) {
         PreRead(0);
-        menuClose(0x54);
-        menuCloseSync(0x54, 1);
-        zz_005ee78_(0);
-        msgctrlSetValue(0x59, 0x1772);
+        menuClose(worldMapMenuID);
+        menuCloseSync(worldMapMenuID, 1);
+        menuScriptSetWorldMapFlag(0);
+        msgctrlSetValue(worldMapMsgWindowID, worldMapDemoEndMsgID);
         floorPop();
     }
 }
@@ -535,12 +601,11 @@ void WorldMap::MainSub2()
  * back to the regular update. */
 void WorldMap::MainSub()
 {
-    WorldMapWork* work = mModelWork;
-    s32 old = *(s32*)((u8*)work + 0x2C);
-    s32 sel = menuOpenCustom(0x54, windowGetActiveID(), (u8*)work + 0x2C, 0, 1, 0);
+    s32 old = mModelWork->mMenuIndex;
+    s32 sel = menuOpenCustom(worldMapMenuID, windowGetActiveID(), &mModelWork->mMenuIndex, 0, 1, 0);
     WorldMapMapData* data;
 
-    if (lbl_804EA6F8 == 0) {
+    if (worldMapMoveDemoActive == 0) {
         return;
     }
     if (sel < 0) {
@@ -548,24 +613,24 @@ void WorldMap::MainSub()
     }
     PreRead(sel);
     SelectIcon(sel);
-    data = SearchData(lbl_80428080[sel]);
-    menuClose(0x54);
-    menuCloseSync(0x54, 1);
+    data = SearchData(worldMapCursorTable[sel]);
+    menuClose(worldMapMenuID);
+    menuCloseSync(worldMapMenuID, 1);
     if (sel != old) {
-        mModelWork->_90 = 1;
+        mModelWork->mMapChanged = 1;
         heroMovePoolCounter(2, 0x28);
         moveDemo(old, sel);
     }
     if (sel != old) {
-        fadeSet(3, lbl_804EBEF8);
+        fadeSet(3, worldMapFloatOne);
         do {
             RenderMoveDemoModel();
             GSthreadSwitch();
         } while (fadeCheck(0) != 0);
         if (mModelWork->mScooterIndex >= 4) {
-            _recoveryEventSetSE__FUl(0x5DC);
+            _recoveryEventSetSE(worldMapSpecialScooterSeID);
         } else {
-            _recoveryEventSetSE__FUl(0x5B2);
+            _recoveryEventSetSE(worldMapScooterSeID);
         }
         releaseOffscreenData();
     } else {
@@ -580,29 +645,29 @@ void WorldMap::MainSub()
         mDemoEffect = 0;
     }
     if (data != 0) {
-        zz_01202e0_(data->mExtra, 0);
-        if (mModelWork->_90 != 0) {
-            floorSetFadeScript(0, 0x5960008);
+        floorUnlinkWithSE(data->mExtra, 0);
+        if (mModelWork->mMapChanged != 0) {
+            floorSetFadeScript(0, worldMapMoveFadeScriptID);
         }
-        SetFlagData(lbl_80428080[sel]);
+        SetFlagData(worldMapCursorTable[sel]);
     } else {
-        zz_01202e0_(mModelWork->mMapResource, 0);
+        floorUnlinkWithSE(mModelWork->mMapResource, 0);
     }
 }
 
 void WorldMap::PreRead(long index)
 {
-    WorldMapMapData* data = SearchData(lbl_80428080[index]);
+    WorldMapMapData* data = SearchData(worldMapCursorTable[index]);
     void* mapData;
 
-    if (mModelWork->_00 != 0) {
-        mapData = zz_roomID_get_map_data(mModelWork->mMapResource);
+    if (mModelWork->mScriptFlag != 0) {
+        mapData = roomIDGetMapData(mModelWork->mMapResource);
     } else if (data != 0) {
-        mapData = zz_roomID_get_map_data(data->mExtra);
+        mapData = roomIDGetMapData(data->mExtra);
     } else {
-        mapData = zz_roomID_get_map_data(mModelWork->mMapResource);
+        mapData = roomIDGetMapData(mModelWork->mMapResource);
     }
-    GSfsysPreRead(zz_room_data_get_fsys_gid_for_language(mapData));
+    GSfsysPreRead(roomDataGetFsysGidForLanguage(mapData));
 }
 
 void WorldMap::CheckPadIndex(bool flag)
@@ -616,14 +681,14 @@ void WorldMap::CheckPadIndex(bool flag)
     f32 dist;
     /* Window angle handed to GetPadIndex3; widened step by step so the
      * direction search gets less strict for the ribbons that are left. */
-    f32 angle = lbl_804E7E98;
-    f32 step = lbl_804E7E9C;
+    f32 angle = worldMapPadWindowAngle;
+    f32 step = worldMapPadWindowStep;
     s8 pad;
 
     for (i = 0; i < getRibbonCnt(this); i++) {
         icon = &mIcons[i];
         for (k = 0; k < 8; k++) {
-            icon->_14[k] = -1;
+            icon->mNext[k] = -1;
         }
     }
 
@@ -646,12 +711,12 @@ void WorldMap::CheckPadIndex(bool flag)
                 }
                 for (k = 0; k < 8; k++) {
                     pad = GetPadIndex3(icon->mDist[j].angle, k, angle);
-                    if (pad >= 0 && icon->_14[pad] < 0) {
+                    if (pad >= 0 && icon->mNext[pad] < 0) {
                         dist = icon->mDist[j].dist;
-                        if (dist < lbl_804E7E88) {
+                        if (dist < worldMapRibbonDistMax) {
                             if (dists[pad] == 0) {
                                 dirs[pad] = (s8)j;
-                                dists[pad] = (s32)dist;
+                                dists[pad] = (s32)(f32)dist;
                             } else if (dists[pad] > (s32)dist) {
                                 dirs[pad] = (s8)j;
                                 dists[pad] = (s32)(f32)dist;
@@ -661,13 +726,13 @@ void WorldMap::CheckPadIndex(bool flag)
                 }
             }
             for (k = 0; k < 8; k++) {
-                if (dists[k] != lbl_804EBEEC) {
-                    icon->_14[k] = dirs[k];
+                if (dists[k] != worldMapFloatZero) {
+                    icon->mNext[k] = dirs[k];
                 }
             }
         }
         angle += step;
-    } while (angle <= lbl_804E7E94);
+    } while (angle <= worldMapPadAngleMax);
 }
 
 /* Project every ribbon to screen space, then record the distance and the
@@ -680,9 +745,8 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
     GSmtx proj;
     GSmtx mvp;
     f32 xscale;
-    /* Distance to the neighbour ribbon, stored into mDist[j].dist. The
-     * projection loop that runs first reuses the same variable for the
-     * projected screen y offset, so both loops share this one scratch value. */
+    /* Screen-space scratch: the projection loop and the distance loop below
+     * both work through this one value. */
     f32 dist;
     s32 i;
     s32 j;
@@ -692,9 +756,9 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
     proj = *(GSmtx*)GScameraGetProjMatrixPtr(cam);
     PSMTXConcat(mtx, &proj, &mvp);
 
-    f32 a = lbl_804EBF10 * angle;
+    f32 a = worldMapDegToRad * angle;
 
-    xscale = lbl_804EBF14 / (f32)tan(a * lbl_804EBF00);
+    xscale = worldMapProjectionScale / (f32)tan(a * worldMapFloatHalf);
     for (i = 0; i < getRibbonCnt(this); i++) {
         GSvec vec;
         f32 sx;
@@ -704,9 +768,9 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
         PSMTXMultVec(mtx, &icon->pos, &vec);
         sx = xscale * vec.x / vec.z;
         dist = -xscale * vec.y / vec.z;
-        icon->screen.x = lbl_804EBF18 + sx;
-        icon->screen.y = lbl_804EBF1C + dist;
-        icon->screen.z = lbl_804EBEEC;
+        icon->screen.x = worldMapScreenCenterX + sx;
+        icon->screen.y = worldMapScreenCenterY + dist;
+        icon->screen.z = worldMapFloatZero;
     }
     for (i = 0; i < getRibbonCnt(this); i++) {
         icon = &mIcons[i];
@@ -717,22 +781,22 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
                 f32 ang;
 
                 if (GetFlagData(i) == 0 || GetFlagData(j) == 0) {
-                    dist = lbl_804EBEEC;
+                    dist = worldMapFloatZero;
                     ang = dist;
                 } else {
                     f32 d = PSVECDistance(&icon->screen, &other->screen);
                     dist = d;
                     ang = (f32)atan2(other->screen.y - icon->screen.y,
                                      other->screen.x - icon->screen.x);
-                    if (ang < lbl_804EBEEC) {
-                        ang = lbl_804EBEE8 + ang;
+                    if (ang < worldMapFloatZero) {
+                        ang = worldMapTwoPi + ang;
                     }
                 }
                 icon->mDist[j].dist = dist;
                 icon->mDist[j].angle = ang;
             } else {
-                icon->mDist[j].dist = lbl_804EBEEC;
-                icon->mDist[j].angle = lbl_804EBEEC;
+                icon->mDist[j].dist = worldMapFloatZero;
+                icon->mDist[j].angle = worldMapFloatZero;
             }
         }
     }
@@ -740,18 +804,17 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
 }
 
 /* Index of the pad slot whose window contains angle, or -1 when the angle
-
- * falls outside every slot. The eight slots are spread evenly over the
- * turn (pi/4 apart), so the slot at angle 0 wraps around the end. */
+ * falls outside every slot. The eight slot centres sit a quarter turn apart
+ * (pi * index * 0.25), so the slot at angle 0 wraps around the end. */
 s8 WorldMap::GetPadIndex3(f32 angle, long index, f32 width)
 {
     bool inWindow = false;
     s8 padIndex = -1;
-    f32 wrapEnd = lbl_804EBEE8 - width;
-    f32 slotAngle = lbl_804EBF20 * (f32)index;
-    f32 slotCenter = slotAngle * lbl_804EBF24;
+    f32 wrapEnd = worldMapTwoPi - width;
+    f32 slotAngle = worldMapPi * index;
+    f32 slotCenter = slotAngle * worldMapFloatQuarter;
 
-    if (lbl_804EBEEC == (f32)index) {
+    if (worldMapFloatZero == index) {
         if (angle >= wrapEnd || angle < width) {
             inWindow = true;
         }
@@ -777,8 +840,8 @@ void WorldMap::InitModel2D(f32 param)
 /* Prime the camera blend from the default rate. */
 void WorldMap::SetCameraSpeed(f32 speed)
 {
-    mCamWork->blend = lbl_804EBEEC;
-    mCamWork->_10 = lbl_804EA704;
-    mCamWork->_0C = lbl_804E7E90;
-    mCamWork->_14 = lbl_804EBEEC;
+    mCamWork->blend = worldMapFloatZero;
+    mCamWork->mSpeed = worldMapCamSpeed;
+    mCamWork->mAccel = worldMapCamAccel;
+    mCamWork->mElapsed = worldMapFloatZero;
 }

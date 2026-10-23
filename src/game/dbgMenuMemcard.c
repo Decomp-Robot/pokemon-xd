@@ -36,7 +36,7 @@ u8 _memcard_debug_type_check(s32 type);
 void memcard_debug_Load(u8 *buf);
 void memcard_debug_Load2(void);
 void memcard_debug_Save(u8 *buf);
-void *zz_get_trainer_data_start_offset(s32 a, s32 b);
+void *getTrainerDataStartOffset(s32 a, s32 b);
 s32 zz_game_get_region(void);
 void gamedataSetStatus(void *gamedata, s32 index, s32 status);
 void __assert(const char *file, s32 line, const char *cond);
@@ -74,7 +74,7 @@ s32 zz_000b644_(s32 menuID, s32 type)
         GSdvdClose(file);
         memcard_debug_Load2();
     }
-    gamedata = zz_get_trainer_data_start_offset(0, 1);
+    gamedata = getTrainerDataStartOffset(0, 1);
     switch (zz_game_get_region()) {
     case 0:
         gamedataSetStatus(gamedata, 2, 0xB);
@@ -122,7 +122,7 @@ s32 zz_000b850_(s32 menuID, s32 type)
             /* CP932 message: "out of memory". */
             __assert("dbgMenuMemcard.c", 501, "bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab\"");
         }
-        memcpy(bk_savedataPtr, zz_get_trainer_data_start_offset(0, 0), 0x27FD0);
+        memcpy(bk_savedataPtr, getTrainerDataStartOffset(0, 0), 0x27FD0);
         if (memcardTaskCall(2, 2, 0) == 3) {
             if (GSdvdOpenTest(memcard_file_name_table[type])) {
                 file = GSdvdOpen(memcard_file_name_table[type]);
@@ -134,7 +134,7 @@ s32 zz_000b850_(s32 menuID, s32 type)
                 GSdvdClose(file);
             }
         }
-        memcpy(zz_get_trainer_data_start_offset(0, 0), bk_savedataPtr, 0x27FD0);
+        memcpy(getTrainerDataStartOffset(0, 0), bk_savedataPtr, 0x27FD0);
         bk_savedataPtr = (u8 *)zz_01ce1b0_(bk_savedataPtr);
         if (bk_savedataPtr != 0) {
             /* CP932 message: "free failed". */

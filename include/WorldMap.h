@@ -1,6 +1,7 @@
 #ifndef WORLDMAP_H
 #define WORLDMAP_H
 
+#include <GSgfx.h>
 #include <hero.h>
 #include <types.h>
 #include <winSprite.h>
@@ -19,13 +20,15 @@ struct GSvec {
  * cursor, the map/particle model ids the move demo drives, the resource
  * handles the move demo keeps alive and the screen-space icon state. */
 struct WorldMapWork {
-    /* 0x00: set once the map model is ready; Cursor, Main, readScooter and
-     * MainSub2 only run their body while this is clear. */
-    u8 _00;
+    /* 0x00: set while the world map was opened by a menu script (Init
+     * copies getWorldMapScriptFlag() into it). Main takes the scripted
+     * MainSub2 path while this is set; Cursor, readScooter and Release only
+     * do their free-roam handling while it is clear. */
+    u8 mScriptFlag;
     u8 _01[0x2B];                // 0x01-0x2B: unknown.
     /* 0x2C: index the map menu edits (MainSub hands it to menuOpenCustom and
      * restores it into the selected index slot). */
-    s32 _2C;
+    s32 mMenuIndex;
     /* 0x30: selected cursor slot (GetNowCursor, ControlPad). */
     s32 cursor;
     /* 0x34: map resource object released by MainSub. */
@@ -36,20 +39,22 @@ struct WorldMapWork {
     f32 mOffscreenAlpha;
     /* 0x40: animation table entry the move demo picked for this map. */
     void* mAnime;
-    /* 0x44: animation frame count handed back by _cameraPlayAnime. */
-    s32 mAnimeFrames;
+    /* 0x44: camera resource the move demo's camera animation plays on;
+     * _cameraPlayAnime hands it back and RenderMoveDemoModel sets it on the
+     * demo models' layers. */
+    void* mAnimeCamera;
     /* 0x48: set while the map model is still loading. */
-    u8 _48;
+    u8 mModelLoading;
     u8 _49[0x03];                // 0x49-0x4B: unknown.
     /* 0x4C: map model id of the map the scooter is read for. */
     u32 mMapModelID;
     /* 0x50/0x54/0x58/0x5C: model ids used by the move demo (the map model
      * plus its three sub models) - they differ between the demo map and the
      * regular maps. */
-    u32 _50;
-    u32 _54;
-    u32 _58;
-    u32 _5C;
+    u32 mDemoModel0;
+    u32 mDemoModel1;
+    u32 mDemoModel2;
+    u32 mDemoModel3;
     /* 0x60: scooter type index, used to pick the loaded scooter entry and
      * the recovery sound. */
     s32 mScooterIndex;
@@ -60,27 +65,31 @@ struct WorldMapWork {
     /* 0x6C: model resource of the map setNullModel restores (the value it
      * hands to SetModel). */
     u32 mModelRes;
-    /* 0x70: model id the scooter motion is played on. */
-    u32 _70;
+    /* 0x70: model id of the move-demo map; the scooter motion is played on
+     * it and RenderMoveDemoModel puts it on its own layer. */
+    u32 mDemoMapModel;
     /* 0x74: scooter table entry the map currently uses. */
     void* mScooter;
     /* 0x78: resource groups of the move-demo sub models; the matching
      * particle generator handles sit at 0x84. */
-    u32 _78[0x03];
-    u32 _84[0x03];
+    u32 mParticleRes[0x03];
+    u32 mParticleGen[0x03];
     /* 0x90: set when the move demo changed the map; byte only. */
-    u8 _90;
+    u8 mMapChanged;
     u8 _91[0x03];                // 0x91-0x93: unknown.
 };
 
-/* Per-ribbon emit parameters (8 bytes): the distance to the ribbon and the
- * angle it is seen under, both relative to the icon that owns the array.
- * WorldMapIconWork's constructor builds the arrays with __construct_new_array
- * and passes __ct__11_EmitParamsFv as the element constructor, so the element
- * type is a class with a non-trivial constructor: that is what makes MWCC
- * subtract the 0x10 array header at the delete[] in the destructor. */
+/* _EmitParams record (8 bytes). The map attests the class (its ctor is in
+ * the map module's model code, outside the recovered units; the pe particle
+ * node Start functions take it as their last argument). The map module uses
+ * it as the per-ribbon link record: the distance to the neighbouring ribbon
+ * and the angle it is seen under, relative to the icon that owns the array.
+ * The user-provided constructor copies the TU's shared 0.0f literal into
+ * both fields, so MWCC allocates its arrays through __construct_new_array
+ * with a 0x10-byte header that the delete[] in ~WorldMapIconWork strips
+ * again. */
 struct _EmitParams {
-    _EmitParams();               // defined in WorldMapIcon.cpp, external here
+    _EmitParams();
     f32 dist;                    // 0x00
     f32 angle;                   // 0x04
 };
@@ -91,8 +100,9 @@ struct _EmitParams {
 struct WorldMapIconWork {
     u8 _00[0x08];                // 0x00-0x07: unknown.
     GSvec pos;                   // 0x08: camera target of this icon.
-    /* 0x14: walked-direction flags, one byte per direction index. */
-    s8 _14[0x08];
+    /* 0x14: neighbour icon index per pad direction (-1 = none); filled by
+     * CheckPadIndex, read by ControlPad. */
+    s8 mNext[0x08];
     /* 0x1C: screen position; CalcModel2D keeps z at 0 so the distance and
      * angle between two icons can be taken over this vector. */
     GSvec screen;
@@ -125,56 +135,56 @@ struct WorldMapCamData {
  * SetCameraWork targets the current slot at +0x18 while SetCameraNextWork
  * targets the pending slot at +0x40. */
 struct WorldMapCamWork {
-    /* 0x00: debug target slot; TargetDebug shifts this to +0x04 and
-     * reloads it from the debug table. */
-    s32 _00;
+    /* 0x00: debug target slot; TargetDebug stages the picked icon here and
+     * keeps the previous pick at +0x04. */
+    s32 mDebugTarget;
     /* 0x04: previous debug target slot. */
-    s32 _04;
+    s32 mPrevDebugTarget;
     /* 0x08: camera blend parameter; 0 = camera at the old position,
      * 1 = fully blended to the new one. */
     f32 blend;
     /* 0x0C: rate feeding the per-frame increment; ControlCamera adds
-     * rate * dt into +0x10 every frame. */
-    f32 _0C;
+     * mAccel * dt into mSpeed every frame. */
+    f32 mAccel;
     /* 0x10: per-frame blend increment added into the blend parameter. */
-    f32 _10;
+    f32 mSpeed;
     /* 0x14: elapsed camera-move time; ControlCamera accumulates dt here. */
-    f32 _14;
+    f32 mElapsed;
     /* 0x18: current camera target position. */
     GSvec curPos;
     /* 0x24/0x28/0x2C: current blend range (start/end/current). */
-    f32 _24;
-    f32 _28;
-    f32 _2C;
+    f32 curBlendStart;
+    f32 curBlendEnd;
+    f32 curBlend;
     /* 0x30/0x34/0x38/0x3C: current distance and angle parameters. */
-    f32 _30;
-    f32 _34;
-    f32 _38;
-    f32 _3C;
+    f32 curDist;
+    f32 curRotY;
+    f32 curRotX;
+    f32 curFov;
     /* 0x40: pending camera target position (ControlCamera blends to it). */
     GSvec nextPos;
     /* 0x4C/0x50/0x54: pending blend range (start/end/current). */
-    f32 _4C;
-    f32 _50;
-    f32 _54;
+    f32 nextBlendStart;
+    f32 nextBlendEnd;
+    f32 nextBlend;
     /* 0x58/0x5C/0x60/0x64: pending distance and angle parameters. */
-    f32 _58;
-    f32 _5C;
-    f32 _60;
-    f32 _64;
+    f32 nextDist;
+    f32 nextRotY;
+    f32 nextRotX;
+    f32 nextFov;
 };
 
 /* Move-demo animation table entry (0x10 bytes). readScooter reads the model
  * id at +0x0A; moveDemo indexes a table of them. */
 struct WorldMapAnimeRecord {
     /* 0x00: model resource setNullModel loads for this map. */
-    u32 _00;
+    u32 mModelRes;
     /* 0x04: model id setNullModel puts in the work block (SetLayerID and
      * GSresGetResourceAllGroup use it). */
-    u32 _04;
+    u32 mModelID;
     u8 _08[0x02];                // 0x08-0x09: unknown.
     /* 0x0A: model part readScooter attaches the scooter model to. */
-    s16 _0A;
+    s16 mPart;
     /* 0x0C: camera animation the move demo plays for this entry. */
     u32 mCamera;
 };
@@ -186,9 +196,9 @@ struct WorldMapScooterData {
     u32 mModelRes;
     u32 mMotionRes;
     /* 0x08/0x0C/0x10: the three scooter parts readScooter attaches. */
-    u32 _08;
-    u32 _0C;
-    u32 _10;
+    u32 mPart0;
+    u32 mPart1;
+    u32 mPart2;
 };
 
 /* Map data entry returned by SearchData; the move demo reads the model id at
@@ -206,13 +216,6 @@ enum GSattachMode {
     GS_ATTACH_MODE_0 = 0,
     GS_ATTACH_MODE_4 = 4,
     GS_ATTACH_MODE_7 = 7,
-};
-
-/* Layer id used by WorldMapModel::SetLayerID; the two layer ids the map
- * hands over (lbl_804EFC90/94) are 4-byte objects. */
-class GSgfxLayerID {
-public:
-    u32 mID;                     // 0x00: 4-byte layer id handle.
 };
 
 /* Model container the map renders its offscreen texture with. WorldMap
@@ -274,11 +277,12 @@ public:
 public:
     /* 0x0C: intensity; RenderMoveDemoModel boosts it for the demo model. */
     f32 mIntensity;
-    u8 _10;                      // 0x10-0x14: setup bytes written by moveDemo.
-    u8 _11;
-    u8 _12;
-    u8 _13;
-    u8 _14;
+    /* 0x10-0x14: setup bytes written by moveDemo (worldMapGlowParam0-4). */
+    u8 mParam0;
+    u8 mParam1;
+    u8 mParam2;
+    u8 mParam3;
+    u8 mParam4;
 };
 
 /* Partial WorldMap declaration (0x48 bytes; menuWorldMapMXInit allocates
@@ -340,7 +344,7 @@ private:
      * selected cursor at +0x30 of this same block (see WorldMapWork). */
     WorldMapWork* mModelWork;
     /* 0x0C: Icon works. Init allocates the array with
-     * `new WorldMapIconWork[lbl_804E87D8->?]` (0x2C bytes per entry); the
+     * `new WorldMapIconWork[getRibbonCnt(this)]` (0x2C bytes per entry); the
      * 0x10-byte block header __construct_new_array installs in front of the
      * entries is where the per-icon distance arrays start (see
      * WorldMapIconWork::mDist). InitModel, SelectIcon and SetCursorPosition
@@ -350,7 +354,7 @@ private:
     u8 _10[0x0C];
     /* 0x1C: menu mode; Button and ControlPad only forward pad input while
      * this does not read 1. */
-    u8 _1C;
+    u8 mMenuMode;
     /* 0x1D..0x43: unrecovered map state. */
     u8 _1D[0x27];
     /* 0x44: Camera work block (0x68 bytes). Init allocates it and zeroes
@@ -360,11 +364,12 @@ private:
     WorldMapCamWork* mCamWork;
 };
 
-/* Plays the camera animation of the map (the frame count is returned). */
-long _cameraPlayAnime(unsigned long model, long loop, bool flag);
+/* Loads the camera resource, plays its animation from startFrame (looping
+ * when loop is set) and hands the camera back for the move-demo render. */
+void* _cameraPlayAnime(unsigned long cameraRes, long startFrame, bool loop);
 
 /* Map setup helpers shared with the WorldMap constructor unit. */
-extern "C" void zz_0010558_(WorldMap* map);
-extern "C" u8 zz_0011408_(WorldMap* map);
+extern "C" void worldMapInitDummy(WorldMap* map);
+extern "C" u8 getWorldMapScriptFlag(WorldMap* map);
 
 #endif

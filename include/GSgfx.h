@@ -6,7 +6,9 @@
 struct GSgfxVF;
 
 // Layer the GS engine routes a primitive to, passed by value to the layer
-// entry points. The enumerator names were not recovered.
+// entry points (the sprite/text drawers hand it on unchanged). The ids are
+// the slots the layer setup registered; the enumerator names and values were
+// not recovered, so the handle stays a bare distinct type (see GSgfxPrimType).
 enum GSgfxLayerID { };
 
 // Primitive op a surface emits, following the GX primitive op encoding

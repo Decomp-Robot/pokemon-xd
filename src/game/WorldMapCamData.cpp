@@ -1,7 +1,7 @@
 #include <WorldMap.h>
 
-extern u32* lbl_804E87E0;
-extern WorldMapCamData* lbl_804E87E4;
+extern u32* worldMapCamDataCnt;
+extern WorldMapCamData* worldMapCamDataTable;
 
 /* Copy one camera table entry into the caller's buffers. Out-of-range
  * indices are ignored. */
@@ -12,10 +12,10 @@ void WorldMap::GetCameraData(long index, GSvec* pos, f32* distance, f32* rotY, f
     f32 y;
     f32 z;
 
-    if ((u32)index >= *lbl_804E87E0) {
+    if ((u32)index >= *worldMapCamDataCnt) {
         return;
     }
-    entry = &lbl_804E87E4[index];
+    entry = &worldMapCamDataTable[index];
     z = entry->pos.z;
     y = entry->pos.y;
     x = entry->pos.x;

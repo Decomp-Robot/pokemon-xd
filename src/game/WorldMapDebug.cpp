@@ -1,19 +1,19 @@
 #include <WorldMap.h>
-extern s16 lbl_80428080[];
-extern u8 lbl_804EA6FC;
-extern const f32 lbl_804EBEEC;
-extern const f32 lbl_804EBF2C;
-extern const f32 lbl_804EBF30;
-extern const f32 lbl_804EBF34;
-extern const f32 lbl_804EBEF8;
+extern s16 worldMapCursorTable[];
+extern u8 worldMapTargetDebugEnabled;
+extern const f32 worldMapFloatZero;
+extern const f32 worldMapTargetCamOffsetX;
+extern const f32 worldMapTargetCamOffsetY;
+extern const f32 worldMapTargetCamOffsetZ;
+extern const f32 worldMapFloatOne;
 void WorldMap::TargetDebug(long index)
 {
-    s32 prev = mCamWork->_00;
-    s16 id = lbl_80428080[index];
-    mCamWork->_04 = prev;
-    mCamWork->_00 = id;
-    if (lbl_804EA6FC == 0) return;
-    if (mCamWork->_04 == mCamWork->_00) return;
-    SetCameraNextWork(&mIcons[id].pos, lbl_804EBF2C, lbl_804EBF30, lbl_804EBEEC, lbl_804EBF34);
-    SetCameraSpeed(lbl_804EBEF8);
+    s32 prev = mCamWork->mDebugTarget;
+    s16 id = worldMapCursorTable[index];
+    mCamWork->mPrevDebugTarget = prev;
+    mCamWork->mDebugTarget = id;
+    if (worldMapTargetDebugEnabled == 0) return;
+    if (mCamWork->mPrevDebugTarget == mCamWork->mDebugTarget) return;
+    SetCameraNextWork(&mIcons[id].pos, worldMapTargetCamOffsetX, worldMapTargetCamOffsetY, worldMapFloatZero, worldMapTargetCamOffsetZ);
+    SetCameraSpeed(worldMapFloatOne);
 }

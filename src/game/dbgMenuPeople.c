@@ -8,7 +8,7 @@ void menuClose(s32 menuID);
 void menuOpenCustom(s32 menuID, s32 a, s32 b, s32 c, s32 d, s32 e, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 s32 zz_get_current_room_ID(void);
-void zz_roomID_get_map_data(s32 roomID);
+void roomIDGetMapData(s32 roomID);
 u8 floorFieldCameraDataExist(void);
 void floorFieldCameraEnable(void);
 void zz_011ddf8_(void);
@@ -31,7 +31,7 @@ s32 dbgMenuDispChangePartyInfo(void)
 
 s32 dbgMenuPeopleOpenEdit(void)
 {
-    zz_roomID_get_map_data(zz_get_current_room_ID());
+    roomIDGetMapData(zz_get_current_room_ID());
 
     if (menuIsOpen(0xA)) {
         if (floorFieldCameraDataExist()) {

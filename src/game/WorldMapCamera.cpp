@@ -1,31 +1,25 @@
 #include <WorldMap.h>
 
-extern const f32 lbl_804EBEEC;
-extern const f32 lbl_804EBEF8;
+extern const f32 worldMapFloatZero;
+extern const f32 worldMapFloatOne;
 
 /* WorldMap::SetCameraNextWork -- stage the pending camera target. */
 void WorldMap::SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov)
 {
     WorldMapCamWork* work = mCamWork;
-    f32 blendEnd;
-    f32 blendStart;
 
     if (pos != 0) {
-        work->nextPos.x = pos->x;
-        work->nextPos.y = pos->y;
-        work->nextPos.z = pos->z;
+        work->nextPos = *pos;
     }
-    if (distance != lbl_804EBEEC) {
-        work->_58 = distance;
+    if (distance != worldMapFloatZero) {
+        work->nextDist = distance;
     }
-    work->_5C = rotY;
-    blendStart = lbl_804EBEEC;
-    work->_60 = rotX;
-    blendEnd = lbl_804EBEF8;
-    work->_64 = fov;
-    work->_4C = blendStart;
-    work->_50 = blendEnd;
-    work->_54 = blendStart;
+    work->nextRotY = rotY;
+    work->nextRotX = rotX;
+    work->nextFov = fov;
+    work->nextBlendStart = worldMapFloatZero;
+    work->nextBlendEnd = worldMapFloatOne;
+    work->nextBlend = worldMapFloatZero;
 }
 
 /* WorldMap::SetCameraWork -- stage the current camera target.
@@ -35,23 +29,17 @@ void WorldMap::SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f
 void WorldMap::SetCameraWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov)
 {
     WorldMapCamWork* work = mCamWork;
-    f32 blendEnd;
-    f32 blendStart;
 
     if (pos != 0) {
-        work->curPos.x = pos->x;
-        work->curPos.y = pos->y;
-        work->curPos.z = pos->z;
+        work->curPos = *pos;
     }
-    if (distance != lbl_804EBEEC) {
-        work->_30 = distance;
+    if (distance != worldMapFloatZero) {
+        work->curDist = distance;
     }
-    work->_34 = rotY;
-    blendStart = lbl_804EBEEC;
-    work->_38 = rotX;
-    blendEnd = lbl_804EBEF8;
-    work->_3C = fov;
-    work->_24 = blendStart;
-    work->_28 = blendEnd;
-    work->_2C = blendStart;
+    work->curRotY = rotY;
+    work->curRotX = rotX;
+    work->curFov = fov;
+    work->curBlendStart = worldMapFloatZero;
+    work->curBlendEnd = worldMapFloatOne;
+    work->curBlend = worldMapFloatZero;
 }

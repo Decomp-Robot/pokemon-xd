@@ -17,7 +17,7 @@ enum {
 
 /* Group/resource lookups shared with the floor and map code, which fetch
  * map resources as GSresGetResource(<map group id>, <resource id>). */
-extern u32 zz_current_map_get_group_id(void);
+extern u32 getCurrentMapGroupId(void);
 extern void *GSresGetResource(u32 groupID, u32 resID);
 
 /* Not called directly by other code; marked so the linker keeps them. */
@@ -28,7 +28,7 @@ extern void *GSresGetResource(u32 groupID, u32 resID);
  * already registered, so this just makes sure it is fetched. */
 void menuKeyDiscMain(void)
 {
-    GSresGetResource(zz_current_map_get_group_id(), KEYDISC_RESID);
+    GSresGetResource(getCurrentMapGroupId(), KEYDISC_RESID);
 }
 
 /* Companion entry point of the key disc menu; compiles to a bare blr. Its
