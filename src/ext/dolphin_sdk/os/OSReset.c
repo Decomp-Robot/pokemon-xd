@@ -160,7 +160,7 @@ void __OSDoHotReset(u32 resetCode) {
     Reset(resetCode * 8);
 }
 
-void __OSShutdownDevices(BOOL doRecal) {
+static void __OSShutdownDevices(BOOL doRecal) {
     int rc;
     BOOL disableRecalibration;
 

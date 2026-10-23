@@ -24,15 +24,15 @@ name = "os"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/os", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/os", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__", "-DSDK_REVISION=1"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OS.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAlarm.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAlloc.c"
@@ -40,19 +40,19 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSArena.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAudioSystem.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSCache.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSContext.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSError.c"
@@ -72,11 +72,11 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSInterrupt.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSLink.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSMemory.c"
@@ -84,7 +84,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSMutex.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSReboot.c"
@@ -92,7 +92,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSReset.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSResetSW.c"
@@ -100,7 +100,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSRtc.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSSemaphore.c"
@@ -112,15 +112,15 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSSync.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSThread.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSTime.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/time.dolphin.c"
@@ -132,7 +132,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/__start.c"
-completed = false
+completed = true
 
 [[lib]]
 name = "db"
@@ -264,7 +264,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXVert.c"
-completed = false
+completed = true
 
 [[lib]]
 name = "mtx"
@@ -283,7 +283,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtxvec.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtx44vec.c"
@@ -379,19 +379,19 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDBlock.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDCheck.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDCreate.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDDelete.c"
-completed = false
+completed = true
 
 
 [[lib.object]]
@@ -441,3 +441,14 @@ completed = false
 name = "ext/dolphin_sdk/card/CARDWrite.c"
 completed = false
 
+
+[[lib]]
+name = "dvd"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/dvd/dvd.c"
+completed = false

@@ -13,9 +13,6 @@ Sections:
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
@@ -24,9 +21,15 @@ ext/dolphin_sdk/base/PPCArch.c:
 
 ext/dolphin_sdk/os/OS.c:
 	.text       start:0x800A96AC end:0x800AA178
+	.data       start:0x803D0818 end:0x803D0A10
+	.bss        start:0x8043D6C0 end:0x8043D730
+	.sdata      start:0x804E8100 end:0x804E8110
+	.sbss       start:0x804EAAB0 end:0x804EAAE8
 
 ext/dolphin_sdk/os/OSAlarm.c:
 	.text       start:0x800AA178 end:0x800AA950
+	.data       start:0x803D0A10 end:0x803D0A20
+	.sbss       start:0x804EAAE8 end:0x804EAAF0
 
 ext/dolphin_sdk/os/OSArena.c:
 	.text       start:0x800AA950 end:0x800AA958
@@ -34,16 +37,21 @@ ext/dolphin_sdk/os/OSArena.c:
 	.text       start:0x800AA960 end:0x800AA968
 	.text       start:0x800AA968 end:0x800AA970
 	.text       start:0x800AA970 end:0x800AA99C
+	.sdata      start:0x804E8110 end:0x804E8114
+	.sbss       start:0x804EAAF0 end:0x804EAAF8
 
 ext/dolphin_sdk/os/OSAudioSystem.c:
 	.text       start:0x800AA99C end:0x800AAB58
 	.text       start:0x800AAB58 end:0x800AAC30
+	.data       start:0x803D0A20 end:0x803D0AA0
 
 ext/dolphin_sdk/os/OSCache.c:
 	.text       start:0x800AAC30 end:0x800AB2B4
+	.data       start:0x803D0AA0 end:0x803D0CD0
 
 ext/dolphin_sdk/os/OSContext.c:
 	.text       start:0x800AB2B4 end:0x800ABC80
+	.data       start:0x803D0CD0 end:0x803D0EA8
 
 ext/dolphin_sdk/os/OSError.c:
 	.text       start:0x800ABC80 end:0x800ABD00
@@ -70,9 +78,12 @@ ext/dolphin_sdk/os/OSFont.c:
 
 ext/dolphin_sdk/os/OSInterrupt.c:
 	.text       start:0x800AE37C end:0x800AEBE8
+	.data       start:0x803D1CE8 end:0x803D1D18
+	.sbss       start:0x804EAB10 end:0x804EAB28
 
 ext/dolphin_sdk/os/OSLink.c:
 	.text       start:0x800AEBE8 end:0x800AF610
+	.data       start:0x803D1D18 end:0x803D1D68
 
 ext/dolphin_sdk/os/OSMemory.c:
 	.text       start:0x800AF610 end:0x800AF900
@@ -87,14 +98,16 @@ ext/dolphin_sdk/os/OSReboot.c:
 
 ext/dolphin_sdk/os/OSReset.c:
 	.text       start:0x800AF9F4 end:0x800AFA78
-
-ext/dolphin_sdk/os/OSResetSW.c:
 	.text       start:0x800AFA78 end:0x800AFB20
 	.text       start:0x800AFB20 end:0x800AFB90
 	.text       start:0x800AFB90 end:0x800AFBF8
 	.text       start:0x800AFBF8 end:0x800AFC40
 	.text       start:0x800AFC40 end:0x800AFE40
 	.text       start:0x800AFE40 end:0x800AFE78
+	.data       start:0x803D1D78 end:0x803D1DC8
+	.sbss       start:0x804EAB30 end:0x804EAB40
+
+ext/dolphin_sdk/os/OSResetSW.c:
 	.text       start:0x800AFE78 end:0x800AFF6C
 	.text       start:0x800AFF6C end:0x800B0204
 
@@ -118,6 +131,7 @@ ext/dolphin_sdk/os/OSRtc.c:
 	.text       start:0x800B0D50 end:0x800B0DFC
 	.text       start:0x800B0DFC end:0x800B0E6C
 	.text       start:0x800B0E6C end:0x800B0F24
+	.bss        start:0x8043DA60 end:0x8043DAB8
 
 ext/dolphin_sdk/os/OSSync.c:
 	.text       start:0x800B0F24 end:0x800B0F44
@@ -125,6 +139,12 @@ ext/dolphin_sdk/os/OSSync.c:
 
 ext/dolphin_sdk/os/OSThread.c:
 	.text       start:0x800B0FA8 end:0x800B2244
+	.bss        start:0x8043DAB8 end:0x8043E4B0
+	.sdata      start:0x804E8138 end:0x804E8140
+	.sbss       start:0x804EAB60 end:0x804EAB70
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/os/OSTime.c:
 	.text       start:0x800B2244 end:0x800B225C
@@ -133,6 +153,7 @@ ext/dolphin_sdk/os/OSTime.c:
 	.text       start:0x800B22C8 end:0x800B2320
 	.text       start:0x800B2320 end:0x800B24BC
 	.text       start:0x800B24BC end:0x800B26C0
+	.data       start:0x803D1DC8 end:0x803D1E28
 
 ext/dolphin_sdk/os/__ppc_eabi_init.c:
 	.text       start:0x800B26C0 end:0x800B26E0
@@ -591,6 +612,7 @@ ext/dolphin_sdk/gx/GXVert.c:
 
 ext/dolphin_sdk/os/__start.c:
 	.init       start:0x80003100 end:0x80003400
+	.sbss       start:0x804EAB70 end:0x804EAB78
 
 src/init.c:
 	.init       start:0x80003400 end:0x80005544
