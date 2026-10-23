@@ -1291,6 +1291,26 @@ ext/musyx_sdk/runtime/hw_volconv.c:
 	.data       start:0x8040878C end:0x8040879C
 	.sdata2     start:0x804EDE08 end:0x804EDE3C
 
+ext/musyx_sdk/runtime/snd3d.c:
+	.text       start:0x8017AF3C end:0x8017B5B8
+	.text       start:0x8017B5B8 end:0x8017B690
+	.text       start:0x8017B690 end:0x8017B6B0
+	.text       start:0x8017B6B0 end:0x8017BB58
+	.text       start:0x8017BB58 end:0x8017BBB0
+	.text       start:0x8017BBB0 end:0x8017BC58
+	.text       start:0x8017BC58 end:0x8017BCB4
+	.text       start:0x8017BCB4 end:0x8017BE28
+	.text       start:0x8017BE28 end:0x8017C038
+	.text       start:0x8017C038 end:0x8017C0B4
+	.text       start:0x8017C0B4 end:0x8017C208
+	.text       start:0x8017C208 end:0x8017CAFC
+	.text       start:0x8017CAFC end:0x8017D224
+	.text       start:0x8017D224 end:0x8017D25C
+	.text       start:0x8017D25C end:0x8017D260
+	.bss        start:0x80469DA8 end:0x8046AFF8
+	.sbss       start:0x804EB450 end:0x804EB470
+	.sdata2     start:0x804EDE40 end:0x804EDE90
+
 ext/musyx_sdk/runtime/snd_init.c:
 	.text       start:0x8017D260 end:0x8017D398
 	.text       start:0x8017D398 end:0x8017D3CC

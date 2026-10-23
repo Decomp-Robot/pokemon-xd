@@ -1254,3 +1254,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/seq_api.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/snd3d.c"
+completed = true
