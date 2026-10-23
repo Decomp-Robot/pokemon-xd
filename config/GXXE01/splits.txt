@@ -44,6 +44,9 @@ ext/dolphin_sdk/os/OSError.c:
 	.text       start:0x800ABD00 end:0x800ABF18
 	.text       start:0x800ABF18 end:0x800AC200
 
+ext/dolphin_sdk/os/OSExec.c:
+	.text       start:0x800AC200 end:0x800ACB60
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 

@@ -47,3 +47,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSError.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSExec.c"
+completed = false
