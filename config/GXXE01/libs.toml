@@ -3603,6 +3603,12 @@ completed = true
 name = "libc/FILE_POS.c"
 completed = true
 [[lib.object]]
+name = "libc/locale.c"
+completed = true
+# MSL const data stays out of .sdata2: the original .sdata2 listing has no
+# MSL objects. Route the locale string table to .rodata.
+extra_cflags = ["-sdata2 0"]
+[[lib.object]]
 name = "libc/mbstring.c"
 completed = true
 [[lib.object]]
