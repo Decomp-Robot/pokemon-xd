@@ -1175,6 +1175,9 @@ ext/dolphin_sdk/gx/GXDraw.c:
 	.text       start:0x800CEC34 end:0x800CED3C
 	.text       start:0x800CED3C end:0x800CEE44
 	.text       start:0x800CEE44 end:0x800CEF58
+	.data       start:0x803D3D80 end:0x803D4090
+	.bss        start:0x8043F0B0 end:0x8043F338
+	.sdata2     start:0x804ECC78 end:0x804ECCB8
 
 ext/dolphin_sdk/gx/GXDisplayList.c:
 	.text       start:0x800CEF58 end:0x800CF024

@@ -210,7 +210,7 @@ void GXDrawSphere(u8 numMajor, u8 numMinor) {
 
     if (ttype != GX_NONE) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_RGBA6, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     }
 
     for (i = 0; i < numMajor; i++) {
@@ -300,11 +300,11 @@ void GXDrawCube(void) {
     GetVertState();
     if (ntype != GX_NONE) {
         GXSetVtxDesc(GX_VA_NBT, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_NBT, GX_TEX_ST, GX_RGBA6, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_NBT, GX_NRM_NBT, GX_F32, 0);
     }
     if (ttype != GX_NONE) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
     }
 
     GXBegin(GX_QUADS, GX_VTXFMT3, 24);
