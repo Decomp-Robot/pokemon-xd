@@ -300,6 +300,11 @@ ext/dolphin_sdk/card/CARDDelete.c:
 	.text       start:0x800C55E4 end:0x800C5688
 	.text       start:0x800C5688 end:0x800C5798
 
+ext/dolphin_sdk/card/CARDNet.c:
+	.text       start:0x800C5F58 end:0x800C601C
+	.text       start:0x800C601C end:0x800C605C
+	.text       start:0x800C605C end:0x800C6140
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
