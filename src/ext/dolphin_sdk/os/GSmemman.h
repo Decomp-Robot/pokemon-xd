@@ -125,6 +125,7 @@ extern GSmemPoolAllocator gPoolTable[POOL_MAX];
 extern "C" {
 u32 GSmemGetLargestFree(void);
 u16 GSmemGetCellId(void);
+void* GSmemAlloc(u32 size);
 void* GSmemAllocNoClr(u32 size);
 void GSmemFree(void* ptr);
 GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize);

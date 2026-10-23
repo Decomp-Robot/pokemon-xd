@@ -3,8 +3,19 @@
  */
 
 #include <dolphin/os.h>
+#include <string.h>
 
 #include "GSmemman.h"
+
+/* Free cells chain through a 4-byte link stored ahead of the user payload. */
+class GSmemPoolCell {
+public:
+    GSmemPoolCell* next; /* 0x00 */
+};
+
+/* Pool state save/clear/restore around free-list updates. */
+extern "C" u32 GSmemPoolGetState(void);
+extern "C" void GSmemPoolSetState(u32 state);
 
 GSmemPoolAllocator gPoolTable[POOL_MAX];
 
@@ -59,4 +70,94 @@ extern "C" GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize) {
     }
     gPoolTable[i].init(cellCount, cellSize);
     return &gPoolTable[i];
+}
+
+/* Clears the whole pool table; called from GSmemInit. */
+extern "C" void GSmemInitPool(void) {
+    memset(gPoolTable, 0, sizeof(gPoolTable));
+}
+
+/* The pool dump is compiled out of retail. */
+extern "C" void GSmemDumpPoolInfo(GSmemPoolAllocator* pool) {
+}
+
+u8 GSmemPoolAllocator::isRegistration(void* ptr) {
+    if (ptr == 0) {
+        return 0;
+    }
+    if (ptr >= begin && ptr < end) {
+        return 1;
+    }
+    return 0;
+}
+
+u32 GSmemPoolAllocator::getFreeCell() const {
+    return cellCount - usedCellCount;
+}
+
+void GSmemPoolAllocator::freeCell(void* ptr) {
+    GSmemPoolCell* cell;
+
+    if (!ptr) {
+        return;
+    }
+    ptr = (GSmemPoolCell*)ptr - 1;
+    cell = (GSmemPoolCell*)ptr;
+    cell->next = (GSmemPoolCell*)freeCellList;
+    usedCellCount--;
+    u32 state = GSmemPoolGetState();
+    GSmemPoolSetState(0);
+    freeCellList = cell;
+    GSmemPoolSetState(state);
+}
+
+void* GSmemPoolAllocator::allocCell() {
+    GSmemPoolCell* cell;
+    u32 state;
+
+    cell = (GSmemPoolCell*)freeCellList;
+    state = GSmemPoolGetState();
+    GSmemPoolSetState(0);
+    if (cell != 0) {
+        freeCellList = cell->next;
+    } else {
+        GSmemPoolSetState(state);
+        return 0;
+    }
+    GSmemPoolSetState(state);
+    memset(cell, 0, cellSize);
+    usedCellCount++;
+    if (usedCellCount > peakCellCount) {
+        peakCellCount = usedCellCount;
+    }
+    return (void*)(cell + 1);
+}
+
+/* cellSize grows by the link word and rounds up to the cell alignment. */
+void GSmemPoolAllocator::init(u32 cellCount, u32 cellSize) {
+    u8* cursor;
+    u32 i;
+    GSmemPoolCell* last;
+    u8* next;
+    this->cellCount = cellCount;
+    this->cellSize = cellSize = ROUNDUP(cellSize + sizeof(GSmemPoolCell), 4);
+    begin = (u8*)GSmemAlloc((cellCount + 1) * cellSize);
+    end = begin + cellCount * cellSize;
+    freeCellList = begin;
+    last = 0;
+    cursor = begin;
+    for (i = 0; i < cellCount; i++) {
+        next = cursor + cellSize;
+        last = (GSmemPoolCell*)cursor;
+        ((GSmemPoolCell*)cursor)->next = (GSmemPoolCell*)next;
+        cursor = next;
+    }
+    last->next = 0;
+}
+
+extern "C" void GSmemPoolSetState(u32 state) {
+}
+
+extern "C" u32 GSmemPoolGetState(void) {
+    return 0;
 }
