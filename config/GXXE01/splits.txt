@@ -36,7 +36,7 @@ decomp/WorldMapIsBlending.cpp:
 	.text       start:0x800127F4 end:0x80012818
 
 game/WorldMapCamera.cpp:
-	.text       start:0x80012818 end:0x80012870
+	.text       start:0x80012818 end:0x800128C8
 
 decomp/WorldMapIcon.cpp:
 	.text       start:0x80012FA8 end:0x80012FD8

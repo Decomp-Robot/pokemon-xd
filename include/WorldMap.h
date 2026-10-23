@@ -53,7 +53,17 @@ struct WorldMapCamWork {
     f32 _10;
     /* 0x14: elapsed camera-move time; ControlCamera accumulates dt here. */
     f32 _14;
-    u8 _18[0x28];
+    /* 0x18: current camera target position. */
+    GSvec curPos;
+    /* 0x24/0x28/0x2C: current blend range (start/end/current). */
+    f32 _24;
+    f32 _28;
+    f32 _2C;
+    /* 0x30/0x34/0x38/0x3C: current distance and angle parameters. */
+    f32 _30;
+    f32 _34;
+    f32 _38;
+    f32 _3C;
     /* 0x40: pending camera target position (ControlCamera blends to it). */
     GSvec nextPos;
     /* 0x4C/0x50/0x54: pending blend range (start/end/current). */
@@ -85,6 +95,7 @@ public:
     f32 GetAngle(long work);
     void SetCameraSpeed(f32 speed);
     void SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
+    void SetCameraWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
     void GetCameraData(long index, GSvec* pos, f32* distance, f32* rotY, f32* rotX, f32* fov);
 
 private:
