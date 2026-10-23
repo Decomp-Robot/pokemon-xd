@@ -1277,6 +1277,10 @@ progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/card", "-i src/ext/dolphin_sdk", "-D__GEKKO__"]
 
 [[lib.object]]
+name = "ext/dolphin_sdk/card/CARDBiosDefaultApiCallback.c"
+completed = true
+
+[[lib.object]]
 name = "ext/dolphin_sdk/card/CARDBios.c"
 completed = false
 

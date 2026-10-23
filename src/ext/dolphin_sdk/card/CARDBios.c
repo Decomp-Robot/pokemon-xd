@@ -26,7 +26,7 @@ static BOOL OnReset(BOOL f);
 
 static OSResetFunctionInfo ResetFunctionInfo = {OnReset, 127};
 
-void __CARDDefaultApiCallback(s32 chan, s32 result) {}
+
 
 void __CARDSyncCallback(s32 chan, s32 result) {
     CARDControl* card;
