@@ -71,3 +71,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSMemory.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSMutex.c"
+completed = false
