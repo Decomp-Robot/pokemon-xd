@@ -268,6 +268,7 @@ static f32 __SYNSemitonesTableDown[128] = {
     0.000652f,
 };
 
+// UNUSED: the game never calls this; dead-stripped at link.
 f32 __SYNGetRelativePitch(SYNVOICE* voice) {
     s32 cents;
 
@@ -295,6 +296,7 @@ f32 __SYNGetRelativePitch(SYNVOICE* voice) {
     return 1.0f;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupPitch(SYNVOICE* voice) {
     voice->srcRatio = (voice->sample->sampleRate / 32000.0f);
     voice->cents = (voice->keyNum - voice->region->unityNote) * 100;
@@ -302,6 +304,7 @@ void __SYNSetupPitch(SYNVOICE* voice) {
     voice->cents = (voice->cents << 0x10);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupSrc(SYNVOICE* voice) {
     f32 srcRatio;
     u32 value;
@@ -328,6 +331,7 @@ void __SYNSetupSrc(SYNVOICE* voice) {
     voice->axvpb->sync |= 0x40001;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNUpdateSrc(SYNVOICE* voice) {
     u32 ratio = (65536.0f * (voice->srcRatio * __SYNGetRelativePitch(voice)));
 
