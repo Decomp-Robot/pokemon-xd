@@ -227,6 +227,32 @@ ext/dolphin_sdk/ar/arq.c:
 	.text       start:0x800BE88C end:0x800BE8AC
 	.text       start:0x800BE8AC end:0x800BE8B4
 
+ext/dolphin_sdk/card/CARDBios.c:
+	.text       start:0x800BF34C end:0x800BF424
+	.text       start:0x800BF424 end:0x800BF53C
+	.text       start:0x800BF53C end:0x800BF5E4
+	.text       start:0x800BF5E4 end:0x800BF668
+	.text       start:0x800BF668 end:0x800BF728
+	.text       start:0x800BF728 end:0x800BF818
+	.text       start:0x800BF818 end:0x800BF908
+	.text       start:0x800BF908 end:0x800BF9B4
+	.text       start:0x800BF9B4 end:0x800BFA58
+	.text       start:0x800BFA58 end:0x800BFCF8
+	.text       start:0x800BFCF8 end:0x800BFE08
+	.text       start:0x800BFE08 end:0x800C002C
+	.text       start:0x800C002C end:0x800C0160
+	.text       start:0x800C0160 end:0x800C029C
+	.text       start:0x800C029C end:0x800C03AC
+	.text       start:0x800C03AC end:0x800C0458
+	.text       start:0x800C0458 end:0x800C0460
+	.text       start:0x800C0460 end:0x800C0498
+	.text       start:0x800C0498 end:0x800C0550
+	.text       start:0x800C0550 end:0x800C05B4
+	.text       start:0x800C05B4 end:0x800C05E4
+	.text       start:0x800C05E4 end:0x800C0734
+	.text       start:0x800C0734 end:0x800C0784
+	.text       start:0x800C0784 end:0x800C07A0
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
