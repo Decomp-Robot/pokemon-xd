@@ -193,7 +193,7 @@ extern "C" s32 menuSaveLoadWrite(menuSaveload *report)
     memcpy(getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), buffer, 0x27FD0);
     pokecoloSetPlayTime((f64)(report->mPlaytime + pokecoloGetPlayTimeUnsigned()));
     report->mPlaytime = 0;
-    zz_01ce1b0_(buffer);
+    memcardMemFreeForSavedata(buffer);
     return kept != 0;
 }
 
@@ -226,7 +226,7 @@ void menuSaveload::SaveParameterSet()
 // Execution mode gates the report save-availability flag.
 extern "C" s32 menuSaveLoadCanSave(void)
 {
-    if (zz_005c228_() == 1) {
+    if (memcardGetTaskStatus() == 1) {
         return 0;
     }
     return flagGetBooleanValue(SAVE_AVAILABILITY_FLAG);

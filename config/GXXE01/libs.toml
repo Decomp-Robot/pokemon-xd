@@ -6,7 +6,7 @@ progress_category = "game"
 # The game code is full of stmw/lmw register saves (only the third-party
 # sound library uses _savegpr_/_restgpr_ helpers), so the original game
 # library was built with the paired register saves enabled.
-cflags_extra = ["-use_lmw_stmw on"]
+cflags_extra = ["-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "orig/GXXE01/sys/main.dol"
@@ -53,6 +53,8 @@ cflags = [
     "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION",
     "-str reuse,readonly",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 [[lib.object]]
 name = "game/dbgMenuMsg.c"
@@ -118,6 +120,8 @@ cflags = [
     "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION",
     "-str reuse,readonly",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 [[lib.object]]
 name = "game/dbgMenuToolBattle.c"
@@ -159,6 +163,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -217,6 +223,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -245,6 +253,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -273,6 +283,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -332,6 +344,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -391,6 +405,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-opt nopeephole",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -419,6 +435,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-opt nopeephole",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -492,6 +510,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-opt nopeephole",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -524,6 +544,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -558,6 +580,8 @@ cflags = [
     "-i build/$VERSION/include",
     "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -588,6 +612,8 @@ cflags = [
     "-i build/$VERSION/include",
     "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -617,6 +643,8 @@ cflags = [
     "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -646,6 +674,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -674,6 +704,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -702,6 +734,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -731,6 +765,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -768,6 +804,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -797,6 +835,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -961,6 +1001,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-opt nopeephole",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -989,6 +1031,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-opt nopeephole",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1017,6 +1061,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-opt nopeephole",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1044,6 +1090,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1073,6 +1121,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1102,6 +1152,8 @@ cflags = [
     "-DVERSION_GXXE01",
     "-lang=c++",
     "-opt nopeephole",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1135,6 +1187,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1164,6 +1218,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1193,6 +1249,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 # Battle bios of the link battles (trainer records, hero snapshots, rule
@@ -1232,6 +1290,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 # Loose-ball desperation accessor: a C++ class static member.
@@ -1262,6 +1322,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 
@@ -1292,6 +1354,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1321,6 +1385,8 @@ cflags = [
     "-opt nopeephole",
     "-use_lmw_stmw on",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1348,6 +1414,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 [[lib.object]]
@@ -1387,6 +1455,8 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
 ]
 
 # The sound API's short id and volume wrappers stay out of line: the engine
@@ -1399,17 +1469,101 @@ extra_cflags = ["-inline noauto"]
 [[lib.object]]
 name = "game/peParticle.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+# Preserve MSL math header precedence ahead of SDK libc.
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/msl/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
 
 [[lib.object]]
 name = "game/peNode.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+# Preserve MSL math header precedence ahead of SDK libc.
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/msl/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
 
 [[lib.object]]
 name = "game/peBank.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+# Preserve MSL math header precedence ahead of SDK libc.
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/msl/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
 
 [[lib.object]]
 name = "game/GSmodel/effects.cpp"
@@ -1536,6 +1690,135 @@ cflags = [
         "-inline noauto",
 "-lang=c++",
 ]
+
+[[lib.object]]
+name = "game/floorFieldCameraEditor.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nodeadstore",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+
+[[lib.object]]
+name = "game/floorOffscreen.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
+
+
+[[lib.object]]
+name = "game/floor.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
+
+
+[[lib.object]]
+name = "game/floorManager.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
+
 
 [[lib]]
 name = "TRK_MINNOW_DOLPHIN"
@@ -2210,6 +2493,10 @@ name = "ext/dolphin_sdk/gx/GXStubs.c"
 completed = true
 
 [[lib.object]]
+name = "ext/dolphin_sdk/gx/GXVert.c"
+completed = false
+
+[[lib.object]]
 name = "ext/dolphin_sdk/gx/GXTev.c"
 completed = false
 
@@ -2229,9 +2516,6 @@ completed = true
 name = "ext/dolphin_sdk/gx/GXVerifXF.c"
 completed = true
 
-[[lib.object]]
-name = "ext/dolphin_sdk/gx/GXVert.c"
-completed = true
 
 [[lib]]
 name = "mtx"

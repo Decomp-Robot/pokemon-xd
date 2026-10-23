@@ -11,7 +11,7 @@ enum PDATOP_MENU_RES {
     PDATOP_MENU_RES_DP_MON = 0, // dark pokemon list (menuPdaDPMonList).
     PDATOP_MENU_RES_MEMO = 1,   // memo list (menuPdaMemoList).
     PDATOP_MENU_RES_MAIL = 2,   // XD mail list (menuPdaMailListXD).
-    PDATOP_MENU_RES_EXTRA = 3,  // submenu of zz_0042c2c_ (menus 0x77/0x6D).
+    PDATOP_MENU_RES_SEARCHER = 3,  // Searcher submenu (menuPdaSearcher).
     PDATOP_MENU_RES_EXIT = 4,   // leave the PDA screen.
 };
 
@@ -27,7 +27,7 @@ struct PDA_FRAME_ARG {
 };
 
 // Work area of the PDA menus: the selected top menu entry, the submenu state,
-// the fade the PDA script animates with and the cursor bookkeeping.
+// the script state and selection cursor bookkeeping.
 struct MenuPdaWork {
     PDATOP_MENU_RES mRes;  // 0x00: top menu entry to open; script mode for the PDA script.
     s32 mSubmenuFlag;      // 0x04: set while a submenu is open.
@@ -36,8 +36,8 @@ struct MenuPdaWork {
     u8 mFadeOutDone;       // 0x40: set once the fade-out wait is done.
     u8 mExitFlag;          // 0x41: set by the top menu to leave the PDA screen.
     u8 _42[0x1A];          // 0x42-0x5B: unknown here.
-    f32 mFadeFrom;         // 0x5C: fade scale the PDA animates from.
-    f32 mFadeTo;           // 0x60: fade scale the PDA animates towards.
+    f32 mCursorY;          // 0x5C: current selection cursor Y.
+    f32 mCursorTargetY;    // 0x60: selected row cursor target Y.
     u8 _64[0x04];          // 0x64-0x67: unknown here.
     u8 mCursorMoved;       // 0x68: set while the cursor was moved by the pad.
     u8 _69[0x03];          // 0x69-0x6B: unknown here.
@@ -71,7 +71,7 @@ extern const f32 menuPdaAlphaFull;
 extern const char menuPdaPageStartFormat[];
 extern GSgfxLayerID menuPdaEventLayer[2];
 
-extern "C" bool zz_003930c_(tagWINDOW_WORK *window);
-extern "C" void zz_0039d2c_(s8 selection);
+extern "C" bool menuPdaIsScriptWindow(tagWINDOW_WORK *window);
+extern "C" void menuPdaPrepareSelectionCursor(s8 selection);
 
 #endif

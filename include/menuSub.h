@@ -3,13 +3,13 @@
 
 #include <types.h>
 
-// RGBA colour, same layout as the GX colour type.
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} GXColor;
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <dolphin/gx/GXStruct.h>
+#ifdef __cplusplus
+}
+#endif
 
 // The Yes/No sub dialog answer flag is a C++ bool in the menus that use it,
 // which the compiler passes as a byte.

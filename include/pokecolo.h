@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-s32 zz_005c228_(void);
+s32 memcardGetTaskStatus(void);
 unsigned long pokecoloGetPlayTimeUnsigned(void);
 void pokecoloSetPlayTime(f64 playtime);
 #ifdef __cplusplus

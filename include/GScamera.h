@@ -1,10 +1,19 @@
 #ifndef GS_CAMERA_H
 #define GS_CAMERA_H
 
-#include <GSgfx.h>
+#include <GSgfxLayer.h>
+
+struct _HSD_CObj;
+
+struct _GScamera {
+    u8 reservedCameraHeader[0x08];
+    _HSD_CObj *mCObj;
+    u8 reservedCameraTransform[0xF0];
+    GSvec mTarget; // 0xFC: active camera target.
+};
 
 extern "C" {
-void *GScameraGetActiveCamera(void);
+_GScamera *GScameraGetActiveCamera(void);
 void GScameraLoadActiveCameraMatrix(GSgfxLayerID pass);
 void GScameraGetPerspective(void *cam, f32 *fovY, f32 *aspect, f32 *nearZ, f32 *farZ);
 void GScameraGetPosition(void *cam, GSvec *pos);

@@ -1,19 +1,8 @@
 #ifndef GSVEC_H
 #define GSVEC_H
 
-#include <types.h>
 #include <GSmtx.h>
-
-/* 3D point / direction / plane vector. The GS geometry library takes and
- * returns these by pointer everywhere. */
-struct GSvec {
-    f32 x;
-    f32 y;
-    f32 z;
-    GSvec() {}
-    GSvec(f32 positionX, f32 positionY, f32 positionZ)
-        : x(positionX), y(positionY), z(positionZ) {}
-
-};
+#include <GSvecDecl.h>
+#include <GSvecInline.h>
 
 #endif

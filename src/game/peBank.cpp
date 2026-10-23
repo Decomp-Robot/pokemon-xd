@@ -3,7 +3,7 @@
 #include <dolphin/os/OSFastCast.h>
 
 extern "C" {
-void *memset(void *destination, int value, unsigned long size);
+void *memset(void *destination, int value, size_t size);
 u32 GSmemGetSize(void *allocation);
 void GSboundCreate(GSbound *bound, void *vertices);
 void GSboundFree(GSbound *bound);

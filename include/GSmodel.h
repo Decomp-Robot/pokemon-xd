@@ -136,6 +136,9 @@ typedef void (*GSmodelParseCb)(_HSD_PObj *pobj, GSmtx *referenceMatrix,
                                void *userContext);
 
 extern "C" {
+void GSmodelFree(_GSmodel *model);
+void GSmodelSetTextureOverride(_GSmodel *model, GStexture *texture);
+void GSmodelResetTextureOverride(_GSmodel *model);
 void *GSmodelGetBound(_GSmodel *model);
 void GSmodelForceAnimTransformUpdate(_GSmodel *model);
 void GSmodelSetAnimRate(_GSmodel *model, f32 rate);

@@ -28,18 +28,18 @@ s32 dbgMenuDispChangePartyInfo(void)
 
 s32 dbgMenuPeopleOpenEdit(void)
 {
-    roomIDGetMapData(roomGetCurrentRoomID());
+    roomIDGetMapData(floorGetCurrentRoomID());
 
     if (menuIsOpen(MENU_ID_PEOPLE_EDITOR)) {
         if (floorFieldCameraDataExist()) {
             floorFieldCameraEnable();
         }
         menuClose(MENU_ID_PEOPLE_EDITOR);
-        zz_011ddf8_();
+        floorUnblockScriptModule();
     } else {
-        zz_0123e50_();
+        floorFieldCameraDisable();
         menuOpenCustom(MENU_ID_PEOPLE_EDITOR, 0, 0, 0, 0, 0);
-        zz_011de1c_();
+        floorBlockScriptModule();
     }
     return 0;
 }

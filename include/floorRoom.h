@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-u32 roomGetCurrentRoomID(void);
-u32 fieldGetCurrentRoomID(void);
+u32 floorGetCurrentRoomID(void);
+u32 floorStackGetCurrentRoomID(void);
 u32 floorGetPreviousMap(void);
 u32 floorGetCurrentMap(void);
 void floorUnlinkWithSE(u32 roomID, long soundEffect);
