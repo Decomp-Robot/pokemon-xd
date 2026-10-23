@@ -21,6 +21,7 @@ static char* TevRegNames[8] = {0};
 #define SOME_GET_REG_MACRO(reg, size, shift) ((u32)((reg) << (shift)) & ((1 << (size)) - 2))
 #define SOME_GET_REG_MACRO2(reg, size, shift) ((u32)((reg) >> (shift)) & ((1 << (size)) - 2))
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __GXVerifySU(void) {
     s32 scis_l;
     s32 scis_r;
@@ -79,6 +80,7 @@ void __GXVerifySU(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __GXVerifyBUMP(void) {
     u32 i;
     u32 nBmp;
@@ -169,6 +171,7 @@ void __GXVerifyBUMP(void) {
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __GXVerifyTEX(void) {
     u32 i;
     u32 nBmp;
@@ -383,6 +386,7 @@ static char _521[] = "A";
 static char _522[] = "B";
 static char _523[] = "C";
 static char _524[] = "D";
+// UNUSED: the game never calls this; dead-stripped at link.
 asm void __GXVerifyTEV(void) {
     nofralloc
 #include "../../nonmatchings/__GXVerifyTEV.s"
@@ -610,6 +614,7 @@ void __GXVerifyTEV(void) {
 }
 #endif
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __GXVerifyPE(void) {
     u32 i;
 

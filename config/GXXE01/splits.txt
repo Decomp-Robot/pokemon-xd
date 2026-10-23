@@ -704,6 +704,9 @@ ext/dolphin_sdk/gx/GXPerf.c:
 	.text       start:0x800D0084 end:0x800D00C8
 	.text       start:0x800D00C8 end:0x800D018C
 
+ext/dolphin_sdk/gx/GXVerifRAS.c:
+	.text       start:0x800D018C end:0x800D018C
+
 ext/dolphin_sdk/perf/perf.c:
 	.text       start:0x800D018C end:0x800D0234
 	.text       start:0x800D0234 end:0x800D033C
