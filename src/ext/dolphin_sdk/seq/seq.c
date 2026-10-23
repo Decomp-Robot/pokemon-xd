@@ -52,6 +52,7 @@ static void __SEQRunEvent(SYNSYNTH* synth, SEQTRACK* track);
 static void __SEQInitTracks(SEQSEQUENCE* sequence, u8* read, int tracks);
 static void __SEQReadHeader(SEQSEQUENCE* sequence, u8* midiStream);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQPushSequenceList(SEQSEQUENCE* sequence) {
     BOOL old;
 
@@ -66,6 +67,7 @@ static void __SEQPushSequenceList(SEQSEQUENCE* sequence) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQRemoveSequenceFromList(SEQSEQUENCE* sequence) {
     BOOL old;
     SEQSEQUENCE* thisSequence;
@@ -86,6 +88,7 @@ static void __SEQRemoveSequenceFromList(SEQSEQUENCE* sequence) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u32 __SEQGetIntTrack(SEQTRACK* track) {
     u32 value;
 
@@ -97,6 +100,7 @@ static u32 __SEQGetIntTrack(SEQTRACK* track) {
     return value;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQHandleSysExEvent(SEQTRACK* track) {
     u32 length;
 
@@ -105,6 +109,7 @@ static void __SEQHandleSysExEvent(SEQTRACK* track) {
     track->current += length;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQSetTicksPerFrame(SEQTRACK* track, f32 bps) {
     SEQSEQUENCE* sequence;
 
@@ -114,6 +119,7 @@ static void __SEQSetTicksPerFrame(SEQTRACK* track, f32 bps) {
     track->ticksPerFrame = (65536.0f * (160.0f / ((32000.0f / bps) / sequence->timeFormat)));
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQTempoMetaEvent(SEQTRACK* track) {
     u32 data;
     f32 beatsPerSec;
@@ -131,6 +137,7 @@ static void __SEQTempoMetaEvent(SEQTRACK* track) {
     __SEQSetTicksPerFrame(track, beatsPerSec);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQTrackEnd(SEQTRACK* track) {
     SEQSEQUENCE* sequence;
     ASSERTLINE(199, track);
@@ -143,6 +150,7 @@ static void __SEQTrackEnd(SEQTRACK* track) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQHandleMetaEvent(SEQTRACK* track) {
     u8 type;
     u32 length;
@@ -166,6 +174,7 @@ static void __SEQHandleMetaEvent(SEQTRACK* track) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQHandleSynthEvent(SYNSYNTH* synth, SEQTRACK* track) {
     u8 ch[3];
     u32 bytes;
@@ -196,6 +205,7 @@ static void __SEQHandleSynthEvent(SYNSYNTH* synth, SEQTRACK* track) {
     SYNMidiInput(synth, ch);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQRunEvent(SYNSYNTH* synth, SEQTRACK* track) {
     u8 event;
 
@@ -225,6 +235,7 @@ static void __SEQRunEvent(SYNSYNTH* synth, SEQTRACK* track) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQInitTracks(SEQSEQUENCE* sequence, u8* read, int tracks) {
     int i;
     u8* p;
@@ -259,6 +270,7 @@ static void __SEQInitTracks(SEQSEQUENCE* sequence, u8* read, int tracks) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SEQReadHeader(SEQSEQUENCE* sequence, u8* midiStream) {
     u8* read;
     u32 bytes;
@@ -301,14 +313,17 @@ static void __SEQReadHeader(SEQSEQUENCE* sequence, u8* midiStream) {
     sequence->tracksRunning = sequence->nTracks;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQInit(void) {
     __SEQSequenceList = NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQQuit(void) {
     __SEQSequenceList = NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQRunAudioFrame(void) {
     SEQSEQUENCE* sequence;
     u32 i;
@@ -351,6 +366,7 @@ void SEQRunAudioFrame(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQAddSequence(SEQSEQUENCE* sequence, u8* midiStream, void* wt, u32 aramBase, u32 zeroBase, u32 priorityVoiceAlloc, u32 priorityNoteOn, u32 priorityNoteRelease) {
     int i;
 
@@ -373,12 +389,14 @@ void SEQAddSequence(SEQSEQUENCE* sequence, u8* midiStream, void* wt, u32 aramBas
     __SEQPushSequenceList(sequence);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQRemoveSequence(SEQSEQUENCE* sequence) {
     ASSERTLINE(598, sequence);
     __SEQRemoveSequenceFromList(sequence);
     SYNQuitSynth(&sequence->synth);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQRegisterControllerCallback(SEQSEQUENCE* sequence, u8 controller, void (*callback)(void*, u8)) {
     ASSERTLINE(617, sequence);
     ASSERTLINE(618, controller < 128);
@@ -386,6 +404,7 @@ void SEQRegisterControllerCallback(SEQSEQUENCE* sequence, u8 controller, void (*
     sequence->callback[controller] = callback;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQSetState(SEQSEQUENCE* sequence, u32 state) {
     int i;
 
@@ -430,11 +449,13 @@ void SEQSetState(SEQSEQUENCE* sequence, u32 state) {
     sequence->state = state;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 SEQGetState(SEQSEQUENCE* sequence) {
     ASSERTLINE(700, sequence);
     return sequence->state;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQSetTempo(SEQSEQUENCE* sequence, u32 trackIndex, f32 bpm) {
     int i;
 
@@ -451,17 +472,20 @@ void SEQSetTempo(SEQSEQUENCE* sequence, u32 trackIndex, f32 bpm) {
     __SEQSetTicksPerFrame(&sequence->track[trackIndex], bpm / 60.0f);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 f32 SEQGetTempo(SEQSEQUENCE* sequence, u32 trackIndex) {
     ASSERTLINE(733, sequence);
     ASSERTLINE(734, trackIndex < sequence->nTracks);
     return 60.0f* sequence->track[trackIndex].beatsPerSec;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SEQSetVolume(SEQSEQUENCE* sequence, s32 dB) {
     ASSERTLINE(745, sequence);
     SYNSetMasterVolume(&sequence->synth, dB);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 long SEQGetVolume(SEQSEQUENCE* sequence) {
     ASSERTLINE(756, sequence);
     SYNGetMasterVolume(&sequence->synth);
