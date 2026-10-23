@@ -111,3 +111,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSTime.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/time.dolphin.c"
+completed = false
