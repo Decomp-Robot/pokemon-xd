@@ -13,3 +13,15 @@ long degreeRefresh180(long degree)
 
     return result;
 }
+
+// Wrap a degree value into the [0, 360) range.
+long degreeRefresh360(long degree)
+{
+    long result = degree % 360;
+
+    if (result < 0) {
+        result += 360;
+    }
+
+    return result;
+}
