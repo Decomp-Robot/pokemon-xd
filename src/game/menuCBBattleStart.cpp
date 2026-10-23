@@ -6,10 +6,6 @@
  * The battle-start screen of a link (GBA) battle: the players pick which of
  * the Pokemon they entered fight, and the screen shows the trainer faces of
  * the players that are in the battle.
- *
- * The module is a set of free functions. The entry points the menu system
- * calls are C functions; the helpers the screen code keeps to itself are C++
- * (which is why their linkage names are mangled).
  */
 
 /* -------------------------------------------------------------------------
@@ -23,8 +19,8 @@ typedef struct MenuCBBattleFace {
     /* 0x04 */ u32 resID;
 } MenuCBBattleFace;
 
-/* Battle-start screen work. The layout is shared with the battle animation
-   code, which reads the faces and waits for the read flag. */
+/* Battle-start screen work. The fight-side presentation code reads the faces
+   from here and waits until faceIndex catches up with faceNum. */
 typedef struct MenuCBBattleWork {
     /* 0x000 */ s32 mode;
     /* 0x004 */ s32 status;
@@ -40,15 +36,15 @@ typedef struct MenuCBBattleWork {
     /* 0x144 */ s32 trainerClassNameID;
 } MenuCBBattleWork;
 
-extern MenuCBBattleWork lbl_80435050;
+extern MenuCBBattleWork menuCBBattleStartWork;
 
 /* Pokemon order table the battle-start screen shows. */
-extern s32 lbl_80434FF0[4][6];
+extern s32 menuCBBattleStartPokeOrder[4][6];
 
-/* Starting Pokemon number of each battle slot ("no Pokemon" is 6), kept in the
-   shared read-only small data area. */
-extern u16 lbl_804EC3A8[2];
-extern u16 lbl_804EC3AC[2];
+/* Default party size of each battle slot (6 = full party) until the entry
+   data supplies real counts. */
+extern u32 defaultPokeNum01;
+extern u32 defaultPokeNum23;
 
 /* -------------------------------------------------------------------------
  * External functions
@@ -85,14 +81,16 @@ s32 GSfsysReadIDEX(u32 id, u32 resID, void *callback, void *context, u32 group);
  * Functions of this module
  * ---------------------------------------------------------------------- */
 
-/* State of the battle-start screen; -1 while the screen is not running. */
-extern "C" s32 zz_004725c_(void);
+/* State of the battle-start screen. */
+extern "C" s32 menuCBBattleStartGetStatus(void);
 extern "C" void menuCBBattleStartInit(s32 mode, s32 status);
 extern "C" void menuCBBattleStartSetStatus(s32 status);
 extern "C" u8 menuCB_BattleStartSoundCheck(void);
 extern "C" void menuCBBattleStartDispTrainerInit(void);
 extern "C" void menuCBBattleStartTrainerLoadTex(void);
 extern "C" void menuCBBattleStartTrainerFaceFree(void);
+
+extern "C" void _menuCBBattleStartSetIndexDouble(long index, unsigned short pokeNum);
 
 void _menuCBBattleStartSetIndex(void);
 void _menuCBBattleStartSetIndexSingle(long index, unsigned short pokeNum);
@@ -103,27 +101,25 @@ u8 _menuCBBattleCheckTrainer(long work, long mode);
 s32 _menuCBBattleStartGetTrainerFaceSize(void);
 void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg);
 
-/* Helpers whose original names are not in the symbol table. */
-extern "C" void zz_0046f40_(long index, unsigned short pokeNum);
-
 /* -------------------------------------------------------------------------
  * Battle start screen
  * ---------------------------------------------------------------------- */
 
 /*
- * Fill lbl_80434FF0 with the order the entered Pokemon are shown in. */
+ * Fill menuCBBattleStartPokeOrder with the order the entered Pokemon are shown in. */
 void _menuCBBattleStartSetIndex(void)
 {
     s32 battleType = toolentryTaisenGetBattleType();
     u16 pokeNum[4];
     s32 i;
 
-    *(u32 *)&pokeNum[0] = *(u32 *)&lbl_804EC3A8[0];
-    *(u32 *)&pokeNum[2] = *(u32 *)&lbl_804EC3AC[0];
+    /* default party sizes, two battle slots packed per word */
+    *(u32 *)&pokeNum[0] = defaultPokeNum01;
+    *(u32 *)&pokeNum[2] = defaultPokeNum23;
 
     _menuCBBattleStartWorkInit();
 
-    switch (lbl_80435050.status) {
+    switch (menuCBBattleStartWork.status) {
     case 0:
         for (i = 0; i < 4; i++) {
             pokeNum[i] = toolentryTaisenGetPokemonNum(i);
@@ -139,7 +135,7 @@ void _menuCBBattleStartSetIndex(void)
     switch (battleType) {
     case 0:
         for (i = 0; i < 2; i++) {
-            zz_0046f40_(i, pokeNum[i]);
+            _menuCBBattleStartSetIndexDouble(i, pokeNum[i]);
         }
         break;
     case 1:
@@ -156,17 +152,15 @@ void _menuCBBattleStartSetIndex(void)
 }
 
 /*
- * Order a battle table slot is shown in: one row per Pokemon, holding the row
- * of the order table the Pokemon's party slot selects. Only the rows that are
- * not the identity order are written out.
+ * Order a battle slot is shown in: one row per party size; each row gives the
+ * order in which that party's Pokemon are shown.
  */
 typedef struct MenuCBBattleOrder {
     s32 row[6][6];
 } MenuCBBattleOrder;
 
-/* Double battle order table; party slots 1 and 2 are shown in the order they
-   were entered. */
-static const MenuCBBattleOrder unk_2136 = { {
+/* Double battle order table. */
+static const MenuCBBattleOrder BattleOrderDouble = { {
     { 1, 2, 0, 3, 4, 5 },
     { 2, 0, 1, 3, 4, 5 },
     { 0, 1, 2, 3, 4, 5 },
@@ -175,9 +169,8 @@ static const MenuCBBattleOrder unk_2136 = { {
     { 0, 1, 2, 3, 4, 5 },
 } };
 
-/* Single battle order table; party slot 4 is shown in the order it was
-   entered. */
-static const MenuCBBattleOrder unk_2145 = { {
+/* Single battle order table. */
+static const MenuCBBattleOrder BattleOrderSingle = { {
     { 0, 1, 2, 3, 4, 5 },
     { 0, 1, 2, 3, 4, 5 },
     { 0, 1, 2, 3, 4, 5 },
@@ -190,26 +183,26 @@ static const MenuCBBattleOrder unk_2145 = { {
    in the order of the battle table, picked by the Pokemon's party slot. */
 void _menuCBBattleStartSetIndexSingle(long index, unsigned short pokeNum)
 {
-    s32 *slot = lbl_80434FF0[index];
-    MenuCBBattleOrder order = unk_2145;
-    s32 *row = order.row[(u16)pokeNum - 1];
+    s32 *slot = menuCBBattleStartPokeOrder[index];
+    MenuCBBattleOrder order = BattleOrderSingle;
+    const s32 *row = order.row[pokeNum - 1];
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        slot[(u16)i] = row[(u16)i];
+        slot[i] = row[i];
     }
 }
 
 /* Same as _menuCBBattleStartSetIndexSingle for the double battle table. */
-extern "C" void zz_0046f40_(long index, unsigned short pokeNum)
+extern "C" void _menuCBBattleStartSetIndexDouble(long index, unsigned short pokeNum)
 {
-    s32 *slot = lbl_80434FF0[index];
-    MenuCBBattleOrder order = unk_2136;
-    s32 *row = order.row[(u16)pokeNum - 1];
+    s32 *slot = menuCBBattleStartPokeOrder[index];
+    MenuCBBattleOrder order = BattleOrderDouble;
+    const s32 *row = order.row[pokeNum - 1];
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        slot[(u16)i] = row[(u16)i];
+        slot[i] = row[i];
     }
 }
 
@@ -217,7 +210,7 @@ extern "C" void zz_0046f40_(long index, unsigned short pokeNum)
 void _menuCBBattleStartSetIndexMulti(long index, unsigned short pokeNum)
 {
     u16 i;
-    s32 *slot = lbl_80434FF0[index];
+    s32 *slot = menuCBBattleStartPokeOrder[index];
 
     for (i = 0; i < pokeNum; i++) {
         slot[i] = i;
@@ -235,7 +228,7 @@ void _menuCBBattleStartWorkInit(void)
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 6; j++) {
-            lbl_80434FF0[i][j] = j;
+            menuCBBattleStartPokeOrder[i][j] = j;
         }
     }
 }
@@ -243,19 +236,19 @@ void _menuCBBattleStartWorkInit(void)
 /* Non-zero while the battle-start jingle is still playing. */
 extern "C" u8 menuCB_BattleStartSoundCheck(void)
 {
-    u32 status = GSsndGetStatus(lbl_80435050.soundID);
+    u32 status = GSsndGetStatus(menuCBBattleStartWork.soundID);
 
     return status != 2;
 }
 
 extern "C" void menuCBBattleStartSetStatus(s32 status)
 {
-    lbl_80435050.status = status;
+    menuCBBattleStartWork.status = status;
 }
 
-extern "C" s32 zz_004725c_(void)
+extern "C" s32 menuCBBattleStartGetStatus(void)
 {
-    return lbl_80435050.status;
+    return menuCBBattleStartWork.status;
 }
 
 /* Read the name and the class name of the trainer the battle-start screen
@@ -266,14 +259,14 @@ void _menuCBBattleStartSetTrainerData(void)
 
     if (_menuCBBattleCheckTrainer(1, mode) != 0) {
         void *hero = gamedataBiosGetGamedataAtttestPtr(zz_0231edc_(1));
-        u16 *name = lbl_80435050.trainerName;
+        u16 *name = menuCBBattleStartWork.trainerName;
 
         if (name != 0) {
             GScharCpy(name, hero);
         } else {
             GScharCpy(name, GSmsgGetStringPtr(1));
         }
-        lbl_80435050.trainerClassNameID = zz_trainer_class_get_name_id(
+        menuCBBattleStartWork.trainerClassNameID = zz_trainer_class_get_name_id(
             fightTrainerKindDataBiosGetPtr(fightTrainerDB_GetKindDataId(
                 toolentryTaisenGetTrainerDataID(1))));
     }
@@ -308,8 +301,8 @@ extern "C" void menuCBBattleStartInit(s32 mode, s32 status)
     u16 rnd;
 
     _menuCBBattleStartSetTrainerData();
-    lbl_80435050.mode = mode;
-    lbl_80435050.status = status;
+    menuCBBattleStartWork.mode = mode;
+    menuCBBattleStartWork.status = status;
     _menuCBBattleStartSetIndex();
 
     switch (status) {
@@ -319,25 +312,25 @@ extern "C" void menuCBBattleStartInit(s32 mode, s32 status)
         rnd = HSD_Rand();
         switch (rnd % 3) {
         case 0:
-            lbl_80435050.soundID = 0x3D2;
+            menuCBBattleStartWork.soundID = 0x3D2;
             break;
         case 1:
-            lbl_80435050.soundID = 0x3F5;
+            menuCBBattleStartWork.soundID = 0x3F5;
             break;
         case 2:
-            lbl_80435050.soundID = 0x3F6;
+            menuCBBattleStartWork.soundID = 0x3F6;
             break;
         case 3:
         default:
-            lbl_80435050.soundID = 0x3F7;
+            menuCBBattleStartWork.soundID = 0x3F7;
             break;
         }
-        soundOpenPlay(lbl_80435050.soundID, 0, 0xFF);
+        soundOpenPlay(menuCBBattleStartWork.soundID, 0, 0xFF);
         break;
     case 1:
         menuCBPokemonEntryTexWorkInit();
         menuCBPokemonEntryLoadTex();
-        lbl_80435050.soundID = 0x5DB;
+        menuCBBattleStartWork.soundID = 0x5DB;
         soundOpenPlay(0x5DB, 0, 0xFF);
         break;
     }
@@ -348,14 +341,14 @@ extern "C" void menuCBBattleStartDispTrainerInit(void)
 {
     s32 i;
 
-    MenuCBBattleWork *work = &lbl_80435050;
+    MenuCBBattleWork *work = &menuCBBattleStartWork;
 
     work->readDone = 0;
     work->faceIndex = 0;
     if (_menuCBBattleStartGetTrainerFaceSize() == 0) {
-        lbl_80435050.faceNum = 4;
+        menuCBBattleStartWork.faceNum = 4;
     } else {
-        lbl_80435050.faceNum = 2;
+        menuCBBattleStartWork.faceNum = 2;
     }
     for (i = 0; i < 4; i++) {
         work->face[i].resID = 0;
@@ -367,7 +360,7 @@ extern "C" void menuCBBattleStartDispTrainerInit(void)
 extern "C" void menuCBBattleStartTrainerLoadTex(void)
 {
     _menuCBBattleStartGetTrainerFaceSize();
-    lbl_80435050.readDone = 1;
+    menuCBBattleStartWork.readDone = 1;
     _menuCBBattleStartDispTrainerTexCallBack(0, 0, 0);
 }
 
@@ -396,22 +389,22 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg)
     /* One face per call: read the next one the battle needs, then stop when the
        read has been started or when there is no face left to read. */
     do {
-        if (lbl_80435050.faceIndex == lbl_80435050.faceNum) {
+        if (menuCBBattleStartWork.faceIndex == menuCBBattleStartWork.faceNum) {
             running = 0;
         } else {
             if (_menuCBBattleStartGetTrainerFaceSize() != 0) {
-                if (lbl_80435050.faceIndex % 2 != 0) {
+                if (menuCBBattleStartWork.faceIndex % 2 != 0) {
                     resID = toolentryGetTrainerBicFaceResID(1, 0);
                 } else {
                     resID = toolentryGetTrainerBicFaceResID(0, 1);
                 }
             } else {
-                if (lbl_80435050.faceIndex < 2) {
+                if (menuCBBattleStartWork.faceIndex < 2) {
                     resID = toolentryGetTrainerSamllFaceResID(
-                        lbl_80435050.faceIndex, 1);
+                        menuCBBattleStartWork.faceIndex, 1);
                 } else {
                     resID = toolentryGetTrainerSamllFaceResID(
-                        lbl_80435050.faceIndex, 0);
+                        menuCBBattleStartWork.faceIndex, 0);
                 }
             }
             if (_menuCBBattleStartGetTrainerFaceSize() != 0) {
@@ -419,22 +412,21 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg)
             } else {
                 arg = 0x5C4;
             }
-            face = &lbl_80435050.face[lbl_80435050.faceIndex];
+            face = &menuCBBattleStartWork.face[menuCBBattleStartWork.faceIndex];
             face->resID = resID;
             face->group = GSresGetResourceAllGroup(face->resID);
             if (face->group != 0) {
-                lbl_80435050.faceIndex++;
+                menuCBBattleStartWork.faceIndex++;
             } else {
                 GSfsysReadIDEX(arg, resID,
                                _menuCBBattleStartDispTrainerTexCallBack, face,
                                resID);
                 running = 0;
-                lbl_80435050.faceIndex++;
+                menuCBBattleStartWork.faceIndex++;
             }
         }
     } while (running != 0);
 }
-
 
 /* Free the trainer faces and arm them again. */
 extern "C" void menuCBBattleStartTrainerFaceFree(void)
@@ -451,23 +443,25 @@ extern "C" void menuCBBattleStartTrainerFaceFree(void)
     GSfsysFree(group);
     GSresFreeGroup(group);
 
-    face = &lbl_80435050.face[0];
+    face = &menuCBBattleStartWork.face[0];
     if (_menuCBBattleStartGetTrainerFaceSize() == 0) {
-        lbl_80435050.faceNum = 4;
+        menuCBBattleStartWork.faceNum = 4;
     } else {
-        lbl_80435050.faceNum = 2;
+        menuCBBattleStartWork.faceNum = 2;
     }
-    for (i = 0; i < lbl_80435050.faceNum; i++) {
+    for (i = 0; i < menuCBBattleStartWork.faceNum; i++) {
         GSresFreeResource(group, face->resID);
         face++;
     }
     menuCBBattleStartDispTrainerInit();
 }
 
-// Static initializer of the menuCBBattleStart module, run once at startup through the
-// .ctors table.
-extern "C" void zz_00477f4_(void)
+// Static initializer of the menuCBBattleStart module, run once at startup
+// through the .ctors table.
+extern "C" void menuCBBattleStartStaticInit(void)
 {
 }
 
-extern "C" __declspec(section ".ctors") void (*const zz_00477f4_ctor)(void) = zz_00477f4_;
+// .ctors entry holding the initializer address (SDK _ctors[] convention).
+extern "C" __declspec(section ".ctors") void (*const menuCBBattleStartStaticInit_ctor)(void) =
+    menuCBBattleStartStaticInit;
