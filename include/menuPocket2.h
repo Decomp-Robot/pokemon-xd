@@ -50,6 +50,7 @@ void menuPocket2GetHero(Hero **hero, FIGHT_TRAINER **trainer);
 u32 menuPocket2GetCurrentTemochiPokemonSlotID(void);
 u8 menuPocket2GetLastSlotID(void);
 void menuPocketClearItemScript(void);
+void menuPocket2AddItemScript(u32 item, u32 script);
 s32 menuPocket2GetItemScript(u16 id);
 
 #ifdef __cplusplus
