@@ -96,6 +96,9 @@ game/menuPocket2.cpp:
 game/gbaExchange.cpp:
 	.text       start:0x80027E44 end:0x80027E6C
 
+game/gbaCommand.cpp:
+	.text       start:0x80027E84 end:0x80027EB8
+
 game/menuCBBios.c:
 	.text       start:0x80027EB8 end:0x80027ECC
 

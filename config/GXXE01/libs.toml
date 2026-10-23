@@ -252,6 +252,10 @@ name = "game/menuPocket2.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/gbaCommand.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocketBattleDisk.cpp"
 completed = true
 cflags = [
