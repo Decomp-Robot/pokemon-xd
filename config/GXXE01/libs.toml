@@ -26,3 +26,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAlloc.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSArena.c"
+completed = false

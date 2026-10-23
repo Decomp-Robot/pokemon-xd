@@ -22,6 +22,13 @@ ext/dolphin_sdk/os/OS.c:
 ext/dolphin_sdk/os/OSAlarm.c:
 	.text       start:0x800AA178 end:0x800AA950
 
+ext/dolphin_sdk/os/OSArena.c:
+	.text       start:0x800AA950 end:0x800AA958
+	.text       start:0x800AA958 end:0x800AA960
+	.text       start:0x800AA960 end:0x800AA968
+	.text       start:0x800AA968 end:0x800AA970
+	.text       start:0x800AA970 end:0x800AA99C
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
