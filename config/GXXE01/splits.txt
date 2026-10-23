@@ -688,15 +688,45 @@ ext/dolphin_sdk/exi/EXIBios.c:
 	.sdata      start:0x804E8320 end:0x804E8324
 	.sbss       start:0x804EAEA8 end:0x804EAEAC
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/dolphin_sdk/exi/EXIUart.c:
 	.text       start:0x800E949C end:0x800E9628
 	.text       start:0x800E9628 end:0x800E97E4
 	.text       start:0x800E97E4 end:0x800E9854
 	.text       start:0x800E9854 end:0x800E9A54
 	.sbss       start:0x804EAEB0 end:0x804EAEC0
+
+ext/dolphin_sdk/si/SIBios.c:
+	.text       start:0x800E9A54 end:0x800E9A74
+	.text       start:0x800E9A74 end:0x800E9AB0
+	.text       start:0x800E9AB0 end:0x800E9DAC
+	.text       start:0x800E9DAC end:0x800EA0F0
+	.text       start:0x800EA0F0 end:0x800EA188
+	.text       start:0x800EA188 end:0x800EA254
+	.text       start:0x800EA254 end:0x800EA348
+	.text       start:0x800EA348 end:0x800EA3FC
+	.text       start:0x800EA3FC end:0x800EA608
+	.text       start:0x800EA608 end:0x800EA684
+	.text       start:0x800EA684 end:0x800EA698
+	.text       start:0x800EA698 end:0x800EA6A8
+	.text       start:0x800EA6A8 end:0x800EA714
+	.text       start:0x800EA714 end:0x800EA7B0
+	.text       start:0x800EA7B0 end:0x800EA81C
+	.text       start:0x800EA81C end:0x800EA8F0
+	.text       start:0x800EA8F0 end:0x800EA9B4
+	.text       start:0x800EA9B4 end:0x800EAA40
+	.text       start:0x800EAA40 end:0x800EABAC
+	.text       start:0x800EABAC end:0x800EAE44
+	.text       start:0x800EAE44 end:0x800EB008
+	.text       start:0x800EB008 end:0x800EB144
+	.text       start:0x800EB144 end:0x800EB290
+	.text       start:0x800EB290 end:0x800EB2B4
+	.data       start:0x803D4DC8 end:0x803D4EE0
+	.bss        start:0x80442BB0 end:0x80442DB0
+	.sdata      start:0x804E8328 end:0x804E832C
+	.sbss       start:0x804EAEC0 end:0x804EAEC8
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
