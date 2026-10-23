@@ -1,6 +1,10 @@
 #ifndef WAZA_H
 #define WAZA_H
 
+#include <types.h>
+
+enum { WAZA_STATUS_TYPE = 0x1A };
+
 // Waza (move) data fields read with wazaGetStatus. The status menu asks for
 // the move by waza number: its name message id, its base PP, its type id,
 // its accuracy and power shown as numbers, and its description message id.
@@ -23,5 +27,16 @@ enum WAZA_SHADOW {
     WAZA_SHADOW_SPECIAL = 0x176, // shadow move with special display.
     WAZA_SHADOW_SPECIAL_ICON = 0x7B, // type icon drawn for the special shadow move.
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

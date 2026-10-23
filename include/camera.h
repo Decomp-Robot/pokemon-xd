@@ -3,9 +3,21 @@
 
 #include <types.h>
 
+enum {
+    CAMERA_TYPE_DEFAULT = 0,
+    CAMERA_TYPE_DEBUG_PRIMARY = 5,
+    CAMERA_TYPE_DEBUG_SECONDARY = 6
+};
+
+#ifdef __cplusplus
 extern "C" {
-void zz_01971c8_(s32 resourceGroup, unsigned long resourceId,
-                         f32 startFrame, s32 loop);
+#endif
+// Sets the camera type and returns the previous type.
+u8 cameraSetType(u8 cameraType);
+void cameraPlayAnime(s32 resourceGroup, unsigned long resourceId,
+                 f32 startFrame, s32 loop);
+#ifdef __cplusplus
 }
+#endif
 
 #endif

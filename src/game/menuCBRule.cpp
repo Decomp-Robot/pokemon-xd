@@ -1,3 +1,4 @@
+#include <heroBios.h>
 /*
  * menuCBRule.cpp
  *
@@ -10,6 +11,7 @@
 #include <menuCBBios.h>
 #include <menuCBRule.h>
 #include <Pokemon.h>
+#include <pokemonBios.h>
 #include <types.h>
 
 /* -------------------------------------------------------------------------
@@ -28,7 +30,6 @@ extern u16 *gLegendPokemonList;
 extern "C" {
 extern FightRuleData *menuCBBios_CurrentRule(void);
 extern u8 menuCBRulesetGetDirty(void);
-extern Pokemon *heroBiosGetPokemonPtr(Pokemon *party, u16 slot);
 extern u16 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
 extern u16 battlePokemonGetSpecies(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
@@ -38,7 +39,6 @@ extern u16 battlePokemonStatusGetSpAtk(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetSpDef(Pokemon *pokemon);
 extern u8 pokemonIsShadowPokemon(Pokemon *pokemon);
 extern u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
-extern u8 pokemon_GetLevel(Pokemon *pokemon);
 extern bool pokemonCheckValid(Pokemon *pokemon);
 extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, u16 arg3);
 extern void pokemonBiosCopy(Pokemon *dst, Pokemon *src);
@@ -61,16 +61,6 @@ extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
  * Forward declarations
  * ---------------------------------------------------------------------- */
 
-extern "C" u8 menuCBRule_IsBlankPokemon(Pokemon *pokemon);
-extern "C" u8 menuCBRule_CheckPokemonEventFlag(Pokemon *pokemon);
-extern "C" u8 menuCBRule_CheckPokemonErrorAll(Pokemon *pokemon);
-extern "C" u8 menuCBRule_CheckPokemonRegulationAll(Pokemon *pokemon, FightRuleData *rule);
-extern "C" u8 menuCBRule_CheckTrainerRegulationAll(Pokemon *party, FightRuleData *rule);
-extern "C" u8 menuCBRule_CheckRegulationAll(Pokemon *party, FightRuleData *rule);
-extern "C" u8 menuCBRule_HasTrainerError(Pokemon *party, s32 index);
-extern "C" u8 menuCBRule_CheckTrainerErrorAll(Pokemon *party);
-extern "C" u8 menuCBRule_CheckErrorAll(Pokemon *party);
-extern "C" s32 menuCBRule_CheckHero(Pokemon *party);
 u8 _menuCBRule_IsTamagoPokemon(Pokemon *pokemon);
 
 /* -------------------------------------------------------------------------
@@ -102,13 +92,13 @@ extern "C" u8 menuCBRule_CheckLegendPokemon(Pokemon *pokemon, FightRuleData *rul
     return 1;
 }
 
-extern "C" void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry)
+extern "C" void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry)
 {
     FightRuleData *rule = menuCBBios_CurrentRule();
     u32 i;
 
     for (i = 0; i < 6; i++) {
-        Pokemon *pokemon = heroBiosGetPokemonPtr(party, i);
+        Pokemon *pokemon = heroBiosGetPokemonPtr(hero, i);
 
         battlePokemonStatusGetHeldItem(pokemon);
         menuCBEntrySlotFlagsClear(entry, i);
@@ -143,13 +133,13 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry)
         menuCBTaisenWork.entryFlags[entry][i].invalidMove = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL_MOVE);
         menuCBTaisenWork.entryFlags[entry][i].invalidPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_VALID);
         menuCBTaisenWork.entryFlags[entry][i].partyLevelSumExceeded =
-            !menuCBRule_CheckTrainerRegulation(party, rule, REGULATION_TRAINER_LEVEL_SUM);
+            !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_LEVEL_SUM);
         menuCBTaisenWork.entryFlags[entry][i].duplicateSpecies =
-            !menuCBRule_CheckTrainerRegulationAt(party, pokemon, rule, REGULATION_TRAINER_SAME_SPECIES);
+            !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_SPECIES);
         menuCBTaisenWork.entryFlags[entry][i].duplicateHeldItem =
-            !menuCBRule_CheckTrainerRegulationAt(party, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
+            !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
         menuCBTaisenWork.entryFlags[entry][i].insufficientPokemon =
-            !menuCBRule_CheckTrainerRegulation(party, rule, REGULATION_TRAINER_POKEMON_NUM);
+            !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_POKEMON_NUM);
         menuCBTaisenWork.entryFlags[entry][i].legendPokemon =
             !menuCBRule_CheckLegendPokemon(pokemon, rule);
     }
@@ -175,16 +165,16 @@ extern "C" u8 menuCBRule_CheckPokemonEventFlag(Pokemon *pokemon)
     return 1;
 }
 
-extern "C" u8 menuCBRule_CheckErrorAll(Pokemon *party)
+extern "C" u8 menuCBRule_CheckErrorAll(Hero *hero)
 {
     u16 i;
 
-    if (!menuCBRule_CheckTrainerErrorAll(party)) {
+    if (!menuCBRule_CheckTrainerErrorAll(hero)) {
         return 0;
     }
 
     for (i = 0; i < 6; i++) {
-        Pokemon *pokemon = heroBiosGetPokemonPtr(party, i);
+        Pokemon *pokemon = heroBiosGetPokemonPtr(hero, i);
 
         if (!menuCBRule_CheckPokemonErrorAll(pokemon)) {
             return 0;
@@ -194,13 +184,13 @@ extern "C" u8 menuCBRule_CheckErrorAll(Pokemon *party)
     return 1;
 }
 
-extern "C" u8 menuCBRule_CheckTrainerErrorAll(Pokemon *party)
+extern "C" u8 menuCBRule_CheckTrainerErrorAll(Hero *hero)
 {
     s32 i;
 
     // There are no trainer-record checks in this version.
     for (i = 0; i < 0; i++) {
-        if (!menuCBRule_HasTrainerError(party, i)) {
+        if (!menuCBRule_HasTrainerError(hero, i)) {
             return 0;
         }
     }
@@ -209,7 +199,7 @@ extern "C" u8 menuCBRule_CheckTrainerErrorAll(Pokemon *party)
 }
 
 /* A trainer record carries no regulation of its own. */
-extern "C" u8 menuCBRule_HasTrainerError(Pokemon *party, s32 index)
+extern "C" u8 menuCBRule_HasTrainerError(Hero *hero, s32 index)
 {
     return 0;
 }
@@ -316,17 +306,17 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
     return 0;
 }
 
-extern "C" u8 menuCBRule_CheckRegulationAll(Pokemon *party, FightRuleData *rule)
+extern "C" u8 menuCBRule_CheckRegulationAll(Hero *hero, FightRuleData *rule)
 {
     s32 i;
     s32 num = 0;
 
-    if (!menuCBRule_CheckTrainerRegulationAll(party, rule)) {
+    if (!menuCBRule_CheckTrainerRegulationAll(hero, rule)) {
         return 0;
     }
 
     for (i = 0; i < 6; i++) {
-        Pokemon *pokemon = heroBiosGetPokemonPtr(party, i);
+        Pokemon *pokemon = heroBiosGetPokemonPtr(hero, i);
 
         if (pokemon == 0 || !pokemonCheckValid(pokemon)) {
             continue;
@@ -346,12 +336,12 @@ extern "C" u8 menuCBRule_CheckRegulationAll(Pokemon *party, FightRuleData *rule)
     return num > 0;
 }
 
-extern "C" u8 menuCBRule_CheckTrainerRegulationAll(Pokemon *party, FightRuleData *rule)
+extern "C" u8 menuCBRule_CheckTrainerRegulationAll(Hero *hero, FightRuleData *rule)
 {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (!menuCBRule_CheckTrainerRegulation(party, rule, i)) {
+        if (!menuCBRule_CheckTrainerRegulation(hero, rule, i)) {
             return 0;
         }
     }
@@ -360,14 +350,14 @@ extern "C" u8 menuCBRule_CheckTrainerRegulationAll(Pokemon *party, FightRuleData
 }
 
 /* Regulation `kind` of one slot against the party it is entered from. */
-extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pokemon,
+extern "C" bool menuCBRule_CheckTrainerRegulationAt(Hero *hero, Pokemon *pokemon,
                                                    FightRuleData *rule, s32 kind)
 {
     s32 i;
 
     switch (kind) {
     case REGULATION_TRAINER_LEVEL_SUM:
-        return menuCBRule_CheckTrainerRegulation(party, rule, kind);
+        return menuCBRule_CheckTrainerRegulation(hero, rule, kind);
 
     case REGULATION_TRAINER_SAME_SPECIES:
         if (rule->mAllowSameSpecies != 0) {
@@ -379,7 +369,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
         }
 
         for (i = 0; i < 6; i++) {
-            Pokemon *other = heroBiosGetPokemonPtr(party, i);
+            Pokemon *other = heroBiosGetPokemonPtr(hero, i);
 
             if (other == pokemon) {
                 continue;
@@ -414,7 +404,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
         }
 
         for (i = 0; i < 6; i++) {
-            Pokemon *other = heroBiosGetPokemonPtr(party, i);
+            Pokemon *other = heroBiosGetPokemonPtr(hero, i);
 
             if (other == pokemon) {
                 continue;
@@ -436,7 +426,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
         return 1;
 
     case REGULATION_TRAINER_POKEMON_NUM:
-        return menuCBRule_CheckTrainerRegulation(party, rule, REGULATION_TRAINER_POKEMON_NUM) ||
+        return menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_POKEMON_NUM) ||
             menuCBRule_IsBlankPokemon(pokemon) == 0;
 
     default:
@@ -447,7 +437,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
 }
 
 /* The rule set party-wide regulation `kind`. */
-extern "C" bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData *rule,
+extern "C" bool menuCBRule_CheckTrainerRegulation(Hero *hero, FightRuleData *rule,
                                                 s32 kind)
 {
     s32 levelSum = 0;
@@ -459,7 +449,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData 
     Pokemon *other;
 
     for (i = 0; i < 6; i++) {
-        pokemon = heroBiosGetPokemonPtr(party, i);
+        pokemon = heroBiosGetPokemonPtr(hero, i);
 
         if (menuCBRule_IsBlankPokemon(pokemon)) {
             continue;
@@ -469,10 +459,10 @@ extern "C" bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData 
             continue;
         }
 
-        levelSum += pokemon_GetLevel(pokemon);
+        levelSum += pokemonBiosGetLevel(pokemon);
 
         for (j = i + 1; j < 6; j++) {
-            other = heroBiosGetPokemonPtr(party, j);
+            other = heroBiosGetPokemonPtr(hero, j);
 
             if (menuCBRule_IsBlankPokemon(other)) {
                 continue;
@@ -505,7 +495,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData 
         u16 slot;
 
         for (slot = 0; slot < 6; slot++) {
-            if (!menuCBRule_IsBlankPokemon(heroBiosGetPokemonPtr(party, slot))) {
+            if (!menuCBRule_IsBlankPokemon(heroBiosGetPokemonPtr(hero, slot))) {
                 num++;
             }
         }
@@ -547,10 +537,10 @@ extern "C" bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleDat
 
     switch (kind) {
     case REGULATION_POKEMON_LEVEL_MIN:
-        return pokemon_GetLevel(pokemon) >= rule->mPokemonLevelMin;
+        return pokemonBiosGetLevel(pokemon) >= rule->mPokemonLevelMin;
 
     case REGULATION_POKEMON_LEVEL_MAX:
-        return pokemon_GetLevel(pokemon) <= rule->mPokemonLevelMax;
+        return pokemonBiosGetLevel(pokemon) <= rule->mPokemonLevelMax;
 
     case REGULATION_POKEMON_ITEM:
         return menuCBRule_CheckRegulationItem(battlePokemonStatusGetHeldItem(pokemon));
@@ -563,12 +553,12 @@ extern "C" bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleDat
 }
 
 /* Whether the party may enter a battle under the current rule set. */
-extern "C" s32 menuCBRule_CheckHero(Pokemon *party)
+extern "C" s32 menuCBRule_CheckHero(Hero *hero)
 {
     s32 result = 0;
 
-    if (menuCBRule_CheckErrorAll(party)) {
-        if (menuCBRule_CheckRegulationAll(party, menuCBBios_CurrentRule())) {
+    if (menuCBRule_CheckErrorAll(hero)) {
+        if (menuCBRule_CheckRegulationAll(hero, menuCBBios_CurrentRule())) {
             result = 1;
         }
     }

@@ -1,7 +1,7 @@
 #include <FightRuleData.h>
 #include <menuCBBios.h>
 #include <types.h>
-#include <saveData.h>
+#include <savedata.h>
 
 /*
  * menuCBBiosRule.cpp
@@ -16,7 +16,6 @@
  * ---------------------------------------------------------------------- */
 
 extern "C" {
-
 FightRuleData *menuCB_OreRule(void);
 }
 
@@ -33,7 +32,7 @@ extern "C" void menuCBBios_InitDefaultRules(void);
 // Pokemon entry limit of the current rule set.
 extern "C" u32 menuCBBios_GetPokemonNumLimit(void)
 {
-    return zz_004d0b4_();
+    return menuCBRule_ParticipationPokemonMax();
 }
 
 extern "C" s32 menuCBBios_GetRuleId(void)
@@ -56,7 +55,7 @@ extern "C" FightRuleData *menuCBBios_CurrentRule(void)
         return oreRule;
     }
 
-    ruleData = zz_004d0d4_(menuCBBios_GetRuleId());
+    ruleData = menuCBRule_ConstantRule2(menuCBBios_GetRuleId());
     ruleId = menuCBBios_GetRuleId();
 
     switch (ruleId) {
@@ -91,7 +90,7 @@ extern "C" FightRuleData *menuCBBios_GetRulesetData(s32 ruleId)
 extern "C" void menuCBBios_InitDefaultRules(void)
 {
     FightRuleData *ruleData =
-        (FightRuleData *)getTrainerDataStartOffset(0, TRAINER_DATA_FIGHT_RULES);
+        (FightRuleData *)savedataGetStatus(0, TRAINER_DATA_FIGHT_RULES);
 
     ruleData[0] = *menuCBRule_GetDefaultRuleData(0);
     ruleData[1] = *menuCBRule_GetDefaultRuleData(1);

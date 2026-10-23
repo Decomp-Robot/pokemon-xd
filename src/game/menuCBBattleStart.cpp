@@ -1,3 +1,11 @@
+#include <heroBios.h>
+#include <GSfsys.h>
+#include <GSsnd.h>
+#include <sound.h>
+#include <toolentryTaisen.h>
+#include <hsdRandom.h>
+#include <GSres.h>
+#include <GSmsg.h>
 #include <types.h>
 #include <menuCBBattleStart.h>
 
@@ -13,42 +21,31 @@
  * Data of the screen
  * ---------------------------------------------------------------------- */
 
+// Battle-start screen state.
+MenuCBBattleWork menuCBBattleStartWork;
+
 /* Pokemon order table the battle-start screen shows. */
 extern s32 menuCBBattleStartPokeOrder[4][6];
-
-/* Default party size of each battle slot (6 = full party) until the entry
-   data supplies real counts. */
-extern u32 defaultPokeNum01;
-extern u32 defaultPokeNum23;
 
 /* -------------------------------------------------------------------------
  * External functions
  * ---------------------------------------------------------------------- */
 
 extern "C" {
-s32 toolentryTaisenGetBattleType(void);
 s32 toolentryTaisenGetTrainerDataID(s32 index);
 u16 toolentryTaisenGetPokemonNum(s32 index);
 u16 toolentryTaisenGetEntryPokemonNum(s32 index);
 s32 toolentryGetTrainerBicFaceResID(s32 index, s32 big);
 s32 toolentryGetTrainerSamllFaceResID(s32 index, s32 small);
-void *zz_0231edc_(s32 index);
-s32 zz_trainer_class_get_name_id(void *kindData);
+void *toolentryTaisenGetEntryHeroPtr(s32 index);
+s32 trainerKindGetNameMessageID(void *kindData);
 
 void menuCBPokemonEntryTexWorkInit(void);
 void menuCBPokemonEntryLoadTex(void);
-s32 GSsndGetStatus(u32 soundID);
-void soundOpenPlay(u32 soundID, s32 a, s32 b);
-u16 HSD_Rand(void);
-void *gamedataBiosGetGamedataAtttestPtr(void *hero);
-void GScharCpy(u16 *dst, void *src);
 u16 *GSmsgGetStringPtr(s32 id);
 s32 fightTrainerDB_GetKindDataId(s32 dataID);
 void *fightTrainerKindDataBiosGetPtr(u8 kindID);
-u32 GSresGetResourceAllGroup(u32 resID);
 void GSresFreeGroup(u32 group);
-void GSresFreeResource(u32 group, u32 resID);
-s32 GSfsysFree(u32 id);
 s32 GSfsysReadIDEX(u32 id, u32 resID, void *callback, void *context, u32 group);
 }
 
@@ -85,12 +82,8 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg);
 void _menuCBBattleStartSetIndex(void)
 {
     s32 battleType = toolentryTaisenGetBattleType();
-    u16 pokeNum[4];
+    u16 pokeNum[4] = {6, 6, 6, 6};
     s32 i;
-
-    /* default party sizes, two battle slots packed per word */
-    *(u32 *)&pokeNum[0] = defaultPokeNum01;
-    *(u32 *)&pokeNum[2] = defaultPokeNum23;
 
     _menuCBBattleStartWorkInit();
 
@@ -233,15 +226,15 @@ void _menuCBBattleStartSetTrainerData(void)
     s32 mode = toolentryTaisenGetBattleType();
 
     if (_menuCBBattleCheckTrainer(1, mode) != 0) {
-        void *hero = gamedataBiosGetGamedataAtttestPtr(zz_0231edc_(1));
+        const u16 *trainerName = (const u16 *)heroBiosGetNamePtr(toolentryTaisenGetEntryHeroPtr(1));
         u16 *name = menuCBBattleStartWork.trainerName;
 
         if (name != 0) {
-            GScharCpy(name, hero);
+            GScharCpy(name, trainerName);
         } else {
             GScharCpy(name, GSmsgGetStringPtr(1));
         }
-        menuCBBattleStartWork.trainerClassNameID = zz_trainer_class_get_name_id(
+        menuCBBattleStartWork.trainerClassNameID = trainerKindGetNameMessageID(
             fightTrainerKindDataBiosGetPtr(fightTrainerDB_GetKindDataId(
                 toolentryTaisenGetTrainerDataID(1))));
     }
@@ -284,7 +277,7 @@ extern "C" void menuCBBattleStartInit(s32 mode, s32 status)
     case 0:
         menuCBPokemonEntryTexWorkInit();
         menuCBPokemonEntryLoadTex();
-        rnd = HSD_Rand();
+        rnd = (u16)HSD_Rand();
         switch (rnd % 3) {
         case 0:
             menuCBBattleStartWork.soundID = 0x3D2;
@@ -358,7 +351,7 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg)
 
     if (context != 0) {
         ((MenuCBBattleFace *)context)->group =
-            GSresGetResourceAllGroup(((MenuCBBattleFace *)context)->resID);
+            (u32)GSresGetResourceAllGroup(((MenuCBBattleFace *)context)->resID);
     }
 
     /* One face per call: read the next one the battle needs, then stop when the
@@ -389,7 +382,7 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg)
             }
             face = &menuCBBattleStartWork.face[menuCBBattleStartWork.faceIndex];
             face->resID = resID;
-            face->group = GSresGetResourceAllGroup(face->resID);
+            face->group = (u32)GSresGetResourceAllGroup(face->resID);
             if (face->group != 0) {
                 menuCBBattleStartWork.faceIndex++;
             } else {
@@ -407,7 +400,7 @@ void _menuCBBattleStartDispTrainerTexCallBack(long id, void *context, long arg)
 extern "C" void menuCBBattleStartTrainerFaceFree(void)
 {
     MenuCBBattleFace *face;
-    u32 group;
+    unsigned long group;
     s32 i;
 
     if (_menuCBBattleStartGetTrainerFaceSize() != 0) {
@@ -430,13 +423,3 @@ extern "C" void menuCBBattleStartTrainerFaceFree(void)
     }
     menuCBBattleStartDispTrainerInit();
 }
-
-// Static initializer of the menuCBBattleStart module, run once at startup
-// through the .ctors table.
-extern "C" void menuCBBattleStartStaticInit(void)
-{
-}
-
-// .ctors entry holding the initializer address (SDK _ctors[] convention).
-extern "C" __declspec(section ".ctors") void (*const menuCBBattleStartStaticInit_ctor)(void) =
-    menuCBBattleStartStaticInit;

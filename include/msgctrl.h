@@ -1,6 +1,8 @@
 #ifndef MSGCTRL_H
 #define MSGCTRL_H
 
+enum { MSG_VAR_CHARACTER_NAME = 0x59 };
+
 // Message-value slots used by the save report templates.
 enum {
     MSG_VALUE_REPORT_PLAYTIME = 0x4C,

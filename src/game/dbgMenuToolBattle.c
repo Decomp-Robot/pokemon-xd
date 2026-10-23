@@ -1,27 +1,15 @@
+#include <menu.h>
 #include <types.h>
 
-/*
- * Debug items for the tool battle debug menu. They drive a scratch copy of
- * the GBA coupon exchange state and the AGB connection switch. The debug
- * menu tables that register these callbacks are not part of the final
- * binary, so the items below have no callers; the counters let a debugger
- * confirm that an item ran.
- */
+/* Tool battle debug menu: coupon exchange state and AGB connection controls. */
 
-/* Not called by other code; marked so the linker keeps them. */
 #pragma force_active on
 
-/* The peephole pass reshuffles the small stores below. */
 #pragma peephole off
 
-extern void menuClose(s32 menuID);
-extern s32 menuOpen(s32 menuID, s32 mode);
 extern void menuCBDebug_SkipAGBConnection(u8 skip);
 
-/* Item-run counters. MWCC lays .sbss out in reverse declaration order, so
- * the declarations below run back to front over the block dbgMenuGBACouponCount,
- * dbgMenuGBAClearCouponCount, dbgMenuGBAClearFlag, dbgMenuGBAResetCouponCount.
- */
+/* Item-run counters. */
 static volatile s32 dbgMenuGBAResetCouponCount;
 static volatile s32 dbgMenuGBAClearFlag;
 static volatile s32 dbgMenuGBAClearCouponCount;
@@ -65,7 +53,7 @@ s32 dbgToolBattleDebugSetAGBConnectionMode(s32 menuID, s32 connectionMode)
 }
 
 /* Debug item that does nothing. */
-void zz_000e71c_(void)
+void dbgToolBattleNoOp(void)
 {
 }
 

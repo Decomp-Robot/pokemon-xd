@@ -1,3 +1,6 @@
+#include <fade.h>
+#include <savedata.h>
+#include <heroBios.h>
 #include <Pokemon.h>
 #include <gsFlag.h>
 #include <menuSub.h>
@@ -47,23 +50,6 @@ extern const float gFadeSpeed;
 #define FLOOR_PC_BOX 913
 #define FLOOR_RELIVEHALL_TUTORIAL 935
 
-// Status a dark Pokemon of the shadow data is left in. The bios flag helpers read
-// the value as a threshold: at 1 the Pokemon can fight, at 3 it counts as
-// snatched, and 4 additionally marks it as relived.
-enum darkPokemonStatus {
-    DARK_POKEMON_STATUS_NONE = 0,
-    DARK_POKEMON_STATUS_FIGHT = 1,
-    DARK_POKEMON_STATUS_SNATCH_SUCCESS = 3,
-    DARK_POKEMON_STATUS_RELIVED = 4,
-};
-
-// The record of one dark Pokemon of the shadow data.
-struct DarkPokemon {
-    void setStatus(darkPokemonStatus status);
-    darkPokemonStatus getStatus(void) const;
-    void setUpdate(bool update);
-};
-
 // ---- engine, library and game entry points -------------------------------
 
 extern "C" {
@@ -75,7 +61,7 @@ void menuScriptReciveMail(void);
 void menuWorldMapMXDebug(void);
 // Opens the D2 present of the given kind and keeps the state in its own global.
 void d2presentOpen(s32 kind);
-void floorPush(s32 floor);
+void GSfloorPush(s32 floor);
 void reliveHallDebugPokemonSetup(s32 index);
 
 // PDA menu scripts
@@ -94,8 +80,6 @@ u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 cl
 void GSthreadSetArgs(u32 thread, s32 count, ...);
 
 // pokemon
-Pokemon *heroGetStatus(void *save, s32 flag, u16 slot);
-Pokemon *heroBiosGetPokemonPtr(s32 base, u16 slot);
 void *gamedataGetStatus(s32 a, s32 b);
 void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
 u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
@@ -129,8 +113,6 @@ void reliveHallDebugMakePocketBest(void);
 void reliveHallDebugMakePocketAll(void);
 
 // screens
-void fadeSet(s32 mode, float speed);
-void fadeCheck(s32 wait);
 // The third argument is handed to the evolution floor through its shared work
 // area and reaches the evolution demo as its input flag: zero runs the demo
 // without any button check, nonzero lets the demo take the player's input and
@@ -139,7 +121,6 @@ s32 evolutionOpen(Pokemon *from, Pokemon *to, s32 inputEnabled, u16 *wazaNo, s32
 void menuPokemonStatusOpenWazaLearn(Pokemon *pokemon, s32 waza);
 void msgctrlSetValue(s32 id, s32 value);
 void menuPokemonChange(void);
-s32 getTrainerDataStartOffset(s32 a, s32 b);
 }
 
 // Helpers the entries below share. The leading underscore of the ones that take
@@ -465,11 +446,11 @@ void testEvolution(void)
     Pokemon *from;
     Pokemon *to;
 
-    from = heroGetStatus(0, 3, 0);
+    from = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, 0);
     if (!pokemonCheckValid(from)) {
         return;
     }
-    to = heroGetStatus(0, 3, 1);
+    to = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, 1);
     if (!pokemonCheckValid(to)) {
         return;
     }
@@ -497,9 +478,9 @@ extern "C" s32 dbgMenuMenuTestEvolution(void)
 extern "C" s32 dbgMenuMenuTestWazaMenu(void)
 {
     Pokemon *pokemon;
-    u32 heroBase;
+    void *heroBase;
 
-    heroBase = getTrainerDataStartOffset(0, 2);
+    heroBase = savedataGetStatus(0, SAVE_DATA_HERO);
     if (heroBase == 0) {
         return 0;
     }
@@ -522,7 +503,7 @@ extern "C" s32 dbgMenuMenuTestPokemonChangeMenu(void)
 // Test entry: push the floor of the player's PC box.
 extern "C" s32 dbgMenuMenuTestPCBox(void)
 {
-    floorPush(FLOOR_PC_BOX);
+    GSfloorPush(FLOOR_PC_BOX);
     return 0;
 }
 
@@ -530,7 +511,7 @@ extern "C" s32 dbgMenuMenuTestPCBox(void)
 extern "C" s32 dbgMenuMenuTestRelivehallTutorialMenu(void)
 {
     msgctrlSetValue(MESSAGE_VALUE_SLOT_ID, MESSAGE_DEMO_END_ID);
-    floorPush(FLOOR_RELIVEHALL_TUTORIAL);
+    GSfloorPush(FLOOR_RELIVEHALL_TUTORIAL);
     return 0;
 }
 

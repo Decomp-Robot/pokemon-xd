@@ -2,6 +2,10 @@
 #define WIN_SPRITE_H
 
 #include <types.h>
+#ifdef __cplusplus
+#include <GSgfx.h>
+#include <PocketVec.h>
+#endif
 
 // Usable from C as well as C++.
 typedef struct tagSPRITE_WORK tagSPRITE_WORK;
@@ -16,16 +20,26 @@ struct CURSOR {
     s16 mCursor;  // 0x02: cursor position of the window.
 };
 
+// The cursor can also be copied as one word by selection-window hooks.
+typedef union WindowCursorState {
+    u32 mWord;
+    struct CURSOR mSelection;
+#ifdef __cplusplus
+    PocketVec<short> mPosition;
+#endif
+    struct {
+        s16 mPosX;
+        s16 cursor;
+    } mValue;
+} WindowCursorState;
+
 enum WINDOW_STATE {
     WINDOW_STATE_INIT = 0,
     WINDOW_STATE_ACTIVE = 2,
     WINDOW_STATE_CLOSING = 3,
 };
 
-// Window work, partial. The sprite-work list head at 0x24 is walked by
-// menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
-// custom-menu argument at 0x68 is what the name-entry menus read back. The
-// remaining layout is unrecovered and stays sized padding here.
+// Window state, sprite lists and custom-menu arguments.
 struct tagWINDOW_WORK {
     u8 _00;                      // 0x00: unknown.
     s8 mState;                   // 0x01: WINDOW_STATE lifecycle step.
@@ -40,8 +54,11 @@ struct tagWINDOW_WORK {
     tagSPRITE_WORK *mSpriteWork; // 0x24: head of the window sprite-work list.
     u8 _28[0x04];                // 0x28-0x2B: head of a second work list.
     u8 mSeq[0x3C];               // 0x2C: sequence record of the menu the window runs.
-    NAME_ENTRY_ARG *mArg;        // 0x68: argument the custom menu was opened with.
-    u8 _6C[0x24];                // 0x6C-0x8F: unknown.
+    union {
+        NAME_ENTRY_ARG *mArg;    // 0x68: name-entry argument.
+        u32 mArgs[8];           // 0x68: custom-menu argument words.
+    };
+    u8 _88[0x08];               // 0x88-0x8F: unknown.
     union {
         u32 mColor;              // 0x90: RGBA colour passed to the message printer.
         struct {
@@ -52,8 +69,7 @@ struct tagWINDOW_WORK {
         } mRgba;
     };
     u8 _94[0x08];                // 0x94-0x9B: unknown.
-    s16 mSubMenu;                // 0x9C: sub-menu the window is in.
-    s16 cursor;                  // 0x9E: selected cursor.
+    WindowCursorState mCursorState; // 0x9C: sub-menu and selected cursor.
     s16 mUnkA0;                  // 0xA0: unknown.
     union {
         s16 mSubMenuID;          // 0xA2: last opened sub-menu.
@@ -91,7 +107,7 @@ struct tagSPRITE_WORK {
         } mRgba;
     };
     u8 _68[0x0C];          // 0x68-0x73: unknown.
-    u8 mUnk74;             // 0x74: flag read by winSpriteGetLayerID.
+    u8 mUseFloorMenuLayer; // 0x74: select the floor menu layer.
 };
 
 // Key state read by windowGetKeyOn/windowGetKeyTrg/windowGetKeyRepeat
@@ -107,8 +123,12 @@ struct tagWINDOW_KEY {
 extern "C" {
 #endif
 
+#ifdef __cplusplus
+void winSpriteSetDisp(tagSPRITE_WORK *sprite, bool visible);
+#endif
+
 // Key state of the window the debug menus read directly (menu.a window.o).
-struct tagWINDOW_KEY *windowGetKeyState();
+struct tagWINDOW_KEY *windowGetKeyInfo();
 
 #ifdef __cplusplus
 }

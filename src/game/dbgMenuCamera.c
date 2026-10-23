@@ -1,23 +1,12 @@
+#include <menu.h>
+#include <camera.h>
 #include <types.h>
 
-/* Debug camera menu. The two hooks that precede the menu callbacks in the
- * binary are small: GSgfxCaptureSetTarget is empty, and
- * msgctrlSetPeopleTalkFlag drops the debug camera and restores the room
- * floor camera defaults. */
+/* Debug camera menu and floor-camera reset hooks. */
 
-/* The debug menus reach these entry points only through their dispatch
- * tables, so they have no direct callers (GSgfxCaptureSetTarget is called
- * once, from the field-init module); without force_active the linker's
- * dead stripping drops them. */
 #pragma force_active on
 
-extern u8 menuIsOpen(s32 menuId);
-extern void menuClose(s32 menuId);
-extern s32 menuOpenCustom(s32 menuId, ...);
 extern void menuSetPosition(s32 menuId, s32 x, s32 y);
-/* Set the camera type; returns the previous type. 5 and 6 are the debug
- * cameras. */
-extern u8 cameraSetType(u8 cameraNo);
 /* Drop the debug camera (type 6) and restore the current room's floor
  * camera defaults. */
 extern void cameraResetFloorDefault(void);
@@ -30,7 +19,7 @@ void GSgfxCaptureSetTarget(void)
 }
 
 /* Drop the debug camera and restore the room floor camera defaults. */
-s32 msgctrlSetPeopleTalkFlag(void)
+s32 dbgMenuCameraResetFloor(void)
 {
     cameraResetFloorDefault();
     return 0;
@@ -39,11 +28,11 @@ s32 msgctrlSetPeopleTalkFlag(void)
 /* Open the debug camera window when it is down, close it when it is up. */
 s32 dbgMenuCameraChangeDisp(void)
 {
-    if (menuIsOpen(6) != 0) {
-        menuClose(6);
+    if (menuIsOpen(MENU_ID_DEBUG_CAMERA) != 0) {
+        menuClose(MENU_ID_DEBUG_CAMERA);
     } else {
-        menuOpenCustom(6, 0, 0, 0, 1, 0);
-        menuSetPosition(6, 0x14, 0x104);
+        menuOpenCustom(MENU_ID_DEBUG_CAMERA, 0, 0, 0, 1, 0);
+        menuSetPosition(MENU_ID_DEBUG_CAMERA, 0x14, 0x104);
     }
     return 0;
 }
@@ -55,13 +44,13 @@ s32 dbgMenuCameraSetType(void* window, s32 index)
     switch (index) {
     case 0:
     default:
-        cameraSetType(0);
+        cameraSetType(CAMERA_TYPE_DEFAULT);
         break;
     case 1:
-        cameraSetType(5);
+        cameraSetType(CAMERA_TYPE_DEBUG_PRIMARY);
         break;
     case 2:
-        cameraSetType(6);
+        cameraSetType(CAMERA_TYPE_DEBUG_SECONDARY);
         break;
     }
     return 0;

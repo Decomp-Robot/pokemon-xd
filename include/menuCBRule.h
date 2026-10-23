@@ -3,6 +3,7 @@
 
 #include <FightRuleData.h>
 #include <Pokemon.h>
+#include <hero.h>
 #include <types.h>
 
 /* Species the colosseum holds back until its event is taken: Mew and the
@@ -41,11 +42,28 @@ enum TrainerRegulation {
 extern "C" {
 #endif
 
+// Entry condition reports for the Hero's party.
+void menuCBEntrySlotConditionsBuild(Hero *hero, Pokemon *pokemon, s32 slot);
+void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry);
+void menuCBEntrySlotConditionsSetTrainerRegulation(Hero *hero);
+void menuCBEntrySlotConditionsSetItemRegulation(Hero *hero, Pokemon *pokemon, s32 slot);
+
+u8 menuCBRule_IsBlankPokemon(Pokemon *pokemon);
+u8 menuCBRule_CheckPokemonEventFlag(Pokemon *pokemon);
+u8 menuCBRule_CheckPokemonErrorAll(Pokemon *pokemon);
+u8 menuCBRule_CheckPokemonRegulationAll(Pokemon *pokemon, FightRuleData *rule);
+u8 menuCBRule_CheckTrainerRegulationAll(Hero *hero, FightRuleData *rule);
+u8 menuCBRule_CheckRegulationAll(Hero *hero, FightRuleData *rule);
+u8 menuCBRule_HasTrainerError(Hero *hero, s32 index);
+u8 menuCBRule_CheckTrainerErrorAll(Hero *hero);
+u8 menuCBRule_CheckErrorAll(Hero *hero);
+s32 menuCBRule_CheckHero(Hero *hero);
+
 bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind);
 bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleData *rule, s32 kind);
-bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData *rule, s32 kind);
-bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pokemon,
-                                         FightRuleData *rule, s32 kind);
+bool menuCBRule_CheckTrainerRegulation(Hero *hero, FightRuleData *rule, s32 kind);
+bool menuCBRule_CheckTrainerRegulationAt(Hero *hero, Pokemon *pokemon,
+                                        FightRuleData *rule, s32 kind);
 u8 menuCBRule_CheckLegendPokemon(Pokemon *pokemon, FightRuleData *rule);
 
 #ifdef __cplusplus

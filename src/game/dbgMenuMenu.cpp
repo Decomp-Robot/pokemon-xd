@@ -1,4 +1,6 @@
+#include <menu.h>
 #include <Pokemon.h>
+#include <heroStatus.h>
 #include <WorldMap.h>
 #include <gsFlag.h>
 #include <types.h>
@@ -68,13 +70,8 @@ static u16 sEsabaSpecies[4];             // 0x804EA9B8
 
 extern "C" {
 // menu.a
-s32 menuOpen(s32 menuID, s32 mode);
-void menuClose(s32 menuID);
-s32 menuCloseSync(s32 menuID, s32 flag);
-u8 menuIsOpen(s32 menuID);
 // The 3rd argument is the cursor the window starts on, the 7th and later
 // arguments are the window's own argument record.
-s32 menuOpenCustom(s32 menuID, s32 parentID, void *cursor, s32 a, s32 b, s32 c, ...);
 s32 windowGetActiveID(void);
 
 // menuSub.a
@@ -93,11 +90,10 @@ void menuScriptEevee(void);
 void menuMoveDemo(s32 demo);
 void mewWazaSequence(void);
 void menuOrreColosseum(u16 encountID);
-u16 menuOrreGetBattleResult(void);
+u16 menuOrreColosseumGetResult(void);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon
-Pokemon *heroGetStatus(void *save, s32 flag, u16 slot);
 void *gamedataGetStatus(s32 a, s32 b);
 void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 a, s8 b, s32 c, void *status);
@@ -199,22 +195,22 @@ extern "C" s32 dbgMenuMenuTestWorlMapShow(void)
 // no bottom row, so it only moves the map cursor.
 extern "C" s32 dbgMenuMenuWorldMapCursor(tagWINDOW_WORK *window)
 {
-    tagWINDOW_KEY *key = windowGetKeyState();
+    tagWINDOW_KEY *key = windowGetKeyInfo();
     WorldMapMenuArg *arg = (WorldMapMenuArg *)window->mArg;
 
     if (window->mMenuID != WIN_ID_WORLDMAP_SHOW) {
         if (key->mKeyRepeat & 0x1) {
-            if (--window->cursor < 0) {
-                window->cursor = 0;
+            if (--window->mCursorState.mSelection.mCursor < 0) {
+                window->mCursorState.mSelection.mCursor = 0;
             }
         } else if (key->mKeyRepeat & 0x2) {
-            if (++window->cursor > 1) {
-                window->cursor = 1;
+            if (++window->mCursorState.mSelection.mCursor > 1) {
+                window->mCursorState.mSelection.mCursor = 1;
             }
         }
     }
 
-    switch (window->cursor) {
+    switch (window->mCursorState.mSelection.mCursor) {
     case 0:
         if (key->mKeyRepeat & 0x8) {
             if (arg->mMapIndex < (u16)(arg->mMapCount - 1)) {
@@ -270,18 +266,18 @@ extern "C" s32 dbgMenuMenuTestWorlMapFlagSet(void)
 // holds. The spot adds three rows of its own below them.
 extern "C" s32 dbgMenuEsabaDebugCursor(tagWINDOW_WORK *window)
 {
-    tagWINDOW_KEY *key = windowGetKeyState();
+    tagWINDOW_KEY *key = windowGetKeyInfo();
     u16 count = esabaGetPokemonMax((u16)sEsabaPlaceID);
 
     if (key->mKeyRepeat & 0x5) {
-        if (--window->cursor < 0) {
-            window->cursor = 0;
+        if (--window->mCursorState.mSelection.mCursor < 0) {
+            window->mCursorState.mSelection.mCursor = 0;
         }
     } else if (key->mKeyRepeat & 0xA) {
         u16 maxRow = count + 3;
 
-        if (++window->cursor >= maxRow) {
-            window->cursor = (s16)(maxRow - 1);
+        if (++window->mCursorState.mSelection.mCursor >= maxRow) {
+            window->mCursorState.mSelection.mCursor = (s16)(maxRow - 1);
         }
     }
     return 0;
@@ -291,17 +287,17 @@ extern "C" s32 dbgMenuEsabaDebugCursor(tagWINDOW_WORK *window)
 // menu lists.
 extern "C" s32 dbgMenuUnderTakerebugCursor(tagWINDOW_WORK *window)
 {
-    tagWINDOW_KEY *key = windowGetKeyState();
+    tagWINDOW_KEY *key = windowGetKeyInfo();
 
     sUnderTakerPlaceCount = undertakerGetPlace(sUnderTakerPlaces);
     if (sUnderTakerPlaceCount != 0) {
         if (key->mKeyRepeat & 0x5) {
-            if (--window->cursor < 0) {
-                window->cursor = 0;
+            if (--window->mCursorState.mSelection.mCursor < 0) {
+                window->mCursorState.mSelection.mCursor = 0;
             }
         } else if (key->mKeyRepeat & 0xA) {
-            if (++window->cursor >= sUnderTakerPlaceCount) {
-                window->cursor = (s16)(sUnderTakerPlaceCount - 1);
+            if (++window->mCursorState.mSelection.mCursor >= sUnderTakerPlaceCount) {
+                window->mCursorState.mSelection.mCursor = (s16)(sUnderTakerPlaceCount - 1);
             }
         }
     }
@@ -406,7 +402,7 @@ extern "C" s32 dbgMenuMenuTestPokespotGenerate(void)
     select[0] = lPokespotSelectGenerateRow[0];
     select[1] = lPokespotSelectHeroRow[0];
     sEsabaSpecies[0] = 0;
-    hero = heroGetStatus(0, 2, 0);
+    hero = (Pokemon *)heroGetStatus(0, HERO_STATUS_TRAINER_ID, 0);
 
     result = menuOpenCustom(WIN_ID_POKESPOT, windowGetActiveID(), 0, 0, 1, 0);
     if (result > 0) {
@@ -511,7 +507,7 @@ extern "C" s32 dbgMenuMenuTestOrreColosseumMenu(void)
     menuOrreColosseum(_testEncount[encount]);
     // menuOrreColosseum clears the Orre battle result and the battle floor
     // stores fightEncount's return there; the value is only read back here.
-    menuOrreGetBattleResult();
+    menuOrreColosseumGetResult();
     return 0;
 }
 

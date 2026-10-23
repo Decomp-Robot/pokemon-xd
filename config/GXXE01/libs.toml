@@ -13,7 +13,7 @@ name = "orig/GXXE01/sys/main.dol"
 completed = false
 
 [[lib.object]]
-name = "decomp/dbgMenuFightSetMsgSpeed.c"
+name = "game/dbgMenuFightMsgSpeed.c"
 completed = true
 
 [[lib.object]]
@@ -62,6 +62,9 @@ name = "game/dbgMenuPeople.c"
 completed = true
 [[lib.object]]
 name = "game/dbgMenuSoundTest.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuWazaViewer.c"
 completed = true
 [[lib.object]]
 name = "game/dbgMenuWaza.c"
@@ -130,7 +133,7 @@ name = "game/pokemonIndex.cpp"
 completed = true
 
 [[lib.object]]
-name = "decomp/_memcard_debug_type_check.c"
+name = "game/memcardDebugSlots.c"
 completed = true
 
 [[lib.object]]
@@ -734,14 +737,6 @@ cflags = [
 ]
 
 [[lib.object]]
-name = "game/menuPocket2Pokemon.cpp"
-completed = true
-
-[[lib.object]]
-name = "game/menuPocket2.cpp"
-completed = true
-
-[[lib.object]]
 name = "game/menuSaveLoad.cpp"
 completed = true
 cflags = [
@@ -933,6 +928,10 @@ completed = true
 
 [[lib.object]]
 name = "game/time.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/menuListCursor.cpp"
 completed = true
 
 [[lib.object]]
@@ -1167,6 +1166,37 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/menuCBTaisenWork.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+]
+
+[[lib.object]]
 name = "game/menuCBBattleResult.cpp"
 completed = true
 cflags = [
@@ -1324,7 +1354,24 @@ cflags = [
 ]
 
 [[lib.object]]
-name = "game/menuOrre.cpp"
+name = "game/floorBgmMask.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/GSparticle.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/GSparticleModuleData.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/menuBattleDisk.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
+[[lib.object]]
+name = "game/menuOrreColosseum.cpp"
 completed = true
 cflags = [
     "-nodefaults",
@@ -1334,7 +1381,7 @@ cflags = [
     "-fp hardware",
     "-Cpp_exceptions off",
     "-O4,p",
-    "-inline auto",
+    "-inline on",
     "-pragma \"cats off\"",
     "-pragma \"warn_notinlined off\"",
     "-maxerrors 1",
@@ -1347,20 +1394,11 @@ cflags = [
     "-i build/GXXE01/include",
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
     "-lang=c++",
 ]
-
-[[lib.object]]
-name = "game/floorBgmMask.cpp"
-completed = true
-
-[[lib.object]]
-name = "game/GSparticle.cpp"
-completed = true
-
-[[lib.object]]
-name = "game/GSparticleModuleData.cpp"
-completed = true
 
 [[lib.object]]
 name = "game/particleEngine.cpp"

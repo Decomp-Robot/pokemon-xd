@@ -7,6 +7,12 @@ template <typename T>
 struct PocketVec {
     T x;
     T y;
+    PocketVec &operator=(PocketVec other)
+    {
+        x = other.x;
+        y = other.y;
+        return *this;
+    }
 };
 
 #endif

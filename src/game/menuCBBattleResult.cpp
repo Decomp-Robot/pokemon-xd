@@ -1,3 +1,4 @@
+#include <msgctrl.h>
 #include <gbaCommand.h>
 #include <menuCBBios.h>
 #include <types.h>
@@ -21,11 +22,11 @@ u32 submenu_msg2[3] = { 0x4300, 0x4302, 0x4303 };
 u32 submenu_msg3[4] = { 0x4300, 0x4301, 0x4302, 0x4303 };
 u32 submenu_msg1[3] = { 0x4300, 0x4301, 0x4303 };
 
-extern u32 lbl_804E7F40[2];
-extern u32 lbl_804E7F48[2];
+extern u32 menuCBHeroTransferChoices[2];
+extern u32 menuCBRegionalResultChoices[2];
 
 /* Cleared when a link-battle menu closes. */
-extern s32 lbl_804EA828;
+extern s32 menuCBResultCompletionState;
 
 /* -------------------------------------------------------------------------
  * External functions
@@ -40,7 +41,6 @@ void toolentryCopyHero(void);
 s32 gameGetRegion(void);
 
 void menuSetEnablePort(s32 port);
-void msgctrlSetValue(s32 index, s32 value);
 void winMsgOpen(s32 a, s32 b, s32 c, s32 d);
 void winMsgClose(s32 id);
 s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s16 x,
@@ -72,12 +72,6 @@ extern "C" s32 menuCBResultCheckHomePlace(void);
 /* -------------------------------------------------------------------------
  * Battle result screen
  * ---------------------------------------------------------------------- */
-
-/* Nothing to fill in: the trainer records only need zeroed memory, which the
-   bss work area already is. */
-FIGHT_TRAINER::FIGHT_TRAINER()
-{
-}
 
 extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
 {
@@ -147,7 +141,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             case 1:
             case 2:
                 menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
-                    0, &lbl_804E7F48[0], 2, 0x3E, 0x89, 0, 2, 1, 1);
+                    0, &menuCBRegionalResultChoices[0], 2, 0x3E, 0x89, 0, 2, 1, 1);
                 break;
             }
             if (menuCBTaisenWork.selectResult == -2) {
@@ -300,7 +294,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             } while (running != 0);
         }
 
-        lbl_804EA828 = 0;
+        menuCBResultCompletionState = 0;
         return menuID;
     }
 }
@@ -324,7 +318,7 @@ extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
     menuCBTaisenWork.unk_B060 = 0;
 
     menuCBTaisenWork.selectResult =
-        menuSubOpenSelect3(0, lbl_804E7F40, 2, 0x3E, 0x89, 0, 2, 1, 1);
+        menuSubOpenSelect3(0, menuCBHeroTransferChoices, 2, 0x3E, 0x89, 0, 2, 1, 1);
     if (menuCBTaisenWork.selectResult == -1) {
         menuCBTaisenWork.selectResult = 1;
     }

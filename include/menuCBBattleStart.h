@@ -13,6 +13,7 @@ typedef struct MenuCBBattleFace {
 /* Battle-start screen work. The fight-side presentation code reads the faces
    from here and waits until faceIndex catches up with faceNum. */
 typedef struct MenuCBBattleWork {
+    MenuCBBattleWork() {}
     /* 0x000 */ s32 mode;
     /* 0x004 */ s32 status;
     /* 0x008 */ u8 _008[0x00C - 0x008];
@@ -37,5 +38,22 @@ enum BattleType {
     BATTLE_TYPE_SINGLE = 1,
     BATTLE_TYPE_MULTI = 2
 };
+
+enum MenuCBBattleStartStatus {
+    MENU_CB_BATTLE_START_PARTY = 0,
+    MENU_CB_BATTLE_START_ENTERED_PARTY = 1
+};
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+s32 menuCBBattleStartGetStatus(void);
+void menuCBBattleStartInit(s32 mode, s32 status);
+void menuCBBattleStartSetStatus(s32 status);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

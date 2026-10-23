@@ -110,6 +110,11 @@ extern u32* gSoundWaveCountList;
 extern GSsndWaveEntry* gSoundWaveList;
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void GSsndClose(s32 soundID);
 void soundInitBGM(void);
 s32 soundCheckEnv(s32 sndID);
 s32 soundGetEnvID(void);
@@ -142,5 +147,9 @@ void* GSsndStreamPreFunc(u32 fileNo);
 s32 _sndStreamGetSndID(u32 fileNo);
 s32 _sndStreamGetValid(u32 fileNo);
 void _sndStreamVolume(u8 volume, u16 time, u32 fileNo, u8 mode);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

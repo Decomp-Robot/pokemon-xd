@@ -243,7 +243,7 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
                  MENU_POKEMON_CB callback, long callbackArg);
 
 void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-s32 menuPokemonStatusCheckWazaPage(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+bool menuPokemonStatusCheckWazaPage(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuPokemonStatusDispNoOp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 u16 menuPokemonStatusGetWazaTypeIcon(u16 type);
 void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);

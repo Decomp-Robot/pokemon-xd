@@ -1,7 +1,8 @@
+#include <menu.h>
+#include <floor.h>
 #include <types.h>
 
-/* Waza (move) debug sub menus and the small accessors that go with them. */
-/* Not called directly by other code; marked so the linker keeps them. */
+/* Waza (move) debug sub menus. */
 #pragma force_active on
 
 /* Debug work block the waza debug menus share (0x38 bytes). */
@@ -13,30 +14,18 @@ struct DbgMenuWork {
     s32 mDebugRunning;       /* 0x30 */
 };
 
-extern u8 lbl_804A1500[];
+extern u8 dbgMenuWazaWork[];
 
-u8 menuIsOpen(s32 menuID);
-void menuClose(s32 menuID);
-s32 menuOpenCustom(s32 menuID, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
-void floorPop(void);
-void floorPush(s32 id);
+void GSfloorPop(void);
 void GSthreadSwitch(void);
 
 #pragma peephole off
 
-s32 zz_000c0c4_(void) { return 0; }
-s32 zz_000c0cc_(void) { return 0; }
-s32 zz_000c0d4_(void) { return 0; }
-s32 zz_000c0dc_(void) { return 0; }
-s32 zz_000c0e4_(void) { return 0; }
-s32 zz_000c0ec_(void) { return 0; }
-
-
 int dbgMenuWazaDebugStop(void)
 {
-    if (((struct DbgMenuWork *)lbl_804A1500)->mDebugRunning != 0) {
-        floorPop();
+    if (((struct DbgMenuWork *)dbgMenuWazaWork)->mDebugRunning != 0) {
+        GSfloorPop();
     }
     return 0;
 }
@@ -45,36 +34,36 @@ int dbgMenuPokemonDebugSelect(void)
 {
     struct DbgMenuWork *work;
 
-    if (menuIsOpen(0x26)) {
-        menuClose(0x26);
+    if (menuIsOpen(MENU_ID_DEBUG_POKEMON_SELECT)) {
+        menuClose(MENU_ID_DEBUG_POKEMON_SELECT);
     } else {
-        work = (struct DbgMenuWork *)lbl_804A1500;
+        work = (struct DbgMenuWork *)dbgMenuWazaWork;
         work->mPokemonSelectDirty = 0;
         work->mWazaSelectDirty = 0;
-        menuOpenCustom(0x26, 0, 0, 0, 1, 0);
-        menuSetPosition(0x26, 0xC, 0xA);
+        menuOpenCustom(MENU_ID_DEBUG_POKEMON_SELECT, 0, 0, 0, 1, 0);
+        menuSetPosition(MENU_ID_DEBUG_POKEMON_SELECT, 0xC, 0xA);
     }
     return 0;
 }
 
 int dbgMenuWazaDebugSelect(void)
 {
-    if (menuIsOpen(0x15)) {
-        menuClose(0x15);
+    if (menuIsOpen(MENU_ID_DEBUG_MOVE_SELECT)) {
+        menuClose(MENU_ID_DEBUG_MOVE_SELECT);
     } else {
-        menuOpenCustom(0x15, 0, 0, 0, 1, 0);
-        menuSetPosition(0x15, 0xC, 0xA);
+        menuOpenCustom(MENU_ID_DEBUG_MOVE_SELECT, 0, 0, 0, 1, 0);
+        menuSetPosition(MENU_ID_DEBUG_MOVE_SELECT, 0xC, 0xA);
     }
     return 0;
 }
 
 int dbgMenuWazaDebugStart(void)
 {
-    if (menuIsOpen(0x11)) {
-        menuClose(0x11);
+    if (menuIsOpen(MENU_ID_TITLE)) {
+        menuClose(MENU_ID_TITLE);
     }
-    if (((struct DbgMenuWork *)lbl_804A1500)->mDebugRunning == 0) {
-        floorPush(0x3E7);
+    if (((struct DbgMenuWork *)dbgMenuWazaWork)->mDebugRunning == 0) {
+        GSfloorPush(FLOOR_ID_WAZA_DEBUG);
         GSthreadSwitch();
     }
     return 0;

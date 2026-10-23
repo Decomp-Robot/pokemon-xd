@@ -159,7 +159,7 @@ bool checkCollisionHeadToHead(GSCOLSYS2_HUMAN* a, GSCOLSYS2_HUMAN* b,
     isPushBoxA = gimmickBoxIsBox(characterA);
     if (isPushBoxA) {
         GSvec step;
-        f32 gap = positionA->y + a->mHeight - (heroMoveGetLeaderPosition(&step), step.y);
+        f32 gap = positionA->y + a->mHeight - (heroMoveGetHeroPos(&step), step.y);
 
         if (gap < (0.00001f) && gap > (-0.00001f) && !pushBoxDistanceFixed) {
             return 0;

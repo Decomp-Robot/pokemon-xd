@@ -5,13 +5,20 @@
 #include "types.h"
 #include "winSprite.h"
 
+enum {
+    MENU_ID_PDA_TOP = 0x6B,
+    MENU_ID_PDA_FRAME = 0x6C,
+    MENU_ID_PDA_BACKDROP = 0xA8,
+    MENU_ID_PDA_SCRIPT_INPUT = 0x107,
+};
+
 // Ids of the PDA top menu entries. The rows currently shown are listed in
 // menuPdaResTable; the entries open:
 enum PDATOP_MENU_RES {
     PDATOP_MENU_RES_DP_MON = 0, // dark pokemon list (menuPdaDPMonList).
     PDATOP_MENU_RES_MEMO = 1,   // memo list (menuPdaMemoList).
     PDATOP_MENU_RES_MAIL = 2,   // XD mail list (menuPdaMailListXD).
-    PDATOP_MENU_RES_EXTRA = 3,  // submenu of zz_0042c2c_ (menus 0x77/0x6D).
+    PDATOP_MENU_RES_SEARCHER = 3,  // Searcher submenu.
     PDATOP_MENU_RES_EXIT = 4,   // leave the PDA screen.
 };
 
@@ -71,7 +78,7 @@ extern const f32 menuPdaAlphaFull;
 extern const char menuPdaPageStartFormat[];
 extern GSgfxLayerID menuPdaEventLayer[2];
 
-extern "C" bool zz_003930c_(tagWINDOW_WORK *window);
-extern "C" void zz_0039d2c_(s8 selection);
+bool _checkAddFunc(tagWINDOW_WORK *window);
+void _SelectCursorCalcAngle(s8 selection);
 
 #endif

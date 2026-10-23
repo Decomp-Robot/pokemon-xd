@@ -10,7 +10,7 @@
  * ---------------------------------------------------------------------- */
 
 /* The six colosseum rule sets a battle can be booked under. The table is
-   kept in the save (getTrainerDataStartOffset(0, 0xE)) and mirrored into
+   kept in the save (savedataGetStatus(0, 0xE)) and mirrored into
    the work area; mDirty marks the copy that still has to be written back. */
 typedef struct MenuCBRuleSet {
     /* 0x000 */ FightRuleData mRule[6];

@@ -1,9 +1,11 @@
+#include <menu.h>
+#include <fightTrainer.h>
 #include <types.h>
 #include <menuSub.h>
 
 /* Fight-debug sub menus of the trainer AI data editor.  The additional-data
  * sub menus work on the trainer AI table: 0x2D7 records of 0x14 bytes, which
- * each sub menu snapshots into lbl_80420788 and restores when the user cancels
+ * each sub menu snapshots into dbgFightTrainerAiSubDataBackup and restores when the user cancels
  * the menu.  The pokemon-part and AI-data sub menus work the same way on a
  * single record of the part or AI data block. */
 extern "C" {
@@ -19,13 +21,10 @@ typedef struct {
     u32 last;
 } DbgFightTrainerAiSubData;
 
-extern DbgFightTrainerAiSubData lbl_80420788[0x2D7];
+extern DbgFightTrainerAiSubData dbgFightTrainerAiSubDataBackup[0x2D7];
 
-DbgFightTrainerAiSubData *zz_01fd908_(u16 index);
+DbgFightTrainerAiSubData *fightTrainerAiSubDataBiosGetPtr(u16 index);
 s32 menuGetCursorItemID(s32 menuId);
-s32 menuOpenCustom(s32 menuId, ...);
-s32 menuOpen(s32 menuId, s32 mode);
-void menuCloseCustom(s32 menuId, s32 a, s32 b);
 void dbgMenuFightTrainerDataStatusInputDigit(u16 id, s32 field, s32 sub, s32 max, s32 min);
 
 #pragma peephole off
@@ -36,27 +35,27 @@ s32 dbgMenuFightTrainerAiAddsubDataComboEditSub(void)
     s32 result;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     for (;;) {
-        result = menuOpenCustom(0x1B, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x1B, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result != -2) {
             continue;
         }
-        if (menuOpen(0x55, 1)) {
-            menuCloseCustom(0x55, 0, 1);
+        if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1)) {
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             continue;
         }
-        menuCloseCustom(0x55, 0, 1);
-        menuCloseCustom(0x1B, 0, 1);
+        menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
+        menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 1);
         return 1;
     }
 }
@@ -67,27 +66,27 @@ s32 dbgMenuFightTrainerAiAddsubDataItemEditSub(void)
     s32 result;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     for (;;) {
-        result = menuOpenCustom(0x1A, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x1A, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result != -2) {
             continue;
         }
-        if (menuOpen(0x55, 1)) {
-            menuCloseCustom(0x55, 0, 1);
+        if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1)) {
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             continue;
         }
-        menuCloseCustom(0x55, 0, 1);
-        menuCloseCustom(0x1A, 0, 1);
+        menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
+        menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 1);
         return 1;
     }
 }
@@ -98,27 +97,27 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
     s32 result;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     for (;;) {
-        result = menuOpenCustom(0x1E, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x1E, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x1E) - 0xE7) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR) - 0xE7) {
         case 0:
             dbgMenuFightTrainerDataStatusInputDigit(0x38, 0x3E, 0, 0xC8, -0xC8);
             break;
@@ -172,7 +171,7 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
             break;
         }
     }
-    menuCloseCustom(0x1E, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 1);
     return 1;
 }
 
@@ -182,29 +181,29 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaDefpokemonEditSub(void)
     s32 result;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     for (;;) {
-        result = menuOpenCustom(0x19, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x19, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        menuGetCursorItemID(0x19);
+        menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR);
     }
-    menuCloseCustom(0x19, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 1);
     return 1;
 }
 
@@ -214,27 +213,27 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeDasuEditSub(void)
     u16 i;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     while (1) {
-        result = menuOpenCustom(0x1D, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x1D, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x1D)) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR)) {
         case 0xCD:
             dbgMenuFightTrainerDataStatusInputDigit(0x1D, 0x3E, 0, 0xC8, -0xC8);
             break;
@@ -286,7 +285,7 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeDasuEditSub(void)
         }
     }
 
-    menuCloseCustom(0x1D, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR, 0, 1);
     return 1;
 }
 
@@ -296,27 +295,27 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
     u16 i;
 
     for (i = 0; i < 0x2D7; i++) {
-        lbl_80420788[i] = *zz_01fd908_(i);
+        dbgFightTrainerAiSubDataBackup[i] = *fightTrainerAiSubDataBiosGetPtr(i);
     }
 
     while (1) {
-        result = menuOpenCustom(0x1C, 0, 0, 0, 1, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
-            menuCloseCustom(0x1C, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR, 0, 1);
             for (i = 0; i < 0x2D7; i++) {
-                *zz_01fd908_(i) = lbl_80420788[i];
+                *fightTrainerAiSubDataBiosGetPtr(i) = dbgFightTrainerAiSubDataBackup[i];
             }
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x1C)) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR)) {
         case 0xB3:
             dbgMenuFightTrainerDataStatusInputDigit(0x01, 0x3E, 0, 0xC8, -0xC8);
             break;
@@ -395,7 +394,7 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
         }
     }
 
-    menuCloseCustom(0x1C, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR, 0, 1);
     return 1;
 }
 
@@ -426,11 +425,9 @@ typedef struct FightTrainerAiData {
     u32 unk1C;
 } FightTrainerAiData;
 
-void *zz_01fd934_(u16 index);
+void *fightTrainerPokemonPartDataGetRecord(u16 index);
 void *fightTrainerAiDataBiosGetPtr(u16 index);
-s32 fightTrainerGetStatus(s32 kind, u16 id, s32 field, s32 sub);
-void fightTrainerSetStatus(s32 kind, u16 id, s32 field, s32 sub, s32 value);
-s32 zz_00076cc_(u16 id);
+s32 dbgMenuFightGetZokuseiDataId(u16 id);
 s32 dbgMenuFightGetWazaTypeId(u8 id);
 void dbgMenuFightTrainerDataStatusInputFlag(u16 id, s32 field);
 
@@ -447,25 +444,25 @@ s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
     if (index == 0) {
         return 1;
     }
-    data = (FightTrainerPokemonPartData*)zz_01fd934_(index);
+    data = (FightTrainerPokemonPartData*)fightTrainerPokemonPartDataGetRecord(index);
     id = index;
     for (i = 0; i < 6; i++) savedData[i] = ((u32*)data)[i];
     for (;;) {
-        result = menuOpenCustom(0x1F, 0, 0, 0, 1, 1, id);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 0, 0, 1, 1, id);
         if (result == -1) {
-            menuCloseCustom(0x1F, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 1);
             for (i = 0; i < 6; i++) ((u32*)data)[i] = savedData[i];
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x1F)) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR)) {
         case 0xFC:
             dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 1, 100, 0);
             break;
@@ -501,7 +498,7 @@ s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
             break;
         }
     }
-    menuCloseCustom(0x1F, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 1);
     return 1;
 }
 
@@ -521,21 +518,21 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
     id = index;
     for (i = 0; i < 8; i++) savedData[i] = ((u32*)data)[i];
     for (;;) {
-        result = menuOpenCustom(0x18, 0, 0, 0, 1, 1, id);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 0, 0, 1, 1, id);
         if (result == -1) {
-            menuCloseCustom(0x18, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 1);
             for (i = 0; i < 8; i++) ((u32*)data)[i] = savedData[i];
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x18)) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_EDITOR)) {
         case 0x8E:
             dbgMenuFightTrainerDataStatusInputDigit(index, 0x25, 0, 100, 0);
             break;
@@ -606,7 +603,7 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
             dbgMenuFightTrainerDataStatusInputDigit(index, 0x2F, 0, 0x54, 0);
             break;
         case 0xA6:
-            value = zz_00076cc_((u16)fightTrainerGetStatus(0, index, 0x39, 0));
+            value = dbgMenuFightGetZokuseiDataId((u16)fightTrainerGetStatus(0, index, 0x39, 0));
             if (value >= 0) {
                 fightTrainerSetStatus(0, index, 0x39, 0, value);
             }
@@ -615,7 +612,7 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
             dbgMenuFightTrainerDataStatusInputDigit(index, 0x3A, 0, 100, 0);
             break;
         case 0xA8:
-            value = zz_00076cc_((u16)fightTrainerGetStatus(0, index, 0x39, 1));
+            value = dbgMenuFightGetZokuseiDataId((u16)fightTrainerGetStatus(0, index, 0x39, 1));
             if (value >= 0) {
                 fightTrainerSetStatus(0, index, 0x39, 1, value);
             }
@@ -652,7 +649,7 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
             break;
         }
     }
-    menuCloseCustom(0x18, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 1);
     return 1;
 }
 

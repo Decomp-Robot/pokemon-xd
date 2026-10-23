@@ -5,6 +5,6 @@
 
 u8 floorFieldCameraDataExist(void);
 void floorFieldCameraEnable(void);
-void zz_0123e50_(void);
+void floorFieldCameraDisable(void);
 
 #endif

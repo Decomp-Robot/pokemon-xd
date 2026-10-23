@@ -4,6 +4,11 @@
 #include <types.h>
 #include <GSmtx.h>
 
+struct GSivec2 {
+    s16 x;
+    s16 y;
+};
+
 /* 3D point / direction / plane vector. The GS geometry library takes and
  * returns these by pointer everywhere. */
 struct GSvec {

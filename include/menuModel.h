@@ -8,6 +8,8 @@
 // and its transform are read back; the remaining layout stays sized padding.
 // nameEntryModel (menuNameEntry.cpp) fixes this one at 0xEC bytes.
 struct MENU_MODEL {
+    MENU_MODEL() {}
+
     u8 _00[0x24];
     u16 mSpecies;
     u8 _26[0x1A];

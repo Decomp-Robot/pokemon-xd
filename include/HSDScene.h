@@ -1,5 +1,5 @@
-#ifndef HSD_SCENE_H
-#define HSD_SCENE_H
+#ifndef HSD_SCENE_INTERFACE_H
+#define HSD_SCENE_INTERFACE_H
 #include <types.h>
 
 struct _HSD_JObj;
@@ -8,7 +8,8 @@ struct HSD_Joint;
 struct HSD_AnimJoint;
 struct HSD_MatAnimJoint;
 struct HSD_ShapeAnimJoint;
-struct HSD_AObj;
+struct _HSD_AObj;
+typedef _HSD_AObj HSD_AObj;
 
 struct HSD_SceneModel {
     HSD_Joint *mJoint;

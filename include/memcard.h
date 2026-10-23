@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 void *memcardMemAllocForSavedata(void);
-void *zz_01ce1b0_(void *buffer);
+void *memcardMemFreeForSavedata(void *buffer);
 #ifdef __cplusplus
 }
 #endif

@@ -4,7 +4,7 @@
 
 /* Debug menu that forces the hero's active pokemon to relive (purify) and
  * re-arms the relive parameters. */
-extern const f32 lbl_804EBDF8;
+extern const f32 purificationClearedDarkness;
 
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
@@ -21,7 +21,7 @@ s32 dbgMenuRelive(void)
     if (!pokemonIsShadowPokemon(pokemon)) {
         return 0;
     }
-    pokemonSetDp(pokemon, lbl_804EBDF8);
+    pokemonSetDp(pokemon, purificationClearedDarkness);
     preReliveSetParameter(0, 0, 1);
     return 0;
 }

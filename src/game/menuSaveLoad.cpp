@@ -1,3 +1,6 @@
+#include <gamedata.h>
+#include <menu.h>
+#include <fade.h>
 #include <libc/memory.h>
 #include <gsFlag.h>
 #include "menuSaveLoad.h"
@@ -8,7 +11,7 @@
 #include "heroStatus.h"
 #include "hero.h"
 #include "ProgressionData.h"
-#include "saveData.h"
+#include "savedata.h"
 #include "memcard.h"
 #include "msgctrl.h"
 
@@ -23,18 +26,13 @@ enum { SAVE_AVAILABILITY_FLAG = 0x3DE };
 extern menuSaveload *menuSaveLoadReport;
 
 // Optional playtime override for a report-less save.
-extern unsigned long menuSaveLoadSaveTarget;
+extern unsigned long menuSaveLoadPlaytimeOverride;
 
 extern "C" {
 s32 memcardTaskCall(s32 task, s32 flag, s32 arg);
-s32 menuOpen(s32 menuId, s32 mode);
-void menuClose(s32 menuId);
-void menuCloseSync(s32 menuId, s32 flag);
 void winMsgOpen(s32 p1, s32 msgID, s32 p2, s32 p3);
 void winMsgClose(s32 p1);
 void winSeqSetMenu(long menuID, s32 seq);
-void fadeSet(s32 p1, f32 p2);
-void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
 }
 
 // Entry points of this object: the save-flow driver ("run the save flow on
@@ -153,7 +151,7 @@ extern "C" void menuSaveLoadSave(menuSaveload *report)
             u8 saved = menuSaveLoadWrite(report);
             if (saved != 0) {
                 u32 savedMap = floorGetPreviousMap();
-                saveDataSetMetadata(0, SAVE_METADATA_MAP, savedMap);
+                gamedatasaveSetStatus(0, SAVE_METADATA_MAP, savedMap);
                 memcardTaskCall(4, 2, 0);
             }
         }
@@ -173,11 +171,11 @@ extern "C" s32 menuSaveLoadWrite(menuSaveload *report)
     s32 kept = 1;
     void *buffer = memcardMemAllocForSavedata();
 
-    memcpy(buffer, getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
+    memcpy(buffer, savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
     if (memcardTaskCall(3, 2, 0) == 3) {
-        if (saveDataGetMetadata(0, SAVE_METADATA_SAVE_COUNT) != 0) {
-            unsigned long backupTrainerId = heroGetStatus((Hero *)getTrainerDataStartOffset(buffer, TRAINER_DATA_HERO), HERO_STATUS_TRAINER_ID, 0);
-            if (backupTrainerId == heroGetStatus(0, HERO_STATUS_TRAINER_ID, 0) || saveDataGetMetadata(buffer, SAVE_METADATA_SAVE_COUNT) == 0) {
+        if (gamedatasaveGetStatus(0, SAVE_METADATA_SAVE_COUNT) != 0) {
+            unsigned long backupTrainerId = heroGetStatus((Hero *)savedataGetStatus(buffer, TRAINER_DATA_HERO), HERO_STATUS_TRAINER_ID, 0);
+            if (backupTrainerId == heroGetStatus(0, HERO_STATUS_TRAINER_ID, 0) || gamedatasaveGetStatus(buffer, SAVE_METADATA_SAVE_COUNT) == 0) {
                 report->mPlaytime = pokecoloGetPlayTimeUnsigned();
                 report->SaveParameterSet();
                 winMsgOpen(2, 0x3BF3, 1, 1);
@@ -190,10 +188,10 @@ extern "C" s32 menuSaveLoadWrite(menuSaveload *report)
             }
         }
     }
-    memcpy(getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), buffer, 0x27FD0);
+    memcpy(savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), buffer, 0x27FD0);
     pokecoloSetPlayTime((f64)(report->mPlaytime + pokecoloGetPlayTimeUnsigned()));
     report->mPlaytime = 0;
-    zz_01ce1b0_(buffer);
+    memcardMemFreeForSavedata(buffer);
     return kept != 0;
 }
 
@@ -202,8 +200,8 @@ void _SaveParameterSet(void)
 {
     unsigned long playtime = pokecoloGetPlayTimeUnsigned();
 
-    if (menuSaveLoadSaveTarget != 0) {
-        playtime = menuSaveLoadSaveTarget;
+    if (menuSaveLoadPlaytimeOverride != 0) {
+        playtime = menuSaveLoadPlaytimeOverride;
     }
     msgctrlSetValue(MSG_VALUE_REPORT_PLAYTIME, playtime);
     msgctrlSetValue(MSG_VALUE_REPORT_SNAGGED_POKEMON_COUNT, darkPokemonGetSnaggedCount());
@@ -226,7 +224,7 @@ void menuSaveload::SaveParameterSet()
 // Execution mode gates the report save-availability flag.
 extern "C" s32 menuSaveLoadCanSave(void)
 {
-    if (zz_005c228_() == 1) {
+    if (pokecoloGetRomVersion() == 1) {
         return 0;
     }
     return flagGetBooleanValue(SAVE_AVAILABILITY_FLAG);

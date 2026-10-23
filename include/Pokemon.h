@@ -9,7 +9,7 @@ struct Pokemon {
     u8 _00[0x02]; // 0x00-0x01: unknown.
     u16 mItemDataId; // 0x02: held item data ID.
     u32 _04[0x08]; // 0x04-0x23: unknown.
-    unsigned long mCatchTrainerRnd; // 0x24: controller slot booked as the catch trainer.
+    unsigned long mCatchTrainerRnd; // 0x24: original trainer random ID.
     u8 _28[0xC4 - 0x28]; // 0x28-0xC3: unknown.
 
 #ifdef __cplusplus
@@ -20,14 +20,22 @@ struct Pokemon {
 #endif
 };
 
-// DarkPokemon -- the dark side of a shadow pokemon. Only the members the
-// status menu asks about are declared here.
+// Shadow-data status thresholds: fought, snatched, and purified.
+enum darkPokemonStatus {
+    DARK_POKEMON_STATUS_NONE = 0,
+    DARK_POKEMON_STATUS_FIGHT = 1,
+    DARK_POKEMON_STATUS_SNATCH_SUCCESS = 3,
+    DARK_POKEMON_STATUS_RELIVED = 4,
+};
+
+// DarkPokemon -- shadow Pokemon status and newly learned moves.
 #ifdef __cplusplus
 struct DarkPokemon {
-#ifdef __cplusplus
+    void setStatus(darkPokemonStatus status);
+    darkPokemonStatus getStatus(void) const;
+    void setUpdate(bool update);
     u8 isWazaNew(u8 index) const;
     void setWazaNew(u8 index, bool value);
-#endif
 };
 #else
 typedef struct DarkPokemon DarkPokemon;

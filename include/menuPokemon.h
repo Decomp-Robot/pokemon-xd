@@ -2,11 +2,9 @@
 #define MENU_POKEMON_H
 
 #include <types.h>
+#include <fightTrainer.h>
 
-// Party-menu work (bss 0x804280C0, 0x28 bytes). Partial declaration: only
-// the full-block clear in menuPokemonInitWork is recovered so far; the
-// per-field layout belongs to the sibling menuPokemon helpers sharing
-// this block and stays padding here.
+// Party-menu work cleared when the menu opens.
 struct MenuPokemonWork {
     u8 _00[0x28];
 };
@@ -18,6 +16,9 @@ extern "C" {
 #endif
 
 void menuPokemonInitWork(void);
+u32 menuPokemonOpenItemGive(u8 itemPocket, u8 menuItemIndex, u16 itemID,
+                            FIGHT_TRAINER *runtimeTrainer);
+void menuPokemonClose(void);
 
 #ifdef __cplusplus
 }

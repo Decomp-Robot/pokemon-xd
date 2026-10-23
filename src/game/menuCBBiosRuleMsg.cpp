@@ -1,12 +1,12 @@
 #include <FightRuleData.h>
 #include <types.h>
-#include <saveData.h>
+#include <savedata.h>
 
 /*
  * menuCBBiosRuleMsg.cpp
  *
  * Message-ID bookkeeping for the six colosseum rule slots of the save table
- * (getTrainerDataStartOffset(0, 0xE)).
+ * (savedataGetStatus(0, 0xE)).
  */
 
 
@@ -18,7 +18,7 @@
 extern "C" void menuCBBios_SetRuleMessages(u8 set)
 {
     FightRuleData *ruleData =
-        (FightRuleData *)getTrainerDataStartOffset(0, TRAINER_DATA_FIGHT_RULES);
+        (FightRuleData *)savedataGetStatus(0, TRAINER_DATA_FIGHT_RULES);
 
     if (set == 1) {
         ruleData[0].mMsgId = 0x9124;

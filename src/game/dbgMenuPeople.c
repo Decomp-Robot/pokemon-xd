@@ -1,15 +1,12 @@
 #include <types.h>
 #include <floor.h>
-#include <menuIds.h>
+#include <menu.h>
 #include <floorRoom.h>
 #include <floorFieldCamera.h>
 
 /* Debug menus that open the party-info window and the people editor. */
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
-u8 menuIsOpen(s32 menuID);
-void menuClose(s32 menuID);
-void menuOpenCustom(s32 menuID, s32 a, s32 b, s32 c, s32 d, s32 e, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 
 #pragma peephole off
@@ -35,11 +32,11 @@ s32 dbgMenuPeopleOpenEdit(void)
             floorFieldCameraEnable();
         }
         menuClose(MENU_ID_PEOPLE_EDITOR);
-        zz_011ddf8_();
+        floorUnblockMainScript();
     } else {
-        zz_0123e50_();
+        floorFieldCameraDisable();
         menuOpenCustom(MENU_ID_PEOPLE_EDITOR, 0, 0, 0, 0, 0);
-        zz_011de1c_();
+        floorBlockMainScript();
     }
     return 0;
 }

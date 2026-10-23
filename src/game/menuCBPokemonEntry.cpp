@@ -243,18 +243,18 @@ extern "C" u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window,
     return 0;
 }
 
-extern "C" void menuCBEntrySlotConditionsSetTrainerRegulation(Pokemon *party)
+extern "C" void menuCBEntrySlotConditionsSetTrainerRegulation(Hero *hero)
 {
     FightRuleData *rule = menuCBBios_CurrentRule();
     u32 i;
 
     for (i = 0; i < 6; i++) {
         menuCBTaisenWork.entryFlags[0][i].insufficientPokemon =
-            !menuCBRule_CheckTrainerRegulation(party, rule, REGULATION_TRAINER_POKEMON_NUM);
+            !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_POKEMON_NUM);
     }
 }
 
-extern "C" void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party,
+extern "C" void menuCBEntrySlotConditionsSetItemRegulation(Hero *hero,
                                                            Pokemon *pokemon, s32 slot)
 {
     FightRuleData *rule = menuCBBios_CurrentRule();
@@ -281,10 +281,10 @@ extern "C" void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party,
 
     menuCBTaisenWork.entryFlags[0][slot].invalidHeldItem = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_HELD_ITEM);
     menuCBTaisenWork.entryFlags[0][slot].duplicateHeldItem =
-        !menuCBRule_CheckTrainerRegulationAt(party, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
+        !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
 }
 
-extern "C" void menuCBEntrySlotConditionsBuild(Pokemon *party, Pokemon *src, s32 index)
+extern "C" void menuCBEntrySlotConditionsBuild(Hero *hero, Pokemon *src, s32 index)
 {
     FightRuleData *rule = menuCBBios_CurrentRule();
 
@@ -298,8 +298,8 @@ extern "C" void menuCBEntrySlotConditionsBuild(Pokemon *party, Pokemon *src, s32
     menuCBTaisenWork.entryFlags[0][index].invalidPokemon = !menuCBRule_CheckPokemonKind(src, POKEMON_CONDITION_VALID);
     menuCBTaisenWork.entryFlags[0][index].invalidMove = !menuCBRule_CheckPokemonKind(src, POKEMON_CONDITION_ILLEGAL_MOVE);
     menuCBTaisenWork.entryFlags[0][index].partyLevelSumExceeded =
-        !menuCBRule_CheckTrainerRegulation(party, rule, REGULATION_TRAINER_LEVEL_SUM);
+        !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_LEVEL_SUM);
     menuCBTaisenWork.entryFlags[0][index].legendPokemon = !menuCBRule_CheckLegendPokemon(src, rule);
     menuCBTaisenWork.entryFlags[0][index].duplicateSpecies =
-        !menuCBRule_CheckTrainerRegulationAt(party, src, rule, REGULATION_TRAINER_SAME_SPECIES);
+        !menuCBRule_CheckTrainerRegulationAt(hero, src, rule, REGULATION_TRAINER_SAME_SPECIES);
 }

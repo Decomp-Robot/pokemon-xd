@@ -8,7 +8,7 @@ typedef struct FightRuleData FightRuleData;
 // FightRuleData -- one battle regulation record: the entry fees, time limits
 // and restriction lists a link battle enforces, plus the message shown for
 // it. The colosseum keeps a table of six of these in the save
-// (getTrainerDataStartOffset(0, 0xE)), the MenuCBTaisenWork work area
+// (savedataGetStatus(0, 0xE)), the MenuCBTaisenWork work area
 // mirrors it, and the read-only defaults live in rodata. One record is 0x90
 // bytes; the m1E/m52 entry lists sit at their recorded (even) offsets.
 enum HeldItemMode {
@@ -49,8 +49,8 @@ struct FightRuleData {
 
 extern "C" {
 const FightRuleData *menuCBRule_GetDefaultRuleData(s32 index);
-u32 zz_004d0b4_(void);
-FightRuleData *zz_004d0d4_(s32 ruleId);
+u32 menuCBRule_ParticipationPokemonMax(void);
+FightRuleData *menuCBRule_ConstantRule2(s32 ruleId);
 }
 
 #endif

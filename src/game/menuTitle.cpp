@@ -1,11 +1,18 @@
+#include <fade.h>
+#include <menu.h>
+#include <window.h>
+#include <gamedata.h>
+#include <floor.h>
+#include <camera.h>
 #include <winSprite.h>
 #include <WorldMap.h>
-#include <saveData.h>
+#include <savedata.h>
+#include <fightEncountData.h>
+#include <fightEncountBios.h>
+#include <menuTop.h>
+#include <pokecolo.h>
 
 #pragma force_active on
-
-// C++-linkage engine accessors (defined in other units).
-extern void *deckDataVirtual_GetPtr(u16 id);
 
 /*
  * menuTitle.cpp
@@ -67,7 +74,7 @@ extern "C" {
 #endif
 
 /* Title-screen work variables. */
-extern s32 titleEntrySelected;      // mode select entry recorded by menuTitleSetState
+extern s32 titleEntrySelected;      // mode select entry recorded by menuTitleSetStartStatus
 extern s32 titleBgmWaitCounter;     // battle-select menu open attempts
 extern u32 titleState;              // menuTitleMainSub state machine step
 extern f32 titleFlashWaitTime;      // seconds left of the flash fade hold
@@ -127,10 +134,7 @@ void GSthreadTerminate(u32 threadId);
 u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 closeProtected,
     void (*entry)(void));
 s32 windowGetActiveID(void);
-tagWINDOW_WORK *windowSearchID(s32 id);
-struct tagWINDOW_KEY *windowGetKeyState(void);
-s32 menuOpenCustom(s32 menuID, s32 windowID, ...);
-signed char fadeCheck(s32 id);
+struct tagWINDOW_KEY *windowGetKeyInfo(void);
 void dbgMenuSetOpenFlag(s32 flag);
 void *menuDataBiosGetPtr(s32 menuID);
 void GSsndPlay(s32 id, s32 a, s32 b);
@@ -160,41 +164,20 @@ void GSmodelSetBoundCheck(void *model, s32 flag);
 /* Selects the animation a map model plays. */
 void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index);
 u32 GSfsysWait(u32 id);
-/* Returns the menuTop work struct's "a screen transition is running" flag,
- * which gates whether the mode-select resources may be freed. */
-u8 fn_8002FC70(void);
 void winMsgClose(s32 id);
-u8 cameraSetType(s32 type);
 s32 getCurrentMapGroupId(void);
-/* Loads a camera resource for a map group. */
-void zz_01971c8_(s32 group, void *res, s32 flag, f32 rate);
 void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
-/* Tests whether a save slot holds data. */
-/* Records whether the mode select screen may keep running. */
-void zz_0030324_(s32 a);
-/* Returns the entry the mode select screen settled on. */
-s32 zz_002f718_(void);
-/* Reports whether a memcard task is still in flight. */
-s32 zz_005c228_(void);
 void floorUnlinkWithSE(s32 a, s32 b);
 /* Returns the thread group id of the floor group on top of the stack. */
 u32 floorGetStackGroupID(void);
-/* Reports whether the preread loader is still busy. */
-u8 zz_0125b44_(void);
 void _HSD_AObjForgetMemory(void);
-u8 menuIsOpen(s32 id);
-void menuCloseCustom(s32 id, s32 a, s32 b);
-/* Sets the battle CD id on the encounter data the select screen hands on. */
-void zz_battle_set_battle_cd_id(void *data, s32 id);
-void fightEncountDataBiosSetFightTrainerDataId(void *data, s32 player, u16 id);
 void FlashSystemSetPlayFrameLabel(u32 flash, const char *start, const char *end);
 void FlashSystemSetLoopFlag(u32 flash, s32 flag);
 void FlashSystemSetNowFrameLabel(u32 flash, const char *label);
 s32 FlashSystemGetFrameFromLabel(u32 flash, const char *label);
 s32 FlashSystemGetNowFrame(u32 flash);
 void FlashSystemPlayAndWait(u32 flash, const char *start, const char *end);
-void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 disp);
 }
 
 /* Functions of this module. */
@@ -204,11 +187,11 @@ void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame);
 
 void menuTitleModelCtor(unsigned int group, unsigned int modelID, bool visible);
 void menuTitleModelDtor(unsigned int group, unsigned int modelID);
-u8 menuTitleWaitBgmFade(u8 wait);
+u8 menuTitlePlayBGMWait(u8 wait);
 void menuTitlePlayBGM(void);
 void menuTitleOpenSelectAnime2(void);
-void menuTitlePlaySelectOpenFlash(void);
-void menuTitleCleanupSelect(void);
+void menuTitleOpenSelectAnime(void);
+void menuTitleExit(void);
 void menuTitleBattleSelectFree(void);
 void menuTitleMain(void);
 void menuTitleStartBattleSelect(void);
@@ -219,23 +202,22 @@ void menuTitleUnloadMapModels(void);
 void menuTitleCursorAnimeMain(void);
 void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuTitleCursorShowSelected(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void menuTitleUpdate(void);
+void menuTitleFunc(void);
 void menuTitleButton(tagWINDOW_WORK *window);
-void menuTitleCursorHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void menuTitleHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuTitleMainSub(void);
-void menuTitlePlaySe(s32 id);
-void menuTitleStopThread(void);
-void menuTitleSetState(s32 entry);
-void menuTitleCloseMenuIfOpen(s32 id, s32 flag);
-
-void menuTitleOpenSelectAnime(void);
+void menuTitleBattlePreReadCheck(void);
+void menuTitleSetStartStatus(s32 entry);
+void menuTitleCloseSelectAnime(void);
 }
 
 /* Functions of this module that are compiled as C++. */
-void menuTitleNormalButton(tagWINDOW_WORK *window);
-s32 selectMenu(void);
-void menuTitlePreReadFightRegWzxData(void);
-void menuTitleCreateThread(void);
+static void _menuTitleSetSE(unsigned long id);
+static void _menuTitleClose2(long id, unsigned long flag);
+void _menuTitleNormalButton(tagWINDOW_WORK *window);
+s32 _selectMenu(void);
+void _menuTitlePreReadFightRegWzxData(void);
+void _CreateThread(void);
 
 /* -------------------------------------------------------------------------
  * Title screen flow
@@ -252,7 +234,7 @@ struct TitleSelectWork {
 };
 
 /* Open the title window over the currently active one. */
-extern "C" void menuTitleOpen(void)
+extern "C" void menuTitleOpenMenu(void)
 {
     menuTitleLoadMap();
     menuOpenCustom(TITLE_MENU_ID, windowGetActiveID(), 0, 0, 0, 0);
@@ -275,7 +257,7 @@ extern "C" void menuTitleSetSelect(s32 entry, s16 value)
 
 /* Per-frame housekeeping of the title window: pulse the press-start prompt
  * and, once the map fade has run long enough, move on to the map state. */
-extern "C" void menuTitleUpdate(void)
+extern "C" void menuTitleFunc(void)
 {
     s32 state;
 
@@ -297,7 +279,7 @@ extern "C" void menuTitleUpdate(void)
     if (state == TITLE_STATE_SELECT) {
         return;
     }
-    if (zz_005c228_() == 1) {
+    if (pokecoloGetRomVersion() == 1) {
         return;
     }
     titleBgmFadeSeconds += titleFrameSeconds;
@@ -317,7 +299,7 @@ extern "C" void menuTitleUpdate(void)
         }
     }
     titleState = TITLE_STATE_MAP;
-    menuTitleSetState(TITLE_STATE_0);
+    menuTitleSetStartStatus(TITLE_STATE_0);
 }
 
 /* Button hook of the title window: run the standard handler once the intro
@@ -330,12 +312,12 @@ extern "C" void menuTitleButton(tagWINDOW_WORK *window)
     dbgMenuSetOpenFlag(1);
     u32 end = (u32)FlashSystemGetFrameFromLabel(TITLE_FLASH, cLabelEnd);
     if ((u32)FlashSystemGetNowFrame(TITLE_FLASH) >= end) {
-        menuTitleNormalButton(window);
+        _menuTitleNormalButton(window);
     }
 }
 
 /* Standard title button handling: confirm on Start/A. */
-void menuTitleNormalButton(tagWINDOW_WORK *window)
+void _menuTitleNormalButton(tagWINDOW_WORK *window)
 {
     struct tagWINDOW_KEY *key;
 
@@ -346,12 +328,12 @@ void menuTitleNormalButton(tagWINDOW_WORK *window)
         return;
     }
     menuDataBiosGetPtr(window->mMenuID);
-    key = windowGetKeyState();
+    key = windowGetKeyInfo();
     if ((key->mKeyTrg & TITLE_ACCEPT_KEYS) == 0) {
         return;
     }
     if (window->mAccept == 0) {
-        menuTitlePlaySe(TITLE_SE_CONFIRM);
+        _menuTitleSetSE(TITLE_SE_CONFIRM);
     }
     window->mAccept = 1;
 }
@@ -397,7 +379,7 @@ extern "C" void menuTitleCursorAnimeMain(void)
 
 /* Cursor hook of the press-start entries (item ids 61-63, 66, 67):
  * pulse and select-highlight the entry sprites. */
-extern "C" void menuTitleCursorHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" void menuTitleHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 itemID = sprite->mItemID;
 
@@ -419,7 +401,7 @@ extern "C" void menuTitleCursorHook(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
 extern "C" void menuTitleCursorShowSelected(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 ids[5];
-    s16 cur = window->cursor;
+    s16 cur = window->mCursorState.mSelection.mCursor;
     s32 entry;
     s32 i;
 
@@ -451,7 +433,7 @@ extern "C" void menuTitleMainSub(void)
     titleFlashHoldFrames = 0;
     titleInitFlag = 0;
     menuTitlePlayBGM();
-    menuTitleWaitBgmFade(1);
+    menuTitlePlayBGMWait(1);
     if (titleEntrySelected == 1) {
         titleState = TITLE_STATE_FLASH_BACK;
         titleEntrySelected = 0;
@@ -508,7 +490,7 @@ extern "C" void menuTitleMainSub(void)
             break;
 
         case TITLE_STATE_SELECT:
-            if (zz_005c228_() == 1) {
+            if (pokecoloGetRomVersion() == 1) {
                 status = 5;
             } else {
                 status = memcardTaskCall(1, 2, 0);
@@ -521,19 +503,19 @@ extern "C" void menuTitleMainSub(void)
                 if (status != 3) {
                     savedataCreate(0, 0);
                 }
-                if (saveDataGetMetadata(0, SAVE_METADATA_SAVE_COUNT) != 0U) {
-                    zz_0030324_(1);
+                if (gamedatasaveGetStatus(0, SAVE_METADATA_SAVE_COUNT) != 0U) {
+                    menuTopSetInitCursor(1);
                 } else {
-                    zz_0030324_(0);
+                    menuTopSetInitCursor(0);
                 }
                 titleState = TITLE_STATE_MAP_FADE;
             }
             break;
 
         case TITLE_STATE_MAP_FADE:
-            s32 selResult = selectMenu();
+            s32 selResult = _selectMenu();
             if (selResult < 0 || selResult == 4) {
-                menuTitleOpenSelectAnime();
+                menuTitleCloseSelectAnime();
                 titleState = TITLE_STATE_FLASH_BACK;
                 titleBgmFadeSeconds = cZeroFloat;
             }
@@ -559,7 +541,7 @@ extern "C" void menuTitleLoadMapModels(void)
 extern "C" void menuTitleSetupMapCamera(void)
 {
     cameraSetType(TITLE_CAM_TYPE_MAP);
-    zz_01971c8_(getCurrentMapGroupId(), (void *)TITLE_MAP_CAM_RES, 1, cZeroFloat);
+    cameraPlayAnime(getCurrentMapGroupId(), TITLE_MAP_CAM_RES, cZeroFloat, 1);
 }
 
 /* Stream in the title map group and start its models and camera. */
@@ -630,7 +612,7 @@ extern "C" void menuTitleModelDtor(u32 group, u32 modelID)
 
 /* Wait until the title BGM stream has faded out (wait != 0), or just report
  * whether it is still playing (wait == 0). */
-extern "C" u8 menuTitleWaitBgmFade(u8 wait)
+extern "C" u8 menuTitlePlayBGMWait(u8 wait)
 {
     f32 elapsed;
 
@@ -663,7 +645,7 @@ extern "C" void menuTitlePlayBGM(void)
 
 /* Play the mode-select flash movie from menu_play to menu_end, wait for the
  * end frame, then hand over to the select screen. */
-s32 selectMenu(void)
+s32 _selectMenu(void)
 {
     s32 end;
 
@@ -678,11 +660,11 @@ s32 selectMenu(void)
         GSthreadSwitch();
     } while ((u32)now < (u32)end);
     /* The select screen reports the chosen mode through its return value. */
-    return zz_002f718_();
+    return menuTopSelectMode();
 }
 
 /* Play the select-menu open flash (back_play..back_end) and wait. */
-extern "C" void menuTitleOpenSelectAnime(void)
+extern "C" void menuTitleCloseSelectAnime(void)
 {
     FlashSystemPlayAndWait(TITLE_FLASH, cLabelBackPlay, cLabelBackEnd);
 }
@@ -694,31 +676,31 @@ extern "C" void menuTitleOpenSelectAnime2(void)
 }
 
 /* Play the mode-select open flash (menu_play..menu_end) and wait. */
-extern "C" void menuTitlePlaySelectOpenFlash(void)
+extern "C" void menuTitleOpenSelectAnime(void)
 {
     FlashSystemPlayAndWait(TITLE_FLASH, cLabelMenuPlay, cLabelMenuEnd);
 }
 
 /* Play a UI sound effect. */
-extern "C" void menuTitlePlaySe(s32 id)
+static void _menuTitleSetSE(unsigned long id)
 {
     GSsndPlay(id, 0, 0);
 }
 
 /* Free the select-menu resources and close its windows; called when the
  * mode select screen ends. */
-extern "C" void menuTitleCleanupSelect(void)
+extern "C" void menuTitleExit(void)
 {
     GSfsysWait(TITLE_SELECT_RES);
-    if (fn_8002FC70() == 0) {
+    if (menuTopIsRetainingResources() == 0) {
         GSfsysFree(TITLE_SELECT_RES);
         GSresFreeGroup(TITLE_SELECT_RES);
     }
-    menuTitleCloseMenuIfOpen(TITLE_MENU_ID, 2);
-    menuTitleCloseMenuIfOpen(TITLE_SELECT_MENU_ID_1, 2);
-    menuTitleCloseMenuIfOpen(TITLE_SELECT_MENU_ID_2, 2);
+    _menuTitleClose2(TITLE_MENU_ID, 2);
+    _menuTitleClose2(TITLE_SELECT_MENU_ID_1, 2);
+    _menuTitleClose2(TITLE_SELECT_MENU_ID_2, 2);
     winMsgClose(1);
-    menuTitleStopThread();
+    menuTitleBattlePreReadCheck();
 }
 
 /* Free the battle-select resources. */
@@ -730,7 +712,7 @@ extern "C" void menuTitleBattleSelectFree(void)
 }
 
 /* Stop the title's loader thread if one is running. */
-extern "C" void menuTitleStopThread(void)
+extern "C" void menuTitleBattlePreReadCheck(void)
 {
     if (titlePrereadThreadId != 0) {
         GSthreadTerminate(titlePrereadThreadId);
@@ -771,11 +753,11 @@ extern "C" void menuTitleStartBattleSelect(void)
     titleBgmFadeSeconds = cZeroFloat;
     titleFrameSeconds = cZeroFloat;
     menuTitleReadWazaSelectMenu();
-    encounter = deckDataVirtual_GetPtr(14);
-    zz_battle_set_battle_cd_id(encounter, 0);
+    encounter = fightEncountDataBiosGetPtr(14);
+    fightEncountDataBiosSetDiskId(encounter, 0);
     fightEncountDataBiosSetFightTrainerDataId(encounter, 1, 2);
-    menuTitleCreateThread();
-    if (zz_0125b44_() == 0) {
+    _CreateThread();
+    if (GSfloorIsPop() == 0) {
         TitleSelectWork *select;
         s32 slot = titleSelectSlot;
 
@@ -807,15 +789,15 @@ extern "C" void menuTitleStartBattleSelect(void)
 }
 
 /* Start the title loader thread that prereads the fight data. */
-void menuTitleCreateThread(void)
+void _CreateThread(void)
 {
     titlePrereadThreadId = GSthreadCreate(20, floorGetStackGroupID(), 8192, 1, 1,
-        menuTitlePreReadFightRegWzxData);
+        _menuTitlePreReadFightRegWzxData);
 }
 
 /* Body of the preread thread: hand the BGM over, wait for the map data to be
  * streamed in, then load the fight registry and clear the thread id. */
-void menuTitlePreReadFightRegWzxData(void)
+void _menuTitlePreReadFightRegWzxData(void)
 {
     for (;;) {
         if (soundGetBGMID() == TITLE_BGM_ID) {
@@ -823,7 +805,7 @@ void menuTitlePreReadFightRegWzxData(void)
         }
         GSthreadSwitch();
     }
-    menuTitleWaitBgmFade(1);
+    menuTitlePlayBGMWait(1);
     GSfsysPreReadWait(roomDataGetFsysGidForLanguage(roomIDGetMapData(TITLE_PREREAD_ROOM_ID)));
     fightRegWzxLoadAll(-1);
     titlePrereadThreadId = 0;
@@ -838,15 +820,20 @@ extern "C" void menuTitleReadWazaSelectMenu(void)
 }
 
 /* Record the mode select entry the player settled on. */
-extern "C" void menuTitleSetState(s32 entry)
+extern "C" void menuTitleSetStartStatus(s32 entry)
 {
     titleEntrySelected = entry;
 }
 
 /* Close a menu that is still open. */
-extern "C" void menuTitleCloseMenuIfOpen(s32 id, s32 flag)
+static void _menuTitleClose2(long id, unsigned long flag)
 {
-    if (menuIsOpen(id) == 1) {
-        menuCloseCustom(id, flag, 1);
+    s32 closeFlags;
+    s32 menuID;
+
+    menuID = id;
+    closeFlags = flag;
+    if (menuIsOpen(menuID) == 1) {
+        menuCloseCustom(menuID, closeFlags, 1);
     }
 }

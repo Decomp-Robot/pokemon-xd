@@ -5,6 +5,7 @@
 
 #include <GSgfx.h>
 #include <Pokemon.h>
+#include <pokemonBios.h>
 #include <gbaCommand.h>
 #include <menuCBBios.h>
 #include <types.h>
@@ -127,7 +128,7 @@ u8 menuCBRulesetGetDirty(void);
 void GSthreadSwitch(void);
 // Aligned allocation out of the GSmem current heap, the allocator GSmemFree
 // pairs with; the GSmem module carries two copies of this body.
-void *zz_00a77b0_(unsigned long size, unsigned long alignment);
+void *GSmemAllocAlignedDefaultHeap(unsigned long size, unsigned long alignment);
 void GSmemFree(void *ptr);
 }
 
@@ -297,7 +298,6 @@ extern "C" u16 gbaPokemonConditonFromGC(DeckTrainerAI *pokemon);
 extern "C" u8 pokemonGetDeoxysSel(u8 sel);
 extern "C" u8 menuCBRule_DEOKISISUCamouflage(void);
 extern "C" u8 pokemonAttestGetLanguage(long attest);
-extern "C" u8 pokemon_GetLevel(DeckTrainerAI *pokemon);
 extern "C" u32 pokemon_GetPid(DeckTrainerAI *pokemon);
 // Writes the single byte name the GBA stores from a UTF-16 name: every
 // character is looked up in the gba_code table the region and the language of
@@ -595,7 +595,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
                 } else {
                     packet.summary[i].flag = 0;
                 }
-                packet.summary[i].level = pokemon_GetLevel(other);
+                packet.summary[i].level = pokemonBiosGetLevel(other);
                 packet.summary[i].pid = gbaPacketSwapLong(pokemon_GetPid(other));
                 packet.summary[i].species =
                     gbaPacketSwapShort(battlePokemonGetSpecies(other));
@@ -850,6 +850,6 @@ extern "C" void GSscratchWaitForCompletion(void)
 // Hands out the scratch buffer the GBA file transfer runs in.
 extern "C" void AGB_FileBuffAlloc(void)
 {
-    gbaFileBuffer = zz_00a77b0_(GBA_FILE_BUFFER_SIZE, GBA_FILE_BUFFER_ALIGN);
+    gbaFileBuffer = GSmemAllocAlignedDefaultHeap(GBA_FILE_BUFFER_SIZE, GBA_FILE_BUFFER_ALIGN);
 }
 

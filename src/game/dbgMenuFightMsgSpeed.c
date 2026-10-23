@@ -1,6 +1,6 @@
 #include <types.h>
 
-extern u8 gDbgMenuFightMsgSpeed;
+extern u8 dbgMenuFightMessageSpeed;
 
 /* Debug message speed setting; values outside 1..9 clamp to the nearest end. */
 void dbgMenuFightSetMsgSpeed(u8 speed) {
@@ -10,5 +10,5 @@ void dbgMenuFightSetMsgSpeed(u8 speed) {
 	if (speed > 9) {
 		speed = 9;
 	}
-	gDbgMenuFightMsgSpeed = speed;
+	dbgMenuFightMessageSpeed = speed;
 }

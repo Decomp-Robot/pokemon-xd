@@ -1,11 +1,19 @@
+#include <heroItem.h>
+#include <fade.h>
+#include <savedata.h>
+#include <heroBios.h>
 #include <types.h>
 
 #include <GSgfx.h>
 #include <Pokemon.h>
+#include <pokemonBios.h>
 #include <CAnt.h>
 #include <winSprite.h>
 #include <menuItemBios.h>
 #include <menuCBBios.h>
+#include <menuCBRule.h>
+#include <menuPocket2.h>
+#include <menuPokemonStatus.h>
 
 /*
  * menuCBTaisen.cpp
@@ -57,7 +65,6 @@ s32 gameGetRegion(void);
 void GSfsysReadWait(s32 group);
 void GSfsysFree(s32 group);
 void GSresFreeGroup(s32 group);
-void fadeSet(s32 kind, f32 value);
 void GSsndPlay(s32 id, s32 a, s32 b);
 void GSsndStop(s32 id, s32 a, s32 b);
 void GSmsgPrint2(s32 layer, s32 x, s32 y, u32 color, s32 msgID);
@@ -68,7 +75,7 @@ s32 menuOpen(s32 menuID, s32 arg);
 s32 menuCloseCustom(s32 menuID, s32 arg, s32 flag);
 void menuSetDisp(s32 menuID, s32 on);
 void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on);
-struct tagWINDOW_KEY *windowGetKeyState(void);
+struct tagWINDOW_KEY *windowGetKeyInfo(void);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void spriteSetScissor(s32 layer, s32 x, s32 y, s32 w, s32 h);
 void spriteClearScissor(s32 layer);
@@ -97,13 +104,8 @@ void menuCBPokemonReturnSelected(void);
 u8 menuCBEntrySlotConditionGet(s32 slot, s32 condition);
 // Drop every condition of one entry slot before its Pokemon is re-checked.
 void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
-// Run the current rule set's checks over `src` against the party based at
-// `party` and record them as the conditions of entry slot `index`.
-void menuCBEntrySlotConditionsBuild(Pokemon *party, Pokemon *src, s32 index);
 Pokemon *toolentryTaisenGetPokemonPtr(s32 bank, u32 index);
-s32 getTrainerDataStartOffset(s32 a, s32 b);
-Pokemon *heroBiosGetPokemonPtr(long base, u16 slot);
-u32 itemDataBiosGetDescriptionId(void *itemData);
+u32 itemDataBiosGetNameMsgID(void *itemData);
 u32 menuCBRule_RegulationItemID(s32 index);
 u8 itemDataCheckValid(u32 itemID);
 void *itemDataBiosGetPtr(u32 itemID);
@@ -469,7 +471,7 @@ void _menuCB_errorMsgDisp(unsigned long msgID)
 
     do {
         GSthreadSwitch();
-    } while ((windowGetKeyState()->mKeyTrg & 0x30) == 0);
+    } while ((windowGetKeyInfo()->mKeyTrg & 0x30) == 0);
 
     winMsgClose(1);
 }
@@ -605,7 +607,7 @@ u8 menuCBPokemonMsgCheck(unsigned long bank, unsigned long index)
     Pokemon *pokemon = menuCBPokemonGetPtr(bank, index);
 
     menuCBEntrySlotFlagsClear(0, sel);
-    menuCBEntrySlotConditionsBuild(&menuCBTaisenWork.mParty[0], pokemon, sel);
+    menuCBEntrySlotConditionsBuild(&menuCBTaisenWork.mEntryHero, pokemon, sel);
 
     menuCBTaisenWork.entryNo = 0;
     if (menuCBEntrySlotConditionGet(sel, -1) != 0) {
@@ -721,7 +723,7 @@ Pokemon *menuCBPokemonGetPtr(unsigned long bank, unsigned long index)
 
     switch (bank) {
     case menuCBPokemonHeroParty:
-        pokemon = heroBiosGetPokemonPtr(getTrainerDataStartOffset(0, 2),
+        pokemon = heroBiosGetPokemonPtr(savedataGetStatus(0, SAVE_DATA_HERO),
                                         (u16)index);
         break;
 
@@ -755,7 +757,7 @@ Pokemon *menuCBPokemonGetPtr(unsigned long bank, unsigned long index)
     }
 
     case menuCBPokemonWorkParty:
-        pokemon = heroBiosGetPokemonPtr((long)&menuCBTaisenWork.mParty[0], (u16)index);
+        pokemon = heroBiosGetPokemonPtr(&menuCBTaisenWork.mEntryHero, (u16)index);
         break;
 
     case menuCBPokemonLinkEntry:
@@ -1047,7 +1049,7 @@ void menuCBRegulationItemDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                         0x4345);
         } else {
             if (itemDataCheckValid(itemID)) {
-                u32 msgID = itemDataBiosGetDescriptionId(itemDataBiosGetPtr(itemID));
+                u32 msgID = itemDataBiosGetNameMsgID(itemDataBiosGetPtr(itemID));
 
                 msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(msgID));
             }
@@ -1255,32 +1257,16 @@ void menuCBPokemonEntryTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
 u8 fightReadResource(u32 group, u32 addr);
 void fightFreeResource(u32 group, u32 addr);
 
-/* The condition checks of the entry module: the party-wide trainer regulation,
-   the conditions a held item gives one slot, and the rebuild of every slot of
-   one entry. */
-void menuCBEntrySlotConditionsSetTrainerRegulation(Pokemon *party);
-void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party, Pokemon *pokemon, s32 slot);
-void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry);
-
-/* Held item accessors and the bag of the work party. */
-u32 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
-u32 battlePokemonGetHeldItem(Pokemon *pokemon);
-u32 pokemonDoItemSoubi(Pokemon *pokemon, u32 itemID, u32 apply);
-s32 heroItemCheckAddItemDataId(Pokemon *party, u32 itemID);
-void heroItemAddItemDataId(Pokemon *party, u32 itemID, u32 count, s16 order);
-s32 heroItemDecItemDataId(Pokemon *party, u32 itemID, u32 count, u8 slot);
+/* Pokemon nicknames. */
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
-/* Item pocket, submenus and the entry screens' sources. */
-s32 menuPocket2Call(s32 mode, u32 arg, Pokemon *party);
-s32 menuPocket2GetLastSlotID(void);
+/* Submenus and the entry screens' sources. */
 s32 menuSubOpenSelect2(s32 type, u32 *msgTbl, s32 count, s32 x, s32 y, s32 cursor,
                        s32 select, s32 flag);
 s8 menuSubOpenYesNo(s32 type, s32 x, s32 y, s32 flag);
 FightRuleData *menuCBBios_CurrentRule(void);
 u8 menuCBPokemonGetDataId(s32 port, s32 slot);
 s32 menuCBBattleStartGetStatus(void);
-void menuPokemonStatusOpenFromPokemonChange(Pokemon *pokemon, s32 a, s32 b);
 u32 menuCBBios_GetPokemonNumLimit(void);
 u16 toolentryTaisenGetPokemonNum(s32 port);
 s32 toolentryTaisengetEtnryPokemonOrderNum(s32 port);
@@ -1289,9 +1275,7 @@ u8 pauseCheck(void);
 s32 menuCB_GetDisconnectedGBA(void);
 u8 gbaCommandIsConnected(s32 port);
 u8 GSinputIsConnected(s32 pad);
-void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
 u16 *pcboxGetPokemonBoxName(PCBOX *pcbox, s8 box);
-void *gamedataBiosGetGamedataAtttestPtr(void *party);
 
 /* The two-entry message table the entry select falls back on once all six
    slots are filled: the second and third choice of submenu_msg1, the first
@@ -1406,25 +1390,25 @@ void menuCBPokemonEntryTakeItem(void)
     Pokemon *pokemon = menuCBPokemonGetPtr(menuCBTaisenWork.dstBank,
                                            menuCBTaisenWork.dstIndex);
     u16 *name;
-    Pokemon *party;
-    u32 itemID;
+    Hero *hero;
+    u16 itemID;
 
     name = pokemon_GetNickname(pokemon);
-    party = &menuCBTaisenWork.mParty[0];
+    hero = &menuCBTaisenWork.mEntryHero;
 
     msgctrlSetValue(0x32, (unsigned long)name);
 
-    itemID = battlePokemonGetHeldItem(pokemon);
+    itemID = pokemonGetSoubiItemDataId(pokemon);
 
-    if ((u16)itemID != 0) {
-        if (heroItemCheckAddItemDataId(party, itemID) <= 0) {
+    if (itemID != 0) {
+        if (heroItemCheckAddItemDataId(hero, itemID) <= 0) {
             menuCBMsgPopup(0x3ACF);
         } else {
-            u32 soubi;
+            u16 soubi;
 
-            heroItemAddItemDataId(party, itemID, 1, -1);
+            heroItemAddItemDataId(hero, itemID, 1, -1);
             soubi = pokemonDoItemSoubi(pokemon, 0, 0);
-            msgctrlSetValue(0x2D, (u16)soubi);
+            msgctrlSetValue(0x2D, soubi);
             menuCBMsgPopup(0x3ACD);
         }
     } else {
@@ -1436,17 +1420,17 @@ void menuCBPokemonEntryGiveItem(void)
 {
     Pokemon *pokemon = menuCBPokemonGetPtr(menuCBTaisenWork.dstBank,
                                            menuCBTaisenWork.dstIndex);
-    Pokemon *party;
-    u32 select;
-    u32 pocketSlot;
-    u32 itemID;
-    u32 oldItem;
+    Hero *hero;
+    u16 select;
+    u8 pocketSlot;
+    u16 itemID;
+    u16 oldItem;
     s32 answer;
     u16 *name;
     s32 slot;
 
     name = pokemon_GetNickname(pokemon);
-    party = &menuCBTaisenWork.mParty[0];
+    hero = &menuCBTaisenWork.mEntryHero;
 
     msgctrlSetValue(0x32, (unsigned long)name);
 
@@ -1456,11 +1440,11 @@ void menuCBPokemonEntryGiveItem(void)
     }
 
     menuOpen(0xE6, 1);
-    select = menuPocket2Call(5, 0, party);
+    select = menuPocket2Call(5, 0, hero);
     pocketSlot = menuPocket2GetLastSlotID();
     menuCloseCustom(0xE6, 0, 1);
 
-    if ((u16)select == 0)
+    if (select == 0)
         return;
 
     slot = (u16)menuCBTaisenWork.dstIndex - menuCBEntrySlotFirst;
@@ -1469,7 +1453,7 @@ void menuCBPokemonEntryGiveItem(void)
 
     oldItem = pokemonDoItemSoubi(pokemon, 0, 0);
     pokemonDoItemSoubi(pokemon, select, 1);
-    menuCBEntrySlotConditionsSetItemRegulation(party, pokemon, slot);
+    menuCBEntrySlotConditionsSetItemRegulation(hero, pokemon, slot);
     pokemonDoItemSoubi(pokemon, 0, 0);
     pokemonDoItemSoubi(pokemon, oldItem, 1);
 
@@ -1488,10 +1472,10 @@ void menuCBPokemonEntryGiveItem(void)
         return;
     }
 
-    itemID = battlePokemonGetHeldItem(pokemon);
+    itemID = pokemonGetSoubiItemDataId(pokemon);
 
-    if ((u16)itemID != 0) {
-        msgctrlSetValue(0x2D, (u16)itemID);
+    if (itemID != 0) {
+        msgctrlSetValue(0x2D, itemID);
         winMsgOpen(2, 0x3ACA, 1, 0);
 
         switch (gameGetRegion()) {
@@ -1509,29 +1493,29 @@ void menuCBPokemonEntryGiveItem(void)
         if (answer != 0)
             return;
 
-        if (heroItemDecItemDataId(party, select, 1, (u8)pocketSlot) != 0) {
+        if (heroItemDecItemDataId(hero, select, 1, pocketSlot) != 0) {
             menuCBMsgPopup(0x3ACF);
             return;
         }
 
-        if (heroItemCheckAddItemDataId(party, itemID) <= 0) {
-            heroItemAddItemDataId(party, select, 1, -1);
+        if (heroItemCheckAddItemDataId(hero, itemID) <= 0) {
+            heroItemAddItemDataId(hero, select, 1, -1);
             menuCBMsgPopup(0x3ACF);
         } else {
-            heroItemAddItemDataId(party, itemID, 1, -1);
+            heroItemAddItemDataId(hero, itemID, 1, -1);
 
             oldItem = pokemonDoItemSoubi(pokemon, 0, 0);
             pokemonDoItemSoubi(pokemon, select, 1);
-            msgctrlSetValue(0x2D, (u16)oldItem);
-            msgctrlSetValue(0x2E, (u16)select);
+            msgctrlSetValue(0x2D, oldItem);
+            msgctrlSetValue(0x2E, select);
             menuCBMsgPopup(0x3ACB);
         }
     } else {
-        if (heroItemDecItemDataId(party, select, 1, (u8)pocketSlot) != 0)
+        if (heroItemDecItemDataId(hero, select, 1, pocketSlot) != 0)
             return;
 
         pokemonDoItemSoubi(pokemon, select, 1);
-        msgctrlSetValue(0x2D, (u16)select);
+        msgctrlSetValue(0x2D, select);
         menuCBMsgPopup(0x3ACC);
     }
 }
@@ -1770,15 +1754,15 @@ void menuCBRuleSelect(void)
 
 void menuCBPokemonEntryCheck(void)
 {
-    Pokemon *party;
+    Hero *hero;
     u32 slot;
 
     for (u32 i = 0; i < 6; i++)
         menuCBEntrySlotFlagsClear(0, i);
 
-    party = &menuCBTaisenWork.mParty[0];
+    hero = &menuCBTaisenWork.mEntryHero;
 
-    menuCBEntrySlotConditionsBuildAll(party, 0);
+    menuCBEntrySlotConditionsBuildAll(hero, 0);
 
     for (slot = 0; slot < 6; slot++) {
         if (menuCBEntrySlotConditionGet(slot, 8) != 0) {
@@ -1810,7 +1794,7 @@ void menuCBPokemonEntryCheck(void)
     for (u32 i = 0; i < 6; i++)
         menuCBEntrySlotFlagsClear(0, i);
 
-    menuCBEntrySlotConditionsSetTrainerRegulation(party);
+    menuCBEntrySlotConditionsSetTrainerRegulation(hero);
 
     if (menuCBEntrySlotConditionGet(0, -1) != 0) {
         menuCBTaisenWork.dispState = 2;
@@ -2218,8 +2202,8 @@ void menuCBPokemonEntryTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
     s16 x2;
 
     spriteSetScissor(window->mLayerID, 0, 0, 0xD1, 0x12);
-    msgctrlSetValue(0x37, (unsigned long)gamedataBiosGetGamedataAtttestPtr(
-                              &menuCBTaisenWork.mParty[0]));
+    msgctrlSetValue(0x37, (unsigned long)heroBiosGetNamePtr(
+                              &menuCBTaisenWork.mEntryHero));
 
     width = (s16)(GSmsgGetMessageSize(msgID) >> 16);
     x2 = (s16)(sprite->mWidth / 2 - width / 2);

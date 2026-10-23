@@ -1,12 +1,22 @@
 #ifndef FLOOR_H
 #define FLOOR_H
 
+#include <types.h>
+
+enum { FLOOR_ID_WAZA_DEBUG = 999 };
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void zz_011de1c_(void);
-void zz_011ddf8_(void);
+void floorBlockMainScript(void);
+void floorUnblockMainScript(void);
+
+u8 GSfloorIsPop(void);
+u8 GSfloorIsPush(void);
+void GSfloorPop(void);
+void GSfloorPush(u32 floorID);
+void floorWaitForChange(void);
 
 #ifdef __cplusplus
 }

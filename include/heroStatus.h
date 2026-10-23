@@ -1,7 +1,7 @@
 #ifndef HERO_STATUS_H
 #define HERO_STATUS_H
 
-enum {
+enum HeroStatusSelector {
     HERO_STATUS_TRAINER_ID = 2,
     HERO_STATUS_POKEMON = 3,
     HERO_STATUS_MONEY = 12,
@@ -12,10 +12,9 @@ enum {
 extern "C" {
 #endif
 
-// Values are scalar words or pointers, according to the selector.
-void heroSetStatus(void *hero, unsigned long selector, unsigned long value);
-
-unsigned long heroGetStatus(void *hero, int selector, unsigned short slot);
+// A null hero selects the current Hero. Values are words or pointers by selector.
+void heroSetStatus(void *hero, unsigned short selector, unsigned long value);
+unsigned long heroGetStatus(void *hero, unsigned short selector, int slot);
 
 #ifdef __cplusplus
 }

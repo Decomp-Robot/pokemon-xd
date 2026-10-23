@@ -1,3 +1,5 @@
+#include <menu.h>
+#include <GSsnd.h>
 #include <floorRoom.h>
 #include <pokecolo.h>
 #include <gsFlag.h>
@@ -12,34 +14,37 @@
 #include "time.h"
 #include "winSprite.h"
 
+enum {
+    PDA_MODEL_RESOURCE = 0x17CF1000,
+    PDA_EVENT_LIGHT_1_RESOURCE = 0x17CF1600,
+    PDA_EVENT_LIGHT_2_RESOURCE = 0x17CF1601,
+    PDA_CAMERA_RESOURCE = 0x17CF1800,
+    PDA_OPEN_FLASH = 0x1FBD3000,
+    PDA_PAGE_FLASH = 0x20543000,
+    PDA_OPEN_SOUND = 0x44E,
+};
+
 // PDA front end. The PDA script (menuPdaScript) and the PDA screen (menuPda)
 // share the fade in menuPdaScriptFade and the PDA frame menu; the helpers behind
 // them drive the model, the top menu and the list cursors.
 
 extern "C" {
-void menuOpen(s32 menuId, s32 mode);
-void menuClose(s32 menuId);
-void menuCloseSync(s32 menuId, s32 flag);
-long menuOpenCustom(s32 menuId, long windowId, ...);
+u16 windowGetKeyRepeat(void);
 long windowGetActiveID(void);
-u32 windowGetKeyRepeat(void);
 void *windowGetCursorToItem(tagWINDOW_WORK *window);
 u8 *menuDataBiosGetPtr(long dataId);
 void menuItemBiosSetSelectFlag(s32 dataId, s32 itemId, s32 flag);
 void GSthreadSwitch(void);
-void GSgfxResetRestore(int mode);
-void GSsndPlayNow(s32 id);
 void scriptLightSetDisp(unsigned long res, s32 on);
 void fightOutPokemonSetVisibility(unsigned long res, s32 visible);
 void floorSetFadeScript(s32 floor, s32 script);
-void floorPop(void);
+void GSfloorPop(void);
 s32 menuPdaMemoXDGetItem(void);
 void menuPdaDPMonList(void);
 void menuPdaMemoList(void);
 void menuPdaMailListXD(void);
-void zz_0042c2c_(void);
+void menuPdaSearcher(void);
 void menuButtonNormal(tagWINDOW_WORK *window);
-void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
 s32 heroMoveGetLeader(void);
 s32 floorGetNextFloorID(void);
 void peopleTalkMessageBgmStart(unsigned long res);
@@ -107,33 +112,33 @@ void menuPdaScript(u8 mode)
     if (mode == 0) {
         menuPdaWork.mRes = PDATOP_MENU_RES_MEMO;
         menuPdaWork.mUnk08 = 1;
-        FlashSystemSetPlayFrameLabel(0x1FBD3000, menuPdaFlashMemoStart, menuPdaFlashMemoEnd);
-        FlashSystemSetNowFrameLabel(0x1FBD3000, menuPdaFlashMemoStart);
-        wait = FlashSystemGetFrameFromLabel(0x1FBD3000, menuPdaFlashMemoEnd);
+        FlashSystemSetPlayFrameLabel(PDA_OPEN_FLASH, menuPdaFlashMemoStart, menuPdaFlashMemoEnd);
+        FlashSystemSetNowFrameLabel(PDA_OPEN_FLASH, menuPdaFlashMemoStart);
+        wait = FlashSystemGetFrameFromLabel(PDA_OPEN_FLASH, menuPdaFlashMemoEnd);
     } else {
         menuPdaWork.mRes = PDATOP_MENU_RES_DP_MON;
         menuPdaWork.mUnk08 = 0;
-        FlashSystemSetPlayFrameLabel(0x1FBD3000, menuPdaFlashDPMonStart, menuPdaFlashDPMonEnd);
-        FlashSystemSetNowFrameLabel(0x1FBD3000, menuPdaFlashDPMonStart);
-        wait = FlashSystemGetFrameFromLabel(0x1FBD3000, menuPdaFlashDPMonEnd);
+        FlashSystemSetPlayFrameLabel(PDA_OPEN_FLASH, menuPdaFlashDPMonStart, menuPdaFlashDPMonEnd);
+        FlashSystemSetNowFrameLabel(PDA_OPEN_FLASH, menuPdaFlashDPMonStart);
+        wait = FlashSystemGetFrameFromLabel(PDA_OPEN_FLASH, menuPdaFlashDPMonEnd);
     }
-    zz_0039d2c_(menuPdaWork.mRes);
+    _SelectCursorCalcAngle(menuPdaWork.mRes);
     menuPdaWork.mFadeFrom = menuPdaWork.mFadeTo;
-    FlashSystemSetLoopFlag(0x1FBD3000, 0);
+    FlashSystemSetLoopFlag(PDA_OPEN_FLASH, 0);
     menuPdaWork.mSubmenuFlag = 0;
     menuPdaScriptSelectItems(mode);
-    menuOpen(0xA8, 0);
-    menuOpenCustom(0x6C, windowGetActiveID(), 0, 0, 0, 1, &arg);
-    menuOpenCustom(0x107, windowGetActiveID(), &value, 0, 0, 0);
-    while (FlashSystemGetNowFrame(0x1FBD3000) < wait) {
+    menuOpen(MENU_ID_PDA_BACKDROP, 0);
+    menuOpenCustom(MENU_ID_PDA_FRAME, windowGetActiveID(), 0, 0, 0, 1, &arg);
+    menuOpenCustom(MENU_ID_PDA_SCRIPT_INPUT, windowGetActiveID(), &value, 0, 0, 0);
+    while (FlashSystemGetNowFrame(PDA_OPEN_FLASH) < wait) {
         GSthreadSwitch();
     }
     peopleTalkEnterFloor();
     GSthreadSwitch();
     if (mode == 0) {
-        menuItemBiosSetSelectFlag(0x107, 2, 1);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 2, 1);
     } else {
-        menuItemBiosSetSelectFlag(0x107, 5, 1);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 5, 1);
     }
     fade = menuPdaScriptFadeTime;
     do {
@@ -142,13 +147,13 @@ void menuPdaScript(u8 mode)
         fade = fade - dt;
         GSthreadSwitch();
     } while (fade >= menuPdaZero);
-    menuClose(0x107);
-    menuCloseSync(0x107, 1);
-    menuClose(0xA8);
-    menuClose(0x6C);
-    menuCloseSync(0x6C, 1);
+    menuClose(MENU_ID_PDA_SCRIPT_INPUT);
+    menuCloseSync(MENU_ID_PDA_SCRIPT_INPUT, 1);
+    menuClose(MENU_ID_PDA_BACKDROP);
+    menuClose(MENU_ID_PDA_FRAME);
+    menuCloseSync(MENU_ID_PDA_FRAME, 1);
     GSgfxResetRestore(1);
-    floorPop();
+    GSfloorPop();
 }
 
 // Alpha of the PDA script fade as a 0-255 fade step.
@@ -187,15 +192,15 @@ void peopleTalkEnterFloor(void)
 void menuPdaScriptSelectItems(u8 mode)
 {
     if (mode == 0) {
-        menuItemBiosSetSelectFlag(0x107, 2, 0);
-        menuItemBiosSetSelectFlag(0x107, 5, 0);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 2, 0);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 5, 0);
     } else {
-        menuItemBiosSetSelectFlag(0x107, 2, 1);
-        menuItemBiosSetSelectFlag(0x107, 5, 0);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 2, 1);
+        menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 5, 0);
     }
-    menuItemBiosSetSelectFlag(0x107, 3, 1);
-    menuItemBiosSetSelectFlag(0x107, 4, 1);
-    menuItemBiosSetSelectFlag(0x107, 6, 1);
+    menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 3, 1);
+    menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 4, 1);
+    menuItemBiosSetSelectFlag(MENU_ID_PDA_SCRIPT_INPUT, 6, 1);
 }
 
 // Per-frame hook of the PDA wait loops (motion and zoom waits): nothing to do
@@ -207,14 +212,14 @@ void menuPdaWaitFrame(void)
 // Point the PDA menus at the PDA model resource.
 void menuPdaSetModelPointer(void)
 {
-    menuPdaModel = GSresGetResourceAllGroup(0x17CF1000);
+    menuPdaModel = GSresGetResourceAllGroup(PDA_MODEL_RESOURCE);
 }
 
 // Script-side twin of menuPdaSetModelPointer: the PDA script and the mail
 // flow each register their own entry that points the menus at the PDA model.
 void menuPdaScriptSetModel(void)
 {
-    menuPdaModel = GSresGetResourceAllGroup(0x17CF1000);
+    menuPdaModel = GSresGetResourceAllGroup(PDA_MODEL_RESOURCE);
 }
 
 // List cursor of the PDA frame menu. Moves the window cursor through the
@@ -235,12 +240,12 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
     if (window == 0) {
         return 0;
     }
-    if (zz_003930c_(window) != false) {
+    if (_checkAddFunc(window) != false) {
         return 0;
     }
     menuData = menuDataBiosGetPtr(window->mMenuID);
     if (windowGetCursorToItem(window) == 0) {
-        window->cursor = 0;
+        window->mCursorState.mSelection.mCursor = 0;
         return 0;
     }
     stepX = 0x10;
@@ -262,11 +267,11 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
                 }
                 item = menuItemBiosGetPtr(window->mMenuID, item->mNextID);
             }
-            if (window->cursor > 0) {
-                window->cursor--;
+            if (window->mCursorState.mSelection.mCursor > 0) {
+                window->mCursorState.mSelection.mCursor--;
                 work->mCursorMoved = 0;
             } else {
-                window->cursor = count - 1;
+                window->mCursorState.mSelection.mCursor = count - 1;
                 work->mCursorMoved = 1;
             }
         } else if (down != 0) {
@@ -279,15 +284,15 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
                 }
                 item = menuItemBiosGetPtr(window->mMenuID, item->mNextID);
             }
-            if (window->cursor < count - 1) {
-                window->cursor++;
+            if (window->mCursorState.mSelection.mCursor < count - 1) {
+                window->mCursorState.mSelection.mCursor++;
                 work->mCursorMoved = 0;
             } else {
-                window->cursor = 0;
+                window->mCursorState.mSelection.mCursor = 0;
                 work->mCursorMoved = 1;
             }
         }
-        if (window->cursorTo != window->cursor) {
+        if (window->cursorTo != window->mCursorState.mSelection.mCursor) {
             break;
         }
         stepX = stepX + 0x10;
@@ -433,15 +438,15 @@ void menuPda(void)
     void *model;
     PDA_FRAME_ARG arg;
 
-    scriptLightSetDisp(0x17CF1600, 0);
-    scriptLightSetDisp(0x17CF1601, 0);
-    if (zz_005c228_() == 1) {
+    scriptLightSetDisp(PDA_EVENT_LIGHT_1_RESOURCE, 0);
+    scriptLightSetDisp(PDA_EVENT_LIGHT_2_RESOURCE, 0);
+    if (pokecoloGetRomVersion() == 1) {
         flagSetTrue(0x3F2);
     }
-    FlashSystemSetLoopFlag(0x1FBD3000, 1);
-    FlashSystemSetLoopFlag(0x20543000, 0);
-    menuOpen(0xA8, 0);
-    model = GSresGetResourceAllGroup(0x17CF1000);
+    FlashSystemSetLoopFlag(PDA_OPEN_FLASH, 1);
+    FlashSystemSetLoopFlag(PDA_PAGE_FLASH, 0);
+    menuOpen(MENU_ID_PDA_BACKDROP, 0);
+    model = GSresGetResourceAllGroup(PDA_MODEL_RESOURCE);
     menuPdaModel = model;
     GSmodelSetVisibility((_GSmodel*)model, 0);
     GSthreadSwitch();
@@ -449,14 +454,14 @@ void menuPda(void)
     _menuPdaInit();
     _menuPdaStartEvent();
     _menuPdaSetMenuItem();
-    zz_0039d2c_(menuPdaResTable[0]);
+    _SelectCursorCalcAngle(menuPdaResTable[0]);
     menuPdaWork.mFadeFrom = menuPdaWork.mFadeTo;
     arg.mUnk04 = &menuPdaFrameValue0;
     arg.mUnk00 = 0;
     arg.mUnk01 = 0xFF;
     arg.mUnk02 = 0;
     arg.mUnk08 = &menuPdaFrameValue1;
-    menuOpenCustom(0x6C, windowGetActiveID(), 0, 0, 0, 1, &arg);
+    menuOpenCustom(MENU_ID_PDA_FRAME, windowGetActiveID(), 0, 0, 0, 1, &arg);
     while (menuPdaWork.mExitFlag == 0) {
         _menuPdaSetMenuItem();
         res = topMenu(res);
@@ -484,10 +489,10 @@ void menuPda(void)
             menuPdaWork.mSubmenuFlag = 0;
             _menuPdaZoomOut();
             break;
-        case PDATOP_MENU_RES_EXTRA:
+        case PDATOP_MENU_RES_SEARCHER:
             _menuPdaTopClose();
             _menuPdaZoomIn();
-            zz_0042c2c_();
+            menuPdaSearcher();
             menuPdaWork.mSubmenuFlag = 0;
             _menuPdaZoomOut();
             break;
@@ -504,14 +509,14 @@ void menuPda(void)
         menuPdaWork.mFadeOutDone = 1;
     }
     _menuPdaTopClose();
-    menuClose(0x6C);
-    menuCloseSync(0x6C, 1);
-    menuClose(0xA8);
-    menuCloseSync(0xA8, 1);
-    fightOutPokemonSetVisibility(0x17CF1000, 0);
+    menuClose(MENU_ID_PDA_FRAME);
+    menuCloseSync(MENU_ID_PDA_FRAME, 1);
+    menuClose(MENU_ID_PDA_BACKDROP);
+    menuCloseSync(MENU_ID_PDA_BACKDROP, 1);
+    fightOutPokemonSetVisibility(PDA_MODEL_RESOURCE, 0);
     _menPdaFadeInWait();
     GSgfxResetRestore(1);
-    floorPop();
+    GSfloorPop();
     floorSetFadeScript(0, 0);
 }
 
@@ -530,8 +535,8 @@ void menuPdaSetPageFlash(s32 res)
     menuPdaPageDisp = 1;
     sprintf(label, menuPdaPageStartFormat, res + 1);
     sprintf(text, menuPdaPageEndFormat, res + 1);
-    FlashSystemSetPlayFrameLabel(0x20543000, label, text);
-    FlashSystemSetNowFrameLabel(0x20543000, label);
+    FlashSystemSetPlayFrameLabel(PDA_PAGE_FLASH, label, text);
+    FlashSystemSetNowFrameLabel(PDA_PAGE_FLASH, label);
 }
 
 // Idle thread of the PDA screen, entered by the script system.
@@ -546,15 +551,15 @@ __declspec(export) void menuPdaMain(void)
 // Exported like menuPdaMain.
 __declspec(export) void menuPdaInit(void)
 {
-    void *model = GSresGetResourceAllGroup(0x17CF1000);
+    void *model = GSresGetResourceAllGroup(PDA_MODEL_RESOURCE);
 
     menuPdaModel = model;
     if (model != 0) {
         GSmodelSetVisibility((_GSmodel*)model, 0);
-        _menuPdaSetMotion(0x17CF1000, 0, menuPdaZero, false);
+        _menuPdaSetMotion(PDA_MODEL_RESOURCE, 0, menuPdaZero, false);
     }
     if (menuPdaSoundEnable != 0) {
-        GSsndPlayNow(0x44E);
+        GSsndPlayNow(PDA_OPEN_SOUND);
     }
 }
 } // extern "C"
@@ -564,26 +569,26 @@ __declspec(export) void menuPdaInit(void)
 void _menuPdaStartEvent(void)
 {
     GSgfxLayerID layer = menuPdaEventLayer[0];
-    void *model = GSresGetResourceAllGroup(0x17CF1000);
+    void *model = GSresGetResourceAllGroup(PDA_MODEL_RESOURCE);
 
     GSmodelSetRenderLayer((_GSmodel*)model, 1, &layer);
-    zz_01971c8_(0x17, 0x17CF1800, menuPdaZero, 0);
-    GSmodelSetRenderCamera((_GSmodel*)model, GSresGetResource(0x17, 0x17CF1800));
+    cameraPlayAnime(0x17, PDA_CAMERA_RESOURCE, menuPdaZero, 0);
+    GSmodelSetRenderCamera((_GSmodel*)model, GSresGetResource(0x17, PDA_CAMERA_RESOURCE));
     GSmodelSetVisibility((_GSmodel*)model, 1);
     GSmodelSetBoundCheck((_GSmodel*)model, 0);
-    _menuPdaSetMotion(0x17CF1000, 0, menuPdaZero, false);
+    _menuPdaSetMotion(PDA_MODEL_RESOURCE, 0, menuPdaZero, false);
     GSgfxResetRestore(0);
     GSthreadSwitch();
-    _menuPdaWaitMotion(0x17CF1000);
-    peopleTalkMessageBgmStart(0x17CF1000);
-    _menuPdaSetMotion(0x17CF1000, 1, menuPdaZero, true);
+    _menuPdaWaitMotion(PDA_MODEL_RESOURCE);
+    peopleTalkMessageBgmStart(PDA_MODEL_RESOURCE);
+    _menuPdaSetMotion(PDA_MODEL_RESOURCE, 1, menuPdaZero, true);
 }
 
 // Close the PDA top menu.
 void _menuPdaTopClose(void)
 {
-    menuClose(0x6B);
-    menuCloseSync(0x6B, 1);
+    menuClose(MENU_ID_PDA_TOP);
+    menuCloseSync(MENU_ID_PDA_TOP, 1);
 }
 
 // Open the PDA top menu with the cursor on res and return the entry the
@@ -592,7 +597,7 @@ PDATOP_MENU_RES topMenu(PDATOP_MENU_RES res)
 {
     s32 index = _getMenuIndex(res);
 
-    if (menuOpenCustom(0x6B, windowGetActiveID(), &index, 0, 1, 0) == -1) {
+    if (menuOpenCustom(MENU_ID_PDA_TOP, windowGetActiveID(), &index, 0, 1, 0) == -1) {
         return (PDATOP_MENU_RES)-1;
     }
     return menuPdaWork.mRes;

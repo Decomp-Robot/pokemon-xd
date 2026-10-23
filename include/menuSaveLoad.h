@@ -4,6 +4,8 @@
 #include "types.h"
 #include "winSprite.h"
 
+enum { MENU_ID_SAVE_REPORT = 0x64 };
+
 // Save report shared by the save-load window and the PDA.
 class menuSaveload {
 public:

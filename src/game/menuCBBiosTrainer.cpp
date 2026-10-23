@@ -1,3 +1,4 @@
+#include <heroBios.h>
 #include <FightRuleData.h>
 #include <LooseBallAnims.h>
 #include <Pokemon.h>
@@ -13,8 +14,7 @@
  * controller port, the "fight immediately" opponents of the connect-battle
  * setup, and the accessors the battle menus share. The rule data of the same
  * work area lives in game/menuCBBiosRule.cpp. The entry points the menus call
- * are C functions; the Pokemon accessors the record handling reuses are C++
- * methods.
+ * are C functions.
  */
 
 /* -------------------------------------------------------------------------
@@ -29,11 +29,8 @@ void heroBiosCopy(Hero *dst, Hero *src);
 void heroBiosSetHizukiFlag(Hero *hero, s32 flag);
 u8 heroBiosGetHomePlace(Hero *hero);
 u8 heroBiosGetSexDataId(Hero *hero);
-Pokemon *heroBiosGetPokemonPtr(Hero *hero, u16 slot);
 u8 menuCBRule_IsBlankPokemon(Pokemon *pokemon);
 void pokemonAllKaihuku(Pokemon *pokemon);
-void fightTrainerCreateFightTrainerDataIdToHero(u16 dataId, s32 desperation,
-                                                Hero *hero, u32 battleId);
 }
 
 /* -------------------------------------------------------------------------
@@ -53,7 +50,7 @@ extern "C" void menuCBBios_InitVersusTrainer(FIGHT_TRAINER *trainer,
 extern "C" void menuCBBios_InitTrainerFromHero(FIGHT_TRAINER *trainer,
                                                Hero *hero, u16 dataId);
 extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
-                                                 u16 dataId, u32 battleId);
+                                                 u16 dataId, u16 encountNo);
 extern "C" void menuCBBios_ClearTrainer(FIGHT_TRAINER *trainer);
 extern "C" void menuCBBios_InitTrainer(FIGHT_TRAINER *trainer, u16 dataId);
 extern "C" s32 menuCBBios_FightTrainerDataIDToHomePlace(u16 dataId);
@@ -94,12 +91,12 @@ extern "C" u16 *menuCBBios_GetRuleEntryList(s32 ruleId)
 }
 
 /* -------------------------------------------------------------------------
- * Pokemon record accessors
+ * Trainer player ID
  * ---------------------------------------------------------------------- */
 
-u16 Pokemon::getItemDataId() const
+extern "C" u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer)
 {
-    return mItemDataId;
+    return trainer->mResetDataId;
 }
 
 /* -------------------------------------------------------------------------
@@ -123,14 +120,14 @@ extern "C" void menuCBBios_CopyTrainer(FIGHT_TRAINER *dst,
     memcpy(dst, src, 0x1320);
 }
 
-unsigned long Pokemon::getCatchTrainerRnd() const
+extern "C" s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer)
 {
-    return mCatchTrainerRnd;
+    return trainer->mControllerId;
 }
 
-void Pokemon::setCatchTrainerRnd(unsigned long rnd)
+extern "C" void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId)
 {
-    mCatchTrainerRnd = rnd;
+    trainer->mControllerId = controllerId;
 }
 
 /*
@@ -213,13 +210,13 @@ extern "C" void menuCBBios_InitTrainerFromHero(FIGHT_TRAINER *trainer,
  * `dataId`, fought with the record's battle hero as the base.
  */
 extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
-                                                 u16 dataId, u32 battleId)
+                                                 u16 dataId, u16 encountNo)
 {
     Hero work;
 
     heroBiosCopy(&work, &trainer->mBattleHero);
     fightTrainerCreateFightTrainerDataIdToHero(
-        dataId, LooseBallAnims::GetDesperationInfo(0), &work, battleId);
+        dataId, LooseBallAnims::GetDesperationInfo(0), &work, encountNo);
     heroBiosSetHizukiFlag(&work, 0);
     _menuCBBios_RecoverAllPokemons(&work);
     menuCBBios_ClearTrainer(trainer);
@@ -229,20 +226,19 @@ extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
     trainer->mHomePlace = menuCBBios_FightTrainerDataIDToHomePlace(dataId);
 }
 
-// Reset a trainer record to its default trainer data ID, which is kept in
-// the head's Pokemon held-item slot.
+// Reset a trainer record to its default trainer data ID.
 extern "C" void menuCBBios_ClearTrainer(FIGHT_TRAINER *trainer)
 {
     u16 defaultDataId;
 
-    defaultDataId = ((Pokemon *)trainer)->getItemDataId();
+    defaultDataId = menuCBTrainerBios_GetPlayerID(trainer);
     menuCBBios_InitTrainer(trainer, defaultDataId);
 }
 
 extern "C" void menuCBBios_InitTrainer(FIGHT_TRAINER *trainer, u16 dataId)
 {
     memset(trainer, 0, 0x1320);
-    ((Pokemon *)trainer)->mItemDataId = dataId;
+    trainer->mResetDataId = dataId;
 }
 
 // Home place a fight trainer data ID plays: the hero trainer (0x1388) has
@@ -311,7 +307,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId)
 // is matched by heroMoveGetKenObjID against the per-participant object-ID
 // table to pick the participant slot, and GetBattleHeroPtr is the Hero* the
 // pokemon menus use on the connect-battle branch (alongside
-// getTrainerDataStartOffset(0, 2) and
+// savedataGetStatus(0, 2) and
 // fightFloorGetGcHeroFightTrainerPtr) before reading its gamedata record.
 extern "C" s32 menuCBBios_GetBattlePortID(void)
 {

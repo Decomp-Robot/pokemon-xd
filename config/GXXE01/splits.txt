@@ -20,13 +20,13 @@ game/dbgMenuFight.cpp:
 	.text       start:0x80005798 end:0x80005DB0
 	.data       start:0x802FBF00 end:0x802FBF24
 
-decomp/dbgMenuFightSetMsgSpeed.c:
+game/dbgMenuFightMsgSpeed.c:
 	.text       start:0x800071B4 end:0x800071DC
 
 game/dbgMenuFlag.c:
 	.text       start:0x800083D4 end:0x800084F0
 
-decomp/_memcard_debug_type_check.c:
+game/memcardDebugSlots.c:
 	.text       start:0x8000B620 end:0x8000B644
 
 game/dbgMenuMemcard.c:
@@ -43,8 +43,11 @@ game/dbgMenuPeople.c:
 game/dbgMenuSoundTest.c:
 	.text       start:0x8000BD20 end:0x8000C0C4
 
+game/dbgMenuWazaViewer.c:
+	.text       start:0x8000C0C4 end:0x8000C0F4
+
 game/dbgMenuWaza.c:
-	.text       start:0x8000C0C4 end:0x8000C27C
+	.text       start:0x8000C0F4 end:0x8000C27C
 
 game/GSgfxLayer.cpp:
 	.text       start:0x8000C27C end:0x8000C29C
@@ -94,8 +97,12 @@ game/pause.c:
 	.sbss       start:0x804EA6D0 end:0x804EA6DC
 
 game/time.cpp:
-	.text       start:0x8000E8CC end:0x8000EA94
+	.text       start:0x8000E8CC end:0x8000E97C
 	.sdata2     start:0x804EBE00 end:0x804EBE10
+
+game/menuListCursor.cpp:
+	.text       start:0x8000E97C end:0x8000EA94
+	.sbss2      start:0x804EFC88 end:0x804EFC90
 
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
@@ -134,14 +141,14 @@ game/bitTable.cpp:
 	.text       start:0x80021FFC end:0x80022080
 
 game/menuPocket.cpp:
-	.text       start:0x80022080 end:0x80024088
+	.text       start:0x80022080 end:0x80026898
+	.rodata     start:0x802EA4C8 end:0x802EA788
 	.data       start:0x80322480 end:0x803224EC
-
-game/menuPocket2Pokemon.cpp:
-	.text       start:0x80024118 end:0x80024148
-
-game/menuPocket2.cpp:
-	.text       start:0x80026718 end:0x80026898
+	.bss        start:0x804282A0 end:0x80428338
+	.sdata      start:0x804E7EE8 end:0x804E7EEC
+	.sbss       start:0x804EA760 end:0x804EA768
+	.sdata2     start:0x804EC098 end:0x804EC0D0
+	.sbss2      start:0x804EFCA0 end:0x804EFCB0
 
 game/gbaExchange.cpp:
 	.text       start:0x80027E44 end:0x80027E6C
@@ -193,14 +200,21 @@ game/menuSaveLoad.cpp:
 game/menuPda.cpp:
 	.text       start:0x80038104 end:0x80038FAC
 
+game/menuCBTaisenWork.cpp:
+	.text       start:0x80046530 end:0x80046598
+	.ctors      start:0x802E9F94 end:0x802E9F98
+	.bss        start:0x804299F8 end:0x80434FF0
+
 game/menuCBBattleResult.cpp:
-	.text       start:0x80046594 end:0x80046D5C
+	.text       start:0x80046598 end:0x80046D5C
 	.data       start:0x8032EAE0 end:0x8032EB08
 
 game/menuCBBattleStart.cpp:
 	.text       start:0x80046D5C end:0x800477F8
 	.ctors      start:0x802E9F98 end:0x802E9F9C
 	.rodata     start:0x802EAAD8 end:0x802EABF8
+	.bss        start:0x80435050 end:0x80435198
+	.sdata2     start:0x804EC3A8 end:0x804EC3B0
 
 game/menuCBBiosTrainer.cpp:
 	.text       start:0x800477F8 end:0x80047E30
@@ -246,9 +260,18 @@ game/menuCBTaisen.cpp:
 	.bss        start:0x80435C48 end:0x80436FC8
 	.sbss       start:0x804EA9D0 end:0x804EA9D8
 
-game/menuOrre.cpp:
-	.text       start:0x800A314C end:0x800A3150
+game/menuBattleDisk.cpp:
+	.text       start:0x800A1430 end:0x800A1494
+	.ctors      start:0x802E9FA8 end:0x802E9FAC
+	.bss        start:0x8043B070 end:0x8043C930
+
+game/menuOrreColosseum.cpp:
+	.text       start:0x800A1494 end:0x800A3150
 	.ctors      start:0x802E9FAC end:0x802E9FB0
+	.rodata     start:0x802EBB20 end:0x802EBBB0
+	.bss        start:0x8043C930 end:0x8043D2A8
+	.sbss       start:0x804EAA20 end:0x804EAA30
+	.sdata2     start:0x804EC998 end:0x804EC9F4
 
 game/menuTitle.cpp:
 	.text       start:0x800A3150 end:0x800A423C

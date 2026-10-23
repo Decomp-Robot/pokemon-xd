@@ -1,3 +1,7 @@
+#include <window.h>
+#include <savedata.h>
+#include <heroBios.h>
+#include <LooseBallAnims.h>
 /*
  * menuBBS.cpp
  *
@@ -10,7 +14,6 @@
 #include <menuBBS.h>
 #include <menuCBBattleStart.h>
 #include <menuCBBios.h>
-#include <LooseBallAnims.h>
 #include <Pokemon.h>
 #include <types.h>
 
@@ -41,7 +44,6 @@ extern "C" {
 extern u8 menuCBItemEndGet(void);
 extern void menuCBItemEndClear(void);
 
-extern MenuCBRuleSet *getTrainerDataStartOffset(u32 index, u32 dataId);
 extern void *memset(void *dest, int ch, unsigned long count);
 extern void *memcpy(void *dest, const void *src, unsigned long count);
 extern void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer, u16 dataId, s32 arg);
@@ -54,7 +56,6 @@ extern u32 menuCBBios_GetPokemonNumLimit(void);
 extern FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 index);
 extern u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
 extern void menuCBBios_InitDefaultRules(void);
-extern Pokemon *heroBiosGetPokemonPtr(Hero *hero, u16 slot);
 extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, s32 arg3);
 extern s32 battlePokemonGetNature(Pokemon *pokemon);
 extern s32 pokemonAdjustValueBySeikaku(s32 nature, s32 id, s32 value);
@@ -101,8 +102,6 @@ extern void menuCBSEPlay(unsigned long seID);
 extern u8 pauseCheck(void);
 extern u32 GSinputButtonsChanged(s32 port);
 extern u32 GSinputButtonsPressed(s32 port);
-extern u16 *windowGetKeyState(void);
-extern u32 windowSearchID(s32 id);
 extern s32 windowGetActiveID(void);
 extern void menuOpen(s32 id, s32 arg);
 extern void menuOpenCustom(s32 id, ...);
@@ -146,7 +145,7 @@ u8 _menuCB_pokemonGetDeoxysSel(u16 port, bool flag);
 /* Mark the rule set of the save as changed so that it is written back. */
 extern "C" void menuCBRulesetSetDirty(u8 dirty)
 {
-    MenuCBRuleSet *rules = getTrainerDataStartOffset(0, 0xE);
+    MenuCBRuleSet *rules = (MenuCBRuleSet *)savedataGetStatus(0, SAVE_DATA_FIGHT_RULE);
 
     rules->mDirty = dirty;
 }
@@ -155,7 +154,7 @@ extern "C" u8 menuCBRulesetGetDirty(void)
 {
     MenuCBRuleSet *rules;
 
-    rules = getTrainerDataStartOffset(0, 0xE);
+    rules = (MenuCBRuleSet *)savedataGetStatus(0, SAVE_DATA_FIGHT_RULE);
     if (rules == 0) {
         return 0;
     }
@@ -178,7 +177,7 @@ extern "C" void menuCBBios_InitContext(MenuCBTaisenWork *work)
            is kept in the matching "fight immediately" slot. */
         for (i = 0; i < 4; i++) {
             menuCBBios_InitTrainerFromDataID(&work->mTrainer[i], menuCBBiosPortTrainerDataID[i], 0);
-            ((Pokemon *)&work->mTrainer[i])->setCatchTrainerRnd(LooseBallAnims::GetDesperationInfo(i));
+            menuCBTrainerBios_SetControlerID(&work->mTrainer[i], LooseBallAnims::GetDesperationInfo(i));
             work->mTrainer[i].mResetDataId = i;
             menuCBBios_CopyTrainer(&work->mTrainerImmediately[i], &work->mTrainer[i]);
         }
@@ -371,7 +370,7 @@ extern "C" s32 menuCB_GetDisconnectedGBA(void)
     u32 i;
 
     for (i = 0; i < 4; i++) {
-        s32 gbaPort = menuCBTaisenWork.mTrainerImmediately[i].mCatchTrainerRnd;
+        s32 gbaPort = menuCBTaisenWork.mTrainerImmediately[i].mControllerId;
         u8 connected;
 
         if (gbaPort == 0) {
@@ -509,7 +508,7 @@ void _menuCB_DeoxysParamCustom(Pokemon *pokemon, u16 port)
 u8 _menuCB_pokemonGetDeoxysSel(u16 port, bool flag)
 {
     u8 form = 0;
-    u16 gbaIndex = (u16)(menuCBTaisenWork.mTrainer[port].mCatchTrainerRnd - 1);
+    u16 gbaIndex = (u16)(menuCBTaisenWork.mTrainer[port].mControllerId - 1);
 
     if (menuCBTaisenWork.connectMode == 1) {
         return 0;
@@ -795,7 +794,7 @@ extern "C" void menuCBPokemonEntryOrderInput(s32 device, s32 port)
     u16 num;
 
     toolentryTaisenGetPokemonItemDataId(port);
-    if (!pauseCheck() && (*(u16 *)windowGetKeyState() & 0x400) == 0 && windowSearchID(0xE2) == 0) {
+    if (!pauseCheck() && (windowGetKeyInfo()->mKeyOn & 0x400) == 0 && windowSearchID(0xE2) == 0) {
         if ((buttons & 0x140) != 0) {
             if ((buttons & 0x40) != 0) {
                 s32 order = toolentryTaisengetEtnryPokemonOrderNum(port);
@@ -923,7 +922,7 @@ void _menuCBPokemonEntryWorkInit(void)
     menuCBPokemonEntryWork.mTimer = 0;
     for (port = 0; port < playerNum; port++) {
         FIGHT_TRAINER *trainer = menuCBBios_GetTrainerByPort(port);
-        u32 gbaPort = ((Pokemon *)trainer)->getCatchTrainerRnd();
+        u32 gbaPort = menuCBTrainerBios_GetControlerID(trainer);
         Hero *hero = menuCBBios_GetHeroImmediately(port);
         s32 type;
 

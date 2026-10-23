@@ -1,3 +1,9 @@
+#include <menu.h>
+#include <menuSub.h>
+#include <GSsnd.h>
+#include <GSmsg.h>
+#include <msgctrl.h>
+#include <fade.h>
 #include <GSgfx.h>
 #include <Pokemon.h>
 #include <heroStatus.h>
@@ -7,14 +13,11 @@
 #include <window.h>
 
 extern "C" {
-void winSpriteSetDisp(tagSPRITE_WORK *sprite, int on);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuSubDrawCursorBackAnimeOnOffAuto(tagWINDOW_WORK *window, GSgfxLayerID layer, int p1, int p2, s16 p3, s16 p4, u8 p5, int p6);
 GSgfxVF *GSgfxVFBuildTemp(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9);
 void GSgfxRenderDrawEnd(GSgfxLayer *layer);
 u16 *GSmsgGetStringPtr(int id);
-void msgctrlSetValue(int id, unsigned long value);
-void GSmsgPrint2(GSgfxLayerID layer, int x, int y, u32 color, int msgID);
 Pokemon *fightFloorGetDefPokemonPtr(int p1);
 u8 pokemonGetSex(Pokemon *pokemon);
 u8 pokemonCheckValid(Pokemon *pokemon);
@@ -25,19 +28,12 @@ u16 *pcboxGetPokemonName(int box, s8 slot);
 void pcboxSetPokemonBoxName(int box, s8 slot, const u16 *name);
 void dbgMenuSetOpenFlag(int flag);
 int GSmsgGetLength(int id);
-unsigned long GSmsgGetMessageSize(int id);
-void GSsndPlayNow(int id);
 void winMsgOpen(int p1, int msgID, int p2, int p3);
-int menuSubOpenYesNo(int mode, int x, int y, int flag);
 void winMsgClose(int p1);
-void GScharCpy(u16 *dst, const u16 *src);
 int GScharCmp(const u16 *a, const u16 *b);
 u32 windowGetKeyRepeat(void);
 u32 windowGetKeyTrg(void);
 long windowGetActiveID(void);
-long menuOpenCustom(int menuID, long windowID, ...);
-void menuClose(int menuID);
-void menuCloseSync(int menuID, int flag);
 void winSeqSetMenu(long menuID, int seq);
 void menuModelSetFlag(MENU_MODEL *model, int flag);
 void menuModelAdjustCamera(MENU_MODEL *model);
@@ -55,18 +51,14 @@ void menuModelTerm(MENU_MODEL *model);
 void FlashSystemSetPlayFrameLabel(unsigned long p1, const char *start, const char *end);
 void FlashSystemSetLoopFlag(unsigned long p1, int flag);
 void FlashSystemSetNowFrameLabel(unsigned long p1, const char *label);
-void fadeSet(int p1, f32 p2);
-void fadeCheck(int p1);
 void floorSetFadeScript(int p1, int script);
 void menuTitleBattleSelectFree(void);
-void floorPop(void);
-void floorPush(int floor);
+void GSfloorPop(void);
+void GSfloorPush(int floor);
 int floorWaitForChange(void);
 f32 HSD_Randf(void);
 void *textureBiosGetDataTable(int id);
 void *textureBiosGetLanguageEntry(void *table);
-void textureBiosLoadSpriteId(int x, int y, int w, int h, u32 flags, tagWINDOW_WORK *window, int tex, int mode, GSgfxLayerID layer);
-u8 menuIsOpen(int id);
 void menuSetDisp(int id, int on);
 double sin(double x);
 }
@@ -144,7 +136,7 @@ int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     s16 cursor;
 
     winSpriteSetDisp(sprite, 0);
-    cursor = window->cursor;
+    cursor = window->mCursorState.mSelection.mCursor;
     if (cursor >= 0) {
         menuSubDrawCursorBackAnimeOnOffAuto(window, winSpriteGetLayerID(window, sprite), 0, cursor << 5,
                                             sprite->mWidth, sprite->mHeight, window->mRgba.mColorA, 1);
@@ -528,11 +520,11 @@ int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     winSpriteSetDisp(sprite, 0);
     if (*arg->mRow < 6) {
         if (*arg->mColumn < 0x0B) {
-            windowDrawTextureId(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
+            windowDrawSprite(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
         }
     } else {
         if (*arg->mColumn < 7) {
-            windowDrawTextureId(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
+            windowDrawSprite(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
         }
     }
     return 0;
@@ -759,7 +751,7 @@ u16 conv50onChar(u16 chr, int table)
 // Confirm the name with a yes/no dialog.
 int confirmName(u16 *name)
 {
-    s8 answer;
+    s32 answer;
 
     GSsndPlayNow(0x1D);
     msgctrlSetValue(0x4D, (unsigned long)name);
@@ -1372,7 +1364,7 @@ int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             f32 y = ball->mY - h / 2.0f;
             u32 flags = ball->mFlags | ball->mAlpha;
 
-            textureBiosLoadSpriteId((int)(0.5f + x), (int)(0.5f + y), (int)(0.5f + w), (int)(0.5f + h),
+            windowDrawSprite2((int)(0.5f + x), (int)(0.5f + y), (int)(0.5f + w), (int)(0.5f + h),
                                     flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
         }
     }
@@ -1605,7 +1597,7 @@ void menuNameEntry(void)
         menuTitleBattleSelectFree();
     }
     if (nameEntryWork.mBlock != 0) {
-        floorPop();
+        GSfloorPop();
         if (nameEntryWork.mFade != 0) {
             floorSetFadeScript(0, 0x5960008);
         } else {
@@ -1785,7 +1777,7 @@ int pushNameEntryFloor(int type, int param, int fade)
     work->mChanged = 0;
     work->mFade = fade;
     work->mBlock = 1;
-    floorPush(NAME_ENTRY_FLOOR_ID);
+    GSfloorPush(NAME_ENTRY_FLOOR_ID);
     if (fade == 0) {
         floorSetFadeScript(0, 0x5960008);
     }

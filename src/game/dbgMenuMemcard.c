@@ -1,6 +1,7 @@
+#include <GSdvd.h>
 #include <types.h>
 #include <memcard.h>
-#include <saveData.h>
+#include <savedata.h>
 
 /* Save data handed to the memcard task; allocated and freed per use. */
 extern u8 *bk_savedataPtr;
@@ -23,13 +24,7 @@ const char *memcard_file_name_table[10] = {
     "HDSaveData_5.DSV2",
 };
 
-u8 GSdvdOpenTest(const char *fileName);
-void *GSdvdOpen(const char *fileName);
-void GSdvdRead(void *file, void *buf, u32 size, s32 offset);
-void GSdvdClose(void *file);
-void *GSfsysStreamHeaderPostFunc(const char *fileName);
-s32 zz_0187c74_(void *file, void *buf, u32 size, s32 offset);
-void *zz_00a77b0_(u32 size, u16 align);
+void *GSmemAllocAlignedDefaultHeap(u32 size, u16 align);
 void GSmemFree(void *ptr);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 u8 _memcard_debug_type_check(s32 type);
@@ -48,7 +43,7 @@ void winMsgClose(s32 id);
 
 #pragma peephole off
 
-s32 zz_000b644_(s32 menuID, s32 type)
+s32 dbgMenuMemcardLoadFile(s32 menuID, s32 type)
 {
     void *file;
     void *gamedata;
@@ -62,7 +57,7 @@ s32 zz_000b644_(s32 menuID, s32 type)
         return 0;
     }
     if (_memcard_debug_type_check(type)) {
-        memcard_save_buf = (u8 *)zz_00a77b0_(0x28000, 0x20);
+        memcard_save_buf = (u8 *)GSmemAllocAlignedDefaultHeap(0x28000, 0x20);
         GSdvdRead(file, memcard_save_buf, 0x28000, 0);
         GSdvdClose(file);
         memcard_debug_Load(memcard_save_buf + 8);
@@ -73,7 +68,7 @@ s32 zz_000b644_(s32 menuID, s32 type)
         GSdvdClose(file);
         memcard_debug_Load2();
     }
-    gamedata = getTrainerDataStartOffset(0, TRAINER_DATA_GAME_DATA);
+    gamedata = savedataGetStatus(0, TRAINER_DATA_GAME_DATA);
     switch (gameGetRegion()) {
     case 0:
         gamedataSetStatus(gamedata, 2, 0xB);
@@ -97,20 +92,20 @@ s32 zz_000b644_(s32 menuID, s32 type)
     return 0;
 }
 
-s32 zz_000b850_(s32 menuID, s32 type)
+s32 dbgMenuMemcardSaveFile(s32 menuID, s32 type)
 {
     void *file;
 
     if (_memcard_debug_type_check(type)) {
-        memcard_save_buf = (u8 *)zz_00a77b0_(0x28000, 0x20);
+        memcard_save_buf = (u8 *)GSmemAllocAlignedDefaultHeap(0x28000, 0x20);
         memcard_debug_Save(memcard_save_buf + 8);
         if (GSdvdOpenTest(memcard_file_name_table[type])) {
             file = GSdvdOpen(memcard_file_name_table[type]);
         } else {
-            file = GSfsysStreamHeaderPostFunc(memcard_file_name_table[type]);
+            file = GSdvdCreate(memcard_file_name_table[type]);
         }
         if (file != 0) {
-            zz_0187c74_(file, memcard_save_buf, 0x28000, 0);
+            GSdvdWrite(file, memcard_save_buf, 0x28000, 0);
             GSdvdClose(file);
         }
         GSmemFree(memcard_save_buf);
@@ -121,20 +116,20 @@ s32 zz_000b850_(s32 menuID, s32 type)
             /* CP932 message: "out of memory". */
             __assert("dbgMenuMemcard.c", 501, "bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab\"");
         }
-        memcpy(bk_savedataPtr, getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
+        memcpy(bk_savedataPtr, savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
         if (memcardTaskCall(2, 2, 0) == 3) {
             if (GSdvdOpenTest(memcard_file_name_table[type])) {
                 file = GSdvdOpen(memcard_file_name_table[type]);
             } else {
-                file = GSfsysStreamHeaderPostFunc(memcard_file_name_table[type]);
+                file = GSdvdCreate(memcard_file_name_table[type]);
             }
             if (file != 0) {
-                zz_0187c74_(file, memcard_dvd_buf, 0x27FC0, 0);
+                GSdvdWrite(file, memcard_dvd_buf, 0x27FC0, 0);
                 GSdvdClose(file);
             }
         }
-        memcpy(getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), bk_savedataPtr, 0x27FD0);
-        bk_savedataPtr = (u8 *)zz_01ce1b0_(bk_savedataPtr);
+        memcpy(savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), bk_savedataPtr, 0x27FD0);
+        bk_savedataPtr = (u8 *)memcardMemFreeForSavedata(bk_savedataPtr);
         if (bk_savedataPtr != 0) {
             /* CP932 message: "free failed". */
             __assert("dbgMenuMemcard.c", 534, "!bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x89\xf0\x95\xfa\x8e\xb8\x94s\"");

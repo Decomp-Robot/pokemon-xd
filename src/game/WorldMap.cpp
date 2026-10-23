@@ -1,3 +1,4 @@
+#include <fade.h>
 #include <GSmath.h>
 #include <libc/memory.h>
 #include <WorldMap.h>
@@ -7,8 +8,9 @@
 #include <GSmem.h>
 #include <GSmodel.h>
 #include <GSres.h>
-#include <saveData.h>
+#include <savedata.h>
 #include <window.h>
+#include <GSsnd.h>
 
 enum {
     worldMapTravelVariant1ModelResource = 0x20C30400,
@@ -160,8 +162,6 @@ extern "C" long getRibbonCnt(WorldMap* map);
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
 extern "C" void menuCursorNormal(tagWINDOW_WORK* window, long a);
 extern "C" u16 windowGetKeyRepeat();
-extern "C" s8 fadeCheck(long a);
-extern "C" void fadeSet(long a, f32 b);
 extern "C" s32 windowGetActiveID();
 extern "C" int menuOpenCustom(int menu, int window, void* work, int a, int b, int c, ...);
 extern "C" int menuClose(int menu);
@@ -169,10 +169,9 @@ extern "C" int menuCloseSync(int menu, int a);
 extern "C" void menuScriptSetWorldMapFlag(long a);
 extern "C" u8 menuScriptGetWorldMapFlag();
 extern "C" void msgctrlSetValue(long win, long value);
-extern "C" void floorPop();
+extern "C" void GSfloorPop();
 extern "C" void heroMovePoolCounter(long a, long b);
 
-void _recoveryEventSetSE(unsigned long id);
 extern "C" void GSthreadSwitch();
 extern "C" void GSfsysFree(long id);
 extern "C" void GSfsysPreRead(long id);
@@ -300,7 +299,7 @@ extern "C" double sin(double);
 
 s32 WorldMap::GetNowCursor(tagWINDOW_WORK* window) {
     if (worldMapMenuOpen != 0) {
-        return window->cursor;
+        return window->mCursorState.mSelection.mCursor;
     }
     return mModelWork->cursor;
 }
@@ -332,7 +331,7 @@ void WorldMap::ControlPad(tagWINDOW_WORK* window)
     s32 iconID;
     s8 next;
 
-    windowGetKeyState();
+    windowGetKeyInfo();
     key = windowGetKeyRepeat();
     dir = -1;
     iconID = worldMapCursorTable[mModelWork->cursor];
@@ -376,7 +375,7 @@ void WorldMap::ControlPad(tagWINDOW_WORK* window)
     for (s16 i = 0; i < worldMapCursorCnt; i++) {
         if (worldMapCursorTable[i] == next) {
             mModelWork->cursor = i;
-            window->cursor = i;
+            window->mCursorState.mSelection.mCursor = i;
             SetCursorPosition(i, 1);
             break;
         }
@@ -597,7 +596,7 @@ s32 WorldMap::getScooterType()
     s32 type;
 
     type = 0;
-    hero = (Hero*)getTrainerDataStartOffset(0, TRAINER_DATA_HERO);
+    hero = (Hero*)savedataGetStatus(0, TRAINER_DATA_HERO);
 
     if (hero != 0) {
         u32 unlocked;
@@ -707,7 +706,7 @@ void WorldMap::MainSub2()
         menuCloseSync(worldMapMenuID, 1);
         menuScriptSetWorldMapFlag(0);
         msgctrlSetValue(worldMapMsgWindowID, worldMapDemoEndMsgID);
-        floorPop();
+        GSfloorPop();
     }
 }
 
@@ -740,9 +739,9 @@ void WorldMap::MainSub()
             GSthreadSwitch();
         } while (fadeCheck(0) != 0);
         if (mModelWork->mScooterIndex >= 4) {
-            _recoveryEventSetSE(worldMapSpecialScooterSeID);
+            GSsndStopNow(worldMapSpecialScooterSeID);
         } else {
-            _recoveryEventSetSE(worldMapScooterSeID);
+            GSsndStopNow(worldMapScooterSeID);
         }
         releaseOffscreenData();
     } else {
@@ -1277,8 +1276,8 @@ void WorldMap::DrawIcon(long index,tagWINDOW_WORK* window)
     WorldMapMapData* data = SearchData(worldMapCursorTable[index]);
     switch (GetFlagData(worldMapCursorTable[index])) {
     case worldMapIconFlagHidden: break;
-    case worldMapIconFlagUnvisited: windowDrawTextureId(0,0,0,worldMapUnvisitedIconTexture,0,(GSgfxLayerID)window->mLayerID); break;
-    case worldMapIconFlagVisited: windowDrawTextureId(0,0,0,(u16)data->mTextureID,0,(GSgfxLayerID)window->mLayerID); break;
+    case worldMapIconFlagUnvisited: windowDrawSprite(0,0,0,worldMapUnvisitedIconTexture,0,(GSgfxLayerID)window->mLayerID); break;
+    case worldMapIconFlagVisited: windowDrawSprite(0,0,0,(u16)data->mTextureID,0,(GSgfxLayerID)window->mLayerID); break;
     }
 }
 

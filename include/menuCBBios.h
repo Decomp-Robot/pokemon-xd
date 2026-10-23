@@ -4,6 +4,7 @@
 #include <FightRuleData.h>
 #include <Pokemon.h>
 #include <fightTrainer.h>
+#include <hero.h>
 #include <types.h>
 
 /*
@@ -52,8 +53,8 @@ typedef struct MenuCBTaisenWork {
        entry number below. */
     /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
     /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
-    /* 0xA65C */ Pokemon mParty[6]; // party copy the entry screens work on.
-    /* 0xAAF4 */ u8 _AAF4[0xAFE0 - 0xAAF4];
+    /* 0xA65C */ Hero mEntryHero; // hero copy the entry screens work on.
+    /* 0xAFD4 */ u8 _AFD4[0xAFE0 - 0xAFD4];
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
     /* 0xAFE8 */ u8 _AFE8[0xAFF0 - 0xAFE8];
@@ -130,6 +131,10 @@ extern const s32 staControlerMap[4];
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer);
+s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer);
+void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId);
 
 // Whether the battle of the link encounter was entered.
 s32 menuCBBios_GetEncountFlag(void);

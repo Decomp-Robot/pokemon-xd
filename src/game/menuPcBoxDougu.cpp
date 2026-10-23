@@ -1,3 +1,6 @@
+#include <heroItem.h>
+#include <fade.h>
+#include <menu.h>
 #include <menuItemBios.h>
 #include <menuPtSpriteWork.h>
 #include <winSprite.h>
@@ -70,11 +73,6 @@ extern "C" u32 sListCursorAnimeY;
 // ---- engine and library entry points -------------------------------------
 
 extern "C" {
-s32 menuOpen(s32 windowID, s32 mode);
-void menuClose(s32 windowID);
-s32 menuCloseSync(s32 windowID, s32 flag);
-u8 menuIsOpen(s32 windowID);
-s32 menuOpenCustom(s32 windowID, s32 parentID, void *param, s32 a, s32 b, s32 c, ...);
 s32 windowGetActiveID(void);
 u16 windowGetKeyRepeat(void);
 u16 windowGetKeyTrg(void);
@@ -83,7 +81,6 @@ void winMsgOpen(s32 mode, s32 msgID, s32 a, s32 b);
 void winMsgClose(s32 a);
 void msgctrlSetValue(long group, long value);
 void menuButtonNormal(tagWINDOW_WORK *window);
-void winSpriteSetDisp(tagSPRITE_WORK *work, bool disp);
 s32 winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *work);
 void spriteSetScissor(s32 layerID, s32 x, s32 y, s32 width, s32 height);
 void spriteClearScissor(s32 layerID);
@@ -92,8 +89,6 @@ void GSmsgPrint2(s32 layer, s32 x, s32 y, u32 color, u32 msgID);
 void GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 anchorX, s32 anchorY, u32 color, u32 msgID);
 unsigned long GSmsgGetMessageSize(u32 msgID);
 void menuPtPlaySe(u32 seID);
-void fadeSet(s32 type, f32 value);
-void fadeCheck(s32 type);
 void menuSubCursorAnimeValGet(f32 *animeValues, s32 *animeColor);
 void menuSubCursorAnimeStart(void);
 void menuSubCursorAnimeInit(void);
@@ -117,8 +112,8 @@ s32 menuPocketInputNumber(tagWINDOW_WORK *window, s32 value, s32 max, u16 keys, 
 extern "C" {
 ItemData *itemDataBiosGetPtr(u16 itemID);
 u8 itemDataBiosGetBagPocket(ItemData *data);
-u32 itemDataBiosGetNameId(ItemData *data);
-u32 itemDataBiosGetDescriptionId(ItemData *data);
+u32 itemDataBiosGetDescriptionMsgID(ItemData *data);
+u32 itemDataBiosGetNameMsgID(ItemData *data);
 u16 itemSlotGetCount(struct BoxItemSlot *slot);
 u16 itemSlotGetItemId(struct BoxItemSlot *slot);
 u8 itemCheckValid(struct BoxItemSlot *slot);
@@ -126,9 +121,6 @@ struct BoxItemSlot *pcboxGetItem(s32 box, s16 slot);
 s32 pcboxGetNbItemSlot(s32 box);
 void pcboxDelItem(s32 box, u16 itemID, u16 count);
 void pcboxSwapItemSlot(s32 box, s16 from, s16 dest);
-// How many of the item the hero can still take.
-s32 heroItemCheckAddItemDataId(s32 hero, u16 itemID);
-void heroItemAddItemDataId(s32 hero, u16 itemID, u16 count, s16 menuPos);
 }
 
 // Window ids of the menus.
@@ -279,7 +271,7 @@ extern "C" s32 menuPcBoxDouguNumCursor(tagWINDOW_WORK *window)
     for (i = 0; i < 3; i++) {
         tagSPRITE_WORK *sprite = menuPtSpriteWorkGetByItemID(window, ITEM_ROW_DIGIT, 2 - i);
 
-        winSpriteSetDisp(sprite, window->cursor - i == 0);
+        winSpriteSetDisp(sprite, window->mCursorState.mSelection.mCursor - i == 0);
     }
     return 0;
 }
@@ -346,10 +338,10 @@ void swapItemSlot(int from, int dest)
     pcboxSwapItemSlot(0, from, dest);
 }
 
-// Message id of the item name.
-extern "C" u32 getItemNameMsgID(u16 itemID)
+// Message id of the item description.
+extern "C" u32 menuPcBoxGetItemDescriptionMessage(u16 itemID)
 {
-    return itemDataBiosGetNameId(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetDescriptionMsgID(itemDataBiosGetPtr((u16)itemID));
 }
 
 // Number of the item in the list row `menuPos`: the count half of the box slot
@@ -375,10 +367,10 @@ u16 getItemIDFromMenuPos(int menuPos)
     return 0;
 }
 
-// Message id of the item description.
-extern "C" u32 getItemDescriptionMsgID(u16 itemID)
+// Message id of the item name.
+extern "C" u32 menuPcBoxGetItemNameMessage(u16 itemID)
 {
-    return itemDataBiosGetDescriptionId(itemDataBiosGetPtr(itemID));
+    return itemDataBiosGetNameMsgID(itemDataBiosGetPtr(itemID));
 }
 
 // Item id of the box slot the list row `row` shows.
@@ -518,7 +510,7 @@ s32 printItemListDougu(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned 
         if (row >= 0) {
             rowPix = i * _getItemListLineHeight() - y;
             itemID = getItemIDFromRow(row);
-            msgID = getItemDescriptionMsgID(itemID);
+            msgID = menuPcBoxGetItemNameMessage(itemID);
 
             if (msgID != 0) {
                 GSmsgPrint2(winSpriteGetLayerID(window, sprite), 0, rowPix, col, msgID);
@@ -741,7 +733,7 @@ extern "C" s32 menuPcBoxDouguHikidashiCursor(tagWINDOW_WORK *window)
         row = sListTop + sListCursorRow;
         msgID = getItemIDFromRow(row);
         if (msgID != 0) {
-            msgID = getItemNameMsgID(msgID);
+            msgID = menuPcBoxGetItemDescriptionMessage(msgID);
         } else {
             msgID = MSG_DOUGU_EMPTY_ROW_NAME;
         }
@@ -772,7 +764,7 @@ extern "C" s32 menuPcBoxDouguHikidashiCtrl(tagWINDOW_WORK *window)
             winSeqSetMenu(WIN_ID_DOUGU_HIKIDASHI, WIN_SEQ_HIKIDASHI_PREPARE);
             msgID = getItemIDFromRow(sListTop + sListCursorRow);
             if (msgID != 0) {
-                msgID = getItemNameMsgID(msgID);
+                msgID = menuPcBoxGetItemDescriptionMessage(msgID);
             } else {
                 msgID = MSG_DOUGU_EMPTY_ROW_NAME;
             }
@@ -934,11 +926,11 @@ extern "C" s32 menuPcBoxDouguHikidashiItemCursor(tagWINDOW_WORK *window, tagSPRI
     u32 animeValues[2];
     s32 animeColor;
 
-    y = window->cursor * ITEM_ROW_HEIGHT;
+    y = window->mCursorState.mSelection.mCursor * ITEM_ROW_HEIGHT;
     item = menuPtItemGetBySpriteWork(window, sprite);
 
     if (sprite->mItemID == ITEM_ROW_CURSOR) {
-        if (sItemCursorRow != window->cursor) {
+        if (sItemCursorRow != window->mCursorState.mSelection.mCursor) {
             menuSubCursorAnimeStart();
         }
 
@@ -953,7 +945,7 @@ extern "C" s32 menuPcBoxDouguHikidashiItemCursor(tagWINDOW_WORK *window, tagSPRI
         windowDrawCursorSprite(0, y, -1, window, ITEM_ROW_CURSOR_SPRITE, 0,
                                winSpriteGetLayerID(window, sprite), (f32 *)animeValues, animeColor);
         winSpriteSetDisp(sprite, 0);
-        sItemCursorRow = window->cursor;
+        sItemCursorRow = window->mCursorState.mSelection.mCursor;
     } else {
         sprite->mY = item->mOffsetA + y;
     }
