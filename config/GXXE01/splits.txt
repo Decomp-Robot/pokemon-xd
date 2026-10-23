@@ -1111,6 +1111,29 @@ ext/musyx_sdk/runtime/hw_aramdma.c:
 	.bss        start:0x80472310 end:0x80472720
 	.sbss       start:0x804EB480 end:0x804EB4A0
 
+ext/musyx_sdk/runtime/hw_dolphin.c:
+	.text       start:0x80181BE0 end:0x80181C88
+	.text       start:0x80181C88 end:0x80181C98
+	.text       start:0x80181C98 end:0x80181CFC
+	.text       start:0x80181CFC end:0x80181D20
+	.text       start:0x80181D20 end:0x80181DE8
+	.text       start:0x80181DE8 end:0x80181E08
+	.text       start:0x80181E08 end:0x80181E3C
+	.text       start:0x80181E3C end:0x80181E6C
+	.text       start:0x80181E6C end:0x80181F40
+	.text       start:0x80181F40 end:0x80181F90
+	.text       start:0x80181F90 end:0x80182004
+	.text       start:0x80182004 end:0x80182050
+	.text       start:0x80182050 end:0x8018207C
+	.text       start:0x8018207C end:0x80182080
+	.text       start:0x80182080 end:0x801820B8
+	.text       start:0x801820B8 end:0x801820F0
+	.text       start:0x801820F0 end:0x80182110
+	.text       start:0x80182110 end:0x80182130
+	.bss        start:0x80472720 end:0x80472780
+	.bss        start:0x80472780 end:0x80474780
+	.sbss       start:0x804EB4A0 end:0x804EB4D0
+
 ext/musyx_sdk/runtime/hw_memory.c:
 	.text       start:0x80182130 end:0x8018215C
 	.text       start:0x8018215C end:0x8018218C

@@ -1182,3 +1182,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/hw_aramdma.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/hw_dolphin.c"
+completed = true
