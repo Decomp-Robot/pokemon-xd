@@ -1,9 +1,7 @@
 #include <stddef.h>
 
 /*
- * Metrowerks C runtime memory routines. memset fills through __fill_mem,
- * which handles byte, word and longword runs; memcpy copies forwards unless
- * the regions would overlap from the front.
+ * MSL memory routines.
  */
 __declspec(section ".init") void __fill_mem(void *dest, int val, size_t count);
 
