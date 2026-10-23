@@ -1,0 +1,5 @@
+[[lib]]
+name = "main"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
