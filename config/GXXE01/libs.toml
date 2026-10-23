@@ -20,6 +20,14 @@ add_to_all_targets = true
 name = "src/decomp/zz_000e748_.c"
 add_to_all_targets = true
 
+[[lib.object]]
+name = "src/decomp/zz_000e880_.c"
+add_to_all_targets = true
+
+[[lib.object]]
+name = "src/decomp/fightTrainerAiWazaHitNull.c"
+add_to_all_targets = true
+
 [[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"
