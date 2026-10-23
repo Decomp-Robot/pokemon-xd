@@ -39,7 +39,8 @@ struct tagWINDOW_WORK {
     };
     u8 _94[0x0A];                // 0x94-0x9D: unknown.
     s16 cursor;                  // 0x9E: selected cursor.
-    u8 _A0[0x04];                // 0xA0-0xA3: unknown.
+    u8 _A0[0x02];                // 0xA0-0xA1: unknown.
+    s16 cursorTo;                // 0xA2: cursor the window is scrolled to.
     u8 mAccept;                  // 0xA4: set when the menu is confirmed.
     u8 mCancel;                  // 0xA5: set when the menu is cancelled.
 };
