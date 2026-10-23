@@ -34,6 +34,7 @@ static u8 palRange1[38] = {
 
 static u8 value3a = 19;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void send7120Data(u8 *range0, u8 *range1) {
     u8 i;
     u8 buffer[2];
@@ -67,6 +68,7 @@ static void send7120Data(u8 *range0, u8 *range1) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __VIInitPhilips(void) {
     __VIInitI2C();
     send7120Data(ntscRange0, ntscRange1);
