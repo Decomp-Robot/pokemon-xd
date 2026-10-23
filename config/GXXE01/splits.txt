@@ -139,6 +139,9 @@ ext/dolphin_sdk/os/OSRtc.c:
 	.text       start:0x800B0E6C end:0x800B0F24
 	.bss        start:0x8043DA60 end:0x8043DAB8
 
+ext/dolphin_sdk/os/OSStopwatch.c:
+	.text       start:0x800B0F24 end:0x800B0F24
+
 ext/dolphin_sdk/os/OSSync.c:
 	.text       start:0x800B0F24 end:0x800B0F44
 	.text       start:0x800B0F44 end:0x800B0FA8

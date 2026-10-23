@@ -1,6 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSInitStopwatch(OSStopwatch* sw, char* name) {
     sw->name = name;
     sw->total = 0;
@@ -9,11 +10,13 @@ void OSInitStopwatch(OSStopwatch* sw, char* name) {
     sw->max = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSStartStopwatch(OSStopwatch* sw) {
     sw->running = TRUE;
     sw->last = OSGetTime();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSStopStopwatch(OSStopwatch* sw) {
     OSTime interval;
 
@@ -31,6 +34,7 @@ void OSStopStopwatch(OSStopwatch* sw) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 OSTime OSCheckStopwatch(OSStopwatch* sw) {
     OSTime currTotal;
 
@@ -41,10 +45,12 @@ OSTime OSCheckStopwatch(OSStopwatch* sw) {
     return currTotal;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSResetStopwatch(OSStopwatch* sw) {
     OSInitStopwatch(sw, sw->name);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSDumpStopwatch(OSStopwatch* sw) {
     OSReport("Stopwatch [%s]	:\n", sw->name);
     OSReport("\tTotal= %lld us\n",    OSTicksToMicroseconds(sw->total));

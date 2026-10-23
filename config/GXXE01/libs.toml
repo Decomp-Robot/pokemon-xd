@@ -112,7 +112,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSStopwatch.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSSync.c"
