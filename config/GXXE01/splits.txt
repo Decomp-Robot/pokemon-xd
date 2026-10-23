@@ -80,6 +80,9 @@ game/menuPtSpriteWork.cpp:
 game/menuPocketTool.cpp:
 	.text       start:0x80021E84 end:0x80021EFC
 
+game/bitTable.cpp:
+	.text       start:0x80022040 end:0x80022080
+
 game/menuPocket2Pokemon.cpp:
 	.text       start:0x80024118 end:0x80024148
 
