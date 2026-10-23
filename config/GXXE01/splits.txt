@@ -160,9 +160,12 @@ game/floorRead.cpp:
 	.text       start:0x8002D8C0 end:0x8002DE58
 
 game/menuTop.cpp:
-	.text       start:0x8003032C end:0x80030330
+	.text       start:0x8002F308 end:0x80030330
 	.ctors      start:0x802E9F88 end:0x802E9F8C
-	.bss        start:0x80429180 end:0x80429270
+	.rodata     start:0x802EA8A8 end:0x802EA8F8
+	.bss        start:0x80429170 end:0x80429270
+	.sbss       start:0x804EA798 end:0x804EA7A0
+	.sdata2     start:0x804EC0D0 end:0x804EC110
 
 game/menuNameEntry.cpp:
 	.text       start:0x80030330 end:0x80033440

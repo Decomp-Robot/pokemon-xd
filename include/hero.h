@@ -193,6 +193,7 @@ enum HeroStatusID {
     HERO_STATUS_HIZUKI_NAME = 23
 };
 
+s32 heroGetObjID(s32 heroType);
 u8 heroMoveIsMember(s32 member);
 u8 heroMoveGetResID(u32* group, u32* id, s32 member);
 void heroMoveTermEvent(void);

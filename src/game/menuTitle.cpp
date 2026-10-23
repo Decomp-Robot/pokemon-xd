@@ -8,6 +8,7 @@
 #include <GSres.h>
 #include <floorManager.h>
 #include <gamedata.h>
+#include <savedata.h>
 #include <fade.h>
 #include <camera.h>
 #include <GSfsys.h>
@@ -117,7 +118,6 @@ void dbgMenuSetOpenFlag(s32 flag);
 f32 timeGetLastFrameSec(void);
 double sin(double x);
 void fightRegWzxLoadAll(s32 id);
-void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 /* Records whether the mode select screen may keep running. */
 void menuTopSetInitCursor(s32 a);
@@ -598,7 +598,7 @@ s32 _selectMenu(void)
         GSthreadSwitch();
     } while (now < end);
     /* The select screen reports the chosen mode through its return value. */
-    return menuTopSelectMode();
+    return menuTopSelect();
 }
 
 /* Play the select-menu return flash (back_play..back_end) and wait. */
@@ -630,7 +630,7 @@ void _menuTitleSetSE(u32 id)
 extern "C" void menuTitleExit(void)
 {
     GSfsysWait(TITLE_SELECT_RES);
-    if (menuTopIsRetainingResources() == 0) {
+    if (menuTopShouldKeepSelectResources() == 0) {
         GSfsysFree(TITLE_SELECT_RES);
         GSresFreeGroup(TITLE_SELECT_RES);
     }

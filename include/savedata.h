@@ -25,6 +25,8 @@ extern "C" {
 #endif
 // A null image selects the live save data.
 void *savedataGetStatus(void *saveData, u16 region);
+// Builds a new save image from the current game data.
+void savedataCreate(s32 mode, u16 *name);
 #ifdef __cplusplus
 }
 #endif

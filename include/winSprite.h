@@ -29,7 +29,9 @@ struct tagWINDOW_WORK {
     s8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
     u8 _03;                      // 0x03: unknown.
     long mMenuID;                // 0x04: menu data id used for item lookups.
-    u8 _08[0x08];                // 0x08-0x0F: unknown.
+    u8 _08;                      // 0x08: unknown.
+    u8 mOpenPriority;            // 0x09: window ordering priority.
+    u8 _0A[0x06];                // 0x0A-0x0F: unknown.
     tagWINDOW_WORK *mNext;       // 0x10: next window in the window list.
     u8 _14[0x08];                // 0x14-0x1B: unknown.
     GSgfxLayerID mLayerID;               // 0x1C: GSgfx layer the window draws on.
