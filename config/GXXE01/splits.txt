@@ -85,7 +85,7 @@ game/menuPocketTool.cpp:
 	.sdata2     start:0x804EC068 end:0x804EC070
 
 game/bitTable.cpp:
-	.text       start:0x80022040 end:0x80022080
+	.text       start:0x80021FFC end:0x80022080
 
 game/menuPocket2Pokemon.cpp:
 	.text       start:0x80024118 end:0x80024148
