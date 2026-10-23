@@ -1074,3 +1074,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/demo/DEMOStats.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/demo/DEMOWin.c"
+completed = true

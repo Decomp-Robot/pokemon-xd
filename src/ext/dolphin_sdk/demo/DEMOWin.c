@@ -21,6 +21,7 @@ static void __DEMOWinMenu_refesh_menu(DEMOWindow* w);
 static u16 __DEMOWinMenu_get_user_input(DEMOWinPadInfo* p);
 static void __DEMOWinList_refresh_list(DEMOWindow* w);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinInit() {
     __first_node = NULL;
     __last_node = NULL;
@@ -29,6 +30,7 @@ void DEMOWinInit() {
     GXSetCopyClear((GXColor){0, 0, 0, 0}, 0xFFFFFF);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DEMOWindow* DEMOWinCreateWindow(s32 x1, s32 y1, s32 x2, s32 y2, char* caption, u16 scroll, void* func) {
     DEMOWindow* handle;
     ASSERTMSGLINE(188, x1 < x2, "DEMOWIN: Illegal X coords for window\n");
@@ -68,6 +70,7 @@ DEMOWindow* DEMOWinCreateWindow(s32 x1, s32 y1, s32 x2, s32 y2, char* caption, u
     return handle;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinDestroyWindow(DEMOWindow* handle) {
     BOOL old;
     ASSERTMSGLINE(287, handle, "DEMOWinDestroyWindow(): NULL handle!\n");
@@ -78,16 +81,19 @@ void DEMOWinDestroyWindow(DEMOWindow* handle) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinOpenWindow(DEMOWindow* handle) {
     ASSERTMSGLINE(321, handle, "DEMOWinOpenWindow(): NULL handle!\n");
     handle->flags |= DEMOWIN_FLAGS_OPENED;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinCloseWindow(DEMOWindow* handle) {
     ASSERTMSGLINE(337, handle, "DEMOWinCloseWindow(): NULL handle!\n");
     handle->flags &= ~(DEMOWIN_FLAGS_OPENED);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinSetWindowColor(DEMOWindow* handle, u32 item, u8 r, u8 g, u8 b, u8 a) {
     ASSERTMSGLINE(355, handle, "DEMOWinSetWinColor(): NULL window handle\n");
 
@@ -133,6 +139,7 @@ void DEMOWinSetWindowColor(DEMOWindow* handle, u32 item, u8 r, u8 g, u8 b, u8 a)
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinLogPrintf(DEMOWindow* handle, char* fmt, ...) {
     va_list vlist;
     char buffer[128];
@@ -172,6 +179,7 @@ void DEMOWinLogPrintf(DEMOWindow* handle, char* fmt, ...) {
     va_end(vlist);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinPrintfXY(DEMOWindow* handle, u16 col, u16 row, char* fmt, ...) {
     BOOL old;
     va_list vlist;
@@ -199,6 +207,7 @@ void DEMOWinPrintfXY(DEMOWindow* handle, u16 col, u16 row, char* fmt, ...) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinScrollWindow(DEMOWindow* handle, u32 dir) {
     BOOL old;
     u16 n;
@@ -235,6 +244,7 @@ void DEMOWinScrollWindow(DEMOWindow* handle, u32 dir) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinBringToFront(DEMOWindow* handle) {
     DEMOWindow* ptr;
     ASSERTMSGLINE(609, __first_node, "DEMOWinBringToFront(): Window list is empty!\n");
@@ -248,11 +258,13 @@ void DEMOWinBringToFront(DEMOWindow* handle) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinSendToBack(DEMOWindow* handle) {
     ASSERTMSGLINE(645, handle, "DEMOWinSendToBack(): NULL handle!\n");
     handle->priority = 1;
 } 
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinClearRow(DEMOWindow* handle, u16 row) {
     u16 buffer_row;
     u16 index;
@@ -275,6 +287,7 @@ void DEMOWinClearRow(DEMOWindow* handle, u16 row) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinClearWindow(DEMOWindow* handle) {
     u16 buffer_row;
     u16 index;
@@ -295,6 +308,7 @@ void DEMOWinClearWindow(DEMOWindow* handle) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinClearBuffer(DEMOWindow* handle) {
     BOOL old;
 
@@ -304,6 +318,7 @@ void DEMOWinClearBuffer(DEMOWindow* handle) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinRefresh(void) {
     DEMOWindow* ptr;
     u16 i;
@@ -466,6 +481,7 @@ void DEMOWinRefresh(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWin_add_node(DEMOWindow* handle) {
     ASSERTMSGLINE(1032, handle, "__add_node(): you're adding a NULL node!\n");
 
@@ -487,6 +503,7 @@ static void __DEMOWin_add_node(DEMOWindow* handle) {
     handle->flags |= DEMOWIN_FLAGS_INIT;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWin_delete_node(DEMOWindow* handle) {
     ASSERTMSGLINE(1071, handle, "__delete_node(): you're deleting a NULL node!\n");
 
@@ -512,6 +529,7 @@ static void __DEMOWin_delete_node(DEMOWindow* handle) {
     handle->flags &= ~(DEMOWIN_FLAGS_INIT);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWin_puts_n(s16 x, s16 y, s16 z, u16 n, char* string) {
     s32 s;
     s32 t;
@@ -545,6 +563,7 @@ static void __DEMOWin_puts_n(s16 x, s16 y, s16 z, u16 n, char* string) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DEMOWinMenu* DEMOWinCreateMenuWindow(DEMOWinMenu* menu, u16 x, u16 y) {
     DEMOWinMenuItem* ptr;
 
@@ -575,6 +594,7 @@ DEMOWinMenu* DEMOWinCreateMenuWindow(DEMOWinMenu* menu, u16 x, u16 y) {
     return NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinDestroyMenuWindow(DEMOWinMenu* menu) {
     if (menu->handle) {
         DEMOWinCloseWindow(menu->handle);
@@ -583,6 +603,7 @@ void DEMOWinDestroyMenuWindow(DEMOWinMenu* menu) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DEMOWinMenuChild(DEMOWinMenu* menu, int child_flag) {
     DEMOWinPadInfo* pad;
     DEMOWindow* handle;
@@ -729,6 +750,7 @@ u32 DEMOWinMenuChild(DEMOWinMenu* menu, int child_flag) {
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWinMenu_refesh_menu(DEMOWindow* w) {
     DEMOWinMenu* m;
     s32 i;
@@ -757,6 +779,7 @@ static void __DEMOWinMenu_refesh_menu(DEMOWindow* w) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinPadInit(DEMOWinPadInfo* p) {
     u16 i;
 
@@ -768,6 +791,7 @@ void DEMOWinPadInit(DEMOWinPadInfo* p) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinPadRead(DEMOWinPadInfo* p) {
     PADStatus* pad;
     u16 index;
@@ -822,6 +846,7 @@ void DEMOWinPadRead(DEMOWinPadInfo* p) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u16 __DEMOWinMenu_get_user_input(DEMOWinPadInfo* p) {
     u16 user_input;
 
@@ -845,16 +870,19 @@ static u16 __DEMOWinMenu_get_user_input(DEMOWinPadInfo* p) {
     return user_input;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinSetRepeat(u32 threshold, u32 rate) {
     __DEMOWIN_PAD_repeat_rate = rate;
     __DEMOWIN_PAD_repeat_threshold = threshold;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinResetRepeat(void) {
     __DEMOWIN_PAD_repeat_threshold = 15;
     __DEMOWIN_PAD_repeat_rate = 2;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DEMOWinListbox* DEMOWinCreateListWindow(DEMOWinListbox* list, u16 x, u16 y) {
     DEMOWinListboxItem* ptr;
     ASSERTMSGLINE(1846, list, "DEMOWinCreateListWindow(): List is NULL!\n");
@@ -885,6 +913,7 @@ DEMOWinListbox* DEMOWinCreateListWindow(DEMOWinListbox* list, u16 x, u16 y) {
     return NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinDestroyListWindow(DEMOWinListbox* list) {
     if (list->handle) {
         DEMOWinCloseWindow(list->handle);
@@ -893,6 +922,7 @@ void DEMOWinDestroyListWindow(DEMOWinListbox* list) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWinList_refresh_list(DEMOWindow* w) {
     DEMOWinListbox* l;
     s32 i;
@@ -927,10 +957,12 @@ static void __DEMOWinList_refresh_list(DEMOWindow* w) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinListSetCursor(DEMOWinListbox* list, int x) {
     list->cursor_state = x;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 DEMOWinListScrollList(DEMOWinListbox* list, u32 dir) {
     ASSERTMSGLINE(2032, list, "DEMOWinListScrollList(): NULL handle!\n");
 
@@ -962,6 +994,7 @@ s32 DEMOWinListScrollList(DEMOWinListbox* list, u32 dir) {
     return list->display_pos;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 DEMOWinListMoveCursor(DEMOWinListbox* list, u32 dir) {
     ASSERTMSGLINE(2092, list, "DEMOWinListScrollList(): NULL handle!\n");
 
