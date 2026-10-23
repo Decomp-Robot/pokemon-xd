@@ -1,3 +1,4 @@
+#include <gbaCommand.h>
 #include <menuCBBios.h>
 #include <types.h>
 
@@ -40,7 +41,6 @@ s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
 u16 toolentryTaisenGetPokemonHomePlace(s32 index);
-s32 zz_get_battle_result(void);
 s32 zz_game_get_region(void);
 
 void menuSetEnablePort(s32 port);
@@ -54,7 +54,6 @@ s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s16 x,
 void GSthreadSwitch(void);
 u8 GSinputIsConnected(s32 pad);
 s32 GSinputGetSubType(s32 pad);
-u8 gbaCommandIsConnected(s32 port);
 }
 
 /* -------------------------------------------------------------------------
@@ -108,7 +107,7 @@ extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
 extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
 {
     s32 homePlace = -1;
-    s32 battleResult = zz_get_battle_result();
+    u16 battleResult = battleGetResult();
     u8 shown = 0;
     s32 state;
     s32 menuID;
@@ -116,7 +115,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
     menuSetEnablePort(0);
 
     for (;;) {
-        switch ((s32)(u16)battleResult) {
+        switch (battleResult) {
         case 1: {
             menuSetEnablePort(1);
 

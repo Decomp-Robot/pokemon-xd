@@ -1,8 +1,7 @@
 #include <GSgfx.h>
+#include <Pokemon.h>
 #include <menuNameEntry.h>
 #include <winSprite.h>
-
-struct Pokemon;
 
 extern "C" {
 void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
@@ -17,11 +16,9 @@ void GSmsgPrint2(GSgfxLayerID layer, s32 x, s32 y, u32 color, s32 msgID);
 Pokemon *heroGetStatus(s32 p1, s32 p2, u16 slot);
 void heroSetStatus(s32 p1, unsigned long p2, const u16 *name);
 Pokemon *fightFloorGetDefPokemonPtr(s32 p1);
-u8 pokemonGetSex(Pokemon *pokemon);
 u8 pokemonCheckValid(Pokemon *pokemon);
 u16 battlePokemonGetSpecies(Pokemon *pokemon);
 s32 pokemon_SetNickname(Pokemon *pokemon, const u16 *name);
-u16 *pokemon_GetNickname(Pokemon *pokemon);
 u16 *pcboxGetPokemonName(s32 box, s8 slot);
 void pcboxSetPokemonBoxName(s32 box, s8 slot, const u16 *name);
 void dbgMenuSetOpenFlag(s32 flag);

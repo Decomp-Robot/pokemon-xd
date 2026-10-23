@@ -178,6 +178,12 @@ game/gbaCommand.cpp:
 game/menuCBBios.c:
 	.text       start:0x80027EB8 end:0x80027ECC
 
+game/gbaCommandLink.cpp:
+	.text       start:0x80027ECC end:0x80028FF0
+
+game/gbaPokemonTransfer.cpp:
+	.text       start:0x80028FF0 end:0x800299C8
+
 game/menuTop.cpp:
 	.text       start:0x8003032C end:0x80030330
 	.ctors      start:0x802E9F88 end:0x802E9F8C

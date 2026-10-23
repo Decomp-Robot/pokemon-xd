@@ -49,4 +49,19 @@ extern u32 staEncountFlag;
 // Controller IDs of the four ports, in port order.
 extern const s32 staControlerMap[4];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Whether the battle of the link encounter was entered.
+s32 menuCBBios_GetEncountFlag(void);
+
+// Result the fight layer reported for the battle that is running
+// (battleSetResult); 1 ends the link exchange.
+u16 battleGetResult(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

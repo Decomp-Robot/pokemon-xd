@@ -24,6 +24,11 @@ extern "C" {
 #endif
 
 void pokemonInit(Pokemon *pokemon);
+// Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most
+// ten characters; the name entry mode, the message layer and the link
+// exchange each copy them into their own name buffers.
+u8 pokemonGetSex(Pokemon *pokemon);
+u16 *pokemon_GetNickname(Pokemon *pokemon);
 
 #ifdef __cplusplus
 }

@@ -41,7 +41,6 @@ void fightTrainerCreateFightTrainerDataIdToHero(u16 dataId, s32 desperation,
  * ---------------------------------------------------------------------- */
 
 extern "C" void menuCBBios_SetEncountFlag(u32 flag);
-extern "C" u32 menuCBBios_GetEncountFlag(void);
 extern "C" s32 menuCBBios_GetNameEntryMode(void);
 extern "C" u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
 extern "C" void menuCBBios_SetTrainerHomePlace(FIGHT_TRAINER *trainer,
@@ -77,7 +76,7 @@ extern "C" void menuCBBios_SetEncountFlag(u32 flag)
     staEncountFlag = flag;
 }
 
-extern "C" u32 menuCBBios_GetEncountFlag(void)
+extern "C" s32 menuCBBios_GetEncountFlag(void)
 {
     return staEncountFlag;
 }
