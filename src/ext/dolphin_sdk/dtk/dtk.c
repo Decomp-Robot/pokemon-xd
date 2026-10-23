@@ -28,6 +28,7 @@ static DVDCommandBlock __block_for_set_state;
 static DVDCommandBlock __block_for_next_track;
 static DVDCommandBlock __block_for_prev_track;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKStartAi(void) {
     AISetStreamVolLeft(__DTKVolumeL);
     AISetStreamVolRight(__DTKVolumeR);
@@ -36,12 +37,14 @@ static void __DTKStartAi(void) {
     AISetStreamPlayState(1);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKStopAi(void) {
     AISetStreamVolLeft(0);
     AISetStreamVolRight(0);
     AISetStreamPlayState(0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCheckUserCallback(DTKTrack* track, u32 event) {
     ASSERTLINE(84, track);
     if (track && track->callback && (track->eventMask & event)) {
@@ -49,6 +52,7 @@ static void __DTKCheckUserCallback(DTKTrack* track, u32 event) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKForward(void) {
     BOOL old = OSDisableInterrupts();
     if (__DTKCurrentTrack && __DTKCurrentTrack->next) {
@@ -57,6 +61,7 @@ static void __DTKForward(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKBackward(void) {
     BOOL old = OSDisableInterrupts();
     if (__DTKCurrentTrack && __DTKCurrentTrack->prev) {
@@ -65,6 +70,7 @@ static void __DTKBackward(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForStreamStatus(s32 result, DVDCommandBlock* block) {
     if ((result & 0xFF) == 0) {
         __DTKTrackEnded = 1;
@@ -72,6 +78,7 @@ static void __DTKCallbackForStreamStatus(s32 result, DVDCommandBlock* block) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForRun(s32 result, DVDFileInfo* fileInfo) {
     __DTKStartAi();
     DVDStopStreamAtEndAsync(&__block_for_run_callback, 0);
@@ -79,6 +86,7 @@ static void __DTKCallbackForRun(s32 result, DVDFileInfo* fileInfo) {
     __DTKCheckUserCallback(__DTKCurrentTrack, 1);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForPreparePaused(s32 result, DVDFileInfo* fileInfo) {
     __DTKStopAi();
     DVDStopStreamAtEndAsync(&__block_for_prep_callback, 0);
@@ -86,14 +94,17 @@ static void __DTKCallbackForPreparePaused(s32 result, DVDFileInfo* fileInfo) {
     __DTKCheckUserCallback(__DTKCurrentTrack, 32);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKPrepareCurrentTrack(void) {
     DVDPrepareStreamAsync(&__DTKCurrentTrack->dvdFileInfo, 0, 0, __DTKCallbackForRun);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKPrepareCurrentTrackPaused(void) {
     DVDPrepareStreamAsync(&__DTKCurrentTrack->dvdFileInfo, 0, 0, __DTKCallbackForPreparePaused);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForPlaylist(s32 result, DVDCommandBlock* block) {
     __DTKPosition = result;
     __busy_for_ais_address = 0;
@@ -142,6 +153,7 @@ static void __DTKCallbackForPlaylist(s32 result, DVDCommandBlock* block) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForAIInterrupt(u32 count) {
     AISetStreamTrigger(count + __DTKInterruptFrequency);
     if (__DTKCurrentTrack && !__busy_for_ais_address) {
@@ -150,6 +162,7 @@ static void __DTKCallbackForAIInterrupt(u32 count) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForFlush(s32 result, DVDCommandBlock* block) {
     DTKTrack* track;
 
@@ -174,11 +187,13 @@ static void __DTKCallbackForFlush(s32 result, DVDCommandBlock* block) {
     __DTKShutdownFlag = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForStop(s32 result, DVDCommandBlock* block) {
     __DTKCheckUserCallback(__DTKCurrentTrack, 2);
     __DTKState = DTK_STATE_STOP;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForNextTrack(s32 result, DVDCommandBlock* block) {
     AISetStreamPlayState(0);
     __DTKForward();
@@ -186,6 +201,7 @@ static void __DTKCallbackForNextTrack(s32 result, DVDCommandBlock* block) {
     DTKSetState(__DTKTempState);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForPrevTrack(s32 result, DVDCommandBlock* block) {
     AISetStreamPlayState(0);
     __DTKBackward();
@@ -193,6 +209,7 @@ static void __DTKCallbackForPrevTrack(s32 result, DVDCommandBlock* block) {
     DTKSetState(__DTKTempState);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKInit(void) {
     __DTKCurrentTrack = NULL;
     __DTKPlayListHead = NULL;
@@ -211,6 +228,7 @@ void DTKInit(void) {
     AISetStreamPlayState(0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKShutdown(void) {
     AISetStreamVolLeft(0);
     AISetStreamVolRight(0);
@@ -225,6 +243,7 @@ void DTKShutdown(void) {
     while (__DTKShutdownFlag) {}
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKQueueTrack(char* fileName, DTKTrack* track, u32 eventMask, DTKCallback callback) {
     u32 startTrack;
     BOOL old;
@@ -269,6 +288,7 @@ u32 DTKQueueTrack(char* fileName, DTKTrack* track, u32 eventMask, DTKCallback ca
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKRemoveTrack(DTKTrack* track) {
     BOOL old;
 
@@ -312,6 +332,7 @@ u32 DTKRemoveTrack(DTKTrack* track) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DTKFlushTracks(DTKFlushCallback callback) {
     u32 temp;
 
@@ -330,20 +351,24 @@ int DTKFlushTracks(DTKFlushCallback callback) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKSetSampleRate(u32 samplerate) {
     // obsolete
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKSetInterruptFrequency(u32 samples) {
     __DTKInterruptFrequency = samples;
     AIResetStreamSampleCount();
     AISetStreamTrigger(__DTKInterruptFrequency);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKSetRepeatMode(u32 repeat) {
     __DTKRepeatMode = repeat;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DTKSetState(u32 state) {
     if (__DTKState == state) {
         return 1;
@@ -399,6 +424,7 @@ int DTKSetState(u32 state) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DTKNextTrack(void) {
     if (__DTKState == DTK_STATE_BUSY) {
         return 0;
@@ -422,6 +448,7 @@ int DTKNextTrack(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DTKPrevTrack(void) {
     if (__DTKState == DTK_STATE_BUSY) {
         return 0;
@@ -445,30 +472,37 @@ int DTKPrevTrack(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKGetSampleRate(void) {
     return 1;  // obsolete
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKGetRepeatMode(void) {
     return __DTKRepeatMode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKGetState(void) {
     return __DTKState;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKGetPosition(void) {
     return __DTKPosition;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DTKGetInterruptFrequency(void) {
     return __DTKInterruptFrequency;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DTKTrack* DTKGetCurrentTrack(void) {
     return __DTKCurrentTrack;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DTKSetVolume(u8 left, u8 right) {
     __DTKVolumeL = left;
     __DTKVolumeR = right;
@@ -478,6 +512,7 @@ void DTKSetVolume(u8 left, u8 right) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u16 DTKGetVolume(void) {
     return (__DTKVolumeL << 8) | __DTKVolumeR;
 }
