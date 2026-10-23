@@ -132,7 +132,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/time.dolphin.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/__ppc_eabi_init.c"
