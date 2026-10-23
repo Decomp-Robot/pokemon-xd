@@ -177,8 +177,13 @@ game/menuTop.cpp:
 	.ctors      start:0x802E9F88 end:0x802E9F8C
 
 game/menuNameEntry.cpp:
-	.text       start:0x8003343C end:0x80033440
+	.text       start:0x80030330 end:0x80033440
 	.ctors      start:0x802E9F8C end:0x802E9F90
+	.rodata     start:0x802EA8F8 end:0x802EA9F8
+	.data       start:0x80322910 end:0x80322948
+	.bss        start:0x80429270 end:0x804297C8
+	.sbss       start:0x804EA7A0 end:0x804EA7C8
+	.sdata2     start:0x804EC110 end:0x804EC190
 
 game/menuPokemonStatus.cpp:
 	.text       start:0x80037A44 end:0x80037A48

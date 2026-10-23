@@ -6,33 +6,61 @@
 // Usable from C as well as C++.
 typedef struct tagSPRITE_WORK tagSPRITE_WORK;
 typedef struct tagWINDOW_WORK tagWINDOW_WORK;
+typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 
 // Window work, partial. The sprite-work list head at 0x24 is walked by
 // menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
+// custom-menu argument at 0x68 is what the name-entry menus read back. The
 // remaining layout is unrecovered and stays sized padding here.
 struct tagWINDOW_WORK {
-    u8 _00[0x04];                // 0x00-0x03: unknown.
+    u8 _00;                      // 0x00: unknown.
+    u8 mState;                   // 0x01: menu sequence step the window is in.
+    u8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
+    u8 _03;                      // 0x03: unknown.
     long mMenuID;                // 0x04: menu data id used for item lookups.
-    u8 _08[0x14];                // 0x08-0x1B: remainder; unknown here.
+    u8 _08[0x08];                // 0x08-0x0F: unknown.
+    tagWINDOW_WORK *mNext;       // 0x10: next window in the window list.
+    u8 _14[0x08];                // 0x14-0x1B: unknown.
     long mLayerID;               // 0x1C: GSgfx layer the window draws on.
     u8 _20[0x04];                // 0x20-0x23: unknown.
     tagSPRITE_WORK *mSpriteWork; // 0x24: head of the window sprite-work list.
-    u8 _28[0x76];                // 0x28-0x9D: remainder; unknown here.
+    u8 _28[0x04];                // 0x28-0x2B: head of a second work list.
+    u8 mSeq[0x3C];               // 0x2C: sequence record of the menu the window runs.
+    NAME_ENTRY_ARG *mArg;        // 0x68: argument the custom menu was opened with.
+    u8 _6C[0x24];                // 0x6C-0x8F: unknown.
+    union {
+        u32 mColor;              // 0x90: RGBA colour passed to the message printer.
+        struct {
+            u8 mColorR;          // 0x90
+            u8 mColorG;          // 0x91
+            u8 mColorB;          // 0x92
+            u8 mColorA;          // 0x93: alpha channel; also read on its own.
+        } mRgba;
+    };
+    u8 _94[0x0A];                // 0x94-0x9D: unknown.
     s16 cursor;                  // 0x9E: selected cursor.
+    u8 _A0[0x04];                // 0xA0-0xA3: unknown.
+    u8 mAccept;                  // 0xA4: set when the menu is confirmed.
+    u8 mCancel;                  // 0xA5: set when the menu is cancelled.
 };
 
-// Sprite work node (0x78 bytes). winSpriteAdd hands these out of a fixed
-// pool and chains them through +0x00; the hook at +0x48 is the routine
-// the window invokes for the sprite.
+// Sprite work node (0x78 bytes). winSpriteAdd hands these out of a fixed pool
+// and chains them through +0x00.
 struct tagSPRITE_WORK {
     tagSPRITE_WORK *mNext; // 0x00: next node in the list.
     u8 _04[0x02];          // 0x04-0x05: unknown.
     s16 mItemID;           // 0x06: item id the node displays for the menu.
-    u8 _08[0x40];          // 0x08-0x47: remainder; unknown here.
+    u8 _08[0x40];          // 0x08-0x47: unknown.
     void *mHookFunction;   // 0x48: hook the node was registered with.
-    u8 _4C[0x06];          // 0x4C-0x51: unknown.
-    s16 mY;                // 0x52: y position set by the item cursor hooks.
-    u8 _54[0x24];          // 0x54-0x77: remainder; unknown here.
+    u32 mMsgID;            // 0x4C: message id the node prints.
+    u8 _50[0x02];          // 0x50-0x51: unknown.
+    s16 mCursorY;          // 0x52: y position set by the item cursor hooks.
+    s16 mX;                // 0x54: x position.
+    s16 mY;                // 0x56: y position.
+    u8 _58[0x0F];          // 0x58-0x66: unknown.
+    u8 mAlpha;             // 0x67: alpha the sprite is drawn with.
+    u8 _68[0x0C];          // 0x68-0x73: unknown.
+    u8 mUnk74;             // 0x74: flag read by winSpriteGetLayerID.
 };
 
 // Key state read by windowGetKeyOn/windowGetKeyTrg/windowGetKeyRepeat
