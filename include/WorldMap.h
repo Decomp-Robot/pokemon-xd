@@ -26,6 +26,16 @@ struct GSvec {
     f32 z;
 };
 
+/* Camera data table entry (0x1C bytes). GetCameraData copies the position
+ * plus the four camera parameters staged by SetCameraNextWork. */
+struct WorldMapCamData {
+    GSvec pos;
+    f32 distance;
+    f32 rotY;
+    f32 rotX;
+    f32 fov;
+};
+
 /* Camera-blend work block (0x68 bytes, allocated by Init). IsBlending only
  * reads the blend parameter at +0x08, which ControlCamera drives from 0 to
  * 1 (its per-frame increment +0x10 is clamped so the blend never passes 1);
@@ -75,6 +85,7 @@ public:
     f32 GetAngle(long work);
     void SetCameraSpeed(f32 speed);
     void SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
+    void GetCameraData(long index, GSvec* pos, f32* distance, f32* rotY, f32* rotX, f32* fov);
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the
