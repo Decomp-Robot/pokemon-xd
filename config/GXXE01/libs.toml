@@ -1170,3 +1170,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/snd_service.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/hw_memory.c"
+completed = true
