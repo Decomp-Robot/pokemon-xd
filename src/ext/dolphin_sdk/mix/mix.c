@@ -336,6 +336,7 @@ static void __MIXResetChannel(MIXChannel* channel);
 static void __MIXSetPan(MIXChannel* channel);
 static int __MIXClampPan(int pan);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u16 __MIXGetVolume(int db_) {
     int db = db_;
     if (db <= -0x388) {
@@ -347,6 +348,7 @@ static u16 __MIXGetVolume(int db_) {
     return __MIXVolumeTable[db + 0x388];
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __MIXSetPan(MIXChannel* channel) {
     int pan, span;
     int ipan, ispan;
@@ -374,6 +376,7 @@ static void __MIXSetPan(MIXChannel* channel) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __MIXResetChannel(MIXChannel* channel) {
     channel->mode = 0x50000000;
     channel->input = 0;
@@ -389,6 +392,7 @@ static void __MIXResetChannel(MIXChannel* channel) {
     __MIXSetPan(channel);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int __MIXClampPan(int pan) {
     if (pan < 0) {
         return 0;
@@ -399,6 +403,7 @@ static int __MIXClampPan(int pan) {
     return pan;    
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXInit(void) {
     int i;
 
@@ -411,18 +416,22 @@ void MIXInit(void) {
     __MIXSoundMode = MIX_SOUND_MODE_STEREO;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXQuit(void) {}
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetSoundMode(u32 mode) {
     ASSERTLINE(421, (mode == MIX_SOUND_MODE_MONO) || (mode == MIX_SOUND_MODE_STEREO) ||
                     (mode == MIX_SOUND_MODE_SURROUND) || (mode == MIX_SOUND_MODE_DPL2));
     __MIXSoundMode = mode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 MIXGetSoundMode(void) {
     return __MIXSoundMode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXInitChannel(AXVPB* axvpb, u32 mode, int input, int auxA, int auxB, int pan, int span, int fader) {
     BOOL old;
     MIXChannel* c;
@@ -573,15 +582,18 @@ void MIXInitChannel(AXVPB* axvpb, u32 mode, int input, int auxA, int auxB, int p
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXReleaseChannel(AXVPB* axvpb) {
     ASSERTLINE(657, axvpb);
     __MIXChannel[axvpb->index].axvpb = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXResetControls(AXVPB* p) {
     __MIXResetChannel(&__MIXChannel[p->index]);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetInput(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -590,6 +602,7 @@ void MIXSetInput(AXVPB* p, int dB) {
     channel->mode |= 0x10000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustInput(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -598,6 +611,7 @@ void MIXAdjustInput(AXVPB* p, int dB) {
     channel->mode |= 0x10000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetInput(AXVPB* p) {
     MIXChannel* channel;
 
@@ -605,6 +619,7 @@ int MIXGetInput(AXVPB* p) {
     return channel->input;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAuxAPostFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -613,6 +628,7 @@ void MIXAuxAPostFader(AXVPB* p) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAuxAPreFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -620,6 +636,7 @@ void MIXAuxAPreFader(AXVPB* p) {
     channel->mode |= 0x40000001;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXAuxAIsPostFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -630,6 +647,7 @@ int MIXAuxAIsPostFader(AXVPB* p) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetAuxA(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -638,6 +656,7 @@ void MIXSetAuxA(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustAuxA(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -646,6 +665,7 @@ void MIXAdjustAuxA(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetAuxA(AXVPB* p) {
     MIXChannel* channel;
 
@@ -653,6 +673,7 @@ int MIXGetAuxA(AXVPB* p) {
     return channel->auxA;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAuxBPostFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -661,6 +682,7 @@ void MIXAuxBPostFader(AXVPB* p) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAuxBPreFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -668,6 +690,7 @@ void MIXAuxBPreFader(AXVPB* p) {
     channel->mode |= 0x40000002;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXAuxBIsPostFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -678,6 +701,7 @@ int MIXAuxBIsPostFader(AXVPB* p) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetAuxB(AXVPB* p, int dB) {
     MIXChannel* channel;
     if (__MIXSoundMode == MIX_SOUND_MODE_DPL2)
@@ -688,6 +712,7 @@ void MIXSetAuxB(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustAuxB(AXVPB* p, int dB) {
     MIXChannel* channel;
     if (__MIXSoundMode == MIX_SOUND_MODE_DPL2)
@@ -698,6 +723,7 @@ void MIXAdjustAuxB(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetAuxB(AXVPB* p) {
     MIXChannel* channel;
     if (__MIXSoundMode == MIX_SOUND_MODE_DPL2)
@@ -707,6 +733,7 @@ int MIXGetAuxB(AXVPB* p) {
     return channel->auxB;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetPan(AXVPB* p, int pan) {
     MIXChannel* channel;
 
@@ -716,6 +743,7 @@ void MIXSetPan(AXVPB* p, int pan) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustPan(AXVPB* p, int pan) {
     MIXChannel* channel;
 
@@ -725,6 +753,7 @@ void MIXAdjustPan(AXVPB* p, int pan) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetPan(AXVPB* p) {
     MIXChannel* channel;
 
@@ -732,6 +761,7 @@ int MIXGetPan(AXVPB* p) {
     return channel->pan;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetSPan(AXVPB* p, int span) {
     MIXChannel* channel;
 
@@ -741,6 +771,7 @@ void MIXSetSPan(AXVPB* p, int span) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustSPan(AXVPB* p, int span) {
     MIXChannel* channel;
 
@@ -750,6 +781,7 @@ void MIXAdjustSPan(AXVPB* p, int span) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetSPan(AXVPB* p) {
     MIXChannel* channel;
 
@@ -757,6 +789,7 @@ int MIXGetSPan(AXVPB* p) {
     return channel->span;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXMute(AXVPB* p) {
     MIXChannel* channel;
 
@@ -764,6 +797,7 @@ void MIXMute(AXVPB* p) {
     channel->mode |= 0x10000004;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXUnMute(AXVPB* p) {
     MIXChannel* channel;
 
@@ -772,6 +806,7 @@ void MIXUnMute(AXVPB* p) {
     channel->mode |= 0x10000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXIsMute(AXVPB* p) {
     MIXChannel* channel;
 
@@ -782,6 +817,7 @@ int MIXIsMute(AXVPB* p) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetFader(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -790,6 +826,7 @@ void MIXSetFader(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXAdjustFader(AXVPB* p, int dB) {
     MIXChannel* channel;
 
@@ -798,6 +835,7 @@ void MIXAdjustFader(AXVPB* p, int dB) {
     channel->mode |= 0x40000000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetFader(AXVPB* p) {
     MIXChannel* channel;
 
@@ -805,6 +843,7 @@ int MIXGetFader(AXVPB* p) {
     return channel->fader;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXSetDvdStreamFader(int dB) {
     int db;
 
@@ -818,10 +857,12 @@ void MIXSetDvdStreamFader(int dB) {
     __MIXDvdStreamAttenUser = db;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MIXGetDvdStreamFader(void) {
     return __MIXDvdStreamAttenUser;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MIXUpdateSettings(void) {
     int i;
     int setNewMixLevel;
