@@ -14,3 +14,31 @@ completed = true
 [[lib.object]]
 name = "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"
 completed = false
+
+[[lib.object]]
+name = "Runtime.PPCEABI.H/MemFuncs.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-gccinc",
+    "-common off",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-lang=c",
+]
