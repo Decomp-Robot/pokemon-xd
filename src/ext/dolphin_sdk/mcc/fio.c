@@ -43,18 +43,22 @@ static int fioPacketWrite(int fd, void* buffer, int size, int async);
 static int fioPacketResultRead(void* buffer, u32 dataSize);
 static int fioPacketResultWrite(void* buffer, u32 dataSize);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static BOOL fioIsInitialized(void) {
     return !!gChID;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u16 EndianConvert16(u16 n) {
     return ((n & 0x00FF) << 8) | ((n & 0xFF00) >> 8);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u32 EndianConvert32(u32 n) {
     return EndianConvert16((n >> 16) & 0xFFFF) | (EndianConvert16(n & 0xFFFF) << 0x10);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int MPDWaiting(int timeout, volatile int* flag, int value) {
     OSTick tickStart;
     OSTick tickDist;
@@ -72,6 +76,7 @@ static int MPDWaiting(int timeout, volatile int* flag, int value) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ShowChannelInfo(MCC_CHANNEL chID) {
     MCC_Info info;
 
@@ -86,10 +91,12 @@ static void ShowChannelInfo(MCC_CHANNEL chID) {
              (info.isLocked == TRUE)                    ? "LOCKED" : "UNKNOWN");
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void fioErrorReport(char* msg) {
     OSReport("[fio] Error: %s\n", msg);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void fioMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
     u32 notify;
 
@@ -126,6 +133,7 @@ static void fioMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOInit(MCC_EXI exiChannel, MCC_CHANNEL chID, u8 blockSize) {
     OSRegisterVersion(__FIOVersion);
 
@@ -155,6 +163,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void FIOExit(void) {
     if (MCCClose(gChID) == 0) {
         gLastErr = FIO_ERROR_MCC;
@@ -172,6 +181,7 @@ void FIOExit(void) {
     bAsyncIsRead = FALSE;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOQuery(void) {
     OSTick tick;
 
@@ -195,10 +205,12 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u8 FIOGetLastError(void) {
     return gLastErr;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFopen(const char* filename, u32 mode) {
     struct FIO_Code {
         /* 0x00 */ u32 flag;
@@ -241,6 +253,7 @@ exit:;
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFclose(int handle) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -277,6 +290,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 FIOFread(int handle, void* data, u32 size) {
     char* pBuf;
     volatile int nSizeRemain;
@@ -321,6 +335,7 @@ exit:;
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 FIOFwrite(int handle, void* data, u32 size) {
     volatile int nSizeRemain;
     int nResult;
@@ -363,6 +378,7 @@ exit:;
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 FIOFseek(int handle, s32 offset, u32 mode) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -416,6 +432,7 @@ exit:
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFprintf(int handle, const char* format, ...) {
     char* str;
     int length;
@@ -462,6 +479,7 @@ exit:;
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFflush(int handle) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -502,6 +520,7 @@ exit:
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFstat(int handle, FIO_Stat* stat) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -552,6 +571,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFerror(int handle) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -592,6 +612,7 @@ exit:;
     return gLastErr;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFindFirst(const char* filename, FIO_Finddata* finddata) {
     struct FIO_Code {
         /* 0x00 */ u8 filename; // dynamic length
@@ -638,6 +659,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFindNext(FIO_Finddata* finddata) {
     struct FIO_Code {
         /* 0x00 */ u32 reserved;
@@ -680,6 +702,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOOpenDir(const char* dirname, int* dir) {
     struct FIO_Code {
         /* 0x00 */ s8 filename;
@@ -723,6 +746,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOCloseDir(int dir) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -754,6 +778,7 @@ int FIOCloseDir(int dir) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 FIOGetDirSize(int dir) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -786,6 +811,7 @@ s32 FIOGetDirSize(int dir) {
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 FIOReadDir(int dir, FIO_Finddata* data, s32 numOfData) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -834,6 +860,7 @@ s32 FIOReadDir(int dir, FIO_Finddata* data, s32 numOfData) {
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 FIOGetAsyncBufferSize(void) {
     int nPacketSize;
     int nHeaderSize;
@@ -850,6 +877,7 @@ u32 FIOGetAsyncBufferSize(void) {
     return !(nResult & 0x1F) ? nResult : nResult & ~0x1F;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFreadAsync(int handle, void* data, u32 size) {
     if (handle == 0) {
         gLastErr = FIO_ERROR_INVALID_PARAMETERS;
@@ -886,6 +914,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOFwriteAsync(int handle, void* data, u32 size) {
     if (handle == 0) {
         gLastErr = FIO_ERROR_INVALID_PARAMETERS;
@@ -922,6 +951,7 @@ exit:
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int FIOCheckAsyncDone(u32* result) {
     if (bAsyncBusy) {
         if (bAsyncIsRead) {
@@ -939,6 +969,7 @@ int FIOCheckAsyncDone(u32* result) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void* fioPacketMakeHeader(u32 fioCode, u32 dataSize, BOOL bEndianConvert) {
     MCC_Hdr* hdrDpci;
     MCC_HdrFio* hdrFio;
@@ -964,6 +995,7 @@ static void* fioPacketMakeHeader(u32 fioCode, u32 dataSize, BOOL bEndianConvert)
     return data;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int fioPacketSendPacket(u8 sizeOfBlocks, void* pTopOfSecondBlockData) {
     u32 oldMaskWrite;
     u8 indexOfBlocks;
@@ -1001,6 +1033,7 @@ static int fioPacketSendPacket(u8 sizeOfBlocks, void* pTopOfSecondBlockData) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void* fioPacketReceiveResult(u32 fioCode, BOOL bDone) {
     u32 oldMaskRead;
     MCC_Hdr* hdrDpci;
@@ -1045,10 +1078,12 @@ exit:;
     return NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void fioPacketReceiveDone(void) {
     gProcBusy = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int fioPacketRead(int fd, void* buffer, int size, int async) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -1071,6 +1106,7 @@ static int fioPacketRead(int fd, void* buffer, int size, int async) {
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int fioPacketWrite(int fd, void* buffer, int size, int async) {
     struct FIO_Code {
         /* 0x00 */ u32 descriptor;
@@ -1093,6 +1129,7 @@ static int fioPacketWrite(int fd, void* buffer, int size, int async) {
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int fioPacketResultRead(void* buffer, u32 dataSize) {
     int bResult;
     MCC_CHANNEL nChID;
@@ -1204,6 +1241,7 @@ exit:;
     return -1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int fioPacketResultWrite(void* buffer, u32 dataSize) {
     register int nResult = 0;
     MCC_CHANNEL nChID;
