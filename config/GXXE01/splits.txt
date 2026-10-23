@@ -250,6 +250,14 @@ ext/dolphin_sdk/dvd/dvdFatal.c:
 	.sbss       start:0x804EAC38 end:0x804EAC3C
 	.sdata2     start:0x804ECB68 end:0x804ECB70
 
+ext/dolphin_sdk/dvd/fstload.c:
+	.text       start:0x800B8348 end:0x800B8420
+	.text       start:0x800B8420 end:0x800B8588
+	.data       start:0x803D2550 end:0x803D25C0
+	.bss        start:0x8043E638 end:0x8043E6A8
+	.sdata      start:0x804E8178 end:0x804E8188
+	.sbss       start:0x804EAC40 end:0x804EAC4C
+
 ext/dolphin_sdk/gd/GDTexture.c:
 	.sdata      start:0x804E8700 end:0x804E8738
 
