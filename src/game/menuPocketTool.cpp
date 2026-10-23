@@ -1,9 +1,27 @@
-#include <types.h>
+#include <menuPocketTool.h>
 
 // Angle constants the direction helpers share.
 extern const f32 zero;
 extern const f32 twoPi;
 extern const f32 invTwoPi;
+
+// Subtract two directions and wrap the difference into [0, 2*PI).
+float dirSubHalf(float dir1, float dir2)
+{
+    return dirRefresh2PI(dir1 - dir2);
+}
+
+// Subtract two directions and wrap the difference into [-PI, PI).
+float dirSubPI(float dir1, float dir2)
+{
+    return dirRefreshPI(dir1 - dir2);
+}
+
+// Subtract two degree values and wrap the difference into [-180, 180).
+long degreeSubHalf(long degree1, long degree2)
+{
+    return degreeRefresh180(degree1 - degree2);
+}
 
 // Wrap a degree value into the [-180, 180) range.
 long degreeRefresh180(long degree)
