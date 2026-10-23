@@ -229,12 +229,13 @@ else:
     cflags_base.extend(toml_config.build.cflags_release)
 
 # Add warning flags
+fatal_cflags = toml_config.build.cflags_warn_error or ["-W error"]
 if args.warn == "all":
     cflags_base.extend(toml_config.build.cflags_warn_all)
 elif args.warn == "off":
     cflags_base.extend(toml_config.build.cflags_warn_off)
 elif args.warn == "error":
-    cflags_base.extend(toml_config.build.cflags_warn_error)
+    cflags_base.extend(fatal_cflags)
 
 config.asflags = subst(toml_config.build.asflags)
 config.ldflags = subst(toml_config.build.ldflags)
@@ -292,7 +293,7 @@ for lib in toml_config.libs:
         if obj.add_to_all is not None:
             obj_options["add_to_all"] = obj.add_to_all
         if obj.cflags is not None:
-            obj_options["cflags"] = subst(obj.cflags) + (toml_config.build.cflags_warn_error if args.warn == "error" else [])
+            obj_options["cflags"] = subst(obj.cflags) + (fatal_cflags if args.warn == "error" else [])
         if obj.asflags is not None:
             obj_options["asflags"] = subst(obj.asflags) + (["--fatal-warnings"] if args.warn == "error" else [])
         if obj.mw_version is not None:
