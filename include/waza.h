@@ -2,6 +2,7 @@
 #define WAZA_H
 
 #include <types.h>
+typedef struct FIGHT_WAZA FIGHT_WAZA;
 
 enum WAZA_FIELD {
     WAZA_FIELD_NAME = 1,
@@ -66,6 +67,12 @@ s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, s32 index);
 void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, s32 index, s32 value);
 
 u8 wazaDB_GetCompatible(u16 wazaID);
+s16 wazaDB_GetIryoku(u16 move);
+s32 fightWaza_GetDamage(FIGHT_WAZA *waza);
+void fightWaza_SetDamage(FIGHT_WAZA *waza, s32 damage);
+u16 wazaDB_GetSeqId(u16 move);
+u8 wazaDB_GetOujanosirusi(u16 move);
+s32 wazaDB_GetName(u16 move);
 #ifdef __cplusplus
 }
 #endif

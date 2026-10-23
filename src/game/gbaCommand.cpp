@@ -1,6 +1,7 @@
 #include <fightTrainer.h>
 #include <fightFloor.h>
 #include <fightPokemonBios.h>
+#include <fightPokemon.h>
 #include <fightSeq.h>
 #include <dolphin/si.h>
 
@@ -263,7 +264,7 @@ struct FightOutPokemon;
 // answer null when the slot does not hold a valid Pokemon. The same index also
 // reaches the record's Pokemon through the stats start pointers below.
 extern "C" FightOutPokemon *fightTrainerGetFightoutPokemonPtrValid(void *trainerData, u16 index);
-extern "C" Pokemon *fightOutPokemonGetStatsStartPtr(FightOutPokemon *fightOutPokemon);
+
 extern "C" u16 gbaPokemonConditonFromGC(Pokemon *pokemon);
 extern "C" u8 pokemonGetDeoxysSel(u8 sel);
 extern "C" u8 menuCBRule_DEOKISISUCamouflage(void);
@@ -275,7 +276,6 @@ extern "C" u8 pokemonAttestGetLanguage(long attest);
 extern "C" long GScharConvToGBACode(void *dst, const u16 *name, long language);
 extern "C" u8 fightOutPokemonCheckCanOutOkWazaBanme(FightOutPokemon *fightOutPokemon, u16 index, long flag, u16 *out);
 extern "C" u8 fightOutPokemonCheckFightActionWazaSelect(FightOutPokemon *fightOutPokemon, long index);
-extern "C" u8 fightOutPokemonIsJoutaiDataId(FightOutPokemon *fightOutPokemon, long id);
 extern "C" void fightOutPokemonGetRndStatus(FightOutPokemon *fightOutPokemon, u32 *o1, u32 *o2);
 extern "C" u8 fightFloorCheckFightActionFightOutPokemonIrekaeSelect(void *battleData, FightOutPokemon *fightOutPokemon, FightOutPokemon **out);
 extern "C" u8 fightTimerAllIsOver(void);
@@ -449,7 +449,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
     packet.header.ability = _swap32(ability);
     state2 = 0;
     {
-        pokemon = fightOutPokemonGetStatsStartPtr(targetPokemon);
+        pokemon = fightOutPokemonGetPokemonPtr(targetPokemon);
 
         fightOutPokemonGetRndStatus(targetPokemon, &random1, &random2);
         packet.header.random1 = _swap32(random1);
@@ -541,7 +541,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
                 packet.summary[i].name[0] = 0xFF;
             } else {
                 long attest;
-                Pokemon *other = fightOutPokemonGetStatsStartPtr(selection[i]);
+                Pokemon *other = fightOutPokemonGetPokemonPtr(selection[i]);
                 attest = pokemonBiosGetAttest(other);
                 long len = GScharConvToGBACode(&packet.summary[i], pokemon_GetNickname(other), pokemonAttestGetLanguage(attest));
 

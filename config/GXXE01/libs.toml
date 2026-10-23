@@ -3149,3 +3149,71 @@ cflags_extra = ["-O4,s", "-inline auto,deferred", "-use_lmw_stmw on", "-i src/ex
 [[lib.object]]
 name = "game/app/memo/memo.c"
 completed = true
+
+[[lib]]
+name = "fightSeq"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/app/fight/fightSeq/fightSeqWazaseq.cpp"
+completed = true
+extra_cflags = ["-W error"]
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4",
+    "-inline noauto,deferred",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/app/fight/fightSeq/fightSeq.cpp"
+completed = true
+extra_cflags = ["-W error"]
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4",
+    "-inline noauto,deferred",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]

@@ -125,6 +125,21 @@ void *fightFloorGetNowPtr(void);
 void fightFloorSetTimeOutAllFightResult(void *floor);
 s32 fightFloor_GetStockPokemonNum(FIGHT_FLOOR *floor);
 u32 fightFloor_GetFightKind(void *floor);
+u8 fightFloorIsLastActionFightOutPokemon(FIGHT_FLOOR *floor);
+u32 fightFloor_GetFightType(FIGHT_FLOOR *floor);
+void fightFloor_SetDefPokemonAndAtkFightWazaTargetId(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetItemPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetAppointItemDataId(FIGHT_FLOOR *floor, u16 item);
+FIGHT_TRAINER *fightFloorGetFightOutPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+u8 fightFloorLoopValidFightOutPokemon(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
+void fightFloor_SetAttackPokemonFightWazaJoutaiDataId(FIGHT_FLOOR *floor, u32 status);
+u16 fightFloor_GetFightSideFightOutPokemonSideMax(FIGHT_FLOOR *floor);
+u16 fightFloorGetValidFightOutPokemonCount(FIGHT_FLOOR *floor, u32 side, FightOutPokemon *pokemon, u32 validOnly);
+FightOutPokemon *fightFloor_GetFightOutPokemonFromDefaultSortData(u8 index);
+FightOutPokemon *fightFloorGetFightOutPokemonPtrAryPokemonTokuseiDataIdFirst(FIGHT_FLOOR *floor, u32 ability, u32 iterationMode, u32 relationship, FightOutPokemon *referencePokemon);
 
 #ifdef __cplusplus
 }

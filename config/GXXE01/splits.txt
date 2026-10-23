@@ -2051,6 +2051,15 @@ game/app/fight/fightFloor.cpp:
 game/app/fight/fightFloorBios.cpp:
 	.text       start:0x801F5B38 end:0x801F5E18
 
+game/app/fight/fightSeq/fightSeqWazaseq.cpp:
+	.text       start:0x80222A68 end:0x8022364C
+
+game/app/fight/fightSeq/fightSeq.cpp:
+	.text       start:0x8022364C end:0x80225598
+	.rodata     start:0x802F9258 end:0x802F9270
+	.data       start:0x804184B0 end:0x80418730
+	.sdata2     start:0x804EEB98 end:0x804EEBA4
+
 game/app/pokemon/pokemonWazaSequenceDisplay.cpp:
 	.text       start:0x80233B20 end:0x80233C8C
 	.sdata2     start:0x804EEBE0 end:0x804EEBE4

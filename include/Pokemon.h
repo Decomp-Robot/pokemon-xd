@@ -96,9 +96,16 @@ enum POKEMON_POKERUS {
     POKEMON_POKERUS_ACTIVE_MASK = 0xF, // active pokerus infection in the low nibble.
 };
 
+enum { POKEMON_STATUS_CONDITION = 0x7C, POKEMON_STATUS_HP = 0x83 };
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+u16 pokemon_GetHp(Pokemon *pokemon);
+u16 pokemon_GetMaxHp(Pokemon *pokemon);
+void pokemon_SetHp(Pokemon *pokemon, u16 hp);
+void pokemonInitJoutai(Pokemon *pokemon);
+void pokemonInitJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
 
 /* pokemonGetStatus query IDs. POKEMON_STATUS_SPECIES reads the record's
    species halfword (zero for an empty slot); POKEMON_STATUS_MOVE reads the
@@ -145,8 +152,9 @@ u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
 u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
-// Read a scalar field, or one indexed element of a field, from a Pokemon record.
-s32 pokemonGetStatus(void *record, u16 speciesId, u16 field, u16 elementIndex);
+// The field ID may select party data or deployed fight-record data.
+s32 pokemonGetStatus(void *record, u16 speciesId, s32 field, u16 elementIndex);
+void pokemonSetStatus(void *record, unsigned short pokemonDataID, int fieldID, int index, unsigned long value);
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);

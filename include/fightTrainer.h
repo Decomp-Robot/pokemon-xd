@@ -33,6 +33,7 @@ struct FIGHT_TRAINER {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void fightTrainer_SetOkaneBai(FIGHT_TRAINER *trainer, s32 multiplier);
 s32 fightTrainerGetStatus(FIGHT_TRAINER *trainer, u16 id, u16 field, u16 sub);
 void fightTrainerSetStatus(FIGHT_TRAINER *trainer, u16 id, u16 field, u16 sub, s32 value);
 

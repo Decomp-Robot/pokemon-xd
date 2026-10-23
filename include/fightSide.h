@@ -7,6 +7,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+u8 fightSideCheckWriteJoutaiDataId(void *side, u32 status);
+void fightSideWriteJoutaiDataId(void *side, u32 status, u32 value);
 
 typedef struct FIGHT_SIDE FIGHT_SIDE;
 
