@@ -89,7 +89,7 @@ private:
     void tutorialPokemonSetup();
     void loop();
 
-    long _334;
+    long mUnknown;
     MenuInfo *mMenuInfo;
     bool mReliveHallLoaded;
     bool mPokemonLoaded;
