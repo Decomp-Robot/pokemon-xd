@@ -2689,7 +2689,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtx44.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtxvec.c"

@@ -524,6 +524,7 @@ ext/dolphin_sdk/mtx/mtx44.c:
 	.text       start:0x800B3398 end:0x800B3434
 	.text       start:0x800B3434 end:0x800B3504
 	.text       start:0x800B3504 end:0x800B359C
+	.sdata2     start:0x804ECB08 end:0x804ECB20
 
 ext/dolphin_sdk/mtx/vec.c:
 	.text       start:0x800B359C end:0x800B35C0
