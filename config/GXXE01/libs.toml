@@ -854,3 +854,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/axfx/chorus.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/axfx/delay.c"
+completed = true

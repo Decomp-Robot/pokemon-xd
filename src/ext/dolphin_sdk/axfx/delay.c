@@ -4,6 +4,7 @@
 
 #include "__axfx.h"
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXFXDelayCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_DELAY* delay) {
     s32 l;
     s32 r;
@@ -40,6 +41,7 @@ void AXFXDelayCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_DELAY* delay) {
     delay->currentPos[2] = (s32) ((delay->currentPos[2] + 1) % delay->currentSize[2]);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXDelaySettings(AXFX_DELAY* delay) {
     u32 i;
     s32* l;
@@ -112,6 +114,7 @@ int AXFXDelaySettings(AXFX_DELAY* delay) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXDelayInit(AXFX_DELAY* delay) {
     BOOL old;
 
@@ -123,6 +126,7 @@ int AXFXDelayInit(AXFX_DELAY* delay) {
     AXFXDelaySettings(delay);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXDelayShutdown(AXFX_DELAY* delay) {
     BOOL old;
 
