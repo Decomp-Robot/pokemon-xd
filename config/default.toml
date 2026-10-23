@@ -28,6 +28,7 @@ asflags = [
     "-I include",
     "-I build/$VERSION/include",
     "--defsym BUILD_VERSION=$VERSION_NUM",
+    "--fatal-warnings",
 ]
 
 # Base C flags (applied to all objects)
@@ -97,6 +98,7 @@ cflags_rel = [
 ldflags = [
     "-fp hardware",
     "-nodefaults",
+    "-w error",
 ]
 
 # Linker debug flags (appended when --debug is used)

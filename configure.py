@@ -286,9 +286,9 @@ for lib in toml_config.libs:
         if obj.add_to_all is not None:
             obj_options["add_to_all"] = obj.add_to_all
         if obj.cflags is not None:
-            obj_options["cflags"] = subst(obj.cflags)
+            obj_options["cflags"] = subst(obj.cflags) + (toml_config.build.cflags_warn_error if args.warn == "error" else [])
         if obj.asflags is not None:
-            obj_options["asflags"] = subst(obj.asflags)
+            obj_options["asflags"] = subst(obj.asflags) + (["--fatal-warnings"] if args.warn == "error" else [])
         if obj.mw_version is not None:
             obj_options["mw_version"] = obj.mw_version
         if obj.progress_category is not None:
