@@ -86,6 +86,9 @@ game/menuPocket2Pokemon.cpp:
 game/menuPocket2.cpp:
 	.text       start:0x80026718 end:0x8002672C
 
+game/gbaExchange.cpp:
+	.text       start:0x80027E44 end:0x80027E6C
+
 game/menuCBBios.c:
 	.text       start:0x80027EB8 end:0x80027ECC
 
