@@ -4,6 +4,8 @@
 extern const f32 zero;
 extern const f32 twoPi;
 extern const f32 invTwoPi;
+extern const f32 lbl_804EC040;
+extern const f32 lbl_804EC094;
 
 // Subtract two directions and wrap the difference into [0, 2*PI).
 float dirSubHalf(float dir1, float dir2)
@@ -55,6 +57,20 @@ float dirRefresh2PI(float dir)
     float result = dir - (float)(long)(invTwoPi * dir) * twoPi;
 
     if (result < zero) {
+        result += twoPi;
+    }
+
+    return result;
+}
+
+// Wrap a direction value into the [-PI, PI) range.
+float dirRefreshPI(float dir)
+{
+    float result = dir - (float)(long)(invTwoPi * dir) * twoPi;
+
+    if (result > lbl_804EC040) {
+        result -= twoPi;
+    } else if (result < lbl_804EC094) {
         result += twoPi;
     }
 
