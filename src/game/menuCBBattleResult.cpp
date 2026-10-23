@@ -91,17 +91,20 @@ u8 _menuCBResultCheckController1sub(void);
 void _menuCBResultCheckController1(void);
 s32 _menuCBResultCheckGBAPort(void);
 
-/* Helpers whose original names are not in the symbol table. */
-extern "C" void zz_0046594_(void);
-extern "C" s32 zz_00465ec_(MenuCBTaisenWork *work);
-extern "C" s32 zz_0046b18_(MenuCBTaisenWork *work);
-extern "C" s32 zz_0046bc4_(void);
+/* No-op default constructor of the trainer records that live in the work
+   area (built by the startup constructor, see fn_80046530). */
+extern "C" void menuTaisenTrainerCtor(void);
+extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work);
+extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work);
+extern "C" s32 menuCBResultCheckHomePlace(void);
 
 /* -------------------------------------------------------------------------
  * Battle result screen
  * ---------------------------------------------------------------------- */
 
-extern "C" void zz_0046594_(void)
+/* Nothing to fill in: the trainer records only need zeroed memory, which the
+   bss work area already is. */
+extern "C" void menuTaisenTrainerCtor(void)
 {
 }
 
@@ -109,11 +112,11 @@ extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
 {
     switch (toolentryTaisenGetBattleMode()) {
     case 1:
-        zz_0046b18_(work);
+        menuCBResultSelectHero(work);
         break;
     case 0:
     default:
-        zz_00465ec_(work);
+        menuCBResultMain(work);
         break;
     }
 }
@@ -123,7 +126,7 @@ extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
  * and, while the players still have to pick where their Pokemon go, runs the
  * selection dialogue. Returns the menu to open next.
  */
-extern "C" s32 zz_00465ec_(MenuCBTaisenWork *work)
+extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
 {
     s32 homePlace = -1;
     s32 battleResult = zz_get_battle_result();
@@ -287,7 +290,7 @@ extern "C" s32 zz_00465ec_(MenuCBTaisenWork *work)
         if (menuID == -1 || menuID == 0xA9) {
             state = 0;
             s32 running = 1;
-            u16 port = zz_0046bc4_();
+            u16 port = menuCBResultCheckHomePlace();
 
             do {
                 switch (state) {
@@ -341,9 +344,10 @@ u16 _menuCBResultGetHomePlace(void)
     return 0;
 }
 
-/* Battle start screen for the battle modes that ask for it: the players pick
-   which of the entered Pokemon fight. */
-extern "C" s32 zz_0046b18_(MenuCBTaisenWork *work)
+/* Result flow for the battle modes that ask again before the fight: the
+   players pick whether to fight with the entered hero Pokemon. Yes copies the
+   hero into the battle entries and goes to the battle; no leaves the screen. */
+extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
 {
     lbl_804299F8.selectResult = 0;
     lbl_804299F8.unk_B060 = 0;
@@ -366,7 +370,7 @@ extern "C" s32 zz_0046b18_(MenuCBTaisenWork *work)
 
 /* Twin of _menuCBResultGetHomePlace, used by the battle result screen while it
    waits for the players. */
-extern "C" s32 zz_0046bc4_(void)
+extern "C" s32 menuCBResultCheckHomePlace(void)
 {
     if (toolentryTaisenGetBattleType() == 2) {
         return zz_0231e2c_(0) != 0;
