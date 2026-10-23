@@ -2,14 +2,9 @@
 #define WORLDMAP_H
 
 #include <types.h>
+#include <winSprite.h>
 
 class glowEffect;
-
-/* Window work, partial: GetNowCursor only reads the cursor slot at 0x9E. */
-struct tagWINDOW_WORK {
-    u8 _00[0x9E];
-    s16 cursor;
-};
 
 /* Partial view of the WorldMap work block addressed by the pointer at 0x08.
  * Only the selected-cursor slot at +0x30 (read by GetNowCursor) is

@@ -71,6 +71,9 @@ game/menuInfoWindow.cpp:
 decomp/menuMetaMenu.cpp:
 	.text       start:0x80020A7C end:0x80020A90
 
+game/menuPtSpriteWork.cpp:
+	.text       start:0x8002189C end:0x800218E8
+
 game/menuPocketTool.cpp:
 	.text       start:0x80021E84 end:0x80021EFC
 
