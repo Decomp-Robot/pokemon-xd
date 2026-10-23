@@ -328,6 +328,9 @@ ext/dolphin_sdk/pad/Pad.c:
 	.sdata      start:0x804E8198 end:0x804E81B8
 	.sbss       start:0x804EACB8 end:0x804EACE4
 
+ext/dolphin_sdk/pad/Padclamp.c:
+	.text       start:0x800BC12C end:0x800BC12C
+
 ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC12C end:0x800BC170
 	.text       start:0x800BC170 end:0x800BC1F8
