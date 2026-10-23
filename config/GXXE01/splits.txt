@@ -382,6 +382,9 @@ ext/dolphin_sdk/dsp/dsp.c:
 ext/dolphin_sdk/dsp/dsp_debug.c:
 	.text       start:0x800BEA74 end:0x800BEAC4
 
+ext/dolphin_sdk/dsp/dsp_perf.c:
+	.text       start:0x800BEAC4 end:0x800BEAC4
+
 ext/dolphin_sdk/ax/AXAlloc.c:
 	.text       start:0x800BF34C end:0x800BF34C
 

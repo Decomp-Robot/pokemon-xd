@@ -389,6 +389,10 @@ completed = true
 name = "ext/dolphin_sdk/dsp/dsp_debug.c"
 completed = true
 
+[[lib.object]]
+name = "ext/dolphin_sdk/dsp/dsp_perf.c"
+completed = true
+
 [[lib]]
 name = "card"
 mw_version = "GC/1.2.5n"
