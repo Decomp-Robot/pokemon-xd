@@ -43,9 +43,7 @@ extern void __timesdec(Dec *result, const Dec *a, const Dec *b);
 #define CLASS_NORMAL  4
 #define CLASS_SUBNORM 5
 
-extern float __float_huge[];
-/* Largest finite double, the clamp taken when a decimal rounds to infinity. */
-extern double doubleMaxFinite[];
+#include "float_data.h"
 
 #define FP_CLASSIFY(value, result) {                                       \
     union {                                                                \

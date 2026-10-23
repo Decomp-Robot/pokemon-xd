@@ -3567,6 +3567,9 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 # string pool (rodata) and the integer-to-double conversion constants
 # (sdata2); Gecko_ExceptionPPC holds the fragment table (.bss).
 [[lib.object]]
+name = "libc/float.c"
+completed = true
+[[lib.object]]
 name = "libc/abort_exit.c"
 completed = true
 [[lib.object]]

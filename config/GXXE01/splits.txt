@@ -1217,6 +1217,9 @@ ext/dolphin_sdk/perf/perfdraw.c:
 	.sbss       start:0x804EAE30 end:0x804EAE48
 	.sdata2     start:0x804ECCD0 end:0x804ECD1C
 
+libc/float.c:
+	.sdata      start:0x804E82E0 end:0x804E8318
+
 TRK/mainloop.c:
 	.text       start:0x800D39D0 end:0x800D3AC8
 
