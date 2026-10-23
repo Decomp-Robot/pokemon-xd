@@ -224,7 +224,6 @@ struct PocketNumberInputParam {
 
 // ---- engine and library entry points -------------------------------------
 
-extern "C" void winMsgOpenWithSE(int mode, u32 msgID, int a, int b, u32 se);
 
 
 // ---- item, menu and hero data -------------------------------------------
@@ -653,7 +652,7 @@ void _setActMenuResizeWork(void)
         ActMenuResizeWork[i].mRowOffset =
             menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mOffsetA;
         ActMenuResizeWork[i].mColumnExtent =
-            menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mOffsetC;
+            menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mHeight;
     }
 }
 
@@ -1265,7 +1264,7 @@ void _printItemDouguBall(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     off += (s16)(GSmsgGetMessageSize(POCKET_MSG_QUANTITY_MARKER) >> 16);
 
-    int ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox - off, y, -1, POCKET_MSG_QUANTITY_MARKER);
 
@@ -1273,7 +1272,7 @@ void _printItemDouguBall(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     s16 off2 = (s16)(GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16);
 
-    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox2 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
@@ -1332,7 +1331,7 @@ void _printItemWazaMachine(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     off += (s16)(GSmsgGetMessageSize(POCKET_MSG_QUANTITY_MARKER) >> 16);
 
-    int ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox - off, y, -1, POCKET_MSG_QUANTITY_MARKER);
 
@@ -1340,7 +1339,7 @@ void _printItemWazaMachine(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     off2 = (s16)(GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16);
 
-    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox2 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
@@ -1382,7 +1381,7 @@ void _printItemKinomi(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     off += (s16)(GSmsgGetMessageSize(POCKET_MSG_QUANTITY_MARKER) >> 16);
 
-    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox2 - off, y, -1, POCKET_MSG_QUANTITY_MARKER);
 
@@ -1390,7 +1389,7 @@ void _printItemKinomi(GSgfxLayerID layer, int x, int y, int tab, int index)
 
     off2 = (s16)(GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16);
 
-    int ox3 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
+    int ox3 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mWidth;
 
     GSmsgPrint2(layer, ox3 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
@@ -2053,7 +2052,7 @@ extern "C" int menuPocket2PrintItemList(tagWINDOW_WORK *window, tagSPRITE_WORK *
 {
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_LIST_SCISSOR_ITEM);
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mOffsetB, scissor->mOffsetC);
+    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mWidth, scissor->mHeight);
     CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     _printItemList(winSpriteGetLayerID(window, sprite), Data.mTabScroll, window->mCursor.y, pos);
     if (0.0f != Data.mTabScroll) {
@@ -2064,13 +2063,13 @@ extern "C" int menuPocket2PrintItemList(tagWINDOW_WORK *window, tagSPRITE_WORK *
             if (tab < 0) {
                 tab = POCKET_TAB_COUNT - 1;
             }
-            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mWidth;
         } else {
             tab = window->mCursor.y + 1;
             if ((unsigned int)tab >= POCKET_TAB_COUNT) {
                 tab = 0;
             }
-            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mWidth;
         }
         CURSOR neighbor = cursorBiosGetPos(lPocketTabData[tab].mCursorID);
         _printItemList(winSpriteGetLayerID(window, sprite), offset, tab, neighbor);
@@ -2085,7 +2084,7 @@ extern "C" int menuPocket2PrintItemKind(tagWINDOW_WORK *window, tagSPRITE_WORK *
     s16 nextWidth;
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_TITLE_SCISSOR_ITEM);
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mOffsetB, scissor->mOffsetC);
+    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mWidth, scissor->mHeight);
     int tab;
     int center = sprite->mWidth / 2;
     u32 message = lPocketTabData[window->mCursor.y].mTitleMsgID;
@@ -2098,13 +2097,13 @@ extern "C" int menuPocket2PrintItemKind(tagWINDOW_WORK *window, tagSPRITE_WORK *
             if (tab < 0) {
                 tab = POCKET_TAB_COUNT - 1;
             }
-            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mWidth;
         } else {
             tab = window->mCursor.y + 1;
             if ((unsigned int)tab >= POCKET_TAB_COUNT) {
                 tab = 0;
             }
-            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mWidth;
         }
         message = lPocketTabData[tab].mTitleMsgID;
         nextWidth = (s16)(GSmsgGetMessageSize(message) >> 16);
@@ -2238,7 +2237,7 @@ extern "C" int menuPocket2DrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
         if (Data.mExchangeSlot >= 0) {
             winSpriteSetDisp(sprite, 0);
             tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-            menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0, item->mOffsetB, item->mOffsetC, sprite->mRgba.mAlpha, 1, 1);
+            menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0, item->mWidth, item->mHeight, sprite->mRgba.mAlpha, 1, 1);
         } else {
             winSpriteSetDisp(sprite, 1);
         }
@@ -2361,11 +2360,11 @@ extern "C" int menuPocket2Cursor(tagWINDOW_WORK *window)
     if (Data.mExchangeSlot < 0 && !moved) {
         if ((repeatKeys & POCKET_KEY_RIGHT) && Data.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
             if ((u32)++window->mCursor.y >= POCKET_TAB_COUNT) window->mCursor.y = 0;
-            Data.mTabScroll = menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
+            Data.mTabScroll = menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mWidth;
             sound = POCKET_SFX_TAB;
         } else if ((repeatKeys & POCKET_KEY_LEFT) && Data.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
             if (--window->mCursor.y < 0) window->mCursor.y = POCKET_TAB_COUNT - 1;
-            Data.mTabScroll = -menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
+            Data.mTabScroll = -menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mWidth;
             sound = POCKET_SFX_TAB;
         } else if ((triggerKeys & POCKET_KEY_SORT) && _IsSortAble(window)) {
             sound = POCKET_SFX_CONFIRM;

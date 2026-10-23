@@ -291,8 +291,8 @@ void menuPtSpriteWorkSetMenuItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
     sprite->mTextureHeight = value->mHeight;
     sprite->mX = item->mMessageX;
     sprite->mY = item->mOffsetA;
-    sprite->mWidth = item->mOffsetB;
-    sprite->mHeight = item->mOffsetC;
+    sprite->mWidth = item->mWidth;
+    sprite->mHeight = item->mHeight;
 }
 
 void menuPtSpriteWorkSetSpriteData(tagSPRITE_WORK *sprite, MenuSpriteData *data)
@@ -329,23 +329,23 @@ void menuPtSpriteWorkSetWidthRateColor(tagWINDOW_WORK *window, unsigned long ite
     tagSPRITE_WORK *sprite = menuPtSpriteWorkGetByItemID(window, itemID, offset);
     tagMENU_ITEM_DATA *item = menuPtItemGetBySpriteWork(window, sprite);
     sprite->mColor = GSgfxColAu8To32(color);
-    sprite->mWidth = item->mOffsetB * rate;
+    sprite->mWidth = item->mWidth * rate;
     winSpriteSetDisp(sprite, rate != 0.0f);
 }
 
 void menuPtItemDrawAlpha(MENU_ITEM_dd_ *item, unsigned char alpha)
 {
-    windowDrawSprite2(item->mMessageX, item->mOffsetA, item->mOffsetB, item->mOffsetC, 0xffffff00 | alpha, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mMessageX, item->mOffsetA, item->mWidth, item->mHeight, 0xffffff00 | alpha, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtItemDrawOffset(MENU_ITEM_dd_ *item, long x, long y)
 {
-    windowDrawSprite2(item->mMessageX + x, item->mOffsetA + y, item->mOffsetB, item->mOffsetC, -1, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mMessageX + x, item->mOffsetA + y, item->mWidth, item->mHeight, -1, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtItemDrawOffsetXWColor(MENU_ITEM_dd_ *item, long x, long width, unsigned long color)
 {
-    windowDrawSprite2(item->mMessageX + x, item->mOffsetA, width, item->mOffsetC, color, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mMessageX + x, item->mOffsetA, width, item->mHeight, color, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtSpriteDraw(unsigned short spriteID, long x, long y)

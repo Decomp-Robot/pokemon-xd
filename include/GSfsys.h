@@ -4,6 +4,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+long GSfsysGetDriveStatus();
+
 void GSfsysFree(u32 fileID);
 void GSfsysFreeCache(u16 groupId);
 u8 GSfsysWait(u32 fileID);

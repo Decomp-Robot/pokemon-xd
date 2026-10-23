@@ -53,6 +53,8 @@ int itemDataBiosGetName(ItemData *data);
 PocketItemUseFunc itemDataBiosGetFieldUseFunc(ItemData *data);
 PocketItemUseFunc itemDataBiosGetBattleUseFunc(ItemData *data);
 u8 itemDataBiosGetUseful(ItemData *data);
+u8 itemDataBiosCheckExportable(ItemData *data);
+u8 itemDataBiosCheckImportable(ItemData *data);
 
 u8 itemDataCheckValid(u16 itemID);
 u8 itemDataBiosGetItemEffectParam(ItemData *data);

@@ -325,7 +325,7 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
             layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
             GScameraLoadProjection(camera, layer);
             layer->FlushState();
-            psDispSetProjection(layer->mProjection);
+            psDispSetProjection(&layer->mProjectionType);
             psSetBillboardCamera(camera->mCObj);
             psDispParticles(group, GS_PARTICLE_DISP_MODE_Z, 0);
             psDispParticles(group, GS_PARTICLE_DISP_MODE_PLAIN, 0);
@@ -337,7 +337,7 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
                 rendered = true;
                 GScameraLoadProjection(cam, layer);
                 layer->FlushState();
-                psDispSetProjection(layer->mProjection);
+                psDispSetProjection(&layer->mProjectionType);
                 psSetBillboardCamera(cam->mCObj);
                 psDispParticles(group, GS_PARTICLE_DISP_MODE_Z, cam);
                 psDispParticles(group, GS_PARTICLE_DISP_MODE_PLAIN, cam);

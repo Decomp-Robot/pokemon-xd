@@ -320,7 +320,7 @@ static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE
     icon = menuPokemonStatusGetWazaTypeIcon((u16)wazaGetStatus(0, waza, WAZA_FIELD_TYPE, 0));
     if (_menuStatus.mWazaNew[slot] != 0 && slot != 0) {
         windowDrawSprite(7, 0x14, window, MENU_POKEMON_STATUS_TEXTURE_WAZA_NEW, 0, winSpriteGetLayerID(window, sprite));
-        pokemonGetDarkPokemonPtr(pokemon)->setWazaNew(slot - 1, 1);
+        pokemon->getDarkPokemon()->setWazaNew(slot - 1, 1);
     }
     return icon;
 }
@@ -1108,7 +1108,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_TAB_SLOT1,
                                                      MENU_POKEMON_STATUS_ITEM_RELIVE_METER);
 
-        menuDrawReliveMeter(pokemon, item->mOffsetB, item->mOffsetC,
+        menuDrawReliveMeter(pokemon, item->mWidth, item->mHeight,
                             winSpriteGetLayerID(window, sprite));
         return;
     }
@@ -1297,7 +1297,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         f32 angle[3];
 
         menuModelSetSize(&_menuModel, item->mMessageX, item->mOffsetA,
-                         item->mOffsetB, item->mOffsetC);
+                         item->mWidth, item->mHeight);
         if (menuModelSetupPokemon(&_menuModel, pokemon) != 1)
             return;
         if (menuModelCheck(&_menuModel, 0) == 0)
@@ -1334,7 +1334,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         if ((u8)ball == 0)
             return;
         item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_HEAD, MENU_POKEMON_STATUS_ITEM_BALL);
-        windowDrawSprite2(0, 0, item->mOffsetB, item->mOffsetC, 0xFFFFFFFF, window,
+        windowDrawSprite2(0, 0, item->mWidth, item->mHeight, 0xFFFFFFFF, window,
                                       mballBiosGetSpriteID((u8)ball), 0,
                                       winSpriteGetLayerID(window, sprite));
         return;
@@ -1602,7 +1602,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             _menuStatus.mWazaNew[i] = 0;
             if (!pokemon->isDarkPokemon())
                 continue;
-            shadow = pokemonGetDarkPokemonPtr(pokemon);
+            shadow = pokemon->getDarkPokemon();
             if (shadow == 0)
                 continue;
             waza = (u16)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_WAZA_ID, (u8)i);
@@ -1816,7 +1816,7 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
     s32 result;
 
     item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_HEAD, MENU_POKEMON_STATUS_ITEM_MODEL);
-    menuModelInit(&_menuModel, item->mOffsetB, item->mOffsetC);
+    menuModelInit(&_menuModel, item->mWidth, item->mHeight);
     menuModelFree(&_menuModel);
     menuModelLoadPokemon(&_menuModel, pokemon);
 
@@ -1896,7 +1896,7 @@ long _menuPokemonStatusOpen(u8 type, FIGHT_TRAINER *trainer, Pokemon *pokemon, u
         _menuStatus.mWazaNew[i] = 0;
         if (!pokemon->isDarkPokemon())
             continue;
-        dark = pokemonGetDarkPokemonPtr(pokemon);
+        dark = pokemon->getDarkPokemon();
         if (dark == 0)
             continue;
         waza = (u16)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_WAZA_ID, (u8)i);

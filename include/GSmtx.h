@@ -21,11 +21,14 @@ struct GSmtx {
     const f32 (*sdk() const)[4] { return reinterpret_cast<const f32 (*)[4]>(&m00); }
 };
 
+extern const f32 mtxIdent[12];
+
 /* GS projection-matrix helpers. Both forward their arguments unchanged to the
  * matching C_MTX builder; they exist so GS code does not have to include the
  * SDK matrix header directly. */
 
 extern "C" {
+void GSmtx44Ortho(f32* matrix, f32 top, f32 bottom, f32 left, f32 right, f32 nearPlane, f32 farPlane);
 void GSmtxMakePerspective(f32 m[4][4], f32 fovY, f32 aspect, f32 n, f32 f);
 void GSmtxMakeOrtho(f32 m[4][4], f32 top, f32 bottom, f32 left, f32 right, f32 n, f32 f);
 }

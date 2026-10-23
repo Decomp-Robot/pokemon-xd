@@ -10,6 +10,7 @@ extern "C" u8 menuOffScreenSetPriority(s32 priority);
 #ifdef __cplusplus
 extern "C" {
 #endif
+u8 menuOffScreenFadeSync(s32 wait);
 s32 menuOffScreenSetDisp(s32 enable);
 void menuCreateOffScreen(float frames, float frames2);
 void menuReleaseOffScreen(float frames);

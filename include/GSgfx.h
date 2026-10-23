@@ -12,8 +12,10 @@ struct GSgfxVF {
 };
 
 struct GSgfxLight;
+enum GSgfxMatrixFlags { GS_MATRIX_INVERSE_TRANSPOSE_DIRTY = 1 };
+
 struct GSgfxMatrixStackEntry {
-    u8 reservedHeader[4];
+    u32 mFlags;
     GSmtx mMatrix;
     u8 reserved[0x30];
 };
@@ -34,8 +36,8 @@ enum GSgfxTunitKReg { GSGFX_KREG0, GSGFX_KREG1, GSGFX_KREG2, GSGFX_KREG3 };
 // Texel filter a layer loads its texture with (GStextureSetFilter): 0 keeps the
 // nearest texel, 2 blends the neighbours linearly.
 enum GStextureFilter { GS_TEXTURE_FILTER_NEAREST = 0, GS_TEXTURE_FILTER_LINEAR = 2 };
-enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR };
-enum GSgfxCunitSrc { GSGFX_CUNIT_REGISTER };
+enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR, GSGFX_CUNIT_COLOR_AND_ALPHA = 2 };
+enum GSgfxCunitSrc { GSGFX_CUNIT_REGISTER, GSGFX_CUNIT_VERTEX_COLOR = 1 };
 enum GSgfxLightType { GSGFX_LIGHT_DIRECTIONAL, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_POINT };
 enum GSgfxDiffuseFunc { GSGFX_DIFFUSE_NONE, GSGFX_DIFFUSE_SIGN, GSGFX_DIFFUSE_CLAMP };
 enum GSgfxTunitCArg {
@@ -64,7 +66,7 @@ struct GSgfxTunitOpState { u32 operation, bias, scale; u8 clamp; u8 reserved[3];
 
 enum GSgfxCullType { GSGFX_CULL_NONE = 0, GSGFX_CULL_BACK = 2 , GS_GFX_CULL_NONE = 0, GSGFX_CULL_FRONT = 1, GSGFX_CULL_ALL = 3 };
 enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0 , GS_GFX_CLIP_ENABLED = 0 };
-enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_LEQUAL = 3 , GS_GFX_Z_COMPARE_LEQUAL = 3 };
+enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_ALWAYS = 7, GSGFX_Z_COMPARE_LEQUAL = 3 , GS_GFX_Z_COMPARE_LEQUAL = 3 };
 enum GSgfxACmpFunc { GSGFX_A_COMPARE_ALWAYS = 7 , GS_GFX_A_COMPARE_ALWAYS = 7 };
 enum GSgfxAlphaOp { GSGFX_ALPHA_AND = 0 , GS_GFX_ALPHA_AND = 0 };
 enum GSgfxTunitOp { GSGFX_TUNIT_OP_ADD = 0 };
@@ -97,6 +99,7 @@ typedef union {
     f32 f32;
 } PPCWGPipe;
 
+#define GSgfxFifo (*(PPCWGPipe *)0xCC008000)
 #define GXWGFifo (*(volatile PPCWGPipe *)0xCC008000)
 
 // Texture the layers cache and the game sprites draw.
@@ -209,7 +212,10 @@ struct GSgfxDL {
     void Invalidate() { mFlags |= GS_DISPLAY_LIST_DIRTY; }
 };
 
-enum GSgfxLayerOffset { GS_LAYER_INSERT_AFTER = 2 };
+enum GSgfxProjectionType { GS_PROJECTION_PERSPECTIVE = 0, GS_PROJECTION_ORTHOGRAPHIC = 1 };
+enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_PROJECTION = 0x20 };
+
+enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2 };
 
 
 enum GSgfxTgenFunc { GS_GFX_TGEN_MTX3X4 = 0, GS_GFX_TGEN_MTX2X4 = 1 };
@@ -225,6 +231,7 @@ enum GSgfxLayerType { GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
 class GSgfxLayerConfig {
 public:
     static void Remove(GSgfxLayerID id);
+    static void Move(GSgfxLayerID from, GSgfxLayerID to, GSgfxLayerOffset offset);
     /* Registers a layer and hands back the id it was filed under, which the
      * callers pass straight on to GSgfxLayerFindByID. */
     static GSgfxLayerID Add(char *name, unsigned long pass0FifoSize, unsigned long pass1FifoSize,
@@ -282,6 +289,42 @@ enum GSgfxCachedStateConstants {
 // Graphics state and draw commands for one layer.
 class GSgfxLayer {
 public:
+    void SetClearFlags(bool color, bool alpha, bool depth);
+    void SetTextureCopy(GStexture* texture, bool flag, u8* image);
+    void orthographicProjection(const f32* matrix) {
+        mProjectionType = GS_PROJECTION_ORTHOGRAPHIC;
+        mProjectionParameters[0] = matrix[0];
+        mProjectionParameters[1] = matrix[3];
+        mProjectionParameters[2] = matrix[5];
+        mProjectionParameters[3] = matrix[7];
+        mProjectionParameters[4] = matrix[10];
+        mProjectionParameters[5] = matrix[11];
+    }
+    void projectionDepthRange(f32 nearDistance, f32 farDistance) {
+        mProjectionNear = nearDistance;
+        mProjectionFar = farDistance;
+        if (mFog != 0) {
+            if (mFogRangeAdj != 0) {
+                mPassState[0].mGpuFlags |= GSGFX_GPU_FOG_ADJ_TABLE;
+                mPassState[1].mGpuFlags |= GSGFX_GPU_FOG_ADJ_TABLE;
+            }
+            mPassState[0].mGpuFlags |= GSGFX_GPU_FOG;
+            mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+            mPassState[1].mGpuFlags |= GSGFX_GPU_FOG;
+            mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        }
+        mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_PROJECTION;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_PROJECTION;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    }
+    void texCoordGeneratorCount(u8 count) {
+        mTexGenCount = count;
+        mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    }
     void FlushState();
     void endSurface();
     void beginSurface(u16 count);
@@ -450,9 +493,9 @@ public:
 
     void tgenCount(u8 count) {
         mTexGenCount = count;
-        mPassState[0].mGeometryFlags |= 1;
+        mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
         mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
-        mPassState[1].mGeometryFlags |= 1;
+        mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
         mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
     }
     void channelCount(u8 count) {
@@ -584,7 +627,8 @@ public:
     u8 mTexCoordLineOffset0;
     u8 mTexCoordPointOffset0;
     u8 _0D46[0x0E];
-    u8 mProjection[0x1C]; // 0xD54: projection data.
+    GSgfxProjectionType mProjectionType; // 0xD54
+    f32 mProjectionParameters[6]; // 0xD58
     u16 mScissorX; // 0xD70
     u16 mScissorY; // 0xD72
     u16 mScissorWidth; // 0xD74
@@ -649,7 +693,10 @@ public:
     u8 mDepthCompareBeforeTexture; // 0x1672
     u8 _1673;
     u8 mDitherEnabled; // 0x1674
-    u8 _1675[0x16A6 - 0x1675];
+    u8 _1675[0x0F];
+    f32 mProjectionNear; // 0x1684
+    f32 mProjectionFar; // 0x1688
+    u8 _168C[0x1A];
     u8 mFogRangeAdj;       // 0x16A6: fog range adjustment is set up.
     u8 mFog;               // 0x16A7: the layer draws with fog.
     GSgfxPassState mPassState[2]; // 0x16A8: one state per render pass.

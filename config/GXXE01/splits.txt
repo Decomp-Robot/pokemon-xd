@@ -251,6 +251,36 @@ game/menuCB_Sub1.cpp:
 	.sbss       start:0x804EA9D0 end:0x804EA9D8
 	.sdata2     start:0x804EC718 end:0x804EC764
 
+game/menuPokemonChange.cpp:
+	.text       start:0x80098B44 end:0x8009D4E8
+	.ctors      start:0x802E9FA4 end:0x802E9FA8
+	.rodata     start:0x802EBA68 end:0x802EBA88
+	.data       start:0x803CD1C0 end:0x803CD268
+	.bss        start:0x8043A318 end:0x8043B070
+	.sdata      start:0x804E80A8 end:0x804E80B8
+	.sbss       start:0x804EAA10 end:0x804EAA18
+	.sdata2     start:0x804EC8E8 end:0x804EC938
+
+game/menuWorldMapMoveDemo.cpp:
+	.text       start:0x8009D4E8 end:0x8009D6B8
+	.data       start:0x803CD268 end:0x803CD2E0
+	.sbss       start:0x804EAA18 end:0x804EAA1C
+	.sdata2     start:0x804EC938 end:0x804EC940
+
+game/menuWorldMapModel.cpp:
+	.text       start:0x8009D6B8 end:0x8009E664
+	.rodata     start:0x802EBA88 end:0x802EBB20
+	.data       start:0x803CD2E0 end:0x803CD2EC
+	.sdata2     start:0x804EC940 end:0x804EC95C
+	.sbss2      start:0x804EFCF0 end:0x804EFCF4
+
+game/menuBattleDisk.cpp:
+	.text       start:0x8009E664 end:0x800A1494
+	.ctors      start:0x802E9FA8 end:0x802E9FAC
+	.data       start:0x803CD3D0 end:0x803CD504
+	.bss        start:0x8043B070 end:0x8043C928
+	.sdata2     start:0x804EC960 end:0x804EC994
+
 game/menuOrreColosseum.cpp:
 	.text       start:0x800A314C end:0x800A3150
 	.ctors      start:0x802E9FAC end:0x802E9FB0

@@ -27,6 +27,7 @@ struct tagSPRITE_WORK;
 #ifdef __cplusplus
 extern "C" {
 #endif
+s8 menuSubOpenYesNoField();
 
 u8 menuSubGetPokemonSexForFightDisp(struct Pokemon *pokemon);
 u8 menuSubGetPokemonSexForDisp(struct Pokemon *pokemon);

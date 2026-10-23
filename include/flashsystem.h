@@ -12,6 +12,7 @@ void FlashSystemSetNowFrameLabel(u32 flash, const char *label);
 void FlashSystemSetLoopFlag(u32 flash, s32 loop);
 u32 FlashSystemGetFrameFromLabel(u32 flash, const char *label);
 u32 FlashSystemGetNowFrame(u32 flash);
+u32 FlashSystemGetEndFrame(u32 flash);
 void FlashSystemPlayAndWait(u32 flash, const char *start, const char *end);
 u8 FlashSystemIsLastFrame(u32 flash);
 #ifdef __cplusplus

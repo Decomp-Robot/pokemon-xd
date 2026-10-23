@@ -36,7 +36,6 @@ static s16 _cursor_index[5];
 
 extern "C" {
 double acos(double value);
-void *windowGetCursorToItem(tagWINDOW_WORK *window);
 void GSthreadSwitch(void);
 void scriptLightSetDisp(unsigned long res, s32 on);
 
@@ -68,7 +67,7 @@ void _menuPdaWaitMotion(unsigned long res);
 void _menuPdaStopMotion(unsigned long res);
 void _menuPdaModelVisibility(unsigned long res, bool visible);
 void _menuPdaAddFunc(void);
-bool _menuPdaWaitMotion2(unsigned long res);
+u8 _menuPdaWaitMotion2(unsigned long res);
 s32 _menuPdaModelGetIndex(unsigned long res);
 void _menuPdaFree(void *buffer);
 s32 _SelectCursorSub(s8 select, GSvec2 *vertices);
@@ -1022,7 +1021,7 @@ extern "C" void menuPdaSetSubres(s32 res, s32 subres)
 extern "C" s32 menuPdaGetRes(void) { return _menuPdaStatus.mRes; }
 extern "C" s32 menuPdaGetSubres(void) { return _menuPdaStatus.mSubmenuFlag; }
 
-bool _menuPdaWaitMotion2(unsigned long res)
+u8 _menuPdaWaitMotion2(unsigned long res)
 {
     _GSmodel *model = (_GSmodel *)GSresGetResourceAllGroup(res);
     if (model == 0) return false;

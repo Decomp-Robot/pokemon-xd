@@ -10,6 +10,7 @@ enum darkPokemonStatus {
     DARK_POKEMON_SNATCHED = 3,
     DARK_POKEMON_STATUS_RELIVED = 4
 };
+enum darkPokemonWhere { DARK_POKEMON_EXCHANGED = 5 };
 class DarkPokemon {
 public:
     u16 getPokemonID() const;
@@ -18,6 +19,7 @@ public:
     void setWazaNew(u8 index, bool value);
     darkPokemonStatus getStatus() const;
     void setStatus(darkPokemonStatus status);
+    void setPlace(darkPokemonWhere place, unsigned char slot);
     void setUpdate(bool update);
 private:
     u8 reserved[0x48];

@@ -112,6 +112,7 @@ struct tagWINDOW_KEY {
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct MENU_ITEM_dd_* windowGetCursorToItem(tagWINDOW_WORK* window);
 void winSpriteDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 
 // Key state of the window the debug menus read directly (menu.a window.o).
@@ -123,6 +124,7 @@ GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 void winSpriteSetDisp(tagSPRITE_WORK* sprite, bool visible);
 #endif
 
+void spriteClearScissor(s32 layer);
 void spriteSetOffset(s32 layer, s16 x, s16 y);
 void spriteSetEnv(s32 layer);
 void winSeqSetMenu(long menuID, s32 seq);

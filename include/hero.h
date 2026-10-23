@@ -50,8 +50,11 @@ extern "C" u32 heroGetFollower(void);
 class Hero {
 public:
     Hero() {}
+    static Hero* getHeroPtr();
     u8 getFollowerID();
     u8 getHeroStyle() const;
+    Pokemon* getPokemon(long slot);
+    const Pokemon* getPokemon(long slot) const;
     void itemSort(u8 kind); // sorts the item list of one pocket.
 
 private:
@@ -78,6 +81,7 @@ enum HeroStatusID {
     HERO_STATUS_HIZUKI_NAME = 23
 };
 
+unsigned long heroGetPokeomCount(Hero* hero);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
 void heroSetStatus(Hero* hero, u16 statusID, u32 value);
 u16* heroBiosGetNamePtr(Hero* hero);

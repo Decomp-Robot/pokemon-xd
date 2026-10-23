@@ -7,6 +7,7 @@
 #include <GStexture.h>
 #include <GSfsys.h>
 #include <GSlight.h>
+#include <scene.h>
 #include <floorPostCall.h>
 #include <floor.h>
 #include <ant.h>
@@ -23,13 +24,6 @@
 // The pending-callback manager of the floor subsystem.
 extern FloorPostCallManager _postFuncManager;
 
-// Scene description the public data of a stage archive carries, with the
-// table of the lights of the stage at 0x08.
-struct _HSD_SceneDesc {
-    u8 sceneHeader[0x08];
-    void **lights; // table of light pointers, the list ending in a null pointer
-};
-
 // Camera and ant helpers of the stage modules the reader hands resources to;
 // both are C++ functions of the game.
 void _registerCamera(unsigned long group, unsigned long res, _HSD_SceneDesc *scene);
@@ -41,9 +35,6 @@ extern "C" {
 extern "C" void floorAddResource(u32 group, u32 res);
 
 
-// Public data of an archive of a stage; the scene description it starts with
-// lists the lights of the stage.
-extern "C" void *HSD_ArchiveGetPublicAddress(void *archive, const char *symbol);
 // Name the public data of a stage archive carries its scene description under;
 // the camera and the light registration both look their part up in it.
 extern char floorSceneDataName[];
@@ -167,9 +158,9 @@ extern "C" void *floorRegisterLight(u32 group, u32 res)
     if (scene == 0) {
         return 0;
     }
-    if (scene->lights != 0) {
+    if (scene->mLights != 0) {
         baseRes = floorReadMakeLightResID(res);
-        while ((light = scene->lights[index]) != 0) {
+        while ((light = scene->mLights[index]) != 0) {
             void *loaded = GSlightLoad(light);
 
             if (loaded != 0) {

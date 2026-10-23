@@ -1457,7 +1457,7 @@ void loadModel(long dataID, MENU_MODEL *model, int type, int param)
         break;
     }
     item = menuItemBiosGetPtr(dataID, menuID);
-    menuModelInit(model, item->mOffsetB, item->mOffsetC);
+    menuModelInit(model, item->mWidth, item->mHeight);
     switch (type) {
     case NAME_ENTRY_MODE_KEN:
     case NAME_ENTRY_MODE_HIZUKI: {

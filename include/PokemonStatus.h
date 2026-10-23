@@ -1,0 +1,24 @@
+#ifndef POKEMON_STATUS_H
+#define POKEMON_STATUS_H
+
+#include <types.h>
+
+class Pokemon;
+
+enum PokemonStatusSelector {
+    POKEMON_STATUS_NICKNAME = 0x77,
+    POKEMON_STATUS_CURRENT_HP = 0x83,
+    POKEMON_STATUS_LEVEL = 0x7A,
+    POKEMON_STATUS_MOVE_ID = 0x7F,
+    POKEMON_STATUS_PHYSICAL_ATTACK = 0x88,
+    POKEMON_STATUS_PHYSICAL_DEFENSE = 0x89,
+    POKEMON_STATUS_SPECIAL_ATTACK = 0x8A,
+    POKEMON_STATUS_SPECIAL_DEFENSE = 0x8B,
+    POKEMON_STATUS_SPEED = 0x8C
+};
+
+extern "C" {
+u16 pokemonGetSoubiItemDataId(Pokemon* pokemon);
+}
+
+#endif

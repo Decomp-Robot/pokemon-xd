@@ -13,6 +13,11 @@ struct tagSPRITE_WORK;
 extern "C" {
 #endif
 
+void menuSetPosition(s32 menuID, s32 x, s32 y);
+void menuCursorNormal(struct tagWINDOW_WORK* window, u8 move);
+void menuPlaySe(s32 menuID, s32 soundID);
+u8 menuSetEnablePort(s32 portMask);
+s32 menuGetLastError(void);
 s32 menuGetCursor(s32 menuID);
 s32 menuGetCursorItemID(s32 menuID);
 void menuButtonNormal(struct tagWINDOW_WORK *window);
@@ -23,7 +28,11 @@ u8 menuDataBiosGetDispMax(s32 id);
 void menuFaceDispSub(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite, u16 faceID);
 
 void windowCloseMain(struct tagWINDOW_WORK *window);
-void menuSetDisp(s32 menuID, s32 visible);
+#ifdef __cplusplus
+void menuSetDisp(s32 menuID, bool visible);
+#else
+void menuSetDisp(s32 menuID, u8 visible);
+#endif
 u16 windowGetKeyOn(void);
 void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, u32 color,
                        struct tagWINDOW_WORK *window, u16 spriteID, s32 flags,

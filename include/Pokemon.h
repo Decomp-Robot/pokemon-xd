@@ -6,6 +6,7 @@
 
 // Pokemon -- party/battle pokemon record.
 typedef struct Pokemon Pokemon;
+typedef struct PokemonData PokemonData;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
     u16 mItemDataId; // 0x02: held item data ID.
@@ -17,6 +18,12 @@ struct Pokemon {
     bool checkValid() const;
     void setDarkPoint(float point);
     u16 getPokemonDataId() const;
+    u16 getHp() const;
+    u8 getLevel() const;
+    u16* getNicknamePtr();
+    const DarkPokemon* getDarkPokemon() const;
+    DarkPokemon* getDarkPokemon();
+    PokemonData* getPokemonDataPtr() const;
     u16 getItemDataId() const;
     u8 isDarkPokemon() const;
     unsigned long getCatchTrainerRnd() const;
@@ -142,7 +149,6 @@ s32 pokemonGetStatus(void *record, u16 speciesId, u16 field, u16 elementIndex);
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
-DarkPokemon *pokemonGetDarkPokemonPtr(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);
 u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u32 joutaiID);

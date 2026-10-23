@@ -1,3 +1,4 @@
+#include <fight.h>
 #include <GSmsg.h>
 #include <GSfsys.h>
 #include <GSres.h>
@@ -1031,8 +1032,8 @@ void menuCB_RuleItemFlagDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         last = 0x3E;
 
     spriteSetScissor(layer, itemTop->mMessageX - itemRow->mMessageX,
-                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mOffsetB,
-                     itemRow->mOffsetC);
+                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mWidth,
+                     itemRow->mHeight);
 
     for (i = first; i <= last; i++, y += 0x18) {
         if (i == 0x3E) {
@@ -1073,8 +1074,8 @@ void menuCB_RuleItemNameEntry(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         last = 0x3E;
 
     spriteSetScissor(layer, itemTop->mMessageX - itemRow->mMessageX,
-                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mOffsetB,
-                     itemRow->mOffsetC);
+                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mWidth,
+                     itemRow->mHeight);
 
     for (s32 i = first; i <= last; i++, y += 0x18) {
         itemID = menuCBRule_RegulationItemID(i);
@@ -1288,8 +1289,6 @@ void menuCBGCEntryTitleDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 
    group held before, reads the requested one in when it is not in memory yet
    and returns 1 when it had to, 0 when it was already there; fightFreeResource
    releases one member. */
-u8 fightReadResource(u32 group, u32 addr);
-void fightFreeResource(u32 group, u32 addr);
 
 /* The condition checks of the entry module: the party-wide trainer regulation,
    the conditions a held item gives one slot, and the rebuild of every slot of

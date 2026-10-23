@@ -382,7 +382,7 @@ extern "C" u8 GSmodelHasAnimationEnded(_GSmodel *model)
     return (model->mFlags & MODEL_FLAG_ANIM_ENDED) != 0;
 }
 
-extern "C" bool GSmodelIsAnimating(_GSmodel *model)
+extern "C" u8 GSmodelIsAnimating(_GSmodel *model)
 {
     return (model->mFlags & MODEL_FLAG_ANIM_RUNNING) != 0;
 }

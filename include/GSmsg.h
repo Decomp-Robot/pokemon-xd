@@ -4,6 +4,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+unsigned long GSmsgGetCharLength(const u16* text);
+
 s32 GSmsgIsCheck(u32 messageID);
 void GSmsgKill(u32 messageID);
 s32 GSmsgExec(u32 messageID, s32 arg1, s32 arg2);
@@ -20,7 +22,7 @@ u16 *GSmsgGetStringPtr(u32 messageID);
 s32 GSmsgGetLength(u32 messageID);
 u32 GSmsgGetMessageSize(s32 messageID);
 s32 GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 width, s32 height, u32 color, u32 messageID);
-s32 GSmsgPrintRect(s32 layer, s32 x, s32 y, s16 width, s16 height, u32 color, s32 msgID);
+s32 GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 width, s16 height, u32 color, s32 msgID);
 
 u16 *GSmsgMakeGScharStr(u16 *message, s32 capacity, u32 messageID);
 #ifdef __cplusplus

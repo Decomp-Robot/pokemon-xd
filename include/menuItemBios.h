@@ -13,8 +13,8 @@ struct MENU_ITEM_dd_ {
     s16 mSpriteID;
     s16 mMessageX; // 0x06: x origin the row's centered message is placed from.
     s16 mOffsetA;  // 0x08: row offset, a y offset for the item cursor.
-    s16 mOffsetB;  // 0x0A: row offset, the x position of the row values.
-    s16 mOffsetC;  // 0x0C: row offset measured for the menu columns.
+    s16 mWidth;   // 0x0A: row width.
+    s16 mHeight;  // 0x0C: row height.
     u8 _0E[0x0A];  // 0x0E-0x17: unknown here.
     s16 mNextID;   // 0x18: next row of the chain, read while bit6 is clear.
     u8 _1A[0x02];  // 0x1A-0x1B: unknown here.
@@ -30,7 +30,11 @@ extern "C" {
 tagMENU_ITEM_DATA *menuItemBiosGetPtr(long dataID, long itemID);
 // Select state of `itemID` the PDA frame menus toggle.
 u8 menuItemBiosGetSelectFlag(s32 dataID, s32 itemID);
-void menuItemBiosSetSelectFlag(s32 dataID, s32 itemID, s32 flag);
+#ifdef __cplusplus
+void menuItemBiosSetSelectFlag(s32 dataID, s32 itemID, bool flag);
+#else
+void menuItemBiosSetSelectFlag(s32 dataID, s32 itemID, u8 flag);
+#endif
 void menuItemSetPosition(s32 menuId, s16 itemId, s16 x, s16 y);
 
 #ifdef __cplusplus

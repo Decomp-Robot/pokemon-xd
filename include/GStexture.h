@@ -2,12 +2,14 @@
 #define GSTEXTURE_H
 #include <types.h>
 struct GStexture;
+enum GStextureFormat { GS_TEXTURE_FORMAT_32BIT = 0x45 };
 enum GStextureWrapMode { GS_TEXTURE_WRAP_CLAMP = 0 };
 enum GStextureMipFilterMode { GS_TEXTURE_MIP_FILTER_NONE = 0 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct GStexture* GStextureCreate(long width, long height, long format, long flags, long extra);
 struct GStexture *GStextureLoad(void *data);
 void GStextureFree(struct GStexture *texture);
 void GStextureSetWrap(struct GStexture *texture, s32 wrapU, s32 wrapV);

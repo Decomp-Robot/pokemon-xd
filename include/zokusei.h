@@ -9,6 +9,7 @@ struct PokemonData;
 extern "C" {
 #endif
 u32 zokuseiGetPokemonSpriteID(struct PokemonData *data, u16 index);
+u16 zokuseiBiosGetSpriteID(u16 moveID);
 u32 zokuseiBiosGetSmallSpriteID(u16 dataID);
 u32 zokuseiBiosGetName(u16 dataID);
 extern u32 *zokusei_data_number;

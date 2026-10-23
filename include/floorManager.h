@@ -8,6 +8,7 @@ u32 floorGetCurrent(void);
 u32 GSfloorGetCurrent(void);
 u32 GSfloorGetCurrentFloorGroupID(void);
 u8 GSfloorIsPop(void);
+u8 GSfloorIsFloorPushed(void);
 void GSfloorPush(u32 floorID);
 void GSfloorChange(u32 floorID);
 void floorWaitForChange(void);

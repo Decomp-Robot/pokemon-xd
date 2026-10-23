@@ -12,6 +12,7 @@ enum {
 #ifdef __cplusplus
 extern "C" {
 #endif
+u8 cameraWaitSyncAnime(u8 wait);
 
 u8 cameraSetType(u8 type);
 void cameraPlayAnime(u32 groupID, u32 resourceID, f32 frame, u8 loop);

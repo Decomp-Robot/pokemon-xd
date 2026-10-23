@@ -7,6 +7,8 @@ struct tagSPRITE_WORK;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void winMsgOpenWithSE(int kind, u32 message, int mode, int wait, u32 sound);
+
 s32 winMsgDraw(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 void winMsgOpen(s32 mode, u32 messageID, s32 windowID, s32 wait);
 void winMsgClose(s32 wait);

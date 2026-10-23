@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void GSthreadUnblockGroup(unsigned long group);
 
 typedef void (*GSthreadEntry)(void);
 

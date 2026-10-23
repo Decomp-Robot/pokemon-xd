@@ -6,6 +6,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void floorMapSetDisp(long on);
+u32 floorReadMakeModelResID(u32 resource);
+u32 floorReadMakeLightResID(u32 resource);
+void floorSetLightInfo(u32 resource, long count);
+
 GSgfxLayerID floorGetMenuLayerID(void);
 s32 floorGetNextFloorID();
 s32 floorGetPrevFloorID();

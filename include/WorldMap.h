@@ -9,7 +9,7 @@
 #include <winSprite.h>
 
 struct _GSparticleGen;
-struct WorldMapArchiveHeader;
+struct _HSD_SceneDesc;
 
 class glowEffect;
 
@@ -172,24 +172,39 @@ public:
     void StopMotion(unsigned long model);
     void renderOffscreenData(f32 param);
     void initializeOffscreenData();
-    WorldMapArchiveHeader* SetModel(unsigned long model, unsigned long resource, bool visible);
+    _HSD_SceneDesc* SetModel(unsigned long model, unsigned long resource, bool visible);
     void UnloadModel(unsigned long model, unsigned long resource);
     void Visibility(unsigned long model, bool visible);
     void ObjectVisibility(unsigned long model, bool visible);
-    void ModelDetach(unsigned long model);
-    void ModelAttach(unsigned long model, unsigned long part, long mode, GSattachMode attachMode);
+    bool ModelDetach(unsigned long model);
+    bool ModelAttach(unsigned long model, unsigned long part, long mode, GSattachMode attachMode);
     _GSparticleGen* SetModelPartPaticle(unsigned long model, unsigned long particleResource, long part, GSattachMode attachMode, bool oneShot, bool resetTransform, bool linkChildren);
     void DetachModelPartPaticle(_GSparticleGen* generator, bool keepLink);
     _GSmodel* GetModelPtr(unsigned long modelID);
-    void SetMotion(unsigned long motion, short startFrame, f32 rate, bool loop);
-    void SetLayerID(unsigned long model, long part, GSgfxLayerID* layer);
+    void SetMotion(unsigned long motion, short startFrame, f32 startTime, bool loop);
+    void SetLayerID(unsigned long model, long, GSgfxLayerID* layer);
     f32 GetAnimeFrameCount(unsigned long motion, unsigned long a);
     f32 GetAnimeFrame(unsigned long motion);
 
 protected:
 
-    u32 mOffscreenTexture;
+    _HSD_SceneDesc* makeArchiveHeader(unsigned long resource);
+    GStexture* mOffscreenTexture;
 };
+
+struct WorldMapMoveDemoAnime {
+    s16 animationIndex;
+    u16 _02;
+    u32 cameraResourceId;
+};
+
+class WorldMapMoveDemo : public WorldMapModel {
+public:
+    WorldMapMoveDemo() {}
+    ~WorldMapMoveDemo() {}
+    void Main();
+};
+
 
 class WorldMap : public WorldMapModel {
 public:

@@ -9,7 +9,11 @@ typedef struct PokemonTokuseiData PokemonTokuseiData;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void pokemonBiosSetFriend(Pokemon* pokemon, unsigned short level);
+void pokemonBiosCopy(Pokemon* dst, Pokemon* src);
+
 u16 pokemonBiosGetInitDp(Pokemon *pokemon);
+u8 pokemon_GetFuseiFlag(Pokemon *pokemon);
 u16 pokemonBiosGetFightTrainerPokemonDataId(Pokemon *pokemon);
 u8 pokemonBiosGetPokerus(Pokemon *pokemon);
 u8 pokemonBiosGetMailId(Pokemon *pokemon);

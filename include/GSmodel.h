@@ -130,6 +130,9 @@ typedef void (*GSmodelParseCb)(_HSD_PObj *, GSmtx *, GSmtx *, GSmtx *, void *);
 
 #ifdef __cplusplus
 extern "C" {
+_GSmodel* GSmodelLoad(_HSD_SceneModelSet* modelSet, u32 flags);
+void GSmodelFree(_GSmodel* model);
+void GSmodelAttachToGSpart(_GSmodel* model, GSpart* part, GSattachMode mode, u8 inheritScale, u8 keepTransform);
 #endif
 GSbound *GSmodelGetBound(_GSmodel *model);
 void GSmodelForceAnimTransformUpdate(_GSmodel *model);
@@ -176,7 +179,7 @@ void GSmodelSetBlendAnimFrameForce(_GSmodel *model, f32 fromFrame, f32 toFrame);
 void GSmodelAllUnpauseAnimation(void);
 void GSmodelAllPauseAnimation(void);
 u8 GSmodelHasAnimationEnded(_GSmodel *model);
-bool GSmodelIsAnimating(_GSmodel *model);
+u8 GSmodelIsAnimating(_GSmodel *model);
 void GSmodelStopAnimation(_GSmodel *model);
 void GSmodelSetAnimType(_GSmodel *model, s32 type);
 void GSmodelSetDontResetPartAnimFlag(_GSmodel *model, u8 enabled);

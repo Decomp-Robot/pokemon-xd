@@ -53,7 +53,6 @@ struct WorldMapUnlockData { WorldMapUnlockEntry mEntries[69]; };
 extern WorldMapUnlockData* worldMapScooterUnlockData;
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
-extern "C" void menuCursorNormal(tagWINDOW_WORK* window, long a);
 extern "C" void menuScriptSetOpenWorldMapFlag(long a);
 extern "C" u8 menuScriptGetOpenWorldMapFlag();
 extern "C" void heroMovePoolCounter(long a, long b);

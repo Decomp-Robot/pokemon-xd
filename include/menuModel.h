@@ -25,7 +25,7 @@ struct MENU_MODEL {
 extern "C" {
 void menuModelInit(MENU_MODEL *model, int modelKind, int cameraKind);
 void menuModelFree(MENU_MODEL *model);
-void menuModelSetSize(MENU_MODEL *model, s16 x0, s16 y0, s16 x1, s16 y1);
+s32 menuModelSetSize(MENU_MODEL *model, s32 x, s32 y, s32 width, s32 height);
 void menuModelSetAngle(MENU_MODEL *model, const f32 *angle);
 void menuModelAdjustCamera(MENU_MODEL *model);
 u8 menuModelCheck(MENU_MODEL *model, u8 wait);
