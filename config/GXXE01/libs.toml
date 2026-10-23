@@ -13,8 +13,8 @@ name = "decomp/dbgMenuFightSetMsgSpeed.c"
 completed = true
 
 [[lib.object]]
-name = "decomp/dbgMenuGetGsinputMsgId.c"
-completed = false
+name = "game/dbgMenuFight.c"
+completed = true
 
 [[lib.object]]
 name = "decomp/pokemonindex.cpp"
