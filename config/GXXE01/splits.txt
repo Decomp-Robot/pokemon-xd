@@ -212,6 +212,18 @@ game/menuCBBattleStart.cpp:
 	.ctors      start:0x802E9F98 end:0x802E9F9C
 	.rodata     start:0x802EAAD8 end:0x802EABF8
 
+game/menuCBBiosTrainer.cpp:
+	.text       start:0x800477F8 end:0x80047E30
+
+game/LooseBallAnims.cpp:
+	.text       start:0x80047E30 end:0x80047E44
+
+game/menuCBBiosRule.cpp:
+	.text       start:0x80047E44 end:0x80048420
+
+game/menuCBBiosRuleMsg.cpp:
+	.text       start:0x80048420 end:0x800484B4
+
 game/menuOrre.cpp:
 	.text       start:0x800A314C end:0x800A3150
 	.ctors      start:0x802E9FAC end:0x802E9FB0

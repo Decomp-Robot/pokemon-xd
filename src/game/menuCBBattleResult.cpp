@@ -1,3 +1,4 @@
+#include <menuCBBios.h>
 #include <types.h>
 
 /*
@@ -11,28 +12,6 @@
  * calls are C functions; the helpers the screen code keeps to itself are C++
  * (which is why their linkage names are mangled).
  */
-
-/* -------------------------------------------------------------------------
- * Work areas
- * ---------------------------------------------------------------------- */
-
-/*
- * Work area for the link battles, shared with the menus that are still
- * undecoded: its address is the base for the constant-offset accesses all
- * over the link-battle menu code, so only the slots the result screen touches
- * are named and the rest is left as padding. (The trainer records the battle code
- * walks live at the start of the area: +0x18, 0x1320 bytes each.)
- */
-typedef struct MenuCBTaisenWork {
-    /* 0x0000 */ u8 unk_0000[0x8];
-    /* 0x0008 */ s32 battleMode;
-    /* 0x000C */ u8 unk_000C[0xAFE0 - 0x0C];
-    /* 0xAFE0 */ s32 selectResult;
-    /* 0xAFE4 */ u8 unk_AFE4[0x7C];
-    /* 0xB060 */ s32 unk_B060;
-} MenuCBTaisenWork;
-
-extern MenuCBTaisenWork lbl_804299F8;
 
 /* Selection lists handed to menuSubOpenSelect*: the message IDs of the
    choices, one list per number of players. */

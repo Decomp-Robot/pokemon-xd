@@ -10,10 +10,9 @@
 // _AGB_ExchangeStart, _InitialExchange, _AGB_EntryGetStatus, ...) pass their
 // long channel straight through and test the result against the 0x40000
 // controller-type word (subis/cmplwi), hence the long parameter and u32
-// result. Groups with the other menuCBBios helpers
-// (menuCBBios_ControlerIDtoPortID, menuCBBios_CopyTrainer,
-// menuCBBios_InitTrainer, ...), which will join this module as they are
-// recovered.
+// result. The other menuCBBios helpers (menuCBBios_ControlerIDtoPortID,
+// menuCBBios_CopyTrainer, menuCBBios_InitTrainer, ...) live in the battle
+// bios module, game/menuCBBiosTrainer.cpp.
 extern u32 _SIProbe_Result[4];
 
 u32 menuCBBios_PortIDtoControlerID(long portID)

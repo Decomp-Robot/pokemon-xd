@@ -705,6 +705,134 @@ cflags = [
     "-lang=c++",
 ]
 
+# Battle bios of the link battles (trainer records, hero snapshots, rule
+# data). Same module family and settings as the two battle screens.
+# TU-scope experiments: with -inline auto, menuCBBios_ClearTrainer collapses
+# 15 -> 9 insns (Pokemon::getItemDataId inlines away; the bl at 0x80047B00 is
+# frozen) and one of menuCBBios_CurrentRule's three GetRuleId calls
+# disappears, so -inline noauto. With the peephole pass on,
+# menuCBBios_InitVersusTrainer loses its pre-switch li (79 -> 76 insns) and
+# seven more functions change form, so -opt nopeephole. LooseBallAnims.cpp
+# (a 5-insn accessor) is byte-identical under -inline auto without
+# nopeephole and carries the family settings for its module.
+[[lib.object]]
+name = "game/menuCBBiosTrainer.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+# Loose-ball desperation accessor: a C++ class static member.
+[[lib.object]]
+name = "game/LooseBallAnims.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+
+[[lib.object]]
+name = "game/menuCBBiosRule.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/menuCBBiosRuleMsg.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
 [[lib.object]]
 name = "game/menuOrre.cpp"
 completed = true
