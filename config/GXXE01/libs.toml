@@ -46,7 +46,6 @@ completed = false
 name = "ext/dolphin_sdk/os/OSAudioSystem.c"
 completed = false
 
-
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSCache.c"
 completed = false
@@ -135,7 +134,6 @@ completed = false
 name = "ext/dolphin_sdk/os/__start.c"
 completed = false
 
-
 [[lib]]
 name = "db"
 mw_version = "GC/2.6"
@@ -171,4 +169,15 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 
 [[lib.object]]
 name = "ext/dolphin_sdk/hio/hio.c"
+completed = false
+
+[[lib]]
+name = "sp"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/sp/sp.c"
 completed = false
