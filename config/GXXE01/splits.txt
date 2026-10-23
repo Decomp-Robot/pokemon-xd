@@ -1505,5 +1505,8 @@ ext/musyx_sdk/runtime/StdReverb/reverb.c:
 ext/musyx_sdk/runtime/Chorus/chorus_fx.c:
 	.text       start:0x80183140 end:0x80183140
 
+ext/musyx_sdk/runtime/Delay/delay_fx.c:
+	.text       start:0x80183140 end:0x80183140
+
 src/init.c:
 	.init       start:0x80003400 end:0x80005544

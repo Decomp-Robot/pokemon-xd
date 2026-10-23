@@ -1278,3 +1278,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/Chorus/chorus_fx.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/Delay/delay_fx.c"
+completed = true
