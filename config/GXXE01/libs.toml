@@ -764,3 +764,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXAlloc.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/ax/AXAux.c"
+completed = true
