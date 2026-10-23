@@ -2,6 +2,32 @@
 
 extern PocketVec<short> sDummyPosition;
 
+// MSL memory routine used to copy the pokemon record.
+extern "C" void *memcpy(void *dest, const void *src, unsigned long count);
+
+// setBeforAnt -- keep the model state that is about to be replaced so the
+// cursor can restore it afterwards.
+void CMenuPokemonCursor::setBeforAnt(CAnt &ant)
+{
+    mBeforAnt = ant;
+}
+
+// setPokemon -- point the cursor at the given party pokemon, remembering the
+// current model first. A null pokemon clears both records instead.
+void CMenuPokemonCursor::setPokemon(Pokemon *pokemon)
+{
+    mBeforAnt = mAnt;
+
+    if (pokemon == 0) {
+        pokemonInit(&mPokemon);
+        mAnt.init();
+    } else {
+        memcpy(&mPokemon, pokemon, sizeof(Pokemon));
+        zz_battle_pokemon_get_poke_body(&mAnt, &mPokemon);
+        mAnt.setAnimation(0);
+    }
+}
+
 void CMenuPokemonCursor::setPositionTableDummy()
 {
     PocketVec<short> *dummy = &sDummyPosition;
