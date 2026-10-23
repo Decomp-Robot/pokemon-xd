@@ -1038,6 +1038,13 @@ ext/dolphin_sdk/gd/GDTexture.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+ext/musyx_sdk/runtime/snd_math.c:
+	.text       start:0x8017D3D4 end:0x8017D480
+	.text       start:0x8017D480 end:0x8017D534
+	.text       start:0x8017D534 end:0x8017D598
+	.text       start:0x8017D598 end:0x8017D794
+	.sdata2     start:0x804EDE90 end:0x804EDEAC
+
 ext/dolphin_sdk/axfx/reverb_hi.c:
 	.text       start:0x801822B0 end:0x801827BC
 	.text       start:0x801827BC end:0x801829D0
