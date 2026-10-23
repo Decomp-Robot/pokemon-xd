@@ -881,3 +881,14 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/mix/mix.c"
 completed = true
+
+[[lib]]
+name = "syn"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/syn", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/syn/syn.c"
+completed = true

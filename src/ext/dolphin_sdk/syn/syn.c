@@ -13,6 +13,7 @@ SYNSYNTH* __SYNSynthList;
 static void __SYNAddSynthToList(SYNSYNTH* synth);
 static void __SYNRemoveSynthFromList(SYNSYNTH* synth);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNAddSynthToList(SYNSYNTH* synth) {
     BOOL old = OSDisableInterrupts();
 
@@ -25,6 +26,7 @@ static void __SYNAddSynthToList(SYNSYNTH* synth) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNRemoveSynthFromList(SYNSYNTH* synth) {
     SYNSYNTH* tempHead;
     SYNSYNTH* tempTail;
@@ -54,6 +56,7 @@ static void __SYNRemoveSynthFromList(SYNSYNTH* synth) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNInit(void) {
     int i;
 
@@ -63,10 +66,12 @@ void SYNInit(void) {
     __SYNSynthList = NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNQuit(void) {
     SYNInit();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNRunAudioFrame(void) {
     int i;
     SYNSYNTH* synth;
@@ -80,6 +85,7 @@ void SYNRunAudioFrame(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNInitSynth(SYNSYNTH* synth, void* wavetable, u32 aramBase, u32 zeroBase, u32 priorityVoiceAlloc, u32 priorityNoteOn, u32 priorityNoteRelease) {
     u32* p;
     u32 midiChannel;
@@ -126,6 +132,7 @@ void SYNInitSynth(SYNSYNTH* synth, void* wavetable, u32 aramBase, u32 zeroBase, 
     __SYNAddSynthToList(synth);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNQuitSynth(SYNSYNTH* synth) {
     int i;
     BOOL old;
@@ -147,6 +154,7 @@ void SYNQuitSynth(SYNSYNTH* synth) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNMidiInput(SYNSYNTH* synth, u8* input) {
     u8* src;
 
@@ -164,16 +172,19 @@ void SYNMidiInput(SYNSYNTH* synth, u8* input) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void SYNSetMasterVolume(SYNSYNTH* synth, s32 dB) {
     ASSERTLINE(267, synth);
     synth->masterVolume = (dB << 0x10);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 SYNGetMasterVolume(SYNSYNTH* synth) {
     ASSERTLINE(278, synth);
     return synth->masterVolume >> 0x10;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 SYNGetActiveNotes(SYNSYNTH* synth) {
     ASSERTLINE(289, synth);
     return synth->notes;
