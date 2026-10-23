@@ -17,6 +17,10 @@ name = "game/dbgMenuFight.c"
 completed = true
 
 [[lib.object]]
+name = "game/dbgMenuFlag.c"
+completed = true
+
+[[lib.object]]
 name = "decomp/pokemonindex.cpp"
 completed = true
 
