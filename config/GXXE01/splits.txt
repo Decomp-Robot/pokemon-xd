@@ -251,6 +251,28 @@ ext/dolphin_sdk/gx/GXLight.c:
 	.text       start:0x800CB15C end:0x800CB198
 	.text       start:0x800CB198 end:0x800CB248
 
+ext/dolphin_sdk/gx/GXTexture.c:
+	.text       start:0x800CB248 end:0x800CB3A4
+	.text       start:0x800CB3A4 end:0x800CB46C
+	.text       start:0x800CB46C end:0x800CB6B8
+	.text       start:0x800CB6B8 end:0x800CB700
+	.text       start:0x800CB700 end:0x800CB864
+	.text       start:0x800CB864 end:0x800CB880
+	.text       start:0x800CB880 end:0x800CB890
+	.text       start:0x800CB890 end:0x800CB8A8
+	.text       start:0x800CB8A8 end:0x800CBA24
+	.text       start:0x800CBA24 end:0x800CBA78
+	.text       start:0x800CBA78 end:0x800CBAB0
+	.text       start:0x800CBAB0 end:0x800CBB48
+	.text       start:0x800CBB48 end:0x800CBC3C
+	.text       start:0x800CBC3C end:0x800CBC74
+	.text       start:0x800CBC74 end:0x800CBCBC
+	.text       start:0x800CBCBC end:0x800CBCD0
+	.text       start:0x800CBCD0 end:0x800CBCE4
+	.text       start:0x800CBCE4 end:0x800CBD84
+	.text       start:0x800CBD84 end:0x800CBF00
+	.text       start:0x800CBF00 end:0x800CC254
+
 ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC254 end:0x800CC2C0
 	.text       start:0x800CC2C0 end:0x800CC404
