@@ -20,38 +20,92 @@ linker_version = "GC/2.6"
 # $VERSION and $VERSION_NUM are replaced at runtime
 
 # Assembler flags
-asflags = ["-mgekko", "--strip-local-absolute", "-I include", "-I build/$VERSION/include", "--defsym BUILD_VERSION=$VERSION_NUM"]
+asflags = [
+    "-mgekko",
+    "--strip-local-absolute",
+    "-I include",
+    "-I build/$VERSION/include",
+    "--defsym BUILD_VERSION=$VERSION_NUM",
+]
 
 # Base C flags (applied to all objects)
-cflags_base = ["-nodefaults", "-proc gekko", "-align powerpc", "-enum int", "-fp hardware", "-Cpp_exceptions off", "-O4,p", "-inline auto", "-pragma cats off", "-pragma warn_notinlined off", "-maxerrors 1", "-nosyspath", "-RTTI off", "-fp_contract on", "-str reuse", "-multibyte", "-i include", "-i build/$VERSION/include", "-DBUILD_VERSION=$VERSION_NUM", "-DVERSION_$VERSION"]
+cflags_base = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma cats off",
+    "-pragma warn_notinlined off",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+]
 
 # Debug flags (appended when --debug is used)
-cflags_debug = ["-sym on", "-DDEBUG=1"]
+cflags_debug = [
+    "-sym on",
+    "-DDEBUG=1",
+]
 
 # Release flags (appended when not --debug)
-cflags_release = ["-DNDEBUG=1"]
+cflags_release = [
+    "-DNDEBUG=1",
+]
 
 # Warning flags - set by --warn argument
-cflags_warn_all = ["-W all"]
+cflags_warn_all = [
+    "-W all",
+]
 
-cflags_warn_off = ["-W off"]
+cflags_warn_off = [
+    "-W off",
+]
 
-cflags_warn_error = ["-W error"]
+cflags_warn_error = [
+    "-W error",
+]
 
 # Runtime/library C flags (inherits cflags_base + cflags_runtime)
-cflags_runtime = ["-use_lmw_stmw on", "-str reuse,pool,readonly", "-gccinc", "-common off", "-inline auto"]
+cflags_runtime = [
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-gccinc",
+    "-common off",
+    "-inline auto",
+]
 
 # REL module C flags (inherits cflags_base + cflags_rel)
-cflags_rel = ["-sdata 0", "-sdata2 0"]
+cflags_rel = [
+    "-sdata 0",
+    "-sdata2 0",
+]
 
 # Linker flags
-ldflags = ["-fp hardware", "-nodefaults"]
+ldflags = [
+    "-fp hardware",
+    "-nodefaults",
+]
 
 # Linker debug flags (appended when --debug is used)
-ldflags_debug = ["-g"]
+ldflags_debug = [
+    "-g",
+]
 
 # Linker map flags (appended when --map is used)
-ldflags_map = ["-mapunused"]
+ldflags_map = [
+    "-mapunused",
+]
 
 # Progress categories
 [progress]
