@@ -74,6 +74,11 @@ ext/dolphin_sdk/os/OSMemory.c:
 ext/dolphin_sdk/os/OSMutex.c:
 	.text       start:0x800AF900 end:0x800AF970
 
+ext/dolphin_sdk/os/OSReboot.c:
+	.text       start:0x800AF970 end:0x800AF9E0
+	.text       start:0x800AF9E0 end:0x800AF9F4
+	.sbss       start:0x804EAB28 end:0x804EAB30
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
