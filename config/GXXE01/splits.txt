@@ -661,6 +661,9 @@ ext/dolphin_sdk/gx/GXPixel.c:
 	.text       start:0x800CD320 end:0x800CD358
 	.text       start:0x800CD358 end:0x800CD3D0
 
+ext/dolphin_sdk/gx/GXStubs.c:
+	.text       start:0x800CD3D0 end:0x800CD3D0
+
 ext/dolphin_sdk/gx/GXDraw.c:
 	.text       start:0x800CD3D0 end:0x800CD784
 	.text       start:0x800CD784 end:0x800CDE50
