@@ -1526,6 +1526,11 @@ game/GSlerp.cpp:
 	.text       start:0x800EFBE8 end:0x800EFCE8
 	.sdata2     start:0x804ED3B0 end:0x804ED3B8
 
+game/GSutil.cpp:
+	.text       start:0x800EFCE8 end:0x800EFDA0
+	.bss        start:0x80442E30 end:0x80443108
+	.sdata2     start:0x804ED3B8 end:0x804ED3C8
+
 game/GSmodel/effects.cpp:
 	.text       start:0x800EFFCC end:0x800F0EE0
 	.data       start:0x803D5028 end:0x803D5040
