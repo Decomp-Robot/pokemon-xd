@@ -103,7 +103,7 @@ game/WorldMapSdata2.s:
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
 
-decomp/menuWorldMap.cpp:
+game/WorldMapGetNowCursor.cpp:
 	.text       start:0x80010538 end:0x80010558
 
 game/WorldMap.cpp:

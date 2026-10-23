@@ -134,7 +134,7 @@ name = "game/memcardDebugSlots.c"
 completed = true
 
 [[lib.object]]
-name = "decomp/menuWorldMap.cpp"
+name = "game/WorldMapGetNowCursor.cpp"
 completed = true
 
 [[lib.object]]

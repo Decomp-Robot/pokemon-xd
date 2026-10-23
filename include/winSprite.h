@@ -11,7 +11,7 @@ typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 // Window work, partial. The sprite-work list head at 0x24 is walked by
 // menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
 // custom-menu argument at 0x68 is what the name-entry menus read back. The
-// remaining layout is unrecovered and stays sized padding here.
+// remaining fields are unused here and stay sized padding.
 struct tagWINDOW_WORK {
     u8 _00;                      // 0x00: unknown.
     s8 mState;                   // 0x01: menu sequence step the window is in.
