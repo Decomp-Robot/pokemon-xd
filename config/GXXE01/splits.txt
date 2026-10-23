@@ -323,8 +323,10 @@ ext/dolphin_sdk/card/CARDRead.c:
 	.text       start:0x800C50E0 end:0x800C5224
 	.text       start:0x800C5224 end:0x800C52B0
 
-ext/dolphin_sdk/card/CARDErase.c:
+ext/dolphin_sdk/card/CARDWrite.c:
 	.text       start:0x800C52B0 end:0x800C5420
+	.text       start:0x800C5420 end:0x800C54D0
+	.text       start:0x800C54D0 end:0x800C55E4
 
 ext/dolphin_sdk/card/CARDDelete.c:
 	.text       start:0x800C55E4 end:0x800C5688
