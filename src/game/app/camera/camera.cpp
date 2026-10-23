@@ -894,12 +894,12 @@ void cameraSetGScamera(GScamera* camera)
         GScameraGetDistanceVector(camera, &distance);
         pCamWork->flags = 0;
         setMode(CAMERA_FREE);
-        mainCamera->target.x = camera->target.x;
-        mainCamera->target.y = camera->target.y;
-        mainCamera->target.z = camera->target.z;
-        mainCamera->position.x = camera->position.x;
-        mainCamera->position.y = camera->position.y;
-        mainCamera->position.z = camera->position.z;
+        mainCamera->mInterest.x = camera->mInterest.x;
+        mainCamera->mInterest.y = camera->mInterest.y;
+        mainCamera->mInterest.z = camera->mInterest.z;
+        mainCamera->mPosition.x = camera->mPosition.x;
+        mainCamera->mPosition.y = camera->mPosition.y;
+        mainCamera->mPosition.z = camera->mPosition.z;
         f32 camHeight, camDistance, camFov, yaw;
         camFov = fov;
         yaw = (f32)atan2(distance.x, distance.z);

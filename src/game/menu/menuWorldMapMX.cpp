@@ -873,7 +873,7 @@ void WorldMap::CalcModel2D(f32 fieldOfView, bool flag)
 {
     WorldMapIconWork* icon;
     _GScamera* cam;
-    GSmtx* mtx;
+    MtxPtr mtx;
     GSmtx proj;
     GSmtx mvp;
     f32 xscale;

@@ -79,9 +79,9 @@ void modelDistortionRender(void)
     layer->cullMode(GS_GFX_CULL_NONE);
     layer->clipMode(GS_GFX_CLIP_ENABLED);
     layer->coplanar(false);
-    layer->mScissorX = 0;
-    layer->mScissorY = 0;
-    GSgfxVideoGetEFBSize(&layer->mScissorWidth, &layer->mScissorHeight);
+    layer->mProjectionState.mScissorLeft = 0;
+    layer->mProjectionState.mScissorTop = 0;
+    GSgfxVideoGetEFBSize(&layer->mProjectionState.mScissorWidth, &layer->mProjectionState.mScissorHeight);
     layer->mPassState[0].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;
     layer->mPassState[0].mFlags |= GS_GFX_DIRTY_RASTER;
     layer->mPassState[1].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;

@@ -38,6 +38,7 @@ void HSD_JObjAddAnimAll(HSD_JObj *joint, HSD_AnimJoint *animation,
                        HSD_ShapeAnimJoint *shapeAnimation);
 void HSD_JObjReqAnimAll(HSD_JObj *joint, f32 frame);
 void HSD_JObjAnimAll(HSD_JObj *joint);
+u32 HSD_AObjGetFlags(HSD_AObj *animation);
 void HSD_AObjSetFlags(HSD_AObj *animation, u32 flags);
 void HSD_AObjClearFlags(HSD_AObj *animation, u32 flags);
 void HSD_AObjSetRate(HSD_AObj *animation, f32 rate);

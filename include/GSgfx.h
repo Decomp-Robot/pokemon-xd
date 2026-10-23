@@ -4,6 +4,7 @@
 #include <GSmathTypes.h>
 #include <types.h>
 #include <GSgfxC.h>
+#include <libc/memory.h>
 #include <GSvec.h>
 #include <GStexture.h>
 
@@ -26,6 +27,18 @@ public:
     void pop(void);
     GSmtx *top(void);
     GSmtx *currentMatrix() { return &mCurrentEntry->mMatrix; }
+    void identity()
+    {
+        memcpy(&mCurrentEntry->mMatrix, mtxIdent, 0x30);
+        mCurrentEntry->mFlags |= GS_MATRIX_INVERSE_TRANSPOSE_DIRTY;
+    }
+    void mult(GSmtx *matrix)
+    {
+        PSMTXConcat((const f32 (*)[4])&mCurrentEntry->mMatrix,
+                    (const f32 (*)[4])matrix,
+                    (f32 (*)[4])&mCurrentEntry->mMatrix);
+        mCurrentEntry->mFlags |= GS_MATRIX_INVERSE_TRANSPOSE_DIRTY;
+    }
     u8 reservedHeader[4];
     GSgfxMatrixStackEntry *mCurrentEntry;
 };
@@ -213,6 +226,19 @@ struct GSgfxDL {
 };
 
 enum GSgfxProjectionType { GS_PROJECTION_PERSPECTIVE = 0, GS_PROJECTION_ORTHOGRAPHIC = 1 };
+
+struct GSgfxProjectionState {
+    GSgfxProjectionType mType;
+    f32 mParameters[6];
+    u16 mScissorLeft;
+    u16 mScissorTop;
+    u16 mScissorWidth;
+    u16 mScissorHeight;
+    f32 mViewportLeft;
+    f32 mViewportTop;
+    f32 mViewportCentreX;
+    f32 mViewportCentreY;
+};
 enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_PROJECTION = 0x20 };
 
 enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2 };
@@ -291,14 +317,24 @@ class GSgfxLayer {
 public:
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool flag, u8* image);
-    void orthographicProjection(const f32* matrix) {
-        mProjectionType = GS_PROJECTION_ORTHOGRAPHIC;
-        mProjectionParameters[0] = matrix[0];
-        mProjectionParameters[1] = matrix[3];
-        mProjectionParameters[2] = matrix[5];
-        mProjectionParameters[3] = matrix[7];
-        mProjectionParameters[4] = matrix[10];
-        mProjectionParameters[5] = matrix[11];
+    void perspectiveProjection(const f32 matrix[4][4])
+    {
+        mProjectionState.mType = GS_PROJECTION_PERSPECTIVE;
+        mProjectionState.mParameters[0] = matrix[0][0];
+        mProjectionState.mParameters[1] = matrix[0][2];
+        mProjectionState.mParameters[2] = matrix[1][1];
+        mProjectionState.mParameters[3] = matrix[1][2];
+        mProjectionState.mParameters[4] = matrix[2][2];
+        mProjectionState.mParameters[5] = matrix[2][3];
+    }
+    void orthographicProjection(const f32 matrix[4][4]) {
+        mProjectionState.mType = GS_PROJECTION_ORTHOGRAPHIC;
+        mProjectionState.mParameters[0] = matrix[0][0];
+        mProjectionState.mParameters[1] = matrix[0][3];
+        mProjectionState.mParameters[2] = matrix[1][1];
+        mProjectionState.mParameters[3] = matrix[1][3];
+        mProjectionState.mParameters[4] = matrix[2][2];
+        mProjectionState.mParameters[5] = matrix[2][3];
     }
     void projectionDepthRange(f32 nearDistance, f32 farDistance) {
         mProjectionNear = nearDistance;
@@ -627,13 +663,7 @@ public:
     u8 mTexCoordLineOffset0;
     u8 mTexCoordPointOffset0;
     u8 _0D46[0x0E];
-    GSgfxProjectionType mProjectionType; // 0xD54
-    f32 mProjectionParameters[6]; // 0xD58
-    u16 mScissorX; // 0xD70
-    u16 mScissorY; // 0xD72
-    u16 mScissorWidth; // 0xD74
-    u16 mScissorHeight; // 0xD76
-    u8 _0D78[0x10];
+    GSgfxProjectionState mProjectionState; // 0xD54
     u8 mCoplanarEnabled; // 0xD88
     u8 _0D89[3];
     u32 mCullMode;       // 0xD8C

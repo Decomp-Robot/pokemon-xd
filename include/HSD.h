@@ -10,6 +10,7 @@
 
 #include <hsd/jobj.h>
 #include <hsd/aobj.h>
+#include <HSDScene.h>
 
 extern "C" void QuatSlerp(const Quaternion *first, const Quaternion *second, Quaternion *out, f32 blend);
 

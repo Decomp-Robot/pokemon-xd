@@ -51,7 +51,7 @@ void WorldMapModel::renderOffscreenData(f32 alpha)
     spriteSetOffset(4, 0, 0);
     spriteClearScissor(4);
     spriteSetEnv(4);
-    f32 matrix[0x10];
+    f32 matrix[4][4];
     GSmtx44Ortho(matrix, 0.0f, 480.0f, 0.0f, 640.0f, 0.0f, -30000.0f);
     layer->orthographicProjection(matrix);
     GSgfxMatrixStack* stack = layer->mMatrixStack;

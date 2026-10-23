@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void __assert(const char *file, s32 line, const char *expression);
+void __assert(const char *file, int line, const char *expression);
 #ifdef __cplusplus
 }
 #endif
