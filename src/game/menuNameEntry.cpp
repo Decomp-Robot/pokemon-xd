@@ -80,7 +80,7 @@ extern "C" const unsigned long DefKenName[3] = { 0x3B20, 0x3B21, 0x3B22 };
 extern "C" const unsigned long DefHizukiName[3] = { 0x3B20, 0x3B21, 0x3B22 };
 
 // Per-mode title, character limit and default names.
-extern "C" const NameEntryModeData lbl_802EA910[7] = {
+extern "C" const NameEntryModeData nameEntryModeData[7] = {
     { 0x3B11, 7, DefKenName, 3 },
     { 0x3B11, 7, DefHizukiName, 3 },
     { 0x3B12, 10, 0, 0 },
@@ -91,7 +91,7 @@ extern "C" const NameEntryModeData lbl_802EA910[7] = {
 };
 
 // The two 50-on character tables.
-extern "C" const NameEntryTableData lbl_802EA980[2] = {
+extern "C" const NameEntryTableData nameEntry50onData[2] = {
     { 0x0B570200, 0x3B14, { 0x3AFD, 0x3AFE, 0x3AFF, 0x3B00, 0x3BF4, 0x3BF5, 0, 0 }, 0 },
     { 0x023C5700, 0x3B15, { 0x3B01, 0x3B02, 0x3B03, 0x3B04, 0x3BF6, 0x3BF7, 0, 0 }, 0 },
 };
@@ -104,17 +104,17 @@ extern "C" const unsigned long nameEntryModelIDs[4] = { 0x16C90400, 0x16C70400, 
 
 // Background balls.
 extern "C" {
-BALL_WORK lbl_80429270[30];
+BALL_WORK nameEntryBalls[30];
 
 // Model work the background renders.
-MENU_MODEL lbl_804296A8;
+MENU_MODEL nameEntryModel;
 
 // The name being edited.
-NAME_ENTRY_WORK lbl_80429794;
+NAME_ENTRY_WORK nameEntryWork;
 }
 
 // Kana tables the editor steps through; slot 0 is "none".
-extern "C" const unsigned long lbl_804EC110[2] = { 0, 0x3B1B };
+extern "C" const unsigned long nameEntryKanaTables[2] = { 0, 0x3B1B };
 
 // Position and size the background models are drawn with.
 struct ModelExtent {
@@ -127,18 +127,20 @@ extern "C" const ModelExtent cPokemonModelSize = { 300, 300 };
 extern "C" const ModelExtent cHumanModelPos = { 0, 80 };
 extern "C" const ModelExtent cHumanModelSize = { 520, 300 };
 
-// Editing fields shared with the window code.
+// Editing fields the screen shares with the window code through
+// NAME_ENTRY_ARG; inputName binds them to the arg pointers.
 extern "C" {
-s32 lbl_804EA7A0;
-s32 lbl_804EA7A4;
-s32 lbl_804EA7A8;
-f32 lbl_804EA7AC;
-s32 lbl_804EA7B0;
-s32 lbl_804EA7B4;
-s32 lbl_804EA7B8;
-s32 lbl_804EA7BC;
-s32 lbl_804EA7C0;
-s32 lbl_804EA7C4;
+s32 nameEntryTable;
+s32 nameEntryColumn;
+s32 nameEntryRow;
+f32 nameEntryTimer;
+s32 nameEntryCursor;
+// Purpose not recovered: only the window code (unrecovered) uses these five.
+s32 nameEntrySharedVal0;
+s32 nameEntrySharedVal1;
+s32 nameEntrySharedVal2;
+s32 nameEntrySharedVal3;
+s32 nameEntrySharedVal4;
 }
 
 // Draw the background cursor of the name-entry screen.
@@ -218,7 +220,7 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
 }
 
 // Mode and message display of the name-entry screen.
-int zz_0030544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
     Pokemon *pokemon;
@@ -312,30 +314,30 @@ int zz_0030544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Pick the name box style from the menu type.
-void zz_0030790_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+void menuNameEntryDrawNameBox(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 mode = window->mArg->mMode;
 
     if (mode == 6) {
-        zz_0030838_(window, sprite, 10, 6);
+        menuNameEntryDrawNameBoxCur(window, sprite, 10, 6);
     } else if (mode == 3) {
-        zz_0030838_(window, sprite, 8, 3);
+        menuNameEntryDrawNameBoxCur(window, sprite, 8, 3);
     } else if (mode == 2) {
-        zz_0030838_(window, sprite, 10, 2);
+        menuNameEntryDrawNameBoxCur(window, sprite, 10, 2);
     } else if (mode == 4) {
-        zz_0030838_(window, sprite, 10, 4);
+        menuNameEntryDrawNameBoxCur(window, sprite, 10, 4);
     } else if (mode == 5) {
-        zz_0030838_(window, sprite, 10, 5);
+        menuNameEntryDrawNameBoxCur(window, sprite, 10, 5);
     } else {
-        zz_0030838_(window, sprite, 7, 0);
+        menuNameEntryDrawNameBoxCur(window, sprite, 7, 0);
     }
 }
 
 // Cursor blink of the name box.
-int zz_0030838_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 count, s32 mode)
+int menuNameEntryDrawNameBoxCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 count, s32 mode)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
-    s32 limit = lbl_802EA910[arg->mMode].mMaxLength;
+    s32 limit = nameEntryModeData[arg->mMode].mMaxLength;
     s32 pos = *arg->mCursor;
     s32 n = 0;
     s32 show = 0;
@@ -421,8 +423,8 @@ int menuNameEntryDrawNameRuleText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     return menuNameEntryDrawNameText(window, sprite, 10, 6);
 }
 
-// Draw the name entry title text.
-int zz_0030a84_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the name text of the Ken name screen (mode 0).
+int menuNameEntryDrawKenNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     return menuNameEntryDrawNameText(window, sprite, 7, 0);
 }
@@ -433,8 +435,8 @@ int menuNameEntryDrawNameBoxText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     return menuNameEntryDrawNameText(window, sprite, 8, 3);
 }
 
-// Draw the name text unless the type hides it.
-int zz_0030ad4_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the name text for the window's mode (modes 1, 2, 4 and 5).
+int menuNameEntryDrawModeNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 mode = window->mArg->mMode;
 
@@ -474,18 +476,18 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s3
         count = 0;
         x = 0;
         while ((chr = *chars) != 0) {
-            zz_0030fbc_(winSpriteGetLayerID(window, sprite), x, 0, window->mRgba.mColorA | 0xFFFFFF00, chr);
+            print1Char(winSpriteGetLayerID(window, sprite), x, 0, window->mRgba.mColorA | 0xFFFFFF00, chr);
             x += 0x1A;
             count++;
             chars++;
         }
-        if (count < lbl_802EA910[arg->mMode].mMaxLength && window->mAccept == 0) {
-            blink = zz_0030ecc_(*arg->mTable, *arg->mColumn, *arg->mRow);
-            if (blink != 0 && zz_0031698_(blink) == 6) {
+        if (count < nameEntryModeData[arg->mMode].mMaxLength && window->mAccept == 0) {
+            blink = get50onChar(*arg->mTable, *arg->mColumn, *arg->mRow);
+            if (blink != 0 && getCharClass(blink) == 6) {
                 float s = sin(3.14f * *arg->mTimer * 2.0f);
                 u32 color = (u8)(s32)(128.0f * (1.0f + s)) | 0xFFFFFF00;
 
-                zz_0030fbc_(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
+                print1Char(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
             }
         }
         sprite->mAlpha = 0xFF;
@@ -493,8 +495,9 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s3
     return 0;
 }
 
-// Show the B cursor when the position selects it.
-void zz_0030ce8_(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
+// Show the delete/end button cursor of the position selected on the 50-on
+// table (row 6 column >6 is delete, row 7 column >6 is end).
+void menuNameEntryDispButtonCur(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
 {
     s32 column = *arg->mColumn;
     s32 row = *arg->mRow;
@@ -509,26 +512,26 @@ void zz_0030ce8_(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
     }
 }
 
-// Draw the B cursor.
+// Draw the delete (B) button cursor.
 int menuNameEntryDrawBCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
-    zz_0030ce8_(arg, sprite);
+    menuNameEntryDispButtonCur(arg, sprite);
     return 0;
 }
 
-// Draw the 50-on cursor.
-int zz_0030da0_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the end button cursor.
+int menuNameEntryDrawEndCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
-    zz_0030ce8_(arg, sprite);
+    menuNameEntryDispButtonCur(arg, sprite);
     return 0;
 }
 
-// Draw the name cursor.
-int zz_0030dc8_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the cursor over the selected 50-on table cell.
+int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
@@ -546,7 +549,7 @@ int zz_0030dc8_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Look up the character of the 50-on table cell.
-u16 zz_0030ecc_(s32 table, s32 column, s32 row)
+u16 get50onChar(s32 table, s32 column, s32 row)
 {
     s32 id;
     u16 *string;
@@ -558,7 +561,7 @@ u16 zz_0030ecc_(s32 table, s32 column, s32 row)
     if (row < 0 || row >= 8) {
         return 0;
     }
-    id = lbl_802EA980[table].mRow[row];
+    id = nameEntry50onData[table].mRow[row];
     if ((u32)id == 0) {
         return 0;
     }
@@ -587,7 +590,7 @@ int getGScharLen(u16 *string)
 }
 
 // Print one character centered on the sprite.
-void zz_0030fbc_(GSgfxLayerID layer, s32 x, s32 y, u32 color, u16 chr)
+void print1Char(GSgfxLayerID layer, s32 x, s32 y, u32 color, u16 chr)
 {
     u16 text[2];
     s32 width;
@@ -616,10 +619,10 @@ int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     while (row < 8) {
         column = 0;
         x = -2;
-        while ((chr = zz_0030ecc_(table, column, row)) != 0) {
+        while ((chr = get50onChar(table, column, row)) != 0) {
             GSgfxLayerID layer = winSpriteGetLayerID(window, sprite);
 
-            zz_0030fbc_(layer, x, y, window->mRgba.mColorA | 0xFFFFFF00, chr);
+            print1Char(layer, x, y, window->mRgba.mColorA | 0xFFFFFF00, chr);
             x += 0x1A;
             column++;
         }
@@ -629,8 +632,8 @@ int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     return 0;
 }
 
-// Draw the 50-on table title.
-int zz_0031108_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the title of the 50-on table the hira/kata toggle switches to.
+int menuNameEntryDraw50onToggleTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 table = *window->mArg->mTable + 1;
 
@@ -639,13 +642,13 @@ int zz_0031108_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     }
     if (table >= 0 && table < 2) {
         GSmsgPrint2(winSpriteGetLayerID(window, sprite), 0, 0,
-                    window->mRgba.mColorA | 0xFFFFFF00, lbl_802EA980[table].mTitle);
+                    window->mRgba.mColorA | 0xFFFFFF00, nameEntry50onData[table].mTitle);
     }
     return 0;
 }
 
 // Draw the name subject (hero, box or Pokemon).
-int zz_003119c_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg;
     u32 width;
@@ -668,17 +671,17 @@ int zz_003119c_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 species = 1;
             }
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(lbl_802EA910[arg->mMode].mMessageID) >> 16;
+            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
             GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
-                        window->mRgba.mColorA | 0xFFFFFF00, lbl_802EA910[arg->mMode].mMessageID);
+                        window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         case 5: {
             u16 species = zz_battle_pokemon_get_species((Pokemon *)arg->mParam);
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(lbl_802EA910[arg->mMode].mMessageID) >> 16;
+            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
             GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
-                        window->mRgba.mColorA | 0xFFFFFF00, lbl_802EA910[arg->mMode].mMessageID);
+                        window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         case 4: {
@@ -691,16 +694,16 @@ int zz_003119c_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 species = 1;
             }
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(lbl_802EA910[arg->mMode].mMessageID) >> 16;
+            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
             GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
-                        window->mRgba.mColorA | 0xFFFFFF00, lbl_802EA910[arg->mMode].mMessageID);
+                        window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         default: {
-            width = (u32)zz_0107554_(lbl_802EA910[arg->mMode].mMessageID) >> 16;
+            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
 
             GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
-                        window->mRgba.mColorA | 0xFFFFFF00, lbl_802EA910[arg->mMode].mMessageID);
+                        window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         }
@@ -709,7 +712,7 @@ int zz_003119c_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Step the character to the neighboring kana table.
-u16 zz_0031490_(u16 chr, s32 table)
+u16 conv50onChar(u16 chr, s32 table)
 {
     s32 i = 0;
     s32 n;
@@ -717,9 +720,9 @@ u16 zz_0031490_(u16 chr, s32 table)
     s32 j;
 
     while (i < NAME_ENTRY_TABLE_COUNT) {
-        if (lbl_804EC110[i] != 0) {
-            n = zz_01073f8_(lbl_804EC110[i]);
-            p = zz_get_pointer_to_string_with_id(lbl_804EC110[i]) + 1;
+        if (nameEntryKanaTables[i] != 0) {
+            n = zz_01073f8_(nameEntryKanaTables[i]);
+            p = zz_get_pointer_to_string_with_id(nameEntryKanaTables[i]) + 1;
             j = 1;
             while (j < n) {
                 if (*p == chr) {
@@ -747,8 +750,8 @@ u16 zz_0031490_(u16 chr, s32 table)
     if (table == 0) {
         return chr;
     }
-    n = zz_01073f8_(lbl_804EC110[table]);
-    p = zz_get_pointer_to_string_with_id(lbl_804EC110[table]);
+    n = zz_01073f8_(nameEntryKanaTables[table]);
+    p = zz_get_pointer_to_string_with_id(nameEntryKanaTables[table]);
     j = 0;
     while (j < n) {
         if (*p == chr) {
@@ -764,7 +767,7 @@ u16 zz_0031490_(u16 chr, s32 table)
 }
 
 // Confirm the name with a yes/no dialog.
-int zz_00315d0_(u16 *name)
+int confirmName(u16 *name)
 {
     s8 answer;
 
@@ -797,7 +800,7 @@ u8 backNameCursor(NAME_ENTRY_ARG *arg)
 }
 
 // Classify the character for the input state machine.
-s32 zz_0031698_(u16 chr)
+s32 getCharClass(u16 chr)
 {
     u16 *space = zz_get_pointer_to_string_with_id(0x3B1E);
 
@@ -808,7 +811,7 @@ s32 zz_0031698_(u16 chr)
 }
 
 // Toggle the 50-on table.
-void zz_00316e4_(NAME_ENTRY_ARG *arg)
+void toggle50onTable(NAME_ENTRY_ARG *arg)
 {
     s32 table = *arg->mTable;
 
@@ -820,7 +823,7 @@ void zz_00316e4_(NAME_ENTRY_ARG *arg)
 }
 
 // Feed one character press into the name buffer.
-int zz_0031704_(NAME_ENTRY_ARG *arg)
+int input50onCell(NAME_ENTRY_ARG *arg)
 {
     u16 chr;
     s32 col = *arg->mColumn;
@@ -839,11 +842,11 @@ int zz_0031704_(NAME_ENTRY_ARG *arg)
             break;
         }
     } else {
-        chr = zz_0030ecc_(*arg->mTable, col, act);
+        chr = get50onChar(*arg->mTable, col, act);
         if ((u16)chr == 0) {
             chr = *zz_get_pointer_to_string_with_id(0x3B1D);
         }
-        charClass = zz_0031698_(chr);
+        charClass = getCharClass(chr);
         act = charClass;
     }
     switch (act) {
@@ -860,7 +863,7 @@ int zz_0031704_(NAME_ENTRY_ARG *arg)
 
         if (cur >= 0) {
             u16 *chars = arg->mChars;
-            u16 c = zz_0031490_(chars[cur], table);
+            u16 c = conv50onChar(chars[cur], table);
 
             if (c != 0) {
                 chars[cur] = c;
@@ -878,7 +881,7 @@ int zz_0031704_(NAME_ENTRY_ARG *arg)
         ret = 1;
         break;
     case 3:
-        zz_00316e4_(arg);
+        toggle50onTable(arg);
         sound = 0x14;
         break;
     case 0:
@@ -889,7 +892,7 @@ int zz_0031704_(NAME_ENTRY_ARG *arg)
         u16 *p;
         s32 next;
 
-        maxLen = lbl_802EA910[arg->mMode].mMaxLength;
+        maxLen = nameEntryModeData[arg->mMode].mMaxLength;
         cur = *arg->mCursor;
 
         if (cur >= maxLen) {
@@ -914,23 +917,23 @@ int zz_0031704_(NAME_ENTRY_ARG *arg)
 }
 
 // Drive the name editor from the pad.
-int zz_00318ec_(tagWINDOW_WORK *window)
+int menuNameEntryInputButton(tagWINDOW_WORK *window)
 {
     s32 repeat = windowGetKeyRepeat();
     u16 trg = windowGetKeyTrg();
     NAME_ENTRY_ARG *arg = window->mArg;
 
     if (trg & 0x40) {
-        zz_00316e4_(arg);
+        toggle50onTable(arg);
         GSsndPlayNow(0x14);
         return 0;
     }
     if (trg & 0x10) {
-        if (zz_0031704_(arg) != 0) {
+        if (input50onCell(arg) != 0) {
             window->mAccept = 1;
             return 0;
         }
-        if (getGScharLen(arg->mChars) >= lbl_802EA910[arg->mMode].mMaxLength) {
+        if (getGScharLen(arg->mChars) >= nameEntryModeData[arg->mMode].mMaxLength) {
             *arg->mColumn = 10;
             *arg->mRow = 7;
         }
@@ -943,7 +946,7 @@ int zz_00318ec_(tagWINDOW_WORK *window)
         return 0;
     }
     if (trg & 0x400) {
-        zz_00316e4_(arg);
+        toggle50onTable(arg);
         GSsndPlayNow(0x14);
         return 0;
     }
@@ -1056,7 +1059,7 @@ int menuNameEntryCtrl(tagWINDOW_WORK *window)
     return 0;
 }
 
-void zz_0031cb4_(void)
+void menuNameEntryInputDummy(void)
 {
 }
 
@@ -1096,21 +1099,21 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
     arg.mChars = name;
     arg.mMode = type;
     arg.mParam = param;
-    lbl_804EA7A0 = 0;
-    arg.mTable = &lbl_804EA7A0;
-    lbl_804EA7A4 = 0;
-    arg.mColumn = &lbl_804EA7A4;
-    lbl_804EA7A8 = 0;
-    arg.mRow = &lbl_804EA7A8;
-    lbl_804EA7AC = 0.0f;
-    arg.mTimer = &lbl_804EA7AC;
-    lbl_804EA7B0 = 0;
-    arg.mCursor = &lbl_804EA7B0;
-    arg.mUnk38 = &lbl_804EA7B4;
-    arg.mUnk3C = &lbl_804EA7B8;
-    arg.mUnk40 = &lbl_804EA7BC;
-    arg.mUnk44 = &lbl_804EA7C0;
-    arg.mUnk48 = &lbl_804EA7C4;
+    nameEntryTable = 0;
+    arg.mTable = &nameEntryTable;
+    nameEntryColumn = 0;
+    arg.mColumn = &nameEntryColumn;
+    nameEntryRow = 0;
+    arg.mRow = &nameEntryRow;
+    nameEntryTimer = 0.0f;
+    arg.mTimer = &nameEntryTimer;
+    nameEntryCursor = 0;
+    arg.mCursor = &nameEntryCursor;
+    arg.mUnk38 = &nameEntrySharedVal0;
+    arg.mUnk3C = &nameEntrySharedVal1;
+    arg.mUnk40 = &nameEntrySharedVal2;
+    arg.mUnk44 = &nameEntrySharedVal3;
+    arg.mUnk48 = &nameEntrySharedVal4;
     zz_01554b4_(0);
     argp = &arg;
     while (done == 0) {
@@ -1120,13 +1123,13 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
         } else {
             chosen = arg.mInitialName;
         }
-        accepted = zz_00315d0_(chosen);
+        accepted = confirmName(chosen);
         if (skip == 0) {
             done = 1;
             if (accepted != 0) {
                 continue;
             }
-            lbl_80429794.mName[0] = 0;
+            nameEntryWork.mName[0] = 0;
         } else if (accepted != 0) {
             done = 1;
         }
@@ -1135,7 +1138,7 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
     menuClose(NAME_ENTRY_MENU_ID_INPUT);
     menuCloseSync(NAME_ENTRY_MENU_ID_INPUT, 1);
     if (accepted != 0) {
-        GScharCpy(lbl_80429794.mName, chosen);
+        GScharCpy(nameEntryWork.mName, chosen);
         return 1;
     }
     return 0;
@@ -1241,7 +1244,7 @@ int selectName(u16 *name, const unsigned long *nameIDs, s32 param)
         }
         id = nameIDs[result - 1];
         chosen = zz_get_pointer_to_string_with_id(id);
-        if (zz_00315d0_(chosen) == 0) {
+        if (confirmName(chosen) == 0) {
             continue;
         }
         accepted = 1;
@@ -1279,13 +1282,13 @@ int menuNameEntryBackDrawHumanModel(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         offset[2] = 0.0f;
 
         menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-        menuModelAdjustCamera(&lbl_804296A8);
-        menuModelSetSize(&lbl_804296A8, pos.mX, pos.mY, size.mX, size.mY);
-        zz_01123b8_(&lbl_804296A8, 0);
-        menuModelSetAngle(&lbl_804296A8, angle);
-        menuModelSetZoom(&lbl_804296A8, 1.4f);
-        menuModelSetOffset(&lbl_804296A8, offset);
-        texture = menuModelRender(&lbl_804296A8);
+        menuModelAdjustCamera(&nameEntryModel);
+        menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
+        zz_01123b8_(&nameEntryModel, 0);
+        menuModelSetAngle(&nameEntryModel, angle);
+        menuModelSetZoom(&nameEntryModel, 1.4f);
+        menuModelSetOffset(&nameEntryModel, offset);
+        texture = menuModelRender(&nameEntryModel);
         if (texture != 0) {
             drawTexture(texture, sprite, winSpriteGetLayerID(window, sprite));
         }
@@ -1313,7 +1316,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         offset[0] = 0.0f;
         offset[1] = 0.0f;
         offset[2] = 0.0f;
-        switch (lbl_804296A8.mSpecies) {
+        switch (nameEntryModel.mSpecies) {
         case 0x28:
         case 0x3E:
         case 0x47:
@@ -1346,13 +1349,13 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         }
         {
             menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-            menuModelAdjustCamera(&lbl_804296A8);
-            menuModelSetSize(&lbl_804296A8, pos.mX, pos.mY, size.mX, size.mY);
-            zz_01123b8_(&lbl_804296A8, 0);
-            menuModelSetAngle(&lbl_804296A8, angle);
-            menuModelSetZoom(&lbl_804296A8, zoom);
-            menuModelSetOffset(&lbl_804296A8, offset);
-            texture = menuModelRender(&lbl_804296A8);
+            menuModelAdjustCamera(&nameEntryModel);
+            menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
+            zz_01123b8_(&nameEntryModel, 0);
+            menuModelSetAngle(&nameEntryModel, angle);
+            menuModelSetZoom(&nameEntryModel, zoom);
+            menuModelSetOffset(&nameEntryModel, offset);
+            texture = menuModelRender(&nameEntryModel);
             if (texture != 0) {
                 drawTexture(texture, sprite, winSpriteGetLayerID(window, sprite));
             }
@@ -1370,7 +1373,7 @@ int zz_0032544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     s16 texH = *(s16 *)((u8 *)entry + 6);
 
     for (count = 0; count < 0x1E; count++) {
-        BALL_WORK *ball = &lbl_80429270[count];
+        BALL_WORK *ball = &nameEntryBalls[count];
 
         if (ball->mActive != 0) {
             f32 w = (f32)texW * ball->mScale;
@@ -1415,22 +1418,22 @@ void generateBall(void)
         return;
     }
     for (i = 0; i < 30; i++) {
-        if (lbl_80429270[i].mActive == 0) {
+        if (nameEntryBalls[i].mActive == 0) {
             break;
         }
     }
     if (i >= 30) {
         return;
     }
-    lbl_80429270[i].mActive = 1;
-    lbl_80429270[i].mX = 640.0f * HSD_Randf();
-    lbl_80429270[i].mY = 480.0f * HSD_Randf();
-    lbl_80429270[i].mScale = 0.001f;
-    lbl_80429270[i].mScaleMax = 1.999f * HSD_Randf() + 0.001f;
-    lbl_80429270[i].mFlags = -0x100;
-    lbl_80429270[i].mAlpha = 0x80;
-    lbl_80429270[i].mTime = 0.0f;
-    lbl_80429270[i].mTimeMax = 60.0f * HSD_Randf() + 120.0f;
+    nameEntryBalls[i].mActive = 1;
+    nameEntryBalls[i].mX = 640.0f * HSD_Randf();
+    nameEntryBalls[i].mY = 480.0f * HSD_Randf();
+    nameEntryBalls[i].mScale = 0.001f;
+    nameEntryBalls[i].mScaleMax = 1.999f * HSD_Randf() + 0.001f;
+    nameEntryBalls[i].mFlags = -0x100;
+    nameEntryBalls[i].mAlpha = 0x80;
+    nameEntryBalls[i].mTime = 0.0f;
+    nameEntryBalls[i].mTimeMax = 60.0f * HSD_Randf() + 120.0f;
 }
 
 // Step the background balls.
@@ -1440,8 +1443,8 @@ void ballMain(void)
 
     generateBall();
     for (i = 0; i < 0x1E; i++) {
-        if (lbl_80429270[i].mActive != 0) {
-            ballMain1(&lbl_80429270[i]);
+        if (nameEntryBalls[i].mActive != 0) {
+            ballMain1(&nameEntryBalls[i]);
         }
     }
 }
@@ -1455,7 +1458,7 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
     case 0:
         if ((s8)window->mFlag == 0) {
             for (i = 0; i < 30; i++) {
-                lbl_80429270[i].mActive = 0;
+                nameEntryBalls[i].mActive = 0;
             }
             for (i = 0; i < 600; i++) {
                 ballMain();
@@ -1556,10 +1559,10 @@ void menuNameEntry(void)
         s32 param;
     } args;
 
-    if (getName(name, lbl_80429794.mType, lbl_80429794.mParam) == 0) {
+    if (getName(name, nameEntryWork.mType, nameEntryWork.mParam) == 0) {
         name[0] = 0;
     }
-    zz_0032a94_(0x68, &lbl_804296A8, lbl_80429794.mType, lbl_80429794.mParam);
+    zz_0032a94_(0x68, &nameEntryModel, nameEntryWork.mType, nameEntryWork.mParam);
     {
         static const char startLabel[] = "start";
         static const char endLabel[] = "end";
@@ -1568,21 +1571,21 @@ void menuNameEntry(void)
         FlashSystemSetLoopFlag(0x22063000, 0);
         FlashSystemSetNowFrameLabel(0x22063000, startLabel);
     }
-    args.type = lbl_80429794.mType;
-    args.param = lbl_80429794.mParam;
+    args.type = nameEntryWork.mType;
+    args.param = nameEntryWork.mParam;
     menuOpenCustom(NAME_ENTRY_MENU_ID_MAIN, windowGetActiveID(), 0, 0, 1, 1, &args);
-    if (lbl_80429794.mBlock == 0) {
+    if (nameEntryWork.mBlock == 0) {
         fadeSet(2, 0.5f);
         fadeCheck(1);
     }
-    if (lbl_802EA910[lbl_80429794.mType].mDefaultNameCount > 0) {
+    if (nameEntryModeData[nameEntryWork.mType].mDefaultNameCount > 0) {
         s32 loop = 1;
 
         while (loop != 0) {
-            switch (selectName(lbl_80429794.mName, lbl_802EA910[lbl_80429794.mType].mDefaultNames,
-                               lbl_802EA910[lbl_80429794.mType].mDefaultNameCount)) {
+            switch (selectName(nameEntryWork.mName, nameEntryModeData[nameEntryWork.mType].mDefaultNames,
+                               nameEntryModeData[nameEntryWork.mType].mDefaultNameCount)) {
             case 1:
-                if (inputName(lbl_80429794.mName, name, lbl_80429794.mType, lbl_80429794.mParam, 0) != 0) {
+                if (inputName(nameEntryWork.mName, name, nameEntryWork.mType, nameEntryWork.mParam, 0) != 0) {
                     loop = 0;
                 }
                 break;
@@ -1595,25 +1598,25 @@ void menuNameEntry(void)
             }
         }
     } else {
-        inputName(lbl_80429794.mName, name, lbl_80429794.mType, lbl_80429794.mParam, 1);
+        inputName(nameEntryWork.mName, name, nameEntryWork.mType, nameEntryWork.mParam, 1);
     }
     fadeSet(3, 0.5f);
     fadeCheck(1);
-    zz_0112eac_(&lbl_804296A8);
+    zz_0112eac_(&nameEntryModel);
     menuClose(NAME_ENTRY_MENU_ID_MAIN);
     menuCloseSync(NAME_ENTRY_MENU_ID_MAIN, 1);
-    setName(lbl_80429794.mName, lbl_80429794.mType, lbl_80429794.mParam);
-    if (GScharCmp(lbl_80429794.mName, name) == 0) {
-        lbl_80429794.mChanged = 0;
+    setName(nameEntryWork.mName, nameEntryWork.mType, nameEntryWork.mParam);
+    if (GScharCmp(nameEntryWork.mName, name) == 0) {
+        nameEntryWork.mChanged = 0;
     } else {
-        lbl_80429794.mChanged = 1;
+        nameEntryWork.mChanged = 1;
     }
-    if (lbl_80429794.mType == 0) {
+    if (nameEntryWork.mType == 0) {
         menuTitleBattleSelectFree();
     }
-    if (lbl_80429794.mBlock != 0) {
+    if (nameEntryWork.mBlock != 0) {
         zz_0125ba4_();
-        if (lbl_80429794.mFade != 0) {
+        if (nameEntryWork.mFade != 0) {
             floorSetFadeScript(0, 0x5960008);
         } else {
             floorSetFadeScript(0, 0);
@@ -1761,7 +1764,7 @@ int menuNameEntryCall(s32 type, s32 param)
     if (chkParam(type, param) == 0) {
         return 0;
     }
-    work = &lbl_80429794;
+    work = &nameEntryWork;
     work->mName[0] = 0;
     work->mType = type;
     work->mParam = param;
@@ -1774,7 +1777,7 @@ int menuNameEntryCall(s32 type, s32 param)
 // Copy out the name being edited.
 void menuNameEntryGetLastName(u16 *name)
 {
-    GScharCpy(name, lbl_80429794.mName);
+    GScharCpy(name, nameEntryWork.mName);
 }
 
 // Push the name-entry floor.
@@ -1785,7 +1788,7 @@ int pushNameEntryFloor(s32 type, s32 param, s32 fade)
     if (chkParam(type, param) == 0) {
         return 0;
     }
-    work = &lbl_80429794;
+    work = &nameEntryWork;
     work->mName[0] = 0;
     work->mType = type;
     work->mParam = param;

@@ -46,9 +46,9 @@ struct NAME_ENTRY_ARG {
     s32 *mRow;    // 0x2C: selected row.
     f32 *mTimer;  // 0x30: cursor blink timer.
     s32 *mCursor; // 0x34: character position in the buffer.
-    s32 *mUnk38;  // 0x38
-    s32 *mUnk3C;  // 0x3C
-    s32 *mUnk40;  // 0x40
+    s32 *mUnk38;  // 0x38: five more pointers to shared editing values; the
+    s32 *mUnk3C;  // 0x3C: window code uses them, their semantics are not
+    s32 *mUnk40;  // 0x40: recovered (see nameEntrySharedVal0-4).
     s32 *mUnk44;  // 0x44
     s32 *mUnk48;  // 0x48
 };
@@ -96,8 +96,8 @@ enum {
 
 // Mode table and 50-on tables the screen shares with the window code.
 extern "C" {
-extern const NameEntryModeData lbl_802EA910[7];
-extern const NameEntryTableData lbl_802EA980[2];
+extern const NameEntryModeData nameEntryModeData[7];
+extern const NameEntryTableData nameEntry50onData[2];
 extern const unsigned long DefKenName[3];
 extern const unsigned long DefHizukiName[3];
 }
@@ -118,32 +118,32 @@ int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawBCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawNameRuleText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0030a84_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawKenNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawNameBoxText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0030ad4_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0030da0_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0031108_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_003119c_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawModeNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawEndCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDraw50onToggleTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectButton(tagWINDOW_WORK *window);
 int menuNameEntrySelectCtrl(tagWINDOW_WORK *window);
 int menuNameEntrySelectDrawSelText1(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectDrawSelText2(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectDrawSelText3(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int zz_0032544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0030544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void zz_0030790_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int zz_0030838_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 count, s32 mode);
-void zz_0030ce8_(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite);
-int zz_0030dc8_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-u16 zz_0030ecc_(s32 table, s32 column, s32 row);
-void zz_0030fbc_(GSgfxLayerID layer, s32 x, s32 y, u32 color, u16 chr);
-u16 zz_0031490_(u16 chr, s32 table);
-int zz_00315d0_(u16 *name);
-s32 zz_0031698_(u16 chr);
-void zz_00316e4_(NAME_ENTRY_ARG *arg);
-int zz_0031704_(NAME_ENTRY_ARG *arg);
-int zz_00318ec_(tagWINDOW_WORK *window);
-void zz_0031cb4_(void);
+int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void menuNameEntryDrawNameBox(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawNameBoxCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 count, s32 mode);
+void menuNameEntryDispButtonCur(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+u16 get50onChar(s32 table, s32 column, s32 row);
+void print1Char(GSgfxLayerID layer, s32 x, s32 y, u32 color, u16 chr);
+u16 conv50onChar(u16 chr, s32 table);
+int confirmName(u16 *name);
+s32 getCharClass(u16 chr);
+void toggle50onTable(NAME_ENTRY_ARG *arg);
+int input50onCell(NAME_ENTRY_ARG *arg);
+int menuNameEntryInputButton(tagWINDOW_WORK *window);
+void menuNameEntryInputDummy(void);
 
 } // extern "C"
 
