@@ -460,3 +460,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/dvd/dvdFatal.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/dvd/dvdfs.c"
+completed = true

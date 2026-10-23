@@ -207,6 +207,12 @@ ext/dolphin_sdk/os/__start.c:
 	.init       start:0x80003100 end:0x80003400
 	.sbss       start:0x804EAB70 end:0x804EAB78
 
+ext/dolphin_sdk/dvd/dvdfs.c:
+	.text       start:0x800B4C10 end:0x800B5540
+	.data       start:0x803D1E40 end:0x803D1FD0
+	.sdata      start:0x804E8150 end:0x804E8158
+	.sbss       start:0x804EABC8 end:0x804EABE8
+
 ext/dolphin_sdk/dvd/dvd.c:
 	.text       start:0x800B5540 end:0x800B7D94
 	.data       start:0x803D1FD0 end:0x803D2154
