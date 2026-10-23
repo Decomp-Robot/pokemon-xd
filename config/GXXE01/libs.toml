@@ -1112,3 +1112,14 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/support/Tree.c"
 completed = true
+
+[[lib]]
+name = "stub"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/stub.c"
+completed = true
