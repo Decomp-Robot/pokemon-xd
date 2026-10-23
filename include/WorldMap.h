@@ -1,6 +1,7 @@
 #ifndef WORLDMAP_H
 #define WORLDMAP_H
 
+#include <hero.h>
 #include <types.h>
 #include <winSprite.h>
 
@@ -357,13 +358,6 @@ private:
      * ControlCamera drives it toward the targets set by SetCameraNextWork
      * (see WorldMapCamWork). */
     WorldMapCamWork* mCamWork;
-};
-
-/* Hero the map menu reads the follower and the style of. */
-class Hero {
-public:
-    u8 getFollowerID();
-    u8 getHeroStyle() const;
 };
 
 /* Plays the camera animation of the map (the frame count is returned). */

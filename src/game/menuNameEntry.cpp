@@ -1504,7 +1504,7 @@ void zz_0032a94_(long dataID, MENU_MODEL *model, s32 type, s32 param)
         break;
     }
     item = menuItemBiosGetPtr(dataID, menuID);
-    menuModelInit(model, item->mUnk0A, item->mUnk0C);
+    menuModelInit(model, item->mOffsetB, item->mOffsetC);
     switch (type) {
     case 0:
     case 1: {

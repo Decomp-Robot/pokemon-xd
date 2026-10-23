@@ -55,7 +55,7 @@ s32 zz_000e97c_(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
     tagMENU_ITEM_DATA *item;
 
     item = menuItemBiosGetPtr(window->mMenuID, work->mItemID);
-    work->mCursorY = (s16)(item->mY + getCursorPositionY());
+    work->mCursorY = (s16)(item->mOffsetA + getCursorPositionY());
     return 0;
 }
 
