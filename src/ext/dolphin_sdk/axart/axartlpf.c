@@ -14,6 +14,7 @@ static u16 __coefs[48] = {
 	0x032D, 0x7CD2, 0x027D, 0x7D82, 0x01FE, 0x7E01
 };
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTLpf(AXART_LPF* articulator, AXVPB* voice) {
     u32 i;
     ASSERTLINE(68, articulator);
