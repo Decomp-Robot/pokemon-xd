@@ -81,12 +81,16 @@ ext/dolphin_sdk/os/OSReboot.c:
 
 ext/dolphin_sdk/os/OSReset.c:
 	.text       start:0x800AF9F4 end:0x800AFA78
+
+ext/dolphin_sdk/os/OSResetSW.c:
 	.text       start:0x800AFA78 end:0x800AFB20
 	.text       start:0x800AFB20 end:0x800AFB90
 	.text       start:0x800AFB90 end:0x800AFBF8
 	.text       start:0x800AFBF8 end:0x800AFC40
 	.text       start:0x800AFC40 end:0x800AFE40
 	.text       start:0x800AFE40 end:0x800AFE78
+	.text       start:0x800AFE78 end:0x800AFF6C
+	.text       start:0x800AFF6C end:0x800B0204
 
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
