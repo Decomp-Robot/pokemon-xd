@@ -1,4 +1,5 @@
 #include <GSparticle.h>
+#include <GSquat.h>
 #include <floorBgmMask.h>
 
 /* GS particle layer: the particle API the game code drives, the frame hooks
@@ -116,9 +117,8 @@ enum PEBankFlag {
     PE_BANK_FLAG_VISIBLE = 0x4,
 };
 
-/* Quaternion and unit scale vector a freshly attached generator's engine half
- * is reset to; both belong to the GS math module. */
-extern f32 zeroQuaternion[4];
+/* Unit scale vector a freshly attached generator's engine half is reset to; it
+ * belongs to the GS math module, as does the zeroQuaternion of GSquat.h. */
 extern GSvec unitScaleVector;
 
 /* Module data of the layer, GSparticleModuleData.cpp: the descriptor handed to
@@ -872,10 +872,10 @@ void GSparticleAttachGeneratorToGSpart(_GSparticleGen *gen, GSpart *part, GSatta
         if (gen->mLink != 0) {
             f32 *rotation = ((_peBank *)gen->mLink)->mRotation;
 
-            rotation[0] = zeroQuaternion[0];
-            rotation[1] = zeroQuaternion[1];
-            rotation[2] = zeroQuaternion[2];
-            rotation[3] = zeroQuaternion[3];
+            rotation[0] = zeroQuaternion.x;
+            rotation[1] = zeroQuaternion.y;
+            rotation[2] = zeroQuaternion.z;
+            rotation[3] = zeroQuaternion.w;
         }
         if (gen->mLink != 0) ((_peBank *)gen->mLink)->mScale = unitScaleVector;
     } else {

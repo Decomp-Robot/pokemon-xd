@@ -1104,6 +1104,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/GSquat.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/GSparticle.cpp"
 completed = true
 
