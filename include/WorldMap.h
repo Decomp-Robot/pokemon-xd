@@ -29,6 +29,7 @@ class WorldMap {
 public:
     WorldMap();
     s32 GetNowCursor(tagWINDOW_WORK* window);
+    s32 GetStartIconAnimIndex(unsigned long index);
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the

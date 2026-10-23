@@ -25,6 +25,10 @@ name = "decomp/WorldMap.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/WorldMapIcon.cpp"
+completed = true
+
+[[lib.object]]
 name = "decomp/menuWorldMap.cpp"
 completed = true
 
