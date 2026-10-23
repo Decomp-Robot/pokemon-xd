@@ -3,8 +3,15 @@
 
 #include <types.h>
 
-// One entry of an item table, 0x1C bytes.
-struct tagMENU_ITEM_DATA;
+// One entry of an item table, 0x1C bytes. Partial: only the y offset
+// added to the cursor position by the item cursor hooks is named; the
+// rest stays padding.
+typedef struct tagMENU_ITEM_DATA tagMENU_ITEM_DATA;
+struct tagMENU_ITEM_DATA {
+    u8 _00[0x08];
+    s16 mY;       // 0x08: y offset added to the cursor position.
+    u8 _0A[0x12]; // 0x0A-0x1B: remainder; unknown here.
+};
 
 #ifdef __cplusplus
 extern "C" {

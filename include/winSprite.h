@@ -3,7 +3,9 @@
 
 #include <types.h>
 
-struct tagSPRITE_WORK;
+// Usable from C as well as C++.
+typedef struct tagSPRITE_WORK tagSPRITE_WORK;
+typedef struct tagWINDOW_WORK tagWINDOW_WORK;
 
 // Window work, partial. The sprite-work list head at 0x24 is walked by
 // menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
@@ -26,7 +28,9 @@ struct tagSPRITE_WORK {
     s16 mItemID;           // 0x06: item id the node displays for the menu.
     u8 _08[0x40];          // 0x08-0x47: remainder; unknown here.
     void *mHookFunction;   // 0x48: hook the node was registered with.
-    u8 _4C[0x2C];          // 0x4C-0x77: remainder; unknown here.
+    u8 _4C[0x06];          // 0x4C-0x51: unknown.
+    s16 mY;                // 0x52: y position set by the item cursor hooks.
+    u8 _54[0x24];          // 0x54-0x77: remainder; unknown here.
 };
 
 #endif

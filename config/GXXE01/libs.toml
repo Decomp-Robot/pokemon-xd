@@ -312,6 +312,14 @@ name = "game/gbaCommand.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/pause.c"
+completed = true
+
+[[lib.object]]
+name = "game/time.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocketBattleDisk.cpp"
 completed = true
 cflags = [
