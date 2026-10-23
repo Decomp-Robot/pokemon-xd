@@ -8,6 +8,10 @@ progress_category = "game"
 name = "orig/GXXE01/sys/main.dol"
 completed = false
 
+[[lib.object]]
+name = "decomp/dbgMenuFightSetMsgSpeed.c"
+completed = true
+
 [[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"
