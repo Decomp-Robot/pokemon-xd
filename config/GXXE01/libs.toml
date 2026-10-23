@@ -119,3 +119,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/__ppc_eabi_init.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/__start.c"
+completed = false
