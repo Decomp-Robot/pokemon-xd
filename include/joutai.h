@@ -17,6 +17,8 @@ enum JoutaiWriteResult {
     JOUTAI_WRITE_ACCEPT = 2
 };
 
+typedef struct _JOUTAI _JOUTAI;
+
 struct _JOUTAI {
     u16 joutaiDataId;
     u16 userFightTargetId;
@@ -27,16 +29,20 @@ struct _JOUTAI {
     u32 buff;
     u16 idBuff;
 
+#ifdef __cplusplus
     void writeJoutaiDataId(u16 dataId, u16 targetId);
     s32 checkWriteJoutaiDataId(u16 dataId);
     u8 isValid();
     void init();
+#endif
 };
 
 _JOUTAI* _joutaiGetTargetJoutaiPtrAsJoutaiDataId(void* status, u16 dataId);
 void _joutaiInit(_JOUTAI* joutai);
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 void joutaiCopy(void* destination, void* source, u16 dataId);
 void joutaiSetBuff(void* status, u16 dataId, u32 buff);
 u32 joutaiGetBuff(void* status, u16 dataId);
@@ -76,6 +82,8 @@ u16 joutaiBiosGetUserFightTargetId(_JOUTAI* joutai);
 u16 joutaiBiosGetJoutaiDataId(_JOUTAI* joutai);
 
 s32 kaisuuGetKaisuu(s32 dataId);
+#ifdef __cplusplus
 }
+#endif
 
 #endif

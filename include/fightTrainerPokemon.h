@@ -10,7 +10,7 @@ struct FightPokemon;
 extern "C" {
 #endif
 
-struct FightPokemon *fightTrainerGetFightPokemonPtrValid(struct FIGHT_TRAINER *trainer, u16 index);
+struct FightPokemon *fightTrainerGetValidFightPokemonPtr(struct FIGHT_TRAINER *trainer, u16 index);
 
 #ifdef __cplusplus
 }

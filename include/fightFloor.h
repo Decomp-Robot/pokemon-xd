@@ -1,34 +1,133 @@
-#ifndef FIGHTFLOOR_H
-#define FIGHTFLOOR_H
+#ifndef FIGHT_FLOOR_H
+#define FIGHT_FLOOR_H
 
+#include <fightEncountData.h>
+
+#include <fightPokemon.h>
 #include <fightTrainer.h>
+#include <joutai.h>
 #include <types.h>
 
+typedef struct FIGHT_WAZA FIGHT_WAZA;
+
+enum {
+    FIGHT_FLOOR_SIDE_COUNT = 2,
+    FIGHT_SIDE_TRAINER_COUNT = 2,
+    FIGHT_SIDE_JOUTAI_COUNT = 6,
+    FIGHT_OUT_POKEMON_COUNT = 8
+};
+
+typedef struct FIGHT_SIDE FIGHT_SIDE;
+
+struct FIGHT_SIDE {
 #ifdef __cplusplus
-extern "C" {
+    FIGHT_SIDE() {}
 #endif
 
-void *fightFloorGetPtr(void);
-FIGHT_TRAINER *fightFloorGetGcHeroFightTrainerPtr(s32 flag);
-void *fightFloorGetNowPtr(void);
-Pokemon *fightFloorGetDefPokemonPtr(void *floor);
-u32 fightFloorGetStatus(void *floor, u16 id, u16 field, u16 index);
-void fightFloorSetTimeOutAllFightResult(void *floor);
-FIGHT_TRAINER *fightFloorGetFightPokemonPtrToFightTrainerPtr(void *floor,
-    FightPokemon *pokemon);
+    u16 mFightSideDataId;
+    u16 mReserved;
+    _JOUTAI mJoutaiAry[FIGHT_SIDE_JOUTAI_COUNT]; // 0x04
+    FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT]; // 0x64
+    u8 mMakibisiCheckFlag; // 0x6EEC
+    u8 mPadding[3];
+};
 
+typedef struct FIGHT_FLOOR FIGHT_FLOOR;
+
+struct FIGHT_FLOOR {
+    _JOUTAI mJoutai;
+    u16 mTurnCount; // 0x10
+    u16 mEncountDataId;
+    FIGHT_SIDE mSideAry[FIGHT_FLOOR_SIDE_COUNT]; // 0x14
+    FightOutPokemon *mAttackPokemon; // 0xDDF4
+    FightOutPokemon *mDefensePokemon;
+    FightOutPokemon *mEscapePokemon;
+    FightOutPokemon *mIrekaePokemon;
+    FightOutPokemon *mKizetuPokemon;
+    FightOutPokemon *mTuikakoukaPokemon;
+    FightOutPokemon *mTokuseiPokemon;
+    FightOutPokemon *mItemPokemon; // 0xDE10
+    FightOutPokemon *mAppointPokemon;
+    FIGHT_TRAINER *mAppointTrainer;
+    FIGHT_WAZA *mAppointWaza;
+    FIGHT_SIDE *mAppointSide;
+    void *mAppointItem;
+    u32 mAttackMsgId; // 0xDE28
+    u32 mCriticalMsgId;
+    u32 mWazakoukaMsgId;
+    u32 mAppointMsgId;
+    u16 mAppointPokemonDataId;
+    u16 mAppointWazaDataId;
+    u16 mAppointItemDataId;
+    u16 mAppointTokuseiDataId;
+    s16 mFightPokemonEntryCnt; // 0xDE40
+    u16 mReserved;
+    FightOutPokemon *mFightOutPokemonPtrAry[FIGHT_OUT_POKEMON_COUNT]; // 0xDE44
+    u16 mFirstAttackRnd; // 0xDE64
+    u8 mUnknownTail[0xE318 - 0xDE66];
+};
+
+typedef struct FIGHT_FLOOR_DATA FIGHT_FLOOR_DATA;
+
+struct FIGHT_FLOOR_DATA {
+    u8 mTikeiDataId;
+    u8 mReserved;
+    u16 mFloorDataId;
+    u32 mName;
+    u32 mSyoukaiWzxDataId;
+    u32 mBgmSndId;
+    u32 mEnvSndId;
+    u16 mFightSideDataId[FIGHT_FLOOR_SIDE_COUNT];
+};
+
+extern u32 encount_floor_id;
 extern u32 *fight_floor_data_number;
 
 #ifdef __cplusplus
+extern "C" {
+#endif
+struct Pokemon *fightFloorGetDefPokemonPtr(FIGHT_FLOOR *floor);
+u32 fightFloorGetStatus(FIGHT_FLOOR *floor, u16 dataId, u16 selector, u32 index);
+void fightFloorBiosSetEncountFloorId(u32 floorId);
+u32 fightFloorBiosGetEncountFloorId(void);
+void fightFloorBiosSetItemPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetItemPokemonPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetTokuseiPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetTokuseiPokemonPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetTuikakoukaPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetTuikakoukaPokemonPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetKizetuPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetKizetuPokemonPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetFirstAttackRnd(FIGHT_FLOOR *floor, u16 random);
+u16 fightFloorBiosGetFirstAttackRnd(FIGHT_FLOOR *floor);
+void fightFloorBiosSetFightOutPokemonPtrAryPtr(FIGHT_FLOOR *floor, FightOutPokemon **pokemonAry);
+FightOutPokemon **fightFloorBiosGetFightOutPokemonPtrAryPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetFightOutPokemonPtrAry(FIGHT_FLOOR *floor, u16 slot, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetFightOutPokemonPtrAry(FIGHT_FLOOR *floor, u16 slot);
+void fightFloorBiosSetFightPokemonEntryCnt(FIGHT_FLOOR *floor, s16 count);
+s16 fightFloorBiosGetFightPokemonEntryCnt(FIGHT_FLOOR *floor);
+void fightFloorDataBiosSetName(FIGHT_FLOOR_DATA *data, u32 name);
+u32 fightFloorDataBiosGetName(FIGHT_FLOOR_DATA *data);
+void fightFloorDataBiosSetEnvSndId(FIGHT_FLOOR_DATA *data, u32 dataId);
+void fightFloorDataBiosSetBgmSndId(FIGHT_FLOOR_DATA *data, u32 dataId);
+void fightFloorDataBiosSetSyoukaiWzxDataId(FIGHT_FLOOR_DATA *data, u32 dataId);
+void fightFloorDataBiosSetTikeiDataId(FIGHT_FLOOR_DATA *data, u8 dataId);
+void fightFloorDataBiosSetFightSideDataId(FIGHT_FLOOR_DATA *data, u8 side, u16 dataId);
+void fightFloorDataBiosSetFloorDataId(FIGHT_FLOOR_DATA *data, u16 dataId);
+u32 fightFloorDataBiosGetEnvSndId(FIGHT_FLOOR_DATA *data);
+u32 fightFloorDataBiosGetBgmSndId(FIGHT_FLOOR_DATA *data);
+u32 fightFloorDataBiosGetSyoukaiWzxDataId(FIGHT_FLOOR_DATA *data);
+u8 fightFloorDataBiosGetTikeiDataId(FIGHT_FLOOR_DATA *data);
+FIGHT_TRAINER *fightFloorGetGcHeroFightTrainerPtr(FIGHT_FLOOR *floor);
+FIGHT_TRAINER *fightFloorGetFightPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightPokemon *pokemon);
+void *fightFloorBiosGetFightFloorPtr(void);
+void *fightFloorGetNowPtr(void);
+void fightFloorSetTimeOutAllFightResult(void *floor);
+s32 fightFloor_GetStockPokemonNum(FIGHT_FLOOR *floor);
+u32 fightFloor_GetFightKind(void *floor);
+
+#ifdef __cplusplus
 }
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-s32 fightFloor_GetStockPokemonNum(void *floor);
-u32 fightFloor_GetFightKind(void *floor);
-#ifdef __cplusplus
-}
-#endif
 #endif

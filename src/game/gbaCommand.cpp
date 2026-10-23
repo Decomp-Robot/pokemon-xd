@@ -413,7 +413,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
     ability = 0;
     for (i = 0; i < trainerCount; i++) {
         long cond;
-        FightPokemon *fightPokemon = fightTrainerGetFightPokemonPtrValid(static_cast<FIGHT_TRAINER *>(target), i);
+        FightPokemon *fightPokemon = fightTrainerGetValidFightPokemonPtr(static_cast<FIGHT_TRAINER *>(target), i);
         u8 mailId;
         Pokemon *pokemon;
         u8 pokerus;
@@ -479,7 +479,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
             selectionIndex = 0;
         } else {
             kind = fightFloorCheckFightActionFightOutPokemonIrekaeSelect(
-                fightFloorGetPtr(), targetPokemon, &irekaeSelect);
+                fightFloorBiosGetFightFloorPtr(), targetPokemon, &irekaeSelect);
             if (kind == 2) {
                 u32 abilityKind;
                 u16 ability = fightOutPokemonGetTokuseiDataId(irekaeSelect);

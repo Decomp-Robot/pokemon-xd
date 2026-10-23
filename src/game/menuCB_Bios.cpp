@@ -2,6 +2,7 @@
 #include <savedata.h>
 #include <GSmsg.h>
 #include <menuCB.h>
+#include <fightTrainer.h>
 #include <string.h>
 
 extern u32 menuCBRule_RegulationItemNum;
@@ -12,8 +13,6 @@ void heroBiosSetHizukiFlag(Hero *hero, s32 flag);
 u8 heroBiosGetHomePlace(Hero *hero);
 u8 heroBiosGetSexDataId(Hero *hero);
 u8 menuCBRule_IsBlankPokemon(Pokemon *pokemon);
-void fightTrainerCreateFightTrainerDataIdToHero(u16 dataId, s32 desperation,
-                                                Hero *hero, u32 battleId);
 }
 
 void menuCB_SetToolBattleModeFlag(u32 flag)

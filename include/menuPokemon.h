@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <fightTrainer.h>
+#include <fightPokemon.h>
 #include <menuPokemonStatus.h>
 
 enum PartyConditionSprite {

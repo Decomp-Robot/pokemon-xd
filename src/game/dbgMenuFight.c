@@ -330,42 +330,42 @@ void _dbgMenuFightStopSub(u16 result)
 s32 dbgMenuFightFightPokemonSelect5(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 5);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 5);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }
 s32 dbgMenuFightFightPokemonSelect4(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 4);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 4);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }
 s32 dbgMenuFightFightPokemonSelect3(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 3);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 3);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }
 s32 dbgMenuFightFightPokemonSelect2(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 2);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 2);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }
 s32 dbgMenuFightFightPokemonSelect1(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 1);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 1);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }
 s32 dbgMenuFightFightPokemonSelect0(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_pokemon_ptr = fightTrainerGetFightPokemonPtrValid(_target_fight_trainer_ptr, 0);
+    _target_fight_pokemon_ptr = fightTrainerGetValidFightPokemonPtr(_target_fight_trainer_ptr, 0);
     if (_target_fight_pokemon_ptr == 0) return -1;
     return _dbgMenuFightFightPokemonSelectSub(_target_fight_pokemon_ptr);
 }

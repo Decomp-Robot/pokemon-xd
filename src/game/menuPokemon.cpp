@@ -1704,7 +1704,7 @@ Pokemon *_menuPokemonGetPokemonPtr(unsigned short index)
             return 0;
         }
 
-        trainerPokemon = fightTrainerGetFightPokemonPtrValid(trainer, index);
+        trainerPokemon = fightTrainerGetValidFightPokemonPtr(trainer, index);
 
         if (trainerPokemon == 0)
             return 0;
