@@ -1205,6 +1205,17 @@ ext/musyx_sdk/runtime/synth_vsamples.c:
 	.text       start:0x8017670C end:0x8017691C
 	.bss        start:0x80468560 end:0x804690B0
 
+ext/musyx_sdk/runtime/s_data.c:
+	.text       start:0x8017691C end:0x8017695C
+	.text       start:0x8017695C end:0x8017696C
+	.text       start:0x8017696C end:0x80176BF8
+	.text       start:0x80176BF8 end:0x80176C18
+	.text       start:0x80176C18 end:0x80176F64
+	.text       start:0x80176F64 end:0x801770B8
+	.text       start:0x801770B8 end:0x801771DC
+	.bss        start:0x804690B0 end:0x804696C8
+	.sbss       start:0x804EB400 end:0x804EB410
+
 ext/musyx_sdk/runtime/hw_dspctrl.c:
 	.text       start:0x801771DC end:0x80177590
 	.text       start:0x80177590 end:0x801775C8
