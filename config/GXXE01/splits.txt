@@ -332,6 +332,23 @@ ext/dolphin_sdk/gx/GXDisplayList.c:
 	.text       start:0x800CF024 end:0x800CF0E8
 	.text       start:0x800CF0E8 end:0x800CF158
 
+ext/dolphin_sdk/gx/GXTransform.c:
+	.text       start:0x800CF158 end:0x800CF2CC
+	.text       start:0x800CF2CC end:0x800CF370
+	.text       start:0x800CF370 end:0x800CF3FC
+	.text       start:0x800CF3FC end:0x800CF444
+	.text       start:0x800CF444 end:0x800CF494
+	.text       start:0x800CF494 end:0x800CF4E4
+	.text       start:0x800CF4E4 end:0x800CF518
+	.text       start:0x800CF518 end:0x800CF5CC
+	.text       start:0x800CF5CC end:0x800CF65C
+	.text       start:0x800CF65C end:0x800CF6A4
+	.text       start:0x800CF6A4 end:0x800CF6C8
+	.text       start:0x800CF6C8 end:0x800CF740
+	.text       start:0x800CF740 end:0x800CF780
+	.text       start:0x800CF780 end:0x800CF7A8
+	.text       start:0x800CF7A8 end:0x800CF82C
+
 ext/dolphin_sdk/gx/GXPerf.c:
 	.text       start:0x800CF82C end:0x800D0074
 	.text       start:0x800D0074 end:0x800D0084
