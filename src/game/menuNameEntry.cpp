@@ -407,10 +407,10 @@ int menuNameEntryDrawNameBoxCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, 
         if (n == pos) {
             float s = sin(3.14f * *arg->mTimer * 2.0f);
 
-            sprite->mAlpha = 128.0f * (1.0f + s);
+            sprite->mAlphaReg.alpha.mAlpha = 128.0f * (1.0f + s);
             winSpriteSetDisp(sprite, 1);
         } else if (n < pos) {
-            sprite->mAlpha = 0xFF;
+            sprite->mAlphaReg.alpha.mAlpha = 0xFF;
             winSpriteSetDisp(sprite, 1);
         }
     }
@@ -462,16 +462,16 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s3
     u16 blink;
     if (arg->mMode == 1) {
         if (mode == 0) {
-            sprite->mAlpha = 0xFF;
+            sprite->mAlphaReg.alpha.mAlpha = 0xFF;
         } else {
-            sprite->mAlpha = 0;
+            sprite->mAlphaReg.alpha.mAlpha = 0;
         }
     } else if (arg->mMode != mode) {
-        sprite->mAlpha = 0;
+        sprite->mAlphaReg.alpha.mAlpha = 0;
     } else {
-        sprite->mAlpha = 0xFF;
+        sprite->mAlphaReg.alpha.mAlpha = 0xFF;
     }
-    if (sprite->mAlpha != 0) {
+    if (sprite->mAlphaReg.alpha.mAlpha != 0) {
         chars = arg->mChars;
         count = 0;
         x = 0;
@@ -490,7 +490,7 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s3
                 print1Char(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
             }
         }
-        sprite->mAlpha = 0xFF;
+        sprite->mAlphaReg.alpha.mAlpha = 0xFF;
     }
     return 0;
 }

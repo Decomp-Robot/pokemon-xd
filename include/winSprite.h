@@ -58,8 +58,18 @@ struct tagSPRITE_WORK {
     s16 mCursorY;          // 0x52: y position set by the item cursor hooks.
     s16 mX;                // 0x54: x position.
     s16 mY;                // 0x56: y position.
-    u8 _58[0x0F];          // 0x58-0x66: unknown.
-    u8 mAlpha;             // 0x67: alpha the sprite is drawn with.
+    u8 _58[0x0C];          // 0x58-0x63: unknown.
+    /* 0x64-0x67: the title cursor hook clears the whole word to -1 to drop
+     * whatever blend override is in place, while everything else writes only
+     * the alpha byte at the top of it. The lower three bytes are not
+     * understood yet. */
+    union {
+        u32 mAlphaWord;        // 0x64: whole word, cleared to -1 by the title hook.
+        struct {
+            u8 _64[3];         // 0x64-0x66: unknown.
+            u8 mAlpha;         // 0x67: alpha the sprite is drawn with.
+        } alpha;
+    } mAlphaReg;
     u8 _68[0x0C];          // 0x68-0x73: unknown.
     u8 mUnk74;             // 0x74: flag read by winSpriteGetLayerID.
 };
