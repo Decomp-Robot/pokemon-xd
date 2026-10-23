@@ -8,6 +8,7 @@ static u32 __AXMaxProfiles;
 static u32 __AXCurrentProfile;
 static u32 __AXProfileInitialized;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 AXPROFILE* __AXGetCurrentProfile(void) {
     AXPROFILE* profile;
 
@@ -21,6 +22,7 @@ AXPROFILE* __AXGetCurrentProfile(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXInitProfile(AXPROFILE* profile, u32 maxProfiles) {
     ASSERTLINE(60, profile);
     ASSERTLINE(61, maxProfiles);
@@ -31,6 +33,7 @@ void AXInitProfile(AXPROFILE* profile, u32 maxProfiles) {
     __AXProfileInitialized = 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AXGetProfile(void) {
     BOOL old;
     u32 n;
