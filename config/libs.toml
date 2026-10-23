@@ -8,6 +8,10 @@ cflags_preset = "runtime"
 progress_category = "sdk"
 
 [[lib.object]]
+name = "Runtime.PPCEABI.H/EABISupport.c"
+completed = true
+
+[[lib.object]]
 name = "Runtime.PPCEABI.H/global_destructor_chain.c"
 completed = true
 
