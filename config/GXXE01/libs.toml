@@ -79,6 +79,10 @@ name = "ext/dolphin_sdk/os/OSLink.c"
 completed = true
 
 [[lib.object]]
+name = "ext/dolphin_sdk/os/OSMessage.c"
+completed = true
+
+[[lib.object]]
 name = "ext/dolphin_sdk/os/OSMemory.c"
 completed = false
 

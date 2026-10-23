@@ -1,6 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
     OSInitThreadQueue(&mq->queueSend);
     OSInitThreadQueue(&mq->queueReceive);
@@ -10,6 +11,7 @@ void OSInitMessageQueue(OSMessageQueue* mq, void* msgArray, s32 msgCount) {
     mq->usedCount = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     BOOL enabled;
     s32 lastIndex;
@@ -30,6 +32,7 @@ int OSSendMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     BOOL enabled = OSDisableInterrupts();
 
@@ -51,6 +54,7 @@ int OSReceiveMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int OSJamMessage(OSMessageQueue* mq, void* msg, s32 flags) {
     BOOL enabled = OSDisableInterrupts();
 
