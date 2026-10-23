@@ -1235,9 +1235,6 @@ TRK/dolphin_trk_glue.c:
 	.text       start:0x800D8AA4 end:0x800D8FFC
 	.rodata     start:0x802EC750 end:0x802EC854
 
-game/GSparticleModuleData.cpp:
-	.rodata     start:0x802F3590 end:0x802F3718
-
 TRK/targcont.c:
 	.text       start:0x800D8FFC end:0x800D9030
 
@@ -1247,6 +1244,55 @@ TRK/target_options.c:
 __fini_cpp_exceptions.cpp:
 	.text       start:0x800DA88C end:0x800DA8C0
 	.dtors      start:0x802EA000 end:0x802EA004
+
+Runtime.PPCEABI.H/Gecko_ExceptionPPC.c:
+	.text       start:0x800DA8FC end:0x800DA964
+	.bss        start:0x804426A8 end:0x804426B4
+
+Runtime.PPCEABI.H/GCN_Mem_Alloc.c:
+	.text       start:0x800DA964 end:0x800DAA1C
+
+libc/abort_exit.c:
+	.text       start:0x800DAA1C end:0x800DAB0C
+
+libc/alloc.c:
+	.text       start:0x800DAB0C end:0x800DAFC0
+
+libc/ansi_files.c:
+	.text       start:0x800DAFC0 end:0x800DB0D8
+
+libc/ansi_fp.c:
+	.text       start:0x800DB0D8 end:0x800DE6B4
+	.rodata     start:0x802ECAC0 end:0x802ECBA0
+	.data       start:0x803D45A0 end:0x803D4704
+	.sdata2     start:0x804ECD20 end:0x804ECD50
+
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
+
+libc/arith.c:
+	.text       start:0x800DE6B4 end:0x800DE6C4
+
+libc/buffer_io.c:
+	.text       start:0x800DE6C4 end:0x800DE7BC
+
+libc/critical_regions.c:
+	.text       start:0x800DE7BC end:0x800DE7C8
+
+libc/ctype.c:
+	.text       start:0x800DE7C8 end:0x800DE7EC
+
+libc/direct_io.c:
+	.text       start:0x800DE7EC end:0x800DEB74
+
+libc/file_io.c:
+	.text       start:0x800DEB74 end:0x800DEE68
+
+libc/FILE_POS.c:
+	.text       start:0x800DEE68 end:0x800DF228
+
+libc/mbstring.c:
+	.text       start:0x800DF228 end:0x800DF340
 
 ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800E7008 end:0x800E700C

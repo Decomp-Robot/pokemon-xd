@@ -2950,3 +2950,78 @@ cflags_extra = ["-i src/ext/musyx_sdk/include", "-i src/ext/dolphin_sdk/include"
 [[lib.object]]
 name = "ext/musyx_sdk/txwin/txwin.c"
 completed = true
+
+# The MSL runtime modules come from the two archives the original map
+# identifies, and each object keeps its original module identity:
+# Gecko_ExceptionPPC, GCN_mem_alloc, abort_exit, alloc, ansi_files,
+# ansi_fp, arith, buffer_io, critical_regions, ctype, direct_io, file_io,
+# FILE_POS and mbstring.
+[[lib]]
+name = "Runtime.PPCEABI.H.a"
+mw_version = "GC/2.6"
+cflags_preset = "runtime"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+# Exception fragment registration (Gecko_ExceptionPPC.o) and the default
+# heap allocator (GCN_mem_alloc.o) belong to the OS runtime archive.
+[[lib.object]]
+name = "Runtime.PPCEABI.H/Gecko_ExceptionPPC.c"
+completed = true
+[[lib.object]]
+name = "Runtime.PPCEABI.H/GCN_Mem_Alloc.c"
+completed = true
+
+[[lib]]
+name = "MSL_C.PPCEABI.bare.H"
+mw_version = "GC/2.6"
+cflags_preset = "runtime"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+# MSL runtime modules use the runtime preset's automatic inlining.
+# The stream operations keep their three original objects: direct_io
+# (fwrite/__fwrite), file_io (fclose inlines fflush) and FILE_POS
+# (fseek/_fseek/ftell); calls to buffer and critical-region routines
+# remain cross-object calls.
+#
+# Objects whose data the library's own code uses own those ranges: ansi_fp
+# holds the pow_10 table, the __two_exp switch jump table, the decimal
+# string pool (rodata) and the integer-to-double conversion constants
+# (sdata2); Gecko_ExceptionPPC holds the fragment table (.bss).
+[[lib.object]]
+name = "libc/abort_exit.c"
+completed = true
+[[lib.object]]
+name = "libc/alloc.c"
+completed = true
+[[lib.object]]
+name = "libc/ansi_files.c"
+completed = true
+[[lib.object]]
+name = "libc/ansi_fp.c"
+completed = true
+[[lib.object]]
+name = "libc/arith.c"
+completed = true
+[[lib.object]]
+name = "libc/buffer_io.c"
+completed = true
+[[lib.object]]
+name = "libc/critical_regions.c"
+completed = true
+[[lib.object]]
+name = "libc/ctype.c"
+completed = true
+[[lib.object]]
+name = "libc/direct_io.c"
+completed = true
+[[lib.object]]
+name = "libc/file_io.c"
+completed = true
+[[lib.object]]
+name = "libc/FILE_POS.c"
+completed = true
+[[lib.object]]
+name = "libc/mbstring.c"
+completed = true
