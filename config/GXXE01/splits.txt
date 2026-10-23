@@ -144,6 +144,20 @@ ext/dolphin_sdk/db/db.c:
 	.text       start:0x800B27F0 end:0x800B280C
 	.text       start:0x800B280C end:0x800B285C
 
+ext/dolphin_sdk/perf/perf.c:
+	.text       start:0x800D018C end:0x800D0234
+	.text       start:0x800D0234 end:0x800D033C
+	.text       start:0x800D033C end:0x800D0344
+	.text       start:0x800D0344 end:0x800D05C4
+	.text       start:0x800D05C4 end:0x800D0800
+	.text       start:0x800D0800 end:0x800D08B0
+	.text       start:0x800D08B0 end:0x800D09A8
+	.text       start:0x800D09A8 end:0x800D0AF0
+	.text       start:0x800D0AF0 end:0x800D0BB0
+	.text       start:0x800D0BB0 end:0x800D1138
+	.text       start:0x800D1138 end:0x800D11C4
+	.text       start:0x800D11C4 end:0x800D1258
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 

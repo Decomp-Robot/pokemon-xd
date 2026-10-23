@@ -146,3 +146,14 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/db/db.c"
 completed = false
+
+[[lib]]
+name = "perf"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__", "-i src/ext/dolphin_sdk/perf"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/perf/perf.c"
+completed = false
