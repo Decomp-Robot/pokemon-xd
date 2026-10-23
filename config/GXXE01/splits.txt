@@ -1390,6 +1390,10 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 	.data       start:0x803D4EE0 end:0x803D4F78
 	.sbss       start:0x804EAED0 end:0x804EAED4
 
+game/GSlerp.cpp:
+	.text       start:0x800EFBE8 end:0x800EFCE8
+	.sdata2     start:0x804ED3B0 end:0x804ED3B8
+
 game/GSmodel/effects.cpp:
 	.text       start:0x800EFFCC end:0x800F0EE0
 	.sdata2     start:0x804ED3D8 end:0x804ED3E8

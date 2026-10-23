@@ -9,6 +9,7 @@
 #include <GSquat.h>
 
 extern "C" {
+void GSlerpGetLinearInterpolationVector(GSvec *out, const GSvec *start, const GSvec *end, f32 blend);
 f32 GSlerpGetLinearInterpolationFloat(f32 start, f32 end, f32 blend);
 void GSvecTransformQuat(GSvec *out, const f32 *rotation, const GSvec *value);
 double fmod(double numerator, double denominator);
