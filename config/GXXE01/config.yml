@@ -2,8 +2,9 @@ object: orig/GXXE01/sys/main.dol
 hash: ff9e752ead9914af0b363ae6c831a34ccce189d2
 symbols: config/GXXE01/symbols.txt
 splits: config/GXXE01/splits.txt
+ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
-detect_objects: false
+detect_objects: true
 detect_strings: false
-export_all: false
+export_all: true
 fill_gaps: false

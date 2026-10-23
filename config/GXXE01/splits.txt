@@ -12,3 +12,6 @@ Sections:
 	.sbss       type:bss align:32
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
+
+src/init.c:
+	.init       start:0x80003100 end:0x800055E8
