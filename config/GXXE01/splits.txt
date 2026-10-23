@@ -120,6 +120,14 @@ ext/dolphin_sdk/os/OSSync.c:
 ext/dolphin_sdk/os/OSThread.c:
 	.text       start:0x800B0FA8 end:0x800B2244
 
+ext/dolphin_sdk/os/OSTime.c:
+	.text       start:0x800B2244 end:0x800B225C
+	.text       start:0x800B225C end:0x800B2264
+	.text       start:0x800B2264 end:0x800B22C8
+	.text       start:0x800B22C8 end:0x800B2320
+	.text       start:0x800B2320 end:0x800B24BC
+	.text       start:0x800B24BC end:0x800B26C0
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 

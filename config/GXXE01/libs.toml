@@ -107,3 +107,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSThread.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSTime.c"
+completed = false
