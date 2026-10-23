@@ -1100,6 +1100,31 @@ ext/musyx_sdk/runtime/snd_synthapi.c:
 	.text       start:0x80168BC8 end:0x80168CB4
 	.text       start:0x80168CB4 end:0x80168E0C
 
+ext/musyx_sdk/runtime/stream.c:
+	.text       start:0x80168E0C end:0x80168ED4
+	.text       start:0x80168ED4 end:0x80168F60
+	.text       start:0x80168F60 end:0x80169844
+	.text       start:0x80169844 end:0x80169848
+	.text       start:0x80169848 end:0x801698E0
+	.text       start:0x801698E0 end:0x80169A40
+	.text       start:0x80169A40 end:0x80169ED4
+	.text       start:0x80169ED4 end:0x80169F08
+	.text       start:0x80169F08 end:0x80169F18
+	.text       start:0x80169F18 end:0x80169F5C
+	.text       start:0x80169F5C end:0x8016A08C
+	.text       start:0x8016A08C end:0x8016A52C
+	.text       start:0x8016A52C end:0x8016A570
+	.text       start:0x8016A570 end:0x8016AC6C
+	.text       start:0x8016AC6C end:0x8016B1D4
+	.text       start:0x8016B1D4 end:0x8016B888
+	.text       start:0x8016B888 end:0x8016BEF0
+	.text       start:0x8016BEF0 end:0x8016C5C4
+	.text       start:0x8016C5C4 end:0x8016CC1C
+	.text       start:0x8016CC1C end:0x8016D330
+	.bss        start:0x80457348 end:0x80458D48
+	.sbss       start:0x804EB368 end:0x804EB376
+	.sdata2     start:0x804EDD88 end:0x804EDDA0
+
 ext/musyx_sdk/runtime/synthdata.c:
 	.text       start:0x8016D330 end:0x8016D520
 	.text       start:0x8016D520 end:0x8016D69C

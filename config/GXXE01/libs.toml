@@ -1248,6 +1248,10 @@ name = "ext/musyx_sdk/runtime/snd_synthapi.c"
 completed = true
 
 [[lib.object]]
+name = "ext/musyx_sdk/runtime/stream.c"
+completed = true
+
+[[lib.object]]
 name = "ext/musyx_sdk/runtime/seq.c"
 completed = true
 
