@@ -197,6 +197,31 @@ ext/dolphin_sdk/gx/GXAttr.c:
 	.text       start:0x800C91C0 end:0x800C9440
 	.text       start:0x800C9440 end:0x800C947C
 
+ext/dolphin_sdk/gx/GXMisc.c:
+	.text       start:0x800C947C end:0x800C9510
+	.text       start:0x800C9510 end:0x800C956C
+	.text       start:0x800C956C end:0x800C95A0
+	.text       start:0x800C95A0 end:0x800C970C
+	.text       start:0x800C970C end:0x800C98D4
+	.text       start:0x800C98D4 end:0x800C9988
+	.text       start:0x800C9988 end:0x800C9994
+	.text       start:0x800C9994 end:0x800C9A2C
+	.text       start:0x800C9A2C end:0x800C9AAC
+	.text       start:0x800C9AAC end:0x800C9AD0
+	.text       start:0x800C9AD0 end:0x800C9AE4
+	.text       start:0x800C9AE4 end:0x800C9B04
+	.text       start:0x800C9B04 end:0x800C9B1C
+	.text       start:0x800C9B1C end:0x800C9B80
+	.text       start:0x800C9B80 end:0x800C9B98
+	.text       start:0x800C9B98 end:0x800C9BBC
+	.text       start:0x800C9BBC end:0x800C9BD4
+	.text       start:0x800C9BD4 end:0x800C9BF4
+	.text       start:0x800C9BF4 end:0x800C9C38
+	.text       start:0x800C9C38 end:0x800C9CC0
+	.text       start:0x800C9CC0 end:0x800C9D04
+	.text       start:0x800C9D04 end:0x800C9D84
+	.text       start:0x800C9D84 end:0x800C9DF8
+
 ext/dolphin_sdk/gx/GXGeometry.c:
 	.text       start:0x800C9DF8 end:0x800C9E78
 	.text       start:0x800C9E78 end:0x800C9F48
