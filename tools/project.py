@@ -451,6 +451,11 @@ def generate_build(config: ProjectConfig) -> None:
     generate_compile_commands(config, objects, build_config)
 
 
+def _relative_path(path: str | Path) -> Path:
+    path = Path(path).absolute()
+    return Path(os.path.relpath(path)) if path.drive.casefold() == Path.cwd().drive.casefold() else path
+
+
 # Generate build.ninja
 def generate_build_ninja(
     config: ProjectConfig,
@@ -462,8 +467,8 @@ def generate_build_ninja(
     n.variable("ninja_required_version", "1.3")
     n.newline()
 
-    configure_script = Path(os.path.relpath(os.path.abspath(sys.argv[0])))
-    python_lib = Path(os.path.relpath(__file__))
+    configure_script = _relative_path(sys.argv[0])
+    python_lib = _relative_path(__file__)
     python_lib_dir = python_lib.parent
     n.comment("The arguments passed to configure.py, for rerunning it.")
     n.variable("configure_args", sys.argv[1:])
@@ -1984,7 +1989,7 @@ def generate_compile_commands(
 
         def default_format(o):
             if isinstance(o, Path):
-                return o.resolve().as_posix()
+                return o.absolute().as_posix()
             return str(o)
 
         json.dump(clangd_config, w, indent=2, default=default_format)
@@ -2041,14 +2046,20 @@ def calculate_progress(config: ProjectConfig) -> None:
         total_units = measures.get("total_units", 0)
         complete_units = measures.get("complete_units", 0)
 
+        # Formats a progress percentage as a string, and prevents partial matches from being rounded to 0.00% or 100.00%.
+        def format_percent(value: float) -> str:
+            if value > 0.0 and value < 100.0:
+                value = max(0.01, min(value, 99.99))
+            return f"{value:.2f}%"
+
         progress_print(
-            f"  {name}: {fuzzy_match_percent:.2f}% fuzzy, {matched_code_percent:.2f}% matched, {complete_code_percent:.2f}% linked ({complete_units} / {total_units} files)"
+            f"  {name}: {format_percent(fuzzy_match_percent)} fuzzy, {format_percent(matched_code_percent)} matched, {format_percent(complete_code_percent)} linked ({complete_units} / {total_units} files)"
         )
         progress_print(
             f"    Code: {matched_code} / {total_code} bytes ({matched_functions} / {total_functions} functions)"
         )
         progress_print(
-            f"    Data: {matched_data} / {total_data} bytes ({matched_data_percent:.2f}%)"
+            f"    Data: {matched_data} / {total_data} bytes ({format_percent(matched_data_percent)})"
         )
 
     print_category("All", report_data["measures"])
@@ -2065,8 +2076,8 @@ def calculate_progress(config: ProjectConfig) -> None:
         total_data = measures.get("total_data", 0)
         if total_code == 0 or total_data == 0:
             return
-        code_frac = measures.get("complete_code", 0) / total_code
-        data_frac = measures.get("complete_data", 0) / total_data
+        code_frac = measures.get("matched_code", 0) / total_code
+        data_frac = measures.get("matched_data", 0) / total_data
 
         progress_print(
             "\nYou have {} out of {} {} and {} out of {} {}.".format(
