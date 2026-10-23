@@ -9,6 +9,11 @@ struct GSgfxVF;
 // entry points. The enumerator names were not recovered.
 enum GSgfxLayerID { };
 
+// Primitive op a surface emits, following the GX primitive op encoding
+// (0x80 quads, 0x98 triangle strip; 0xA0 triangle fan also seen at call
+// sites). The enumerator names were not recovered.
+enum GSgfxPrimType { };
+
 // Write-gather FIFO the GS layers emit their primitives into.
 typedef union {
     u8 u8;
@@ -34,6 +39,7 @@ class GSgfxLayer {
 public:
     void setRenderStateAndSelect(GSgfxVF *vf);
     void beginSurface(u16 surface);
+    void primitiveType(GSgfxPrimType type);
 
     u8 _0000[0x173C];
     u32 mTextureStateA;   // 0x173C: dirty bits of the first cached texture.
@@ -42,7 +48,7 @@ public:
     u32 mTextureStateB;   // 0x17F4: dirty bits of the second cached texture.
     GStexture *mTextureB; // 0x17F8: second cached texture.
     u8 _17FC[0x19C];
-    u32 mSurfaceID;       // 0x1998: surface the quad is emitted into.
+    GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
 };
 
 #endif

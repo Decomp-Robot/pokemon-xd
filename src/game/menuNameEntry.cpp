@@ -170,7 +170,7 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
         layer->mTextureB = texture;
         layer->mTextureStateB |= 1;
     }
-    layer->mSurfaceID = 0x98;
+    layer->mPrimitiveType = (GSgfxPrimType)0x98;
     layer->beginSurface(4);
 
     f32 zero = 0.0f;
