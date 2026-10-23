@@ -184,6 +184,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/menuPocketToolData.s"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocketTool.cpp"
 completed = true
 cflags = [

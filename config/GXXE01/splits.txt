@@ -13,6 +13,9 @@ Sections:
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
 
+game/menuPocketToolData.s:
+	.sdata2     start:0x804EC064 end:0x804EC068
+
 game/dbgMenuFight.c:
 	.text       start:0x80005D40 end:0x80005DB0
 
@@ -78,7 +81,8 @@ game/menuPtSpriteWork.cpp:
 	.text       start:0x8002189C end:0x800218E8
 
 game/menuPocketTool.cpp:
-	.text       start:0x80021E84 end:0x80021EFC
+	.text       start:0x80021E84 end:0x80021F50
+	.sdata2     start:0x804EC068 end:0x804EC070
 
 game/bitTable.cpp:
 	.text       start:0x80022040 end:0x80022080
