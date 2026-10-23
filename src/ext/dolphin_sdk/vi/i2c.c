@@ -4,6 +4,7 @@
 
 static int lastError;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int wait4ClkHigh(void) {
     int n;
 
@@ -17,6 +18,7 @@ static int wait4ClkHigh(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int sendSlaveAddr(u8 slaveAddr) {
     int i;
 
@@ -55,6 +57,7 @@ static int sendSlaveAddr(u8 slaveAddr) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int __VISendI2CData(u8 slaveAddr, u8* pData, int nBytes) {
     s32 i;
     u8 data;
