@@ -23,7 +23,7 @@
 #define BLOCK_PREV_USED 0x4
 
 /* Sizes served from the fixed-size pools, smallest first. */
-extern const int fix_pool_sizes[];
+const int fix_pool_sizes[6] = { 4, 12, 20, 36, 52, 68 };
 
 /* Largest request still satisfied out of a fixed-size pool. */
 #define FIXED_POOL_LIMIT 68
@@ -97,20 +97,19 @@ typedef struct PoolChunk {
     (*(PoolChunk **)((char *)(pool) + (span) - sizeof(unsigned int)))
 
 /*
- * Allocator state, owned by the allocator's own translation unit.  The
- * variable-size pools form a plain list; the fixed-size pools follow it as
- * six entries, because the deallocation routines address them as an offset
- * from the state.
+ * The allocator state.  The variable-size pools form a plain list; the
+ * fixed-size pools follow it as six entries, because the deallocation
+ * routines address them as an offset from the state.
  */
 typedef struct AllocState {
     VarPool *var_pools;              /* +0x00 */
     Pool fixed[MAX_FIXED_POOLS];     /* +0x04 */
 } AllocState;                        /* 0x34 bytes */
 
-extern AllocState defaultAllocatorState;
+AllocState defaultAllocatorState;
 
 /* Set once the state block has been zeroed, so free() stays cheap. */
-extern unsigned char allocatorInitialized;
+unsigned char allocatorInitialized;
 
 extern void *memset(void *dst, int c, unsigned long n);
 

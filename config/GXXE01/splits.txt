@@ -1318,11 +1318,14 @@ libc/abort_exit.c:
 	.bss        start:0x804426B8 end:0x804427B8
 	.sbss       start:0x804EAE60 end:0x804EAE70
 
-libc/errno.c:
-	.sbss       start:0x804EAE78 end:0x804EAE80
-
 libc/alloc.c:
 	.text       start:0x800DAB0C end:0x800DAFC0
+	.rodata     start:0x802ECAA8 end:0x802ECAC0
+	.bss        start:0x804427B8 end:0x804427F0
+	.sbss       start:0x804EAE70 end:0x804EAE78
+
+libc/errno.c:
+	.sbss       start:0x804EAE78 end:0x804EAE80
 
 libc/ansi_files.c:
 	.text       start:0x800DAFC0 end:0x800DB0D8
