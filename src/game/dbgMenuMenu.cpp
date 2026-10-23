@@ -92,7 +92,8 @@ void menuOrreColosseum(u16 encountID);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon
-u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
+#include <memo.h>
+
 void pokemonBiosSetRnd(Pokemon *pokemon, u32 rnd);
 void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
 

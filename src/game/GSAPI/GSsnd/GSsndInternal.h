@@ -15,6 +15,8 @@
 extern "C" {
 #endif
 
+enum { GSSND_EMITTER_DISTANCE_FILTER = 0x80 };
+
 /* GSsnd state paired with the MusyX 3-D emitter and listener records. */
 typedef struct GSsndEmitter {
     u8 inUse;

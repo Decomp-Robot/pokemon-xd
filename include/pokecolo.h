@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+f32 pokecoloGetFrameTime(void);
 s32 pokecoloGetCountryCode(void);
 s32 pokecoloGetLanguage(void);
 s32 pokecoloGetRomVersion(void);

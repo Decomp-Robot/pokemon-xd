@@ -5,7 +5,7 @@
 #include <GSgfx.h>
 #include <GSres.h>
 
-struct Sequence;
+class NullSequence;
 struct WazaSequence;
 
 struct ScriptResultContext;
@@ -41,7 +41,7 @@ enum VariantKind {
     VariantWaza = 0x3a
 };
 struct tigaWaza {
-    Sequence* sequence;
+    NullSequence* sequence;
     WazaSequence* wazaSequence;
 };
 class tigaArrayFixed;

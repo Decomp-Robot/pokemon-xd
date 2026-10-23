@@ -398,7 +398,7 @@ GSsndEmitter* GSsndCreateEmitterParam(s32 soundID, GSsndVec3* position, GSsndVec
     GSsndEmitter* emitter = _sndGetNewEmitter();
     if (emitter == 0) return 0;
     sndAddEmitter(&emitter->emitter, (SND_FVECTOR*)position, (SND_FVECTOR*)velocity,
-                  maxDistance, compression, SND_EMITTER_CONTINUOUS | SND_EMITTER_RESTARTABLE | SND_EMITTER_DOPPLERFX | SND_EMITTER_PAUSABLE | SND_EMITTER_ITD | SND_EMITTER_DISTANCEFILTER, entry->fxID,
+                  maxDistance, compression, SND_EMITTER_CONTINUOUS | SND_EMITTER_RESTARTABLE | SND_EMITTER_DOPPLERFX | SND_EMITTER_PAUSABLE | SND_EMITTER_ITD | GSSND_EMITTER_DISTANCE_FILTER, entry->fxID,
                   maxVolume, minVolume, 0);
     emitter->position = *position;
     emitter->velocity = *velocity;

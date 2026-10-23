@@ -16,7 +16,8 @@ enum SaveDataRegion {
     SAVE_DATA_IMAGE = 0,
     SAVE_DATA_GAME = 1,
     SAVE_DATA_HERO = 2,
-    SAVE_DATA_FIGHT_RULE = 0xE
+    SAVE_DATA_FIGHT_RULE = 0xE,
+    SAVEDATA_BLOCK_MEMO = 0xC
 };
 
 #ifdef __cplusplus

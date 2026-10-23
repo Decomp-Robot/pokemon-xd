@@ -117,23 +117,7 @@
 // the GameCube hands the GBA, and both modes arm the same poll timer for it.
 #define AGB_UPLOAD_MODE_POKEMON 0
 
-// Dolphin SDK Game Boy Advance link library (dolphin/gba).
-typedef void (*GBACallback)(long chan, long result);
-
-extern "C" long GBAGetStatusAsync(long chan, u8 *status, GBACallback callback);
-extern "C" long GBAReadAsync(long chan, void *dst, u8 *status, GBACallback callback);
-extern "C" long GBAWriteAsync(long chan, void *src, u8 *status, GBACallback callback);
-extern "C" long GBAResetAsync(long chan, u8 *status, GBACallback callback);
-
-// Blocking forms of the same calls, which wait for the GBA to answer and report
-// whether it did; they are what the exchanges of the link library are built on.
-extern "C" {
-BOOL GBAInit(void);
-BOOL GBAGetStatus(long chan, u8 *status);
-BOOL GBARead(long chan, void *dst, u8 *status);
-BOOL GBAWrite(long chan, const void *src, u8 *status);
-BOOL GBAReset(long chan, u8 *status);
-}
+#include <dolphin/gba.h>
 
 // Job framework and channel initialization.
 void _timer_set(long chan, unsigned long msec);

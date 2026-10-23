@@ -2051,6 +2051,32 @@ game/app/fight/fightFloor.cpp:
 game/app/fight/fightFloorBios.cpp:
 	.text       start:0x801F5B38 end:0x801F5E18
 
+game/app/pokemon/pokemonWazaSequenceDisplay.cpp:
+	.text       start:0x80233B20 end:0x80233C8C
+	.sdata2     start:0x804EEBE0 end:0x804EEBE4
+
+ext/dolphin_sdk/gba/GBA.c:
+	.text       start:0x80233C8C end:0x80233F7C
+	.data       start:0x804187A8 end:0x804187B8
+	.bss        start:0x804B0A40 end:0x804B0F40
+	.sbss       start:0x804EB9A8 end:0x804EB9AC
+
+ext/dolphin_sdk/gba/GBARead.c:
+	.text       start:0x80233F7C end:0x802340DC
+
+ext/dolphin_sdk/gba/GBAWrite.c:
+	.text       start:0x802340DC end:0x80234264
+
+ext/dolphin_sdk/gba/GBAXfer.c:
+	.text       start:0x80234264 end:0x80234578
+
+game/app/memo/memo.c:
+	.text       start:0x80234578 end:0x80234E58
+	.sdata2     start:0x804EEBE8 end:0x804EEC20
+
+game/app/evolution/evolution.cpp:
+	.text       start:0x80234E58 end:0x80234F78
+
 src/init.c:
 	.init       start:0x80003458 end:0x80003488
 
