@@ -19,6 +19,7 @@ completed = false
 name = "Runtime.PPCEABI.H/MemFuncs.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",

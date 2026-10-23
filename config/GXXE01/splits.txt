@@ -1962,6 +1962,11 @@ game/sound.c:
 	.sbss       start:0x804EB4D0 end:0x804EB4D8
 	.sdata2     start:0x804EDF30 end:0x804EDF40
 
+game/fight.cpp:
+	.text       start:0x8020D854 end:0x8020D858
+	.ctors      start:0x802E9FE0 end:0x802E9FE4
+	.bss        start:0x804B0048 end:0x804B0078
+
 src/init.c:
 	.init       start:0x80003458 end:0x80003488
 

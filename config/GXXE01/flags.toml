@@ -1,0 +1,2 @@
+cflags_extra = ["-W error"]
+ldflags_extra = ["-w error"]

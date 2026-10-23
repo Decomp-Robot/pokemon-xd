@@ -32,6 +32,7 @@ completed = true
 name = "game/dbgMenuMemcard.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -97,6 +98,7 @@ completed = true
 name = "game/menuPokeCoupon.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -133,6 +135,7 @@ completed = true
 name = "game/GScolsys2.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -161,6 +164,7 @@ cflags = [
 name = "game/GScolsys2Draw.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -191,6 +195,7 @@ cflags = [
 name = "game/GScolsys2Walk.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -219,6 +224,7 @@ cflags = [
 name = "game/GScolsys2Hit.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -247,6 +253,7 @@ cflags = [
 name = "game/GScolsys2Util.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -275,6 +282,7 @@ cflags = [
 name = "game/GScolsys2Human.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -306,6 +314,7 @@ cflags = [
 name = "game/GScolsys2Thru.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -334,6 +343,7 @@ cflags = [
 name = "game/menuWorldMapMX.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -365,6 +375,7 @@ cflags = [
 name = "game/menuPokemon.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -405,37 +416,44 @@ completed = true
 
 [[lib.object]]
 name = "TRK/mainloop.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/nubevent.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/nubinit.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/msg.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/msgbuf.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto,deferred', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto,deferred', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/serpoll.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
 name = "TRK/usr_put.c"
-cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+cflags = [
+    "-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
 completed = true
 
 [[lib.object]]
@@ -444,6 +462,7 @@ completed = true
 # The face texture work and the per-port entry flags of the Pokemon entry
 # screen. Same flags as the menu stack module it continues.
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -474,6 +493,7 @@ completed = true
 # The regulation checks of the colosseum rule sets and the per-slot condition
 # records the entry screens report. Same flags as the entry screen module.
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -502,6 +522,7 @@ cflags = [
 name = "game/menuPcBoxDougu.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -531,6 +552,7 @@ cflags = [
 name = "game/dbgMenuMenu.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -560,6 +582,7 @@ cflags = [
 name = "game/menuPocketTool.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -592,6 +615,7 @@ cflags = [
 name = "game/menuPocket.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -621,6 +645,7 @@ cflags = [
 name = "game/menuSaveLoad.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -650,6 +675,7 @@ cflags = [
 name = "game/menuPda.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -683,6 +709,7 @@ completed = true
 name = "game/gbaCommandLink.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -714,6 +741,7 @@ cflags = [
 name = "game/gbaPokemonTransfer.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -745,6 +773,7 @@ cflags = [
 name = "game/gbaPokemonTransferJobs.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -776,6 +805,7 @@ cflags = [
 name = "game/gbaAgbLink.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -881,6 +911,7 @@ completed = true
 name = "game/menuPocketBattleDisk.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -909,6 +940,7 @@ cflags = [
 name = "game/gbaExchange.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -937,6 +969,7 @@ cflags = [
 name = "game/menuTitle.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -965,6 +998,7 @@ cflags = [
 name = "game/menuUseItem.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -996,6 +1030,7 @@ cflags = [
 name = "game/menuTop.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1023,6 +1058,7 @@ cflags = [
 name = "game/menuNameEntry.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1052,6 +1088,7 @@ cflags = [
 name = "game/menuPokemonStatus.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1081,6 +1118,7 @@ cflags = [
 name = "game/menuCB_Sub1.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1112,6 +1150,7 @@ cflags = [
 name = "game/menuCBBattleStart.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1141,6 +1180,7 @@ cflags = [
 name = "game/menuColosseumBattle.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1172,6 +1212,7 @@ cflags = [
 name = "game/menuCBBattleResult.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1211,6 +1252,7 @@ cflags = [
 name = "game/menuCBBiosTrainer.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1241,6 +1283,7 @@ cflags = [
 name = "game/LooseBallAnims.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1271,6 +1314,7 @@ cflags = [
 name = "game/menuCBBiosRule.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1300,6 +1344,7 @@ cflags = [
 name = "game/menuCBBiosRuleMsg.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1340,12 +1385,14 @@ completed = true
 [[lib.object]]
 name = "game/menuBattleDisk.cpp"
 completed = true
-extra_cflags = ["-opt nopeephole"]
+extra_cflags = [
+    "-W error", "-opt nopeephole"]
 
 [[lib.object]]
 name = "game/menuOrreColosseum.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1376,6 +1423,7 @@ cflags = [
 name = "game/particleEngine.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1404,27 +1452,60 @@ cflags = [
 [[lib.object]]
 name = "game/sound.c"
 completed = true
-extra_cflags = ["-inline noauto"]
+extra_cflags = [
+    "-W error", "-inline noauto"]
+
+[[lib.object]]
+name = "game/fight.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-lang=c++",
+]
 
 [[lib.object]]
 name = "game/peParticle.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = [
+    "-W error", "-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/peNode.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = [
+    "-W error", "-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/peBank.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = [
+    "-W error", "-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/GSmodel/effects.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1456,6 +1537,7 @@ cflags = [
 name = "game/GSmodelBlend.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1488,6 +1570,7 @@ cflags = [
 name = "game/GSmodelBound.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1519,6 +1602,7 @@ cflags = [
 name = "game/GSmodelAnim.cpp"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1557,6 +1641,7 @@ progress_category = "sdk"
 name = "TRK/targimpl.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1590,6 +1675,7 @@ cflags = [
 name = "TRK/targsupp.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1623,6 +1709,7 @@ cflags = [
 name = "TRK/mpc_7xx_603e.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1656,6 +1743,7 @@ cflags = [
 name = "TRK/dolphin_trk.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1689,6 +1777,7 @@ cflags = [
 name = "TRK/main_TRK.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1722,6 +1811,7 @@ cflags = [
 name = "TRK/targcont.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1755,6 +1845,7 @@ cflags = [
 name = "TRK/target_options.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1788,6 +1879,7 @@ cflags = [
 name = "TRK/dolphin_trk_glue.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1838,6 +1930,7 @@ completed = true
 # stays a real call) and -use_lmw_stmw on (the entry callbacks save their
 # registers inline).
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -1891,6 +1984,130 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAlarm.c"
 completed = true
+
+# GSmemman.a heap allocator. OSAlloc.o, sysdolmem.o and poolAlloc.o were built
+# unoptimized: -O0,p keeps the spilled temporaries and dead stores the objects
+# still contain. All three share the settings below, and each of them is
+# required - -O4,p shrinks OSAlloc.o .text from 0x11CC to 0xFE8, the peephole
+# pass off grows it to 0x1214, -inline auto or -schedule off shrinks it to
+# 0x11C4, and without -use_lmw_stmw (0x1204) or without the readonly string pool
+# the object changes as well.
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/sysdolmem.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/poolAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSArena.c"
@@ -2385,6 +2602,7 @@ completed = true
 name = "ext/dolphin_sdk/exi/EXIBios.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2414,6 +2632,7 @@ cflags = [
 name = "ext/dolphin_sdk/exi/EXIUart.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2451,6 +2670,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 name = "ext/dolphin_sdk/si/SIBios.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2482,6 +2702,7 @@ cflags = [
 name = "ext/dolphin_sdk/si/SISamplingRate.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2513,6 +2734,7 @@ cflags = [
 name = "ext/dolphin_sdk/si/SISteering.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2544,6 +2766,7 @@ cflags = [
 name = "ext/dolphin_sdk/si/SISteeringAuto.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -2575,6 +2798,7 @@ cflags = [
 name = "ext/dolphin_sdk/si/SISteeringXfer.c"
 completed = true
 cflags = [
+    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
