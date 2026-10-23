@@ -1108,3 +1108,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/support/string.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/support/Tree.c"
+completed = true
