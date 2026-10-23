@@ -23,8 +23,8 @@ extern "C" bool GScolsys2UtilGetCpPlaneLine(GSvec* out, f32* t, GSvec* normal,
     return 1;
 }
 
-/* Closest point on the segment a->b to p, written to out, with the
- * segment parameter returned. A degenerate segment collapses onto a. */
+/* Closest point on the line through a and b to p, written to out, with the
+ * line parameter returned. A degenerate segment collapses onto a. */
 extern "C" f32 GScolsys2UtilGetCpLinePoint(GSvec* out, GSvec* a, GSvec* b,
                                            GSvec* p)
 {
