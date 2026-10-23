@@ -10,6 +10,7 @@ static u32 __AMStackLocation;
 static u32 __AMFreeBytes;
 static u32 __AMPendingReads;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __AM_dvd_callback(s32 result, DVDFileInfo* handle) {
     u32 i;
     AMReadInfo* ptr;
@@ -30,6 +31,7 @@ static void __AM_dvd_callback(s32 result, DVDFileInfo* handle) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __AM_arq_callback(u32 task) {
     u32 i;
     AMReadInfo* ptr;
@@ -59,6 +61,7 @@ static void __AM_arq_callback(u32 task) {
     }
 }  
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __AM_arq_poll_callback(u32 task) {
     u32 i;
     AMReadInfo* ptr;
@@ -75,6 +78,7 @@ static void __AM_arq_poll_callback(u32 task) {
     ptr->poll_flag = 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void* AMLoadFile(char* path, u32* length) {
     DVDFileInfo dvdFileInfo;
     u32 roundLength;
@@ -106,6 +110,7 @@ void* AMLoadFile(char* path, u32* length) {
     return buffer;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMPush(char* path) {
     DVDFileInfo handle;
     void* buffer;
@@ -137,6 +142,7 @@ u32 AMPush(char* path) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMPushData(void* buffer, u32 length) {
     BOOL old;
     u32 round_length;
@@ -170,6 +176,7 @@ u32 AMPushData(void* buffer, u32 length) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 __AMPushBuffered(char* path, void* buffer, u32 buffer_size, AMCallback callback, int async_flag) {
     BOOL old;
     u32 round_file_length;
@@ -249,6 +256,7 @@ u32 __AMPushBuffered(char* path, void* buffer, u32 buffer_size, AMCallback callb
     return ptr->aram_start_addr;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AMPop(void) {
     BOOL old;
     old = OSDisableInterrupts();
@@ -263,10 +271,12 @@ void AMPop(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMGetZeroBuffer(void) {
     return __AMStackPointer[0];
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMGetReadStatus(void) {
     BOOL old;
     u32 tmp;
@@ -278,6 +288,7 @@ u32 AMGetReadStatus(void) {
     return tmp;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMGetFreeSize(void) {
     BOOL old;
     u32 tmp;
@@ -289,6 +300,7 @@ u32 AMGetFreeSize(void) {
     return tmp;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AMGetStackPointer(void) {
     BOOL old;
     u32 tmp;
@@ -300,6 +312,7 @@ u32 AMGetStackPointer(void) {
     return tmp;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AMInit(u32 aramBase, u32 aramBytes) {
     u32 i;
     u8 __AMZeroBuffer[256 + 31];
