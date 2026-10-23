@@ -1053,6 +1053,63 @@ ext/musyx_sdk/runtime/synthdata.c:
 	.bss        start:0x80467548 end:0x80467580
 	.sbss       start:0x804EB378 end:0x804EB3C8
 
+ext/musyx_sdk/runtime/synthmacros.c:
+	.text       start:0x8016EC94 end:0x8016EF84
+	.text       start:0x8016EF84 end:0x8016F054
+	.text       start:0x8016F054 end:0x8016F1A8
+	.text       start:0x8016F1A8 end:0x8016F334
+	.text       start:0x8016F334 end:0x8016F40C
+	.text       start:0x8016F40C end:0x8016F60C
+	.text       start:0x8016F60C end:0x8016F788
+	.text       start:0x8016F788 end:0x8016F928
+	.text       start:0x8016F928 end:0x8016FB80
+	.text       start:0x8016FB80 end:0x8016FCAC
+	.text       start:0x8016FCAC end:0x8016FF28
+	.text       start:0x8016FF28 end:0x8016FFC4
+	.text       start:0x8016FFC4 end:0x80170060
+	.text       start:0x80170060 end:0x80170194
+	.text       start:0x80170194 end:0x801702C4
+	.text       start:0x801702C4 end:0x80170400
+	.text       start:0x80170400 end:0x8017059C
+	.text       start:0x8017059C end:0x801706A0
+	.text       start:0x801706A0 end:0x801707A4
+	.text       start:0x801707A4 end:0x801708A8
+	.text       start:0x801708A8 end:0x801709AC
+	.text       start:0x801709AC end:0x80170AB0
+	.text       start:0x80170AB0 end:0x80170BB4
+	.text       start:0x80170BB4 end:0x80170CB8
+	.text       start:0x80170CB8 end:0x80170DBC
+	.text       start:0x80170DBC end:0x80170EC0
+	.text       start:0x80170EC0 end:0x80170FC4
+	.text       start:0x80170FC4 end:0x801710C8
+	.text       start:0x801710C8 end:0x801711CC
+	.text       start:0x801711CC end:0x801712D0
+	.text       start:0x801712D0 end:0x801713D4
+	.text       start:0x801713D4 end:0x801714D8
+	.text       start:0x801714D8 end:0x80171654
+	.text       start:0x80171654 end:0x801717D0
+	.text       start:0x801717D0 end:0x80171934
+	.text       start:0x80171934 end:0x8017199C
+	.text       start:0x8017199C end:0x80171BBC
+	.text       start:0x80171BBC end:0x80171D08
+	.text       start:0x80171D08 end:0x80171F4C
+	.text       start:0x80171F4C end:0x80171FCC
+	.text       start:0x80171FCC end:0x801720A8
+	.text       start:0x801720A8 end:0x8017303C
+	.text       start:0x8017303C end:0x80173190
+	.text       start:0x80173190 end:0x8017323C
+	.text       start:0x8017323C end:0x8017332C
+	.text       start:0x8017332C end:0x80173434
+	.text       start:0x80173434 end:0x801734D8
+	.text       start:0x801734D8 end:0x801735E0
+	.text       start:0x801735E0 end:0x801736DC
+	.text       start:0x801736DC end:0x80173B14
+	.text       start:0x80173B14 end:0x80173B7C
+	.data       start:0x80405B50 end:0x80405F98
+	.bss        start:0x80467580 end:0x804675A0
+	.sbss       start:0x804EB3C8 end:0x804EB3E8
+	.sdata2     start:0x804EDDA0 end:0x804EDDC8
+
 ext/musyx_sdk/runtime/synthvoice.c:
 	.text       start:0x80173B7C end:0x80173C5C
 	.text       start:0x80173C5C end:0x80173FC4
