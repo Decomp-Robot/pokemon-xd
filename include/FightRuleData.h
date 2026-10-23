@@ -3,6 +3,8 @@
 
 #include <types.h>
 
+typedef struct FightRuleData FightRuleData;
+
 // FightRuleData -- one battle regulation record: the entry fees, time limits
 // and restriction lists a link battle enforces, plus the message shown for
 // it. The colosseum keeps a table of six of these in the save
@@ -33,7 +35,8 @@ struct FightRuleData {
     u16 m46;
     u32 m48[2];
     u16 mMsgId; // 0x50: message ID of the rule set; also marks initialized slots.
-    u16 m52[30]; // 0x52: restriction entry list, read as u16.
+    u8 m52[0x3C]; // 0x52-0x8D: restriction entry list; slot 0 is a flag
+                   // written as a byte, the rest is read as u16.
     u16 m8E;
 };
 

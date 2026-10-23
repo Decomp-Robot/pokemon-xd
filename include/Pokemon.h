@@ -4,6 +4,7 @@
 #include <types.h>
 
 // Pokemon -- party/battle pokemon record.
+typedef struct Pokemon Pokemon;
 struct Pokemon {
     u8 _00[0x02]; // 0x00-0x01: unknown.
     u16 mItemDataId; // 0x02: held item data ID.

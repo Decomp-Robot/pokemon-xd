@@ -4,6 +4,8 @@
 #include <hero.h>
 #include <types.h>
 
+typedef struct FIGHT_TRAINER FIGHT_TRAINER;
+
 // FIGHT_TRAINER -- one battle trainer record of the MenuCBTaisenWork work
 // area: the fight trainer data IDs it plays, the home place the battle-start
 // screen shows, the versus battle ID the record was booked under, and the two
@@ -16,9 +18,12 @@
 // the record belongs to the fight module and stays undeclared here.
 struct FIGHT_TRAINER {
     u16 mDataId; // 0x00: fight trainer data ID the record is set to.
-    u8 _02[0x04 - 0x02]; // 0x02-0x03: reset data ID, kept in the head's Pokemon item slot.
-    u32 mHomePlace; // 0x04: home place of the record's hero.
-    u8 _08[0x28 - 0x08]; // 0x08-0x27: unknown.
+    u16 mResetDataId; // 0x02: reset data ID, kept in the head's Pokemon item slot.
+    s32 mHomePlace; // 0x04: home place of the record's hero.
+    s32 mEntryList[6]; // 0x08-0x1F: party slot list of the entry screen.
+    s32 mEntryCount; // 0x20: slots of the list that are in use.
+    s32 mCatchTrainerRnd; // 0x24: controller slot the record's hero plays on,
+                          // kept in the head's Pokemon catch-trainer slot.
     s32 mVersusBattleId; // 0x28: versus battle ID the record is booked under
                          // (menuCBBios_GetTrainerFromVersusBattleID).
     Hero mHero; // 0x2C: hero the player entered with.

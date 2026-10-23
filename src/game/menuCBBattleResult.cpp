@@ -39,7 +39,7 @@ s32 toolentryTaisenGetBattleType(void);
 s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
-u16 zz_0231e2c_(s32 index);
+u16 toolentryTaisenGetPokemonHomePlace(s32 index);
 s32 zz_get_battle_result(void);
 s32 zz_game_get_region(void);
 
@@ -141,33 +141,33 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             return 0xA9;
         }
 
-        lbl_804299F8.selectResult = 0;
-        lbl_804299F8.unk_B060 = 0;
+        menuCBTaisenWork.selectResult = 0;
+        menuCBTaisenWork.unk_B060 = 0;
         menuSetEnablePort(1);
         winMsgOpen(2, 0x42FF, 1, 1);
 
         if (work->battleMode != 2) {
             switch (zz_game_get_region()) {
             case 0:
-                lbl_804299F8.selectResult = menuSubOpenSelect_gba(
+                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg2, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             case 1:
             case 2:
-                lbl_804299F8.selectResult = menuSubOpenSelect_gba(
+                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, &lbl_804E7F48[0], 2, 0x3E, 0x89, 0, 2, 1, 1);
                 break;
             }
-            if (lbl_804299F8.selectResult == -2) {
+            if (menuCBTaisenWork.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (lbl_804299F8.selectResult == -1) {
-                lbl_804299F8.selectResult = 2;
+            if (menuCBTaisenWork.selectResult == -1) {
+                menuCBTaisenWork.selectResult = 2;
             }
             switch (zz_game_get_region()) {
             case 0:
-                switch (lbl_804299F8.selectResult) {
+                switch (menuCBTaisenWork.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -181,7 +181,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
                 break;
             case 1:
             case 2:
-                switch (lbl_804299F8.selectResult) {
+                switch (menuCBTaisenWork.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -196,25 +196,25 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             /* Four players: as many choices as there are players. */
             switch (zz_game_get_region()) {
             case 0:
-                lbl_804299F8.selectResult = menuSubOpenSelect_gba(
+                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg3, 4, 0x3E, 0x89, 0, 4, 1, 1);
                 break;
             case 1:
             case 2:
-                lbl_804299F8.selectResult = menuSubOpenSelect_gba(
+                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg1, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             }
-            if (lbl_804299F8.selectResult == -2) {
+            if (menuCBTaisenWork.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (lbl_804299F8.selectResult == -1) {
-                lbl_804299F8.selectResult = 3;
+            if (menuCBTaisenWork.selectResult == -1) {
+                menuCBTaisenWork.selectResult = 3;
             }
             switch (zz_game_get_region()) {
             case 0:
-                switch (lbl_804299F8.selectResult) {
+                switch (menuCBTaisenWork.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -232,7 +232,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
                 break;
             case 1:
             case 2:
-                switch (lbl_804299F8.selectResult) {
+                switch (menuCBTaisenWork.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -318,7 +318,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
 u16 _menuCBResultGetHomePlace(void)
 {
     if (toolentryTaisenGetBattleType() == 2) {
-        return zz_0231e2c_(0) != 0;
+        return toolentryTaisenGetPokemonHomePlace(0) != 0;
     }
     return 0;
 }
@@ -328,16 +328,16 @@ u16 _menuCBResultGetHomePlace(void)
    hero into the battle entries and goes to the battle; no leaves the screen. */
 extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
 {
-    lbl_804299F8.selectResult = 0;
-    lbl_804299F8.unk_B060 = 0;
+    menuCBTaisenWork.selectResult = 0;
+    menuCBTaisenWork.unk_B060 = 0;
 
-    lbl_804299F8.selectResult =
+    menuCBTaisenWork.selectResult =
         menuSubOpenSelect3(0, lbl_804E7F40, 2, 0x3E, 0x89, 0, 2, 1, 1);
-    if (lbl_804299F8.selectResult == -1) {
-        lbl_804299F8.selectResult = 1;
+    if (menuCBTaisenWork.selectResult == -1) {
+        menuCBTaisenWork.selectResult = 1;
     }
 
-    switch (lbl_804299F8.selectResult) {
+    switch (menuCBTaisenWork.selectResult) {
     case 0:
         toolentryCopyHero();
         return 0xB1;
@@ -352,7 +352,7 @@ extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
 extern "C" s32 menuCBResultCheckHomePlace(void)
 {
     if (toolentryTaisenGetBattleType() == 2) {
-        return zz_0231e2c_(0) != 0;
+        return toolentryTaisenGetPokemonHomePlace(0) != 0;
     }
     return 0;
 }
@@ -392,7 +392,7 @@ s32 _menuCBResultCheckGBAPort(void)
 
     toolentryTaisenGetBattleMode();
     for (i = 0; i < playerNum; i++) {
-        u16 home = zz_0231e2c_(i);
+        u16 home = toolentryTaisenGetPokemonHomePlace(i);
 
         type = toolentryTaisenGetControlerType(i);
 

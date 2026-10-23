@@ -84,14 +84,14 @@ extern "C" u32 menuCBBios_GetEncountFlag(void)
 
 extern "C" s32 menuCBBios_GetNameEntryMode(void)
 {
-    return lbl_804299F8.nameEntryMode;
+    return menuCBTaisenWork.nameEntryMode;
 }
 
 // Rule entry list of rule set `ruleId`; the colosseum screens walk it as u16
 // entries.
 extern "C" u16 *menuCBBios_GetRuleEntryList(s32 ruleId)
 {
-    return lbl_804299F8.mRulesetData[ruleId].m1E;
+    return menuCBTaisenWork.mRulesetData[ruleId].m1E;
 }
 
 /* -------------------------------------------------------------------------
@@ -286,19 +286,19 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId)
 {
     s32 i;
 
-    switch (lbl_804299F8.battleMode) {
+    switch (menuCBTaisenWork.battleMode) {
     case 0:
     case 1:
         if (battleId >= 0 && battleId <= 1) {
-            return &lbl_804299F8.mTrainer[battleId];
+            return &menuCBTaisenWork.mTrainer[battleId];
         }
         break;
 
     case 2:
     default:
         for (i = 0; i < 4; i++) {
-            if (battleId == lbl_804299F8.mTrainer[i].mVersusBattleId) {
-                return &lbl_804299F8.mTrainer[i];
+            if (battleId == menuCBTaisenWork.mTrainer[i].mVersusBattleId) {
+                return &menuCBTaisenWork.mTrainer[i];
             }
         }
         break;
@@ -332,7 +332,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainer(s32 controllerId)
     if (port < 0) {
         return 0;
     }
-    return &lbl_804299F8.mTrainer[port];
+    return &menuCBTaisenWork.mTrainer[port];
 }
 
 extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerImmediately(s32 index)
@@ -340,7 +340,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerImmediately(s32 index)
     if (index < 0 || index >= 4) {
         return 0;
     }
-    return &lbl_804299F8.mTrainerImmediately[index];
+    return &menuCBTaisenWork.mTrainerImmediately[index];
 }
 
 extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerByPort(s32 index)
@@ -348,7 +348,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerByPort(s32 index)
     if (index < 0 || index >= 4) {
         return 0;
     }
-    return &lbl_804299F8.mTrainer[index];
+    return &menuCBTaisenWork.mTrainer[index];
 }
 
 extern "C" Hero *menuCBBios_GetHeroImmediately(s32 index)
@@ -356,7 +356,7 @@ extern "C" Hero *menuCBBios_GetHeroImmediately(s32 index)
     if (index < 0 || (u32)index >= 4) {
         return 0;
     }
-    return &lbl_804299F8.mTrainer[index].mHero;
+    return &menuCBTaisenWork.mTrainer[index].mHero;
 }
 
 // Refresh every pokemon of `hero` that is not an empty slot.

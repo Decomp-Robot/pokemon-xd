@@ -929,6 +929,39 @@ cflags_preset = "game"
 progress_category = "game"
 
 [[lib.object]]
+name = "game/menuBBS.cpp"
+completed = true
+# The menu stack, the rule-set setup and the Pokemon entry screen of the link
+# battles. Three flags on top of the library preset: -opt nopeephole (the
+# epilogues stay in save order), -inline noauto (_menuCB_DeoxysParamCustom
+# stays a real call) and -use_lmw_stmw on (the entry callbacks save their
+# registers inline).
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+]
+
+[[lib.object]]
 name = "game/menuCBBios.c"
 completed = true
 

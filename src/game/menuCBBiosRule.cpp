@@ -20,7 +20,7 @@ void *getTrainerDataStartOffset(s32 slot, s32 id);
 // Rule menu module: the read-only default rule sets, the entry pokemon
 // limit of the current rule set and the working copy of a customizable
 // rule set.
-FightRuleData *zz_004d314_(s32 index);
+FightRuleData *menuCBRule_GetDefaultRuleData(s32 index);
 u32 zz_004d0b4_(void);
 FightRuleData *zz_004d0d4_(s32 ruleId);
 FightRuleData *menuCB_OreRule(void);
@@ -47,7 +47,7 @@ extern "C" u32 menuCBBios_GetPokemonNumLimit(void)
 
 extern "C" s32 menuCBBios_GetRuleId(void)
 {
-    return lbl_804299F8.ruleId;
+    return menuCBTaisenWork.ruleId;
 }
 
 /*
@@ -92,7 +92,7 @@ extern "C" FightRuleData *menuCBBios_GetRulesetData(s32 ruleId)
     if (ruleId < 0 || (u32)ruleId >= 6) {
         return 0;
     }
-    return &lbl_804299F8.mRulesetData[ruleId];
+    return &menuCBTaisenWork.mRulesetData[ruleId];
 }
 
 // Copy the three rodata default rule sets into the save table and stamp
@@ -102,9 +102,9 @@ extern "C" void menuCBBios_InitDefaultRules(void)
     FightRuleData *ruleData =
         (FightRuleData *)getTrainerDataStartOffset(0, 0xE);
 
-    ruleData[0] = *zz_004d314_(0);
-    ruleData[1] = *zz_004d314_(1);
-    ruleData[2] = *zz_004d314_(2);
+    ruleData[0] = *menuCBRule_GetDefaultRuleData(0);
+    ruleData[1] = *menuCBRule_GetDefaultRuleData(1);
+    ruleData[2] = *menuCBRule_GetDefaultRuleData(2);
     ruleData[0].mMsgId = 0x9124;
     ruleData[1].mMsgId = 0xA2D4;
     ruleData[2].mMsgId = 0xB51C;

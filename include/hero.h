@@ -8,6 +8,7 @@
 // only the members the recovered menus call are named here. The bios block
 // itself is moved around as a whole -- heroBiosCopy transfers 0x978 bytes per
 // hero slot, and the trainer records keep two snapshots of it.
+#ifdef __cplusplus
 class Hero {
 public:
     u8 getFollowerID();
@@ -17,5 +18,12 @@ public:
 private:
     u8 mBios[0x978];
 };
+#else
+// The C menus only move hero records around, so they see the same layout
+// without the member functions.
+typedef struct Hero {
+    u8 mBios[0x978];
+} Hero;
+#endif
 
 #endif
