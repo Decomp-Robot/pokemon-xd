@@ -147,6 +147,7 @@ static void __SYNNoteOn(SYNSYNTH* synth, u8 midiChannel, u8 keyNum, u8 keyVel);
 static void __SYNPitchWheel(SYNSYNTH* synth, u8 midiChannel, u8 lsb, u8 msb);
 static void __SYNMidiIn(SYNSYNTH* synth, u8* input);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNSetData(SYNSYNTH* synth, u8 midiChannel) {
     ASSERTLINE(59, synth);
     ASSERTLINE(60, midiChannel < 16);
@@ -173,6 +174,7 @@ static void __SYNSetData(SYNSYNTH* synth, u8 midiChannel) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNSetSustainPedal(SYNSYNTH* synth, u8 midiChannel, u8 data) {
     int i;
     SYNVOICE* voice;
@@ -193,6 +195,7 @@ static void __SYNSetSustainPedal(SYNSYNTH* synth, u8 midiChannel, u8 data) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNProgramChange(SYNSYNTH* synth, u8 midiChannel, u8 program) {
     ASSERTLINE(142, synth);
     ASSERTLINE(143, midiChannel < 16);
@@ -207,6 +210,7 @@ static void __SYNProgramChange(SYNSYNTH* synth, u8 midiChannel, u8 program) {
     synth->inst[midiChannel] += program;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNReleaseChannelNotes(SYNSYNTH* synth, u8 midiChannel) {
     int i;
     SYNVOICE* voice;
@@ -223,6 +227,7 @@ static void __SYNReleaseChannelNotes(SYNSYNTH* synth, u8 midiChannel) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNClearAllNotes(SYNSYNTH* synth) {
     u8 i;
 
@@ -233,6 +238,7 @@ void __SYNClearAllNotes(SYNSYNTH* synth) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetController(SYNSYNTH* synth, u8 midiChannel, u8 function, u8 value) {
     ASSERTLINE(201, synth);
     ASSERTLINE(202, midiChannel < 16);
@@ -294,6 +300,7 @@ void __SYNSetController(SYNSYNTH* synth, u8 midiChannel, u8 function, u8 value) 
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNResetController0(SYNSYNTH* synth, u8 midiChannel) {
     u8 volume;
     u8 pan;
@@ -320,6 +327,7 @@ void __SYNResetController0(SYNSYNTH* synth, u8 midiChannel) {
     __SYNSetController(synth, midiChannel, 0x5C, 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNResetController(SYNSYNTH* synth, u8 midiChannel) {
     int i;
 
@@ -340,6 +348,7 @@ void __SYNResetController(SYNSYNTH* synth, u8 midiChannel) {
     __SYNSetController(synth, midiChannel, 0x5C, 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNResetAllControllers(SYNSYNTH* synth) {
     u8 midiChannel;
 
@@ -351,6 +360,7 @@ void __SYNResetAllControllers(SYNSYNTH* synth) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNNoteOff(SYNSYNTH* synth, u8 midiChannel, u8 keyNum) {
     SYNVOICE* voice;
 
@@ -369,6 +379,7 @@ static void __SYNNoteOff(SYNSYNTH* synth, u8 midiChannel, u8 keyNum) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNNoteOn(SYNSYNTH* synth, u8 midiChannel, u8 keyNum, u8 keyVel) {
     AXVPB* axvpb;
     SYNVOICE* voice;
@@ -442,6 +453,7 @@ static void __SYNNoteOn(SYNSYNTH* synth, u8 midiChannel, u8 keyNum, u8 keyVel) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNPitchWheel(SYNSYNTH* synth, u8 midiChannel, u8 lsb, u8 msb) {
     s32 position;
 
@@ -454,6 +466,7 @@ static void __SYNPitchWheel(SYNSYNTH* synth, u8 midiChannel, u8 lsb, u8 msb) {
     synth->pwCents[midiChannel] = (synth->pwMaxCents[midiChannel] * ((f32)position / 8192.0f));
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNMidiIn(SYNSYNTH* synth, u8* input) {
     u8* ch;
     u8 midiFunction;
@@ -491,6 +504,7 @@ static void __SYNMidiIn(SYNSYNTH* synth, u8* input) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNRunInputBufferEvents(SYNSYNTH* synth) {
     u8* input;
 
@@ -502,6 +516,7 @@ void __SYNRunInputBufferEvents(SYNSYNTH* synth) {
     synth->inputPosition = &synth->input[0][0];
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u8 SYNGetMidiController(SYNSYNTH* synth, u8 midiChannel, u8 function) {
     ASSERTLINE(678, synth);
     ASSERTLINE(679, midiChannel < 16);
