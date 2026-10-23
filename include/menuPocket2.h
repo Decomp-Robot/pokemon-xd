@@ -25,6 +25,22 @@ struct MenuPocket2Work {
 
 extern MenuPocket2Work menuPocket2Work;
 
+// Item-script queue (bss 0x804282A0, 0x44 bytes): the item scripts the
+// pocket menu queues for the script engine, eight entries plus the number
+// of live entries. An entry is an item ID and the script queued for it;
+// the two bytes between them are alignment padding.
+struct MenuPocket2ItemScriptEntry {
+    u16 mID; // 0x0: item the script belongs to.
+    s32 mScript; // 0x4: script queued for the item.
+};
+
+struct MenuPocket2ItemScript {
+    MenuPocket2ItemScriptEntry mEntries[8]; // 0x00: queued item scripts.
+    s32 mCount; // 0x40: number of live entries.
+};
+
+extern MenuPocket2ItemScript menuPocket2ItemScript;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +48,8 @@ extern "C" {
 void menuPocket2GetHero(Hero **hero, FIGHT_TRAINER **trainer);
 u32 menuPocket2GetCurrentTemochiPokemonSlotID(void);
 u8 menuPocket2GetLastSlotID(void);
+void menuPocketClearItemScript(void);
+s32 menuPocket2GetItemScript(u16 id);
 
 #ifdef __cplusplus
 }
