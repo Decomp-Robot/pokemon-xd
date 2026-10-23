@@ -22,6 +22,9 @@ decomp/dbgMenuFightSetMsgSpeed.c:
 decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
+decomp/menuWorldMap.cpp:
+	.text       start:0x80010538 end:0x80010558
+
 decomp/WorldMap.cpp:
 	.text       start:0x80013220 end:0x80013234
 
