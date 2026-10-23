@@ -14,8 +14,7 @@ extern "C" s32 GScolsys2WalkGetLayer(GSvec* pos, u8* color0, u8* color1)
     if (heightCount <= 0) {
         return 0;
     }
-    /* Pick the walk height nearest to the query point in y. Every distance is
-     * taken as pos->y minus the height, then made positive. */
+    // Return colors from the walk surface closest to the query height.
     nearestDistance = (pos->y - heights[0].mHeight) > 0.0f ? (pos->y - heights[0].mHeight) : -(pos->y - heights[0].mHeight);
     nearestHeightIndex = 0;
     for (heightIndex = 1; heightIndex < heightCount; heightIndex++) {
