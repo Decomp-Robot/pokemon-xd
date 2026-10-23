@@ -1384,6 +1384,10 @@ libc/string.c:
 libc/wchar_io.c:
 	.text       start:0x800E3238 end:0x800E32C0
 
+libc/e_fmod.c:
+	.text       start:0x800E3CB8 end:0x800E3FF4
+	.rodata     start:0x802ECC38 end:0x802ECC48
+
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 
