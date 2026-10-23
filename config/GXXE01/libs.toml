@@ -903,10 +903,6 @@ name = "ext/dolphin_sdk/axfx/delay.c"
 completed = true
 
 [[lib.object]]
-name = "ext/dolphin_sdk/axfx/reverb_hi.c"
-completed = true
-
-[[lib.object]]
 name = "ext/dolphin_sdk/axfx/reverb_hi_4ch.c"
 completed = true
 
@@ -1269,4 +1265,8 @@ completed = true
 
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/CheapReverb/creverb_fx.c"
+completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/StdReverb/reverb.c"
 completed = true
