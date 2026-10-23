@@ -100,6 +100,9 @@ public:
      * faded in (blend parameter reached 1). */
     bool IsBlending();
     f32 GetAngle(long work);
+    s8 GetPadIndex3(f32 angle, long index, f32 width);
+    void InitModel2D(f32 param);
+    void CalcModel2D(f32 param, bool flag);
     void SetCameraSpeed(f32 speed);
     void TargetDebug(long index);
     void SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
