@@ -691,6 +691,13 @@ ext/dolphin_sdk/exi/EXIBios.c:
 ext/dolphin_sdk/gd/GDTexture.c:
 	.sdata      start:0x804E8700 end:0x804E8738
 
+ext/dolphin_sdk/exi/EXIUart.c:
+	.text       start:0x800E949C end:0x800E9628
+	.text       start:0x800E9628 end:0x800E97E4
+	.text       start:0x800E97E4 end:0x800E9854
+	.text       start:0x800E9854 end:0x800E9A54
+	.sbss       start:0x804EAEB0 end:0x804EAEC0
+
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
