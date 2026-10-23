@@ -73,6 +73,10 @@ name = "game/menuPocketTool.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/menuPocket2Pokemon.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocket2.cpp"
 completed = true
 

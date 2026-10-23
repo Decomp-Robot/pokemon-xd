@@ -62,6 +62,9 @@ decomp/menuMetaMenu.cpp:
 game/menuPocketTool.cpp:
 	.text       start:0x80021E84 end:0x80021EC8
 
+game/menuPocket2Pokemon.cpp:
+	.text       start:0x80024134 end:0x80024148
+
 game/menuPocket2.cpp:
 	.text       start:0x80026718 end:0x8002672C
 
