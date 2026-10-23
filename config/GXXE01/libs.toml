@@ -866,3 +866,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/axfx/reverb_hi_4ch.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/axfx/reverb_std.c"
+completed = true

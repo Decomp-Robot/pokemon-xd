@@ -15,6 +15,7 @@ static void HandleReverb(s32* sptr, AXFX_REVSTD_WORK* rv);
 static void ReverbSTDCallback(s32* left, s32* right, s32* surround, AXFX_REVSTD_WORK* rv);
 static void ReverbSTDFree(AXFX_REVSTD_WORK* rv);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DLsetdelay(AXFX_REVSTD_DELAYLINE* dl, s32 lag) {
     dl->outPoint = dl->inPoint - (lag * 4);
     while (dl->outPoint < 0) {
@@ -22,6 +23,7 @@ static void DLsetdelay(AXFX_REVSTD_DELAYLINE* dl, s32 lag) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int DLcreate(AXFX_REVSTD_DELAYLINE* dl, s32 max_length) {
     dl->length = (max_length * 4);
     dl->inputs = __AXFXAlloc(max_length * 4);
@@ -38,11 +40,12 @@ static int DLcreate(AXFX_REVSTD_DELAYLINE* dl, s32 max_length) {
 	return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DLdelete(AXFX_REVSTD_DELAYLINE* dl) {
     __AXFXFree(dl->inputs);
 }
 
-// NONMATCHING RELEASE - regalloc
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ReverbSTDCreate(AXFX_REVSTD_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 predelay) {
     u8 i;
     u8 k;
@@ -122,6 +125,7 @@ static int ReverbSTDCreate(AXFX_REVSTD_WORK* rv, f32 coloration, f32 time, f32 m
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ReverbSTDModify(AXFX_REVSTD_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 predelay) {
     u8 i;
 
@@ -170,6 +174,7 @@ const static f32 value0_3 = 0.3f;
 const static f32 value0_6 = 0.6f;
 const static double i2fMagic = 4503601774854144.0;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 asm static void HandleReverb(register s32* sptr, register AXFX_REVSTD_WORK* rv) {
     nofralloc
 	stwu r1, -144(r1)
@@ -431,10 +436,12 @@ L_0000090C:
 	blr
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ReverbSTDCallback(s32* left, s32* right, s32* surround, AXFX_REVSTD_WORK* rv) {
     HandleReverb(left, rv);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ReverbSTDFree(AXFX_REVSTD_WORK* rv) {
     u8 i;
 
@@ -462,6 +469,7 @@ static void ReverbSTDFree(AXFX_REVSTD_WORK* rv) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbStdInit(AXFX_REVERBSTD* rev) {
     int ret;
     BOOL old;
@@ -473,6 +481,7 @@ int AXFXReverbStdInit(AXFX_REVERBSTD* rev) {
     return ret;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbStdShutdown(AXFX_REVERBSTD* rev) {
     BOOL old;
 
@@ -482,6 +491,7 @@ int AXFXReverbStdShutdown(AXFX_REVERBSTD* rev) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbStdSettings(AXFX_REVERBSTD* rev) {
 	int ret;
     BOOL old;
@@ -494,6 +504,7 @@ int AXFXReverbStdSettings(AXFX_REVERBSTD* rev) {
     return ret;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXFXReverbStdCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_REVERBSTD* reverb) {
     if (reverb->tempDisableFX == 0) {
         ReverbSTDCallback(bufferUpdate->left, bufferUpdate->right, bufferUpdate->surround, &reverb->rv);
