@@ -13,8 +13,12 @@ name = "os"
 mw_version = "GC/2.6"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/os", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/os", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OS.c"
+completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSAlarm.c"
 completed = false

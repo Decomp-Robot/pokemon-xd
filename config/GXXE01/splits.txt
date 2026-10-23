@@ -16,6 +16,9 @@ Sections:
 ext/dolphin_sdk/os/OS.c:
 	.text       start:0x800A96AC end:0x800AA178
 
+ext/dolphin_sdk/os/OSAlarm.c:
+	.text       start:0x800AA178 end:0x800AA950
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
