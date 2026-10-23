@@ -385,6 +385,10 @@ cflags_extra = ["-i src/ext/dolphin_sdk/dsp", "-i src/ext/dolphin_sdk/include", 
 name = "ext/dolphin_sdk/dsp/dsp.c"
 completed = true
 
+[[lib.object]]
+name = "ext/dolphin_sdk/dsp/dsp_debug.c"
+completed = true
+
 [[lib]]
 name = "card"
 mw_version = "GC/1.2.5n"
