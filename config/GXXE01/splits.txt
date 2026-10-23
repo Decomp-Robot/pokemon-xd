@@ -128,6 +128,11 @@ ext/dolphin_sdk/os/OSTime.c:
 	.text       start:0x800B2320 end:0x800B24BC
 	.text       start:0x800B24BC end:0x800B26C0
 
+ext/dolphin_sdk/os/__ppc_eabi_init.c:
+	.text       start:0x800B26C0 end:0x800B26E0
+	.text       start:0x800B26E0 end:0x800B2734
+	.text       start:0x800B2734 end:0x800B2754
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
