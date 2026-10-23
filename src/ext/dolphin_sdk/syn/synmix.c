@@ -240,11 +240,13 @@ s32 __SYNAttackAttnTable[100] = {
     0x00000000
 };
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupVolume(SYNVOICE* voice) {
     ASSERTLINE(85, voice);
     voice->attn = (voice->region->attn + __SYNVolumeAttenuation[voice->keyVel]);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupPan(SYNVOICE* voice) {
     ASSERTLINE(98, voice);
     if (voice->midiChannel == 9) {
@@ -254,14 +256,17 @@ void __SYNSetupPan(SYNVOICE* voice) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 __SYNGetVoiceInput(SYNVOICE* voice) {
     return (voice->attn + voice->lfoAttn + voice->veAttn) >> 0x10;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 __SYNGetVoiceFader(SYNVOICE* voice) {
     return (voice->synth->volAttn[voice->midiChannel] + voice->synth->expAttn[voice->midiChannel] + voice->synth->masterVolume) >> 0x10;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNUpdateMix(SYNVOICE* voice) {
     MIXSetInput(voice->axvpb, __SYNGetVoiceInput(voice));
     MIXSetAuxA(voice->axvpb, voice->synth->auxAAttn[voice->midiChannel] >> 0x10);
