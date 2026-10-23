@@ -129,6 +129,7 @@ static inline void modelIntpTrans(_HSD_JObj *firstJoint, _HSD_JObj *secondJoint,
  * rotation through the quaternion path. */
 void _modelIntpJObj(_HSD_JObj *firstJoint, _HSD_JObj *secondJoint, _HSD_JObj *resultJoint, f32 blendFactor)
 {
+    /* The first pose receives the portion not used by the second pose. */
     f32 firstWeight = 1.0f - blendFactor;
     modelIntpTrans(firstJoint, secondJoint, resultJoint, blendFactor, firstWeight, NULL, 0);
     modelIntpScale(firstJoint, secondJoint, resultJoint, blendFactor, firstWeight, NULL, 0);
