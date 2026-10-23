@@ -2,6 +2,7 @@
 #define GS_RES_H
 
 #include <types.h>
+#include <bool.h>
 
 // Handle of a registered resource: the group and resource id pair the
 // resource system resolves a resource with.

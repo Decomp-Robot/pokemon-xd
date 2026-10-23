@@ -1,0 +1,6 @@
+#ifndef INCLUDE_GSAPI_GSMEMMAN_GSMEMMAN_H
+#define INCLUDE_GSAPI_GSMEMMAN_GSMEMMAN_H
+
+#include <GSmem.h>
+
+#endif

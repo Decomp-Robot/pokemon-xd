@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-u16 fightGetFightResultId(void);
+unsigned short fightGetFightResultId(void);
 #ifdef __cplusplus
 }
 #endif

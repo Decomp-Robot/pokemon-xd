@@ -45,6 +45,7 @@ void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, unsigned long color,
                        tagWINDOW_WORK *window, u16 textureId, s32 drawMode,
                        GSgfxLayerID layer);
 s32 windowGetActiveID();
+s32 windowGetValue(long windowID);
 u16 windowGetKeyOn();
 void windowCloseMain(tagWINDOW_WORK *window);
 #ifdef __cplusplus

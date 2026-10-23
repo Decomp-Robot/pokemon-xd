@@ -1,0 +1,6 @@
+#ifndef INCLUDE_APP_FLOOR_FLOORFIELDCAMERA_H
+#define INCLUDE_APP_FLOOR_FLOORFIELDCAMERA_H
+
+#include <floorFieldCamera.h>
+
+#endif

@@ -8,6 +8,8 @@ public:
     glowEffect();
     virtual ~glowEffect();
     virtual void _render(GSgfxLayer* layer, GSgfxLayerPass pass);
+    void _renderOffset(GSgfxLayer* layer);
+    void _renderScale(GSgfxLayer* layer);
 
 public:
 

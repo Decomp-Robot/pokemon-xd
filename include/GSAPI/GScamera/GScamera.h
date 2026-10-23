@@ -1,0 +1,6 @@
+#ifndef INCLUDE_GSAPI_GSCAMERA_GSCAMERA_H
+#define INCLUDE_GSAPI_GSCAMERA_GSCAMERA_H
+
+#include <GScamera.h>
+
+#endif

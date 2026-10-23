@@ -1,3 +1,4 @@
+#include <libc/memory.h>
 #include <fight.h>
 #include <GSmsg.h>
 #include <GSfsys.h>
@@ -7,6 +8,7 @@
 #include <menu.h>
 #include <itemData.h>
 #include <menuCB_Sub1.h>
+#include <menuPokemonStatus.h>
 #include <menuBBS.h>
 #include <menuPocketTool.h>
 #include <winMsg.h>
@@ -120,10 +122,10 @@ public:
 
 extern "C" {
 void GSthreadSwitch(void);
-void *memcpy(void *dst, const void *src, u32 size);
 double fmod(double x, double y);
 
 s32 pokecoloGetCountryCode(void);
+
 s32 menuOpen(s32 menuID, s32 arg);
 void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on);
 struct tagWINDOW_KEY *windowGetKeyInfo(void);
@@ -2524,7 +2526,6 @@ void menuCBPokemonName_nido(tagWINDOW_WORK *window, unsigned long bank, unsigned
 #include <menuCBBattleStart.h>
 void GSprimSetup2DRender(GSgfxLayer *layer);
 extern "C" {
-void *memset(void *dst, s32 value, u32 size);
 void spriteSetEnv(s32 layer);
 u8 menuCB_BattleStartSoundCheck();
 u8 FlashSystemIsLastFrame(u32 id);

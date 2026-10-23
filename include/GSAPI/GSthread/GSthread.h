@@ -1,0 +1,6 @@
+#ifndef INCLUDE_GSAPI_GSTHREAD_GSTHREAD_H
+#define INCLUDE_GSAPI_GSTHREAD_GSTHREAD_H
+
+#include <GSthread.h>
+
+#endif

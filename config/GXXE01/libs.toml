@@ -9,26 +9,6 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
-name = "game/app/people/peoplePartAnimation.cpp"
-completed = true
-extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
-
-[[lib.object]]
-name = "game/app/people/peopleSave.cpp"
-completed = true
-extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
-
-[[lib.object]]
-name = "game/app/people/peopleTalk.cpp"
-completed = true
-extra_cflags = ["-inline noauto", "-rostr", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
-
-[[lib.object]]
-name = "game/app/people/peopleWalkList.cpp"
-completed = true
-extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
-
-[[lib.object]]
 name = "game/GSbezier.cpp"
 completed = true
 mw_version = "GC/1.3"
@@ -102,6 +82,10 @@ name = "game/dbgMenuCamera.c"
 completed = true
 
 [[lib.object]]
+name = "game/dbgMenuFight.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/dbgMenuFlag.c"
 completed = true
 
@@ -129,6 +113,9 @@ name = "game/menuTool.c"
 completed = true
 [[lib.object]]
 name = "game/menuColosseumBattleConnection.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuFightTrainer.cpp"
 completed = true
 [[lib.object]]
 name = "game/dbgMenuFightWaza.c"
@@ -177,6 +164,10 @@ name = "game/dbgMenuToolBattle.c"
 completed = true
 [[lib.object]]
 name = "game/menuKeyDisc.c"
+completed = true
+
+[[lib.object]]
+name = "game/memcardDebugSlots.c"
 completed = true
 
 [[lib.object]]
@@ -538,6 +529,36 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/menuPcBoxDougu.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/dbgMenuMenu.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
@@ -592,6 +613,134 @@ extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++", "-str reuse,
 
 [[lib.object]]
 name = "game/gbaCommand.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/gbaCommandLink.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/gbaPokemonTransfer.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/gbaPokemonTransferJobs.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/gbaAgbLink.cpp"
 completed = true
 cflags = [
     "-W error",
@@ -684,6 +833,10 @@ cflags = [
     "-use_lmw_stmw on",
     "-lang=c++",
 ]
+
+[[lib.object]]
+name = "game/pause.c"
+completed = true
 
 [[lib.object]]
 name = "game/time.cpp"
@@ -885,6 +1038,36 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/menuCBBattleStart.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/menuColosseumBattle.cpp"
 completed = true
 cflags = [
@@ -917,7 +1100,129 @@ cflags = [
 ]
 
 [[lib.object]]
-name = "game/menuCBBattleResult.cpp"
+name = "game/menuCB_BattleResult.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/menuCBBiosTrainer.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+# Loose-ball desperation accessor: a C++ class static member.
+[[lib.object]]
+name = "game/LooseBallAnims.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+
+[[lib.object]]
+name = "game/menuCBBiosRule.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/menuCBBiosRuleMsg.cpp"
 completed = true
 cflags = [
     "-W error",
@@ -948,6 +1253,14 @@ cflags = [
 
 [[lib.object]]
 name = "game/floorBgmMask.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/GSparticle.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/GSparticleModuleData.cpp"
 completed = true
 
 [[lib.object]]
@@ -1000,6 +1313,42 @@ cflags = [
     "-str reuse,readonly",
     "-lang=c++",
 ]
+
+[[lib.object]]
+name = "game/particleEngine.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-lang=c++",
+]
+
+# The sound API's short id and volume wrappers stay out of line: the engine
+# entry points reach them as ordinary calls.
+[[lib.object]]
+name = "game/sound.c"
+completed = true
+extra_cflags = [
+    "-W error", "-inline noauto"]
 
 [[lib.object]]
 name = "game/pokemonRelive.cpp"
@@ -1290,6 +1639,26 @@ extra_cflags = [
     "-DMUSY_VERSION_MINOR=0",
     "-DMUSY_VERSION_PATCH=3",
 ]
+
+[[lib.object]]
+name = "game/app/people/peoplePartAnimation.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
+
+[[lib.object]]
+name = "game/app/people/peopleSave.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
+
+[[lib.object]]
+name = "game/app/people/peopleTalk.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-rostr", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/app/people/peopleWalkList.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
 
 [[lib]]
 name = "fade.a"
@@ -1704,6 +2073,44 @@ cflags_preset = "game"
 progress_category = "game"
 
 [[lib.object]]
+name = "game/menuBBS.cpp"
+completed = true
+# The menu stack, the rule-set setup and the Pokemon entry screen of the link
+# battles. Three flags on top of the library preset: -opt nopeephole (the
+# epilogues stay in save order), -inline noauto (_menuCB_DeoxysParamCustom
+# stays a real call) and -use_lmw_stmw on (the entry callbacks save their
+# registers inline).
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+]
+
+[[lib.object]]
+name = "game/menuCBBios.c"
+completed = true
+
+[[lib.object]]
 name = "game/menuCB_Common.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-opt nopeephole", "-use_lmw_stmw on"]
@@ -1745,6 +2152,123 @@ name = "ext/dolphin_sdk/os/OSAlarm.c"
 completed = true
 
 # GSmemman.a game heap and renderer allocation adapters.
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/sysdolmem.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/poolAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSArena.c"
 completed = true
@@ -3125,50 +3649,99 @@ cflags_extra = ["-use_lmw_stmw on", "-inline noauto"]
 name = "game/app/joutai/joutai.cpp"
 completed = true
 
+
 [[lib]]
-name = "pokemonWazaSequenceDisplay"
+name = "camera"
 mw_version = "GC/2.6"
 cflags_preset = "game"
 progress_category = "game"
-cflags_extra = ["-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+cflags_extra = ["-use_lmw_stmw on"]
+
 [[lib.object]]
-name = "game/app/pokemon/pokemonWazaSequenceDisplay.cpp"
+name = "game/app/camera/camera.cpp"
 completed = true
+extra_cflags = ["-str reuse,readonly", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline auto"]
+
+[[lib]]
+name = "GSfsys"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSfsys/fsysStream.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
+
+[[lib.object]]
+name = "game/GSAPI/GSfsys/fsysBlock.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
+
+[[lib.object]]
+name = "game/GSAPI/GSfsys/fsysCache.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
+
+[[lib]]
+name = "evolution"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/app/evolution/evolution.cpp"
 completed = true
-[[lib]]
-name = "gba"
-mw_version = "GC/1.2.5n"
-cflags_preset = "sdk"
-progress_category = "sdk"
-cflags_extra = ["-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/gba"]
-
-[[lib.object]]
-name = "ext/dolphin_sdk/gba/GBA.c"
-completed = true
-
-[[lib.object]]
-name = "ext/dolphin_sdk/gba/GBARead.c"
-completed = true
-
-[[lib.object]]
-name = "ext/dolphin_sdk/gba/GBAWrite.c"
-completed = true
-
-[[lib.object]]
-name = "ext/dolphin_sdk/gba/GBAXfer.c"
-completed = true
 
 [[lib]]
-name = "memo"
+name = "hero"
 mw_version = "GC/2.6"
 cflags_preset = "game"
 progress_category = "game"
-cflags_extra = ["-O4,s", "-inline auto,deferred", "-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib.object]]
-name = "game/app/memo/memo.c"
+name = "game/app/hero/heroMove.cpp"
+source = "game/app/hero/heroMove.cpp"
 completed = true
+
+[[lib.object]]
+name = "game/app/hero/heroPokemonGet.cpp"
+source = "game/app/hero/heroPokemonGet.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/hero/heroMemberFunctions.cpp"
+source = "game/app/hero/heroMemberFunctions.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
 
 [[lib]]
 name = "fightSeq"
@@ -3238,52 +3811,45 @@ cflags = [
     "-lang=c++",
 ]
 # Original hero.a modules: movement, gift encounters and Hero members.
+
 [[lib]]
-name = "hero"
+name = "pokemonWazaSequenceDisplay"
 mw_version = "GC/2.6"
 cflags_preset = "game"
 progress_category = "game"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+cflags_extra = ["-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+[[lib.object]]
+name = "game/app/pokemon/pokemonWazaSequenceDisplay.cpp"
+completed = true
+[[lib]]
+name = "gba"
+mw_version = "GC/1.2.5n"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/gba"]
 
 [[lib.object]]
-name = "game/app/hero/heroMove.cpp"
-source = "game/app/hero/heroMove.cpp"
+name = "ext/dolphin_sdk/gba/GBA.c"
 completed = true
 
 [[lib.object]]
-name = "game/app/hero/heroPokemonGet.cpp"
-source = "game/app/hero/heroPokemonGet.cpp"
+name = "ext/dolphin_sdk/gba/GBARead.c"
 completed = true
 
 [[lib.object]]
-name = "game/app/hero/heroMemberFunctions.cpp"
-source = "game/app/hero/heroMemberFunctions.cpp"
+name = "ext/dolphin_sdk/gba/GBAWrite.c"
 completed = true
-cflags = [
-    "-W error",
-    "-nodefaults",
-    "-proc gekko",
-    "-align powerpc",
-    "-enum int",
-    "-fp hardware",
-    "-Cpp_exceptions off",
-    "-O4,p",
-    "-inline noauto",
-    "-pragma \"cats off\"",
-    "-pragma \"warn_notinlined off\"",
-    "-maxerrors 1",
-    "-nosyspath",
-    "-RTTI off",
-    "-fp_contract on",
-    "-str reuse",
-    "-multibyte",
-    "-i include",
-    "-i src/ext/dolphin_sdk/include",
-    "-i src/ext/dolphin_sdk/include/libc",
-    "-i build/GXXE01/include",
-    "-DBUILD_VERSION=0",
-    "-DVERSION_GXXE01",
-    "-use_lmw_stmw on",
-    "-lang=c++",
-]
 
+[[lib.object]]
+name = "ext/dolphin_sdk/gba/GBAXfer.c"
+completed = true
+
+[[lib]]
+name = "memo"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-O4,s", "-inline auto,deferred", "-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+[[lib.object]]
+name = "game/app/memo/memo.c"
+completed = true

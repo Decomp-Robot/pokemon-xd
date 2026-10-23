@@ -5,6 +5,7 @@
 #include <gbaCommand.h>
 #include <menuCBBios.h>
 #include <FightResult.h>
+#include <menu.h>
 #include <types.h>
 
 /*
@@ -42,7 +43,6 @@ s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
 
-void menuSetEnablePort(s32 port);
 s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s16 x,
                           s16 y, s32 work, s32 cursor, u8 a, u8 b);
 s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s16 x,

@@ -194,7 +194,7 @@ extern "C" void *floorReadDeckPreFunc(u32 group, u32 res, u32 size)
 
     buffer = GSresAllocResourceAlign((size + (FLOOR_READ_ALIGN - 1)) & ~(FLOOR_READ_ALIGN - 1),
                                      FLOOR_READ_ALIGN, group, res,
-                                     (GSresFreeFunc)_unloadDeckData);
+                                     _unloadDeckData);
     GSresLockResource(group, res);
     return buffer;
 }
@@ -228,7 +228,7 @@ extern "C" void *floorReadAntPreFunc(u32 group, u32 res, u32 size)
 
     buffer = GSresAllocResourceAlign((size + (FLOOR_READ_ALIGN - 1)) & ~(FLOOR_READ_ALIGN - 1),
                                      FLOOR_READ_ALIGN, group, res,
-                                     (GSresFreeFunc)_unloadTextureForAnt);
+                                     _unloadTextureForAnt);
     GSresLockResource(group, res);
     return buffer;
 }
@@ -261,7 +261,7 @@ extern "C" void *floorReadGSWPreFunc(u32 group, u32 res, u32 size)
 
     buffer = GSresAllocResourceAlign((size + (FLOOR_READ_ALIGN - 1)) & ~(FLOOR_READ_ALIGN - 1),
                                      FLOOR_READ_ALIGN, group, res,
-                                     (GSresFreeFunc)_unloadGSW);
+                                     _unloadGSW);
     GSresLockResource(group, res);
     return buffer;
 }

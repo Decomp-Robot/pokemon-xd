@@ -1,0 +1,17 @@
+#ifndef APP_CAMERA_TYPE_H
+#define APP_CAMERA_TYPE_H
+
+enum CameraType {
+    CAMERA_NORMAL = 0,
+    CAMERA_LOOK_AT = 1,
+    CAMERA_FIXED_LOOK_AT = 2,
+    CAMERA_FREE = 3,
+    CAMERA_ANIMATION = 4,
+    CAMERA_PAD_ROTATE = 5,
+    CAMERA_PAD_MOVE = 6,
+    CAMERA_OFFSET = 7,
+    CAMERA_OFFSET_ANIMATION = 8
+};
+
+
+#endif

@@ -1,0 +1,6 @@
+#ifndef INCLUDE_GSAPI_GSINPUT_GSINPUT_H
+#define INCLUDE_GSAPI_GSINPUT_GSINPUT_H
+
+#include <GSinput.h>
+
+#endif

@@ -30,7 +30,7 @@ game/dbgMenuFlag.c:
 
 game/dbgMenuMemcard.c:
 	.text       start:0x8000B620 end:0x8000BAE4
-	.rodata     start:0x802EA0B8 end:0x802EA1DC
+	.rodata     start:0x802EA0B8 end:0x802EA1E0
 	.data       start:0x802FC8C8 end:0x802FC8F0
 	.sbss       start:0x804EA678 end:0x804EA680
 
@@ -194,7 +194,7 @@ game/menu/menuColosseumBattle.cpp:
 	.ctors      start:0x802E9F94 end:0x802E9F98
 	.bss        start:0x804299F8 end:0x80434FF0
 
-game/menuCBBattleResult.cpp:
+game/menuCB_BattleResult.cpp:
 	.text       start:0x80046598 end:0x80046D5C
 	.data       start:0x8032EAE0 end:0x8032EB08
 
@@ -2035,6 +2035,28 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.data       start:0x8040AF20 end:0x8040AF80
 	.sdata      start:0x804E8468 end:0x804E846C
 	.sdata2     start:0x804EDF48 end:0x804EDF60
+
+game/app/camera/camera.cpp:
+	.text       start:0x80196A14 end:0x8019B01C
+	.ctors      start:0x802E9FD4 end:0x802E9FD8
+	.rodata     start:0x802F4478 end:0x802F44B8
+	.data       start:0x8040B2A8 end:0x8040B2F0
+	.bss        start:0x80475580 end:0x80475940
+	.sdata      start:0x804E84B0 end:0x804E84B8
+	.sbss       start:0x804EB5E0 end:0x804EB5E8
+	.sdata2     start:0x804EE138 end:0x804EE1C8
+
+game/GSAPI/GSfsys/fsysStream.c:
+	.text       start:0x8019B01C end:0x8019B2AC
+
+game/GSAPI/GSfsys/fsysBlock.c:
+	.text       start:0x8019B2AC end:0x8019B6B4
+	.sbss       start:0x804EB5E8 end:0x804EB600
+
+game/GSAPI/GSfsys/fsysCache.c:
+	.text       start:0x8019B6B4 end:0x8019BD84
+	.bss        start:0x80475940 end:0x80478140
+	.sbss       start:0x804EB600 end:0x804EB638
 
 game/app/fade/fade_effect.cpp:
 	.text       start:0x801B711C end:0x801B715C

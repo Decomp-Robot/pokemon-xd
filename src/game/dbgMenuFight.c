@@ -1088,7 +1088,7 @@ u16 *_dbgMenuFightGetFightEncountDataIdSub(u32 id)
     static u16 strbuf[64];
     u16 suffix[2];
     u32 message;
-    const char *deckMessage;
+    char *deckMessage;
     if (id >= 1 && id <= _readEncountDataCnt) message = _readEncountDataName[id - 1];
     else message = 0xeb63;
     if (message == 0) message = 0xeb63;

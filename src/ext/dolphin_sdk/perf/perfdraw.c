@@ -89,14 +89,14 @@ static f32 FramePts[28] = {
 };
 
 static f32 CPUPts[4] = {
-    0.0f,  
+    0.0f,
     0.0f,
     616.0f,
     0.0f,
 };
 
 static f32 GPPts[4] = {
-    0.0f,  
+    0.0f,
     0.0f,
     616.0f,
     0.0f,

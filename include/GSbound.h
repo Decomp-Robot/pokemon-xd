@@ -17,7 +17,7 @@ void GSboundSetAnimFrame(GSbound *bound, f32 frame);
 void GSboundReset(GSbound *bound);
 void GSboundAddPoint(GSbound *bound, f32 x, f32 y, f32 z);
 void GSboundAlwaysInView(GSbound *bound, bool enabled);
-void GSboundGetSize(GSbound *bound, GSvec *size, GSmtx *transform, bool localAxes);
+void GSboundGetSize(GSbound *bound, GSvec *size, GSmtx *transform, bool applyRotation);
 #ifdef __cplusplus
 }
 #endif

@@ -1,5 +1,6 @@
 #include <particleEngine.h>
 #include <peParticle.h>
+#include <GSAPI/GSsysdolphin_baselib/baselib/quatlib.h>
 #include <dolphin/os/OSFastCast.h>
 
 extern GSgfxVF g_vertex_format;
@@ -314,7 +315,6 @@ peParticleContainer::peParticleContainer(peEmitterNode *parent, _peParticle *par
 #include <dolphin/os/OSFastCast.h>
 
 extern "C" {
-void EulerToQuat(const GSvec *, f32 *);
 f32 HSD_Randf();
 double fmod(double, double);
 double atan2(double, double);

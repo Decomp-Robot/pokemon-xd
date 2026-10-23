@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 u8 GSgfxVideoGetVsyncRate(void);
+s32 GSgfxVideoGetLockFrameRate(void);
 #ifdef __cplusplus
 }
 #endif

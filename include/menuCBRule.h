@@ -42,6 +42,10 @@ enum TrainerRegulation {
 extern "C" {
 #endif
 
+FightRuleData *menuCB_OreRule(void);
+extern unsigned long menuCBRule_RegulationItemNum;
+u16 menuCBRule_RegulationItemID(s32 index);
+
 // Entry condition reports for the Hero's party.
 void menuCBEntrySlotConditionsBuild(Hero *hero, Pokemon *pokemon, s32 slot);
 void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry);

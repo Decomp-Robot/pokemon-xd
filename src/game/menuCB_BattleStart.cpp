@@ -44,7 +44,6 @@ void menuCBPokemonEntryLoadTex(void);
 s32 fightTrainerDB_GetKindDataId(s32 dataID);
 void *fightTrainerKindDataBiosGetPtr(u8 kindID);
 void GSresFreeResource(u32 group, u32 resID);
-s32 GSfsysReadIDEX(u32 id, u32 resID, void *callback, void *context, u32 group);
 }
 
 /* -------------------------------------------------------------------------

@@ -8,7 +8,7 @@ extern u8 menuIsOpen(s32 menuId);
 extern void menuSetPosition(s32 menuId, s32 x, s32 y);
 /* Drop the debug camera (type 6) and restore the current room's floor
  * camera defaults. */
-extern void cameraResetFloorDefault(void);
+extern void cameraResetFloor(void);
 
 #pragma peephole off
 
@@ -19,7 +19,7 @@ void zz_800056a0_(void)
 /* Drop the debug camera and restore the room floor camera defaults. */
 s32 dbgMenuCameraResetFloor(void)
 {
-    cameraResetFloorDefault();
+    cameraResetFloor();
     return 0;
 }
 

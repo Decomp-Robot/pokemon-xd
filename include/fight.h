@@ -11,6 +11,7 @@ u8 fightReadResource(unsigned long groupID, unsigned long resourceID);
 void fightFreeResource(unsigned long groupID, unsigned long resourceID);
 u8 fightIsFight(void);
 void fightSetFightResultId(u16 result);
+u16 fightGetFightResultId(void);
 
 #ifdef __cplusplus
 }

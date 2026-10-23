@@ -15,9 +15,11 @@ struct GSvec {
     f32 x;
     f32 y;
     f32 z;
+#ifdef __cplusplus
     GSvec() {}
     GSvec(f32 positionX, f32 positionY, f32 positionZ)
         : x(positionX), y(positionY), z(positionZ) {}
+#endif
 
 };
 

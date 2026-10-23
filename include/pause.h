@@ -25,6 +25,8 @@ void pauseInit(void);
 
 #ifdef __cplusplus
 }
+
+void _pauseDaemon(unsigned long appID, unsigned long userData);
 #endif
 
 #endif

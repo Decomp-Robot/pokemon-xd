@@ -205,7 +205,7 @@ extern "C" void GScolsys2Draw(void)
     } else if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSCOLSYS2_DRAW_BUTTON_X) != 0) {
         floorMapSetDisp(1);
     }
-    GSgfxLayerSetActive((GSgfxLayerID)2);
+    GSgfxLayerSetActive(GSGFX_LAYER_DEFAULT);
     GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_FRONT);
     GSgfxSelectVertexFormat(gsColSysState.mVf);

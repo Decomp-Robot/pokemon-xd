@@ -1,0 +1,6 @@
+#ifndef INCLUDE_GSAPI_GSMODEL_GSMODEL_H
+#define INCLUDE_GSAPI_GSMODEL_GSMODEL_H
+
+#include <GSmodel.h>
+
+#endif

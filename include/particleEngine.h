@@ -3,16 +3,9 @@
 
 #include <types.h>
 #include <GSgfx.h>
+#include <GScamera.h>
 
-struct _HSD_CObj;
 struct _HSD_JObj;
-
-/* The camera the GS camera module hands out. Everything the layer does with a
- * camera goes through the HSD camera object it is built on. */
-struct _GScamera {
-    u8 _00[0x08];
-    _HSD_CObj *mCObj; // 0x08: HSD camera object the projection comes from.
-};
 
 /* Particle generators and loaded engine banks. */
 

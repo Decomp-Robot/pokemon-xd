@@ -26,9 +26,9 @@ struct FIGHT_SIDE {
 
     u16 mFightSideDataId;
     u16 mReserved;
-    _JOUTAI mJoutaiAry[FIGHT_SIDE_JOUTAI_COUNT]; // 0x04
-    FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT]; // 0x64
-    u8 mMakibisiCheckFlag; // 0x6EEC
+    _JOUTAI mJoutaiAry[FIGHT_SIDE_JOUTAI_COUNT];
+    FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT];
+    u8 mMakibisiCheckFlag;
     u8 mPadding[3];
 };
 

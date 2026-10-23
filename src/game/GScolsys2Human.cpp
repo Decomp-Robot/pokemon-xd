@@ -65,7 +65,7 @@ extern "C" void GScolsys2HumanDispColision(void)
     if (floor == 0) {
         return;
     }
-    GSgfxLayerSetActive((GSgfxLayerID)2);
+    GSgfxLayerSetActive(GSGFX_LAYER_DEFAULT);
     GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_NONE);
     GSgfxSelectVertexFormat(GSgfxVFBuildTemp(GX_POS_XYZ, GX_F32, GX_FALSE, GX_NRM_XYZ,

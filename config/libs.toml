@@ -46,4 +46,5 @@ cflags = [
     "-common off",
     "-i src/ext/dolphin_sdk/include/libc",
     "-lang=c",
+    "-W error",
 ]

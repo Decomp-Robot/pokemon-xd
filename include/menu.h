@@ -4,6 +4,7 @@
 #include <GSgfxTypes.h>
 #include <menuIds.h>
 #include <types.h>
+#include <bool.h>
 
 struct Pokemon;
 struct tagWINDOW_WORK;
@@ -14,12 +15,13 @@ extern "C" {
 #endif
 
 void menuSetPosition(s32 menuID, s32 x, s32 y);
-void menuCursorNormal(struct tagWINDOW_WORK* window, u8 move);
 void menuPlaySe(s32 menuID, s32 soundID);
 u8 menuSetEnablePort(s32 portMask);
 s32 menuGetLastError(void);
 s32 menuGetCursor(s32 menuID);
 s32 menuGetCursorItemID(s32 menuID);
+void menuCursorNormal(struct tagWINDOW_WORK *window, s32 mode);
+u8 menuIsCheck(s32 menuID);
 void menuButtonNormal(struct tagWINDOW_WORK *window);
 u8 menuFaceCheckLoading(void);
 void menuDataBiosSetXY(s32 id, s16 x, s16 y);
@@ -41,15 +43,11 @@ void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, u32 color,
 s32 menuOpen(s32 menuID, s32 mode);
 u16 windowGetKeyTrg(void);
 s32 menuOpenCustom(s32 menuID, s32 parentID, void *result, u32 flags,
-#ifdef __cplusplus
                    bool wait,
-#else
-                   u8 wait,
-#endif
                    s32 argCount, ...);
 s32 menuClose(s32 menuID);
-s32 menuCloseCustom(s32 menuID, s32 arg, s32 wait);
-s32 menuCloseSync(s32 menuID, s32 wait);
+s32 menuCloseCustom(s32 menuID, s32 arg, bool wait);
+s32 menuCloseSync(s32 menuID, bool wait);
 u8 menuIsOpen(s32 menuID);
 u16 windowGetKeyRepeat(void);
 s32 windowGetActiveID(void);

@@ -4,6 +4,7 @@
 #include <types.h>
 #include <GSthread.h>
 #include <roomData.h>
+#include <floorManager.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -13,17 +14,15 @@ u32 floorReadMakeLightResID(u32 resource);
 void floorSetLightInfo(u32 resource, long count);
 
 GSgfxLayerID floorGetMenuLayerID(void);
-s32 floorGetNextFloorID();
-s32 floorGetPrevFloorID();
-s32 floorGetCurrentGroupID();
+s32 floorGetNextFloorID(void);
+s32 floorGetPrevFloorID(void);
+u32 floorGetCurrentGroupID(void);
 void floorLink(s32 floorID, s32 mode);
 void floorSetFadeScript(s32 scriptID, s32 fadeID);
 RoomData* floorDataBiosGetPtr(s32 floorID);
-void GSfloorPop();
-
+void GSfloorPop(void);
 void floorWaitForChange(void);
 u8 GSfloorIsPop(void);
-
 void floorExecScriptInteger(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
 void floorExecScriptIntegerThread(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
 void floorExecScriptIntegerByName(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
