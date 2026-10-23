@@ -127,6 +127,10 @@ name = "ext/dolphin_sdk/os/OSTime.c"
 completed = true
 
 [[lib.object]]
+name = "ext/dolphin_sdk/os/OSTimer.c"
+completed = true
+
+[[lib.object]]
 name = "ext/dolphin_sdk/os/time.dolphin.c"
 completed = false
 

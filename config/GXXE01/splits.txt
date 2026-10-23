@@ -161,6 +161,9 @@ ext/dolphin_sdk/os/OSTime.c:
 	.text       start:0x800B24BC end:0x800B26C0
 	.data       start:0x803D1DC8 end:0x803D1E28
 
+ext/dolphin_sdk/os/OSTimer.c:
+	.text       start:0x800B26C0 end:0x800B26C0
+
 ext/dolphin_sdk/os/__ppc_eabi_init.c:
 	.text       start:0x800B26C0 end:0x800B26E0
 	.text       start:0x800B26E0 end:0x800B2734

@@ -16,6 +16,7 @@ static struct Timer Timer;
 // prototypes
 static void DecrementerExceptionHandler(__OSException exception, OSContext* context);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 OSTimerCallback OSSetTimerCallback(OSTimerCallback callback) {
     OSTimerCallback prevCallback;
 
@@ -31,6 +32,7 @@ OSTimerCallback OSSetTimerCallback(OSTimerCallback callback) {
     return prevCallback;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSInitTimer(u32 time, u32 mode) {
 #if DEBUG
     if (time >= 0x80000000) {
@@ -53,6 +55,7 @@ void OSInitTimer(u32 time, u32 mode) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSStartTimer(void) {
     BOOL enabled;
 
@@ -67,6 +70,7 @@ void OSStartTimer(void) {
     OSRestoreInterrupts(enabled);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSStopTimer(void) {
     BOOL enabled;
 
@@ -87,6 +91,7 @@ void OSStopTimer(void) {
     OSRestoreInterrupts(enabled);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DecrementerExceptionCallback(__OSException exception, OSContext* context) {
     OSContext exceptionContext;
 
@@ -110,6 +115,7 @@ static void DecrementerExceptionCallback(__OSException exception, OSContext* con
 }
 
 #ifdef __GEKKO__
+// UNUSED: the game never calls this; dead-stripped at link.
 static asm void DecrementerExceptionHandler(__OSException exception,
                                             register OSContext* context) {
     nofralloc
