@@ -161,6 +161,19 @@ ext/dolphin_sdk/mtx/mtx44.c:
 	.text       start:0x800B3434 end:0x800B3504
 	.text       start:0x800B3504 end:0x800B359C
 
+ext/dolphin_sdk/mtx/vec.c:
+	.text       start:0x800B359C end:0x800B35C0
+	.text       start:0x800B35C0 end:0x800B35E4
+	.text       start:0x800B35E4 end:0x800B3600
+	.text       start:0x800B3600 end:0x800B3644
+	.text       start:0x800B3644 end:0x800B365C
+	.text       start:0x800B365C end:0x800B36A0
+	.text       start:0x800B36A0 end:0x800B36C0
+	.text       start:0x800B36C0 end:0x800B36FC
+	.text       start:0x800B36FC end:0x800B3724
+	.text       start:0x800B3724 end:0x800B37D0
+	.text       start:0x800B37D0 end:0x800B3824
+
 ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3824 end:0x800B3880
 	.text       start:0x800B3880 end:0x800B38D8
