@@ -201,7 +201,12 @@ ext/dolphin_sdk/os/OSTimer.c:
 ext/dolphin_sdk/os/time.dolphin.c:
 	.text       start:0x800B26C0 end:0x800B26C0
 
+ext/dolphin_sdk/os/__start.c:
+	.init       start:0x80003100 end:0x80003400
+	.sbss       start:0x804EAB70 end:0x804EAB78
+
 ext/dolphin_sdk/os/__ppc_eabi_init.c:
+	.init       start:0x80003400 end:0x80003458
 	.text       start:0x800B26C0 end:0x800B26E0
 	.text       start:0x800B26E0 end:0x800B2734
 	.text       start:0x800B2734 end:0x800B2754
@@ -251,10 +256,6 @@ ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3964 end:0x800B3BBC
 	.text       start:0x800B3BBC end:0x800B3C20
 	.text       start:0x800B3C20 end:0x800B3D94
-
-ext/dolphin_sdk/os/__start.c:
-	.init       start:0x80003100 end:0x80003400
-	.sbss       start:0x804EAB70 end:0x804EAB78
 
 ext/dolphin_sdk/dvd/dvdlow.c:
 	.text       start:0x800B3D94 end:0x800B4C10
@@ -1531,7 +1532,7 @@ ext/musyx_sdk/txwin/txwin.c:
 	.text       start:0x80183140 end:0x80183140
 
 src/init.c:
-	.init       start:0x80003400 end:0x80003488
+	.init       start:0x80003458 end:0x80003488
 
 decomp/TRKMemory.c:
 	.init       start:0x80003488 end:0x800034AC
