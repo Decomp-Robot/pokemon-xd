@@ -10,6 +10,7 @@
 
 SYNVOICE __SYNVoice[64];
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNClearVoiceReferences(void* p) {
     AXVPB* axvpb;
     SYNSYNTH* synth;
@@ -36,6 +37,7 @@ void __SYNClearVoiceReferences(void* p) {
     synth->notes--;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetVoiceToRelease(SYNVOICE* voice, u32 priority) {
     ASSERTLINE(63, voice);
     voice->veState = 3;
@@ -43,6 +45,7 @@ void __SYNSetVoiceToRelease(SYNVOICE* voice, u32 priority) {
     AXSetVoicePriority(voice->axvpb, priority);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNServiceVoice(int i) {
     SYNVOICE* voice;
     SYNSYNTH* synth;
