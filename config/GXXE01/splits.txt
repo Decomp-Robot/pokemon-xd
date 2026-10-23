@@ -1147,6 +1147,9 @@ ext/musyx_sdk/runtime/hw_memory.c:
 	.text       start:0x8018215C end:0x8018218C
 	.text       start:0x8018218C end:0x801821BC
 
+ext/musyx_sdk/runtime/hw_lib_dolphin.c:
+	.text       start:0x801821BC end:0x801821BC
+
 ext/dolphin_sdk/axfx/reverb_hi.c:
 	.text       start:0x801822B0 end:0x801827BC
 	.text       start:0x801827BC end:0x801829D0
