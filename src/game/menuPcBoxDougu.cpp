@@ -453,7 +453,7 @@ extern "C" s32 menuPcBoxDouguHikidasuDrawRollDown(tagWINDOW_WORK *window, tagSPR
     } else {
         disp = 0;
     }
-    sprite->mAlphaReg.alpha.mAlpha = (u8)(ITEM_ROLL_ALPHA_MAX * (1.0f - sRollProgress));
+    sprite->mRgba.mAlpha = (u8)(ITEM_ROLL_ALPHA_MAX * (1.0f - sRollProgress));
     winSpriteSetDisp(sprite, disp);
     return 0;
 }
@@ -468,7 +468,7 @@ extern "C" s32 menuPcBoxDouguHikidasuDrawRollUp(tagWINDOW_WORK *window, tagSPRIT
     } else {
         disp = 0;
     }
-    sprite->mAlphaReg.alpha.mAlpha = (u8)(ITEM_ROLL_ALPHA_MAX * (1.0f - sRollProgress));
+    sprite->mRgba.mAlpha = (u8)(ITEM_ROLL_ALPHA_MAX * (1.0f - sRollProgress));
     winSpriteSetDisp(sprite, disp);
     return 0;
 }

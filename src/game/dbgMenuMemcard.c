@@ -37,7 +37,7 @@ void memcard_debug_Load(u8 *buf);
 void memcard_debug_Load2(void);
 void memcard_debug_Save(u8 *buf);
 void *getTrainerDataStartOffset(s32 a, s32 b);
-s32 zz_game_get_region(void);
+s32 gameGetRegion(void);
 void gamedataSetStatus(void *gamedata, s32 index, s32 status);
 void __assert(const char *file, s32 line, const char *cond);
 void *memcpy(void *dest, const void *src, u32 count);
@@ -75,7 +75,7 @@ s32 zz_000b644_(s32 menuID, s32 type)
         memcard_debug_Load2();
     }
     gamedata = getTrainerDataStartOffset(0, 1);
-    switch (zz_game_get_region()) {
+    switch (gameGetRegion()) {
     case 0:
         gamedataSetStatus(gamedata, 2, 0xB);
         gamedataSetStatus(gamedata, 3, 3);

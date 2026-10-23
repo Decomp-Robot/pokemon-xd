@@ -41,7 +41,7 @@ s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
 u16 toolentryTaisenGetPokemonHomePlace(s32 index);
-s32 zz_game_get_region(void);
+s32 gameGetRegion(void);
 
 void menuSetEnablePort(s32 port);
 void msgctrlSetValue(s32 index, s32 value);
@@ -146,7 +146,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
         winMsgOpen(2, 0x42FF, 1, 1);
 
         if (work->battleMode != 2) {
-            switch (zz_game_get_region()) {
+            switch (gameGetRegion()) {
             case 0:
                 menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg2, 3, 0x3E, 0x89, 0, 3, 1, 1);
@@ -164,7 +164,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             if (menuCBTaisenWork.selectResult == -1) {
                 menuCBTaisenWork.selectResult = 2;
             }
-            switch (zz_game_get_region()) {
+            switch (gameGetRegion()) {
             case 0:
                 switch (menuCBTaisenWork.selectResult) {
                 case 0:
@@ -193,7 +193,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             }
         } else {
             /* Four players: as many choices as there are players. */
-            switch (zz_game_get_region()) {
+            switch (gameGetRegion()) {
             case 0:
                 menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg3, 4, 0x3E, 0x89, 0, 4, 1, 1);
@@ -211,7 +211,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             if (menuCBTaisenWork.selectResult == -1) {
                 menuCBTaisenWork.selectResult = 3;
             }
-            switch (zz_game_get_region()) {
+            switch (gameGetRegion()) {
             case 0:
                 switch (menuCBTaisenWork.selectResult) {
                 case 0:

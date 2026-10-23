@@ -366,14 +366,14 @@ extern "C" void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
         s32 frame = titleCursorFrame;
 
         phase = frame % 60;
-        sprite->mAlphaReg.mAlphaWord = -1;
+        sprite->mColor = -1;
         if (phase < 30) {
             angle = cPiFloat * ((f32)phase / cThirtyFloat);
             alpha = cAlphaBaseFloat * (f32)sin(angle);
-            sprite->mAlphaReg.alpha.mAlpha -= (u8)alpha;
+            sprite->mRgba.mAlpha -= (u8)alpha;
         }
     } else {
-        sprite->mAlphaReg.alpha.mAlpha = 255;
+        sprite->mRgba.mAlpha = 255;
     }
 }
 

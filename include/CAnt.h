@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 // Fill the model state in `ant` from the pokemon record in `pokemon`.
-void zz_battle_pokemon_get_poke_body(CAnt *ant, Pokemon *pokemon);
+void battlePokemonGetPokeBody(CAnt *ant, Pokemon *pokemon);
 
 #ifdef __cplusplus
 }

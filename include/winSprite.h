@@ -59,17 +59,19 @@ struct tagSPRITE_WORK {
     s16 mWidth;            // 0x54: width of the sprite.
     s16 mHeight;           // 0x56: height of the sprite.
     u8 _58[0x0C];          // 0x58-0x63: unknown.
-    /* 0x64-0x67: the title cursor hook clears the whole word to -1 to drop
-     * whatever blend override is in place, while everything else writes only
-     * the alpha byte at the top of it. The lower three bytes are not
-     * understood yet. */
+    /* 0x64-0x67: the sprite colour word. The title cursor hook clears the
+     * whole word to -1 to drop whatever blend override is in place; the entry
+     * menus set the channels apart on it, and everything else writes only the
+     * alpha byte at the top of it. */
     union {
-        u32 mAlphaWord;        // 0x64: whole word, cleared to -1 by the title hook.
+        u32 mColor;            // 0x64: whole colour word.
         struct {
-            u8 _64[3];         // 0x64-0x66: unknown.
+            u8 mRed;           // 0x64
+            u8 mGreen;         // 0x65
+            u8 mBlue;          // 0x66
             u8 mAlpha;         // 0x67: alpha the sprite is drawn with.
-        } alpha;
-    } mAlphaReg;
+        } mRgba;
+    };
     u8 _68[0x0C];          // 0x68-0x73: unknown.
     u8 mUnk74;             // 0x74: flag read by winSpriteGetLayerID.
 };

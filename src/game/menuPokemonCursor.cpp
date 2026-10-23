@@ -23,7 +23,7 @@ void CMenuPokemonCursor::setPokemon(Pokemon *pokemon)
         mAnt.init();
     } else {
         memcpy(&mPokemon, pokemon, sizeof(Pokemon));
-        zz_battle_pokemon_get_poke_body(&mAnt, &mPokemon);
+        battlePokemonGetPokeBody(&mAnt, &mPokemon);
         mAnt.setAnimation(0);
     }
 }
