@@ -144,6 +144,24 @@ ext/dolphin_sdk/db/db.c:
 	.text       start:0x800B27F0 end:0x800B280C
 	.text       start:0x800B280C end:0x800B285C
 
+ext/dolphin_sdk/gx/GXAttr.c:
+	.text       start:0x800C7FC4 end:0x800C8230
+	.text       start:0x800C8230 end:0x800C84B8
+	.text       start:0x800C84B8 end:0x800C8574
+	.text       start:0x800C8574 end:0x800C8698
+	.text       start:0x800C8698 end:0x800C884C
+	.text       start:0x800C884C end:0x800C88DC
+	.text       start:0x800C88DC end:0x800C8914
+	.text       start:0x800C8914 end:0x800C8B70
+	.text       start:0x800C8B70 end:0x800C8DF0
+	.text       start:0x800C8DF0 end:0x800C8E78
+	.text       start:0x800C8E78 end:0x800C90F8
+	.text       start:0x800C90F8 end:0x800C916C
+	.text       start:0x800C916C end:0x800C91B0
+	.text       start:0x800C91B0 end:0x800C91C0
+	.text       start:0x800C91C0 end:0x800C9440
+	.text       start:0x800C9440 end:0x800C947C
+
 ext/dolphin_sdk/perf/perf.c:
 	.text       start:0x800D018C end:0x800D0234
 	.text       start:0x800D0234 end:0x800D033C
