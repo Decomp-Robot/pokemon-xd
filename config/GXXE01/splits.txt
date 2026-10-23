@@ -1197,6 +1197,14 @@ ext/musyx_sdk/runtime/synth_adsr.c:
 	.text       start:0x80175F00 end:0x80175F84
 	.sdata2     start:0x804EDDE0 end:0x804EDE08
 
+ext/musyx_sdk/runtime/synth_vsamples.c:
+	.text       start:0x80175F84 end:0x80176040
+	.text       start:0x80176040 end:0x8017630C
+	.text       start:0x8017630C end:0x801763B4
+	.text       start:0x801763B4 end:0x8017670C
+	.text       start:0x8017670C end:0x8017691C
+	.bss        start:0x80468560 end:0x804690B0
+
 ext/musyx_sdk/runtime/hw_dspctrl.c:
 	.text       start:0x801771DC end:0x80177590
 	.text       start:0x80177590 end:0x801775C8
