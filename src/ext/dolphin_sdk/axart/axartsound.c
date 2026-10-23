@@ -2,6 +2,7 @@
 #include <dolphin/os.h>
 #include <dolphin/mix.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTServiceSound(AXART_SOUND* sound) {
     AXART_ART* articulator;
     AXVPB* axvpb;
@@ -113,6 +114,7 @@ void AXARTServiceSound(AXART_SOUND* sound) {
     MIXSetSPan(axvpb, span);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTAddArticulator(AXART_SOUND* sound, AXART_ART* articulator) {
     ASSERTLINE(232, sound);
     ASSERTLINE(233, articulator);

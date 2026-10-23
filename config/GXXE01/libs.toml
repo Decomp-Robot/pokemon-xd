@@ -835,3 +835,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartlpf.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/axart/axartsound.c"
+completed = true
