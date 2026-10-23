@@ -25,7 +25,7 @@ inline bool checkHitFace(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos,
 inline bool checkHitEdge(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos, f32 radiusSquared, u16 flags)
 {
     GSvec closest;
-    u16 edgeMask[3] = {1, 2, 4};
+    u16 edgeMask[3] = {1U, 2U, 4U};
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, pos) < collisionIntervalStart) return false;
     for (s32 edge = 0; edge < 3; edge++) {
         if (!(flags & edgeMask[edge])) continue;
@@ -42,7 +42,7 @@ inline bool checkHitEdge(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos,
 }
 inline bool checkHitVertex(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos, f32 radiusSquared, u16 flags)
 {
-    u16 pointMask[3] = {1, 2, 4};
+    u16 pointMask[3] = {1U, 2U, 4U};
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, pos) < collisionIntervalStart) return false;
     for (s32 vertex = 0; vertex < 3; vertex++) {
         s32 previous = vertex + 2;
@@ -329,8 +329,6 @@ bool checkHitCollision(GSvec* pos, GSvec* cur, f32 radius, GSvec* out,
     here.y = cur->y;
     here.z = cur->z;
     file = GScolsys2GetCCDFileHead();
-    /* The models are handed a scratch point to report into; without a caller
-     * result there is nowhere to write, so the sweep still runs. */
     if (out == 0) {
         dst = 0;
     } else {
@@ -377,8 +375,6 @@ bool checkHitCollision(GSvec* pos, GSvec* cur, f32 radius, GSvec* out,
             here.y = dst->y;
             here.z = dst->z;
         }
-        /* Another hit means the sample point moved, so the sweep is worth
-         * repeating; ten rounds is the cap. */
         if (hits <= 0) {
             break;
         }
