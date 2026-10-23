@@ -1038,19 +1038,34 @@ ext/musyx_sdk/runtime/hw_volconv.c:
 	.data       start:0x8040878C end:0x8040879C
 	.sdata2     start:0x804EDE08 end:0x804EDE3C
 
-ext/musyx_sdk/runtime/dsp_import.c:
-	.data       start:0x80409040 end:0x8040AF00
-	.sdata      start:0x804E8460 end:0x804E8468
-
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/musyx_sdk/runtime/snd_math.c:
 	.text       start:0x8017D3D4 end:0x8017D480
 	.text       start:0x8017D480 end:0x8017D534
 	.text       start:0x8017D534 end:0x8017D598
 	.text       start:0x8017D598 end:0x8017D794
 	.sdata2     start:0x804EDE90 end:0x804EDEAC
+
+ext/musyx_sdk/runtime/snd_service.c:
+	.text       start:0x8017FAA4 end:0x8017FAC0
+	.text       start:0x8017FAC0 end:0x8017FB4C
+	.text       start:0x8017FB4C end:0x8017FBF0
+	.text       start:0x8017FBF0 end:0x8017FC44
+	.text       start:0x8017FC44 end:0x8017FD18
+	.text       start:0x8017FD18 end:0x8017FD28
+	.text       start:0x8017FD28 end:0x8017FD70
+	.text       start:0x8017FD70 end:0x8017FD78
+	.rodata     start:0x802F3C70 end:0x802F3C7C
+	.rodata     start:0x802F3C7C end:0x802F3C9C
+	.data       start:0x80408830 end:0x80409030
+	.sdata      start:0x804E8448 end:0x804E844C
+	.sdata2     start:0x804EDEB0 end:0x804EDEB8
+
+ext/musyx_sdk/runtime/dsp_import.c:
+	.data       start:0x80409040 end:0x8040AF00
+	.sdata      start:0x804E8460 end:0x804E8468
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/axfx/reverb_hi.c:
 	.text       start:0x801822B0 end:0x801827BC
