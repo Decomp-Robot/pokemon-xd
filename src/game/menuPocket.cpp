@@ -12,6 +12,7 @@
 #include <time.h>
 #include <menu.h>
 #include <menuPocket2.h>
+#include <menuPocketBattleDisk.h>
 #include <menuItemBios.h>
 #include <itemData.h>
 #include <winSprite.h>
@@ -230,7 +231,6 @@ struct PocketNumberInputParam {
 
 
 extern "C" void heroAddPokedoru(Hero *hero, u32 money);
-extern "C" void menuPocketBattleDiskMain(int a, FIGHT_TRAINER *trainer, Hero *hero);
 extern "C" u16 menuPocketCologne(int a);
 // The throw-away menu is handed to _actionMenuOpen as one table.
 struct SActionMenuTable {

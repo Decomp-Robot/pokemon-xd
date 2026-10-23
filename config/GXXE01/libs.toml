@@ -205,6 +205,7 @@ cflags = [
     "-str reuse",
     "-multibyte",
     "-i include",
+    "-i src/ext/dolphin_sdk/include",
     "-i build/GXXE01/include",
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
@@ -861,6 +862,36 @@ name = "game/menuListCursor.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/main.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/menuPocketBattleDisk.cpp"
 completed = true
 cflags = [
@@ -886,6 +917,65 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/flashmenuTest.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/sysvars.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-str reuse,readonly",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
     "-lang=c++",
 ]
 

@@ -8,6 +8,12 @@
 #include <menuSpriteBios.h>
 #include <GSgfxTypes.h>
 
+// Move a value toward zero by the specified step.
+void menuPocketToolFloatToZero(f32 &value, f32 step);
+
+// Play a sound effect from the pocket tool menu.
+void menuPtPlaySe(unsigned long seID);
+
 // Angle helpers the pocket menus share. The refresh helpers wrap a value
 // into a fixed range and the subtraction helpers wrap the difference of two
 // values, so callers can normalise a heading before comparing or drawing it.

@@ -105,8 +105,26 @@ game/time.cpp:
 	.sdata2     start:0x804EBE00 end:0x804EBE18
 
 game/menuPocketBattleDisk.cpp:
-	.text       start:0x8000E97C end:0x8000EAD8
+	.text       start:0x8000E97C end:0x8000F5E8
+	.bss        start:0x80424058 end:0x80424080
+	.sdata2     start:0x804EBE18 end:0x804EBE38
 	.sbss2      start:0x804EFC88 end:0x804EFC90
+
+game/main.cpp:
+	.text       start:0x8000F5E8 end:0x8000F820
+
+game/sysvars.cpp:
+	.text       start:0x8000F820 end:0x8000F9B4
+	.text       start:0x8000F9B4 end:0x8000FA38
+	.text       start:0x8000FA38 end:0x8000FAFC
+	.text       start:0x8000FAFC end:0x8000FC3C
+	.text       start:0x8000FC3C end:0x8000FCA8
+	.text       start:0x8000FCA8 end:0x8000FD38
+	.text       start:0x8000FD38 end:0x8000FDA8
+	.sdata2     start:0x804EBE58 end:0x804EBEE0
+
+game/flashmenuTest.cpp:
+	.text       start:0x8000FDA8 end:0x8000FFF0
 
 game/menu/menuWorldMapMX.cpp:
 	.text       start:0x8000FFF0 end:0x800136C8

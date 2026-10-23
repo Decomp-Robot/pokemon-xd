@@ -795,6 +795,8 @@ struct GSgfxRenderModule {
 
 #define GSGFX_RENDER_MODULE_SIGNATURE 0xB29A48E1
 extern "C" {
+s32 GSgfxGPUSetMode(s32 mode);
+void GSgfxRender(void);
 void GSgfxDLPrimitiveType(u32 primitive);
 GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
                          s32 hasNormal, s32 normalComponents,
