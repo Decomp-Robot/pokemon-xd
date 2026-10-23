@@ -1014,9 +1014,6 @@ ext/dolphin_sdk/si/SIBios.c:
 	.sdata      start:0x804E8328 end:0x804E832C
 	.sbss       start:0x804EAEC0 end:0x804EAEC8
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/dolphin_sdk/si/SISamplingRate.c:
 	.text       start:0x800EB2B4 end:0x800EB398
 	.text       start:0x800EB398 end:0x800EB3BC
@@ -1030,6 +1027,13 @@ ext/musyx_sdk/runtime/synth_dbtab.c:
 
 ext/dolphin_sdk/ax/AXComp.c:
 	.data       start:0x80406B20 end:0x80408560
+
+ext/musyx_sdk/runtime/dsp_import.c:
+	.data       start:0x80409040 end:0x8040AF00
+	.sdata      start:0x804E8460 end:0x804E8468
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
