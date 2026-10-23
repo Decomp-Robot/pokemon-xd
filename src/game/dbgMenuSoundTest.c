@@ -14,7 +14,6 @@ extern u16 *snd_test_env;
 extern u32 *snd_test_bgm_number;
 extern u16 *snd_test_bgm;
 
-void GSsndSetMasterVolume(s32 volume, s32 a, s32 b, s32 c);
 void sndPlay(s32 soundID, s32 bgm);
 
 #pragma force_active on

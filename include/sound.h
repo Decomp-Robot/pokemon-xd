@@ -14,11 +14,6 @@ extern s32 soundPlayID;
 extern "C" {
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void GSsndClose(s32 soundID);
 void soundInitBGM(void);
 u8 soundCheckEnv(s32 sndID);
 u32 soundGetEnvID(void);
@@ -46,10 +41,6 @@ void _soundCloseFastFadeout(s32 sndID);
 s32 _soundCheckActive(s32 sndID);
 void _soundWait(u32 msec);
 void soundInit(void);
-#ifdef __cplusplus
-}
-#endif
-
 #ifdef __cplusplus
 }
 #endif

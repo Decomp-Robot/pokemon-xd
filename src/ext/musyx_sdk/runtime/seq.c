@@ -5,6 +5,7 @@
 #include "musyx/synth.h"
 
 #include <stdint.h>
+#include <math.h>
 
 NOTE seqNote[256];
 SEQ_INSTANCE seqInstance[8];

@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "musyx/musyx.h"
 
 #include "musyx/hardware.h"

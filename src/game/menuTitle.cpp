@@ -114,7 +114,6 @@ extern s32 _menuTitleWorkPat;
 
 extern "C" {
 void dbgMenuSetOpenFlag(s32 flag);
-u8 GSsndIsPlayingStream(u32 streamID);
 f32 timeGetLastFrameSec(void);
 double sin(double x);
 void fightRegWzxLoadAll(s32 id);
@@ -141,7 +140,7 @@ void menuTitleSetupModel(u32 resourceID, s16 animationIndex, u8 animationType, f
 
 void menuTitleModelCtor(u32 group, u32 modelID, bool visible);
 void menuTitleModelDtor(u32 group, u32 modelID);
-u8 menuTitlePlayBGMWait(u8 wait);
+long menuTitlePlayBGMWait(u8 wait);
 void menuTitlePlayBGM(void);
 void menuTitleOpenSelectAnime2(void);
 void menuTitleOpenSelectAnime(void);
@@ -552,7 +551,7 @@ extern "C" void menuTitleModelDtor(u32 group, u32 modelID)
 
 /* Wait until the title BGM stream has faded out (wait != 0), or just report
  * whether it is still playing (wait == 0). */
-extern "C" u8 menuTitlePlayBGMWait(u8 wait)
+extern "C" long menuTitlePlayBGMWait(u8 wait)
 {
     f32 elapsed;
 
@@ -561,7 +560,7 @@ extern "C" u8 menuTitlePlayBGMWait(u8 wait)
     }
     elapsed = 0.0f;
     for (;;) {
-        if (GSsndIsPlayingStream(TITLE_BGM_ID) != 1) {
+        if ((u8)GSsndIsPlayingStream(TITLE_BGM_ID) != 1) {
             elapsed = elapsed + timeGetLastFrameSec();
             if (elapsed >= 2.0f) {
                 break;

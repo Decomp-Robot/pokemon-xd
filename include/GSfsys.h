@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 long GSfsysGetDriveStatus();
+long GSfsysGetStatus(unsigned long fileNo);
+void GSfsysStreamSetLoopFlag(unsigned long fileNo, unsigned long arg, unsigned long loopFlag);
+void GSfsysStreamSetLoopPoint(unsigned long fileNo, unsigned long arg, unsigned long loopStart, unsigned long loopEnd);
 
 void GSfsysFree(u32 fileID);
 void GSfsysFreeCache(u16 groupId);

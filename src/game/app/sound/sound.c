@@ -54,7 +54,7 @@ u32 soundGetBGMID(void)
 
 s32 soundPlayME(s32 sndID, s32 time, s32 volume)
 {
-    if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
+    if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
     }
     GSsndPlayVolume(sndID, time, volume, 0);
@@ -101,10 +101,10 @@ void soundOpenWave(s32 waveID)
 {
     GSsndWaveEntry* wave;
 
-    if (*gSoundWaveCountList <= (u32)waveID) {
+    if (*snd_wave_data_number <= (u32)waveID) {
         return;
     }
-    wave = &gSoundWaveList[waveID];
+    wave = &snd_wave_data[waveID];
     GSsndOpenWaveDVD(waveID, wave->dvdFileID, 0, wave->resourceGroup, wave->poolResID,
                      wave->projectResID, wave->sampDirResID);
 }
@@ -136,25 +136,25 @@ void soundSetVolumeID(s32 sndID, u32 time, s32 volume)
 s32 soundCreateListener(void)
 {
     GSsndVec3 pos;
-    s32 handle;
+    GSsndListener* listener;
 
     pos.x = 0.0f;
     pos.y = 0.0f;
     pos.z = 0.0f;
-    handle = GSsndCreateListener(&pos);
-    return SND_BOOL(handle);
+    listener = GSsndCreateListener(&pos);
+    return SND_BOOL((u32)listener);
 }
 
 s32 soundCreateEmitter(s32 sndID, f32 x, f32 y, f32 z)
 {
     GSsndVec3 pos;
-    s32 created;
+    GSsndEmitter* emitter;
 
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    created = GSsndCreateEmitter(sndID, &pos);
-    return SND_BOOL(created);
+    emitter = GSsndCreateEmitter(sndID, &pos);
+    return SND_BOOL((u32)emitter);
 }
 
 void soundStopEnv(s32 fadeTime)
@@ -166,7 +166,7 @@ s32 soundStop(s32 sndID, s32 fadeTime)
 {
     s32 isBGM;
 
-    if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
+    if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
     }
     isBGM = 0;
@@ -199,7 +199,7 @@ s32 soundStop(s32 sndID, s32 fadeTime)
 
 s32 soundOpenPlayEnvFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
 {
-    if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
+    if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
     }
     _soundFadeout(fadeTime, 0, 1);
@@ -208,7 +208,7 @@ s32 soundOpenPlayEnvFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
 
 s32 soundOpenPlayFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
 {
-    if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
+    if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
     }
     _soundFadeout(fadeTime, 1, 1);
@@ -227,7 +227,7 @@ s32 soundOpenPlay(s32 sndID, s32 time, s32 volume)
 
 s32 _soundOpenPlay(s32 sndID, s32 time, s32 volume, s32 isBGM)
 {
-    if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
+    if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
     }
     if (isBGM == 0) {
@@ -236,7 +236,7 @@ s32 _soundOpenPlay(s32 sndID, s32 time, s32 volume, s32 isBGM)
         }
         soundPlayEnvID = sndID;
     } else {
-        if (gSoundSEList[sndID].soundEffect != 1) {
+        if (snd_data[sndID].soundEffect != 1) {
             if (soundPlayID != (u32)sndID && soundPlayID != SND_ID_NONE) {
                 _soundCloseFastFadeout(soundPlayID);
             }

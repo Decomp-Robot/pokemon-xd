@@ -12,14 +12,10 @@ s32 pauseAppID;
 // graphics libraries and in the game app module.
 extern "C" {
 extern void GSgfxRenderUnpause(void);
-extern void GSsndPopVolumeALL(s32 a, s32 b, s32 c);
 extern void GSgappPauseOff(void);
-extern void GSsndContinue(s32 bgmID, s32 volume, s32 unk);
 extern void GSmovieAllContinue(void);
 extern void GSgfxRenderPause(void);
-extern void GSsndPushVolumeALL(s32 a, s32 b, s32 c, s32 d);
 extern void GSgappPauseOn(void);
-extern void GSsndPause(s32 bgmID, s32 volume, s32 unk);
 extern void GSmovieAllPause(void);
 extern s32 GSgappCreate(s32 app, s32 a, s32 b, void (*callback)(u32, u32));
 }
