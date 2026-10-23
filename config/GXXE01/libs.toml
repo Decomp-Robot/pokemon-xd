@@ -1238,3 +1238,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/s_data.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/snd_init.c"
+completed = true
