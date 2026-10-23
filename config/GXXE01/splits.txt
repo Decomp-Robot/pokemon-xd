@@ -260,6 +260,21 @@ ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC474 end:0x800CC4A4
 	.text       start:0x800CC4A4 end:0x800CC4C8
 
+ext/dolphin_sdk/gx/GXPixel.c:
+	.text       start:0x800CCBE8 end:0x800CCDFC
+	.text       start:0x800CCDFC end:0x800CCFAC
+	.text       start:0x800CCFAC end:0x800CD0D0
+	.text       start:0x800CD0D0 end:0x800CD124
+	.text       start:0x800CD124 end:0x800CD150
+	.text       start:0x800CD150 end:0x800CD17C
+	.text       start:0x800CD17C end:0x800CD1B0
+	.text       start:0x800CD1B0 end:0x800CD1E4
+	.text       start:0x800CD1E4 end:0x800CD2B8
+	.text       start:0x800CD2B8 end:0x800CD2E4
+	.text       start:0x800CD2E4 end:0x800CD320
+	.text       start:0x800CD320 end:0x800CD358
+	.text       start:0x800CD358 end:0x800CD3D0
+
 ext/dolphin_sdk/gx/GXDraw.c:
 	.text       start:0x800CD3D0 end:0x800CD784
 	.text       start:0x800CD784 end:0x800CDE50
