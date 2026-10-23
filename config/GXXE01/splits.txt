@@ -16,6 +16,9 @@ Sections:
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
+ext/dolphin_sdk/base/PPCArch.c:
+	.text       start:0x800A9574 end:0x800A96AC
+
 ext/dolphin_sdk/os/OS.c:
 	.text       start:0x800A96AC end:0x800AA178
 

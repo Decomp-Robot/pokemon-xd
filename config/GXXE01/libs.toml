@@ -9,6 +9,17 @@ name = "orig/GXXE01/sys/main.dol"
 completed = false
 
 [[lib]]
+name = "base"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/base/PPCArch.c"
+completed = false
+
+[[lib]]
 name = "os"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
