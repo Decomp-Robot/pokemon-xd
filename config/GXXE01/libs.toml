@@ -216,3 +216,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXGeometry.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gx/GXInit.c"
+completed = false
