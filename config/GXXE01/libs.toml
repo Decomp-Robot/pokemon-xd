@@ -34,3 +34,8 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSAudioSystem.c"
 completed = false
+
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSCache.c"
+completed = false
