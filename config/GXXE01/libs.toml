@@ -1282,3 +1282,14 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/Delay/delay_fx.c"
 completed = true
+
+[[lib]]
+name = "txwin"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/musyx_sdk/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/musyx_sdk/txwin/txwin.c"
+completed = true
