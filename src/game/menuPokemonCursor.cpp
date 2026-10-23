@@ -21,3 +21,10 @@ void CMenuPokemonCursor::setPositionIndex(long index)
     mPrevPositionIndex = mPositionIndex;
     mPositionIndex = index;
 }
+
+void CMenuPokemonCursor::setPositionTable(PocketVec<short> *table, long index)
+{
+    setPositionIndex(index);
+    mPrevPositionIndex = 0;
+    mPositionTable = table;
+}

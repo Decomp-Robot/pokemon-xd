@@ -15,6 +15,7 @@ class CMenuPokemonCursor {
 public:
     void setPositionTableDummy();
     void setPositionIndex(long index);
+    void setPositionTable(PocketVec<short> *table, long index);
 
 private:
     u8 _00[0x0C];
