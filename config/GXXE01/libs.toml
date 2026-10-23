@@ -1100,3 +1100,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/support/HTable.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/support/List.c"
+completed = true

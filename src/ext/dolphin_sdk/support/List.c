@@ -1,11 +1,13 @@
 #include <charPipeline/structures/List.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSInitList(DSListPtr list, Ptr obj, DSLinkPtr link) {
     list->Head = NULL;
     list->Tail = NULL;
     list->Offset = (Ptr)link - obj;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSInsertListObject(DSListPtr list, Ptr cursor, Ptr obj) {
     DSLinkPtr link;
     DSLinkPtr linkNext;
@@ -40,6 +42,7 @@ void DSInsertListObject(DSListPtr list, Ptr cursor, Ptr obj) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSRemoveListObject(DSListPtr list, Ptr obj) {
     DSLinkPtr link = (DSLinkPtr)(obj + list->Offset);
 
@@ -61,6 +64,7 @@ void DSRemoveListObject(DSListPtr list, Ptr obj) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSAttachList(DSListPtr baseList, DSListPtr attachList) {
     DSLinkPtr link;
     DSLinkPtr linkPrev;
@@ -80,6 +84,7 @@ void DSAttachList(DSListPtr baseList, DSListPtr attachList) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void* DSNextListObj(DSListPtr list, Ptr obj) {
     if (!list) {
         return NULL;
