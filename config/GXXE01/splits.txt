@@ -35,6 +35,9 @@ decomp/menuWorldMap.cpp:
 decomp/WorldMapIsBlending.cpp:
 	.text       start:0x800127F4 end:0x80012818
 
+decomp/WorldMapIcon.cpp:
+	.text       start:0x80012FA8 end:0x80012FD8
+
 decomp/WorldMap.cpp:
 	.text       start:0x80013220 end:0x80013234
 

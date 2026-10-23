@@ -91,6 +91,16 @@ name = "game/menuCBBios.c"
 completed = true
 
 [[lib]]
+name = "WorldMapIcon"
+mw_version = "GC/2.0p1"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "decomp/WorldMapIcon.cpp"
+completed = false
+
+[[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"

@@ -47,6 +47,7 @@ public:
     /* True once the camera blend started by SetCameraNextWork has fully
      * faded in (blend parameter reached 1). */
     bool IsBlending();
+    f32 GetAngle(long work);
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the
