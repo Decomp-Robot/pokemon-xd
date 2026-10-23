@@ -163,7 +163,7 @@ bool checkCollisionHeadToHead(GSCOLSYS2_HUMAN* a, GSCOLSYS2_HUMAN* b,
         return 0;
     }
     if (distance >= combinedRadius) return 0;
-    if (distance <= (0.0f)) {
+    if (distance <= 0.0f) {
         dx = (1.0f);
         distance = dx;
     }
