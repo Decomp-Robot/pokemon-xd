@@ -1492,6 +1492,8 @@ game/GSlerp.cpp:
 
 game/GSmodel/effects.cpp:
 	.text       start:0x800EFFCC end:0x800F0EE0
+	.data       start:0x803D5028 end:0x803D5040
+	.sbss       start:0x804EAF00 end:0x804EAF08
 	.sdata2     start:0x804ED3D8 end:0x804ED3E8
 
 game/GSmodelBlend.cpp:

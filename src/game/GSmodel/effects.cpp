@@ -11,9 +11,11 @@ enum {
  * of models currently using it. The layer is removed from its config once
  * the last user has gone. */
 extern const char gsDistortionLayerName[];
+__declspec(section ".data") const char gsDistortionLayerName[] = "model distortion";
 /* Number of models that currently own a distortion pass; the layer is
  * dropped from the config once the last one goes. */
 extern u8 gsDistortionUserCount;
+u8 gsDistortionUserCount;
 
 /* Live models, linked through mNext. */
 extern _GSmodel *gsModelList;
