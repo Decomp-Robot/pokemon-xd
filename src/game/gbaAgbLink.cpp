@@ -148,7 +148,7 @@
 
 // Reads the code the GBA has to run out of the file the path names into dst and
 // reports its length through size, rounded up to the transfer unit of the link.
-long _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
+void _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
 
 // Handler of the sleep alarm of _sleep_thread, which resumes the thread that
 // suspended itself there.

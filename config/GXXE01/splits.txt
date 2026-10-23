@@ -161,6 +161,14 @@ game/gbaPokemonTransferJobs.cpp:
 game/gbaAgbLink.cpp:
 	.text       start:0x8002B63C end:0x8002CDD8
 
+game/agbCommunication.cpp:
+	.text       start:0x8002CDD8 end:0x8002D8C0
+	.rodata     start:0x802EA788 end:0x802EA898
+	.data       start:0x803226E0 end:0x80322704
+
+game/floorRead.cpp:
+	.text       start:0x8002D8C0 end:0x8002DE58
+
 game/menuTop.cpp:
 	.text       start:0x8003032C end:0x80030330
 	.ctors      start:0x802E9F88 end:0x802E9F8C

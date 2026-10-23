@@ -146,7 +146,7 @@ long AGB_Initialize(long chan);
 // Reads the code the GBA has to run (the .jb file) into the file buffer of the
 // link and reports the length it read through size, rounded up to the transfer
 // unit of the link.
-long _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
+void _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
 
 // Code and key helpers of the link library the upload exchange is built on.
 unsigned long SwapEndian(unsigned long value);
@@ -311,18 +311,23 @@ struct AGBWork {
     unsigned long request;   // 0x3C: word the current write sends out.
     unsigned long reply;     // 0x40: header word read back from the GBA.
     unsigned long period;    // 0x44: polling period of the stage timer, in msec.
-    u8 _48[0x14];
+    unsigned long reserved48;
+    unsigned long reserved4C;
+    unsigned long reserved50;
+    unsigned long reserved54;
+    unsigned long reserved58;
     unsigned long offset;    // 0x5C: write position in the packet buffer.
     unsigned long codedWord; // 0x60: packet word after the coding.
     unsigned long plainWord; // 0x64: packet word the checksum advances with.
-    u8 _68[0x04];
+    unsigned long reserved68;
     unsigned long tick;      // 0x6C: start tick of the stage timer.
     unsigned long timeout;   // 0x70: stage timer length, in ticks.
     unsigned long pollTick;  // 0x74: start tick of the polling timer.
     unsigned long pollTimeout; // 0x78: polling timer length, in ticks.
     unsigned long resetTick;    // 0x7C: start tick of the GBA reset handshake.
     unsigned long resetTimeout; // 0x80: reset handshake length, in ticks.
-    u8 _84[0x08];               // 0x84-0x8B: unknown.
+    unsigned long reserved84;
+    unsigned long reserved88;
     u8 *buffer;              // 0x8C: buffer the packet is assembled in.
     unsigned long size;      // 0x90: length of the packet to upload, in bytes.
     void *record;            // 0x94: Pokemon record the packet is converted into.
