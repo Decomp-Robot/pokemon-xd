@@ -56,6 +56,37 @@ extern PocketTabData lPocketTabData[];
 // Cursor position (0, 0) a tab's cursor is put back to when its list shrank.
 extern "C" PocketVec<short> lbl_804E7EE8;
 
+// Frame hooks the meta-menu keeps for the menu it manages. The meta-menu's
+// draw hook runs the third for records that fill it, its tutorial prompt
+// gates on the fourth, the per-frame wait of an info window runs the fifth
+// and an A press on a tutorial message runs the last one. The pocket record
+// fills only the last three. No record in the game fills the first two.
+struct PocketMenuProcess {
+    void (*mInit)(); // 0x00: unused.
+    void (*mExit)(); // 0x04: unused.
+    void (*mDraw)(); // 0x08: extra drawing.
+    int (*mIsAnimationStateNone)(); // 0x0C: gate of the tutorial prompt.
+    void (*mMain)(); // 0x10: one frame of the menu.
+    void (*mDecide)(); // 0x14: A press on a tutorial message.
+};
+
+extern "C" int menuPocketIsAnimationStateNone(void);
+extern "C" void menuPocketTutorialDecideProc(void);
+// One waited frame of the pocket menu: hands the thread back to the menu
+// system. Owned by the menu bios.
+extern "C" void zz_002010c_(void);
+
+// The pocket menu's record. The menu has no item animations, so the gate
+// always answers "none" and confirming a tutorial message does nothing.
+extern "C" PocketMenuProcess lPocketMenuProcess = {
+    0,
+    0,
+    0,
+    menuPocketIsAnimationStateNone,
+    zz_002010c_,
+    menuPocketTutorialDecideProc,
+};
+
 // The rows the action menu is measured and laid out in, 0x54 bytes.
 // _setActMenuResizeWork fills the two measured columns from the menu data of
 // the row's item; the flag that follows belongs to the row's window.
@@ -225,18 +256,22 @@ u16 _getItemIDFromMenuPos(int tab, int menuPos);
 
 } // namespace
 
-extern "C" int zz_0022080_(void)
+// The pocket menu animates nothing, so its record in lPocketMenuProcess
+// always reports "no animation running".
+extern "C" int menuPocketIsAnimationStateNone(void)
 {
     return 1;
 }
 
-extern "C" void zz_0022088_(void)
+// The pocket menu adds nothing to the A press that confirms a tutorial
+// message.
+extern "C" void menuPocketTutorialDecideProc(void)
 {
 }
 
 // Whether the sort cursor is drawn: the tab still has an item under the
 // cursor and no action has been chosen yet.
-extern "C" u8 zz_002208c_(tagWINDOW_WORK *window)
+extern "C" u8 menuPocketIsSortCursorDisp(tagWINDOW_WORK *window)
 {
     PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->cursor].mCursorID);
 
@@ -254,7 +289,7 @@ extern "C" u8 zz_002208c_(tagWINDOW_WORK *window)
 
 // Whether the swap cursor is drawn: an item under the cursor or an action
 // already chosen.
-extern "C" u8 zz_0022128_(tagWINDOW_WORK *window)
+extern "C" u8 menuPocketIsIrekaeCursorDisp(tagWINDOW_WORK *window)
 {
     PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->cursor].mCursorID);
     s32 menuPos = pos.x + pos.y;
@@ -293,9 +328,9 @@ s32 _actSuteruNormal(int tab, int menuPos, int *num);
 s32 _actMotaseruNormal(int tab, int menuPos, int *num);
 s32 _actTukauNormal(int tab, int menuPos, int *num);
 s32 _openPokemonMenuForGiveItem(u16 itemID, u8 pocket, u8 kind);
-extern "C" u8 zz_0022f30_(int itemID);
-extern "C" u8 zz_0022f58_(u16 itemID);
-extern "C" int zz_0023100_(int itemID);
+extern "C" u8 _getItemBagPocket(int itemID);
+extern "C" u8 _getDepositAble(u16 itemID);
+extern "C" int _getItemDescriptionMsgID(int itemID);
 extern "C" u32 zz_0023c68_(int itemID);
 void _setExplanationMsgID(unsigned long msgID);
 extern "C" void zz_0023b20_(GSgfxLayerID layer, int x, int tab, unsigned short *pos);
@@ -384,7 +419,7 @@ void _setActMenuResizeWork(void)
 // finished (or failed), 1 while the pocket should go on.
 s32 _execDeposit(int tab, u16 itemID, int menuPos)
 {
-    if (!zz_0022f58_(itemID)) {
+    if (!_getDepositAble(itemID)) {
         msgctrlSetValue(WIN_ID_MESSAGE, itemID);
         _infoBeep(0xC37B);
         return 0;
@@ -745,14 +780,14 @@ s32 _getItemPrice(int itemID)
     return (u16)zz_015ea84_(itemDataBiosGetPtr((u16)itemID));
 }
 
-// Bag pocket of the item.
-extern "C" u8 zz_0022f30_(int itemID)
+// Bag pocket the item belongs to, ItemData::mBagPocket.
+extern "C" u8 _getItemBagPocket(int itemID)
 {
     return zz_item_data_get_bag_pocket(itemDataBiosGetPtr((u16)itemID));
 }
 
-// Whether the item may be put into the PC.
-extern "C" u8 zz_0022f58_(u16 itemID)
+// Whether the item may be put into the PC, ItemData::mDepositAble.
+extern "C" u8 _getDepositAble(u16 itemID)
 {
     return itemDataBiosGetDeposit(itemDataBiosGetPtr(itemID));
 }
@@ -803,8 +838,8 @@ s32 _getStockMaxFromTagID(int tab)
     return num;
 }
 
-// Message id that describes the item.
-extern "C" int zz_0023100_(int itemID)
+// Description message id of the item, ItemData::mDescriptionMsgID.
+extern "C" int _getItemDescriptionMsgID(int itemID)
 {
     return zz_015eb1c_(itemDataBiosGetPtr((u16)itemID));
 }
@@ -901,7 +936,7 @@ __declspec(weak) s32 _actMotaseruNormal(int tab, int menuPos, int *num)
         return 0;
     }
 
-    u8 pocket = zz_0022f30_(itemID);
+    u8 pocket = _getItemBagPocket(itemID);
 
     if (!(u8)_openPokemonMenuForGiveItem(itemID, pocket, (u8)menuPos)) {
         return 1;
@@ -951,7 +986,7 @@ __declspec(weak) s32 _actTukauNormal(int tab, int menuPos, int *num)
 // Prints the name of the item of one row.
 extern "C" __declspec(weak) void zz_0023560_(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
-    u32 msgID = zz_0023100_(_getItemIDFromMenuPos(tab, index));
+    u32 msgID = _getItemDescriptionMsgID(_getItemIDFromMenuPos(tab, index));
 
     if (msgID != 0) {
         GSmsgPrint2(layer, x, y, -1, msgID);
@@ -1066,7 +1101,7 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
     GSmsgPrint2(layer, ox, y, -1, 0x4270);
     ox += (u32)zz_0107554_(0x4270) >> 16;
 
-    s32 infoMsgID = zz_0023100_(itemID);
+    s32 infoMsgID = _getItemDescriptionMsgID(itemID);
 
     GSmsgPrint2(layer, ox + 9, y, -1, infoMsgID);
 
@@ -1095,7 +1130,7 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
 // show a name, the key-item and TM tabs.
 __declspec(weak) void _printItemTaisetsu(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
-    u32 msgID = zz_0023100_(_getItemIDFromMenuPos(tab, index));
+    u32 msgID = _getItemDescriptionMsgID(_getItemIDFromMenuPos(tab, index));
 
     if (msgID != 0) {
         GSmsgPrint2(layer, x, y, -1, msgID);
