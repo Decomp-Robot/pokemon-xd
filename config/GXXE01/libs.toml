@@ -2532,6 +2532,10 @@ name = "ext/dolphin_sdk/mtx/mtx.c"
 completed = false
 
 [[lib.object]]
+name = "ext/dolphin_sdk/mtx/mtxbuild.c"
+completed = true
+
+[[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtx44.c"
 completed = false
 
