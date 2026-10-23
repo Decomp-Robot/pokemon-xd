@@ -401,3 +401,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDErase.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/card/CARDFormat.c"
+completed = false

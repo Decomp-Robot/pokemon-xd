@@ -275,6 +275,11 @@ ext/dolphin_sdk/card/CARDCheck.c:
 	.text       start:0x800C2C7C end:0x800C320C
 	.text       start:0x800C320C end:0x800C3234
 
+ext/dolphin_sdk/card/CARDFormat.c:
+	.text       start:0x800C3CF0 end:0x800C3E34
+	.text       start:0x800C3E34 end:0x800C448C
+	.text       start:0x800C448C end:0x800C44D4
+
 ext/dolphin_sdk/card/CARDCreate.c:
 	.text       start:0x800C4AA8 end:0x800C4BD8
 	.text       start:0x800C4BD8 end:0x800C4DF8
