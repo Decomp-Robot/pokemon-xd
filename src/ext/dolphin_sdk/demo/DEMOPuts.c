@@ -17,6 +17,7 @@ static s16 FontSpace;
 static void DrawFontChar(int x, int y, int z, int xChar, int yChar);
 static void LoadSheet(void* image, GXTexMapID texMapID);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetFontType(s32 attr) {
     switch(attr) {
     case DM_FT_RVS:
@@ -32,6 +33,7 @@ void DEMOSetFontType(s32 attr) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOLoadFont(GXTexMapID texMap, GXTexMtx texMtx, DMTexFlt texFlt) {
     Mtx fontTMtx;
     u16 width;
@@ -55,6 +57,7 @@ void DEMOLoadFont(GXTexMapID texMap, GXTexMtx texMtx, DMTexFlt texFlt) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, texMtx);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetupScrnSpc(s32 width, s32 height, f32 depth) {
     Mtx44 pMtx;
     Mtx mMtx;
@@ -73,6 +76,7 @@ void DEMOSetupScrnSpc(s32 width, s32 height, f32 depth) {
     GXSetCurrentMtx(GX_PNMTX0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOInitCaption(s32 font_type, s32 width, s32 height) {
     DEMOSetupScrnSpc(width, height, 100.0f);
     GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_ENABLE);
@@ -84,6 +88,7 @@ void DEMOInitCaption(s32 font_type, s32 width, s32 height) {
     DEMOSetFontType(font_type);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPuts(s16 x, s16 y, s16 z, char* string) {
     char* str;
     s32 s;
@@ -137,6 +142,7 @@ void DEMOPuts(s16 x, s16 y, s16 z, char* string) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
     va_list vlist;
     char buf[256];
@@ -147,6 +153,7 @@ void DEMOPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
     va_end(vlist);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 OSFontHeader* DEMOInitROMFont(void) {
     switch (OSGetFontEncode()) {
     case OS_FONT_ENCODE_SJIS:
@@ -173,11 +180,13 @@ OSFontHeader* DEMOInitROMFont(void) {
     return FontData;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetROMFontSize(s16 size, s16 space) {
     FontSize = size * 16;
     FontSpace = space * 16;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOGetROMFontSize(s16* size, s16* space) {
     if (size != 0) {
         *size = FontSize / 16;
@@ -188,6 +197,7 @@ void DEMOGetROMFontSize(s16* size, s16* space) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DrawFontChar(int x, int y, int z, int xChar, int yChar) {
     s16 posLeft = x;
     s16 posRight = posLeft + FontSize;
@@ -211,6 +221,7 @@ static void DrawFontChar(int x, int y, int z, int xChar, int yChar) {
     GXEnd();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void LoadSheet(void* image, GXTexMapID texMapID) {
     Mtx mtx;
     GXTexObj texObj;
@@ -227,6 +238,7 @@ static void LoadSheet(void* image, GXTexMapID texMapID) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DEMORFPuts(s16 x, s16 y, s16 z, char* string) {
     s32 cx;
     void* image;
@@ -268,6 +280,7 @@ int DEMORFPuts(s16 x, s16 y, s16 z, char* string) {
     return (width + 15) / 16;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DEMORFPutsEx(s16 x, s16 y, s16 z, char* string, s16 maxWidth, int length) {
     s32 cx;
     void* image;
@@ -312,6 +325,7 @@ int DEMORFPutsEx(s16 x, s16 y, s16 z, char* string, s16 maxWidth, int length) {
     return (width + 15) / 16;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DEMORFPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
     va_list vlist;
     char buf[256];
@@ -321,6 +335,7 @@ int DEMORFPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
     DEMORFPuts(x, y, z, buf);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 char* DEMODumpROMFont(char* string) {
     u32 image[288];
     void* temp;
@@ -357,6 +372,7 @@ char* DEMODumpROMFont(char* string) {
     return string;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DEMOGetRFTextWidth(char* string) {
     s32 cx;
     s32 width;
@@ -385,6 +401,7 @@ int DEMOGetRFTextWidth(char* string) {
     return (maxWidth + 15) / 16;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int DEMOGetRFTextHeight(char* string) {
     s32 height;
 
