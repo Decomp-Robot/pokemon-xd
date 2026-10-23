@@ -19,6 +19,7 @@ u32 DemoNumValidPads;
 // prototypes
 static void DEMOPadCopy(PADStatus* pad, DEMODMPad* dmpad);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DEMOPadCopy(PADStatus* pad, DEMODMPad* dmpad) {
     u16 dirs;
 
@@ -67,6 +68,7 @@ static void DEMOPadCopy(PADStatus* pad, DEMODMPad* dmpad) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPadRead(void) {
     s32 i;
     u32 ResetReq = 0;
@@ -91,6 +93,7 @@ void DEMOPadRead(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPadInit(void) {
     s32 i;
 
