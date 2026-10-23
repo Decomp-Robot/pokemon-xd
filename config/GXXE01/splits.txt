@@ -327,6 +327,10 @@ ext/dolphin_sdk/card/CARDStat.c:
 	.text       start:0x800C5990 end:0x800C5AA4
 	.text       start:0x800C5AA4 end:0x800C5C18
 
+ext/dolphin_sdk/card/CARDStatEx.c:
+	.text       start:0x800C5C18 end:0x800C5CBC
+	.text       start:0x800C5CBC end:0x800C5F58
+
 ext/dolphin_sdk/card/CARDNet.c:
 	.text       start:0x800C5F58 end:0x800C601C
 	.text       start:0x800C601C end:0x800C605C
