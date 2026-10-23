@@ -1,14 +1,15 @@
+#include "abort_exit.h"
 #include "critical_regions.h"
 
 extern void _ExitProcess(void);
 extern void __destroy_global_chain(void);
 extern void (*_dtors[])(void);
 
-extern int __aborting;
-extern void (*__stdio_exit)(void);
-extern void (*__console_exit)(void);
-extern void (*__atexit_funcs[64])(void);
-extern int __atexit_curr_func;
+void (*__atexit_funcs[64])(void);
+void (*__console_exit)(void);
+void (*__stdio_exit)(void);
+int __atexit_curr_func;
+int __aborting;
 
 /**
  * Tear the program down: run the static destructors, flush the stdio
