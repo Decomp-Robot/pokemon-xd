@@ -315,3 +315,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDGeometry.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gd/GDIndirect.c"
+completed = false
