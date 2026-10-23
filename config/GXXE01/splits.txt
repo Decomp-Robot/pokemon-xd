@@ -36,6 +36,9 @@ ext/dolphin_sdk/os/OSAudioSystem.c:
 ext/dolphin_sdk/os/OSCache.c:
 	.text       start:0x800AAC30 end:0x800AB2B4
 
+ext/dolphin_sdk/os/OSContext.c:
+	.text       start:0x800AB2B4 end:0x800ABC80
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
