@@ -211,6 +211,21 @@ ext/dolphin_sdk/gx/GXGeometry.c:
 ext/dolphin_sdk/gx/GXFrameBuf.c:
 	.text       start:0x800CA118 end:0x800CAB4C
 
+ext/dolphin_sdk/gx/GXLight.c:
+	.text       start:0x800CAB4C end:0x800CAB68
+	.text       start:0x800CAB68 end:0x800CACF8
+	.text       start:0x800CACF8 end:0x800CADC8
+	.text       start:0x800CADC8 end:0x800CADD8
+	.text       start:0x800CADD8 end:0x800CADF4
+	.text       start:0x800CADF4 end:0x800CAED8
+	.text       start:0x800CAED8 end:0x800CAF04
+	.text       start:0x800CAF04 end:0x800CAF10
+	.text       start:0x800CAF10 end:0x800CAF8C
+	.text       start:0x800CAF8C end:0x800CB074
+	.text       start:0x800CB074 end:0x800CB15C
+	.text       start:0x800CB15C end:0x800CB198
+	.text       start:0x800CB198 end:0x800CB248
+
 ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC254 end:0x800CC2C0
 	.text       start:0x800CC2C0 end:0x800CC404
