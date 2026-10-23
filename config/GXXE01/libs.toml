@@ -43,3 +43,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSContext.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSError.c"
+completed = false

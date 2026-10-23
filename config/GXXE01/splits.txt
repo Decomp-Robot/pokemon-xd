@@ -39,6 +39,11 @@ ext/dolphin_sdk/os/OSCache.c:
 ext/dolphin_sdk/os/OSContext.c:
 	.text       start:0x800AB2B4 end:0x800ABC80
 
+ext/dolphin_sdk/os/OSError.c:
+	.text       start:0x800ABC80 end:0x800ABD00
+	.text       start:0x800ABD00 end:0x800ABF18
+	.text       start:0x800ABF18 end:0x800AC200
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
