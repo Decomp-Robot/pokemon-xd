@@ -8,7 +8,7 @@
  * instance the layer drives. */
 class FloorBgmMask {
 public:
-    void setState(u32 state);
+    void setState(unsigned int state);
     u8 isActive();
 
 private:

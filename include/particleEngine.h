@@ -13,10 +13,8 @@ struct _GScamera {
     _HSD_CObj *mCObj; // 0x08: HSD camera object the projection comes from.
 };
 
-/* Partial views of the two objects the particle engine hands out and the GS
- * particle layer (GSparticle.cpp) binds its generators to. Only the fields
- * that cross the unit boundary are named; the rest of each object stays
- * padding. The layouts come from the accesses in both units. */
+/* Generator view used by the GS particle layer. Fields private to the ps
+ * implementation are left out here. */
 
 /* Generator of the engine's particle-system half (the ps* units).
  * psInitGenerator allocates a pool of 0xB8-byte generators. */
@@ -39,22 +37,7 @@ struct _psGenerator {
     u8 _A8[0x10];
 };
 
-/* Bank of the engine's emitter half (the peBank* units). peBankCreate
- * allocates the 0x168-byte object; a bank owns one particle file and drives
- * its own generator. The GS layer gives one to every slot of a bank file that
- * preallocates its generators. */
-struct _peBank {
-    u8 _00[0x08];
-    _psGenerator *mGenerator;  // 0x08: engine generator the bank drives.
-    u8 _0C[0x100];
-    GSvec mPosition;           // 0x10C: transform the layer sets.
-    f32 mRotation[4];          // 0x118: quaternion (Euler stored as a quat here).
-    GSvec mScale;              // 0x128
-    u32 mFlags;                // 0x134: bit 0x4 is the bank's visibility.
-    u8 _138[0x28];
-    _GScamera *mCamera;        // 0x160
-    u8 _164[0x04];
-};
+#include <peBank.h>
 
 extern "C" {
 
@@ -65,13 +48,14 @@ _peBank *peBankCreate(void *fileData);
 void *peBankLoadFile(void *fileData);
 void peBankFreeFile(void *fileData);
 void peBankFree(_peBank *bank);
-void peBankStart(_peBank *bank);
+bool peBankStart(_peBank *bank);
 void peBankStop(_peBank *bank);
 void peBankStopLoop(_peBank *bank);
 bool peBankIsInfinite(_peBank *bank);
 f32 peBankGetLife(_peBank *bank);
 
 /* --- particle-system half --- */
+void psSetStartupSetting(u16 setting);
 void psInitParticle(u32 count);
 void psInitGenerator(u32 count);
 void psInitAppSRT(u32 count, u32 size);

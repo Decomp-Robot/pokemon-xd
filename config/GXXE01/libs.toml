@@ -1351,6 +1351,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/floorBgmMask.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/GSparticle.cpp"
 completed = true
 
@@ -1391,6 +1395,21 @@ cflags = [
 name = "game/sound.c"
 completed = true
 extra_cflags = ["-inline noauto"]
+
+[[lib.object]]
+name = "game/peParticle.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/peNode.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/peBank.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/GSmodel/effects.cpp"

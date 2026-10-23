@@ -1,5 +1,4 @@
 #include <GSparticle.h>
-#include <floorBgmMask.h>
 
 /* GS particle layer: the particle API the game code drives, the frame hooks
  * the GS render module list calls and the loader of the packed particle bank
@@ -77,14 +76,6 @@ void HSD_JObjSetDispCallback(void (*callback)(int, int, int, _HSD_JObj *));
 void HSD_JObjSetUpdateCallback(void (*callback)(int, int, int, _HSD_JObj *));
 void HSD_JObjSetPointCallback(void (*callback)(_HSD_JObj *jobj, int id));
 void psSetPointJObjNodup(_HSD_JObj *jobj, int id);
-}
-
-/* Start-up call of the engine particle module, made once by GSparticleInit,
- * next to the psInit* calls; it stores the given setting into the module's
- * own global. Only its role is known, so the placeholder name stays until
- * that global is identified. */
-extern "C" {
-void zz_0189250_(u16 value);
 }
 
 /* Tag the update hooks label their CPU profile entry with, and the tag the
@@ -322,18 +313,6 @@ static inline void GSparticleGenSetVisibility(_GSparticleGen *gen, bool visible)
     } else {
         psSetParticleVisibility(((_GSparticleGenWork *)gen->mLink)->mGenerator, visible);
     }
-}
-
-/* The floor BGM mask the floor script layer of the map area is driven with:
- * the state the mask is switched to and whether it is switched on. */
-void FloorBgmMask::setState(u32 state)
-{
-    mState = state;
-}
-
-u8 FloorBgmMask::isActive()
-{
-    return mActive;
 }
 
 void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
@@ -943,7 +922,7 @@ typedef struct _GSparticleGenFile {
 /* Index of the slot a bank starts its next generator in: the first slot that
  * carries the bank's generator tag and has no engine link yet. A slot of
  * another tag ends the search, the array belongs to a single file. */
-static inline s32 _particleFindFreeSlot(_GSparticleBank *bank)
+static inline int _particleFindFreeSlot(_GSparticleBank *bank)
 {
     _GSparticleGen *slot = bank->mGenerators;
 
@@ -1001,7 +980,7 @@ extern "C" _GSparticleGen *GSparticleCreateGenerator(_GSparticleBank *bank,
                                                      bool bankGenerator)
 {
     _GSparticleGen *slot;
-    s32 slotIndex;
+    int slotIndex;
 
     if (bank->mActive == 0) return 0;
     if (bank->mDisactivated != 0) return 0;
@@ -1209,7 +1188,7 @@ extern "C" void GSparticleInit(u32 bankCount)
 
     for (i = 0; i < GSparticleBankCount; i++) GSparticleBanks[i].mActive = 0;
 
-    zz_0189250_(0);
+    psSetStartupSetting(0);
     psInitParticle(0);
     psInitGenerator(0);
     psInitAppSRT(0, GS_PARTICLE_SRT_POOL_SIZE);
@@ -1220,4 +1199,78 @@ extern "C" void GSparticleInit(u32 bankCount)
 
     particleEngineInit();
     GSgfxRenderModuleRegister(GS_PARTICLE_RENDER_MODULE_ID, &module, 0);
+}
+
+/* Hierarchy links used by the particle event hooks. */
+struct _HSD_JObj {
+    u8 mObjectHeader[8];
+    _HSD_JObj *mNext;
+    _HSD_JObj *mParent;
+    _HSD_JObj *mChild;
+};
+
+extern "C" {
+_GSmodel *GSmodelSearchModelList(_HSD_JObj *root);
+_GSparticleBank *GSmodelGetLinkedGSparticleBank(_GSmodel *model);
+bool GSmodelIsRootNullAdded(_GSmodel *model);
+u32 GSpartGetJObjIndex(_HSD_JObj *root, _HSD_JObj *jobj);
+GSattachMode GSmodelGetGSparticleLinkAttachMode(_GSmodel *model);
+bool GSmodelGetVisibility(_GSmodel *model);
+}
+
+static const u32 GS_PART_INVALID_INDEX = ~0u;
+
+static inline _HSD_JObj *HSD_JObjGetParent(_HSD_JObj *jobj)
+{
+    if (jobj == 0) return 0;
+    return jobj->mParent;
+}
+
+void _particleBankDestroyOldestGenerator(_GSparticleBank *bank)
+{
+    int slotIndex;
+    _GSparticleGen *gen;
+    _GSparticleGen *generators;
+    _GSparticleGenWork *work;
+    u32 oldestTime = ~0u;
+    int oldestIndex = -1;
+
+    generators = bank->mGenerators;
+    gen = generators;
+    for (slotIndex = 0; slotIndex < bank->mGeneratorCount; slotIndex++, gen++) {
+        work = (_GSparticleGenWork *)gen->mLink;
+        if (work != 0 && work->mCreateTime < oldestTime) {
+            oldestTime = work->mCreateTime;
+            oldestIndex = slotIndex;
+        }
+    }
+    if (oldestIndex != -1) GSparticleDestroyGenerator(&generators[oldestIndex], true);
+}
+
+void _particleJObjCallback(int, int, int generatorIndex, _HSD_JObj *jobj)
+{
+    _HSD_JObj *root = jobj;
+    while (HSD_JObjGetParent(root) != 0) root = HSD_JObjGetParent(root);
+
+    _GSmodel *model = GSmodelSearchModelList(root);
+    if (model == 0) return;
+    _GSparticleBank *bank = GSmodelGetLinkedGSparticleBank(model);
+    if (bank == 0) return;
+    if (GSmodelIsRootNullAdded(model)) root = root->mChild;
+
+    u32 partIndex = GSpartGetJObjIndex(root, jobj);
+    if (partIndex == GS_PART_INVALID_INDEX) return;
+    GSpart *part = GSmodelGetPart(model, partIndex);
+    if (part == 0) return;
+
+    _GSparticleGen *gen = GSparticleCreateGenerator(bank, generatorIndex, false);
+    if (gen != 0) {
+        GSparticleSetParticleTexScaling(gen, true);
+        GSparticleSetVelocityRotationInLocal(gen, true);
+        GSparticleAttachGeneratorToGSpart(gen, part,
+                                        GSmodelGetGSparticleLinkAttachMode(model),
+                                        false, true, false);
+        GSparticleSetGeneratorVisibility(gen, GSmodelGetVisibility(model));
+    }
+    GSpartFree(part);
 }

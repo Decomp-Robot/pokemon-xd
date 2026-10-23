@@ -1416,10 +1416,30 @@ game/GScolsys2Thru.cpp:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+game/floorBgmMask.cpp:
+	.text       start:0x8012AD40 end:0x8012AD50
+
 game/GSparticle.cpp:
-	.text       start:0x8012AD40 end:0x8012DA0C
+	.text       start:0x8012AD50 end:0x8012DC3C
 	.data       start:0x803FC210 end:0x803FC230
 	.sdata2     start:0x804ED990 end:0x804ED9A8
+
+game/peParticle.cpp:
+	.text       start:0x8012DC3C end:0x8012FAD8
+	.data       start:0x803FC230 end:0x803FC258
+	.sdata2     start:0x804ED9A8 end:0x804ED9E0
+
+game/peNode.cpp:
+	.text       start:0x8012FAD8 end:0x8013015C
+	.sdata2     start:0x804ED9E0 end:0x804ED9F0
+
+game/peBank.cpp:
+	.text       start:0x8013015C end:0x801322C4
+	.rodata     start:0x802F3718 end:0x802F3724
+	.data       start:0x803FC258 end:0x803FC274
+	.bss        start:0x804470A0 end:0x804470E8
+	.sbss       start:0x804EB180 end:0x804EB1A0
+	.sdata2     start:0x804ED9F0 end:0x804EDA24
 
 game/particleEngine.cpp:
 	.text       start:0x8013A678 end:0x8013A67C

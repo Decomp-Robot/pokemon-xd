@@ -70,6 +70,34 @@ struct GSgfxPassState {
 };
 
 
+enum GSgfxDLFlags {
+    GS_DISPLAY_LIST_ALLOCATED = 1,
+    GS_DISPLAY_LIST_DIRTY = 2,
+};
+
+enum { GS_DISPLAY_LIST_HEADER_BYTES = 3 };
+
+struct GSgfxVF;
+struct GSgfxDL {
+    u16 mFlags;
+    u16 mVertexStride;
+    char *mData;
+    u32 mSize;
+    GSgfxVF *mVertexFormat;
+
+    char *VertexData(u16 vertex) {
+        if (mFlags & GS_DISPLAY_LIST_ALLOCATED)
+            return mData + vertex * mVertexStride + GS_DISPLAY_LIST_HEADER_BYTES;
+        return 0;
+    }
+    GSgfxVF *VertexFormat() {
+        if (mFlags & GS_DISPLAY_LIST_ALLOCATED)
+            return mVertexFormat;
+        return 0;
+    }
+    void Invalidate() { mFlags |= GS_DISPLAY_LIST_DIRTY; }
+};
+
 struct GSgfxVF {
     u8 storage[0x440];
 };
@@ -90,7 +118,7 @@ enum GSgfxLayerOffset { GS_LAYER_INSERT_AFTER = 2 };
 enum GSgfxLayerID { };
 
 /* GX surface primitive type. */
-enum GSgfxPrimType { GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
+enum GSgfxPrimType { GSGFX_QUADS = 0x80, GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
 
 /* Operation the texture generator performs. */
 enum GSgfxTgenFunc { GS_GFX_TGEN_MTX3X4 = 0, GS_GFX_TGEN_MTX2X4 = 1 };
@@ -127,6 +155,7 @@ struct GSgfxMatrixStackEntry {
 };
 class GSgfxMatrixStack {
 public:
+    void push(GSmtx *mtx);
     void pushMult(GSmtx *mtx);
     void pop(void);
     GSmtx *top(void);
@@ -183,7 +212,13 @@ enum GSgfxCachedStateConstants {
     GS_GFX_COLOR_CHANNEL_NULL = 0xFF,
 };
 
-enum GSgfxCullType { GS_GFX_CULL_NONE = 0 };
+enum GSgfxCullType {
+    GS_GFX_CULL_NONE = 0,
+    GSGFX_CULL_NONE = GS_GFX_CULL_NONE,
+    GSGFX_CULL_FRONT = 1,
+    GSGFX_CULL_BACK = 2,
+    GSGFX_CULL_ALL = 3,
+};
 enum GSgfxClipMode { GS_GFX_CLIP_ENABLED = 0 };
 enum GSgfxZCmpFunc { GS_GFX_Z_COMPARE_LEQUAL = 3 };
 enum GSgfxACmpFunc { GS_GFX_A_COMPARE_ALWAYS = 7 };
@@ -313,6 +348,7 @@ public:
     void beginSurface(u16 vertexCount);
     void primitiveType(GSgfxPrimType type);
     void endSurface(void);
+    void dlDraw(GSgfxDL *displayList);
     /* Returns whether the layer is visible. */
     bool IsLayerVisible(void);
     void SetLayerVisibility(bool on);
@@ -407,7 +443,9 @@ public:
     u8 _14BC[0x18];
     u32 mIndirectCoordScaleS0;
     u32 mIndirectCoordScaleT0;
-    u8 _14DC[0x168];
+    u8 _14DC[0x18];
+    u32 mKonstColors[2]; // 0x14F4: Packed constant colors.
+    u8 _14FC[0x148];
     u32 mBlendType;
     u32 mBlendSourceFactor;
     u32 mBlendDestinationFactor;
@@ -446,7 +484,8 @@ public:
     u32 mIndirectStateDirtyA;
     u32 mIndirectOrderDirtyA;
     u32 mIndirectCoordScaleDirtyA;
-    u8 _16F8[0x14];
+    u32 mTevKonstColorsDirtyA;
+    u8 _16FC[0x10];
     u32 mPixelStateDirtyA;
     u8 _1710[0x2C];
     u32 mTextureDirtyA;
@@ -465,7 +504,8 @@ public:
     u32 mIndirectStateDirtyB;
     u32 mIndirectOrderDirtyB;
     u32 mIndirectCoordScaleDirtyB;
-    u8 _17B0[0x14];
+    u32 mTevKonstColorsDirtyB;
+    u8 _17B4[0x10];
     u32 mPixelStateDirtyB;
     u8 _17C8[0x2C];
     u32 mTextureDirtyB;
