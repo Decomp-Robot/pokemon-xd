@@ -100,10 +100,22 @@
 #define AGB_IDLE_RESET_16S 3
 
 // Status of a job AGB_GetStatus reports: the transfer it ran is in, it ended in
-// error, or it is still running.
+// error, the GBA it ran on stopped answering (the poll timers of the reset
+// handshake ran out), or it is still running.
 #define AGB_STATUS_COMPLETE 0
 #define AGB_STATUS_ERROR 1
+#define AGB_STATUS_NO_ANSWER 2
 #define AGB_STATUS_RUNNING 3
+
+// Game codes the code of the GBA is run on: the upload of the code accepts the
+// Japanese and the American Pokemon Ruby only, which answer the reset of the
+// upload with their code (the characters of the code are the value).
+#define AGB_GAME_CODE_RUBY_JP 0x4158564A // "AXVJ"
+#define AGB_GAME_CODE_RUBY_US 0x41585645 // "AXVE"
+
+// The upload a link battle runs: the code is sent out together with the Pokemon
+// the GameCube hands the GBA, and both modes arm the same poll timer for it.
+#define AGB_UPLOAD_MODE_POKEMON 0
 
 // Dolphin SDK Game Boy Advance link library (dolphin/gba).
 typedef void (*GBACallback)(long chan, long result);
@@ -113,6 +125,16 @@ extern "C" long GBAReadAsync(long chan, void *dst, u8 *status, GBACallback callb
 extern "C" long GBAWriteAsync(long chan, void *src, u8 *status, GBACallback callback);
 extern "C" long GBAResetAsync(long chan, u8 *status, GBACallback callback);
 
+// Blocking forms of the same calls, which wait for the GBA to answer and report
+// whether it did; they are what the exchanges of the link library are built on.
+extern "C" {
+BOOL GBAInit(void);
+BOOL GBAGetStatus(long chan, u8 *status);
+BOOL GBARead(long chan, void *dst, u8 *status);
+BOOL GBAWrite(long chan, const void *src, u8 *status);
+BOOL GBAReset(long chan, u8 *status);
+}
+
 // Job framework of the link layer: the timer a stage arms, the hook a stage
 // reports the job it leaves behind through (the name is not used by the shipped
 // build) and the work record of a channel.
@@ -120,6 +142,11 @@ void _timer_set(long chan, unsigned long msec);
 void _job_type_clear(long chan, const char *jobName);
 void _AGB_Work_Clear(long chan);
 long AGB_Initialize(long chan);
+
+// Reads the code the GBA has to run (the .jb file) into the file buffer of the
+// link and reports the length it read through size, rounded up to the transfer
+// unit of the link.
+long _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
 
 // Code and key helpers of the link library the upload exchange is built on.
 unsigned long SwapEndian(unsigned long value);
@@ -135,6 +162,21 @@ extern "C" {
 // Entry points the game starts a transfer with.
 long AGB_GetPokemon(long chan, void *record, unsigned long *dest);
 long AGB_Upload(long chan, long mode);
+long AGB_Prepare(const char *path);
+
+// The request entry points of the link library the battle menus drive. Every
+// one of them takes the channel over, runs its exchange and reports the code of
+// the exchange (0 when the GBA answered); the caller polls the exchange with
+// the matching status entry point until it is through.
+long PKJB_ReturnTitle(long chan);
+long PKJB_ReturnTitleWait(long chan);
+long PKJB_ExchangeIsPrepared(long chan);
+long PKJB_EntryRequest(long chan, void *data);
+long PKJB_EntryRequestWait(long chan, unsigned long data);
+long PKJB_EntryGetStatus(long chan, unsigned long *data);
+long PKJB_BattleGetStatus(long chan, unsigned long *status);
+long PKJB_BattleRequest(long chan, const u8 *data, int size);
+long PKJB_GetKey(long chan, u16 *key);
 
 #ifdef __cplusplus
 }
@@ -164,6 +206,9 @@ extern char agbJobName10[];   // "_getpokemon_10"
 extern char agbJobName11[];   // "_getpokemon_11"
 extern char agbJobNameGetPokemon[]; // "AGB_GetPokemon"
 
+extern char agbUploadJobName00s[];  // "_upload_00s"
+extern char agbUploadJobName03[];   // "_upload_03"
+extern char agbUploadJobName06[];   // "_upload_06"
 extern char agbUploadJobName07[];   // "_upload_07"
 extern char agbUploadJobName08[];   // "_upload_08"
 extern char agbUploadJobName09[];   // "_upload_09"
@@ -201,9 +246,17 @@ void _getpokemon_09s(long chan, long result);
 void _getpokemon_10(long chan, long result);
 void _getpokemon_11(long chan, long result);
 
-// Stages of the upload job. The stages 17..25 are the key exchange and the
-// packet handshake; every failure of those hands the channel to stage 16s,
-// which resets the GBA and starts the packet exchange again at stage 17.
+// Stages of the upload job. The stages 00s..6 check the code the GBA answers
+// the reset with and give it the key of the packet coding; the stages 17..25 are
+// the packet handshake, and every failure of those hands the channel to stage
+// 16s, which resets the GBA and starts the packet exchange again at stage 17.
+void _upload_00s(long chan, long result);
+void _upload_01(long chan, long result);
+void _upload_02(long chan, long result);
+void _upload_03(long chan, long result);
+void _upload_04(long chan, long result);
+void _upload_05(long chan, long result);
+void _upload_06(long chan, long result);
 void _upload_07(long chan, long result);
 void _upload_08(long chan, long result);
 void _upload_09(long chan, long result);
@@ -252,7 +305,9 @@ struct AGBWork {
     unsigned long linkWord;  // 0x2C: packet word the exchange writes or reads.
     unsigned long keyB;      // 0x30: key the GBA answered the key exchange with.
     unsigned long bootKey;   // 0x34: boot key looked up for the GBA.
-    unsigned long keyA;      // 0x38: key the exchange gives the GBA.
+    unsigned long keyA;      // 0x38: key the exchange gives the GBA; the upload
+                             //       stages reuse the same word for the code the
+                             //       GBA answers the reset with.
     unsigned long request;   // 0x3C: word the current write sends out.
     unsigned long reply;     // 0x40: header word read back from the GBA.
     unsigned long period;    // 0x44: polling period of the stage timer, in msec.
@@ -276,5 +331,19 @@ struct AGBWork {
 
 extern AGBWork AGBWorkArray[4];
 extern u8 agbRecvBuffers[];
+
+// Scratch buffer the code read out of the .jb file is loaded into, and the
+// length of the code it holds (the upload sends that many bytes out). The
+// buffer is handed out by AGB_FileBuffAlloc and released again by
+// GSscratchWaitForCompletion, both in game/gbaCommandLink.cpp; the length is
+// what _ReadJBCode read.
+extern u8 *gbaFileBuffer;
+extern unsigned long gbaFileSize;
+// Path of the code file the last AGB_Prepare read, kept in the buffer the link
+// library reads the file from (the name is copied out of the caller's string).
+extern char gbaJbFilePath[0x100];
+// Set while the link hardware still has to be initialized: AGB_Prepare
+// initializes it once, so the sessions behind the first one reuse the link.
+extern u8 gbaLinkUninitialized;
 
 #endif

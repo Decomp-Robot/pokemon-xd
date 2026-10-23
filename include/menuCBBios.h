@@ -136,6 +136,10 @@ extern "C" {
 // Whether the battle of the link encounter was entered.
 s32 menuCBBios_GetEncountFlag(void);
 
+// The controller type gbaCommandKeyRead cached for the SI port, which the
+// exchanges of the link library test against SI_GBA.
+u32 menuCBBios_PortIDtoControlerID(long portID);
+
 // Result the fight layer reported for the battle that is running
 // (battleSetResult); 1 ends the link exchange.
 u16 battleGetResult(void);
