@@ -879,5 +879,14 @@ ext/dolphin_sdk/ax/AXComp.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+ext/dolphin_sdk/axfx/reverb_hi.c:
+	.text       start:0x801822B0 end:0x801827BC
+	.text       start:0x801827BC end:0x801829D0
+	.text       start:0x801829D0 end:0x80182B54
+	.text       start:0x80182B54 end:0x80183060
+	.text       start:0x80183060 end:0x80183140
+	.data       start:0x8040AF00 end:0x8040AF20
+	.sdata2     start:0x804EDEE0 end:0x804EDF2C
+
 src/init.c:
 	.init       start:0x80003400 end:0x80005544

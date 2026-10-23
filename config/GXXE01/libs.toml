@@ -845,7 +845,7 @@ name = "axfx"
 mw_version = "GC/2.6"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/axfx", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/axfx", "-D__GEKKO__", "-fp_contract off"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axfx/axfx.c"
@@ -857,4 +857,8 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axfx/delay.c"
+completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/axfx/reverb_hi.c"
 completed = true

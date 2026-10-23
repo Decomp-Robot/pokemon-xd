@@ -1,18 +1,21 @@
 #include <dolphin.h>
 #include <dolphin/ax.h>
 #include <dolphin/axfx.h>
-#include "fake_tgmath.h"
 
 #include "__axfx.h"
+
+extern void* salMalloc(s32 size);
+extern void salFree(void* ptr);
+extern double pow(double base, double exponent);
 
 // prototypes
 static void DLsetdelay(AXFX_REVHI_DELAYLINE* dl, s32 lag);
 static int DLcreate(AXFX_REVHI_DELAYLINE* dl, s32 max_length);
 static void DLdelete(AXFX_REVHI_DELAYLINE* dl);
-static int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk);
-static int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk);
+int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk);
+int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk);
 static void HandleReverb(s32* sptr, AXFX_REVHI_WORK* rv, s32 k);
-static void ReverbHICallback(s32* left, s32* right, s32* surround, AXFX_REVHI_WORK* rv);
+void ReverbHICallback(s32* left, s32* right, s32* surround, AXFX_REVHI_WORK* rv);
 static void ReverbHIFree(AXFX_REVHI_WORK* rv);
 
 static void DLsetdelay(AXFX_REVHI_DELAYLINE* dl, s32 lag) {
@@ -24,11 +27,7 @@ static void DLsetdelay(AXFX_REVHI_DELAYLINE* dl, s32 lag) {
 
 static int DLcreate(AXFX_REVHI_DELAYLINE* dl, s32 max_length) {
     dl->length = (max_length * 4);
-    dl->inputs = __AXFXAlloc(max_length << 2);
-	ASSERTMSGLINE(51, dl->inputs, "Can't allocate the memory.");
-	if (dl->inputs == NULL) {
-		return 0;
-	}
+    dl->inputs = salMalloc(max_length << 2);
 
     memset(dl->inputs, 0, max_length << 2);
     dl->lastOutput = 0.0f;
@@ -39,10 +38,10 @@ static int DLcreate(AXFX_REVHI_DELAYLINE* dl, s32 max_length) {
 }
 
 static void DLdelete(AXFX_REVHI_DELAYLINE* dl) {
-    __AXFXFree(dl->inputs);
+    salFree(dl->inputs);
 }
 
-static int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk) {
+int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk) {
     u8 i;
     u8 k;
     static s32 lens[8] = {
@@ -77,27 +76,18 @@ static int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
 
     for (k = 0; k < 3; k++) {
         for (i = 0; i < 3; i++) {
-            if (DLcreate(&rv->C[i + (k * 3)], lens[i] + 2) == 0) {
-				ReverbHIFree(rv);
-				return 0;
-			}
+            DLcreate(&rv->C[i + (k * 3)], lens[i] + 2);
 
             DLsetdelay(&rv->C[i + (k * 3)], lens[i]);
-            rv->combCoef[i + (k * 3)] = powf(10.0f, (lens[i] * -3) / (32000.0f * time));
+            rv->combCoef[i + (k * 3)] = pow(10.0, (lens[i] * -3) / (32000.0f * time));
         }
 
         for (i = 0; i < 2; i++) {
-            if (DLcreate(&rv->AP[i + (k * 3)], lens[i + 3] + 2) == 0) {
-				ReverbHIFree(rv);
-				return 0;
-			}
+            DLcreate(&rv->AP[i + (k * 3)], lens[i + 3] + 2);
             DLsetdelay(&rv->AP[i + (k * 3)], lens[i + 3]);
         }
 
-        if (DLcreate(&rv->AP[2 + (k * 3)], lens[k + 5] + 2) == 0) {
-			ReverbHIFree(rv);
-			return 0;
-		}
+        DLcreate(&rv->AP[2 + (k * 3)], lens[k + 5] + 2);
         DLsetdelay(&rv->AP[2 + (k * 3)], lens[k + 5]);
         rv->lpLastout[k] = 0.0f;
     }
@@ -114,12 +104,7 @@ static int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
     if (0.0f != preDelay) {
         rv->preDelayTime = (32000.0f * preDelay);
         for(i = 0; i < 3; i++) {
-            rv->preDelayLine[i] = __AXFXAlloc(rv->preDelayTime * 4);
-			ASSERTMSGLINE(173, rv->preDelayLine[i], "Can't allocate the memory.");
-			if (rv->preDelayLine[i] == NULL) {
-				ReverbHIFree(rv);
-				return 0;
-			}
+            rv->preDelayLine[i] = salMalloc(rv->preDelayTime * 4);
 
             memset(rv->preDelayLine[i], 0, rv->preDelayTime * 4);
             rv->preDelayPtr[i] = rv->preDelayLine[i];
@@ -135,7 +120,7 @@ static int ReverbHICreate(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
     return 1;
 }
 
-static int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk) {
+int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay, f32 crosstalk) {
     u8 i;
 
 	ASSERTMSGLINE(209, coloration >= 0.0f && coloration <= 1.0f &&
@@ -151,7 +136,7 @@ static int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
      || (mix        < 0.0f ) || (mix        > 1.0f  )
      || (crosstalk  < 0.0f ) || (crosstalk  > 1.0f  )
      || (damping    < 0.0f ) || (damping    > 1.0f  )
-     || (preDelay   < 0.0f ) || (preDelay   > 0.1f)) {
+     || (preDelay   < 0.0f ) || (preDelay   > 100.0f)) {
         return 0;
     }
 
@@ -174,7 +159,7 @@ static int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
 
     if (rv->preDelayTime) {
         for (i = 0; i < 3; i++) {
-            __AXFXFree(rv->preDelayLine[i]);
+            salFree(rv->preDelayLine[i]);
         }
     }
 
@@ -182,7 +167,6 @@ static int ReverbHIModify(AXFX_REVHI_WORK* rv, f32 coloration, f32 time, f32 mix
 }
 
 const static double i2fMagic = 4503601774854144.0;
-const static f32 value1_0 = 1.0f;
 const static f32 value0_3 = 0.3f;
 const static f32 value0_6 = 0.6f;
 
@@ -199,13 +183,10 @@ asm static void DoCrossTalk(register s32* l, register s32* r, register f32 cross
 	stw r5, 32(r1)
 	ps_merge00 f3, invcross, cross
 	ps_merge00 f4, cross, invcross
-	lis r5, value1_0@ha
-	lfs f5, value1_0@l(r5)
 	li r5, 79
 	mtctr r5
 	li r10, -8
 	li r11, -4
-	ps_muls0 f4, f4, f5
 	lwz r6, 0(l)
 	lwz r7, 0(r)
 	xoris r6, r6, 0x8000
@@ -648,7 +629,7 @@ L_00000C7C:
 	blr
 }
 
-static void ReverbHICallback(s32* left, s32* right, s32* surround, AXFX_REVHI_WORK* rv) {
+void ReverbHICallback(s32* left, s32* right, s32* surround, AXFX_REVHI_WORK* rv) {
     u8 k;
 
     for (k = 0; k < 3; k++) {
@@ -669,6 +650,7 @@ static void ReverbHICallback(s32* left, s32* right, s32* surround, AXFX_REVHI_WO
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ReverbHIFree(AXFX_REVHI_WORK* rv) {
     u8 i;
 
@@ -689,13 +671,14 @@ static void ReverbHIFree(AXFX_REVHI_WORK* rv) {
     if (rv->preDelayTime) {
         for (i = 0; i < 3; i++) {
 			if (rv->preDelayLine[i] != 0) {
-				__AXFXFree(rv->preDelayLine[i]);
+				salFree(rv->preDelayLine[i]);
 				rv->preDelayLine[i] = NULL;
 			}
         }
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbHiInit(AXFX_REVERBHI* rev) {
     int ret;
     BOOL old;
@@ -707,6 +690,7 @@ int AXFXReverbHiInit(AXFX_REVERBHI* rev) {
     return ret;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbHiShutdown(AXFX_REVERBHI* rev) {
     BOOL old;
 
@@ -716,6 +700,7 @@ int AXFXReverbHiShutdown(AXFX_REVERBHI* rev) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXReverbHiSettings(AXFX_REVERBHI* rev) {
 	int ret;
     BOOL old;
@@ -728,6 +713,7 @@ int AXFXReverbHiSettings(AXFX_REVERBHI* rev) {
     return ret;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXFXReverbHiCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_REVERBHI* reverb) {
     if (reverb->tempDisableFX == 0) {
         ReverbHICallback(bufferUpdate->left, bufferUpdate->right, bufferUpdate->surround, &reverb->rv);
