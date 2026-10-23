@@ -134,7 +134,7 @@ u8 pokemonCheckValid(Pokemon *pokemon);
 #endif
 u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
-u16 battlePokemonDataGetSpecies(Pokemon *pokemon);
+u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
 // Read a scalar field, or one indexed element of a field, from a Pokemon record.

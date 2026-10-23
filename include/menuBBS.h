@@ -86,6 +86,6 @@ enum GSinputDevice {
     /* 3 */ INPUT_DEVICE_3,
 };
 
-extern "C" void menuCBSetTrainerName(tagSPRITE_WORK* sprite, MenuSpriteData* spriteData);
+extern "C" void menuCBSpriteSetImage(tagSPRITE_WORK* sprite, MenuSpriteData* spriteData);
 
 #endif

@@ -21,7 +21,7 @@ extern const PokemonTutorMove *pokemonTutorMoveTable;
 struct PokeStats *pokemonDataBiosGetPtr(u16 species);
 s32 pokemonDataBiosGetVoice(struct PokeStats *stats);
 u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
-u32 pokemonDataGetNameId(u16 species);
+u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);
 u8 pokemonDataCanLearnTutorMove(u16 species, u16 itemId);
 #ifdef __cplusplus

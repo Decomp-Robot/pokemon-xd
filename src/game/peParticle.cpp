@@ -257,8 +257,8 @@ peParticleContainer::~peParticleContainer()
 {
     if (mSortedNodes)
         delete[] mSortedNodes;
-    peMemory.mBankData -= sizeof(*this);
-    peMemory.mTotal -= sizeof(*this);
+    g_particle_debug_stats.mBankData -= sizeof(*this);
+    g_particle_debug_stats.mTotal -= sizeof(*this);
 }
 
 peParticleContainer::peParticleContainer(peEmitterNode *parent, _peParticle *particle,
@@ -309,8 +309,8 @@ peParticleContainer::peParticleContainer(peEmitterNode *parent, _peParticle *par
         if (mSortedNodes)
             mSortedNodes[index] = node;
     }
-    peMemory.mBankData += sizeof(*this);
-    peMemory.mTotal += sizeof(*this);
+    g_particle_debug_stats.mBankData += sizeof(*this);
+    g_particle_debug_stats.mTotal += sizeof(*this);
 }
 
 #include <peNodeMath.h>
@@ -327,7 +327,7 @@ void particleEngineSetupTexture(u32, GStexture *, u32, u32, u32, u32);
 }
 
 extern GSvec xAxisVector, yAxisVector, zAxisVector;
-extern GSvec peCameraPosition, peCameraForward, peCameraUp, peCameraRight;
+extern GSvec g_CameraPosition, g_CameraLookDir, g_CameraUpDir, g_CameraSideDir;
 struct peColor {
     u8 r, g, b, a;
     peColor &operator=(const u32 &packed) {
@@ -490,9 +490,9 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
     position += mTransform->mPosition;
     if (flags & PE_PARTICLE_BILLBOARD) {
         if (flags & PE_PARTICLE_CAMERA_FACING) {
-            horizontal = peCameraPosition - position;
+            horizontal = g_CameraPosition - position;
             PSVECNormalize(SDKVector(&horizontal), SDKVector(&horizontal));
-            normal = Cross(horizontal, peCameraUp);
+            normal = Cross(horizontal, g_CameraUpDir);
             PSVECNormalize(SDKVector(&normal), SDKVector(&normal));
             if (flags & PE_PARTICLE_UPRIGHT) {
                 horizontal.y = 0.0f;
@@ -505,8 +505,8 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
             if (flags & PE_PARTICLE_UPRIGHT)
                 vertical = yAxisVector;
             else
-                vertical = peCameraUp;
-            normal = peCameraRight;
+                vertical = g_CameraUpDir;
+            normal = g_CameraSideDir;
         }
         angle = particle->mOrientationY;
     } else {
@@ -568,7 +568,7 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
         data = &((peParticleDualColorRenderData *)renderData)[mRenderIndex];
     else
         data = &((peParticleRenderData *)renderData)[mRenderIndex];
-    mDepth = Dot(peCameraForward, position - peCameraPosition);
+    mDepth = Dot(g_CameraLookDir, position - g_CameraPosition);
     corner = -normal;
     corner -= vertical;
     if (offsetPivot) corner += pivot;

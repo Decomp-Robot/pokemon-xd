@@ -7,7 +7,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 
-#include "GSmemman.h"
+#include <GSmemman.h>
 
 /* Format text of the heap dump routine. */
 const char heapDumpText[] =
@@ -621,15 +621,4 @@ s32 GSmemHeapDesc::getHeaderSize() {
         return HEADERSIZE;
     }
     return 0;
-}
-
-extern "C" BOOL GSmemMemCheckOwn(void* ptr) {
-    return TRUE;
-}
-
-extern "C" void _memNoopCallback(void) {
-}
-
-extern "C" u32 GSmemMemGetLargestFree(void) {
-    return GSmemGetLargestFree();
 }

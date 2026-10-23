@@ -47,16 +47,13 @@ game/dbgMenuWazaViewer.c:
 	.text       start:0x8000C0C4 end:0x8000C0F4
 
 game/dbgMenuWaza.c:
-	.text       start:0x8000C0F4 end:0x8000C27C
+	.text       start:0x8000C0F4 end:0x8000C284
 
-game/GSgfxLayer.cpp:
-	.text       start:0x8000C27C end:0x8000C29C
+game/menuTool.c:
+	.text       start:0x8000C284 end:0x8000C298
 
 game/menuColosseumBattleConnection.c:
-	.text       start:0x8000C29C end:0x8000C2B4
-
-game/GSgfxLayerEnd.cpp:
-	.text       start:0x8000C2B4 end:0x8000C2C0
+	.text       start:0x8000C298 end:0x8000C2C0
 
 game/dbgMenuFightTrainer.cpp:
 	.text       start:0x8000C2C0 end:0x8000DBAC
@@ -108,7 +105,7 @@ game/menuListCursor.cpp:
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
 
-game/WorldMap.cpp:
+game/menuWorldMapMX.cpp:
 	.text       start:0x80010538 end:0x800136C8
 	.data       start:0x80312278 end:0x803123AC
 	.sdata2     start:0x804EBEE0 end:0x804EBF44
@@ -172,6 +169,7 @@ game/floorRead.cpp:
 game/menuTop.cpp:
 	.text       start:0x8003032C end:0x80030330
 	.ctors      start:0x802E9F88 end:0x802E9F8C
+	.bss        start:0x80429180 end:0x8042926C
 
 game/menuNameEntry.cpp:
 	.text       start:0x80030330 end:0x80033440
@@ -198,7 +196,7 @@ game/menuSaveLoad.cpp:
 game/menuPda.cpp:
 	.text       start:0x80038104 end:0x80038FAC
 
-game/menuCBTaisenWork.cpp:
+game/menuColosseumBattle.cpp:
 	.text       start:0x80046530 end:0x80046598
 	.ctors      start:0x802E9F94 end:0x802E9F98
 	.bss        start:0x804299F8 end:0x80434FF0
@@ -249,14 +247,13 @@ game/dbgMenuMenu.cpp:
 	.sbss       start:0x804EA9A8 end:0x804EA9C0
 	.sdata2     start:0x804EC6C0 end:0x804EC6C8
 
-game/menuCBTaisenSdata2.s:
-	.sdata2     start:0x804EC720 end:0x804EC73C
-
-game/menuCBTaisen.cpp:
-	.text       start:0x8007E5AC end:0x8008250C
+game/menuCB_Sub1.cpp:
+	.text       start:0x8007E5AC end:0x80084758
+	.rodata     start:0x802EB920 end:0x802EB93C
 	.data       start:0x803C7790 end:0x803C7914
 	.bss        start:0x80435C48 end:0x80436FC8
 	.sbss       start:0x804EA9D0 end:0x804EA9D8
+	.sdata2     start:0x804EC718 end:0x804EC764
 
 game/menuBattleDisk.cpp:
 	.text       start:0x800A1430 end:0x800A1494
@@ -282,16 +279,16 @@ game/menuUseItem.cpp:
 	.sdata      start:0x804E80D0 end:0x804E80D8
 	.sdata2     start:0x804ECA58 end:0x804ECA78
 
-ext/dolphin_sdk/os/OSAlloc.cpp:
-	.text       start:0x800A7CDC end:0x800A8EA8
+game/GSAPI/GSmemman/OSAlloc.cpp:
+	.text       start:0x800A7CDC end:0x800A8E7C
 	.rodata     start:0x802EBD60 end:0x802EC1A8
 	.sbss       start:0x804EAA80 end:0x804EAA92
 
-ext/dolphin_sdk/os/sysdolmem.cpp:
-	.text       start:0x800A8EA8 end:0x800A9118
+game/GSAPI/GSmemman/sysdolmem.cpp:
+	.text       start:0x800A8E7C end:0x800A9118
 	.sbss       start:0x804EAA98 end:0x804EAAAC
 
-ext/dolphin_sdk/os/poolAlloc.cpp:
+game/GSAPI/GSmemman/poolAlloc.cpp:
 	.text       start:0x800A9118 end:0x800A9574
 	.bss        start:0x8043D330 end:0x8043D6B0
 
@@ -1469,6 +1466,7 @@ game/peBank.cpp:
 game/particleEngine.cpp:
 	.text       start:0x8013A678 end:0x8013A67C
 	.ctors      start:0x802E9FCC end:0x802E9FD0
+	.bss        start:0x804470E8 end:0x8044713C
 
 ext/musyx_sdk/runtime/seq.c:
 	.text       start:0x80161308 end:0x80161370

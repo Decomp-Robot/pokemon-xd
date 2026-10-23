@@ -9,6 +9,7 @@
 #include <types.h>
 #include <winSprite.h>
 
+struct _GSparticleGen;
 struct _GSmodel;
 struct WorldMapArchiveHeader;
 
@@ -42,14 +43,14 @@ struct WorldMapWork {
     void* mScooter;
 
     u32 mParticleRes[0x03];
-    u32 mParticleGen[0x03];
+    _GSparticleGen* mParticleGen[0x03];
     u8 mMapChanged;
     u8 mPadding91[0x03];
 };
 
 /* Distance and direction to a neighbouring icon. */
-struct WorldMapIconDistance {
-    WorldMapIconDistance() { dist = 0.0f; angle = 0.0f; }
+struct WorldMapIconSubWork {
+    WorldMapIconSubWork(f32 distance = 0.0f, f32 direction = 0.0f) { dist = distance; angle = direction; }
     f32 dist;
     f32 angle;
 };
@@ -64,7 +65,7 @@ struct WorldMapIconWork {
     s8 mNext[0x08];
     GSvec screen;
 
-    WorldMapIconDistance* mDist;
+    WorldMapIconSubWork* mDist;
     WorldMapIconWork();
     ~WorldMapIconWork();
 };
@@ -144,7 +145,9 @@ public:
     void Visibility(unsigned long model, bool visible);
     void ModelDetach(unsigned long model);
     bool ModelAttach(unsigned long model, unsigned long part, long mode, GSattachMode attachMode);
-    unsigned long SetModelPartPaticle(unsigned long model, unsigned long part, long mode, GSattachMode attachMode, bool f1, bool f2, bool f3);
+    _GSparticleGen* SetModelPartPaticle(unsigned long model, unsigned long part, long mode, GSattachMode attachMode, bool f1, bool f2, bool f3);
+    void DetachModelPartPaticle(_GSparticleGen* generator, bool keepLink);
+    _GSmodel* GetModelPtr(unsigned long model);
     void SetMotion(unsigned long motion, short startFrame, f32 rate, bool loop);
     bool CheckMotion(unsigned long model);
     void StopMotion(unsigned long model);
@@ -161,6 +164,10 @@ public:
     WorldMap();
     ~WorldMap();
     void Init();
+    void InitRenderModule();
+    u8 IsFloorPush();
+    long GetDataNum();
+    f32 GetLastTime();
     void InitCamera(long cursor);
     void SetCamera();
     void ControlCamera(long cursor);
@@ -238,7 +245,5 @@ private:
 
 void* _cameraPlayAnime(unsigned long cameraRes, long startFrame, bool loop);
 
-extern "C" void worldMapInitDummy(WorldMap* map);
-extern "C" u8 getWorldMapScriptFlag(WorldMap* map);
 
 #endif

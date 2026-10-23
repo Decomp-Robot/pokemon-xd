@@ -3,7 +3,7 @@
 
 #include <FightRuleData.h>
 #include <Pokemon.h>
-#include <fightTrainer.h>
+#include <menuCBTrainer.h>
 #include <hero.h>
 #include <types.h>
 
@@ -12,9 +12,16 @@
  * keep their state here and address it directly; every member below sits at
  * the offset the corresponding menu reads or writes.
  */
-/* Entry failures, in message priority order. Only the low two bytes carry
-   flags. Egg and invalid entries are excluded from the level checks; an
-   invalid held item takes precedence over a rule-restricted held item. */
+/* Entry restrictions for one Pokemon. Only the first set condition is
+   reported by menuCBPokemonMsgCheck. The upper halfword is untouched. */
+enum MenuCBEntryCondition {
+    MENU_CB_ENTRY_CONDITION_ANY = -1,
+    MENU_CB_ENTRY_HELD_ITEM_NOT_ALLOWED = 8,
+    MENU_CB_ENTRY_PROHIBITED_ITEM = 9,
+    MENU_CB_ENTRY_DUPLICATE_HELD_ITEM = 10,
+    MENU_CB_ENTRY_ILLEGAL_HELD_ITEM = 11,
+};
+
 typedef struct MenuCBEntrySlotFlags {
     u8 legendPokemon : 1;
     u8 duplicateSpecies : 1;
@@ -43,17 +50,15 @@ typedef struct MenuCBTaisenWork {
     /* 0x000C */ s32 ruleId; // rule set the colosseum screens act on.
     /* 0x0010 */ s32 unk_010; // 0x10: written by the context setup only.
     /* 0x0014 */ s32 mStartMenuType; // 0x14: menu the battle starts in (0 or 4).
-    /* 0x0018 */ FIGHT_TRAINER mTrainer[4]; // trainer record of each controller port.
-    /* 0x4C98 */ FIGHT_TRAINER mTrainerImmediately[4]; // "fight immediately" records.
+    /* 0x0018 */ _MENUCBTRAINER mTrainer[4]; // trainer record of each controller port.
+    /* 0x4C98 */ _MENUCBTRAINER mTrainerImmediately[4]; // "fight immediately" records.
     /* 0x9918 */ FightRuleData mRulesetData[6]; // colosseum rule table, mirror of the save table.
     /* 0x9C78 */ FightRuleData *mEntryRule; // regulation record the entry screens show.
     /* 0x9C7C */ u8 _9C7C[0x9C84 - 0x9C7C];
-    /* 0x9C84: per entry flags of its six Pokemon slots. The record count is not
-       pinned down by the recovered modules; every access goes through the
-       entry number below. */
+    // Per-entry flags for the six Pokemon slots.
     /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
     /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
-    /* 0xA65C */ Hero mEntryHero; // hero copy the entry screens work on.
+    /* 0xA65C */ Hero mHero; // hero copy the entry screens work on.
     /* 0xAFD4 */ u8 _AFD4[0xAFE0 - 0xAFD4];
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
@@ -67,7 +72,7 @@ typedef struct MenuCBTaisenWork {
     /* 0xB018 */ u8 _B018[0xB028 - 0xB018];
     /* 0xB028 */ s32 listRow; // top row of the scrolled entry lists.
     /* 0xB02C */ u8 _B02C[0xB060 - 0xB02C];
-    /* 0xB060 */ s32 unk_B060; // unknown; cleared alongside selectResult.
+    /* 0xB060 */ s32 confirmationComplete; // confirmation callback has finished.
     /* 0xB064 */ u8 _B064[0xB0D8 - 0xB064];
     /* 0xB0D8 */ s32 entryNo; // entry the entry screens work on.
     /* 0xB0DC */ u8 _B0DC[0xB0E0 - 0xB0DC];
@@ -84,30 +89,46 @@ typedef struct MenuCBTaisenWork {
     /* 0xB108 */ s32 mEntryState; // state of the entry screen.
     /* 0xB10C */ u32 mRuleSelect; // regulation chosen in the rule submenu: 0 for its
                                   // first item, 1 for its last one.
-    /* 0xB110 */ s32 unk_B110;
+    /* 0xB110 */ s32 confirmationInputDelay;
     /* 0xB114 */ u8 _B114[0xB118 - 0xB114];
     /* 0xB118 */ s32 mRuleCursor; // row the rule and port windows' cursor is on.
     /* 0xB11C */ u32 selectedValue; // entry menuCBSpriteColorIfMatch compares.
     /* 0xB120 */ u8 _B120[0xB124 - 0xB120];
     /* 0xB124 */ s32 mRuleCursorPrev; // row that cursor just left; -1 while no row
-                                  // transition is heldItemRestricted.
+                                  // transition is pending.
     /* 0xB128 */ u32 mRuleCursorPrevColor; // colour that row is drawn in.
     /* 0xB12C */ u32 mRuleCursorColor; // colour the cursor row is drawn in.
     /* 0xB130 */ u8 _B130[0xB138 - 0xB130];
     /* 0xB138 */ u32 savedColor; // window colour menuCBWindowColorSave stored.
     /* 0xB13C */ u8 _B13C[0xB144 - 0xB13C];
     /* 0xB144 */ s32 mEntryCursorPrev; // entry row that cursor just left; -1 while no
-                                  // row transition is heldItemRestricted.
+                                  // row transition is pending.
     /* 0xB148 */ u32 mEntryCursorPrevColor; // colour that row is drawn in.
     /* 0xB14C */ u32 mEntryCursorColor; // colour the cursor row is drawn in.
-    /* 0xB150 */ u8 _B150[0xB1A0 - 0xB150];
+    /* 0xB150 */ s32 mPageScrollStep;
+    s32 mPageScrollTime;
+    s32 mPageScrollOffset;
+    s32 mPreviousBattleMode2D;
+    s32 mPreviousPage2D;
+    s32 mPreviousPage2DSub;
+    u8 _B168[0xB180 - 0xB168];
+    s32 mBattleEndHPSound;
+    s32 mSkipBattleExitEffect;
+    u8 _B188[0xB1A0 - 0xB188];
     /* 0xB1A0 */ s32 mPlayerLeftEntry; // set once a player left the entry.
     /* 0xB1A4 */ u8 _B1A4[0xB1D4 - 0xB1A4];
     /* 0xB1D4 */ s32 dstBank; // bank/index a party copy is taken from.
     /* 0xB1D8 */ s32 dstIndex;
     /* 0xB1DC */ u32 pokeMsgID; // message menuCBPokemonMsgCheck selected.
     /* 0xB1E0 */ u32 mSlotNo; // 1-based number of the entry slot a message reports.
-    /* 0xB1E4 */ u8 _B1E4[0xB428 - 0xB1E4];
+    /* 0xB1E4 */ s16 mBattleEndWait;
+    u8 _B1E6[2];
+    /* 0xB1E8 */ f32 mBattleEndTargetHP[4][6];
+    /* 0xB248 */ f32 mBattleEndDisplayHP[4][6];
+    /* 0xB2A8 */ f32 mBattleEndMaxHP[4][6];
+    /* 0xB308 */ f32 mBattleEndHPStep[4][6];
+    /* 0xB368 */ f32 mFaintedPokemonScale[4][6];
+    /* 0xB3C8 */ f32 mFaintedPokemonScaleStep[4][6];
     /* 0xB428 */ s16 mPartySlotX[4][6]; // x the slot's face sprite was placed at, one
                                   // per port and slot.
 
@@ -132,11 +153,35 @@ extern const s32 staControlerMap[4];
 extern "C" {
 #endif
 
-struct Hero;
+u16 menuCBTrainerBios_GetPlayerID(_MENUCBTRAINER *trainer);
+s32 menuCBTrainerBios_GetControlerID(_MENUCBTRAINER *trainer);
+void menuCBTrainerBios_SetControlerID(_MENUCBTRAINER *trainer, s32 controllerId);
+
+void menuCBBios_SetEncountFlag(u32 flag);
+s32 menuCBBios_GetNameEntryMode(void);
+u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
+void menuCBBios_SetTrainerHomePlace(_MENUCBTRAINER *trainer,
+    u32 homePlace);
+s32 menuCBBios_GetTrainerHomePlace(_MENUCBTRAINER *trainer);
+void menuCBBios_CopyTrainer(_MENUCBTRAINER *dst,
+    const _MENUCBTRAINER *src);
+void menuCBBios_InitVersusTrainer(_MENUCBTRAINER *trainer,
+    Hero *hero);
+void menuCBBios_InitTrainerFromHero(_MENUCBTRAINER *trainer,
+    Hero *hero, u16 dataId);
+void menuCBBios_InitTrainerFromDataID(_MENUCBTRAINER *trainer,
+    u16 dataId, u16 encountNo);
+void menuCBBios_ClearTrainer(_MENUCBTRAINER *trainer);
+void menuCBBios_InitTrainer(_MENUCBTRAINER *trainer, u16 dataId);
+s32 menuCBBios_FightTrainerDataIDToHomePlace(u16 dataId);
+_MENUCBTRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId);
+s32 menuCBBios_GetBattlePortID(void);
 Hero *menuCBBios_GetBattleHeroPtr(void);
-u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer);
-s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer);
-void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId);
+_MENUCBTRAINER *menuCBBios_GetTrainer(s32 controllerId);
+_MENUCBTRAINER *menuCBBios_GetTrainerImmediately(s32 index);
+_MENUCBTRAINER *menuCBBios_GetTrainerByPort(s32 index);
+Hero *menuCBBios_GetHeroImmediately(s32 index);
+s32 menuCBBios_ControlerIDtoPortID(s32 controllerId);
 
 // Whether the battle of the link encounter was entered.
 s32 menuCBBios_GetEncountFlag(void);
@@ -150,9 +195,6 @@ u32 menuCBBios_PortIDtoControlerID(long portID);
 u16 battleGetResult(void);
 u16 toolentryTaisenGetPokemonHomePlace(s32 port);
 
-u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer);
-s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer);
-void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId);
 #ifdef __cplusplus
 }
 #endif

@@ -47,15 +47,7 @@ extern void menuCBItemEndClear(void);
 
 extern void *memset(void *dest, int ch, unsigned long count);
 extern void *memcpy(void *dest, const void *src, unsigned long count);
-extern void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer, u16 dataId, s32 arg);
-extern void menuCBBios_CopyTrainer(FIGHT_TRAINER *dst, const FIGHT_TRAINER *src);
-extern s32 menuCBBios_GetTrainerHomePlace(FIGHT_TRAINER *trainer);
-extern FIGHT_TRAINER *menuCBBios_GetTrainer(s32 port);
-extern FIGHT_TRAINER *menuCBBios_GetTrainerByPort(s32 port);
-extern Hero *menuCBBios_GetHeroImmediately(s32 port);
 extern u32 menuCBBios_GetPokemonNumLimit(void);
-extern FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 index);
-extern u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
 extern void menuCBBios_InitDefaultRules(void);
 extern s32 battlePokemonGetNature(Pokemon *pokemon);
 extern s32 pokemonAdjustValueBySeikaku(s32 nature, s32 id, s32 value);
@@ -386,7 +378,7 @@ extern "C" s32 menuCB_GetDisconnectedGBA(void)
 }
 
 /* Copy the current language image into the sprite work. */
-extern "C" void menuCBSetTrainerName(tagSPRITE_WORK *sprite, MenuSpriteData *spriteData)
+extern "C" void menuCBSpriteSetImage(tagSPRITE_WORK *sprite, MenuSpriteData *spriteData)
 {
     const MenuSpriteImage *image = menuSpriteBiosGetValPtr(spriteData);
 
@@ -559,8 +551,8 @@ extern "C" s32 menuCBPokemonEntrySelectScreen(void)
     menuCBTaisenWork.mAbortRequest = -1;
     menuCBTaisenWork.mEntryState = 0;
     menuCBTaisenWork.selectResult = 0;
-    menuCBTaisenWork.unk_B060 = 0;
-    menuCBTaisenWork.unk_B110 = 2;
+    menuCBTaisenWork.confirmationComplete = 0;
+    menuCBTaisenWork.confirmationInputDelay = 2;
     menuCBTaisenWork.mPlayerLeftEntry = 0;
     menuCBSEPlay(0x14);
     menuOpen(0xC6, 0);
@@ -572,7 +564,7 @@ extern "C" s32 menuCBPokemonEntrySelectScreen(void)
                 menuOpenCustom(0xE2, windowGetActiveID(), &menuCBTaisenWork.selectResult, 0, 0, 0);
                 opened = 1;
             }
-            if (menuCBTaisenWork.unk_B060 != 0) {
+            if (menuCBTaisenWork.confirmationComplete != 0) {
                 if (menuCBTaisenWork.selectResult == 0) {
                     _menuCBPokemonEntrySetEntryFlag(0, 1);
                     menuCBTaisenWork.mEntryState = 2;
@@ -580,8 +572,8 @@ extern "C" s32 menuCBPokemonEntrySelectScreen(void)
                     toolentryTaisenInitPokemonOrder(0);
                     menuCBTaisenWork.mEntryState = 0;
                     menuCBTaisenWork.selectResult = 0;
-                    menuCBTaisenWork.unk_B060 = 0;
-                    menuCBTaisenWork.unk_B110 = 2;
+                    menuCBTaisenWork.confirmationComplete = 0;
+                    menuCBTaisenWork.confirmationInputDelay = 2;
                     menuCloseCustom(0xE2, 0, 0);
                     opened = 0;
                 }
@@ -657,7 +649,7 @@ extern "C" s32 menuCBPokemonEntrySelectScreen(void)
         for (i = 0; i < count; i++) {
             u16 slot;
             Pokemon *pokemon;
-            FIGHT_TRAINER *trainer = menuCBBios_GetTrainerByPort(i);
+            _MENUCBTRAINER *trainer = menuCBBios_GetTrainerByPort(i);
             Hero *hero = &trainer->mHero;
 
             for (slot = 0; slot < 6; slot++) {
@@ -685,7 +677,7 @@ extern "C" void menuCBPokemonEntryButtonTask_20041006(void)
     for (player = 0; player < playerNum; player++) {
         if (toolentryTaisenGetBattleVersus() == 4) {
             if (_menuCBPokemonEntryGetEntryFlag(player)) {
-                FIGHT_TRAINER *trainer = menuCBBios_GetTrainer(toolentryTaisenGetControlerType(player));
+                _MENUCBTRAINER *trainer = menuCBBios_GetTrainer(toolentryTaisenGetControlerType(player));
 
                 if (trainer->mHomePlace == 1 || trainer->mHomePlace == 2 || trainer->mHomePlace == 3) {
                     port = player;
@@ -702,7 +694,7 @@ extern "C" void menuCBPokemonEntryButtonTask_20041006(void)
         if (!_menuCBPokemonEntryGetEntryFlag(player)) {
             port = player;
             if (toolentryTaisenGetBattleVersus() == 4) {
-                FIGHT_TRAINER *trainer = menuCBBios_GetTrainer(toolentryTaisenGetControlerType(player));
+                _MENUCBTRAINER *trainer = menuCBBios_GetTrainer(toolentryTaisenGetControlerType(player));
 
                 if (trainer->mHomePlace == 1 || trainer->mHomePlace == 2 || trainer->mHomePlace == 3) {
                     _menuCBPokemonEntryEntCheckGBA((GSinputDevice)toolentryTaisenGetControlerType(port), port);
@@ -801,7 +793,7 @@ extern "C" void menuCBPokemonEntryOrderInput(s32 device, s32 port)
                     GSsndPlay(0x12, 0, 0);
                 }
             } else if ((buttons & 0x100) != 0) {
-                FIGHT_TRAINER *trainer = menuCBBios_GetTrainerByPort(port);
+                _MENUCBTRAINER *trainer = menuCBBios_GetTrainerByPort(port);
                 num = (u16)toolentryTaisenGetEntryPokemonNum(port);
                 order = trainer->mEntryCount;
 
@@ -864,7 +856,7 @@ s32 _menuCBPokemonEntryButtonCheck(unsigned long buttons, long port)
 
 void _menuCBPokemonEntryWork(void)
 {
-    FIGHT_TRAINER *found[4];
+    _MENUCBTRAINER *found[4];
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -919,7 +911,7 @@ void _menuCBPokemonEntryWorkInit(void)
     menuCBPokemonEntryWork.mState = 0;
     menuCBPokemonEntryWork.mTimer = 0;
     for (port = 0; port < playerNum; port++) {
-        FIGHT_TRAINER *trainer = menuCBBios_GetTrainerByPort(port);
+        _MENUCBTRAINER *trainer = menuCBBios_GetTrainerByPort(port);
         u32 gbaPort = menuCBTrainerBios_GetControlerID(trainer);
         Hero *hero = menuCBBios_GetHeroImmediately(port);
         s32 type;

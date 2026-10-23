@@ -137,7 +137,9 @@ struct tagSPRITE_WORK {
             u8 mAlpha;         // 0x67: alpha the sprite is drawn with.
         } mRgba;
     };
-    u8 _68[0x0C];          // 0x68-0x73: unknown.
+    f32 mScaleX;           // 0x68: horizontal sprite scale.
+    f32 mScaleY;           // 0x6C: vertical sprite scale.
+    u8 _70[4];
     u8 mUseFloorMenuLayer; // 0x74: select the floor menu layer.
 };
 

@@ -157,7 +157,6 @@ extern WorldMapAnimeRecord* worldMapAnimeTables[2];
 extern GSgfxLayerID worldMapModelLayer;
 extern GSgfxLayerID worldMapScooterLayer;
 
-extern "C" long getRibbonCnt(WorldMap* map);
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
 extern "C" void menuCursorNormal(tagWINDOW_WORK* window, long a);
@@ -175,16 +174,13 @@ extern "C" void GSthreadSwitch();
 extern "C" void GSfsysFree(long id);
 extern "C" void GSfsysPreRead(long id);
 extern "C" unsigned long roomDataGetFsysGidForLanguage(void* data);
-extern "C" f32 worldMapGetFrameSec(WorldMap* map);
 extern "C" void floorSetFadeScript(long a, long b);
 extern "C" long getCurrentMapGroupId();
 extern "C" void GSparticleGeneratorSetCamera(void* gen, void* cam);
 extern "C" void GSgfxVideoSetLockFrameRate(long rate);
-extern "C" _GSmodel* floorOpenModel(WorldMap* map, unsigned long id);
 extern "C" unsigned long GSflagGet(long flag);
 extern "C" unsigned long HSD_Rand();
 extern "C" u8 GSfsysWait(long id);
-extern "C" void ReleaseModelPartPaticle(WorldMap* map, unsigned long a, long b);
 
 extern "C" double atan2(double y, double x);
 extern "C" double tan(double x);
@@ -292,7 +288,7 @@ extern "C" void GSflagSet(long flag,long value);
 extern "C" void menuItemBiosSetSelectFlag(long menu,long item,bool enable);
 extern "C" u16 menuScriptGetWorldMapMode();
 extern "C" u32 charNameBiosGetNameID(u16);
-extern "C" void GSmsgPrint2(GSgfxLayerID,s32,s32,u32,s32);
+#include <GSmsg.h>
 extern "C" double sin(double);
 
 s32 WorldMap::GetNowCursor(tagWINDOW_WORK* window) {
@@ -302,7 +298,7 @@ s32 WorldMap::GetNowCursor(tagWINDOW_WORK* window) {
     return mModelWork->cursor;
 }
 
-extern "C" void worldMapInitDummy(WorldMap* map)
+void WorldMap::InitRenderModule()
 {
 }
 
@@ -385,7 +381,7 @@ void WorldMap::Release()
     if (mModelWork->mScooterModel != 0) {
         for (s32 i = 0; i < 3; i++) {
             if (mModelWork->mParticleGen[i] != 0) {
-                ReleaseModelPartPaticle(this, mModelWork->mParticleGen[i], 1);
+                DetachModelPartPaticle(mModelWork->mParticleGen[i], true);
             }
         }
         ModelDetach(mModelWork->mScooterModel);
@@ -428,10 +424,10 @@ void WorldMap::RenderMoveDemoModel()
         renderOffscreenData(mModelWork->mOffscreenAlpha);
         GSgfxLayerFindByID(0);
         GScameraIsAnimationRunning(cam);
-        GSmodelSetRenderCamera(floorOpenModel(this, mModelWork->mDemoModel1), cam);
-        GSmodelSetRenderCamera(floorOpenModel(this, mModelWork->mDemoModel2), cam);
-        GSmodelSetRenderCamera(floorOpenModel(this, mModelWork->mScooterModel), cam);
-        GSmodelSetRenderCamera(floorOpenModel(this, mModelWork->mDemoMapModel), cam);
+        GSmodelSetRenderCamera(GetModelPtr(mModelWork->mDemoModel1), cam);
+        GSmodelSetRenderCamera(GetModelPtr(mModelWork->mDemoModel2), cam);
+        GSmodelSetRenderCamera(GetModelPtr(mModelWork->mScooterModel), cam);
+        GSmodelSetRenderCamera(GetModelPtr(mModelWork->mDemoMapModel), cam);
         for (s32 i = 0; i < 3; i++) {
             if (mModelWork->mParticleGen[i] != 0) {
                 GSresGetResourceAllGroup(mModelWork->mParticleRes[i]);
@@ -512,7 +508,7 @@ void WorldMap::moveDemo(long from, long to)
         GSsndPlayNow(worldMapScooterSeID);
     }
     for (;;) {
-        f32 dt = worldMapGetFrameSec(this) / worldMapDemoSpeed;
+        f32 dt = GetLastTime() / worldMapDemoSpeed;
 
         MainControl(to);
         RenderMoveDemoModel();
@@ -558,15 +554,15 @@ unsigned long WorldMap::readScooter()
         mModelWork->mParticleRes[0] = worldMapSpecialScooterParticle0;
         mModelWork->mParticleRes[1] = worldMapSpecialScooterParticle1;
         mModelWork->mParticleRes[2] = worldMapSpecialScooterParticle1;
-        mModelWork->mParticleGen[0] = (u32)SetModelPartPaticle(
+        mModelWork->mParticleGen[0] = SetModelPartPaticle(
             mModelWork->mScooterModel, mModelWork->mParticleRes[0],
             ((WorldMapScooterData*)mModelWork->mScooter)->mPrimaryParticleAttachmentPart,
             GS_ATTACH_POSITION_ROTATION, false, true, false);
-        mModelWork->mParticleGen[1] = (u32)SetModelPartPaticle(
+        mModelWork->mParticleGen[1] = SetModelPartPaticle(
             mModelWork->mScooterModel, mModelWork->mParticleRes[1],
             ((WorldMapScooterData*)mModelWork->mScooter)->mSecondaryParticleAttachmentPart,
             GS_ATTACH_POSITION_ROTATION, false, true, false);
-        mModelWork->mParticleGen[2] = (u32)SetModelPartPaticle(
+        mModelWork->mParticleGen[2] = SetModelPartPaticle(
             mModelWork->mScooterModel, mModelWork->mParticleRes[2],
             ((WorldMapScooterData*)mModelWork->mScooter)->mTertiaryParticleAttachmentPart,
             GS_ATTACH_POSITION_ROTATION, false, true, false);
@@ -574,11 +570,11 @@ unsigned long WorldMap::readScooter()
         mModelWork->mParticleRes[0] = worldMapScooterParticle0;
         mModelWork->mParticleRes[1] = worldMapScooterParticle1;
         mModelWork->mParticleRes[2] = worldMapScooterParticle1;
-        mModelWork->mParticleGen[0] = (u32)SetModelPartPaticle(
+        mModelWork->mParticleGen[0] = SetModelPartPaticle(
             mModelWork->mScooterModel, mModelWork->mParticleRes[0],
             ((WorldMapScooterData*)mModelWork->mScooter)->mPrimaryParticleAttachmentPart,
             GS_ATTACH_POSITION_ROTATION, false, true, false);
-        mModelWork->mParticleGen[1] = (u32)SetModelPartPaticle(
+        mModelWork->mParticleGen[1] = SetModelPartPaticle(
             mModelWork->mScooterModel, mModelWork->mParticleRes[1],
             ((WorldMapScooterData*)mModelWork->mScooter)->mSecondaryParticleAttachmentPart,
             GS_ATTACH_POSITION_ROTATION, false, true, false);
@@ -688,7 +684,7 @@ void WorldMap::Main()
     }
 }
 
-extern "C" u8 getWorldMapScriptFlag(WorldMap* map)
+u8 WorldMap::IsFloorPush()
 {
     return menuScriptGetWorldMapFlag();
 }
@@ -793,7 +789,7 @@ void WorldMap::CheckPadIndex(bool flag)
     f32 step = worldMapPadWindowStep;
     s8 pad;
 
-    for (i = 0; i < getRibbonCnt(this); i++) {
+    for (i = 0; i < GetDataNum(); i++) {
         icon = &mIcons[i];
         for (k = 0; k < 8; k++) {
             icon->mNext[k] = -1;
@@ -801,13 +797,13 @@ void WorldMap::CheckPadIndex(bool flag)
     }
 
     do {
-        for (i = 0; i < getRibbonCnt(this); i++) {
+        for (i = 0; i < GetDataNum(); i++) {
             memset(dists, 0, sizeof(dists));
             for (k = 0; k < 8; k++) {
                 dirs[k] = -1;
             }
             icon = &mIcons[i];
-            for (j = 0; j < getRibbonCnt(this); j++) {
+            for (j = 0; j < GetDataNum(); j++) {
                 if (i == j) {
                     continue;
                 }
@@ -880,7 +876,7 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
     halfAngle = a * halfAngle;
     f32 tangent = (f32)tan(halfAngle);
     xscale = -240.0f / tangent;
-    for (i = 0; i < getRibbonCnt(this); i++) {
+    for (i = 0; i < GetDataNum(); i++) {
         GSvec vec;
         f32 sx;
 
@@ -893,9 +889,9 @@ void WorldMap::CalcModel2D(f32 angle, bool flag)
         icon->screen.y = 240.0f + dist;
         icon->screen.z = 0.0f;
     }
-    for (i = 0; i < getRibbonCnt(this); i++) {
+    for (i = 0; i < GetDataNum(); i++) {
         icon = &mIcons[i];
-        for (j = 0; j < getRibbonCnt(this); j++) {
+        for (j = 0; j < GetDataNum(); j++) {
             WorldMapIconWork* other = &mIcons[j];
 
             if (i != j) {
@@ -951,7 +947,7 @@ void WorldMap::InitModel2D(f32 param)
     long i;
 
     CalcModel2D(param, true);
-    for (i = 0; i < getRibbonCnt(this); i++) {
+    for (i = 0; i < GetDataNum(); i++) {
     }
 }
 
@@ -1006,13 +1002,13 @@ void WorldMap::Init()
     mModelWork->mSavedCamera = GScameraGetActiveCamera();
     mIcons = new WorldMapIconWork[*worldMapRibbonCount];
     mCamWork = new WorldMapCamWork;
-    mModelWork->mScriptFlag = getWorldMapScriptFlag(this);
+    mModelWork->mScriptFlag = IsFloorPush();
     mModelWork->mIconAnimationActive = 1;
     mModelWork->mMoveBlend = 0.0f;
     mModelWork->mMoveSpeed = 1.0f;
     mModelWork->mMoveAccel = 0.0f;
     s16 count = 0;
-    for (s16 i = 0; i < getRibbonCnt(this); i++) {
+    for (s16 i = 0; i < GetDataNum(); i++) {
         WorldMapMapData* data = SearchData(i);
         if (data->mFlagID == 0) {
             menuItemBiosSetSelectFlag(worldMapMenuID,data->mItemID,true);
@@ -1040,12 +1036,12 @@ void WorldMap::Init()
     }
     InitModel(mModelWork->mMenuIndex);
     InitCamera(mModelWork->mMenuIndex);
-    worldMapInitDummy(this);
+    InitRenderModule();
 }
 
 WorldMapIconWork::WorldMapIconWork()
 {
-    mDist = new WorldMapIconDistance[*worldMapRibbonCount];
+    mDist = new WorldMapIconSubWork[*worldMapRibbonCount];
     mNext[0] = -1; mNext[1] = -1; mNext[2] = -1; mNext[3] = -1;
     mNext[4] = -1; mNext[5] = -1; mNext[6] = -1; mNext[7] = -1;
 }
@@ -1197,7 +1193,7 @@ void WorldMap::InitModel(long cursor)
     GSmodelStartAnimation(hero);
     SetLayerID(worldMapHeroIconModel, 1, &layer);
 
-    for (icon = 0; icon < getRibbonCnt(this); ++icon) {
+    for (icon = 0; icon < GetDataNum(); ++icon) {
         modelID = GetModelID(icon);
         flag = GetFlagData(icon);
         model = GetModel(icon);
@@ -1352,7 +1348,7 @@ s32 WorldMap::SearchDataFloorID(unsigned int floor)
 {
     long i;
     long count = 0;
-    for (i = 0; i < getRibbonCnt(this); i++) {
+    for (i = 0; i < GetDataNum(); i++) {
         WorldMapMapData* data = SearchData(i);
         u32 flag = GSflagGet(data->mFlagID);
         if (data->mFlagID == 0 || flag != 0) {
@@ -1365,11 +1361,11 @@ s32 WorldMap::SearchDataFloorID(unsigned int floor)
 
 WorldMapMapData* WorldMap::SearchData(long index)
 {
-    if (index >= getRibbonCnt(this)) return 0;
+    if (index >= GetDataNum()) return 0;
     return &worldMapData[index];
 }
 
-extern "C" long getRibbonCnt(WorldMap* map)
+long WorldMap::GetDataNum()
 {
     return *worldMapRibbonCount;
 }
@@ -1399,7 +1395,7 @@ s16 WorldMap::GetStartIconAnimIndex(unsigned long index)
 void WorldMap::ControlCursor(long index)
 {
     _GSmodel* model = (_GSmodel*)GSresGetResourceAllGroup(mCursorModel);
-    f32 dt = worldMapGetFrameSec(this);
+    f32 dt = GetLastTime();
     if (mCursorMoving) {
         f32 speed = 2.0f;
         mCursorBlend += speed * dt;
@@ -1419,7 +1415,7 @@ void WorldMap::ControlCursor(long index)
     GSmodelSetPosition(model,&mCursorPosition);
 }
 
-extern "C" f32 worldMapGetFrameSec(WorldMap* map)
+f32 WorldMap::GetLastTime()
 {
     return timeGetLastFrameSec();
 }
@@ -1428,7 +1424,7 @@ void WorldMap::CheckIconAnime(long cursor)
 {
     long selected = worldMapCursorTable[cursor];
     mModelWork->mIconAnimationActive = 0;
-    for (long i = 0; i < getRibbonCnt(this); i++) {
+    for (long i = 0; i < GetDataNum(); i++) {
         unsigned long model = mIcons[i].mModelID;
         switch (mIcons[i].mAnimationIndex) {
         case worldMapIconAnimationVisitedAppear:

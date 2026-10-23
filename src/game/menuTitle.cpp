@@ -171,7 +171,7 @@ s32 memcardTaskCall(s32 a, s32 b, s32 c);
 void floorUnlinkWithSE(s32 a, s32 b);
 /* Returns the thread group id of the floor group on top of the stack. */
 u32 floorGetStackGroupID(void);
-void _HSD_AObjForgetMemory(void);
+void menuToolInit(void);
 void FlashSystemSetPlayFrameLabel(u32 flash, const char *start, const char *end);
 void FlashSystemSetLoopFlag(u32 flash, s32 flag);
 void FlashSystemSetNowFrameLabel(u32 flash, const char *label);
@@ -784,7 +784,7 @@ extern "C" void menuTitleStartBattleSelect(void)
         select->mPages[2] = -1;
         select->mPages[3] = -1;
         select->mPages[4] = -1;
-        _HSD_AObjForgetMemory();
+        menuToolInit();
     }
 }
 

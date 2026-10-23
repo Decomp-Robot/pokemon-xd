@@ -15,18 +15,16 @@
 #include <gamedata.h>
 #include <savedata.h>
 #include <GSsnd.h>
+#include <GSmsg.h>
+#include <pokemonBios.h>
+#include <winMsg.h>
+#include <fade.h>
+#include <fightFloor.h>
+#include <menuCBBios.h>
 
 extern "C" {
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void msgctrlSetValue(s32 id, unsigned long value);
-void GSmsgPrint2(GSgfxLayerID layer, s32 x, s32 y, u32 color, s32 msgID);
-void GSmsgPrintRight(GSgfxLayerID layer, s32 p1, s32 p2, s32 x, s32 y, u32 color, s32 msgID);
-void GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 w, s16 h, u32 color, s32 msgID);
-unsigned long GSmsgGetMessageSize(s32 id);
-void winMsgOpen(s32 p1, s32 msgID, s32 p2, s32 p3);
-void winMsgClose(s32 p1);
-void fadeCheck(s32 p1);
-void fadeSet(s32 p1, f32 p2);
 void floorSetFadeScript(s32 p1, s32 script);
 void GSfloorPop(void);
 void GSfloorPush(s32 floor);
@@ -46,7 +44,6 @@ void menuPlaySe(s32 p1, s32 p2);
 u8 menuModelSetupPokemon(MENU_MODEL *model, Pokemon *pokemon);
 void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
 void menuModelTerm(MENU_MODEL *model);
-u16 *GSmsgGetStringPtr(s32 id);
 u8 pokemonWazaCheckValid(Pokemon *pokemon, u16 slot);
 u8 pokemonWazaGetMaxPP(Pokemon *pokemon, u16 slot);
 void pokemonWazaReplace(Pokemon *pokemon, s32 prev, s32 slot);
@@ -57,10 +54,7 @@ u16 zokuseiBiosGetSpriteID(u16 type);
 u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
 void *pokemonSeikakuDataBiosGetPtr(u8 id);
-void *tokuseiDataBiosGetPtr(u16 id);
 u32 pokemonSeikakuDataGetMessageId(void *ptr);
-s32 tokuseiDataGetNameId(void *ptr);
-s32 tokuseiDataGetDescriptionId(void *ptr);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 DarkPokemon *pokemonGetDarkPokemonPtr(Pokemon *pokemon);
 u8 pokemonIsShinyFromPIDAndTID(Pokemon *pokemon);
@@ -70,9 +64,6 @@ u16 mballBiosGetSpriteID(u8 ball);
 void *memset(void *dst, int value, unsigned long size);
 u32 GSflagGet(s32 flag);
 u32 trainerGetTID(void *trainer);
-void *fightFloorGetGcHeroFightTrainerPtr(s32 unk);
-void *fightTrainer_GetDataPtr(void *ptr);
-void *menuCBBios_GetBattleHeroPtr(void);
 u32 floorGetPlaceName(u32 place);
 u8 fightKind_CheckFightKind(s32 kind);
 s32 getRibbonCount(void);
@@ -346,7 +337,7 @@ static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE
     u32 waza = menuPokemonStatusGetWazaId(pokemon, slot);
     u32 icon;
 
-    switch ((s32)_menuCB_NotDarkWaza((u16)waza)) {
+    switch ((s32)NotDarkWaza((u16)waza)) {
     case 0:
         return 0;
     case WAZA_SHADOW_SPECIAL:
@@ -508,7 +499,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         waza = menuPokemonStatusGetWazaId(pokemon, slot);
         x = (s16)(((s16)sprite->mWidth - (s16)(GSmsgGetMessageSize(0x3AE8) >> 16)) / 2);
         GSmsgPrint2(winSpriteGetLayerID(window, sprite), x, 0, color, 0x3AE8);
-        msg = (s32)_menuCB_NotDarkWaza(waza & WAZA_ID_MASK);
+        msg = (s32)NotDarkWaza(waza & WAZA_ID_MASK);
         switch (msg) {
         case 0:
             GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, color, 0x3AF5);
@@ -703,7 +694,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
 // Callback the status menu passes to the waza pages while the pokemon is not
 // a dark pokemon: the waza of a dark pokemon are hidden.
-long _menuCB_NotDarkWaza(long waza)
+long NotDarkWaza(long waza)
 {
     // The waza of a dark pokemon are hidden until the pokemon is purified.
     if (waza < WAZA_SHADOW_SPECIAL && waza >= WAZA_SHADOW_FIRST)
@@ -1046,15 +1037,15 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 
     case MENU_POKEMON_STATUS_ITEM_ABILITY_DESCRIPTION:
         msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(
-            tokuseiDataGetDescriptionId(
-                tokuseiDataBiosGetPtr((u16)pokemonGetTokuseiDataId(pokemon)))));
+            pokemonTokuseiDataBiosGetDoc(
+                pokemonTokuseiDataBiosGetPtr((u16)pokemonGetTokuseiDataId(pokemon)))));
         GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4276);
         return;
 
     case MENU_POKEMON_STATUS_ITEM_ABILITY_NAME:
         msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(
-            tokuseiDataGetNameId(
-                tokuseiDataBiosGetPtr((u16)pokemonGetTokuseiDataId(pokemon)))));
+            pokemonTokuseiDataBiosGetName(
+                pokemonTokuseiDataBiosGetPtr((u16)pokemonGetTokuseiDataId(pokemon)))));
         GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4276);
         return;
 
@@ -1184,7 +1175,8 @@ u8 _menuPokemonStatusCheckGinzaru(Pokemon *pokemon)
 // trainer id and name recorded on the pokemon must both match.
 u8 _menuPokemonStatusCheckOya(Pokemon *pokemon)
 {
-    void *trainer = menuPokemonStatusWork.mTrainer;
+    FIGHT_TRAINER *trainer = menuPokemonStatusWork.mTrainer;
+    Hero *hero;
     u16 *info;
     u32 tid;
 
@@ -1198,15 +1190,15 @@ u8 _menuPokemonStatusCheckOya(Pokemon *pokemon)
             trainer = fightFloorGetGcHeroFightTrainerPtr(0);
         if (trainer == 0)
             return 0;
-        trainer = fightTrainer_GetDataPtr(trainer);
+        hero = fightTrainer_GetDataPtr(trainer);
     } else if (GSflagGet(0x30D) == 0) {
-        trainer = savedataGetStatus(0, 2);
+        hero = (Hero *)savedataGetStatus(0, SAVE_DATA_HERO);
     } else {
-        trainer = menuCBBios_GetBattleHeroPtr();
+        hero = menuCBBios_GetBattleHeroPtr();
     }
 
-    info = heroBiosGetNamePtr((Hero *)trainer);
-    tid = trainerGetTID(trainer);
+    info = heroBiosGetNamePtr(hero);
+    tid = trainerGetTID(hero);
     if (tid == (u32)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_TRAINER_ID, 0)) {
         if (GScharCmp((u16 *)info, (u16 *)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_TRAINER_NAME, 0)) == 0)
             return 1;

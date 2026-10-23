@@ -149,8 +149,8 @@ extern "C" void peBankFree(_peBank *bank) {
     bank->mFile->mBankCount--;
     GSboundFree(&bank->mBound);
     if (bank && peEmitParamsCount && bank == peEmitParamsOwner) {
-        peMemory.mTotal -= peMemory.mEmitParams;
-        peMemory.mEmitParams = 0;
+        g_particle_debug_stats.mTotal -= g_particle_debug_stats.mEmitParams;
+        g_particle_debug_stats.mEmitParams = 0;
         delete[] peEmitParams;
         peEmitParams = 0;
         peEmitParamsOwner = 0;
@@ -165,8 +165,8 @@ extern "C" void peBankFree(_peBank *bank) {
         }
         if (peEmitParamsCount) {
             peEmitParams = new _EmitParams[peEmitParamsCount];
-            peMemory.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
-            peMemory.mTotal += peEmitParamsCount * sizeof(_EmitParams);
+            g_particle_debug_stats.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
+            g_particle_debug_stats.mTotal += peEmitParamsCount * sizeof(_EmitParams);
         }
     }
     _peBank *previous = 0;
@@ -180,8 +180,8 @@ extern "C" void peBankFree(_peBank *bank) {
     else peBanks = item->mNext;
     item->mNext = 0;
     u32 size = GSmemGetSize(bank);
-    peMemory.mBankData -= size;
-    peMemory.mTotal -= size;
+    g_particle_debug_stats.mBankData -= size;
+    g_particle_debug_stats.mTotal -= size;
     if (bank) delete bank;
 }
 
@@ -193,8 +193,8 @@ extern "C" _peBank *peBankCreate(void *fileData) {
     _peBank *bank = new _peBank;
     if (bank == 0) return 0;
     u32 size = GSmemGetSize(bank);
-    peMemory.mBankData += size;
-    peMemory.mTotal += size;
+    g_particle_debug_stats.mBankData += size;
+    g_particle_debug_stats.mTotal += size;
     GSboundCreate(&bank->mBound, 0);
     char *bankData = (char *)(file + 1);
     bankData += file->mResourceCount * sizeof(_gpdResourceItem);
@@ -229,16 +229,16 @@ extern "C" _peBank *peBankCreate(void *fileData) {
     bank->mMaxParticles = _peBankCalculateMaxParticles(data, 4.0f / GSgfxVideoGetVsyncRate());
     if (bank && bank->mMaxParticles > peEmitParamsCount) {
         if (peEmitParams) {
-            peMemory.mTotal -= peMemory.mEmitParams;
-            peMemory.mEmitParams = 0;
+            g_particle_debug_stats.mTotal -= g_particle_debug_stats.mEmitParams;
+            g_particle_debug_stats.mEmitParams = 0;
             delete[] peEmitParams;
         }
         u16 maximum = bank->mMaxParticles;
         peEmitParamsCount = ((maximum + PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1) / PE_BANK_EMIT_PARAM_BLOCK_SIZE) * PE_BANK_EMIT_PARAM_BLOCK_SIZE;
         peEmitParamsOwner = bank;
         peEmitParams = new _EmitParams[peEmitParamsCount];
-        peMemory.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
-        peMemory.mTotal += peEmitParamsCount * sizeof(_EmitParams);
+        g_particle_debug_stats.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
+        g_particle_debug_stats.mTotal += peEmitParamsCount * sizeof(_EmitParams);
     }
     return bank;
 }
@@ -270,8 +270,8 @@ extern "C" void peBankFreeFile(void *fileData) {
             case GPD_RESOURCE_SHAPE:
                 shape = resource->mShapeHandle - 1;
                 size = shapeGetUsedMemorySize(shape);
-                peMemory.mShapes -= size;
-                peMemory.mTotal -= size;
+                g_particle_debug_stats.mShapes -= size;
+                g_particle_debug_stats.mTotal -= size;
                 shapeRelease(shape);
                 break;
             case GPD_RESOURCE_TEXTURE_LIST:
@@ -365,14 +365,14 @@ releaseLights:
     {
         _peLight *light = (_peLight *)contents;
         if (light->mDiffuseLight) {
-            peMemory.mBankData -= sizeof(GSgfxLight);
-            peMemory.mTotal -= sizeof(GSgfxLight);
+            g_particle_debug_stats.mBankData -= sizeof(GSgfxLight);
+            g_particle_debug_stats.mTotal -= sizeof(GSgfxLight);
             delete light->mDiffuseLight;
             light->mDiffuseLight = 0;
         }
         if (light->mSpecularLight) {
-            peMemory.mBankData -= sizeof(GSgfxLight);
-            peMemory.mTotal -= sizeof(GSgfxLight);
+            g_particle_debug_stats.mBankData -= sizeof(GSgfxLight);
+            g_particle_debug_stats.mTotal -= sizeof(GSgfxLight);
             delete light->mSpecularLight;
             light->mSpecularLight = 0;
         }
@@ -441,8 +441,8 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             if (shape) {
                 if (shapeLoad(shape - 1, resource->mData)) {
                     u32 size = shapeGetUsedMemorySize(shape - 1);
-                    peMemory.mShapes += size;
-                    peMemory.mTotal += size;
+                    g_particle_debug_stats.mShapes += size;
+                    g_particle_debug_stats.mTotal += size;
                     resource->mLoadFlags |= GPD_RESOURCE_LOADED;
                 } else shape = 0;
             }
@@ -658,15 +658,15 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             if (light->mFlags & PE_LIGHT_DIFFUSE) {
                 GSgfxLight *diffuse = new GSgfxLight;
                 if (diffuse) {
-                    peMemory.mBankData += sizeof(GSgfxLight);
-                    peMemory.mTotal += sizeof(GSgfxLight);
+                    g_particle_debug_stats.mBankData += sizeof(GSgfxLight);
+                    g_particle_debug_stats.mTotal += sizeof(GSgfxLight);
                     diffuse->MakeDiff(&light->mColor, &zeroVector, false);
                     light->mDiffuseLight = diffuse;
                     if (light->mFlags & PE_LIGHT_SPECULAR) {
                         GSgfxLight *specular = new GSgfxLight;
                         if (specular) {
-                            peMemory.mBankData += sizeof(GSgfxLight);
-                            peMemory.mTotal += sizeof(GSgfxLight);
+                            g_particle_debug_stats.mBankData += sizeof(GSgfxLight);
+                            g_particle_debug_stats.mTotal += sizeof(GSgfxLight);
                             specular->MakeSpec(&light->mColor, &zAxisVector, light->mShininess, 0);
                             light->mSpecularLight = specular;
                         } else light->mFlags &= ~PE_LIGHT_SPECULAR;

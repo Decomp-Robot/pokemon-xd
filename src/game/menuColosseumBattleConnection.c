@@ -1,7 +1,7 @@
 #include <types.h>
 
 /* Colosseum battle connection flag.  The debug link menu raises it on entering
- * the connection menu, the GSgfx layer teardown clears it again, and the GBA
+ * the connection menu, initialization clears it, and the GBA
  * link code polls it while the menu is open, so the read stays volatile. */
 extern volatile u8 lbl_804EA688;
 
@@ -15,6 +15,10 @@ extern volatile u8 lbl_804EA688;
 #pragma opt_dead_assignments off
 
 /* Raises the connection flag and reports the state it was in before. */
+void menuColosseumBattleConnectionExit(void)
+{
+}
+
 s32 menuColosseumBattleConnectionMain(void)
 {
     u8 prev = lbl_804EA688;
@@ -27,5 +31,10 @@ s32 menuColosseumBattleConnectionMain(void)
 
 #pragma opt_dead_assignments reset
 #pragma peephole reset
+
+void menuColosseumBattleConnectionInit(void)
+{
+    lbl_804EA688 = 0;
+}
 
 #pragma force_active reset

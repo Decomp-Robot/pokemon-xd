@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <dolphin/os.h>
 
-#include "GSmemman.h"
+#include <GSmemman.h>
 
 /* Allocation size classes served by the sysdol pools. */
 #define SYS_ALLOC_SIZE_8 8
@@ -34,6 +34,17 @@ GSmemPoolAllocator* gSysdolPool48;
 
 extern "C" void HSD_SetInitParameter(s32 type, ...);
 extern "C" GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size);
+
+BOOL _memCheckOwnCallback(void* ptr) {
+    return TRUE;
+}
+
+void _memClearCallback(void) {
+}
+
+u32 _memGetRemainCallback(void) {
+    return GSmemGetLargestFree();
+}
 
 void _memFreeCallback(void* ptr) {
     if (!ptr) {
@@ -104,5 +115,5 @@ extern "C" void GSmemInitSysdolAllocator(void) {
     gSysdolPool48 = GSmemCreatePool(SYS_ALLOC_CELLS_48, SYS_ALLOC_SIZE_48);
 
     HSD_SetInitParameter(HSD_INIT_MEMORY_CALLBACKS, _memAllocCallback, _memFreeCallback,
-                         GSmemMemGetLargestFree, _memNoopCallback, GSmemMemCheckOwn, 0);
+                         _memGetRemainCallback, _memClearCallback, _memCheckOwnCallback, 0);
 }

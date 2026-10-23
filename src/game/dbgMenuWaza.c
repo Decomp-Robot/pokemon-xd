@@ -72,4 +72,9 @@ int dbgMenuWazaDebugStart(void)
 #pragma peephole reset
 
 
+int dbgMenuWazaMain(void)
+{
+    return 1;
+}
+
 #pragma force_active reset

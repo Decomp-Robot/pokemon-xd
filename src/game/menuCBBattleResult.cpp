@@ -128,7 +128,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
         }
 
         menuCBTaisenWork.selectResult = 0;
-        menuCBTaisenWork.unk_B060 = 0;
+        menuCBTaisenWork.confirmationComplete = 0;
         menuSetEnablePort(1);
         winMsgOpen(2, 0x42FF, 1, 1);
 
@@ -315,7 +315,7 @@ u16 _menuCBResultGetHomePlace(void)
 extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
 {
     menuCBTaisenWork.selectResult = 0;
-    menuCBTaisenWork.unk_B060 = 0;
+    menuCBTaisenWork.confirmationComplete = 0;
 
     menuCBTaisenWork.selectResult =
         menuSubOpenSelect3(0, menuCBHeroTransferChoices, 2, 0x3E, 0x89, 0, 2, 1, 1);

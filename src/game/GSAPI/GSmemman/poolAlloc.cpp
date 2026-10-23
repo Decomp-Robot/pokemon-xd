@@ -5,7 +5,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 
-#include "GSmemman.h"
+#include <GSmemman.h>
 
 /* Free cells chain through a 4-byte link stored ahead of the user payload. */
 class GSmemPoolCell {
@@ -14,8 +14,8 @@ public:
 };
 
 /* Pool state save/clear/restore around free-list updates. */
-extern "C" u32 GSmemPoolGetState(void);
-extern "C" void GSmemPoolSetState(u32 state);
+u32 _getDabr(void);
+void _setDabr(unsigned long state);
 
 GSmemPoolAllocator gPoolTable[POOL_MAX];
 
@@ -105,10 +105,10 @@ void GSmemPoolAllocator::freeCell(void* ptr) {
     cell = (GSmemPoolCell*)ptr;
     cell->next = (GSmemPoolCell*)freeCellList;
     usedCellCount--;
-    u32 state = GSmemPoolGetState();
-    GSmemPoolSetState(0);
+    u32 state = _getDabr();
+    _setDabr(0);
     freeCellList = cell;
-    GSmemPoolSetState(state);
+    _setDabr(state);
 }
 
 void* GSmemPoolAllocator::allocCell() {
@@ -116,15 +116,15 @@ void* GSmemPoolAllocator::allocCell() {
     u32 state;
 
     cell = (GSmemPoolCell*)freeCellList;
-    state = GSmemPoolGetState();
-    GSmemPoolSetState(0);
+    state = _getDabr();
+    _setDabr(0);
     if (cell != 0) {
         freeCellList = cell->next;
     } else {
-        GSmemPoolSetState(state);
+        _setDabr(state);
         return 0;
     }
-    GSmemPoolSetState(state);
+    _setDabr(state);
     memset(cell, 0, cellSize);
     usedCellCount++;
     if (usedCellCount > peakCellCount) {
@@ -155,9 +155,9 @@ void GSmemPoolAllocator::init(u32 cellCount, u32 cellSize) {
     last->next = 0;
 }
 
-extern "C" void GSmemPoolSetState(u32 state) {
+void _setDabr(unsigned long state) {
 }
 
-extern "C" u32 GSmemPoolGetState(void) {
+u32 _getDabr(void) {
     return 0;
 }

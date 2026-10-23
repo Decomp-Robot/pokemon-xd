@@ -10,7 +10,7 @@
 /*
  * menuCBBiosTrainer.cpp
  *
- * The trainer records of the link (GBA) battle bios: one FIGHT_TRAINER per
+ * The trainer records of the link (GBA) battle bios: one _MENUCBTRAINER per
  * controller port, the "fight immediately" opponents of the connect-battle
  * setup, and the accessors the battle menus share. The rule data of the same
  * work area lives in game/menuCBBiosRule.cpp. The entry points the menus call
@@ -37,32 +37,7 @@ void pokemonAllKaihuku(Pokemon *pokemon);
  * Functions of this module
  * ---------------------------------------------------------------------- */
 
-extern "C" void menuCBBios_SetEncountFlag(u32 flag);
-extern "C" s32 menuCBBios_GetNameEntryMode(void);
-extern "C" u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
-extern "C" void menuCBBios_SetTrainerHomePlace(FIGHT_TRAINER *trainer,
-                                               u32 homePlace);
-extern "C" u32 menuCBBios_GetTrainerHomePlace(FIGHT_TRAINER *trainer);
-extern "C" void menuCBBios_CopyTrainer(FIGHT_TRAINER *dst,
-                                       const FIGHT_TRAINER *src);
-extern "C" void menuCBBios_InitVersusTrainer(FIGHT_TRAINER *trainer,
-                                             Hero *hero);
-extern "C" void menuCBBios_InitTrainerFromHero(FIGHT_TRAINER *trainer,
-                                               Hero *hero, u16 dataId);
-extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
-                                                 u16 dataId, u16 encountNo);
-extern "C" void menuCBBios_ClearTrainer(FIGHT_TRAINER *trainer);
-extern "C" void menuCBBios_InitTrainer(FIGHT_TRAINER *trainer, u16 dataId);
-extern "C" s32 menuCBBios_FightTrainerDataIDToHomePlace(u16 dataId);
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId);
-extern "C" s32 menuCBBios_GetBattlePortID(void);
-extern "C" Hero *menuCBBios_GetBattleHeroPtr(void);
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainer(s32 controllerId);
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerImmediately(s32 index);
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerByPort(s32 index);
-extern "C" Hero *menuCBBios_GetHeroImmediately(s32 index);
 void _menuCBBios_RecoverAllPokemons(Hero *hero);
-extern "C" s32 menuCBBios_ControlerIDtoPortID(s32 controllerId);
 
 /* -------------------------------------------------------------------------
  * Encounter flag and work-area accessors
@@ -94,7 +69,7 @@ extern "C" u16 *menuCBBios_GetRuleEntryList(s32 ruleId)
  * Trainer player ID
  * ---------------------------------------------------------------------- */
 
-extern "C" u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer)
+extern "C" u16 menuCBTrainerBios_GetPlayerID(_MENUCBTRAINER *trainer)
 {
     return trainer->mResetDataId;
 }
@@ -103,29 +78,29 @@ extern "C" u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer)
  * Trainer records
  * ---------------------------------------------------------------------- */
 
-extern "C" void menuCBBios_SetTrainerHomePlace(FIGHT_TRAINER *trainer,
+extern "C" void menuCBBios_SetTrainerHomePlace(_MENUCBTRAINER *trainer,
                                                u32 homePlace)
 {
     trainer->mHomePlace = homePlace;
 }
 
-extern "C" u32 menuCBBios_GetTrainerHomePlace(FIGHT_TRAINER *trainer)
+extern "C" s32 menuCBBios_GetTrainerHomePlace(_MENUCBTRAINER *trainer)
 {
     return trainer->mHomePlace;
 }
 
-extern "C" void menuCBBios_CopyTrainer(FIGHT_TRAINER *dst,
-                                       const FIGHT_TRAINER *src)
+extern "C" void menuCBBios_CopyTrainer(_MENUCBTRAINER *dst,
+                                       const _MENUCBTRAINER *src)
 {
     memcpy(dst, src, 0x1320);
 }
 
-extern "C" s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer)
+extern "C" s32 menuCBTrainerBios_GetControlerID(_MENUCBTRAINER *trainer)
 {
     return trainer->mControllerId;
 }
 
-extern "C" void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId)
+extern "C" void menuCBTrainerBios_SetControlerID(_MENUCBTRAINER *trainer, s32 controllerId)
 {
     trainer->mControllerId = controllerId;
 }
@@ -135,7 +110,7 @@ extern "C" void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 con
  * the trainer data ID follows the hero's home place (and sex inside the
  * home), so every hero keeps its own trainer face.
  */
-extern "C" void menuCBBios_InitVersusTrainer(FIGHT_TRAINER *trainer,
+extern "C" void menuCBBios_InitVersusTrainer(_MENUCBTRAINER *trainer,
                                              Hero *hero)
 {
     u16 dataId = 0x1388;
@@ -190,7 +165,7 @@ extern "C" void menuCBBios_InitVersusTrainer(FIGHT_TRAINER *trainer,
  * the entry and the battle bios slots and book the trainer data ID and its
  * home place.
  */
-extern "C" void menuCBBios_InitTrainerFromHero(FIGHT_TRAINER *trainer,
+extern "C" void menuCBBios_InitTrainerFromHero(_MENUCBTRAINER *trainer,
                                                Hero *hero, u16 dataId)
 {
     Hero work;
@@ -209,7 +184,7 @@ extern "C" void menuCBBios_InitTrainerFromHero(FIGHT_TRAINER *trainer,
  * Fill a trainer record with a fresh hero generated for trainer data ID
  * `dataId`, fought with the record's battle hero as the base.
  */
-extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
+extern "C" void menuCBBios_InitTrainerFromDataID(_MENUCBTRAINER *trainer,
                                                  u16 dataId, u16 encountNo)
 {
     Hero work;
@@ -227,7 +202,7 @@ extern "C" void menuCBBios_InitTrainerFromDataID(FIGHT_TRAINER *trainer,
 }
 
 // Reset a trainer record to its default trainer data ID.
-extern "C" void menuCBBios_ClearTrainer(FIGHT_TRAINER *trainer)
+extern "C" void menuCBBios_ClearTrainer(_MENUCBTRAINER *trainer)
 {
     u16 defaultDataId;
 
@@ -235,7 +210,7 @@ extern "C" void menuCBBios_ClearTrainer(FIGHT_TRAINER *trainer)
     menuCBBios_InitTrainer(trainer, defaultDataId);
 }
 
-extern "C" void menuCBBios_InitTrainer(FIGHT_TRAINER *trainer, u16 dataId)
+extern "C" void menuCBBios_InitTrainer(_MENUCBTRAINER *trainer, u16 dataId)
 {
     memset(trainer, 0, 0x1320);
     trainer->mResetDataId = dataId;
@@ -277,7 +252,7 @@ extern "C" s32 menuCBBios_FightTrainerDataIDToHomePlace(u16 dataId)
  * it in the port slot named by the ID, the versus modes scan the records'
  * booked versus battle IDs.
  */
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId)
+extern "C" _MENUCBTRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 battleId)
 {
     s32 i;
 
@@ -320,7 +295,7 @@ extern "C" Hero *menuCBBios_GetBattleHeroPtr(void)
 }
 
 // Trainer record of the port `controllerId` is plugged into.
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainer(s32 controllerId)
+extern "C" _MENUCBTRAINER *menuCBBios_GetTrainer(s32 controllerId)
 {
     s32 port = menuCBBios_ControlerIDtoPortID(controllerId);
 
@@ -330,7 +305,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainer(s32 controllerId)
     return &menuCBTaisenWork.mTrainer[port];
 }
 
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerImmediately(s32 index)
+extern "C" _MENUCBTRAINER *menuCBBios_GetTrainerImmediately(s32 index)
 {
     if (index < 0 || index >= 4) {
         return 0;
@@ -338,7 +313,7 @@ extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerImmediately(s32 index)
     return &menuCBTaisenWork.mTrainerImmediately[index];
 }
 
-extern "C" FIGHT_TRAINER *menuCBBios_GetTrainerByPort(s32 index)
+extern "C" _MENUCBTRAINER *menuCBBios_GetTrainerByPort(s32 index)
 {
     if (index < 0 || index >= 4) {
         return 0;

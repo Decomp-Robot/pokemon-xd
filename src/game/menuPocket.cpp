@@ -593,14 +593,14 @@ extern "C" u8 _getDepositAble(u16 itemID);
 extern "C" int _getItemNameMsgID(int itemID);
 }
 
+namespace {
+
 // Message callback of the error window the shop actions raise.
-void _menuCB_errorMsgDisp2(unsigned long msgID)
+void _infoOnly(unsigned long msgID)
 {
     winMsgOpen(2, msgID, 1, 0);
     winMsgClose(1);
 }
-
-namespace {
 
 // Plays the information beep and shows one message window.
 void _infoBeep(unsigned long msgID)
@@ -708,7 +708,7 @@ int _execDeposit(int tab, u16 itemID, int menuPos)
     _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, num);
     msgctrlSetValue(MSG_VAR_ITEM_ID, itemID);
     msgctrlSetValue(MSG_VAR_ITEM_QUANTITY, num);
-    _menuCB_errorMsgDisp2(POCKET_MSG_ITEM_DEPOSITED);
+    _infoOnly(POCKET_MSG_ITEM_DEPOSITED);
     return 1;
 }
 
@@ -761,7 +761,7 @@ int _execSell(int tab, u16 itemID, int menuPos)
     GSsndPlay(0x1A, 0, 0);
     heroAddPokedoru(menuPocket2Work.mHero, total);
     msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_CONFIRM, 0x2D, itemID, 0x4B, total, -1);
-    _menuCB_errorMsgDisp2(msg);
+    _infoOnly(msg);
     return 1;
 }
 
@@ -1171,7 +1171,7 @@ int _actSuteruNormal(int tab, int menuPos, int *num)
 
     msgctrlSetValue(MSG_VAR_ITEM_ID, itemID);
     msgctrlSetValue(MSG_VAR_ITEM_QUANTITY, count);
-    _menuCB_errorMsgDisp2(POCKET_MSG_ITEM_DISCARDED);
+    _infoOnly(POCKET_MSG_ITEM_DISCARDED);
     *num = count;
     return 0;
 }
@@ -2253,7 +2253,6 @@ extern "C" u8 menuPocketIsIrekaeCursorDisp(tagWINDOW_WORK *window);
 extern "C" void menuSubCursorAnimeMain(void);
 void menuPocketToolFloatToZero(float &value, float step);
 
-extern "C" Hero *fightTrainer_GetDataPtr(FIGHT_TRAINER *trainer);
 
 enum {
     POCKET_STATE_OPEN = 0,

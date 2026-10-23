@@ -130,9 +130,10 @@ void* GSmemAllocNoClr(u32 size);
 void GSmemFree(void* ptr);
 GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize);
 void GSmemDumpPoolInfo(GSmemPoolAllocator* pool);
-BOOL GSmemMemCheckOwn(void* ptr);
-void _memNoopCallback(void);
-u32 GSmemMemGetLargestFree(void);
 }
+
+BOOL _memCheckOwnCallback(void* ptr);
+void _memClearCallback(void);
+u32 _memGetRemainCallback(void);
 
 #endif

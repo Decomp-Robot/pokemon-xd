@@ -257,7 +257,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 
 // Helpers of the status menu.
 bool _menuPokemonStatusCheckWazaItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-long _menuCB_NotDarkWaza(long waza);
+long NotDarkWaza(long waza);
 u32 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot);
 u8 _menuPokemonStatusCheckDanny(Pokemon *pokemon);
 u8 _menuPokemonStatusCheckGinzaru(Pokemon *pokemon);

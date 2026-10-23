@@ -25,7 +25,7 @@ void __assert(const char *file, s32 line, const char *cond);
 
 /* Puts the coupon work back into the invalid state, so the next
  * menuPokeCouponInit call re-reads it. */
-void psSetupTevInvalidState(void)
+void menuPokeCouponExit(void)
 {
     _menuPokeCouponWork.m_eRefer = POKECOUPONREFER_INVALID;
 }

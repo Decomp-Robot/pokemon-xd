@@ -192,7 +192,7 @@ extern _EmitParams *peEmitParams;
 extern u16 peEmitParamsCount;
 extern _peBank *peEmitParamsOwner;
 extern _peBank *peBanks;
-extern peMemoryUsage peMemory;
+extern peMemoryUsage g_particle_debug_stats;
 extern GSgfxLayer *peCurrentLayer;
 extern GSgfxLayerPass peCurrentPass;
 

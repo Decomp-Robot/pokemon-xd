@@ -2,47 +2,37 @@
 #define CANT_H
 
 #include <Pokemon.h>
-#include <PocketVec.h>
 #include <types.h>
+#include <PocketVec.h>
 
-// CAnt -- model unit drawn by the pocket menus.
+// Sprite-animation state used by party and link-battle panels.
 class CAnt {
 public:
     void init();
+    void setPos(PocketVec<s16> position) { mPosition.x = position.x; mPosition.y = position.y; }
     void setAnimation(long animation);
+    void use();
     void drawAndUpdate(PocketVec<short> position);
     void drawAndUpdate();
+    static void systemUsecountReset();
+    static void systemUnUseResourceRelease();
 
-private:
-    u32 unk_00;
-    u32 unk_04;
-    u32 unk_08;
-
-public:
-    f32 mScale; // 0x0C: scale of the drawn image.
-
-private:
-    u8 unk_10;
-    u32 unk_14;
-    s16 unk_18;
-    s16 unk_1A;
-    f32 unk_1C;
-    u32 unk_20;
-    u32 unk_24;
-    u32 unk_28;
-    f32 unk_2C;
-    u32 unk_30;
+    u32 mBodyResourceID;
+    void *mResource;
+    PocketVec<s16> mPosition;
+    f32 mScale;
+    u8 mAlpha;
+    s32 mDrawState;
+    s16 mAnimationId;
+    s16 mFrame;
+    f32 mFrameTime;
+    s32 mFrameOffsetX;
+    s32 mFrameOffsetY;
+    s32 mFrameIndex;
+    f32 mFrameDuration;
+    s32 mDrawMode;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-// Fill the model state in `ant` from the pokemon record in `pokemon`.
-void battlePokemonGetPokeBody(CAnt *ant, Pokemon *pokemon);
-
-#ifdef __cplusplus
-}
-#endif
+extern "C" void battlePokemonGetPokeBody(CAnt *ant, Pokemon *pokemon);
 
 #endif
