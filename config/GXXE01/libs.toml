@@ -49,17 +49,6 @@ name = "game/menuPokemonCursor.cpp"
 completed = true
 
 [[lib]]
-name = "menuPocket"
-mw_version = "GC/1.3.2"
-cflags_preset = "game"
-progress_category = "game"
-cflags_extra = ["-opt", "nopeephole"]
-
-[[lib.object]]
-name = "decomp/menuPocket.cpp"
-completed = true
-
-[[lib]]
 name = "menuCBBios"
 mw_version = "GC/2.6"
 cflags_preset = "game"
