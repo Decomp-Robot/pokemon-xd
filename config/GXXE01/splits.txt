@@ -887,6 +887,11 @@ ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c:
 ext/dolphin_sdk/amcnotstub/amcnotstub.c:
 	.text       start:0x800E7038 end:0x800E7038
 
+ext/dolphin_sdk/odemustubs/odemustubs.c:
+	.text       start:0x800E7038 end:0x800E7040
+	.text       start:0x800E7040 end:0x800E7044
+	.text       start:0x800E7044 end:0x800E7048
+
 ext/dolphin_sdk/exi/EXIBios.c:
 	.text       start:0x800E7AC0 end:0x800E7BB4
 	.text       start:0x800E7BB4 end:0x800E7E10
