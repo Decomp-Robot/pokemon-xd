@@ -29,7 +29,14 @@ struct WorldMapCamWork {
     /* 0x08: camera blend parameter; 0 = camera at the old position,
      * 1 = fully blended to the new one. */
     f32 blend;
-    u8 _0C[0x5C];
+    /* 0x0C: rate feeding the per-frame increment; ControlCamera adds
+     * rate * dt into +0x10 every frame. */
+    f32 _0C;
+    /* 0x10: per-frame blend increment added into the blend parameter. */
+    f32 _10;
+    /* 0x14: elapsed camera-move time; ControlCamera accumulates dt here. */
+    f32 _14;
+    u8 _18[0x50];
 };
 
 /* Partial WorldMap declaration (0x48 bytes; menuWorldMapMXInit allocates
@@ -48,6 +55,7 @@ public:
      * faded in (blend parameter reached 1). */
     bool IsBlending();
     f32 GetAngle(long work);
+    void SetCameraSpeed(f32 speed);
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the
