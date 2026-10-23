@@ -95,3 +95,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSSemaphore.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSStopwatch.c"
+completed = false
