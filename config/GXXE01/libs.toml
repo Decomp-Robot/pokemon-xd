@@ -1174,3 +1174,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/hw_memory.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/hw_dspctrl.c"
+completed = true

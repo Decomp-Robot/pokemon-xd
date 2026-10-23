@@ -1031,6 +1031,29 @@ ext/dolphin_sdk/ax/AXComp.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+ext/musyx_sdk/runtime/hw_dspctrl.c:
+	.text       start:0x801771DC end:0x80177590
+	.text       start:0x80177590 end:0x801775C8
+	.text       start:0x801775C8 end:0x801776A8
+	.text       start:0x801776A8 end:0x801777F8
+	.text       start:0x801777F8 end:0x801778EC
+	.text       start:0x801778EC end:0x80177934
+	.text       start:0x80177934 end:0x801779A8
+	.text       start:0x801779A8 end:0x80177A54
+	.text       start:0x80177A54 end:0x80177D60
+	.text       start:0x80177D60 end:0x80177FB8
+	.text       start:0x80177FB8 end:0x8017A5B0
+	.text       start:0x8017A5B0 end:0x8017A5F4
+	.text       start:0x8017A5F4 end:0x8017A694
+	.text       start:0x8017A694 end:0x8017A6F4
+	.text       start:0x8017A6F4 end:0x8017A84C
+	.rodata     start:0x802F3B28 end:0x802F3B48
+	.rodata     start:0x802F3B48 end:0x802F3B60
+	.data       start:0x80408560 end:0x80408578
+	.bss        start:0x804696C8 end:0x80469CA8
+	.bss        start:0x80469CA8 end:0x80469DA8
+	.sbss       start:0x804EB410 end:0x804EB450
+
 ext/musyx_sdk/runtime/hw_volconv.c:
 	.text       start:0x8017A84C end:0x8017AF3C
 	.data       start:0x80408578 end:0x8040877C
