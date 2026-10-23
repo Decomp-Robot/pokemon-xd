@@ -71,7 +71,7 @@ void soundOpenPlay(u32 soundID, s32 a, s32 b);
 u16 HSD_Rand(void);
 void *gamedataBiosGetGamedataAtttestPtr(void *hero);
 void GScharCpy(u16 *dst, void *src);
-u16 *zz_get_pointer_to_string_with_id(s32 id);
+u16 *GSmsgGetStringPtr(s32 id);
 s32 fightTrainerDB_GetKindDataId(s32 dataID);
 void *fightTrainerKindDataBiosGetPtr(u8 kindID);
 u32 GSresGetResourceAllGroup(u32 resID);
@@ -271,7 +271,7 @@ void _menuCBBattleStartSetTrainerData(void)
         if (name != 0) {
             GScharCpy(name, hero);
         } else {
-            GScharCpy(name, zz_get_pointer_to_string_with_id(1));
+            GScharCpy(name, GSmsgGetStringPtr(1));
         }
         lbl_80435050.trainerClassNameID = zz_trainer_class_get_name_id(
             fightTrainerKindDataBiosGetPtr(fightTrainerDB_GetKindDataId(

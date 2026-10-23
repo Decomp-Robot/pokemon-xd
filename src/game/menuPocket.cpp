@@ -196,8 +196,8 @@ extern "C" void GSmsgPrint2(int layer, int x, u32 y, int a, u32 msgID);
 extern "C" void GSsndPlay(int a, int b, int c);
 extern "C" void zz_0020dd8_(u32 seID); // plays one sound effect.
 extern "C" u32 zz_0060d08_(u8 *pSeOut, int a, int msgCode, int b, ...); // builds a shop message.
-extern "C" int zz_0107554_(u32 msgID); // width of one message.
-extern "C" void zz_0125ba4_(void);
+extern "C" unsigned long GSmsgGetMessageSize(u32 msgID); // width of one message (size packed: width in the high half).
+extern "C" void floorPop(void);
 extern "C" void fadeSet(int a, f32 value);
 extern "C" void fadeCheck(int a);
 extern "C" void floorSetFadeScript(int a, int b);
@@ -996,9 +996,9 @@ extern "C" __declspec(weak) void zz_0023560_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, max);
 
-    s16 off = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    s16 off = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
-    off += (s16)((u32)zz_0107554_(0x428F) >> 16);
+    off += (s16)(GSmsgGetMessageSize(0x428F) >> 16);
 
     s32 ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1006,7 +1006,7 @@ extern "C" __declspec(weak) void zz_0023560_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, _getItemNumFromMenuPos(tab, index));
 
-    s16 off2 = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    s16 off2 = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
     s32 ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1035,21 +1035,21 @@ extern "C" __declspec(weak) void zz_0023690_(GSgfxLayerID layer, int x, int y, i
 
     GSmsgPrint2(layer, x, y, -1, msgID);
 
-    x2 = x + ((u32)zz_0107554_(msgID) >> 16);
+    x2 = x + (GSmsgGetMessageSize(msgID) >> 16);
 
     if (hidden != 0xFF) {
         msgctrlSetValue(0x34, hiddenNo);
         GSmsgPrint2(layer, x2, y, -1, 0x4270);
-        x2 += (u32)zz_0107554_(0x4270) >> 16;
+        x2 += GSmsgGetMessageSize(0x4270) >> 16;
     } else {
         if (machineNo < 10) {
             msgctrlSetValue(0x34, 0);
             GSmsgPrint2(layer, x2, y, -1, 0x4270);
-            x2 += (u32)zz_0107554_(0x4270) >> 16;
+            x2 += GSmsgGetMessageSize(0x4270) >> 16;
         }
         msgctrlSetValue(0x34, machineNo);
         GSmsgPrint2(layer, x2, y, -1, 0x4270);
-        x2 += (u32)zz_0107554_(0x4270) >> 16;
+        x2 += GSmsgGetMessageSize(0x4270) >> 16;
     }
 
     s32 nameID = zz_move_data_get_name_id(wazaDataBiosGetPtr(
@@ -1061,9 +1061,9 @@ extern "C" __declspec(weak) void zz_0023690_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, max);
 
-    s16 off = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    s16 off = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
-    off += (s16)((u32)zz_0107554_(0x428F) >> 16);
+    off += (s16)(GSmsgGetMessageSize(0x428F) >> 16);
 
     s32 ox = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1071,7 +1071,7 @@ extern "C" __declspec(weak) void zz_0023690_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, _getItemNumFromMenuPos(tab, index));
 
-    off2 = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    off2 = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
     s32 ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1086,7 +1086,7 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
 
     GSmsgPrint2(layer, x, y, -1, 0x3A9F);
 
-    s32 ox = x + ((u32)zz_0107554_(0x3A9F) >> 16);
+    s32 ox = x + (GSmsgGetMessageSize(0x3A9F) >> 16);
 
     u16 itemID = _getItemIDFromMenuPos(tab, index);
     u8 kinomi = itemDataBiosGetKinomiNo(itemID) + 1;
@@ -1094,12 +1094,12 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
     if (kinomi < 10) {
         msgctrlSetValue(0x34, 0);
         GSmsgPrint2(layer, ox, y, -1, 0x4270);
-        ox += (u32)zz_0107554_(0x4270) >> 16;
+        ox += GSmsgGetMessageSize(0x4270) >> 16;
     }
 
     msgctrlSetValue(0x34, kinomi);
     GSmsgPrint2(layer, ox, y, -1, 0x4270);
-    ox += (u32)zz_0107554_(0x4270) >> 16;
+    ox += GSmsgGetMessageSize(0x4270) >> 16;
 
     s32 infoMsgID = _getItemDescriptionMsgID(itemID);
 
@@ -1109,9 +1109,9 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, max);
 
-    s16 off = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    s16 off = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
-    off += (s16)((u32)zz_0107554_(0x428F) >> 16);
+    off += (s16)(GSmsgGetMessageSize(0x428F) >> 16);
 
     s32 ox2 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1119,7 +1119,7 @@ extern "C" __declspec(weak) void zz_00238e4_(GSgfxLayerID layer, int x, int y, i
 
     msgctrlSetValue(0x34, _getItemNumFromMenuPos(tab, index));
 
-    off2 = (s16)((u32)zz_0107554_(0x4270) >> 16);
+    off2 = (s16)(GSmsgGetMessageSize(0x4270) >> 16);
 
     s32 ox3 = x + menuItemBiosGetPtr(MENU_DATA_ACT_ROW, MENU_DATA_ACT_ROW_ITEM)->mOffsetB;
 
@@ -1295,7 +1295,7 @@ leave:
 
     if (menuPocket2Work.mFromField != 0) {
         GSgfxResetRestore(1);
-        zz_0125ba4_();
+        floorPop();
         floorSetFadeScript(0, 0);
     }
 

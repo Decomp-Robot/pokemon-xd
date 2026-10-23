@@ -14,8 +14,8 @@ typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 // remaining layout is unrecovered and stays sized padding here.
 struct tagWINDOW_WORK {
     u8 _00;                      // 0x00: unknown.
-    u8 mState;                   // 0x01: menu sequence step the window is in.
-    u8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
+    s8 mState;                   // 0x01: menu sequence step the window is in.
+    s8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
     u8 _03;                      // 0x03: unknown.
     long mMenuID;                // 0x04: menu data id used for item lookups.
     u8 _08[0x08];                // 0x08-0x0F: unknown.
@@ -77,7 +77,7 @@ extern "C" {
 #endif
 
 // Key state of the window the debug menus read directly (menu.a window.o).
-struct tagWINDOW_KEY *zz_0116a80_();
+struct tagWINDOW_KEY *windowGetKeyState();
 
 #ifdef __cplusplus
 }

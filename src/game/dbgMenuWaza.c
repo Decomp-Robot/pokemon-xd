@@ -19,8 +19,8 @@ u8 menuIsOpen(s32 menuID);
 void menuClose(s32 menuID);
 s32 menuOpenCustom(s32 menuID, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
-void zz_0125ba4_(void);
-void zz_0125bc4_(s32 id);
+void floorPop(void);
+void floorPush(s32 id);
 void GSthreadSwitch(void);
 
 #pragma peephole off
@@ -36,7 +36,7 @@ s32 zz_000c0ec_(void) { return 0; }
 int dbgMenuWazaDebugStop(void)
 {
     if (((struct DbgMenuWork *)lbl_804A1500)->mDebugRunning != 0) {
-        zz_0125ba4_();
+        floorPop();
     }
     return 0;
 }
@@ -74,7 +74,7 @@ int dbgMenuWazaDebugStart(void)
         menuClose(0x11);
     }
     if (((struct DbgMenuWork *)lbl_804A1500)->mDebugRunning == 0) {
-        zz_0125bc4_(0x3E7);
+        floorPush(0x3E7);
         GSthreadSwitch();
     }
     return 0;

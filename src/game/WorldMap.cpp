@@ -55,7 +55,7 @@ extern "C" void menuCloseSync(s32 menu, s32 a);
 extern "C" void zz_005ee78_(long a);
 extern "C" u8 zz_005ee80_();
 extern "C" void msgctrlSetValue(long win, long value);
-extern "C" void zz_0125ba4_();
+extern "C" void floorPop();
 extern "C" void heroMovePoolCounter(long a, long b);
 extern "C" void _recoveryEventSetSE__FUl(unsigned long id);
 extern "C" void GSthreadSwitch();
@@ -139,7 +139,7 @@ void WorldMap::ControlPad(tagWINDOW_WORK* window)
     s32 iconID;
     s8 next;
 
-    zz_0116a80_();
+    windowGetKeyState();
     key = windowGetKeyRepeat();
     dir = -1;
     iconID = lbl_80428080[mModelWork->cursor];
@@ -527,7 +527,7 @@ void WorldMap::MainSub2()
         menuCloseSync(0x54, 1);
         zz_005ee78_(0);
         msgctrlSetValue(0x59, 0x1772);
-        zz_0125ba4_();
+        floorPop();
     }
 }
 

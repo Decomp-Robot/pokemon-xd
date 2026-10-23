@@ -10,8 +10,8 @@ GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 void menuSubDrawCursorBackAnimeOnOffAuto(tagWINDOW_WORK *window, GSgfxLayerID layer, s32 p1, s32 p2, s16 p3, s16 p4, u8 p5, s32 p6);
 GSgfxLayer *GSgfxLayerFindByID(GSgfxLayerID id);
 GSgfxVF *GSgfxVFBuildTemp(s32 p1, s32 p2, s32 p3, s32 p4, s32 p5, s32 p6, s32 p7, s32 p8, s32 p9);
-void zz_02b7060_(GSgfxLayer *layer);
-u16 *zz_get_pointer_to_string_with_id(s32 id);
+void GSgfxRenderDrawEnd(GSgfxLayer *layer);
+u16 *GSmsgGetStringPtr(s32 id);
 void msgctrlSetValue(s32 id, unsigned long value);
 void GSmsgPrint2(GSgfxLayerID layer, s32 x, s32 y, u32 color, s32 msgID);
 Pokemon *heroGetStatus(s32 p1, s32 p2, u16 slot);
@@ -19,15 +19,15 @@ void heroSetStatus(s32 p1, unsigned long p2, const u16 *name);
 Pokemon *fightFloorGetDefPokemonPtr(s32 p1);
 u8 pokemonGetSex(Pokemon *pokemon);
 u8 pokemonCheckValid(Pokemon *pokemon);
-u16 zz_battle_pokemon_get_species(Pokemon *pokemon);
-s32 zz_01457ac_(Pokemon *pokemon, const u16 *name);
-u16 *zz_0146fec_(Pokemon *pokemon);
-u16 *zz_0157288_(s32 box, s8 slot);
+u16 battlePokemonGetSpecies(Pokemon *pokemon);
+s32 pokemon_SetNickname(Pokemon *pokemon, const u16 *name);
+u16 *pokemon_GetNickname(Pokemon *pokemon);
+u16 *pcboxGetPokemonName(s32 box, s8 slot);
 void pcboxSetPokemonBoxName(s32 box, s8 slot, const u16 *name);
-void zz_01554b4_(s32 flag);
-s32 zz_01073f8_(s32 id);
-s32 zz_0107554_(s32 id);
-void zz_0114e2c_(s16 x, s16 y, tagWINDOW_WORK *window, s32 id, s32 unk, GSgfxLayerID layer);
+void dbgMenuSetOpenFlag(s32 flag);
+s32 GSmsgGetLength(s32 id);
+unsigned long GSmsgGetMessageSize(s32 id);
+void windowDrawTextureId(s16 x, s16 y, tagWINDOW_WORK *window, s32 id, s32 unk, GSgfxLayerID layer);
 void GSsndPlayNow(s32 id);
 void winMsgOpen(s32 p1, s32 msgID, s32 p2, s32 p3);
 s32 menuSubOpenYesNo(s32 mode, s32 x, s32 y, s32 flag);
@@ -41,7 +41,7 @@ long menuOpenCustom(s32 menuID, long windowID, ...);
 void menuClose(s32 menuID);
 void menuCloseSync(s32 menuID, s32 flag);
 void winSeqSetMenu(long menuID, s32 seq);
-void zz_01123b8_(MENU_MODEL *model, s32 flag);
+void menuModelSetFlag(MENU_MODEL *model, s32 flag);
 void menuModelAdjustCamera(MENU_MODEL *model);
 void menuModelSetSize(MENU_MODEL *model, s16 x0, s16 y0, s16 x1, s16 y1);
 void menuModelSetAngle(MENU_MODEL *model, const f32 *angle);
@@ -52,8 +52,8 @@ void menuModelInit(MENU_MODEL *model, s32 p1, s32 p2);
 void menuModelLoad(MENU_MODEL *model, unsigned long id);
 void menuModelSetMotion(MENU_MODEL *model, s32 motion);
 s32 menuModelCheck(MENU_MODEL *model, s32 flag);
-void zz_0112bc0_(MENU_MODEL *model, Pokemon *pokemon);
-void zz_0112eac_(MENU_MODEL *model);
+void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
+void menuModelTerm(MENU_MODEL *model);
 void *peopleInfoBiosGetPtr(unsigned long id);
 void peopleInfoBiosGetMotion(void *info, s32 p1, void *p2, void *p3);
 void FlashSystemSetPlayFrameLabel(unsigned long p1, const char *start, const char *end);
@@ -63,13 +63,13 @@ void fadeSet(s32 p1, f32 p2);
 void fadeCheck(s32 p1);
 void floorSetFadeScript(s32 p1, s32 script);
 void menuTitleBattleSelectFree(void);
-void zz_0125ba4_(void);
-void zz_0125bc4_(s32 floor);
-s32 zz_0125d58_(void);
+void floorPop(void);
+void floorPush(s32 floor);
+s32 floorWaitForChange(void);
 f32 HSD_Randf(void);
-void *zz_texture_id_get_data_table(s32 id);
-void *zz_texture_table_get_entry_for_language(void *table);
-void zz_texture_load_texture_r9_id(s32 x, s32 y, s32 w, s32 h, u32 flags, tagWINDOW_WORK *window, s32 tex, s32 mode, GSgfxLayerID layer);
+void *textureBiosGetDataTable(s32 id);
+void *textureBiosGetLanguageEntry(void *table);
+void textureBiosLoadSpriteId(s32 x, s32 y, s32 w, s32 h, u32 flags, tagWINDOW_WORK *window, s32 tex, s32 mode, GSgfxLayerID layer);
 u8 menuIsOpen(s32 id);
 void menuSetDisp(s32 id, s32 on);
 double sin(double x);
@@ -216,7 +216,7 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
     GXWGFifo.u8 = 0xFF;
     GXWGFifo.f32 = one;
     GXWGFifo.f32 = one;
-    zz_02b7060_(layer);
+    GSgfxRenderDrawEnd(layer);
 }
 
 // Mode and message display of the name-entry screen.
@@ -296,7 +296,7 @@ int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 show = 0x9C6;
             }
             if (show != 0) {
-                msgctrlSetValue(0x37, (unsigned long)zz_get_pointer_to_string_with_id(show));
+                msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(show));
                 GSmsgPrint2(winSpriteGetLayerID(window, sprite), 0, 0, window->mColor, 0x4275);
                 show = 0;
             }
@@ -485,7 +485,7 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s3
             blink = get50onChar(*arg->mTable, *arg->mColumn, *arg->mRow);
             if (blink != 0 && getCharClass(blink) == 6) {
                 float s = sin(3.14f * *arg->mTimer * 2.0f);
-                u32 color = (u8)(s32)(128.0f * (1.0f + s)) | 0xFFFFFF00;
+                u32 color = (u8)(128.0f * (1.0f + s)) | 0xFFFFFF00;
 
                 print1Char(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
             }
@@ -538,11 +538,11 @@ int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     winSpriteSetDisp(sprite, 0);
     if (*arg->mRow < 6) {
         if (*arg->mColumn < 0x0B) {
-            zz_0114e2c_(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
+            windowDrawTextureId(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
         }
     } else {
         if (*arg->mColumn < 7) {
-            zz_0114e2c_(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
+            windowDrawTextureId(*arg->mColumn * 0x1A, *arg->mRow * 0x1E, window, 0x153, 0, winSpriteGetLayerID(window, sprite));
         }
     }
     return 0;
@@ -565,12 +565,12 @@ u16 get50onChar(s32 table, s32 column, s32 row)
     if ((u32)id == 0) {
         return 0;
     }
-    count = zz_01073f8_(id);
+    count = GSmsgGetLength(id);
 
     if (column < 0 || column >= count) {
         return 0;
     }
-    string = zz_get_pointer_to_string_with_id(id);
+    string = GSmsgGetStringPtr(id);
     if (*string == 0xFFFF) {
         string += 2;
     }
@@ -598,7 +598,7 @@ void print1Char(GSgfxLayerID layer, s32 x, s32 y, u32 color, u16 chr)
     text[0] = chr;
     text[1] = 0;
     msgctrlSetValue(0x37, (unsigned long)text);
-    width = (0x1B - (s16)((u32)zz_0107554_(0x4275) >> 16)) / 2;
+    width = (0x1B - (s16)(GSmsgGetMessageSize(0x4275) >> 16)) / 2;
     GSmsgPrint2(layer, x + width, y, color, 0x4275);
 }
 
@@ -651,12 +651,12 @@ int menuNameEntryDraw50onToggleTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
 int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg;
-    u32 width;
+    s32 width;
 
     if (window->mMenuID == NAME_ENTRY_MENU_ID_SELECT) {
-        width = (u32)zz_0107554_(0x3B11) >> 16;
+        width = GSmsgGetMessageSize(0x3B11) >> 16;
 
-        GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
+        GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
                     window->mRgba.mColorA | 0xFFFFFF00, 0x3B11);
     } else {
         arg = window->mArg;
@@ -666,21 +666,21 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             u16 species;
 
             if (pokemonCheckValid(pokemon)) {
-                species = zz_battle_pokemon_get_species(pokemon);
+                species = battlePokemonGetSpecies(pokemon);
             } else {
                 species = 1;
             }
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
+            width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         case 5: {
-            u16 species = zz_battle_pokemon_get_species((Pokemon *)arg->mParam);
+            u16 species = battlePokemonGetSpecies((Pokemon *)arg->mParam);
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
+            width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
@@ -689,20 +689,20 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             u16 species;
 
             if (pokemonCheckValid(pokemon)) {
-                species = zz_battle_pokemon_get_species(pokemon);
+                species = battlePokemonGetSpecies(pokemon);
             } else {
                 species = 1;
             }
             msgctrlSetValue(0x4E, species);
-            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
+            width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         default: {
-            width = (u32)zz_0107554_(nameEntryModeData[arg->mMode].mMessageID) >> 16;
+            width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
 
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), ((s32)sprite->mX - (s32)width) / 2, 0,
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
@@ -721,8 +721,8 @@ u16 conv50onChar(u16 chr, s32 table)
 
     while (i < NAME_ENTRY_TABLE_COUNT) {
         if (nameEntryKanaTables[i] != 0) {
-            n = zz_01073f8_(nameEntryKanaTables[i]);
-            p = zz_get_pointer_to_string_with_id(nameEntryKanaTables[i]) + 1;
+            n = GSmsgGetLength(nameEntryKanaTables[i]);
+            p = GSmsgGetStringPtr(nameEntryKanaTables[i]) + 1;
             j = 1;
             while (j < n) {
                 if (*p == chr) {
@@ -750,8 +750,8 @@ u16 conv50onChar(u16 chr, s32 table)
     if (table == 0) {
         return chr;
     }
-    n = zz_01073f8_(nameEntryKanaTables[table]);
-    p = zz_get_pointer_to_string_with_id(nameEntryKanaTables[table]);
+    n = GSmsgGetLength(nameEntryKanaTables[table]);
+    p = GSmsgGetStringPtr(nameEntryKanaTables[table]);
     j = 0;
     while (j < n) {
         if (*p == chr) {
@@ -802,7 +802,7 @@ u8 backNameCursor(NAME_ENTRY_ARG *arg)
 // Classify the character for the input state machine.
 s32 getCharClass(u16 chr)
 {
-    u16 *space = zz_get_pointer_to_string_with_id(0x3B1E);
+    u16 *space = GSmsgGetStringPtr(0x3B1E);
 
     if (chr == *space) {
         return 0;
@@ -843,8 +843,8 @@ int input50onCell(NAME_ENTRY_ARG *arg)
         }
     } else {
         chr = get50onChar(*arg->mTable, col, act);
-        if ((u16)chr == 0) {
-            chr = *zz_get_pointer_to_string_with_id(0x3B1D);
+        if (chr == 0) {
+            chr = *GSmsgGetStringPtr(0x3B1D);
         }
         charClass = getCharClass(chr);
         act = charClass;
@@ -885,7 +885,7 @@ int input50onCell(NAME_ENTRY_ARG *arg)
         sound = 0x14;
         break;
     case 0:
-        chr = *zz_get_pointer_to_string_with_id(0x3B1D);
+        chr = *GSmsgGetStringPtr(0x3B1D);
     default: {
         s32 cur;
         s32 maxLen;
@@ -1029,9 +1029,9 @@ int menuNameEntryCtrl(tagWINDOW_WORK *window)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
-    switch ((s8)window->mState) {
+    switch (window->mState) {
     case 0:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             winSeqSetMenu(window->mMenuID, 0x58);
             *arg->mTimer = 0.0f;
             window->mFlag = 1;
@@ -1048,7 +1048,7 @@ int menuNameEntryCtrl(tagWINDOW_WORK *window)
         break;
     }
     case 3:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             winSeqSetMenu(window->mMenuID, 0x5C);
             window->mFlag = 1;
         }
@@ -1073,7 +1073,7 @@ int chkValidName(u16 *name)
     if (length <= 0) {
         return 0;
     }
-    prohibited = zz_get_pointer_to_string_with_id(0x3B1D);
+    prohibited = GSmsgGetStringPtr(0x3B1D);
     for (i = 0; i < length; i++, name++) {
         if (*name != *prohibited) {
             break;
@@ -1114,7 +1114,7 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
     arg.mUnk40 = &nameEntrySharedVal2;
     arg.mUnk44 = &nameEntrySharedVal3;
     arg.mUnk48 = &nameEntrySharedVal4;
-    zz_01554b4_(0);
+    dbgMenuSetOpenFlag(0);
     argp = &arg;
     while (done == 0) {
         menuOpenCustom(NAME_ENTRY_MENU_ID_INPUT, windowGetActiveID(), 0, 0, 1, 1, argp);
@@ -1134,7 +1134,7 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
             done = 1;
         }
     }
-    zz_01554b4_(1);
+    dbgMenuSetOpenFlag(1);
     menuClose(NAME_ENTRY_MENU_ID_INPUT);
     menuCloseSync(NAME_ENTRY_MENU_ID_INPUT, 1);
     if (accepted != 0) {
@@ -1147,7 +1147,7 @@ int inputName(u16 *name, u16 *initial, s32 type, s32 param, s32 skip)
 // Set the default name text of the sprite.
 void setDefNameText(tagSPRITE_WORK *sprite, unsigned long stringID)
 {
-    msgctrlSetValue(0x37, (unsigned long)zz_get_pointer_to_string_with_id(stringID));
+    msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(stringID));
     sprite->mMsgID = 0x4276;
 }
 
@@ -1196,15 +1196,15 @@ int menuNameEntrySelectButton(tagWINDOW_WORK *window)
 // Sequence the select menu window.
 int menuNameEntrySelectCtrl(tagWINDOW_WORK *window)
 {
-    switch ((s8)window->mState) {
+    switch (window->mState) {
     case 0:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             winSeqSetMenu(window->mMenuID, 0x58);
             window->mFlag = 1;
         }
         break;
     case 3:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             winSeqSetMenu(window->mMenuID, 0x5C);
             window->mFlag = 1;
         }
@@ -1243,7 +1243,7 @@ int selectName(u16 *name, const unsigned long *nameIDs, s32 param)
             break;
         }
         id = nameIDs[result - 1];
-        chosen = zz_get_pointer_to_string_with_id(id);
+        chosen = GSmsgGetStringPtr(id);
         if (confirmName(chosen) == 0) {
             continue;
         }
@@ -1284,7 +1284,7 @@ int menuNameEntryBackDrawHumanModel(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
         menuModelAdjustCamera(&nameEntryModel);
         menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
-        zz_01123b8_(&nameEntryModel, 0);
+        menuModelSetFlag(&nameEntryModel, 0);
         menuModelSetAngle(&nameEntryModel, angle);
         menuModelSetZoom(&nameEntryModel, 1.4f);
         menuModelSetOffset(&nameEntryModel, offset);
@@ -1351,7 +1351,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
             menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
             menuModelAdjustCamera(&nameEntryModel);
             menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
-            zz_01123b8_(&nameEntryModel, 0);
+            menuModelSetFlag(&nameEntryModel, 0);
             menuModelSetAngle(&nameEntryModel, angle);
             menuModelSetZoom(&nameEntryModel, zoom);
             menuModelSetOffset(&nameEntryModel, offset);
@@ -1365,9 +1365,9 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 }
 
 // Load the ball textures for the background.
-int zz_0032544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    void *entry = zz_texture_table_get_entry_for_language(zz_texture_id_get_data_table(0x1E));
+    void *entry = textureBiosGetLanguageEntry(textureBiosGetDataTable(0x1E));
     s32 count;
     s16 texW = *(s16 *)((u8 *)entry + 4);
     s16 texH = *(s16 *)((u8 *)entry + 6);
@@ -1380,10 +1380,10 @@ int zz_0032544_(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             f32 h = (f32)texH * ball->mScale;
             f32 x = ball->mX - w / 2.0f;
             f32 y = ball->mY - h / 2.0f;
-            u32 flags = (u32)ball->mFlags | ball->mAlpha;
+            u32 flags = ball->mFlags | ball->mAlpha;
 
-            zz_texture_load_texture_r9_id((s32)(0.5f + x), (s32)(0.5f + y), (s32)(0.5f + w), (s32)(0.5f + h),
-                                          flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
+            textureBiosLoadSpriteId((s32)(0.5f + x), (s32)(0.5f + y), (s32)(0.5f + w), (s32)(0.5f + h),
+                                    flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
         }
     }
     return 0;
@@ -1454,9 +1454,9 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
 {
     s32 i;
 
-    switch ((s8)window->mState) {
+    switch (window->mState) {
     case 0:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             for (i = 0; i < 30; i++) {
                 nameEntryBalls[i].mActive = 0;
             }
@@ -1470,7 +1470,7 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
         ballMain();
         break;
     case 3:
-        if ((s8)window->mFlag == 0) {
+        if (window->mFlag == 0) {
             window->mFlag = 1;
         }
         break;
@@ -1481,7 +1481,7 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
 }
 
 // Set up the model the name entry shows.
-void zz_0032a94_(long dataID, MENU_MODEL *model, s32 type, s32 param)
+void menuNameEntrySetupModel(long dataID, MENU_MODEL *model, s32 type, s32 param)
 {
     unsigned long ids[4];
     tagMENU_ITEM_DATA *item;
@@ -1525,12 +1525,12 @@ void zz_0032a94_(long dataID, MENU_MODEL *model, s32 type, s32 param)
         Pokemon *pokemon = heroGetStatus(0, 3, (u16)param);
 
         if (pokemonCheckValid(pokemon)) {
-            zz_0112bc0_(model, pokemon);
+            menuModelLoadPokemon(model, pokemon);
         }
         break;
     }
     case 5:
-        zz_0112bc0_(model, (Pokemon *)param);
+        menuModelLoadPokemon(model, (Pokemon *)param);
         break;
     case 3:
         menuModelLoad(model, ids[type]);
@@ -1539,7 +1539,7 @@ void zz_0032a94_(long dataID, MENU_MODEL *model, s32 type, s32 param)
         Pokemon *pokemon = fightFloorGetDefPokemonPtr(0);
 
         if (pokemonCheckValid(pokemon)) {
-            zz_0112bc0_(model, pokemon);
+            menuModelLoadPokemon(model, pokemon);
         }
         break;
     }
@@ -1562,7 +1562,7 @@ void menuNameEntry(void)
     if (getName(name, nameEntryWork.mType, nameEntryWork.mParam) == 0) {
         name[0] = 0;
     }
-    zz_0032a94_(0x68, &nameEntryModel, nameEntryWork.mType, nameEntryWork.mParam);
+    menuNameEntrySetupModel(0x68, &nameEntryModel, nameEntryWork.mType, nameEntryWork.mParam);
     {
         static const char startLabel[] = "start";
         static const char endLabel[] = "end";
@@ -1602,7 +1602,7 @@ void menuNameEntry(void)
     }
     fadeSet(3, 0.5f);
     fadeCheck(1);
-    zz_0112eac_(&nameEntryModel);
+    menuModelTerm(&nameEntryModel);
     menuClose(NAME_ENTRY_MENU_ID_MAIN);
     menuCloseSync(NAME_ENTRY_MENU_ID_MAIN, 1);
     setName(nameEntryWork.mName, nameEntryWork.mType, nameEntryWork.mParam);
@@ -1615,7 +1615,7 @@ void menuNameEntry(void)
         menuTitleBattleSelectFree();
     }
     if (nameEntryWork.mBlock != 0) {
-        zz_0125ba4_();
+        floorPop();
         if (nameEntryWork.mFade != 0) {
             floorSetFadeScript(0, 0x5960008);
         } else {
@@ -1642,11 +1642,11 @@ int setName(u16 *name, s32 type, s32 param)
         if (pokemonCheckValid(pokemon) == 0) {
             result = 0;
         } else {
-            zz_01457ac_(pokemon, name);
+            pokemon_SetNickname(pokemon, name);
         }
         break;
     case 5:
-        zz_01457ac_((Pokemon *)param, name);
+        pokemon_SetNickname((Pokemon *)param, name);
         break;
     case 3:
         pcboxSetPokemonBoxName(0, (s8)param, name);
@@ -1657,7 +1657,7 @@ int setName(u16 *name, s32 type, s32 param)
         if (pokemonCheckValid(pokemon) == 0) {
             result = 0;
         } else {
-            zz_01457ac_(pokemon, name);
+            pokemon_SetNickname(pokemon, name);
         }
         break;
     case 6:
@@ -1677,10 +1677,10 @@ int getName(u16 *name, s32 type, s32 param)
 
     switch (type) {
     case 0:
-        src = zz_get_pointer_to_string_with_id(DefKenName[0]);
+        src = GSmsgGetStringPtr(DefKenName[0]);
         break;
     case 1:
-        src = zz_get_pointer_to_string_with_id(DefHizukiName[0]);
+        src = GSmsgGetStringPtr(DefHizukiName[0]);
         break;
     case 2: {
         Pokemon *pokemon = heroGetStatus(0, 3, (u16)param);
@@ -1688,15 +1688,15 @@ int getName(u16 *name, s32 type, s32 param)
         if (pokemonCheckValid(pokemon) == 0) {
             src = 0;
         } else {
-            src = zz_0146fec_(pokemon);
+            src = pokemon_GetNickname(pokemon);
         }
         break;
     }
     case 5:
-        src = zz_0146fec_((Pokemon *)param);
+        src = pokemon_GetNickname((Pokemon *)param);
         break;
     case 3:
-        src = zz_0157288_(0, (s8)param);
+        src = pcboxGetPokemonName(0, (s8)param);
         break;
     case 4: {
         Pokemon *pokemon = fightFloorGetDefPokemonPtr(0);
@@ -1704,7 +1704,7 @@ int getName(u16 *name, s32 type, s32 param)
         if (pokemonCheckValid(pokemon) == 0) {
             src = 0;
         } else {
-            src = zz_0146fec_(pokemon);
+            src = pokemon_GetNickname(pokemon);
         }
         break;
     }
@@ -1795,11 +1795,11 @@ int pushNameEntryFloor(s32 type, s32 param, s32 fade)
     work->mChanged = 0;
     work->mFade = fade;
     work->mBlock = 1;
-    zz_0125bc4_(NAME_ENTRY_FLOOR_ID);
+    floorPush(NAME_ENTRY_FLOOR_ID);
     if (fade == 0) {
         floorSetFadeScript(0, 0x5960008);
     }
-    zz_0125d58_();
+    floorWaitForChange();
     return work->mChanged;
 }
 
@@ -1836,8 +1836,8 @@ int menuNameEntryOpen(s32 type, s32 param)
 
 // Static initializer of the menuNameEntry module, run once at startup through the
 // .ctors table.
-extern "C" void zz_003343c_(void)
+extern "C" void menuNameEntryStaticInit(void)
 {
 }
 
-extern "C" __declspec(section ".ctors") void (*const zz_003343c_ctor)(void) = zz_003343c_;
+extern "C" __declspec(section ".ctors") void (*const menuNameEntryStaticInit_ctor)(void) = menuNameEntryStaticInit;

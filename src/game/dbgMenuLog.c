@@ -17,7 +17,7 @@ extern u8 lbl_804EA694;
 void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
-u8 menuIsOpen(s32 menuID);
+u8 menuIsOpen(long menuID);
 void menuClose(long menuID);
 long menuOpenCustom(long menuID, long a, long b, long c, long d, long e, ...);
 void GSgfxZCompare(u8 mode, long value);
@@ -31,7 +31,7 @@ const char *GSlogGetLine(long line);
 s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
 {
     GXColor color = lbl_804EBDF0;
-    struct tagWINDOW_KEY *pad = zz_0116a80_();
+    struct tagWINDOW_KEY *pad = windowGetKeyState();
     GXColor tile;
     long i;
     long y;

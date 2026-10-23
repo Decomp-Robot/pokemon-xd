@@ -24,7 +24,7 @@ void heroItemAddItemDataId(s32 slot, u16 itemID, u16 count, s32 flag);
 /* Amount cursor: 1..999 in steps of 1 or 10. */
 void nbItemCtrl(void)
 {
-    struct tagWINDOW_KEY *key = zz_0116a80_();
+    struct tagWINDOW_KEY *key = windowGetKeyState();
 
     if (key->mKeyRepeat & 0x8) {
         lbl_804EA6AC++;
@@ -54,7 +54,7 @@ void nbItemCtrl(void)
 
 void itemNameCtrl(void)
 {
-    struct tagWINDOW_KEY *key = zz_0116a80_();
+    struct tagWINDOW_KEY *key = windowGetKeyState();
 
     if (key->mKeyRepeat & 0x8) {
         if (++lbl_804EA6B0 >= *lbl_804E8A00) {
@@ -82,7 +82,7 @@ void itemNameCtrl(void)
 
 s32 menuDbgItemCreateCursor(struct tagWINDOW_WORK *window)
 {
-    struct tagWINDOW_KEY *key = zz_0116a80_();
+    struct tagWINDOW_KEY *key = windowGetKeyState();
 
     if (key->mKeyRepeat & 0x1) {
         if (--window->cursor < 0) {
