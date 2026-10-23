@@ -1374,6 +1374,9 @@ libc/mem.c:
 libc/mem_funcs.c:
 	.text       start:0x800DF4B0 end:0x800DF780
 
+libc/misc_io.c:
+	.text       start:0x800DF780 end:0x800DF790
+
 libc/qsort.c:
 	.text       start:0x800E1890 end:0x800E19FC
 

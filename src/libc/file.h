@@ -37,10 +37,10 @@
 /* Value the library leaves in errno for an invalid stream position. */
 #define EINVAL 0x28
 
-/* The head of the global FILE list. */
-extern char __files[];
+/* The statically allocated streams at the head of the global FILE list. */
+extern FILE __files[4];
 
-#define FILE_LIST ((FILE *)(void *)__files)
+#define FILE_LIST (__files)
 
 int __flush_buffer(FILE *f, unsigned int *written);
 void __prep_buffer(FILE *f);
