@@ -13,6 +13,10 @@ name = "decomp/dbgMenuFightSetMsgSpeed.c"
 completed = true
 
 [[lib.object]]
+name = "decomp/dbgMenuGetGsinputMsgId.c"
+completed = true
+
+[[lib.object]]
 name = "decomp/pokemonindex.cpp"
 completed = true
 
@@ -46,16 +50,6 @@ completed = true
 
 [[lib.object]]
 name = "game/menuPokemonCursor.cpp"
-completed = true
-
-[[lib]]
-name = "dbgMenu"
-mw_version = "GC/1.2.5n"
-cflags_preset = "game"
-progress_category = "game"
-
-[[lib.object]]
-name = "decomp/dbgMenuGetGsinputMsgId.c"
 completed = true
 
 [[lib]]
