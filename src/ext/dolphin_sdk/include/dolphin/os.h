@@ -117,6 +117,9 @@ typedef struct OSCalendarTime {
 } OSCalendarTime;
 
 #include <dolphin/dvd.h>
+#define OS_BOOTINFO_MAGIC 0x0D15EA5E
+#define OS_BOOTINFO_MAGIC_JTAG 0xE5207C22
+
 typedef struct OSBootInfo_s {
     DVDDiskID DVDDiskID;
     u32 magic;

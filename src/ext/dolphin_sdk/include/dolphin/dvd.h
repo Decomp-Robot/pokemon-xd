@@ -7,7 +7,6 @@
 extern "C" {
 #endif
 
-// needed for matching release
 #define DVD_ASSERTMSGLINE(line, cond, msg) \
     if (!(cond)) \
         OSPanic(__FILE__, line, msg)
@@ -23,7 +22,8 @@ extern "C" {
 #define DVD_RESULT_GOOD        0
 #define DVD_RESULT_FATAL_ERROR -1
 #define DVD_RESULT_IGNORED     -2
-#define DVD_RESULT_CANCELED    -6
+#define DVD_RESULT_CANCELED    -3
+#define DVD_RESULT_COVER_CLOSED -4
 
 #define DVD_STATE_FATAL_ERROR   -1
 #define DVD_STATE_END            0
@@ -41,11 +41,11 @@ extern "C" {
 
 #define DVD_MIN_TRANSFER_SIZE    32
 
-// could be bitfields
-#define DVD_INTTYPE_TC 1
-#define DVD_INTTYPE_DE 2
-// unk type 3
-#define DVD_INTTYPE_CVR 4
+#define DVD_INTTYPE_TC      1
+#define DVD_INTTYPE_DE      2
+#define DVD_INTTYPE_CVR     4
+#define DVD_INTTYPE_BREAK   8
+#define DVD_INTTYPE_TIMEOUT 16
 
 // DVD Commands
 #define DVD_COMMAND_NONE 0
@@ -64,7 +64,7 @@ extern "C" {
 #define DVD_COMMAND_AUDIO_BUFFER_CONFIG 13
 #define DVD_COMMAND_INQUIRY 14
 #define DVD_COMMAND_BS_CHANGE_DISK 15
-#define DVD_COMMAND_UNK_16 16
+#define DVD_COMMAND_STOP_MOTOR 16
 
 typedef struct DVDDiskID {
     char gameName[4];
