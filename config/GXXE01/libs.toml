@@ -24,6 +24,10 @@ completed = true
 name = "decomp/_memcard_debug_type_check.c"
 completed = true
 
+[[lib.object]]
+name = "decomp/WorldMap.cpp"
+completed = true
+
 [[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"
