@@ -152,6 +152,10 @@ ext/dolphin_sdk/mtx/mtx.c:
 	.text       start:0x800B29D8 end:0x800B2AD0
 	.text       start:0x800B2AD0 end:0x800B2B98
 
+ext/dolphin_sdk/mtx/mtxvec.c:
+	.text       start:0x800B32F0 end:0x800B3344
+	.text       start:0x800B3344 end:0x800B3398
+
 ext/dolphin_sdk/mtx/mtx44.c:
 	.text       start:0x800B3398 end:0x800B3434
 	.text       start:0x800B3434 end:0x800B3504
