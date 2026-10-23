@@ -113,6 +113,10 @@ ext/dolphin_sdk/os/OSRtc.c:
 	.text       start:0x800B0DFC end:0x800B0E6C
 	.text       start:0x800B0E6C end:0x800B0F24
 
+ext/dolphin_sdk/os/OSSync.c:
+	.text       start:0x800B0F24 end:0x800B0F44
+	.text       start:0x800B0F44 end:0x800B0FA8
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
