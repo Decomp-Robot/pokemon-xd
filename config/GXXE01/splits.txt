@@ -279,6 +279,9 @@ ext/dolphin_sdk/card/CARDCreate.c:
 	.text       start:0x800C4AA8 end:0x800C4BD8
 	.text       start:0x800C4BD8 end:0x800C4DF8
 
+ext/dolphin_sdk/card/CARDErase.c:
+	.text       start:0x800C52B0 end:0x800C5420
+
 ext/dolphin_sdk/card/CARDDelete.c:
 	.text       start:0x800C55E4 end:0x800C5688
 	.text       start:0x800C5688 end:0x800C5798
