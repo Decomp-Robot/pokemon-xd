@@ -4,6 +4,7 @@
 
 #include "__syn.h"
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int __SYNGetWavetableData(SYNVOICE* voice) {
     u32 regionIndex;
     SYNSYNTH* synth;
