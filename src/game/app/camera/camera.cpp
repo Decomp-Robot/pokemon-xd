@@ -820,7 +820,7 @@ void _cameraPadMoveUpdate(_GScamera* camera)
     u32 changed = GSinputButtonsChanged(GS_INPUT_PORT_1);
     u32 pressed = GSinputButtonsPressed(GS_INPUT_PORT_1);
     if (pressed & changed & CAMERA_PAD_MENU) {
-        if (menuIsOpen(MENU_ID_DEBUG_CAMERA)) menuClose(MENU_ID_DEBUG_CAMERA);
+        if (menuIsCheck(MENU_ID_DEBUG_CAMERA)) menuClose(MENU_ID_DEBUG_CAMERA);
         else {
             menuOpenCustom(MENU_ID_DEBUG_CAMERA, 0, 0, 0, 1, 0);
             menuSetPosition(MENU_ID_DEBUG_CAMERA, 20, 260);

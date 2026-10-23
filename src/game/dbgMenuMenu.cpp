@@ -73,7 +73,7 @@ static u16 _esabaSelectPokemon;
 
 extern "C" {
 // menu.a
-u8 menuIsOpen(s32 menuID);
+u8 menuIsCheck(s32 menuID);
 // The 3rd argument is the cursor the window starts on, the 7th and later
 // arguments are the window's own argument record.
 
@@ -338,7 +338,7 @@ extern "C" s32 dbgMenuMenuUnderTakerIconOnOff(void)
 // Test entry: toggle the display of the Under window.
 extern "C" s32 dbgMenuMenuUnderTakerDisp(void)
 {
-    if (menuIsOpen(WIN_ID_UNDERTAKER_DISP)) {
+    if (menuIsCheck(WIN_ID_UNDERTAKER_DISP)) {
         menuClose(WIN_ID_UNDERTAKER_DISP);
     } else {
         menuOpenCustom(WIN_ID_UNDERTAKER_DISP, 0, 0, 0, 1, 0);
@@ -376,7 +376,7 @@ extern "C" s32 dbgMenuMenuTestInfoEsa(void)
 // Test entry: toggle the display of the Pokespot window.
 extern "C" s32 dbgMenuMenuEsabaDisp(void)
 {
-    if (menuIsOpen(WIN_ID_ESABA_DISP)) {
+    if (menuIsCheck(WIN_ID_ESABA_DISP)) {
         menuClose(WIN_ID_ESABA_DISP);
     } else {
         menuOpenCustom(WIN_ID_ESABA_DISP, 0, 0, 0, 1, 0);

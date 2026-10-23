@@ -79,7 +79,7 @@ extern "C" u32 sListCursorAnimeY;
 // ---- engine and library entry points -------------------------------------
 
 extern "C" {
-u8 menuIsOpen(s32 windowID);
+u8 menuIsCheck(s32 windowID);
 void menuButtonNormal(tagWINDOW_WORK *window);
 void menuSubCursorAnimeStart(void);
 void menuSubCursorAnimeInit(void);
@@ -960,7 +960,7 @@ extern "C" s32 menuPcBoxDouguDebugMain(void)
 // Control hook of the drawer entry in the debug menu: show or hide its window.
 extern "C" s32 menuPcBoxDouguDebugCtrl(void)
 {
-    if (menuIsOpen(WIN_ID_DOUGU_DEBUG) != 0) {
+    if (menuIsCheck(WIN_ID_DOUGU_DEBUG) != 0) {
         menuClose(WIN_ID_DOUGU_DEBUG);
     } else {
         menuOpenCustom(WIN_ID_DOUGU_DEBUG, 0, 0, 0, 1, 0);

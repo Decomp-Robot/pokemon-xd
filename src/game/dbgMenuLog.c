@@ -17,7 +17,7 @@ extern u8 _viewStartLineInit;
 void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
-u8 menuIsOpen(long menuID);
+u8 menuIsCheck(long menuID);
 
 long GSlogGetLineCount(void);
 const char *GSlogGetLine(long line);
@@ -103,7 +103,7 @@ s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
 
 s32 dbgMenuLogChangeDisp(void)
 {
-    if (menuIsOpen(MENU_ID_DEBUG_LOG)) {
+    if (menuIsCheck(MENU_ID_DEBUG_LOG)) {
         menuClose(MENU_ID_DEBUG_LOG);
     } else {
         _viewStartLineInit = 1;

@@ -1797,9 +1797,9 @@ long _menuPokemonStatusChangeSubMenu(CURSOR cursor)
 
     for (i = 0; i < 4; i++) {
         if ((s32)sub_menu_id[i] == id) {
-            if (menuIsOpen(id) == 0)
+            if (menuIsCheck(id) == 0)
                 menuOpen(id, 0);
-        } else if (menuIsOpen((s32)sub_menu_id[i]) != 0) {
+        } else if (menuIsCheck((s32)sub_menu_id[i]) != 0) {
             menuClose((s32)sub_menu_id[i]);
         }
     }
@@ -1953,13 +1953,13 @@ void menuPokemonStatusClose(void)
         fadeCheck(1);
     }
 
-    if (menuIsOpen(MENU_POKEMON_STATUS_MENU_TAB_SLOT0) != 0)
+    if (menuIsCheck(MENU_POKEMON_STATUS_MENU_TAB_SLOT0) != 0)
         menuCloseCustom(MENU_POKEMON_STATUS_MENU_TAB_SLOT0, 0, 0);
-    if (menuIsOpen(MENU_POKEMON_STATUS_MENU_TAB_SLOT1) != 0)
+    if (menuIsCheck(MENU_POKEMON_STATUS_MENU_TAB_SLOT1) != 0)
         menuCloseCustom(MENU_POKEMON_STATUS_MENU_TAB_SLOT1, 0, 0);
-    if (menuIsOpen(MENU_POKEMON_STATUS_MENU_WAZA) != 0)
+    if (menuIsCheck(MENU_POKEMON_STATUS_MENU_WAZA) != 0)
         menuCloseCustom(MENU_POKEMON_STATUS_MENU_WAZA, 0, 0);
-    if (menuIsOpen(MENU_POKEMON_STATUS_MENU_RIBBON) != 0)
+    if (menuIsCheck(MENU_POKEMON_STATUS_MENU_RIBBON) != 0)
         menuCloseCustom(MENU_POKEMON_STATUS_MENU_RIBBON, 0, 0);
     menuCloseCustom(MENU_POKEMON_STATUS_MENU_HEAD, 0, 1);
 
@@ -1992,12 +1992,12 @@ long menuPokemonStatusOpenWazaLearnList(Pokemon *pokemon, u16 arg)
     for (i = 0; i < 4; i++)
         ids[i] = wazaHideMenuIDs[i];
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i]) != 0)
+        if (menuIsCheck(ids[i]) != 0)
             menuSetDisp(ids[i], 0);
     }
     result = _menuPokemonStatusOpen(MENU_POKEMON_STATUS_WAZA_LEARN_LIST, 0, pokemon, arg, 0, 0);
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i]) != 0)
+        if (menuIsCheck(ids[i]) != 0)
             menuSetDisp(ids[i], 1);
     }
     return result;
@@ -2013,12 +2013,12 @@ long menuPokemonStatusOpenWazaLearn(Pokemon *pokemon, u16 arg)
     for (i = 0; i < 4; i++)
         ids[i] = wazaLearnHideMenuIDs[i];
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i]) != 0)
+        if (menuIsCheck(ids[i]) != 0)
             menuSetDisp(ids[i], 0);
     }
     result = _menuPokemonStatusOpen(MENU_POKEMON_STATUS_WAZA_LEARN, 0, pokemon, arg, 0, 0);
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i]) != 0)
+        if (menuIsCheck(ids[i]) != 0)
             menuSetDisp(ids[i], 1);
     }
     return result;

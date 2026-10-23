@@ -15,7 +15,7 @@ extern u8 gSelectedInit;
 
 #pragma force_active on
 
-u8 menuIsOpen(s32 menuID);
+u8 menuIsCheck(s32 menuID);
 void menuSetPosition(long menuID, long x, long y);
 u32 floorFieldCameraEditorGetFloorID(void);
 void floorInitFieldCameraEditor(u32 roomID);
@@ -26,7 +26,7 @@ s32 dbgMenuFieldCameraChangeDisp(void)
 {
     u32 roomID;
 
-    if (!menuIsOpen(0x23)) {
+    if (!menuIsCheck(0x23)) {
         roomID = GSfloorGetCurrent();
         if (roomID != floorFieldCameraEditorGetFloorID()) {
             floorInitFieldCameraEditor(roomID);

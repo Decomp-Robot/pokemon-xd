@@ -48,7 +48,6 @@ s32 menuOpenCustom(s32 menuID, s32 parentID, void *result, u32 flags,
 s32 menuClose(s32 menuID);
 s32 menuCloseCustom(s32 menuID, s32 arg, bool wait);
 s32 menuCloseSync(s32 menuID, bool wait);
-u8 menuIsOpen(s32 menuID);
 u16 windowGetKeyRepeat(void);
 s32 windowGetActiveID(void);
 s32 windowGetValue(s32 menuID);

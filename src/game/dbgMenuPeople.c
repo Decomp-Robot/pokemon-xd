@@ -10,7 +10,7 @@
 /* Debug menus that open the party-info window and the people editor. */
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
-u8 menuIsOpen(s32 menuID);
+u8 menuIsCheck(s32 menuID);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 u8 floorFieldCameraDataExist(void);
 void floorFieldCameraEnable(void);
@@ -23,7 +23,7 @@ void floorFieldCameraDisable(void);
 
 s32 dbgMenuDispChangePartyInfo(void)
 {
-    if (menuIsOpen(MENU_ID_PARTY_INFO)) {
+    if (menuIsCheck(MENU_ID_PARTY_INFO)) {
         menuClose(MENU_ID_PARTY_INFO);
     } else {
         menuOpenCustom(MENU_ID_PARTY_INFO, 0, 0, 0, 1, 0);
@@ -36,7 +36,7 @@ s32 dbgMenuPeopleOpenEdit(void)
 {
     floorDataBiosGetPtr(GSfloorGetCurrent());
 
-    if (menuIsOpen(MENU_ID_PEOPLE_EDITOR)) {
+    if (menuIsCheck(MENU_ID_PEOPLE_EDITOR)) {
         if (floorFieldCameraDataExist()) {
             floorFieldCameraEnable();
         }

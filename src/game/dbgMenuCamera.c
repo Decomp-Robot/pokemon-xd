@@ -4,7 +4,7 @@
 
 #pragma force_active on
 
-extern u8 menuIsOpen(s32 menuId);
+extern u8 menuIsCheck(s32 menuId);
 extern void menuSetPosition(s32 menuId, s32 x, s32 y);
 /* Drop the debug camera (type 6) and restore the current room's floor
  * camera defaults. */
@@ -26,7 +26,7 @@ s32 dbgMenuCameraResetFloor(void)
 /* Open the debug camera window when it is down, close it when it is up. */
 s32 dbgMenuCameraChangeDisp(void)
 {
-    if (menuIsOpen(MENU_ID_DEBUG_CAMERA) != 0) {
+    if (menuIsCheck(MENU_ID_DEBUG_CAMERA) != 0) {
         menuClose(MENU_ID_DEBUG_CAMERA);
     } else {
         menuOpenCustom(MENU_ID_DEBUG_CAMERA, 0, 0, 0, 1, 0);

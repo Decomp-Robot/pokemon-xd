@@ -122,7 +122,6 @@ s32 memcardTaskCall(s32 a, s32 b, s32 c);
 /* Records whether the mode select screen may keep running. */
 void menuTopSetInitCursor(s32 a);
 s32 pokecoloGetRomVersion(void);
-u8 menuIsOpen(s32 id);
 /* Sets the battle CD id on the encounter data the select screen hands on. */
 }
 
@@ -772,7 +771,7 @@ void _menuTitleClose2(s32 id, u32 flag)
 
     menuID = id;
     closeFlags = flag;
-    if (menuIsOpen(menuID) == 1) {
+    if (menuIsCheck(menuID) == 1) {
         menuCloseCustom(menuID, closeFlags, 1);
     }
 }

@@ -1771,13 +1771,13 @@ int menuNameEntryOpen(int type, int param)
     ids[2] = nameEntryHideMenuIDs[2];
     ids[3] = nameEntryHideMenuIDs[3];
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i])) {
+        if (menuIsCheck(ids[i])) {
             menuSetDisp(ids[i], 0);
         }
     }
     result = pushNameEntryFloor(type, param, 1);
     for (i = 0; i < 4; i++) {
-        if (menuIsOpen(ids[i])) {
+        if (menuIsCheck(ids[i])) {
             menuSetDisp(ids[i], 1);
         }
     }

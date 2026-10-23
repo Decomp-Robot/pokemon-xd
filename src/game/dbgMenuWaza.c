@@ -16,7 +16,7 @@ struct WazaViewerWork {
 
 extern struct WazaViewerWork wazaViewerData;
 
-u8 menuIsOpen(s32 menuID);
+u8 menuIsCheck(s32 menuID);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 void GSfloorPop(void);
 void GSthreadSwitch(void);
@@ -35,7 +35,7 @@ int dbgMenuPokemonDebugSelect(void)
 {
     struct WazaViewerWork *work;
 
-    if (menuIsOpen(MENU_ID_DEBUG_POKEMON_SELECT)) {
+    if (menuIsCheck(MENU_ID_DEBUG_POKEMON_SELECT)) {
         menuClose(MENU_ID_DEBUG_POKEMON_SELECT);
     } else {
         work = &wazaViewerData;
@@ -49,7 +49,7 @@ int dbgMenuPokemonDebugSelect(void)
 
 int dbgMenuWazaDebugSelect(void)
 {
-    if (menuIsOpen(MENU_ID_DEBUG_MOVE_SELECT)) {
+    if (menuIsCheck(MENU_ID_DEBUG_MOVE_SELECT)) {
         menuClose(MENU_ID_DEBUG_MOVE_SELECT);
     } else {
         menuOpenCustom(MENU_ID_DEBUG_MOVE_SELECT, 0, 0, 0, 1, 0);
@@ -60,7 +60,7 @@ int dbgMenuWazaDebugSelect(void)
 
 int dbgMenuWazaDebugStart(void)
 {
-    if (menuIsOpen(MENU_ID_TITLE)) {
+    if (menuIsCheck(MENU_ID_TITLE)) {
         menuClose(MENU_ID_TITLE);
     }
     if (wazaViewerData.mDebugRunning == 0) {
