@@ -33,7 +33,6 @@ static void __ARQPopTaskQueueHi(void) {
     }
 }
 
-#pragma dont_inline on
 void __ARQServiceQueueLo(void) {
     if (__ARQRequestPendingLo == 0 && __ARQRequestQueueLo) {
         __ARQRequestPendingLo = __ARQRequestQueueLo;
@@ -59,8 +58,6 @@ void __ARQServiceQueueLo(void) {
         __ARQRequestPendingLo->dest += __ARQChunkSize;
     }
 }
-
-#pragma dont_inline reset
 
 void __ARQCallbackHack(u32 unused) {}
 
