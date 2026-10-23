@@ -58,7 +58,15 @@ typedef struct MenuCBTaisenWork {
     /* 0xA65C */ Pokemon mParty[6]; // party copy the entry screens work on.
     /* 0xAAF4 */ u8 _AAF4[0xAFE0 - 0xAAF4];
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
-    /* 0xAFE4 */ u8 _AFE4[0xB028 - 0xAFE4];
+    /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
+    /* 0xAFE8 */ u8 _AFE8[0xAFF0 - 0xAFE8];
+    /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
+    /* 0xAFF4 */ u8 _AFF4[0xB004 - 0xAFF4];
+    /* 0xB004 */ s32 mRuleNo; // rule record (mRulesetData) the entry screens work on.
+    /* 0xB008 */ u8 _B008[0xB014 - 0xB008];
+    /* 0xB014 */ s32 mEntrySelect; // entry the trainer rows are drawn for; -1 for the
+                                  // rule row.
+    /* 0xB018 */ u8 _B018[0xB028 - 0xB018];
     /* 0xB028 */ s32 listRow; // top row of the scrolled entry lists.
     /* 0xB02C */ u8 _B02C[0xB060 - 0xB02C];
     /* 0xB060 */ s32 unk_B060; // unknown; cleared alongside selectResult.
@@ -76,19 +84,35 @@ typedef struct MenuCBTaisenWork {
     /* 0xB100 */ s32 selectCount; // number of flagged entry slots.
     /* 0xB104 */ s32 mAbortRequest; // abort request of the entry screen.
     /* 0xB108 */ s32 mEntryState; // state of the entry screen.
-    /* 0xB10C */ u8 _B10C[0xB110 - 0xB10C];
+    /* 0xB10C */ u32 mRuleSelect; // regulation chosen in the rule submenu: 0 for its
+                                  // first item, 1 for its last one.
     /* 0xB110 */ s32 unk_B110;
-    /* 0xB114 */ u8 _B114[0xB11C - 0xB114];
+    /* 0xB114 */ u8 _B114[0xB118 - 0xB114];
+    /* 0xB118 */ s32 mRuleCursor; // row the rule and port windows' cursor is on.
     /* 0xB11C */ u32 selectedValue; // entry menuCBSpriteColorIfMatch compares.
-    /* 0xB120 */ u8 _B120[0xB138 - 0xB120];
+    /* 0xB120 */ u8 _B120[0xB124 - 0xB120];
+    /* 0xB124 */ s32 mRuleCursorPrev; // row that cursor just left; -1 while no row
+                                  // transition is pending.
+    /* 0xB128 */ u32 mRuleCursorPrevColor; // colour that row is drawn in.
+    /* 0xB12C */ u32 mRuleCursorColor; // colour the cursor row is drawn in.
+    /* 0xB130 */ u8 _B130[0xB138 - 0xB130];
     /* 0xB138 */ u32 savedColor; // window colour menuCBWindowColorSave stored.
-    /* 0xB13C */ u8 _B13C[0xB1A0 - 0xB13C];
+    /* 0xB13C */ u8 _B13C[0xB144 - 0xB13C];
+    /* 0xB144 */ s32 mEntryCursorPrev; // entry row that cursor just left; -1 while no
+                                  // row transition is pending.
+    /* 0xB148 */ u32 mEntryCursorPrevColor; // colour that row is drawn in.
+    /* 0xB14C */ u32 mEntryCursorColor; // colour the cursor row is drawn in.
+    /* 0xB150 */ u8 _B150[0xB1A0 - 0xB150];
     /* 0xB1A0 */ s32 mPlayerLeftEntry; // set once a player left the entry.
     /* 0xB1A4 */ u8 _B1A4[0xB1D4 - 0xB1A4];
     /* 0xB1D4 */ s32 dstBank; // bank/index a party copy is taken from.
     /* 0xB1D8 */ s32 dstIndex;
     /* 0xB1DC */ u32 pokeMsgID; // message menuCBPokemonMsgCheck selected.
-    /* 0xB1E0 */ u8 _B1E0[0xB458 - 0xB1E0];
+    /* 0xB1E0 */ u32 mSlotNo; // 1-based number of the entry slot a message reports.
+    /* 0xB1E4 */ u8 _B1E4[0xB428 - 0xB1E4];
+    /* 0xB428 */ s16 mPartySlotX[4][6]; // x the slot's face sprite was placed at, one
+                                  // per port and slot.
+
     /* 0xB458 */ s16 mPartySlotValue[4][6]; // party slot values of the four ports.
     /* 0xB488 */ s8 mPartySlotFlag[4][6]; // party slot flags of the four ports,
                                   // one byte per slot.

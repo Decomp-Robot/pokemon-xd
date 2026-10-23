@@ -45,6 +45,7 @@ public:
     Pokemon *getVisitorPointer();
     Pokemon *getDancerPointer(long slot);
     void insertDancer(Pokemon &pokemon, long slot);
+    void pickupDancer(Pokemon &pokemon, long slot);
 };
 
 extern "C" {
@@ -66,7 +67,7 @@ void msgctrlSetValue(s32 id, unsigned long value);
 s32 menuOpen(s32 menuID, s32 arg);
 s32 menuCloseCustom(s32 menuID, s32 arg, s32 flag);
 void menuSetDisp(s32 menuID, s32 on);
-void menuCB_MenuDispCheckONorOFF(s32 a, s32 on);
+void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on);
 struct tagWINDOW_KEY *windowGetKeyState(void);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void spriteSetScissor(s32 layer, s32 x, s32 y, s32 w, s32 h);
@@ -206,7 +207,7 @@ void menuCB2DPokemonPageScroll(unsigned char key);
 void menuCBMsgPopup(unsigned long msgID);
 void menuCBBattleMenuOpen(u32 load);
 void menuCBBattleMenuClose(u32 unload);
-void menuCBPokemonReturnToParty(unsigned long);
+void menuCBPokemonReturnToParty(void);
 u8 menuCBPokemonMsgCheck(unsigned long bank, unsigned long index);
 Pokemon *menuCBPokemonGetPtr(unsigned long bank, unsigned long index);
 void menuCBDrawStringCenter(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 *str,
@@ -515,7 +516,7 @@ void menuCBBattleMenuClose(u32 unload)
     }
 }
 
-void menuCBPokemonReturnToParty(unsigned long)
+void menuCBPokemonReturnToParty(void)
 {
     u32 sel;
     u32 index;
@@ -1191,4 +1192,1048 @@ void menuCBMsgDrawOnSprite(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
     GSmsgPrint2(window->mLayerID,
                 (s16)(sprite->mWidth / 2 - (s16)(GSmsgGetMessageSize(msgID) >> 16) / 2),
                 0, color, msgID);
+}
+/* -------------------------------------------------------------------------
+ * Entry-screen menus, rows and windows
+ *
+ * The link battle entry screens (the Pokemon the players bring) run on the
+ * menu set menuCBPokemonEntryOpen/menuCBPokemonEntryClose open and close, and drive their windows
+ * through the checks below. The action submenu (menuCBPokemonEntryActionSelect) and the item
+ * submenu (menuCBPokemonEntryGiveItem) are the two ways a Pokemon is worked on; the entry
+ * flow in the entry module runs their result.
+ * ---------------------------------------------------------------------- */
+
+extern "C" {
+/* Entry-screen menu set and the windows' row checks. */
+void menuCBPokemonEntryOpen(u8 load);
+void menuCBPokemonEntryClose(u8 unload);
+void menuCBRuleCursorWindowColor(tagWINDOW_WORK *window, s32 index);
+void menuCBEntryCursorWindowColor(tagWINDOW_WORK *window, s32 index);
+void menuCB_SpriteDispCheckONorOFF(tagSPRITE_WORK *sprite, bool on);
+
+/* Submenus and the Pokemon work of the entry screens. */
+void menuCBPokemonEntryTakeItem(void);
+void menuCBPokemonEntryGiveItem(void);
+void menuCBRuleWindowDisp(tagWINDOW_WORK *window, s32 trainer);
+void menuCBPortTrainerNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 trainer);
+void menuCBPokemonEntryStatusOpen(void);
+s32 menuCBPokemonEntryActionSelect(void);
+void menuCBRuleSelect(void);
+void menuCBPokemonEntryCheck(void);
+void menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
+                                       s32 arg, s32 slot);
+u8 menuCBPokemonEntryDispPokemonFace_AFTER(tagWINDOW_WORK *window,
+                                           tagSPRITE_WORK *sprite, s32 arg, s32 slot);
+u8 menuCBPokemonEntryDispPokemonFace_BEFORE(tagWINDOW_WORK *window,
+                                            tagSPRITE_WORK *sprite, s32 arg, s32 slot);
+
+/* Entry-slot faces and the entry screens' checks. */
+void menuCBPokemonEntryFacePlace(tagSPRITE_WORK *sprite, s32 port, u32 slot);
+void menuCBPokemonEntryFaceDisp(tagSPRITE_WORK *sprite, s32 port, u32 slot);
+void menuCB_BattleEntryPokemonSelectDisp(tagSPRITE_WORK *sprite, s32 bank, s32 index);
+s32 menuCB_GCStatusDispMode(tagSPRITE_WORK *sprite, s32 mode);
+u8 menuCBPokemonEntryDisp(tagSPRITE_WORK *sprite);
+void menuCBPokemonEntryGCControlDisp(tagSPRITE_WORK *sprite, s32 slot);
+void menuCB2DPokemonSetSource(void);
+void menuCBPokemonReturnSelected(void);
+void menuCBPokemonReturnToParty(void);
+u8 menuCBPokemonCheck(unsigned long bank, unsigned long index);
+void menuCB_WaitGCControler1(void);
+void menuCB_GBADisconnectedErrorJob(void);
+void menuCBPokemonEntryAdd(void);
+void menuCB2DPokemonSetPage(void);
+void menuCBPCBOXTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 box,
+                              s32 x);
+void menuCBReliveTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 msgID,
+                               s32 x);
+void menuCBPokemonEntryTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 msgID, s32 x);
+
+/* The fight module's archive members: fightReadResource frees the member the
+   group held before, reads the requested one in when it is not in memory yet
+   and returns 1 when it had to, 0 when it was already there; fightFreeResource
+   releases one member. */
+u8 fightReadResource(u32 group, u32 addr);
+void fightFreeResource(u32 group, u32 addr);
+
+/* The condition checks of the entry module: the party-wide trainer regulation,
+   the conditions a held item gives one slot, and the rebuild of every slot of
+   one entry. */
+void menuCBEntrySlotConditionsSetTrainerRegulation(Pokemon *party);
+void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party, Pokemon *pokemon, s32 slot);
+void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry);
+
+/* Held item accessors and the bag of the work party. */
+u32 battlePokemonGetHeldItem(Pokemon *pokemon);
+u32 pokemonDoItemSoubi(Pokemon *pokemon, u32 itemID, u32 apply);
+s32 heroItemCheckAddItemDataId(Pokemon *party, u32 itemID);
+void heroItemAddItemDataId(Pokemon *party, u32 itemID, u32 count, s16 order);
+s32 heroItemDecItemDataId(Pokemon *party, u32 itemID, u32 count, u8 slot);
+u16 *pokemon_GetNickname(Pokemon *pokemon);
+
+/* Item pocket, submenus and the entry screens' sources. */
+s32 menuPocket2Call(s32 mode, u32 arg, Pokemon *party);
+s32 menuPocket2GetLastSlotID(void);
+s32 menuSubOpenSelect2(s32 type, u32 *msgTbl, s32 count, s32 x, s32 y, s32 cursor,
+                       s32 select, s32 flag);
+s8 menuSubOpenYesNo(s32 type, s32 x, s32 y, s32 flag);
+FightRuleData *menuCBBios_CurrentRule(void);
+u8 menuCBPokemonGetDataId(s32 port, s32 slot);
+s32 menuCBBattleStartGetStatus(void);
+void menuPokemonStatusOpenFromPokemonChange(Pokemon *pokemon, s32 a, s32 b);
+u32 menuCBBios_GetPokemonNumLimit(void);
+u16 toolentryTaisenGetPokemonNum(s32 port);
+s32 toolentryTaisengetEtnryPokemonOrderNum(s32 port);
+u16 toolentryTaisenGetPokemonHomePlace(s32 port);
+u8 pauseCheck(void);
+s32 menuCB_GetDisconnectedGBA(void);
+u8 gbaCommandIsConnected(s32 port);
+u8 GSinputIsConnected(s32 pad);
+void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
+u16 *pcboxGetPokemonBoxName(PCBOX *pcbox, s8 box);
+void *gamedataBiosGetGamedataAtttestPtr(void *party);
+
+/* The two-entry message table the entry select falls back on once all six
+   slots are filled: the second and third choice of submenu_msg1, the first
+   one (0x4398) being unavailable while no slot is left. */
+extern u32 submenu_msgFull[2];
+}
+
+void menuCBPokemonEntryOpen(u8 load)
+{
+    if (load != 0) {
+        GSfsysReadWait(0x88C);
+        menuCBBaseWindowOpen();
+        menuCBFlashStartWait(0);
+        GSthreadSwitch();
+        GSthreadSwitch();
+        GSthreadSwitch();
+        GSthreadSwitch();
+    }
+
+    menuCBSEPlay(0x14);
+    menuOpen(0xA9, 0);
+    menuOpen(0xCE, 0);
+    menuOpen(0xCB, 0);
+    menuOpen(0xCC, 0);
+    menuOpen(0xCD, 0);
+    menuOpen(0xAA, 0);
+    menuOpen(0xF7, 0);
+}
+
+void menuCBPokemonEntryClose(u8 unload)
+{
+    if (unload != 0)
+        menuCBBaseWindowClose(1);
+
+    menuCBSEPlay(0x15);
+    menuCloseCustom(0xF7, 0, 0);
+    menuCloseCustom(0xAA, 0, 0);
+    menuCloseCustom(0xCD, 0, 0);
+    menuCloseCustom(0xCC, 0, 0);
+    menuCloseCustom(0xCB, 0, 0);
+    menuCloseCustom(0xCE, 0, 0);
+    menuCloseCustom(0xA9, 0, 1);
+
+    if (unload != 0) {
+        if (fightReadResource(0x842, 0x195F3400) == 0)
+            fightFreeResource(0x842, 0x195F3400);
+
+        GSfsysFree(0x88C);
+        GSresFreeGroup(0x88C);
+    }
+}
+
+void menuCBRuleCursorWindowColor(tagWINDOW_WORK *window, s32 index)
+{
+    if (menuCBTaisenWork.mRuleCursorPrev != -1) {
+        menuSetDisp(window->mMenuID, 0);
+
+        if (menuCBTaisenWork.mRuleCursorPrev == index) {
+            menuSetDisp(window->mMenuID, 1);
+            window->mRgba.mColorA = (u8)menuCBTaisenWork.mRuleCursorPrevColor;
+        }
+
+        if (menuCBTaisenWork.mRuleCursor == index) {
+            menuSetDisp(window->mMenuID, 1);
+            window->mRgba.mColorA = (u8)menuCBTaisenWork.mRuleCursorColor;
+        }
+    } else if (index == 1) {
+        menuCB_MenuDispCheckONorOFF(window, menuCBTaisenWork.mRuleCursor == index ||
+                                               menuCBTaisenWork.mRuleCursor == 5);
+    } else {
+        menuCB_MenuDispCheckONorOFF(window, menuCBTaisenWork.mRuleCursor == index);
+    }
+}
+
+void menuCBEntryCursorWindowColor(tagWINDOW_WORK *window, s32 index)
+{
+    if (menuCBTaisenWork.mEntryCursorPrev != -1) {
+        menuSetDisp(window->mMenuID, 0);
+
+        if (menuCBTaisenWork.mEntryCursorPrev == index) {
+            menuSetDisp(window->mMenuID, 1);
+            window->mRgba.mColorA = (u8)menuCBTaisenWork.mEntryCursorPrevColor;
+        }
+
+        if (menuCBTaisenWork.mEntryCursor == index) {
+            menuSetDisp(window->mMenuID, 1);
+            window->mRgba.mColorA = (u8)menuCBTaisenWork.mEntryCursorColor;
+        }
+    } else {
+        menuCB_MenuDispCheckONorOFF(window, menuCBTaisenWork.mEntryCursor == index);
+    }
+}
+
+void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on)
+{
+    if (on != 0)
+        menuSetDisp(window->mMenuID, 1);
+    else
+        menuSetDisp(window->mMenuID, 0);
+}
+
+void menuCB_SpriteDispCheckONorOFF(tagSPRITE_WORK *sprite, bool on)
+{
+    if (on != 0)
+        winSpriteSetDisp(sprite, 1);
+    else
+        winSpriteSetDisp(sprite, 0);
+}
+
+void menuCBPokemonEntryTakeItem(void)
+{
+    Pokemon *pokemon = menuCBPokemonGetPtr(menuCBTaisenWork.dstBank,
+                                           menuCBTaisenWork.dstIndex);
+    u16 *name;
+    Pokemon *party;
+    u32 itemID;
+
+    name = pokemon_GetNickname(pokemon);
+    party = &menuCBTaisenWork.mParty[0];
+
+    msgctrlSetValue(0x32, (unsigned long)name);
+
+    itemID = battlePokemonGetHeldItem(pokemon);
+
+    if ((u16)itemID != 0) {
+        if (heroItemCheckAddItemDataId(party, itemID) <= 0) {
+            menuCBMsgPopup(0x3ACF);
+        } else {
+            u32 soubi;
+
+            heroItemAddItemDataId(party, itemID, 1, -1);
+            soubi = pokemonDoItemSoubi(pokemon, 0, 0);
+            msgctrlSetValue(0x2D, (u16)soubi);
+            menuCBMsgPopup(0x3ACD);
+        }
+    } else {
+        menuCBMsgPopup(0x3ACE);
+    }
+}
+
+void menuCBPokemonEntryGiveItem(void)
+{
+    Pokemon *pokemon = menuCBPokemonGetPtr(menuCBTaisenWork.dstBank,
+                                           menuCBTaisenWork.dstIndex);
+    Pokemon *party;
+    u32 select;
+    u32 pocketSlot;
+    u32 itemID;
+    u32 oldItem;
+    s32 answer;
+    u16 *name;
+    s32 slot;
+
+    name = pokemon_GetNickname(pokemon);
+    party = &menuCBTaisenWork.mParty[0];
+
+    msgctrlSetValue(0x32, (unsigned long)name);
+
+    if ((s32)menuCBBios_CurrentRule()->m08 == 1) {
+        _menuCB_errorMsgDisp(0x43A9);
+        return;
+    }
+
+    menuOpen(0xE6, 1);
+    select = menuPocket2Call(5, 0, party);
+    pocketSlot = menuPocket2GetLastSlotID();
+    menuCloseCustom(0xE6, 0, 1);
+
+    if ((u16)select == 0)
+        return;
+
+    slot = (u16)menuCBTaisenWork.dstIndex - menuCBEntrySlotFirst;
+
+    menuCBEntrySlotFlagsClear(0, slot);
+
+    oldItem = pokemonDoItemSoubi(pokemon, 0, 0);
+    pokemonDoItemSoubi(pokemon, select, 1);
+    menuCBEntrySlotConditionsSetItemRegulation(party, pokemon, slot);
+    pokemonDoItemSoubi(pokemon, 0, 0);
+    pokemonDoItemSoubi(pokemon, oldItem, 1);
+
+    if (menuCBEntrySlotConditionGet(slot, 9) != 0) {
+        _menuCB_errorMsgDisp(0x43AA);
+        return;
+    }
+
+    if (menuCBEntrySlotConditionGet(slot, 0xA) != 0) {
+        _menuCB_errorMsgDisp(0x43AB);
+        return;
+    }
+
+    if (menuCBEntrySlotConditionGet(slot, 0xB) != 0) {
+        _menuCB_errorMsgDisp(0x43AC);
+        return;
+    }
+
+    itemID = battlePokemonGetHeldItem(pokemon);
+
+    if ((u16)itemID != 0) {
+        msgctrlSetValue(0x2D, (u16)itemID);
+        winMsgOpen(2, 0x3ACA, 1, 0);
+
+        switch (gameGetRegion()) {
+        case 0:
+            answer = menuSubOpenYesNo(0, 0x3C, 0xD2, 0);
+            break;
+        case 1:
+        case 2:
+            answer = menuSubOpenYesNo(0, 0x3C, 0xC8, 0);
+            break;
+        }
+
+        winMsgClose(1);
+
+        if (answer != 0)
+            return;
+
+        if (heroItemDecItemDataId(party, select, 1, (u8)pocketSlot) != 0) {
+            menuCBMsgPopup(0x3ACF);
+            return;
+        }
+
+        if (heroItemCheckAddItemDataId(party, itemID) <= 0) {
+            heroItemAddItemDataId(party, select, 1, -1);
+            menuCBMsgPopup(0x3ACF);
+        } else {
+            heroItemAddItemDataId(party, itemID, 1, -1);
+
+            oldItem = pokemonDoItemSoubi(pokemon, 0, 0);
+            pokemonDoItemSoubi(pokemon, select, 1);
+            msgctrlSetValue(0x2D, (u16)oldItem);
+            msgctrlSetValue(0x2E, (u16)select);
+            menuCBMsgPopup(0x3ACB);
+        }
+    } else {
+        if (heroItemDecItemDataId(party, select, 1, (u8)pocketSlot) != 0)
+            return;
+
+        pokemonDoItemSoubi(pokemon, select, 1);
+        msgctrlSetValue(0x2D, (u16)select);
+        menuCBMsgPopup(0x3ACC);
+    }
+}
+
+void menuCBRuleWindowDisp(tagWINDOW_WORK *window, s32 trainer)
+{
+    u16 name[0x1F];
+    s32 i;
+
+    if (trainer >= 3) {
+        msgctrlSetValue(0x37, (unsigned long)&menuCBTaisenWork.mRulesetData[trainer].m1E);
+    } else {
+        const u16 *src;
+
+        switch (trainer) {
+        case 0:
+            src = GSmsgGetStringPtr(0x4387);
+            break;
+        case 1:
+            src = GSmsgGetStringPtr(0x4389);
+            break;
+        case 2:
+            src = GSmsgGetStringPtr(0x4388);
+            break;
+        default:
+            break;
+        }
+
+        for (i = 0; i < 0x1F; i++) {
+            if (src != 0) {
+                if (*src == 0xFFFF)
+                    src += 2;
+                name[i] = *src;
+                if (*src != 0)
+                    src++;
+            } else {
+                name[i] = 0;
+            }
+        }
+
+        msgctrlSetValue(0x37, (unsigned long)name);
+    }
+
+    GSmsgPrint2(window->mLayerID, 0, 0, window->mRgba.mColorA | 0xFFFFFF00, 0x4275);
+
+    if (menuCBTaisenWork.mRuleCursor == 5)
+        msgctrlSetValue(0x34, 2);
+    else
+        msgctrlSetValue(0x34, menuCBTaisenWork.mRuleCursor + 1);
+
+    msgctrlSetValue(0x2F, menuCBTaisenWork.mSlotNo);
+
+    GSmsgPrint2(window->mLayerID, 0x1CE, 0, window->mRgba.mColorA | 0xFFFFFF00, 0x427A);
+    GSmsgPrint2(window->mLayerID, 0x1E4, 2, window->mRgba.mColorA | 0xFFFFFF00, 0x4417);
+
+    if (menuCBTaisenWork.mEntrySelect != -1)
+        i = 5;
+    else
+        i = 4;
+
+    msgctrlSetValue(0x34, i);
+    msgctrlSetValue(0x2F, i);
+
+    GSmsgPrint2(window->mLayerID, 0x1FA, 0, window->mRgba.mColorA | 0xFFFFFF00, 0x427A);
+}
+
+void menuCBPortTrainerNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 trainer)
+{
+    msgctrlSetValue(0x37, (unsigned long)&menuCBTaisenWork.mRulesetData[trainer].m1E);
+
+    GSmsgPrint2(window->mLayerID, 0, 0,
+                (sprite->mColor & 0xFFFFFF00) | window->mRgba.mColorA, 0x4277);
+}
+
+void menuCBPokemonEntryStatusOpen(void)
+{
+    Pokemon *pokemon = menuCBPokemonGetPtr(menuCBTaisenWork.dstBank,
+                                           menuCBTaisenWork.dstIndex);
+
+    menuCBBattleMenuClose(0);
+    menuPokemonStatusOpenFromPokemonChange(pokemon, 0, 0);
+    menuCBBattleMenuOpen(0);
+}
+
+s32 menuCBPokemonEntryActionSelect(void)
+{
+    u16 index;
+
+    if (menuCBTaisenWork.mSubmenuConfirm == 1) {
+        winMsgOpen(2, 0x43A1, 1, 0);
+
+        switch (gameGetRegion()) {
+        case 0:
+            menuCBTaisenWork.selectResult = menuSubOpenYesNo(0, 0x3C, 0xD2, 0);
+            break;
+        case 1:
+        case 2:
+            menuCBTaisenWork.selectResult = menuSubOpenYesNo(0, 0x3C, 0xC8, 0);
+            break;
+        }
+
+        if (menuCBTaisenWork.selectResult == -1)
+            menuCBTaisenWork.selectResult = 1;
+
+        winMsgClose(0);
+        return menuCBTaisenWork.selectResult;
+    }
+
+    menuCB2DPokemonSetSource();
+
+    index = (u16)menuCBTaisenWork.dstIndex;
+
+    if (index >= menuCBEntrySlotFirst && index <= menuCBEntrySlotLast) {
+        menuCBTaisenWork.selectResult =
+            menuSubOpenSelect2(0, submenu_msg2, 4, 0x28, 0x64, 0, 4, 1);
+
+        if (menuCBTaisenWork.selectResult == -1)
+            menuCBTaisenWork.selectResult = 3;
+
+        switch (menuCBTaisenWork.selectResult) {
+        case 0:
+            return 1;
+        case 1:
+            return 2;
+        case 2:
+            winMsgOpen(2, 0x43A0, 0, 0);
+            menuCBTaisenWork.selectResult =
+                menuSubOpenSelect2(0, submenu_msg3, 3, 0x28, 0x64, 0, 3, 1);
+
+            if (menuCBTaisenWork.selectResult == -1)
+                menuCBTaisenWork.selectResult = 2;
+
+            switch (menuCBTaisenWork.selectResult) {
+            case 0:
+                winMsgClose(0);
+                return 4;
+            case 1:
+                return 5;
+            case 2:
+                winMsgClose(0);
+                return 6;
+            }
+        case 3:
+            return 6;
+        }
+    } else {
+        s16 x = 0x104;
+        s16 y = 0xC8;
+
+        switch (menuCBTaisenWork.battleMode2D) {
+        case 1:
+            x = submenu1_x[index];
+            y = submenu1_y[index];
+            break;
+        case 0:
+        case 2:
+        case 3:
+            break;
+        }
+
+        if (menuCBTaisenWork.selectCount == 6) {
+            menuCBTaisenWork.selectResult =
+                menuSubOpenSelect2(0, submenu_msgFull, 2, x, y, 0, 2, 1);
+
+            if (menuCBTaisenWork.selectResult == -1)
+                menuCBTaisenWork.selectResult = 1;
+        } else {
+            menuCBTaisenWork.selectResult =
+                menuSubOpenSelect2(0, submenu_msg1, 3, x, y, 0, 3, 1);
+
+            if (menuCBTaisenWork.selectResult == -1)
+                menuCBTaisenWork.selectResult = 2;
+        }
+
+        if (menuCBTaisenWork.selectCount == 6) {
+            switch (menuCBTaisenWork.selectResult) {
+            case 0:
+                return 2;
+            case 1:
+                return 6;
+            }
+        } else {
+            switch (menuCBTaisenWork.selectResult) {
+            case 0:
+                return 0;
+            case 1:
+                return 2;
+            case 2:
+                return 6;
+            }
+        }
+    }
+
+    return 6;
+}
+
+void menuCBRuleSelect(void)
+{
+    switch (menuCBTaisenWork.mRuleNo) {
+    case 0:
+    case 1:
+    case 2:
+        menuCBTaisenWork.selectResult =
+            menuSubOpenSelect2(0, submenurule_msg1, 3, 0x28, 0xF4,
+                               menuCBTaisenWork.selectResult, 3, 1);
+
+        if (menuCBTaisenWork.selectResult == -1)
+            menuCBTaisenWork.selectResult = 2;
+        break;
+
+    case 3:
+    case 4:
+    case 5:
+        menuCBTaisenWork.selectResult =
+            menuSubOpenSelect2(0, submenurule_msg2, 4, 0x28, 0xD4,
+                               menuCBTaisenWork.selectResult, 4, 1);
+
+        if (menuCBTaisenWork.selectResult == -1)
+            menuCBTaisenWork.selectResult = 3;
+
+        menuCBTaisenWork.selectResult += 0x10;
+        break;
+    }
+
+    switch (menuCBTaisenWork.selectResult) {
+    case 0:
+    case 0x10:
+        menuCBTaisenWork.mRuleSelect = 0;
+        break;
+    case 2:
+    case 0x13:
+        menuCBTaisenWork.mRuleSelect = 1;
+        break;
+    }
+}
+
+void menuCBPokemonEntryCheck(void)
+{
+    Pokemon *party;
+    u32 slot;
+
+    for (u32 i = 0; i < 6; i++)
+        menuCBEntrySlotFlagsClear(0, i);
+
+    party = &menuCBTaisenWork.mParty[0];
+
+    menuCBEntrySlotConditionsBuildAll(party, 0);
+
+    for (slot = 0; slot < 6; slot++) {
+        if (menuCBEntrySlotConditionGet(slot, 8) != 0) {
+            menuCBTaisenWork.pokeMsgID = 0x43A9;
+            menuCBTaisenWork.dispState = 2;
+            return;
+        }
+
+        if (menuCBEntrySlotConditionGet(slot, 9) != 0) {
+            menuCBTaisenWork.mSlotNo = slot + 1;
+            menuCBTaisenWork.pokeMsgID = 0x4410;
+            menuCBTaisenWork.dispState = 2;
+            return;
+        }
+
+        if (menuCBEntrySlotConditionGet(slot, 0xA) != 0) {
+            menuCBTaisenWork.pokeMsgID = 0x43AB;
+            menuCBTaisenWork.dispState = 2;
+            return;
+        }
+
+        if (menuCBEntrySlotConditionGet(slot, 0xB) != 0) {
+            menuCBTaisenWork.pokeMsgID = 0x43AC;
+            menuCBTaisenWork.dispState = 2;
+            return;
+        }
+    }
+
+    for (u32 i = 0; i < 6; i++)
+        menuCBEntrySlotFlagsClear(0, i);
+
+    menuCBEntrySlotConditionsSetTrainerRegulation(party);
+
+    if (menuCBEntrySlotConditionGet(0, -1) != 0) {
+        menuCBTaisenWork.dispState = 2;
+
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][0].msg43ae)
+            menuCBTaisenWork.pokeMsgID = 0x43AE;
+    }
+}
+
+void menuCB_WaitGCControler1(void)
+{
+    if (GSinputIsConnected(1) == 0) {
+        s32 msgID;
+
+        if (gbaCommandIsConnected(1) != 0)
+            msgID = 0x442D;
+        else
+            msgID = 0x4436;
+
+        winMsgOpen(2, msgID, 0, 0);
+
+        while (GSinputIsConnected(1) == 0)
+            GSthreadSwitch();
+
+        winMsgClose(1);
+    }
+}
+
+void menuCB_GBADisconnectedErrorJob(void)
+{
+    s32 port = menuCB_GetDisconnectedGBA();
+
+    switch (port) {
+    case 0:
+        if (gbaCommandIsConnected(1) != 0) {
+            winMsgOpen(2, 0x442D, 0, 0);
+
+            while (GSinputIsConnected(1) == 0)
+                GSthreadSwitch();
+        } else {
+            winMsgOpen(2, 0x442C, 1, 0);
+        }
+        break;
+
+    case 1:
+        winMsgOpen(2, 0x4438, 0, 0);
+
+        while (GSinputIsConnected(1) == 0)
+            GSthreadSwitch();
+        break;
+
+    default:
+        if (gbaCommandIsConnected(1) != 0) {
+            winMsgOpen(2, 0x442D, 0, 0);
+
+            while (GSinputIsConnected(1) == 0)
+                GSthreadSwitch();
+        } else {
+            msgctrlSetValue(0x2F, port);
+            winMsgOpen(2, 0x442B, 1, 0);
+        }
+        break;
+    }
+
+    winMsgClose(1);
+    menuCB_WaitGCControler1();
+}
+
+void menuCBPokemonEntryGCControlDisp(tagSPRITE_WORK *sprite, s32 slot)
+{
+    if (menuCBPokemonEntryDisp(sprite) != 0 && menuCBPokemonGetDataId(0, slot) == 0)
+        winSpriteSetDisp(sprite, 0);
+}
+
+void menuCBPokemonEntryFacePlace(tagSPRITE_WORK *sprite, s32 port, u32 slot)
+{
+    u16 limit = (u16)menuCBBios_GetPokemonNumLimit();
+    u16 num = toolentryTaisenGetPokemonNum(port);
+    u16 bound;
+
+    menuCBTaisenWork.mPartySlotX[port][slot - 1] = sprite->mX;
+
+    if (menuCBTaisenWork.mPartySlotFlag[port][slot - 1] == 0)
+        menuCBTaisenWork.mPartySlotValue[port][slot - 1] = 0x32;
+
+    if (num < limit)
+        bound = num;
+    else
+        bound = limit;
+
+    if (slot > (u16)bound)
+        winSpriteSetDisp(sprite, 0);
+    else
+        winSpriteSetDisp(sprite, 1);
+}
+
+void menuCBPokemonEntryFaceDisp(tagSPRITE_WORK *sprite, s32 port, u32 slot)
+{
+    u16 limit = (u16)menuCBBios_GetPokemonNumLimit();
+    u16 num = toolentryTaisenGetPokemonNum(port);
+    s32 order = (u16)toolentryTaisengetEtnryPokemonOrderNum(port);
+    u16 bound;
+    s16 x;
+
+    if (num < limit)
+        bound = num;
+    else
+        bound = limit;
+
+    if (slot > bound || slot > order) {
+        if (pauseCheck()) {
+            if (menuCBTaisenWork.mPartySlotFlag[port][slot - 1] == 0)
+                winSpriteSetDisp(sprite, 0);
+            else
+                winSpriteSetDisp(sprite, 1);
+        } else {
+            winSpriteSetDisp(sprite, 0);
+            menuCBTaisenWork.mPartySlotFlag[port][slot - 1] = 0;
+        }
+        return;
+    }
+
+    if (pauseCheck()) {
+        if (menuCBTaisenWork.mPartySlotFlag[port][slot - 1] != 1) {
+            winSpriteSetDisp(sprite, 0);
+            menuCBTaisenWork.mPartySlotFlag[port][slot - 1] = 0;
+            return;
+        }
+    }
+
+    menuCBTaisenWork.mPartySlotFlag[port][slot - 1] = 1;
+
+    x = menuCBTaisenWork.mPartySlotX[port][slot - 1] +
+        menuCBTaisenWork.mPartySlotValue[port][slot - 1];
+    sprite->mX = x;
+
+    if (menuCBTaisenWork.mPartySlotValue[port][slot - 1] != 0)
+        menuCBTaisenWork.mPartySlotValue[port][slot - 1] -= 5;
+
+    winSpriteSetDisp(sprite, 1);
+
+    if (menuCBTaisenWork.mTrainer[port].mEntryList[slot - 1] == 0xF)
+        winSpriteSetDisp(sprite, 0);
+}
+
+u8 menuCBPokemonEntryDispPokemonFace_AFTER(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
+                                            s32 arg, s32 slot)
+{
+    if (menuCBBattleStartGetStatus() != 0) {
+        menuCBPokemonEntryDispPokemonFace(window, sprite, arg, slot);
+        return 1;
+    }
+
+    return 0;
+}
+
+u8 menuCBPokemonEntryDispPokemonFace_BEFORE(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
+                                            s32 arg, s32 slot)
+{
+    if (menuCBBattleStartGetStatus() == 0) {
+        menuCBPokemonEntryDispPokemonFace(window, sprite, arg, slot);
+        return 1;
+    }
+
+    return 0;
+}
+
+void menuCB_BattleEntryPokemonSelectDisp(tagSPRITE_WORK *sprite, s32 bank, s32 index)
+{
+    menuCB_SpriteDispCheckONorOFF(sprite, menuCBPokemonCheck(bank, index) == 0);
+}
+
+s32 menuCB_GCStatusDispMode(tagSPRITE_WORK *sprite, s32 mode)
+{
+    if (menuCBTaisenWork.battleMode == 2) {
+        if (mode == 0) {
+            winSpriteSetDisp(sprite, 1);
+            return 1;
+        }
+
+        winSpriteSetDisp(sprite, 0);
+        return 0;
+    }
+
+    if (mode == 1) {
+        winSpriteSetDisp(sprite, 1);
+        return 1;
+    }
+
+    winSpriteSetDisp(sprite, 0);
+    return 0;
+}
+
+u8 menuCBPokemonEntryDisp(tagSPRITE_WORK *sprite)
+{
+    u8 disp = 1;
+    s32 home = toolentryTaisenGetPokemonHomePlace(0);
+
+    switch (home) {
+    case 0:
+        winSpriteSetDisp(sprite, 1);
+        break;
+    default:
+        winSpriteSetDisp(sprite, 0);
+        disp = 0;
+        break;
+    }
+
+    return disp;
+}
+
+void menuCB2DPokemonSetSource(void)
+{
+    switch (menuCBTaisenWork.battleMode2D) {
+    case 0:
+        menuCBTaisenWork.dstBank = menuCBPokemonHeroParty;
+        menuCBTaisenWork.dstIndex = menuCBTaisenWork.pokeSelect;
+        return;
+
+    case 1:
+        menuCBTaisenWork.dstBank = menuCBPokemonPcBox;
+        menuCBTaisenWork.dstIndex = (u16)menuCBTaisenWork.pokeSelect |
+                                    ((menuCBTaisenWork.page2D << 16) & 0xFFFF0000);
+        return;
+
+    case 2:
+        menuCBTaisenWork.dstBank = menuCBPokemonReliveHall;
+        menuCBTaisenWork.dstIndex = (u16)menuCBTaisenWork.pokeSelect |
+                                    ((menuCBTaisenWork.page2DSub << 16) & 0xFFFF0000);
+        return;
+
+    case 3:
+        menuCBTaisenWork.dstBank = menuCBPokemonWorkParty;
+        menuCBTaisenWork.dstIndex = menuCBTaisenWork.pokeSelect;
+        return;
+    }
+}
+
+void menuCBPokemonReturnSelected(void)
+{
+    s32 select = menuCBTaisenWork.pokeSelect;
+
+    switch (menuCBTaisenWork.selectCount) {
+    case 1:
+        menuCBTaisenWork.pokeSelect = 0x1E;
+        break;
+    case 2:
+        menuCBTaisenWork.pokeSelect = 0x1F;
+        break;
+    case 3:
+        menuCBTaisenWork.pokeSelect = 0x20;
+        break;
+    case 4:
+        menuCBTaisenWork.pokeSelect = 0x21;
+        break;
+    case 5:
+        menuCBTaisenWork.pokeSelect = 0x22;
+        break;
+    case 6:
+        menuCBTaisenWork.pokeSelect = 0x23;
+        break;
+    }
+
+    menuCBPokemonReturnToParty();
+    menuCBTaisenWork.pokeSelect = select;
+}
+
+void menuCBPokemonEntryAdd(void)
+{
+    u32 bank;
+    u32 index;
+    Pokemon *src;
+    Pokemon *pokemon;
+
+    menuCB2DPokemonSetSource();
+
+    if (menuCBPokemonCheck(menuCBTaisenWork.dstBank, menuCBTaisenWork.dstIndex) == 0)
+        return;
+
+    if (menuCBTaisenWork.pokeSelect >= menuCBEntrySlotFirst) {
+        menuCBPokemonReturnToParty();
+        return;
+    }
+
+    if (menuCBTaisenWork.selectCount == 6)
+        return;
+
+    menuCB2DPokemonSetSource();
+
+    bank = menuCBTaisenWork.dstBank;
+    index = menuCBTaisenWork.dstIndex;
+
+    backup_bank[menuCBTaisenWork.selectCount] = bank;
+    backup_index[menuCBTaisenWork.selectCount] = index;
+
+    pokemon = menuCBPokemonGetPtr(menuCBPokemonWorkParty, menuCBTaisenWork.selectCount);
+
+    switch (gameGetRegion()) {
+    case 0:
+        if (bank != menuCBPokemonReliveHall) {
+            src = menuCBPokemonGetPtr(bank, index);
+
+            memcpy(pokemon, src, sizeof(Pokemon));
+            pokemonInit(src);
+        } else if (menuCBTaisenWork.pokeSelect == 4) {
+            backup_bank[menuCBTaisenWork.selectCount] = 0;
+            backup_index[menuCBTaisenWork.selectCount] = 0;
+            menuCBTaisenWork.dispState = 2;
+            menuCBTaisenWork.pokeMsgID = 0x43A5;
+            return;
+        } else {
+            CReliveStage *stage = CReliveHall::getPointer()->getStage(index >> 16);
+
+            stage->pickupDancer(*pokemon, index & 0xFFFF);
+        }
+        break;
+
+    case 1:
+    case 2:
+        if (bank == menuCBPokemonReliveHall && menuCBTaisenWork.pokeSelect == 4) {
+            backup_bank[menuCBTaisenWork.selectCount] = 0;
+            backup_index[menuCBTaisenWork.selectCount] = 0;
+            menuCBTaisenWork.dispState = 2;
+            menuCBTaisenWork.pokeMsgID = 0x43A5;
+            return;
+        }
+
+        src = menuCBPokemonGetPtr(bank, index);
+
+        memcpy(pokemon, src, sizeof(Pokemon));
+        pokemonInit(src);
+        break;
+    }
+
+    menuCBTaisenWork.selectCount++;
+
+    if (menuCBPokemonMsgCheck(bank, menuCBTaisenWork.selectCount + 0x1D) != 0 &&
+        menuCBTaisenWork.selectCount == 6)
+        menuCBTaisenWork.pokeSelect = 0x25;
+}
+
+void menuCB2DPokemonSetPage(void)
+{
+    s32 base;
+    s32 page;
+    u32 i;
+
+    page = menuCBTaisenWork.page2DSub;
+
+    if (menuCBTaisenWork.pokeSelect > 4)
+        return;
+
+    base = (page << 16) & 0xFFFF0000;
+
+    if (menuCBPokemonCheck(menuCBPokemonReliveHall, menuCBTaisenWork.pokeSelect | base) != 0)
+        return;
+
+    for (i = 0; i < 5; i++) {
+        if (menuCBPokemonCheck(menuCBPokemonReliveHall, i | base) != 0) {
+            menuCBTaisenWork.pokeSelect = (s8)i;
+            break;
+        }
+    }
+
+    if (menuCBTaisenWork.pokeSelect != i)
+        menuCBTaisenWork.pokeSelect = menuCBEntrySlotFirst;
+}
+
+void menuCBPCBOXTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 box, s32 x)
+{
+    s16 x2;
+    s16 width;
+
+    spriteSetScissor(window->mLayerID, 0, 0, 0xD1, 0x12);
+    msgctrlSetValue(0x37, (unsigned long)pcboxGetPokemonBoxName(PCBOX::getPointer(), (s8)box));
+
+    width = (s16)(GSmsgGetMessageSize(0x4277) >> 16);
+    x2 = (s16)(sprite->mWidth / 2 - width / 2);
+    x2 += x;
+    GSmsgPrint2(window->mLayerID, x2, 0, window->mRgba.mColorA | 0xFFFFFF00, 0x4277);
+
+    spriteClearScissor(window->mLayerID);
+}
+
+void menuCBReliveTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 msgID,
+                               s32 x)
+{
+    s16 width;
+    s16 x2;
+
+    spriteSetScissor(window->mLayerID, 0, 0, 0xD1, 0x12);
+    msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(msgID));
+
+    width = (s16)(GSmsgGetMessageSize(0x4277) >> 16);
+    x2 = (s16)(sprite->mWidth / 2 - width / 2);
+    x2 += x;
+    GSmsgPrint2(window->mLayerID, x2, 0, window->mRgba.mColorA | 0xFFFFFF00, 0x4277);
+
+    spriteClearScissor(window->mLayerID);
+}
+
+void menuCBPokemonEntryTitleNameDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 msgID, s32 x)
+{
+    s16 width;
+    s16 x2;
+
+    spriteSetScissor(window->mLayerID, 0, 0, 0xD1, 0x12);
+    msgctrlSetValue(0x37, (unsigned long)gamedataBiosGetGamedataAtttestPtr(
+                              &menuCBTaisenWork.mParty[0]));
+
+    width = (s16)(GSmsgGetMessageSize(msgID) >> 16);
+    x2 = (s16)(sprite->mWidth / 2 - width / 2);
+    x2 += x;
+    GSmsgPrint2(window->mLayerID, x2, 0, window->mRgba.mColorA | 0xFFFFFF00, msgID);
+
+    spriteClearScissor(window->mLayerID);
+}
+
+u8 menuCBPokemonCheck(unsigned long bank, unsigned long index)
+{
+    Pokemon *pokemon = menuCBPokemonGetPtr(bank, index);
+
+    if (pokemon != 0 && (u8)pokemonCheckValid(pokemon) != 0)
+        return 1;
+
+    return 0;
 }
