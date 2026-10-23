@@ -3719,6 +3719,9 @@ name = "libc/qsort.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 [[lib.object]]
+name = "libc/scanf.c"
+completed = true
+[[lib.object]]
 name = "libc/string.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
