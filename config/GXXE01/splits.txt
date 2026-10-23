@@ -204,6 +204,10 @@ game/menuCBBattleStart.cpp:
 	.ctors      start:0x802E9F98 end:0x802E9F9C
 	.rodata     start:0x802EAAD8 end:0x802EABF8
 
+game/menuOrre.cpp:
+	.text       start:0x800A314C end:0x800A3150
+	.ctors      start:0x802E9FAC end:0x802E9FB0
+
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
