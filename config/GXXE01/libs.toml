@@ -13,7 +13,7 @@ name = "orig/GXXE01/sys/main.dol"
 completed = false
 
 [[lib.object]]
-name = "decomp/dbgMenuFightSetMsgSpeed.c"
+name = "game/dbgMenuFightMsgSpeed.c"
 completed = true
 
 [[lib.object]]
