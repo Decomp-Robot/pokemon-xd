@@ -1877,9 +1877,6 @@ ext/musyx_sdk/runtime/dsp_import.c:
 	.data       start:0x80409040 end:0x8040AF00
 	.sdata      start:0x804E8460 end:0x804E8468
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/musyx_sdk/runtime/hw_aramdma.c:
 	.text       start:0x80180E58 end:0x80180EF8
 	.text       start:0x80180EF8 end:0x801810D4
@@ -1976,6 +1973,14 @@ game/pokemonRelive.cpp:
 	.text       start:0x80233B1C end:0x80233B20
 	.ctors      start:0x802E9FE4 end:0x802E9FE8
 	.sbss       start:0x804EB988 end:0x804EB990
+
+game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
+	.text       start:0x8025C940 end:0x8025CA38
+	.sdata      start:0x804E8610 end:0x804E8618
+	.sdata2     start:0x804EF190 end:0x804EF1A0
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 src/init.c:
 	.init       start:0x80003458 end:0x80003488

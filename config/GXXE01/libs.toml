@@ -3552,3 +3552,13 @@ cflags = [
     "-str reuse,readonly",
     "-lang=c++",
 ]
+
+[[lib]]
+name = "hsdbase_gs"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/random.c"
+completed = true
