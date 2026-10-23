@@ -206,6 +206,18 @@ ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC7D4 end:0x800BC82C
 	.text       start:0x800BC82C end:0x800BCA10
 
+ext/dolphin_sdk/ar/ar.c:
+	.text       start:0x800BCA10 end:0x800BCA54
+	.text       start:0x800BCA54 end:0x800BCA90
+	.text       start:0x800BCA90 end:0x800BCB80
+	.text       start:0x800BCB80 end:0x800BCC44
+	.text       start:0x800BCC44 end:0x800BCC4C
+	.text       start:0x800BCC4C end:0x800BCC54
+	.text       start:0x800BCC54 end:0x800BCCCC
+	.text       start:0x800BCCCC end:0x800BCCEC
+	.text       start:0x800BCCEC end:0x800BCCFC
+	.text       start:0x800BCCFC end:0x800BE4F0
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
