@@ -63,7 +63,7 @@ decomp/pokemonindex.cpp:
 	.text       start:0x8001F1B8 end:0x8001F1D0
 
 game/menuPokemonCursor.cpp:
-	.text       start:0x8001F8E4 end:0x8001F920
+	.text       start:0x8001F8A0 end:0x8001F920
 
 game/menuInfoWindow.cpp:
 	.text       start:0x8001FBF8 end:0x8001FC2C
