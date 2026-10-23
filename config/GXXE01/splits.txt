@@ -25,6 +25,61 @@ game/dbgMenuFlag.c:
 decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
+game/dbgMenuMemcard.c:
+	.text       start:0x8000B644 end:0x8000BAE4
+	.rodata     start:0x802EA0B8 end:0x802EA1DC
+	.data       start:0x802FC8C8 end:0x802FC8F0
+
+game/dbgMenuMsg.c:
+	.text       start:0x8000BAE4 end:0x8000BC28
+
+game/dbgMenuPeople.c:
+	.text       start:0x8000BC28 end:0x8000BD20
+
+game/dbgMenuSoundTest.c:
+	.text       start:0x8000BD20 end:0x8000C0C4
+
+game/dbgMenuWaza.c:
+	.text       start:0x8000C0C4 end:0x8000C27C
+
+game/GSgfxLayer.cpp:
+	.text       start:0x8000C27C end:0x8000C29C
+
+game/menuColosseumBattleConnection.c:
+	.text       start:0x8000C29C end:0x8000C2B4
+
+game/GSgfxLayerEnd.cpp:
+	.text       start:0x8000C2B4 end:0x8000C2C0
+
+game/dbgMenuFightTrainer.cpp:
+	.text       start:0x8000C2C0 end:0x8000DBAC
+	.data       start:0x802FE870 end:0x802FEA1C
+
+game/dbgMenuFightWaza.c:
+	.text       start:0x8000DBAC end:0x8000DEE8
+
+game/dbgMenuLog.c:
+	.text       start:0x8000DEE8 end:0x8000E154
+
+game/dbgMenuFieldCamera.c:
+	.text       start:0x8000E154 end:0x8000E1F4
+
+game/dbgMenuItemCreate.c:
+	.text       start:0x8000E1F4 end:0x8000E53C
+
+game/dbgMenuRelive.c:
+	.text       start:0x8000E53C end:0x8000E5AC
+
+game/menuPokeCoupon.c:
+	.text       start:0x8000E5AC end:0x8000E64C
+	.rodata     start:0x802EA1E0 end:0x802EA22C
+
+game/dbgMenuToolBattle.c:
+	.text       start:0x8000E64C end:0x8000E720
+
+game/menuKeyDisc.c:
+	.text       start:0x8000E720 end:0x8000E74C
+
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x8000E74C end:0x8000E794
 	.sbss       start:0x804EA6C8 end:0x804EA6CC

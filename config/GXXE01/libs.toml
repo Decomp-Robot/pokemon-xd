@@ -25,6 +25,103 @@ name = "game/dbgMenuFlag.c"
 completed = true
 
 [[lib.object]]
+name = "game/dbgMenuMemcard.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-str reuse,readonly",
+]
+[[lib.object]]
+name = "game/dbgMenuMsg.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuPeople.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuSoundTest.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuWaza.c"
+completed = true
+[[lib.object]]
+name = "game/GSgfxLayer.cpp"
+completed = true
+[[lib.object]]
+name = "game/GSgfxLayerEnd.cpp"
+completed = true
+[[lib.object]]
+name = "game/menuColosseumBattleConnection.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuFightTrainer.cpp"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuFightWaza.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuLog.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuFieldCamera.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuItemCreate.c"
+completed = true
+[[lib.object]]
+name = "game/dbgMenuRelive.c"
+completed = true
+[[lib.object]]
+name = "game/menuPokeCoupon.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-str reuse,readonly",
+]
+[[lib.object]]
+name = "game/dbgMenuToolBattle.c"
+completed = true
+[[lib.object]]
+name = "game/menuKeyDisc.c"
+completed = true
+[[lib.object]]
 name = "decomp/pokemonindex.cpp"
 completed = true
 

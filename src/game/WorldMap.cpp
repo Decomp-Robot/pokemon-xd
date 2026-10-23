@@ -45,7 +45,6 @@ extern "C" long getRibbonCnt(WorldMap* map);
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
 extern "C" void zz_010f6b0_(tagWINDOW_WORK* window, long a);
-extern "C" void zz_0116a80_();
 extern "C" u16 windowGetKeyRepeat();
 extern "C" s8 fadeCheck(long a);
 extern "C" void fadeSet(long a, f32 b);
