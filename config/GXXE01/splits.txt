@@ -533,6 +533,9 @@ ext/dolphin_sdk/dvd/dvdFatal.c:
 	.sbss       start:0x804EAC38 end:0x804EAC3C
 	.sdata2     start:0x804ECB68 end:0x804ECB70
 
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
+
 ext/dolphin_sdk/dvd/fstload.c:
 	.text       start:0x800B8348 end:0x800B8420
 	.text       start:0x800B8420 end:0x800B8588
@@ -1278,6 +1281,11 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
+
+game/GSparticle.cpp:
+	.text       start:0x8012AD40 end:0x8012DA0C
+	.data       start:0x803FC210 end:0x803FC230
+	.sdata2     start:0x804ED990 end:0x804ED9A8
 
 game/particleEngine.cpp:
 	.text       start:0x8013A678 end:0x8013A67C

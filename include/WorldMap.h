@@ -8,12 +8,7 @@
 
 class glowEffect;
 
-/* 3D/screen position vector (GSvec). */
-struct GSvec {
-    f32 x;
-    f32 y;
-    f32 z;
-};
+/* 3D/screen position vector (GSvec) comes from GSgfx.h. */
 
 /* Partial view of the WorldMap work block addressed by the pointer at 0x08.
  * The block is 0x94 bytes and holds the per-map model state: the selected

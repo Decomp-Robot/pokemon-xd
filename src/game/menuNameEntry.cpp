@@ -163,11 +163,11 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
         return;
     }
     layer->setRenderStateAndSelect(GSgfxVFBuildTemp(0, 3, 0, 0, 1, 5, 1, 1, 4));
-    if (layer->mTextureA != texture || layer->mTextureB != texture || texture->mFormat != 0) {
-        layer->mTextureA = texture;
-        layer->mTextureStateA |= 1;
-        layer->mTextureB = texture;
-        layer->mTextureStateB |= 1;
+    if (layer->mPassState[0].mTexture != texture || layer->mPassState[1].mTexture != texture || texture->mFormat != 0) {
+        layer->mPassState[0].mTexture = texture;
+        layer->mPassState[0].mTextureState |= 1;
+        layer->mPassState[1].mTexture = texture;
+        layer->mPassState[1].mTextureState |= 1;
     }
     layer->mPrimitiveType = (GSgfxPrimType)0x98;
     layer->beginSurface(4);

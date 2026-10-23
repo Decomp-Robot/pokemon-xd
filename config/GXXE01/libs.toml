@@ -1104,6 +1104,14 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/GSparticle.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/GSparticleModuleData.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/particleEngine.cpp"
 completed = true
 cflags = [
