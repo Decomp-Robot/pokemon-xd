@@ -11,10 +11,12 @@ static u32 __AXCommandListCycles;
 static u32 __AXCompressor;
 u32 __AXClMode;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 __AXGetCommandListCycles(void) {
     return __AXCommandListCycles;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 __AXGetCommandListAddress(void) {
     u32 address;
 
@@ -25,11 +27,13 @@ u32 __AXGetCommandListAddress(void) {
     return address;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __AXWriteToCommandList(u16 data) {
     *__AXClWrite = data;
     __AXClWrite++;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __AXNextFrame(void* sbuffer, void* buffer) {
     u32 data;
     u16* pCommandList;
@@ -143,6 +147,7 @@ void __AXNextFrame(void* sbuffer, void* buffer) {
     DCFlushRange(pCommandList, 0x300);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __AXClInit(void) {
 #ifdef DEBUG
     OSReport("Initializing AXCL code module\n");
@@ -155,22 +160,26 @@ void __AXClInit(void) {
     __AXCompressor = 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __AXClQuit(void) {
 #ifdef DEBUG
     OSReport("Shutting down AXCL code module\n");
 #endif
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXSetMode(u32 mode) {
     if (__AXClMode != mode) {
         __AXClMode = mode;
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 AXGetMode(void) {
     return __AXClMode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXSetCompressor(u32 i) {
     __AXCompressor = i;
 }
