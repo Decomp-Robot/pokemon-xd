@@ -1186,3 +1186,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/hw_dolphin.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/hardware.c"
+completed = true

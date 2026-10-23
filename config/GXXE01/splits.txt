@@ -1083,6 +1083,14 @@ ext/musyx_sdk/runtime/snd_service.c:
 	.sdata      start:0x804E8448 end:0x804E844C
 	.sdata2     start:0x804EDEB0 end:0x804EDEB8
 
+ext/musyx_sdk/runtime/hardware.c:
+	.text       start:0x8017FD78 end:0x80180E58
+	.rodata     start:0x802F3CA0 end:0x802F3DA0
+	.bss        start:0x80471DF8 end:0x80471E08
+	.sdata      start:0x804E8450 end:0x804E8460
+	.sbss       start:0x804EB478 end:0x804EB47D
+	.sdata2     start:0x804EDEB8 end:0x804EDEE0
+
 ext/musyx_sdk/runtime/dsp_import.c:
 	.data       start:0x80409040 end:0x8040AF00
 	.sdata      start:0x804E8460 end:0x804E8468
