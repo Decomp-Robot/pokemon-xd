@@ -1090,6 +1090,27 @@ ext/musyx_sdk/runtime/dsp_import.c:
 ext/dolphin_sdk/gd/GDTexture.c:
 	.sdata      start:0x804E8700 end:0x804E8738
 
+ext/musyx_sdk/runtime/hw_aramdma.c:
+	.text       start:0x80180E58 end:0x80180EF8
+	.text       start:0x80180EF8 end:0x801810D4
+	.text       start:0x801810D4 end:0x801810EC
+	.text       start:0x801810EC end:0x801813D0
+	.text       start:0x801813D0 end:0x801813D4
+	.text       start:0x801813D4 end:0x801813F4
+	.text       start:0x801813F4 end:0x80181418
+	.text       start:0x80181418 end:0x80181420
+	.text       start:0x80181420 end:0x80181478
+	.text       start:0x80181478 end:0x8018189C
+	.text       start:0x8018189C end:0x801818B4
+	.text       start:0x801818B4 end:0x80181978
+	.text       start:0x80181978 end:0x80181AB0
+	.text       start:0x80181AB0 end:0x80181AE8
+	.text       start:0x80181AE8 end:0x80181BE0
+	.bss        start:0x80471E08 end:0x8047208C
+	.bss        start:0x8047208C end:0x80472310
+	.bss        start:0x80472310 end:0x80472720
+	.sbss       start:0x804EB480 end:0x804EB4A0
+
 ext/musyx_sdk/runtime/hw_memory.c:
 	.text       start:0x80182130 end:0x8018215C
 	.text       start:0x8018215C end:0x8018218C
