@@ -53,6 +53,9 @@ game/menuPokemonCursor.cpp:
 decomp/menuMetaMenu.cpp:
 	.text       start:0x80020A7C end:0x80020A90
 
+game/menuPocketTool.cpp:
+	.text       start:0x80021E84 end:0x80021EC8
+
 game/menuCBBios.c:
 	.text       start:0x80027EB8 end:0x80027ECC
 
