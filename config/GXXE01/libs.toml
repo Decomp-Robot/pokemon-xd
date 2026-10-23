@@ -130,7 +130,7 @@ name = "game/pokemonIndex.cpp"
 completed = true
 
 [[lib.object]]
-name = "decomp/_memcard_debug_type_check.c"
+name = "game/memcardDebugSlots.c"
 completed = true
 
 [[lib.object]]
