@@ -1845,6 +1845,12 @@ cflags = [
     "-lang=c",
 ]
 
+[[lib.object]]
+name = "TRK/TRK_memcpy_local.c"
+completed = false
+[[lib.object]]
+name = "src/init.c"
+completed = false
 [[lib]]
 name = "menuCBBios"
 mw_version = "GC/2.6"
@@ -3111,17 +3117,6 @@ name = "ext/dolphin_sdk/support/Tree.c"
 completed = true
 
 [[lib]]
-name = "stub"
-mw_version = "GC/2.6"
-cflags_preset = "sdk"
-progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
-
-[[lib.object]]
-name = "ext/dolphin_sdk/stub.c"
-completed = true
-
-[[lib]]
 name = "runtime"
 mw_version = "GC/1.3.2r"
 cflags_preset = "sdk"
@@ -3296,6 +3291,9 @@ completed = true
 name = "Runtime.PPCEABI.H/GCN_Mem_Alloc.c"
 completed = true
 
+[[lib.object]]
+name = "__fini_cpp_exceptions.cpp"
+completed = false
 [[lib]]
 name = "MSL_C.PPCEABI.bare.H"
 mw_version = "GC/2.6"

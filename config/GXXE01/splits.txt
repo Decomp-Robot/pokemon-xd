@@ -113,7 +113,7 @@ game/WorldMap.cpp:
 	.sdata2     start:0x804EBEE0 end:0x804EBF44
 
 game/menuPocketToolData.s:
-	.sdata2     start:0x804EC064 end:0x804EC068
+	.sdata2     start:0x804EC064 end:0x804EC068 align:4
 
 game/menuPokemon.cpp:
 	.text       start:0x800136C8 end:0x800136F8
@@ -1312,9 +1312,6 @@ ext/dolphin_sdk/odemustubs/odemustubs.c:
 ext/dolphin_sdk/odenotstub/odenotstub.c:
 	.text       start:0x800E7048 end:0x800E7048
 
-ext/dolphin_sdk/stub.c:
-	.text       start:0x800E7048 end:0x800E7048
-
 ext/dolphin_sdk/exi/EXIBios.c:
 	.text       start:0x800E7AC0 end:0x800E7BB4
 	.text       start:0x800E7BB4 end:0x800E7E10
@@ -1696,8 +1693,8 @@ ext/musyx_sdk/runtime/synth_ac.c:
 
 ext/musyx_sdk/runtime/synth_dbtab.c:
 	.data       start:0x80406398 end:0x8040651C
-	.data       start:0x8040651C end:0x8040691C
-	.data       start:0x8040691C end:0x80406B20
+	.data       start:0x8040651C end:0x8040691C align:4
+	.data       start:0x8040691C end:0x80406B20 align:4
 
 ext/dolphin_sdk/ax/AXComp.c:
 	.data       start:0x80406B20 end:0x80408560
@@ -1757,8 +1754,8 @@ ext/musyx_sdk/runtime/hw_dspctrl.c:
 ext/musyx_sdk/runtime/hw_volconv.c:
 	.text       start:0x8017A84C end:0x8017AF3C
 	.data       start:0x80408578 end:0x8040877C
-	.data       start:0x8040877C end:0x8040878C
-	.data       start:0x8040878C end:0x8040879C
+	.data       start:0x8040877C end:0x8040878C align:4
+	.data       start:0x8040878C end:0x8040879C align:4
 	.sdata2     start:0x804EDE08 end:0x804EDE3C
 
 ext/musyx_sdk/runtime/snd3d.c:
@@ -1834,7 +1831,7 @@ ext/musyx_sdk/runtime/snd_midictrl.c:
 	.data       start:0x804087A0 end:0x804087B0
 	.data       start:0x804087B0 end:0x804087C0
 	.data       start:0x804087C0 end:0x804087E4
-	.data       start:0x804087E4 end:0x80408808
+	.data       start:0x804087E4 end:0x80408808 align:4
 	.data       start:0x80408808 end:0x8040882C
 	.bss        start:0x8046AFF8 end:0x8046B1F8
 	.bss        start:0x8046B1F8 end:0x8046F4F8
@@ -1855,7 +1852,7 @@ ext/musyx_sdk/runtime/snd_service.c:
 	.text       start:0x8017FD28 end:0x8017FD70
 	.text       start:0x8017FD70 end:0x8017FD78
 	.rodata     start:0x802F3C70 end:0x802F3C7C
-	.rodata     start:0x802F3C7C end:0x802F3C9C
+	.rodata     start:0x802F3C7C end:0x802F3C9C align:4
 	.data       start:0x80408830 end:0x80409030
 	.sdata      start:0x804E8448 end:0x804E844C
 	.sdata2     start:0x804EDEB0 end:0x804EDEB8
@@ -1892,7 +1889,7 @@ ext/musyx_sdk/runtime/hw_aramdma.c:
 	.text       start:0x80181AB0 end:0x80181AE8
 	.text       start:0x80181AE8 end:0x80181BE0
 	.bss        start:0x80471E08 end:0x8047208C
-	.bss        start:0x8047208C end:0x80472310
+	.bss        start:0x8047208C end:0x80472310 align:4
 	.bss        start:0x80472310 end:0x80472720
 	.sbss       start:0x804EB480 end:0x804EB4A0
 
