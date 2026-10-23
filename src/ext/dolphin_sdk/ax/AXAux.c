@@ -49,13 +49,6 @@ void __AXAuxInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __AXAuxQuit(void) {
-#ifdef DEBUG
-    OSReport("Shutting down AXAux code module\n");
-#endif
-    __AXCallbackAuxA = NULL;
-    __AXCallbackAuxB = NULL;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAInput(u32* p) {

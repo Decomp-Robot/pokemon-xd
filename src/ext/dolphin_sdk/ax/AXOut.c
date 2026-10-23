@@ -218,18 +218,6 @@ void __AXOutInit(u32 outputBufferMode) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __AXOutQuit(void) {
-    BOOL old;
-#ifdef DEBUG
-    OSReport("Shutting down AXOut code module\n");
-#endif
-    old = OSDisableInterrupts();
-    __AXUserFrameCallback = NULL;
-    DSPCancelTask(&__AXDSPTask);
-    OSSleepThread(&__AXOutThreadQueue);
-    AIStopDMA();
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 AXCallback AXRegisterCallback(AXCallback callback) {

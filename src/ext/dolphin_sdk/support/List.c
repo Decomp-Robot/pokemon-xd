@@ -43,46 +43,8 @@ void DSInsertListObject(DSListPtr list, Ptr cursor, Ptr obj) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSRemoveListObject(DSListPtr list, Ptr obj) {
-    DSLinkPtr link = (DSLinkPtr)(obj + list->Offset);
-
-    if (obj) {
-        if (link->Prev) {
-            ((DSLinkPtr)(link->Prev + list->Offset))->Next = link->Next;
-        } else {
-            list->Head = link->Next;
-        }
-
-        if (link->Next) {
-            ((DSLinkPtr)(link->Next + list->Offset))->Prev = link->Prev;
-        } else {
-            list->Tail = link->Prev;
-        }
-
-        link->Prev = NULL;
-        link->Next = NULL;
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSAttachList(DSListPtr baseList, DSListPtr attachList) {
-    DSLinkPtr link;
-    DSLinkPtr linkPrev;
-
-    if (baseList->Offset == attachList->Offset && (attachList->Head || attachList->Tail)) {
-        linkPrev = (DSLinkPtr)(attachList->Head + attachList->Offset);
-        if (baseList->Head) {
-            link = (DSLinkPtr)(baseList->Tail + baseList->Offset);
-            link->Next = attachList->Head;
-            linkPrev->Prev = baseList->Tail;
-            baseList->Tail = attachList->Tail;
-            return;
-        }
-        baseList->Head = attachList->Head;
-        baseList->Tail = attachList->Tail;
-        linkPrev;  // needed to match
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void* DSNextListObj(DSListPtr list, Ptr obj) {

@@ -226,46 +226,6 @@ static void LoadSheet(void* image, GXTexMapID texMapID) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DEMORFPuts(s16 x, s16 y, s16 z, char* string) {
-    s32 cx;
-    void* image;
-    s32 xChar;
-    s32 yChar;
-    s32 width;
-
-    ASSERTLINE(583, FontData);
-    LastSheet = NULL;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 4);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 0);
-
-    x *= 16;
-    y *= 16;
-    z *= 16;
-
-    width = 0;
-    while (*string != 0) {
-        if (*string == '\n') {
-            width = 0;
-            y += FontData->leading * FontSize / FontData->cellWidth;
-            string++;
-        } else if (*string == '\t') {
-            width += 8 * (FontSize + FontSpace);
-            width -= width % (8 * (FontSize + FontSpace));
-            string++;
-        } else {
-            string = OSGetFontTexture(string, &image, &xChar, &yChar, &cx);
-            LoadSheet(image, GX_TEXMAP0);
-            DrawFontChar(x + width, y, z, xChar, yChar);
-            width = FontSpace + ((FontSize * cx) / FontData->cellWidth) + width;
-        }
-    }
-
-    return (width + 15) / 16;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

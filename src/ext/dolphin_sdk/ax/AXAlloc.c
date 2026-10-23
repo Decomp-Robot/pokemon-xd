@@ -71,12 +71,6 @@ void __AXAllocInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __AXAllocQuit(void) {
-#ifdef DEBUG
-    OSReport("Shutting down AXAlloc code module\n");
-#endif
-    __AXInitVoiceStacks();
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void __AXPushFreeStack(AXVPB* p) {

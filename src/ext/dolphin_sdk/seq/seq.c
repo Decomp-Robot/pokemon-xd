@@ -334,49 +334,6 @@ void SEQRemoveSequence(SEQSEQUENCE* sequence) {
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQSetState(SEQSEQUENCE* sequence, u32 state) {
-    int i;
-
-    ASSERTLINE(632, sequence);
-
-    switch(state) {
-    case 1:
-    case 2:
-        if (sequence->state == 0) {
-            int old;
-
-            old = OSDisableInterrupts();
-            for (i = 0; i < sequence->nTracks; i++) {
-                SEQTRACK* track = &sequence->track[i];
-                track->current = track->start;
-                track->ticksPerFrame = track->defaultTicksPerFrame;
-                track->delay = __SEQGetIntTrack(track) << 0x10;
-                track->state = 1;                    
-            }
-            sequence->tracksRunning = sequence->nTracks;
-            OSRestoreInterrupts(old);
-        }
-        sequence->end = 0;
-        break;
-    case 0:
-    case 3: {
-        int old;
-        u8 ch[3];
-
-        for (i = 0; i < 16; i++) {
-            old = OSDisableInterrupts();
-            ch[0] = (i | 0xB0);
-            ch[1] = 0x7B;
-            ch[2] = 0;
-            SYNMidiInput(&sequence->synth, ch);
-            OSRestoreInterrupts(old);
-        }
-        break;
-    }
-    }
-
-    sequence->state = state;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

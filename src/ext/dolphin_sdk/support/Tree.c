@@ -5,64 +5,7 @@
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInsertBranchBelow(DSTreePtr tree, Ptr cursor, Ptr obj) {
-    DSBranchPtr branch;
-    DSBranchPtr objBranch = (DSBranchPtr)(obj + tree->Offset);
-    Ptr tail = NULL;
-
-    if (cursor) {
-        branch = (DSBranchPtr)(cursor + tree->Offset);
-        if (branch->Children) {
-            tail = branch->Children;
-        } else {
-            branch->Children = obj;
-        }
-    } else if (tree->Root) {
-        tail = tree->Root;
-    } else {
-        tree->Root = obj;
-    }
-
-    if (tail) {
-        while (((DSBranchPtr)(tail + tree->Offset))->Next) {
-            tail = ((DSBranchPtr)(tail + tree->Offset))->Next;
-        }
-        ((DSBranchPtr)(tail + tree->Offset))->Next = obj;
-        objBranch->Prev = tail;
-    } else {
-        objBranch->Prev = NULL;
-    }
-
-    objBranch->Next = NULL;
-    objBranch->Parent = cursor;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSRemoveBranch(DSTreePtr tree, Ptr obj) {
-    DSBranchPtr branch;
-    DSBranchPtr parent;
-
-    branch = (DSBranchPtr)(obj + tree->Offset);
-    if (branch->Parent) {
-        parent = (DSBranchPtr)(branch->Parent + tree->Offset);
-        if (parent->Children == obj) {
-            parent->Children = branch->Next;
-        }
-    } else if (tree->Root == obj) {
-        tree->Root = branch->Next;
-    }
-
-    if (branch->Prev) {
-        ((DSBranchPtr)(branch->Prev + tree->Offset))->Next = branch->Next;
-    }
-
-    if (branch->Next) {
-        ((DSBranchPtr)(branch->Next + tree->Offset))->Prev = branch->Prev;
-    }
-
-    branch->Prev = NULL;
-    branch->Next = NULL;
-    branch->Parent = NULL;
-}

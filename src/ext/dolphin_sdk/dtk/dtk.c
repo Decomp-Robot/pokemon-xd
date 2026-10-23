@@ -154,13 +154,6 @@ static void __DTKCallbackForPlaylist(s32 result, DVDCommandBlock* block) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void __DTKCallbackForAIInterrupt(u32 count) {
-    AISetStreamTrigger(count + __DTKInterruptFrequency);
-    if (__DTKCurrentTrack && !__busy_for_ais_address) {
-        __busy_for_ais_address = 1;
-        DVDGetStreamPlayAddrAsync(&__block_for_ais_isr, __DTKCallbackForPlaylist);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void __DTKCallbackForFlush(s32 result, DVDCommandBlock* block) {
@@ -194,20 +187,8 @@ static void __DTKCallbackForStop(s32 result, DVDCommandBlock* block) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void __DTKCallbackForNextTrack(s32 result, DVDCommandBlock* block) {
-    AISetStreamPlayState(0);
-    __DTKForward();
-    __DTKState = DTK_STATE_STOP;
-    DTKSetState(__DTKTempState);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void __DTKCallbackForPrevTrack(s32 result, DVDCommandBlock* block) {
-    AISetStreamPlayState(0);
-    __DTKBackward();
-    __DTKState = DTK_STATE_STOP;
-    DTKSetState(__DTKTempState);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

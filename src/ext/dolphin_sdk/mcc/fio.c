@@ -146,92 +146,6 @@ static void fioMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 FIOFread(int handle, void* data, u32 size) {
-    char* pBuf;
-    volatile int nSizeRemain;
-    int nResult;
-    int nReadSize;
-
-    pBuf = data;
-    nSizeRemain = size;
-    nResult = -1;
-
-    if (handle == 0) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (handle == -1) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (data == NULL || (u32)data & 0x1F) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (size == 0) {
-        return 0;
-    }
-    if (bAsyncBusy) {
-        gLastErr = FIO_ERROR_ASYNC_BUSY;
-        goto exit;
-    }
-
-    nReadSize = fioPacketRead(handle, pBuf, nSizeRemain, 0);
-    nSizeRemain = nSizeRemain - nReadSize;
-    if (nReadSize < 0) {
-        gLastErr = FIO_ERROR_PACKET_READ;
-        return -1;
-    }
-
-    gLastErr = FIO_ERROR_NONE;
-    return size - nSizeRemain;
-
-exit:;
-    return -1;
-}
-
-// UNUSED: the game never calls this; dead-stripped at link.
-u32 FIOFwrite(int handle, void* data, u32 size) {
-    volatile int nSizeRemain;
-    int nResult;
-    int nWriteSize;
-
-    nSizeRemain = size;
-    nResult = 0;
-
-    if (handle == 0) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (handle == -1) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (data == NULL || (u32)data & 0x1F) {
-        gLastErr = FIO_ERROR_INVALID_PARAMETERS;
-        goto exit;
-    }
-    if (size == 0) {
-        return 0;
-    }
-    if (bAsyncBusy) {
-        gLastErr = FIO_ERROR_ASYNC_BUSY;
-        goto exit;
-    }
-
-    nWriteSize = fioPacketWrite(handle, data, nSizeRemain, 0);
-    nSizeRemain -= nWriteSize;
-    if (nWriteSize < 0) {
-        gLastErr = FIO_ERROR_PACKET_WRITE;
-        return -1;
-    }
-
-    gLastErr = FIO_ERROR_NONE;
-    return size - nSizeRemain;
-
-exit:;
-    return -1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
@@ -256,21 +170,8 @@ exit:;
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 FIOGetAsyncBufferSize(void) {
-    int nPacketSize;
-    int nHeaderSize;
-    u32 nResult;
 
-    if (gChID == 0) {
-        return 0;
-    }
-
-    nPacketSize = gSizeOfBlocks << 0xD;
-    nHeaderSize = 0x18;
-
-    nResult = nPacketSize - nHeaderSize;
-    return !(nResult & 0x1F) ? nResult : nResult & ~0x1F;
-}
+// UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

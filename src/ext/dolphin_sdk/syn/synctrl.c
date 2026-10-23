@@ -496,15 +496,5 @@ static void __SYNMidiIn(SYNSYNTH* synth, u8* input) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __SYNRunInputBufferEvents(SYNSYNTH* synth) {
-    u8* input;
-
-    for (input = &synth->input[0][0]; synth->inputCounter; synth->inputCounter--) {
-        __SYNMidiIn(synth, input);
-        input+=3;
-    }
-
-    synth->inputPosition = &synth->input[0][0];
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.

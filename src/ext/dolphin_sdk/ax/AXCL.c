@@ -161,11 +161,6 @@ void __AXClInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __AXClQuit(void) {
-#ifdef DEBUG
-    OSReport("Shutting down AXCL code module\n");
-#endif
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

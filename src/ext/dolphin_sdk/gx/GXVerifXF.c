@@ -94,9 +94,6 @@ static void CountTextureTypes(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void InitializeXFVerifyData(void) {
-    CountTextureTypes();
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void CheckDirty(u32 index, const char* name) {
@@ -924,99 +921,10 @@ static void CheckMatrixIndices(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void CheckErrors(void) {
-    u32 i;
-    char registerName[80];
-
-    CheckDirty(0x103FU, "Number of XF output textures");
-    CheckDirty(0x1009U, "Number of XF output colors");
-    CheckDirty(0x1008U, "InVertexSpec");
-    CheckDirty(0x101AU, "Viewport ScaleX");
-    CheckDirty(0x101BU, "Viewport ScaleY");
-    CheckDirty(0x101CU, "Viewport ScaleZ");
-    CheckDirty(0x101DU, "Viewport OffsetX");
-    CheckDirty(0x101EU, "Viewport OffsetY");
-    CheckDirty(0x101FU, "Viewport OffsetZ");
-    CheckDirty(0x1020U, "Projection matrix 'A' value");
-    CheckDirty(0x1021U, "Projection matrix 'B' value");
-    CheckDirty(0x1022U, "Projection matrix 'C' value");
-    CheckDirty(0x1023U, "Projection matrix 'D' value");
-    CheckDirty(0x1024U, "Projection matrix 'E' value");
-    CheckDirty(0x1025U, "Projection matrix 'F' value");
-    CheckDirty(0x1026U, "Projection matrix orthographic/perspective select");
-    CheckMatrixIndices();
-
-    if (__gxVerif->verifyLevel >= 1) {
-        if (!(u32)(BYTE3(__gxVerif->xfRegs[9]) & 3) && !__gxVerif->xfRegs[0x3F] && __gxVerif->verifyLevel >= __gxvWarnLev[0x38]) {
-            __GX_WARN(0x38);
-        }
-
-        CheckCTGColors();
-
-        if (__gxVerif->xfRegs[0x3F] > 8 && __gxVerif->verifyLevel >= __gxvWarnLev[0x64]) {
-            __GX_WARNF(0x64, __gxVerif->xfRegs[0x3F], 8);
-        }
-        if (numRegularTextures > 8 && __gxVerif->verifyLevel >= __gxvWarnLev[0x65]) {
-            __GX_WARNF(0x65, numRegularTextures, 8);
-        }
-        if (numBumpmapTextures > 3 && __gxVerif->verifyLevel >= __gxvWarnLev[0x66]) {
-            __GX_WARNF(0x66, numBumpmapTextures, 3);
-        }
-        if (numColorTextures > 2 && __gxVerif->verifyLevel >= __gxvWarnLev[0x67]) {
-            __GX_WARNF(0x67, numColorTextures, 2);
-        }
-        if (numColor0Textures > 1 && __gxVerif->verifyLevel >= __gxvWarnLev[0x69]) {
-            __GX_WARNF(0x69, 0);
-        }
-        if (numColor1Textures > 1 && __gxVerif->verifyLevel >= __gxvWarnLev[0x69]) {
-            __GX_WARNF(0x69, 1);
-        }
-
-        CheckVertexPacket();
-
-        for (i = 0; i < __gxVerif->xfRegs[0x3F]; i++) {
-            sprintf(registerName, "Texture %d settings", i);
-            CheckDirty(i + 0x1040, registerName);
-        }
-
-        CheckSourceRows();
-        CheckTextureOrder();
-        if (numBumpmapTextures != 0) {
-            CheckBumpmapTextures();
-        }
-
-        CheckTextureTransformMatrices();
-        if (numColorTextures != 0 && (u32)((BYTE3(__gxVerif->xfRegs[numRegularTextures + numBumpmapTextures + 64]) >> 4) & 7) != 2 && __gxVerif->verifyLevel >= __gxvWarnLev[0x68]) {
-            __GX_WARN(0x68U);
-        }
-
-        CheckColor0();
-        CheckColor1();
-        CheckViewport();
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void CheckWarnings(void) {
-    if (__gxVerif->verifyLevel >= 1) {
-        CheckInputForms();
-    }
-
-    CheckClean(0x1000U, "Internal error register");
-    CheckClean(0x1001U, "Internal diagnostic register");
-    CheckClean(0x1002U, "Internal state register 0");
-    CheckClean(0x1003U, "Internal state register 1");
-    CheckClean(0x1004U, "Power savings register");
-
-    if (__gxVerif->verifyLevel >= 2) {
-        CheckFloatingPointRanges();
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void DumpXFRegisters(void) {
-    static u8 firstTime = 1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

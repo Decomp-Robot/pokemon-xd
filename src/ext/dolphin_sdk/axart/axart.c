@@ -22,16 +22,6 @@ void AXARTInit(void) {
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTInitLfo(AXART_LFO* lfo, f32* samples, u32 length, f32 delta) {
-    ASSERTLINE(417, samples);
-    ASSERTLINE(418, length);
-
-    lfo->lfo = samples;
-    lfo->length = length;
-    lfo->delta = delta;
-    lfo->sampleIndex = 0;
-    lfo->counter = lfo->sample1 = lfo->sample = lfo->output = 0.0f;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
@@ -42,40 +32,16 @@ void AXARTInitLfo(AXART_LFO* lfo, f32* samples, u32 length, f32 delta) {
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTInitArtPitch(AXART_PITCH* articulator) {
-    ASSERTLINE(547, articulator);
-
-    articulator->art.type = AXART_TYPE_PITCH;
-    articulator->cents = 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTInitArtVolume(AXART_VOLUME* articulator) {
-    ASSERTLINE(617, articulator);
-
-    articulator->art.type = AXART_TYPE_VOLUME;
-    articulator->attenuation = 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTInitArtAuxAVolume(AXART_AUXA_VOLUME* articulator) {
-    ASSERTLINE(639, articulator);
-
-    articulator->art.type = AXART_TYPE_AUX_A_VOLUME;
-    articulator->attenuation = 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTInitArtAuxBVolume(AXART_AUXB_VOLUME* articulator) {
-    ASSERTLINE(661, articulator);
-
-    articulator->art.type = AXART_TYPE_AUX_B_VOLUME;
-    articulator->attenuation = 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

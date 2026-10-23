@@ -92,12 +92,6 @@ static void FreeCacheNode(DSCacheNodePtr* cacheNode) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInitCache(DSCachePtr cache) {
-    DSCacheNode cacheNode;
-
-    cache->PurgeFlag = DS_AUTO_PURGE;
-    DSInitList(&cache->CacheNodeList, (Ptr)&cacheNode, &cacheNode.Link);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 

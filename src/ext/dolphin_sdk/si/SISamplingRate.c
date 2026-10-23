@@ -80,46 +80,4 @@ void SIRefreshSamplingRate(void) {
 }
 
 #if DEBUG
-void __SITestSamplingRate(u32 tvmode) {
-    u32 msec;
-    u32 line;
-    u32 count;
-    XY* xy;
-
-    switch (tvmode) {
-    case VI_NTSC:
-    case VI_MPAL:
-        xy = XYNTSC;
-        for (msec = 0; msec <= 11; msec++) {
-            line = xy[msec].line;
-            count = xy[msec].count;
-            OSReport("%2d[msec]: count %3d, line %3d, last %3d, diff0 %2d.%03d, diff1 %2d.%03d\n",
-                msec, count, line, line * (count - 1) + LATENCY, (line * 636) / 10000, (line * 636) % 10000,
-                ((263 - line * (count - 1)) * 636) / 10000, ((263 - line * (count - 1)) * 636) % 10000);
-            ASSERTLINE(446, line * (count - 1) + LATENCY < 263);
-            
-            if (msec != 0) {
-                ASSERTLINE(449, 636 * line < msec * 10000);
-                ASSERTLINE(450, 636 * (263 - line * (count - 1)) < msec * 10000);
-            }
-        }
-    break;
-    case VI_PAL:
-        xy = XYPAL;
-        for (msec = 0; msec <= 11; msec++) {
-            line = xy[msec].line;
-            count = xy[msec].count;
-            OSReport("%2d[msec]: count %3d, line %3d, last %3d, diff0 %2d.%03d, diff1 %2d.%03d\n",
-                msec, count, line, line * (count - 1) + LATENCY, (line * 640) / 10000, (line * 640) % 10000,
-                ((313 - line * (count - 1)) * 640) / 10000, ((313 - line * (count - 1)) * 640) % 10000);
-            ASSERTLINE(470, line * (count - 1) + LATENCY < 313);
-            
-            if (msec != 0) {
-                ASSERTLINE(473, 640 * line < msec * 10000);
-                ASSERTLINE(474, 640 * (313 - line * (count - 1)) < msec * 10000);
-            }
-        }
-        break;
-    }
-}
 #endif

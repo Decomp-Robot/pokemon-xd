@@ -69,16 +69,4 @@ s32 CARDSetAttributesAsync(s32 chan, s32 fileNo, u8 attr, CARDCallback callback)
     dirent.permission = attr;
     return __CARDSetStatusExAsync(chan, fileNo, &dirent, callback);
 }
-static int __CARDEnablePerm(u8 perm, BOOL enable) {
-    int prev;
-    prev = __CARDPermMask & perm ? TRUE : FALSE;
-
-    if (enable) {
-        __CARDPermMask |= perm;
-    } else {
-        __CARDPermMask &= ~perm;
-    }
-
-    return prev;
-}
 

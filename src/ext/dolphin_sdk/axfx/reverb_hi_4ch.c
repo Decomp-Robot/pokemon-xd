@@ -133,48 +133,6 @@ static int ReverbHICreateDpl2(AXFX_REVHI_WORK_DPL2* rv, f32 coloration, f32 time
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static int ReverbHIModifyDpl2(AXFX_REVHI_WORK_DPL2* rv, f32 coloration, f32 time, f32 mix, f32 damping, f32 preDelay) {
-    u8 i;
-
-    ASSERTMSGLINE(222, coloration >= 0.0f && coloration <= 1.0f &&
-                  time >= 0.01f && time <= 10.0f &&
-                  mix >= 0.0f && mix <= 1.0f &&
-                  damping >= 0.0f && damping <= 1.0f &&
-                  preDelay >= 0.0f && preDelay <= 0.1f,
-                  "The value of specified parameter is out of range.");
-
-    if ((coloration < 0.0f ) || (coloration > 1.0f  )
-     || (time       < 0.01f) || (time       > 10.0f )
-     || (mix        < 0.0f ) || (mix        > 1.0f  )
-     || (damping    < 0.0f ) || (damping    > 1.0f  )
-     || (preDelay   < 0.0f ) || (preDelay   > 0.1f)) {
-        return 0;
-    }
-
-    rv->allPassCoeff = coloration;
-    rv->level = mix;
-    rv->damping = damping;
-    if (rv->damping < 0.05f) {
-        rv->damping = 0.05f;
-    }
-    rv->damping = (1.0f - (0.05f + (0.8f * rv->damping)));
-
-    for (i = 0; i < 12; i++) {
-        DLdeleteDpl2(&rv->AP[i]);
-    }
-
-    for (i = 0; i < 12; i++) {
-        DLdeleteDpl2(&rv->C[i]);
-    }
-
-    if (rv->preDelayTime) {
-        for (i = 0; i < 4; i++) {
-            __AXFXFree(rv->preDelayLine[i]);
-        }
-    }
-
-    return ReverbHICreateDpl2(rv, coloration, time, mix, damping, preDelay);
-}
 
 const static f32 value0_6 = 0.6f;
 const static f32 value0_3 = 0.3f;

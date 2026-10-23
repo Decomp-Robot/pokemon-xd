@@ -74,51 +74,6 @@ void SYNQuit(void) {
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SYNInitSynth(SYNSYNTH* synth, void* wavetable, u32 aramBase, u32 zeroBase, u32 priorityVoiceAlloc, u32 priorityNoteOn, u32 priorityNoteRelease) {
-    u32* p;
-    u32 midiChannel;
-    u32 noteNumber;
-
-    ASSERTLINE(158, synth);
-    ASSERTLINE(159, wavetable);
-    ASSERTLINE(160, aramBase);
-
-    p = wavetable;
-    synth->percussiveInst = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->melodicInst = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->region = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->art = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->sample = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->adpcm = (void*)((u32)wavetable + *(p)); p += 1;
-    synth->aramBaseWord = (aramBase >> 1);
-    synth->aramBaseByte = aramBase;
-    synth->aramBaseNibble = (aramBase << 1);
-    synth->zeroBaseWord = zeroBase >> 1;
-    synth->zeroBaseByte = zeroBase;
-    synth->zeroBaseNibble = (zeroBase << 1);
-    synth->priorityVoiceAlloc = priorityVoiceAlloc;
-    synth->priorityNoteOn = priorityNoteOn;
-    synth->priorityNoteRelease = priorityNoteRelease;
-    synth->masterVolume = 0;
-    __SYNResetAllControllers(synth);
-    synth->inputPosition = &synth->input[0][0];
-    synth->inputCounter = 0;
-    synth->notes = 0;
-
-    for (midiChannel = 0; midiChannel < 16; midiChannel++) {
-        for (noteNumber = 0; noteNumber < 16; noteNumber++) {
-            synth->keyGroup[midiChannel][noteNumber] = 0;
-        }
-    }
-
-    for (midiChannel = 0; midiChannel < 16; midiChannel++) {
-        for (noteNumber = 0; noteNumber < 128; noteNumber++) {
-            synth->voice[midiChannel][noteNumber] = 0;
-        }
-    }
-
-    __SYNAddSynthToList(synth);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void SYNQuitSynth(SYNSYNTH* synth) {
@@ -161,15 +116,7 @@ void SYNMidiInput(SYNSYNTH* synth, u8* input) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SYNSetMasterVolume(SYNSYNTH* synth, s32 dB) {
-    ASSERTLINE(267, synth);
-    synth->masterVolume = (dB << 0x10);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-s32 SYNGetMasterVolume(SYNSYNTH* synth) {
-    ASSERTLINE(278, synth);
-    return synth->masterVolume >> 0x10;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.

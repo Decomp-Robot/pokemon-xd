@@ -367,23 +367,5 @@ L_00000344:
 // UNUSED: the game never calls this; dead-stripped at link.
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXChorusSettings(AXFX_CHORUS* c) {
-    BOOL old;
-
-	ASSERTMSGLINE(1159, c->baseDelay >= 5 && c->baseDelay <= 15 && c->variation >= 0 && c->variation <= 5 && c->period >= 500 && c->period <= 10000, "The value of specified parameter is out of range.");
-	if (c->baseDelay < 5 || c->baseDelay > 15 || c->variation < 0 || c->variation > 5 || c->period < 500 || c->period > 10000) {
-		return 0;
-	}
-
-    old = OSDisableInterrupts();
-    c->work.currentPosHi = 0x140 - ((c->baseDelay - 5) << 5);
-    c->work.currentPosLo = 0;
-    c->work.currentPosHi = (c->work.currentPosHi + ((c->work.currentLast - 1) * 0xA0/1)) % 480;
-    c->work.pitchOffsetPeriod = ((c->period / 5) + 1) & ~(1);
-    c->work.pitchOffsetPeriodCount = c->work.pitchOffsetPeriod >> 1;
-    c->work.pitchOffset = (c->variation << 0x10) / (c->work.pitchOffsetPeriod * 5);
-    OSRestoreInterrupts(old);
-    return 1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.

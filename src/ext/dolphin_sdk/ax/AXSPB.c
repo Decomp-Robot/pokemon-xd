@@ -77,11 +77,6 @@ void __AXSPBInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __AXSPBQuit(void) {
-#ifdef DEBUG
-    OSReport("Shutting down AXSPB code module\n");
-#endif
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void __AXDepopVoice(AXPB* p) {
