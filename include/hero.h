@@ -36,4 +36,7 @@ typedef struct Hero {
 } Hero;
 #endif
 
+// Selects the connect-battle hero instead of the active save hero.
+enum { HERO_PTR_FLAG = 0x30D };
+
 #endif

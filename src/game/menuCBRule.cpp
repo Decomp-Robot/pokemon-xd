@@ -37,10 +37,9 @@ extern u16 battlePokemonStatusGetAttack(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetDef(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetSpAtk(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetSpDef(Pokemon *pokemon);
-extern u8 pokemonIsShadowPokemon(Pokemon *pokemon);
+extern u8 pokemonIsShadow(Pokemon *pokemon);
 extern u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 extern bool pokemonCheckValid(Pokemon *pokemon);
-extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, u16 arg3);
 extern void pokemonBiosCopy(Pokemon *dst, Pokemon *src);
 extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
 extern void pokemonResetBasisStatus(Pokemon *pokemon);
@@ -276,7 +275,7 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
         return 1;
 
     case POKEMON_CONDITION_SHADOW:
-        return !pokemonIsShadowPokemon(pokemon);
+        return !pokemonIsShadow(pokemon);
 
     case POKEMON_CONDITION_TAMAGO:
         return !pokemon_GetTamagoFlag(pokemon);

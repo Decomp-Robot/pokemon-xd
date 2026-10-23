@@ -17,6 +17,7 @@ u8 GSfloorIsPush(void);
 void GSfloorPop(void);
 void GSfloorPush(u32 floorID);
 void floorWaitForChange(void);
+void floorSetFadeScript(s32 a, s32 b);
 
 #ifdef __cplusplus
 }

@@ -31,12 +31,22 @@ typedef union WindowCursorState {
         s16 mPosX;
         s16 cursor;
     } mValue;
+    struct {
+        s16 mSubMenu;            // 0x9C: sub-menu the window is in.
+        s16 cursorX;            // 0x9C: horizontal cursor coordinate.
+    };
+    s16 cursor;                  // 0x9E: selected cursor.
 } WindowCursorState;
 
 enum WINDOW_STATE {
     WINDOW_STATE_INIT = 0,
     WINDOW_STATE_ACTIVE = 2,
     WINDOW_STATE_CLOSING = 3,
+};
+
+enum WindowSequenceState {
+    WINDOW_SEQUENCE_OPEN = WINDOW_STATE_INIT,
+    WINDOW_SEQUENCE_CLOSE = WINDOW_STATE_CLOSING
 };
 
 // Window state, sprite lists and custom-menu arguments.
@@ -69,7 +79,18 @@ struct tagWINDOW_WORK {
         } mRgba;
     };
     u8 _94[0x08];                // 0x94-0x9B: unknown.
-    WindowCursorState mCursorState; // 0x9C: sub-menu and selected cursor.
+    // Sub-menu and selected cursor. Selection hooks read and write the
+    // whole word through mCursorState; the window itself reads `cursor`.
+    union {
+        WindowCursorState mCursorState; // 0x9C: whole cursor word.
+        struct {
+            union {
+                s16 mSubMenu; // 0x9C: sub-menu the window is in.
+                s16 cursorX; // 0x9C: horizontal cursor coordinate.
+            };
+            s16 cursor; // 0x9E: selected cursor.
+        };
+    };
     s16 mUnkA0;                  // 0xA0: unknown.
     union {
         s16 mSubMenuID;          // 0xA2: last opened sub-menu.
@@ -125,6 +146,7 @@ extern "C" {
 
 #ifdef __cplusplus
 void winSpriteSetDisp(tagSPRITE_WORK *sprite, bool visible);
+GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 #endif
 
 // Key state of the window the debug menus read directly (menu.a window.o).

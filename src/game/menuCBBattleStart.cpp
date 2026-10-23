@@ -42,7 +42,6 @@ s32 trainerKindGetNameMessageID(void *kindData);
 
 void menuCBPokemonEntryTexWorkInit(void);
 void menuCBPokemonEntryLoadTex(void);
-u16 *GSmsgGetStringPtr(s32 id);
 s32 fightTrainerDB_GetKindDataId(s32 dataID);
 void *fightTrainerKindDataBiosGetPtr(u8 kindID);
 void GSresFreeGroup(u32 group);

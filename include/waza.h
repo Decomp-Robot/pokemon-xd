@@ -28,13 +28,15 @@ enum WAZA_SHADOW {
     WAZA_SHADOW_SPECIAL_ICON = 0x7B, // type icon drawn for the special shadow move.
 };
 
+enum {
+    WAZA_STATUS_NAME_MESSAGE_ID = WAZA_FIELD_NAME,
+    WAZA_STATUS_TYPE_ID = WAZA_FIELD_TYPE
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-
-
+s32 wazaGetStatus(void *obj, u16 id, s32 field, s32 arg);
 #ifdef __cplusplus
 }
 #endif

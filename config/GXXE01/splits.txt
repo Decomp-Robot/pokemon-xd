@@ -112,11 +112,16 @@ game/WorldMap.cpp:
 	.data       start:0x80312278 end:0x803123AC
 	.sdata2     start:0x804EBEE0 end:0x804EBF44
 
+game/menuPokemon.cpp:
+	.text       start:0x800136C8 end:0x80016178
+	.rodata     start:0x802EA408 end:0x802EA430
+	.data       start:0x80321DD8 end:0x80321E7C
+	.bss        start:0x804280C0 end:0x80428250
+	.sbss       start:0x804EA710 end:0x804EA718
+	.sdata2     start:0x804EBF48 end:0x804EBF7C
+
 game/menuPocketToolData.s:
 	.sdata2     start:0x804EC064 end:0x804EC068 align:4
-
-game/menuPokemon.cpp:
-	.text       start:0x800136C8 end:0x800136F8
 
 game/pokemonIndex.cpp:
 	.text       start:0x8001F1B8 end:0x8001F1D0

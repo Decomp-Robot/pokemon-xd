@@ -141,6 +141,7 @@ void _soundFadeout(s32 fadeTime, s32 isBGM, s32 wait);
 void _soundCloseFastFadeout(s32 sndID);
 s32 _soundCheckActive(s32 sndID);
 void _soundWait(u32 msec);
+void GSsndPlayNow(long soundID);
 void soundClearCurrentIDs(void);
 void GSsndStreamPostFunc(u32 fileNo, u32 arg);
 void* GSsndStreamPreFunc(u32 fileNo);

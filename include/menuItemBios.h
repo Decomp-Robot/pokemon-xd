@@ -34,6 +34,7 @@ extern "C" {
 tagMENU_ITEM_DATA *menuItemBiosGetPtr(long dataID, long itemID);
 // Select state of `itemID` the PDA frame menus toggle.
 void menuItemBiosSetSelectFlag(s32 dataID, s32 itemID, s32 flag);
+void menuItemSetPosition(s32 menuId, s16 itemId, s16 x, s16 y);
 
 #ifdef __cplusplus
 }

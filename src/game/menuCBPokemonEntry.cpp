@@ -35,8 +35,7 @@ extern s32 menuCBBattleStartGetStatus(void);
    menuFaceGetIDSub hands back. */
 extern u16 menuFaceGetID2(Pokemon *pokemon, s32 flag);
 /* Draws the face of a Pokemon by face ID. */
-extern void menuFaceDispSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 faceID);
-extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, u16 arg3);
+extern void menuFaceDisplay(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 faceID);
 extern void menuFaceLoad_Tool(Pokemon *pokemon, Pokemon *(*callback)(void *), void *context);
 extern FightRuleData *menuCBBios_CurrentRule(void);
 extern u16 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
@@ -236,7 +235,7 @@ extern "C" u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window,
     MenuCBPokemonEntryFaceWork *face = _menuCBPokemonEntryGetFaceBase(player, slot);
 
     if (face->mLoaded) {
-        menuFaceDispSub(window, sprite, face->mFaceID);
+        menuFaceDisplay(window, sprite, face->mFaceID);
         return 1;
     }
 

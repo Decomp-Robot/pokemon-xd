@@ -43,6 +43,23 @@ typedef struct DarkPokemon DarkPokemon;
 
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
+    POKEMON_STATUS_FIELD_CHAMP_RIBBON = 0xA3,
+    POKEMON_STATUS_FIELD_WINNING_RIBBON = 0xA4,
+    POKEMON_STATUS_FIELD_VICTORY_RIBBON = 0xA5,
+    POKEMON_STATUS_FIELD_BROMIDE_RIBBON = 0xA6,
+    POKEMON_STATUS_FIELD_GANBA_RIBBON = 0xA7,
+    POKEMON_STATUS_FIELD_MARINE_RIBBON = 0xA8,
+    POKEMON_STATUS_FIELD_LAND_RIBBON = 0xA9,
+    POKEMON_STATUS_FIELD_SKY_RIBBON = 0xAA,
+    POKEMON_STATUS_FIELD_COUNTRY_RIBBON = 0xAB,
+    POKEMON_STATUS_FIELD_NATIONAL_RIBBON = 0xAC,
+    POKEMON_STATUS_FIELD_EARTH_RIBBON = 0xAD,
+    POKEMON_STATUS_FIELD_WORLD_RIBBON = 0xAE,
+    POKEMON_STATUS_FIELD_STYLE_MEDAL = 0xB0,
+    POKEMON_STATUS_FIELD_BEAUTIFUL_MEDAL = 0xB1,
+    POKEMON_STATUS_FIELD_CUTE_MEDAL = 0xB2,
+    POKEMON_STATUS_FIELD_CLEVER_MEDAL = 0xB3,
+    POKEMON_STATUS_FIELD_STRONG_MEDAL = 0xB4,
     POKEMON_STATUS_FIELD_WAZA_PP = 0x80, // current PP of the given waza slot.
     POKEMON_STATUS_FIELD_WAZA_ID = 0x7F, // waza id of the given waza slot.
     POKEMON_STATUS_FIELD_TRAINER_ID = 0x75, // id of the trainer that met the pokemon.
@@ -92,9 +109,55 @@ extern "C" {
    move ID of the slot the fourth argument selects. */
 enum PokemonStatusQuery {
     POKEMON_STATUS_SPECIES = 0x6E,
-    POKEMON_STATUS_MOVE = 0x7F
+    POKEMON_STATUS_MOVE = 0x7F,
+    POKEMON_QUERY_LEVEL = 0x7A,
+    POKEMON_QUERY_SPECIES = 0x6E,
+    POKEMON_QUERY_MOVE_PP = 0x80,
+    POKEMON_QUERY_ATTACK = 0x88,
+    POKEMON_QUERY_DEFENSE = 0x89,
+    POKEMON_QUERY_SPECIAL_ATTACK = 0x8A,
+    POKEMON_QUERY_SPECIAL_DEFENSE = 0x8B,
+    POKEMON_QUERY_SPEED = 0x8C,
+    POKEMON_QUERY_IS_FAINTED = 0x7B,
+    POKEMON_QUERY_MOVE_ID = 0x7F,
+    POKEMON_QUERY_PARTY_RECORD = 0xCC
 };
 
+enum PokemonSex {
+    POKEMON_SEX_MALE = 0,
+    POKEMON_SEX_FEMALE = 1,
+    POKEMON_SEX_NONE = 2,
+};
+
+enum PokemonAilment {
+    POKEMON_CONDITION_NONE = 0,
+    POKEMON_CONDITION_POISON = 3,
+    POKEMON_CONDITION_BAD_POISON = 4,
+    POKEMON_CONDITION_BURN = 5,
+    POKEMON_CONDITION_FREEZE = 6,
+    POKEMON_CONDITION_PARALYSIS = 7,
+    POKEMON_CONDITION_SLEEP = 8,
+};
+
+#ifdef __cplusplus
+bool pokemonCheckValid(Pokemon *pokemon);
+#else
+u8 pokemonCheckValid(Pokemon *pokemon);
+#endif
+u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
+u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
+u16 battlePokemonGetHeldItem(Pokemon *pokemon);
+u16 battlePokemonDataGetSpecies(Pokemon *pokemon);
+u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
+u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
+s32 pokemonGetStatus(void *record, s32 speciesId, u16 field, u16 elementIndex);
+void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
+void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
+u8 pokemonIsShadow(Pokemon *pokemon);
+u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
+f32 pokemonGetDp(Pokemon *pokemon);
+void pokemonReplace(Pokemon *dst, Pokemon *src);
+u16 battlePokemonGetSpecies(Pokemon *pokemon);
 u8 pokemonIsShadowPokemon(Pokemon *pokemon);
 void pokemonInit(Pokemon *pokemon);
 // Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most

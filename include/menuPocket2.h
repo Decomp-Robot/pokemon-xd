@@ -3,6 +3,16 @@
 
 #include <types.h>
 
+enum {
+    POCKET_MODE_COUNT = 7,
+    POCKET_MODE_FIELD = 0,
+    POCKET_MODE_BATTLE = 1,
+    POCKET_MODE_GIVE = 2,
+    POCKET_MODE_SELL = 3,
+    POCKET_MODE_DEPOSIT = 4,
+    POCKET_MODE_GIVE_FIXED_ORDER = 5
+};
+
 enum PocketItemID {
     POCKET_ITEM_COLOGNE = 0x200,
     POCKET_ITEM_BATTLE_DISK = 0x215,

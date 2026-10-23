@@ -15,7 +15,10 @@
 #include <heroBios.h>
 #include <heroItem.h>
 #include <pcbox.h>
+#define menuPokemonOpenItemUse menuPokemonOpenItemUse_header
 #include <menuPokemon.h>
+#undef menuPokemonOpenItemUse
+extern "C" s32 menuPokemonOpenItemUse(int kind, int wait, u16 itemID, FIGHT_TRAINER *trainer);
 #include <GSgfx.h>
 
 extern "C" {
@@ -288,8 +291,7 @@ struct Pokemon;
 struct FIGHT_POKEMON;
 extern "C" FIGHT_POKEMON *fightTrainer_GetFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
 extern "C" Pokemon *fightPokemonGetStatsStartPtr(FIGHT_POKEMON *pokemon);
-extern "C" s32 menuPokemonOpenItemUse(int kind, int wait, u16 itemID, FIGHT_TRAINER *trainer);
-extern "C" void GSmsgPrintRight(GSgfxLayerID layer, int x, int y, int right, int bottom, int color, u32 msgID);
+
 
 
 struct PocketNumberDigit {
@@ -305,12 +307,8 @@ struct PocketNumberMenu {
 extern "C" const PocketNumberMenu pocketNumberMenuTable[4];
 
 enum {
-    POCKET_MODE_FIELD = 0,
-    POCKET_MODE_BATTLE = 1,
-    POCKET_MODE_GIVE = 2,
-    POCKET_MODE_SHOP_SELL = 3,
-    POCKET_MODE_DEPOSIT = 4,
-    POCKET_MODE_GIVE_RESTRICTED = 5,
+    POCKET_MODE_SHOP_SELL = POCKET_MODE_SELL,
+    POCKET_MODE_GIVE_RESTRICTED = POCKET_MODE_GIVE_FIXED_ORDER,
     POCKET_MODE_SNATCH_ONLY_BATTLE = 6,
     POKEMON_ITEM_USE_PARTY = 3,
     POKEMON_ITEM_USE_BATTLE = 4,
@@ -2325,7 +2323,6 @@ enum {
     POCKET_MSG_VAR_MONEY = 0x50,
     POCKET_MENU_FLOOR = 0x38F,
     POCKET_INITIAL_SLOT_LIMIT = 5,
-    POCKET_MODE_COUNT = 7,
     POCKET_VISIBLE_ROWS = 9,
     POCKET_CURSOR_TAB = 2,
     POCKET_SEQUENCE_OPEN = 0x60,

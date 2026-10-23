@@ -15,6 +15,7 @@
 #include <menuCBBattleStart.h>
 #include <menuCBBios.h>
 #include <Pokemon.h>
+#include <GSmsg.h>
 #include <types.h>
 
 /* -------------------------------------------------------------------------
@@ -56,7 +57,6 @@ extern u32 menuCBBios_GetPokemonNumLimit(void);
 extern FIGHT_TRAINER *menuCBBios_GetTrainerFromVersusBattleID(s32 index);
 extern u16 *menuCBBios_GetRuleEntryList(s32 ruleId);
 extern void menuCBBios_InitDefaultRules(void);
-extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, s32 arg3);
 extern s32 battlePokemonGetNature(Pokemon *pokemon);
 extern s32 pokemonAdjustValueBySeikaku(s32 nature, s32 id, s32 value);
 extern void pokemon_SetPhyAtk(Pokemon *pokemon, u16 value);
@@ -67,7 +67,6 @@ extern void pokemon_SetNimbleness(Pokemon *pokemon, u16 value);
 extern s32 menuGBACGetRomVer(s32 index);
 extern u8 menuCBRule_DEOKISISUCamouflage(void);
 extern u16 menuCBRule_RegulationItemID(s32 index);
-extern u16 *GSmsgGetStringPtr(u16 msgId);
 extern const MenuCBLanguageEntry *textureBiosGetLanguageEntry(s32 index);
 extern s32 menuCB_MenuRollback(s32 menuID);
 extern s32 menuCB_MenuPop(void);

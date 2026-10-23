@@ -3,6 +3,11 @@
 
 #include <types.h>
 
+enum FadeKind {
+    FADE_IN_BLACK = 2,
+    FADE_OUT_BLACK = 3,
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

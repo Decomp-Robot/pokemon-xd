@@ -18,7 +18,7 @@ s32 dbgMenuRelive(void)
 {
     Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, 0);
 
-    if (!pokemonIsShadowPokemon(pokemon)) {
+    if (!pokemonIsShadow(pokemon)) {
         return 0;
     }
     pokemonSetDp(pokemon, purificationClearedDarkness);

@@ -566,6 +566,7 @@ void GSgfxBlendMode(s32 mode, s32 sourceFactor, s32 destinationFactor);
 
 extern "C" {
 u8 GSgfxResetRestore(s32 mode);
+u8 GSgfxVideoGetVsyncRate(void);
 void GSgfxVideoSetLockFrameRate(long frameRateLock);
 }
 

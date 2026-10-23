@@ -1,8 +1,13 @@
+#define windowGetKeyRepeat windowGetKeyRepeat_header
+#define windowGetKeyTrg windowGetKeyTrg_header
+#include <textureBios.h>
 #include <menu.h>
 #include <menuSub.h>
 #include <GSsnd.h>
 #include <GSmsg.h>
 #include <msgctrl.h>
+#include <winMsg.h>
+#include <winSeq.h>
 #include <fade.h>
 #include <GSgfx.h>
 #include <Pokemon.h>
@@ -12,27 +17,25 @@
 #include <winSprite.h>
 #include <window.h>
 
+#undef windowGetKeyRepeat
+#undef windowGetKeyTrg
+extern "C" u32 windowGetKeyRepeat(void);
+extern "C" u32 windowGetKeyTrg(void);
+
 extern "C" {
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuSubDrawCursorBackAnimeOnOffAuto(tagWINDOW_WORK *window, GSgfxLayerID layer, int p1, int p2, s16 p3, s16 p4, u8 p5, int p6);
 GSgfxVF *GSgfxVFBuildTemp(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9);
 void GSgfxRenderDrawEnd(GSgfxLayer *layer);
-u16 *GSmsgGetStringPtr(int id);
 Pokemon *fightFloorGetDefPokemonPtr(int p1);
 u8 pokemonGetSex(Pokemon *pokemon);
-u8 pokemonCheckValid(Pokemon *pokemon);
 u16 battlePokemonGetSpecies(Pokemon *pokemon);
 int pokemon_SetNickname(Pokemon *pokemon, const u16 *name);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 u16 *pcboxGetPokemonName(int box, s8 slot);
 void pcboxSetPokemonBoxName(int box, s8 slot, const u16 *name);
 void dbgMenuSetOpenFlag(int flag);
-int GSmsgGetLength(int id);
-void winMsgOpen(int p1, int msgID, int p2, int p3);
-void winMsgClose(int p1);
 int GScharCmp(const u16 *a, const u16 *b);
-u32 windowGetKeyRepeat(void);
-u32 windowGetKeyTrg(void);
 long windowGetActiveID(void);
 void winSeqSetMenu(long menuID, int seq);
 void menuModelSetFlag(MENU_MODEL *model, int flag);
@@ -57,8 +60,7 @@ void GSfloorPop(void);
 void GSfloorPush(int floor);
 int floorWaitForChange(void);
 f32 HSD_Randf(void);
-void *textureBiosGetDataTable(int id);
-void *textureBiosGetLanguageEntry(void *table);
+
 void menuSetDisp(int id, int on);
 double sin(double x);
 }
@@ -1364,7 +1366,7 @@ int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             f32 y = ball->mY - h / 2.0f;
             u32 flags = ball->mFlags | ball->mAlpha;
 
-            windowDrawSprite2((int)(0.5f + x), (int)(0.5f + y), (int)(0.5f + w), (int)(0.5f + h),
+            textureBiosLoadSpriteId((int)(0.5f + x), (int)(0.5f + y), (int)(0.5f + w), (int)(0.5f + h),
                                     flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
         }
     }

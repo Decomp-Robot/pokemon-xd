@@ -4,6 +4,11 @@
 #include <menuItemBios.h>
 #include <menuPtSpriteWork.h>
 #include <winSprite.h>
+#include <GSmsg.h>
+#include <msgctrl.h>
+#include <winMsg.h>
+#include <winSeq.h>
+#include <window.h>
 
 // The PC box's item (dougu) menu: the drawer that lists the items kept in the
 // box with the numbers the box holds of them, and the small number window that
@@ -74,20 +79,9 @@ extern "C" u32 sListCursorAnimeY;
 
 extern "C" {
 s32 windowGetActiveID(void);
-u16 windowGetKeyRepeat(void);
-u16 windowGetKeyTrg(void);
-void winSeqSetMenu(long menuID, s32 seq);
-void winMsgOpen(s32 mode, s32 msgID, s32 a, s32 b);
-void winMsgClose(s32 a);
-void msgctrlSetValue(long group, long value);
-void menuButtonNormal(tagWINDOW_WORK *window);
-s32 winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *work);
 void spriteSetScissor(s32 layerID, s32 x, s32 y, s32 width, s32 height);
 void spriteClearScissor(s32 layerID);
 void spriteSetEnv(s32 layerID);
-void GSmsgPrint2(s32 layer, s32 x, s32 y, u32 color, u32 msgID);
-void GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 anchorX, s32 anchorY, u32 color, u32 msgID);
-unsigned long GSmsgGetMessageSize(u32 msgID);
 void menuPtPlaySe(u32 seID);
 void menuSubCursorAnimeValGet(f32 *animeValues, s32 *animeColor);
 void menuSubCursorAnimeStart(void);

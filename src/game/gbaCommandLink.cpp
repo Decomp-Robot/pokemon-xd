@@ -291,8 +291,6 @@ extern "C" DeckTrainerAI *fightOutPokemonGetStatsStartPtr(FightOutPokemon *fight
 extern "C" u16 pokemon_GetFightTrainerPokemonDataId(DeckTrainerAI *pokemon);
 extern "C" u8 fightTrainerCheckCanIrekaeFightPokemon(void *trainer, FightPokemon *fightPokemon);
 extern "C" u16 fightPokemonGetItemDataId(FightPokemon *fightPokemon);
-extern "C" u16 battlePokemonStatusGetCurrentHp(DeckTrainerAI *pokemon);
-extern "C" u16 battlePokemonStatusGetMaxHp(DeckTrainerAI *pokemon);
 extern "C" long pokemon_GetAttest(DeckTrainerAI *pokemon);
 extern "C" u16 gbaPokemonConditonFromGC(DeckTrainerAI *pokemon);
 extern "C" u8 pokemonGetDeoxysSel(u8 sel);
@@ -315,8 +313,6 @@ extern "C" void *fightFloorGetPtr(void);
 extern "C" FightOutPokemon *fightSeqSelectDefensePokemonPtr(FightOutPokemon *fightOutPokemon, u16 waza, long cbData, long (*cb)(GStexture *, unsigned long, void *), long a, long b, long c);
 extern "C" u8 fightTimerAllIsOver(void);
 extern "C" u8 fightFloorIsUseFightTimerAll(long flag);
-extern "C" u16 pokemonBiosGetPokemonWazaDataId(DeckTrainerAI *pokemon, u16 index);
-extern "C" u8 pokemonBiosGetPokemonWazaPp(DeckTrainerAI *pokemon, u16 index);
 extern "C" long GetWazaDocGBA(void *dst, u16 waza);
 long myBackFB(GStexture *texture, unsigned long key, void *data);
 

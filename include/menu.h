@@ -34,27 +34,44 @@ enum {
     MENU_ITEM_DEBUG_MOVE_TYPE_THIRD = 0x8B
 };
 
+struct Pokemon;
+struct tagWINDOW_WORK;
+struct tagSPRITE_WORK;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+enum {
+    MENU_SE_CONFIRM = 0x11,
+    MENU_SE_CANCEL = 0x12,
+    MENU_SE_ERROR = 0x13,
+};
+s32 menuGetCursor(s32 menuId);
+s32 menuGetCursorItemID(s32 menuId);
+void menuButtonNormal(struct tagWINDOW_WORK *win);
+u8 menuFaceCheckLoading(void);
+void menuDataBiosSetXY(s32 id, s16 x, s16 y);
+void menuDataBiosGetXY(s32 id, s16 *x, s16 *y);
+u8 menuDataBiosGetDispMax(s32 id);
+void menuFaceLoadPokemon(struct Pokemon *pokemon, void *(*callback)(void *), u16 *counter);
+void menuFaceDisplay(struct tagWINDOW_WORK *win, struct tagSPRITE_WORK *sprite, u16 faceId);
+
 // Opens a menu on the active window and optionally waits for a selection.
-s32 menuOpen(s32 menuID, s32 waitMode);
+s32 menuOpen(s32 menuID, s32 flag);
 
-s32 menuClose(s32 windowID);
-
-// Returns 1 if the window is absent, 0 after closing it.
-s32 menuCloseCustom(s32 windowID, s32 closeFlags, s32 waitMode);
+s8 menuClose(int menuID);
+s32 menuCloseSync(s32 menuID, s32 closeMode);
+s8 menuCloseCustom(int menuID, int closeMode, int wait);
 
 // Returns whether the menu window exists.
 u8 menuIsOpen(s32 menuID);
 
-// Returns whether the window still exists; optionally waits for it to close.
-u8 menuCloseSync(s32 windowID, u8 waitForClose);
-
-// cursor receives the window cursor word when a selection is made.
-s32 menuOpenCustom(s32 menuID, s32 parentWindowID, void *cursor,
-                   s32 closeFlags, s32 waitMode, s32 argumentCount, ...);
+#ifdef __cplusplus
+long menuOpenCustom(int menuID, int parentID, void *cursor, int flags, bool wait, int mode, ...);
+#else
+long menuOpenCustom(int menuID, int parentID, void *cursor, int flags, u8 wait, int mode, ...);
+#endif
 
 #ifdef __cplusplus
 }

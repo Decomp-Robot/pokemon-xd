@@ -132,6 +132,8 @@ extern const s32 staControlerMap[4];
 extern "C" {
 #endif
 
+struct Hero;
+Hero *menuCBBios_GetBattleHeroPtr(void);
 u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer);
 s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer);
 void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId);
