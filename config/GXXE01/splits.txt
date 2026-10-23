@@ -258,6 +258,35 @@ ext/dolphin_sdk/dvd/fstload.c:
 	.sdata      start:0x804E8178 end:0x804E8188
 	.sbss       start:0x804EAC40 end:0x804EAC4C
 
+ext/dolphin_sdk/vi/vi.c:
+	.text       start:0x800B8588 end:0x800B87FC
+	.text       start:0x800B87FC end:0x800B8840
+	.text       start:0x800B8840 end:0x800B8884
+	.text       start:0x800B8884 end:0x800B892C
+	.text       start:0x800B892C end:0x800B8B30
+	.text       start:0x800B8B30 end:0x800B8FE0
+	.text       start:0x800B8FE0 end:0x800B9034
+	.text       start:0x800B9034 end:0x800B9308
+	.text       start:0x800B9308 end:0x800B94A8
+	.text       start:0x800B94A8 end:0x800B9CB0
+	.text       start:0x800B9CB0 end:0x800BA044
+	.text       start:0x800BA044 end:0x800BA174
+	.text       start:0x800BA174 end:0x800BA1E0
+	.text       start:0x800BA1E0 end:0x800BA25C
+	.text       start:0x800BA25C end:0x800BA264
+	.text       start:0x800BA264 end:0x800BA2A0
+	.text       start:0x800BA2A0 end:0x800BA308
+	.text       start:0x800BA308 end:0x800BA3A4
+	.text       start:0x800BA3A4 end:0x800BA43C
+	.text       start:0x800BA43C end:0x800BA4A4
+	.text       start:0x800BA4A4 end:0x800BA4E0
+	.text       start:0x800BA4E0 end:0x800BA6FC
+	.text       start:0x800BA6FC end:0x800BA75C
+	.data       start:0x803D25C0 end:0x803D29A8
+	.bss        start:0x8043E6A8 end:0x8043E7F0
+	.sdata      start:0x804E8188 end:0x804E8198
+	.sbss       start:0x804EAC50 end:0x804EACB8
+
 ext/dolphin_sdk/pad/Pad.c:
 	.text       start:0x800BA75C end:0x800BA900
 	.text       start:0x800BA900 end:0x800BA9C4
