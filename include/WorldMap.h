@@ -19,17 +19,34 @@ struct WorldMapWork {
     s32 cursor;
 };
 
-/* Partial WorldMap declaration.
+/* Camera-blend work block (0x68 bytes, allocated by Init). IsBlending only
+ * reads the blend parameter at +0x08, which ControlCamera drives from 0 to
+ * 1 (its per-frame increment +0x10 is clamped so the blend never passes 1);
+ * the rest of the block (target position/angle work at +0x18, camera
+ * position at +0x40) is still unrecovered. */
+struct WorldMapCamWork {
+    u8 _00[0x08];
+    /* 0x08: camera blend parameter; 0 = camera at the old position,
+     * 1 = fully blended to the new one. */
+    f32 blend;
+    u8 _0C[0x5C];
+};
+
+/* Partial WorldMap declaration (0x48 bytes; menuWorldMapMXInit allocates
+ * 0x48 and runs the constructor over it).
  *
- * The constructor only initializes the leading three words; the rest
- * of the object (icon array at 0x0C, cursor state, camera work at 0x44, for
- * a total size of 0x48 bytes) is set up by Init and the other member
- * functions, so those members are intentionally not declared here. */
+ * The constructor only initializes the leading three words; the icon
+ * array at 0x0C, the cursor state and the camera work at 0x44 are set
+ * up by Init and the other member functions, so only the members those
+ * functions have exposed so far are declared here. */
 class WorldMap {
 public:
     WorldMap();
     s32 GetNowCursor(tagWINDOW_WORK* window);
     s32 GetStartIconAnimIndex(unsigned long index);
+    /* True once the camera blend started by SetCameraNextWork has fully
+     * faded in (blend parameter reached 1). */
+    bool IsBlending();
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the
@@ -49,6 +66,19 @@ private:
      * Release frees it and nulls the pointer. GetNowCursor reads the
      * selected cursor at +0x30 of this same block (see WorldMapWork). */
     WorldMapWork* mModelWork;
+    /* 0x0C: Icon works (array of 0x2C-byte WorldMapIconWork entries, one
+     * per flag data entry). Init allocates and constructs the array;
+     * InitModel, SelectIcon and SetCursorPosition index it. */
+    void* mIcons;
+    /* 0x10..0x43: Unrecovered map state (cursor position, camera targets).
+     * Only MainSub/ControlCamera touch these; left as padding until those
+     * functions are recovered. */
+    u8 _10[0x34];
+    /* 0x44: Camera work block (0x68 bytes). Init allocates it and zeroes
+     * the blend fields; IsBlending reads the blend parameter at +0x08 and
+     * ControlCamera drives it toward the targets set by SetCameraNextWork
+     * (see WorldMapCamWork). */
+    WorldMapCamWork* mCamWork;
 };
 
 #endif

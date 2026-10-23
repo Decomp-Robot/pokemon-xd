@@ -1,5 +1,9 @@
 #include <types.h>
 
+/* The message ids are consumed verbatim by the message engine; keep the
+ * return blocks unmerged so each id stays visible in the output. */
+#pragma global_optimizer off
+
 s32 dbgMenuGetGsinputMsgId(s32 id) {
 	if (id == 0) {
 		return 0xED04;
@@ -15,3 +19,5 @@ s32 dbgMenuGetGsinputMsgId(s32 id) {
 		return 0xED04;
 	}
 }
+
+#pragma global_optimizer on

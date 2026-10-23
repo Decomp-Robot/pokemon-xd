@@ -21,15 +21,19 @@ name = "decomp/_memcard_debug_type_check.c"
 completed = true
 
 [[lib.object]]
+name = "decomp/menuWorldMap.cpp"
+completed = true
+
+[[lib.object]]
+name = "decomp/WorldMapIsBlending.cpp"
+completed = true
+
+[[lib.object]]
 name = "decomp/WorldMap.cpp"
 completed = true
 
 [[lib.object]]
 name = "game/WorldMapIcon.cpp"
-completed = true
-
-[[lib.object]]
-name = "decomp/menuWorldMap.cpp"
 completed = true
 
 [[lib.object]]
