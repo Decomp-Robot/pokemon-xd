@@ -68,7 +68,6 @@ static f32 AXARTNoise[64] = {
    0.364502f, 0.63764f, -0.212945f, 0.394563f, 0.496392f, 0.727584f, -0.564585f, 0.040292f,
 };
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTLfo(AXART_LFO* lfo) {
     lfo->counter += lfo->delta;
 

@@ -27,7 +27,6 @@ static void __AXDSPInitCallback(void* task);
 static void __AXDSPResumeCallback(void* task);
 static void __AXDSPDoneCallback(void* task);
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXOutNewFrame(u32 lessDspCycles) {
     u32 cl;
     AXPROFILE* profile;
@@ -85,7 +84,6 @@ void __AXOutNewFrame(u32 lessDspCycles) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXOutAiCallback(void) {
     if (__AXOutDspReady == 0) {
         __AXOsTime = OSGetTime();
@@ -106,17 +104,14 @@ void __AXOutAiCallback(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void __AXDSPInitCallback(void* task) {
     __AXDSPInitFlag = 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXSetStepMode(u32 i) {
     __AXDebugSteppingMode = i;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void __AXDSPResumeCallback(void* task) {
 #if DEBUG
     if (__AXDebugSteppingMode != 0) {
@@ -133,7 +128,6 @@ static void __AXDSPResumeCallback(void* task) {
     __AXOutDspReady = 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void __AXDSPDoneCallback(void* task) {
     __AXDSPDoneFlag = 1;
     OSWakeupThread(&__AXOutThreadQueue);
@@ -149,7 +143,6 @@ static void __AXDSPDoneCallback(void* task) {
         }                              \
     }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXOutInitDSP(void) {
     __AXDSPTask.iram_mmem_addr = axDspSlave;
     __AXDSPTask.iram_length = axDspSlaveLength;
@@ -176,7 +169,6 @@ void __AXOutInitDSP(void) {
     do {} while (__AXDSPInitFlag == 0);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXOutInit(u32 outputBufferMode) {
 #ifdef DEBUG
     OSReport("Initializing AXOut code module\n");
@@ -220,7 +212,6 @@ void __AXOutInit(u32 outputBufferMode) {
     AIStartDMA();
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXOutQuit(void) {
     BOOL old;
 #ifdef DEBUG
@@ -234,7 +225,6 @@ void __AXOutQuit(void) {
     OSRestoreInterrupts(old);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXCallback AXRegisterCallback(AXCallback callback) {
     BOOL enabled;
     AXCallback oldCB;

@@ -20,7 +20,6 @@ static u32 __AXAuxDspWritePositionDpl2;
 static u32 __AXAuxDspReadPositionDpl2;
 static u32 __AXAuxCpuReadWritePosition;
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXAuxInit(void) {
     int i;
     s32* pA;
@@ -48,7 +47,6 @@ void __AXAuxInit(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXAuxQuit(void) {
 #ifdef DEBUG
     OSReport("Shutting down AXAux code module\n");
@@ -57,7 +55,6 @@ void __AXAuxQuit(void) {
     __AXCallbackAuxB = NULL;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAInput(u32* p) {
     if (__AXCallbackAuxA) {
         *p = (u32)&__AXBufferAuxA[__AXAuxDspWritePosition][0];
@@ -66,32 +63,26 @@ void __AXGetAuxAInput(u32* p) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAInputDpl2(u32* p) {
     *p = (u32)&__AXBufferAuxB[__AXAuxDspWritePosition][320];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAOutput(u32* p) {
     *p = (u32)&__AXBufferAuxA[__AXAuxDspReadPosition][0];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAOutputDpl2R(u32* p) {
     *p = (u32)&__AXBufferAuxA[__AXAuxDspReadPosition][160];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAOutputDpl2Ls(u32* p) {
     *p = (u32)&__AXBufferAuxA[__AXAuxDspReadPosition][320];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxAOutputDpl2Rs(u32* p) {
     *p = (u32)&__AXBufferAuxB[__AXAuxDspReadPosition][320];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxBInput(u32* p) {
     if (__AXCallbackAuxB) {
         *p = (u32)&__AXBufferAuxB[__AXAuxDspWritePosition][0];
@@ -100,22 +91,18 @@ void __AXGetAuxBInput(u32* p) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxBOutput(u32* p) {
     *p = (u32)&__AXBufferAuxB[__AXAuxDspReadPosition][0];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxBForDPL2(u32* p) {
     *p = (u32)&__AXBufferAuxB[__AXAuxDspWritePositionDpl2][0];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXGetAuxBOutputDPL2(u32* p) {
     *p = (u32)&__AXBufferAuxB[__AXAuxDspReadPositionDpl2][0];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXProcessAux(void) {
     __AXAuxADspWrite = &__AXBufferAuxA[__AXAuxDspWritePosition][0];
     __AXAuxADspRead = &__AXBufferAuxA[__AXAuxDspReadPosition][0];
@@ -169,13 +156,11 @@ void __AXProcessAux(void) {
     __AXAuxCpuReadWritePosition %= 3;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXRegisterAuxACallback(void (*callback)(void*, void*), void* context) {
     __AXCallbackAuxA = callback;
     __AXContextAuxA = context;    
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXRegisterAuxBCallback(void (*callback)(void*, void*), void* context) {
     __AXCallbackAuxB = callback;
     __AXContextAuxB = context;    

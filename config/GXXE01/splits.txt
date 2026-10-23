@@ -203,51 +203,6 @@ ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3BBC end:0x800B3C20
 	.text       start:0x800B3C20 end:0x800B3D94
 
-ext/dolphin_sdk/ax/AX.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXAlloc.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXAux.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXCL.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXOut.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXProf.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXSPB.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/AXVPB.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/ax/DSPCode.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axart.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axart3d.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axartcents.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axartenv.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axartlfo.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
-ext/dolphin_sdk/axart/axartlpf.c:
-	.text       start:0x800B3D94 end:0x800B3D94
-
 ext/dolphin_sdk/os/__start.c:
 	.init       start:0x80003100 end:0x80003400
 	.sbss       start:0x804EAB70 end:0x804EAB78

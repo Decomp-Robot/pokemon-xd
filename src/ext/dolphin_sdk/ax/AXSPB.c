@@ -15,12 +15,10 @@ static s32 __AXSpbABL;
 static s32 __AXSpbABR;
 static s32 __AXSpbABS;
 
-// UNUSED: the game never calls this; dead-stripped at link.
 u32 __AXGetStudio(void) {
     return (u32)&__AXStudio;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXDepopFade(s32* hostSum, s32* dspVolume, s16* dspDelta) {
     int frames;
     s32 delta;
@@ -46,7 +44,6 @@ void __AXDepopFade(s32* hostSum, s32* dspVolume, s16* dspDelta) {
     *dspDelta = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXPrintStudio(void) {
     __AXDepopFade(&__AXSpbAL, (void*)&__AXStudio.dpopLHi, &__AXStudio.dpopLDelta);
     __AXDepopFade(&__AXSpbAR, (void*)&__AXStudio.dpopRHi, &__AXStudio.dpopRDelta);
@@ -60,7 +57,6 @@ void __AXPrintStudio(void) {
     DCFlushRange(&__AXStudio, sizeof(__AXStudio));
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXSPBInit(void) {
 #ifdef DEBUG
     OSReport("Initializing AXSPB code module\n");
@@ -76,14 +72,12 @@ void __AXSPBInit(void) {
     __AXSpbABS = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXSPBQuit(void) {
 #ifdef DEBUG
     OSReport("Shutting down AXSPB code module\n");
 #endif
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXDepopVoice(AXPB* p) {
     __AXSpbAL += p->dpop.aL;
     __AXSpbAAL += p->dpop.aAuxAL;

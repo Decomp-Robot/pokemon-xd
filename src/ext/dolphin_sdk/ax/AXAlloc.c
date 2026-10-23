@@ -8,7 +8,6 @@ static AXVPB* __AXStackTail[AX_PRIORITY_STACKS];
 
 static AXVPB* __AXCallbackStack;
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static u32 __AXCheckStacks(void) {
     u32 i;
     u32 voices;
@@ -30,13 +29,11 @@ static u32 __AXCheckStacks(void) {
     return 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXVPB* __AXGetStackHead(u32 priority) {
     ASSERTLINE(97, priority < AX_PRIORITY_STACKS);
     return __AXStackHead[priority];
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXServiceCallbackStack(void) {
     AXVPB* p;
 
@@ -52,7 +49,6 @@ void __AXServiceCallbackStack(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXInitVoiceStacks(void) {
     u32 i;
 
@@ -62,7 +58,6 @@ void __AXInitVoiceStacks(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXAllocInit(void) {
 #ifdef DEBUG
     OSReport("Initializing AXAlloc code module\n");
@@ -70,7 +65,6 @@ void __AXAllocInit(void) {
     __AXInitVoiceStacks();
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXAllocQuit(void) {
 #ifdef DEBUG
     OSReport("Shutting down AXAlloc code module\n");
@@ -78,7 +72,6 @@ void __AXAllocQuit(void) {
     __AXInitVoiceStacks();
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXPushFreeStack(AXVPB* p) {
     ASSERTLINE(168, p->priority);
     p->next = __AXStackHead[0];
@@ -86,7 +79,6 @@ void __AXPushFreeStack(AXVPB* p) {
     p->priority = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXVPB* __AXPopFreeStack(void) {
     AXVPB* p;
 
@@ -97,13 +89,11 @@ AXVPB* __AXPopFreeStack(void) {
     return p;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXPushCallbackStack(AXVPB* p) {
     p->next1 = __AXCallbackStack;
     __AXCallbackStack = p;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXVPB* __AXPopCallbackStack(void) {
     AXVPB* p;
 
@@ -114,7 +104,6 @@ AXVPB* __AXPopCallbackStack(void) {
     return p;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXRemoveFromStack(AXVPB* p) {
     u32 i;
     AXVPB* head;
@@ -148,7 +137,6 @@ void __AXRemoveFromStack(AXVPB* p) {
     tail->prev = head;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __AXPushStackHead(AXVPB* p, u32 priority) {
     ASSERTLINE(261, priority);
     ASSERTLINE(262, priority < AX_PRIORITY_STACKS);
@@ -167,7 +155,6 @@ void __AXPushStackHead(AXVPB* p, u32 priority) {
     p->priority = priority;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXVPB* __AXPopStackFromBottom(u32 priority) {
     AXVPB* p;
 
@@ -189,7 +176,6 @@ AXVPB* __AXPopStackFromBottom(u32 priority) {
     return p;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXFreeVoice(AXVPB* p) {
     BOOL old;
     
@@ -208,7 +194,6 @@ void AXFreeVoice(AXVPB* p) {
     OSRestoreInterrupts(old);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 AXVPB* AXAcquireVoice(u32 priority, void (*callback)(void*), u32 userContext) {
     BOOL old;
     AXVPB* p;
@@ -246,7 +231,6 @@ AXVPB* AXAcquireVoice(u32 priority, void (*callback)(void*), u32 userContext) {
     return p;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoicePriority(AXVPB* p, u32 priority) {
     BOOL old;
 

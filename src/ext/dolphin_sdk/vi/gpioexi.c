@@ -16,7 +16,6 @@ static int gpioOE(u8 value);
 static int gpioOut(u32 addr, u8 value);
 static int gpioInput(u8* p);
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __VIInitI2C(void) {
     OSTime time;
 
@@ -28,7 +27,6 @@ void __VIInitI2C(void) {
     setI2CEnable(1);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void initGpioExi(void) {
     shadowGPIOOE = 0;
     shadowGPIOData = 0;
@@ -36,7 +34,6 @@ static void initGpioExi(void) {
     gpioOE(shadowGPIOOE);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __VISetSCL(int value) {
     shadowGPIOOE &= ~2;
     if (value == 0) {
@@ -45,7 +42,6 @@ void __VISetSCL(int value) {
     gpioOE(shadowGPIOOE);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 int __VIGetSCL(void) {
     u8 value;
 
@@ -57,7 +53,6 @@ int __VIGetSCL(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void __VISetSDA(int value) {
     shadowGPIOOE &= ~1;
     if (value == 0) {
@@ -66,7 +61,6 @@ void __VISetSDA(int value) {
     gpioOE(shadowGPIOOE);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 int __VIGetSDA(void) {
     u8 value;
 
@@ -78,7 +72,6 @@ int __VIGetSDA(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void setVideoReset(int value) {
     if (value != 0) {
         shadowGPIOData |= 4;
@@ -90,7 +83,6 @@ static void setVideoReset(int value) {
     gpioOE(shadowGPIOOE);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void setI2CEnable(int value) {
     if (value != 0) {
         shadowGPIOData &= ~0x10;
@@ -102,17 +94,14 @@ static void setI2CEnable(int value) {
     gpioOE(shadowGPIOOE);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static int gpioOutput(u8 value) {
     return gpioOut(0x800404U, value);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static int gpioOE(u8 value) {
     return gpioOut(0x800408U, value);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static int gpioOut(u32 addr, u8 value) {
     u32 cmd;
 
@@ -135,7 +124,6 @@ static int gpioOut(u32 addr, u8 value) {
     return 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static int gpioInput(u8* p) {
     u32 cmd;
 

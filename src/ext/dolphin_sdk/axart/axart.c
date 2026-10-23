@@ -4,14 +4,12 @@
 
 static AXART_SOUND* __AXARTSoundList;
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInit(void) {
     __AXARTSoundList = 0;
     AXARTSet3DDistanceScale(40.0f);
     AXARTSet3DDopplerScale(20.0f);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTQuit(void) {
     BOOL old;
     AXART_SOUND* sound;
@@ -26,7 +24,6 @@ void AXARTQuit(void) {
     OSRestoreInterrupts(old);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTServiceSounds(void) {
     AXART_SOUND* sound;
 
@@ -35,7 +32,6 @@ void AXARTServiceSounds(void) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitSound(AXART_SOUND* sound, AXVPB* voice, u32 sampleRate) {
     ASSERTLINE(141, sound);
     ASSERTLINE(142, voice);
@@ -45,7 +41,6 @@ void AXARTInitSound(AXART_SOUND* sound, AXVPB* voice, u32 sampleRate) {
     sound->sampleRate = sampleRate;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTAddSound(AXART_SOUND* sound) {
     AXART_ART* articulator;
     AXVPB* axvpb;
@@ -165,7 +160,6 @@ void AXARTAddSound(AXART_SOUND* sound) {
     OSRestoreInterrupts(old);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTRemoveSound(AXART_SOUND* sound) {
     BOOL old;
 
@@ -192,7 +186,6 @@ void AXARTRemoveSound(AXART_SOUND* sound) {
     MIXReleaseChannel(sound->axvpb);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitLfo(AXART_LFO* lfo, f32* samples, u32 length, f32 delta) {
     ASSERTLINE(417, samples);
     ASSERTLINE(418, length);
@@ -204,7 +197,6 @@ void AXARTInitLfo(AXART_LFO* lfo, f32* samples, u32 length, f32 delta) {
     lfo->counter = lfo->sample1 = lfo->sample = lfo->output = 0.0f;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArt3D(AXART_3D* articulator) {
     ASSERTLINE(446, articulator);
     
@@ -218,7 +210,6 @@ void AXARTInitArt3D(AXART_3D* articulator) {
     articulator->attenuation = -0x03C00000;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtPanning(AXART_PANNING* articulator) {
     ASSERTLINE(481, articulator);
     
@@ -227,7 +218,6 @@ void AXARTInitArtPanning(AXART_PANNING* articulator) {
     articulator->span = 127;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtItd(AXART_ITD* articulator) {
     ASSERTLINE(503, articulator);
 
@@ -235,7 +225,6 @@ void AXARTInitArtItd(AXART_ITD* articulator) {
     articulator->itdL = articulator->itdR = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtSrctype(AXART_SRC* articulator) {
     ASSERTLINE(526, articulator);
 
@@ -243,7 +232,6 @@ void AXARTInitArtSrctype(AXART_SRC* articulator) {
     articulator->src = 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtPitch(AXART_PITCH* articulator) {
     ASSERTLINE(547, articulator);
 
@@ -251,7 +239,6 @@ void AXARTInitArtPitch(AXART_PITCH* articulator) {
     articulator->cents = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtPitchEnv(AXART_PITCH_ENV* articulator) {
     ASSERTLINE(569, articulator);
 
@@ -259,7 +246,6 @@ void AXARTInitArtPitchEnv(AXART_PITCH_ENV* articulator) {
     articulator->delta = articulator->target = articulator->cents = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtPitchMod(AXART_PITCH_MOD* articulator) {
     ASSERTLINE(594, articulator);
 
@@ -268,7 +254,6 @@ void AXARTInitArtPitchMod(AXART_PITCH_MOD* articulator) {
     AXARTInitLfo(&articulator->lfo, AXARTSine, AXART_SINE_CNT, 0.0f);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtVolume(AXART_VOLUME* articulator) {
     ASSERTLINE(617, articulator);
 
@@ -276,7 +261,6 @@ void AXARTInitArtVolume(AXART_VOLUME* articulator) {
     articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxAVolume(AXART_AUXA_VOLUME* articulator) {
     ASSERTLINE(639, articulator);
 
@@ -284,7 +268,6 @@ void AXARTInitArtAuxAVolume(AXART_AUXA_VOLUME* articulator) {
     articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxBVolume(AXART_AUXB_VOLUME* articulator) {
     ASSERTLINE(661, articulator);
 
@@ -292,7 +275,6 @@ void AXARTInitArtAuxBVolume(AXART_AUXB_VOLUME* articulator) {
     articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtVolumeEnv(AXART_VOLUME_ENV* articulator) {
     ASSERTLINE(683, articulator);
 
@@ -300,7 +282,6 @@ void AXARTInitArtVolumeEnv(AXART_VOLUME_ENV* articulator) {
     articulator->delta = articulator->target = articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxAVolumeEnv(AXART_AUXA_VOLUME_ENV* articulator) {
     ASSERTLINE(707, articulator);
 
@@ -308,7 +289,6 @@ void AXARTInitArtAuxAVolumeEnv(AXART_AUXA_VOLUME_ENV* articulator) {
     articulator->delta = articulator->target = articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxBVolumeEnv(AXART_AUXB_VOLUME_ENV* articulator) {
     ASSERTLINE(731, articulator);
 
@@ -316,7 +296,6 @@ void AXARTInitArtAuxBVolumeEnv(AXART_AUXB_VOLUME_ENV* articulator) {
     articulator->delta = articulator->target = articulator->attenuation = 0;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtVolumeMod(AXART_VOLUME_MOD* articulator) {
     ASSERTLINE(756, articulator);
 
@@ -325,7 +304,6 @@ void AXARTInitArtVolumeMod(AXART_VOLUME_MOD* articulator) {
     AXARTInitLfo(&articulator->lfo, AXARTSine, AXART_SINE_CNT, 0.0f);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxAVolumeMod(AXART_AUXA_VOLUME_MOD* articulator) {
     ASSERTLINE(781, articulator);
 
@@ -334,7 +312,6 @@ void AXARTInitArtAuxAVolumeMod(AXART_AUXA_VOLUME_MOD* articulator) {
     AXARTInitLfo(&articulator->lfo, AXARTSine, AXART_SINE_CNT, 0.0f);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtAuxBVolumeMod(AXART_AUXB_VOLUME_MOD* articulator) {
     ASSERTLINE(806, articulator);
 
@@ -343,7 +320,6 @@ void AXARTInitArtAuxBVolumeMod(AXART_AUXB_VOLUME_MOD* articulator) {
     AXARTInitLfo(&articulator->lfo, AXARTSine, AXART_SINE_CNT, 0.0f);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTInitArtLpf(AXART_LPF* articulator) {
     ASSERTLINE(830, articulator);
 

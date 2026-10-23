@@ -1,10 +1,8 @@
 #include <dolphin.h>
 #include <dolphin/ax.h>
 
-// UNUSED: the game never calls this; dead-stripped at link.
 u16 axDspSlaveLength = (AX_DSP_SLAVE_LENGTH * 2);
 
-// UNUSED: the game never calls this; dead-stripped at link.
 u16 axDspSlave[AX_DSP_SLAVE_LENGTH] ATTRIBUTE_ALIGN(32) = {
 	0x0000, 0x0000, 0x029F, 0x0E88, 0x029F, 0x0E97,
 	0x029F, 0x0EB3, 0x029F, 0x0ED3, 0x029F, 0x0ED9,

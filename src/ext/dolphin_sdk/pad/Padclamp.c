@@ -27,7 +27,6 @@ static void ClampStick(s8* px, s8* py, s8 max, s8 xy, s8 min);
 static void ClampCircle(s8* px, s8* py, s8 radius, s8 min);
 static void ClampTrigger(u8* trigger, u8 min, u8 max);
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void ClampStick(s8* px, s8* py, s8 max, s8 xy, s8 min) {
     int x = *px;
     int y = *py;
@@ -83,7 +82,6 @@ static void ClampStick(s8* px, s8* py, s8 max, s8 xy, s8 min) {
     *py = (s8)(signY * y);
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void ClampCircle(s8* px, s8* py, s8 radius, s8 min) {
     int x = *px;
     int y = *py;
@@ -117,7 +115,6 @@ static void ClampCircle(s8* px, s8* py, s8 radius, s8 min) {
     *py = y;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 static void ClampTrigger(u8* trigger, u8 min, u8 max) {
     if (*trigger <= min) {
         *trigger = 0;
@@ -129,7 +126,6 @@ static void ClampTrigger(u8* trigger, u8 min, u8 max) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void PADClamp(PADStatus * status) {
     int i;
 
@@ -143,7 +139,6 @@ void PADClamp(PADStatus * status) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void PADClampCircle(PADStatus* status) {
     int i;
     for (i = 0; i < 4; ++i, status++) {

@@ -54,3 +54,49 @@ error:
     ASSERTLINE(98, callback);
     callback(chan, result);
 }
+
+s32 CARDEraseAsync(CARDFileInfo* fileInfo, s32 length, s32 offset, CARDCallback callback) {
+    CARDControl* card;
+    s32 result;
+    CARDDir* dir;
+    CARDDir* ent;
+
+    ASSERTLINE(132, 0 < length);
+
+    result = __CARDSeek(fileInfo, length, offset, &card);
+    if (result < 0) {
+        return result;
+    }
+    
+    ASSERTLINE(138, OFFSET(offset, card->sectorSize) == 0);
+    ASSERTLINE(139, OFFSET(length, card->sectorSize) == 0);
+
+    if (OFFSET(offset, card->sectorSize) != 0 || OFFSET(length, card->sectorSize) != 0) {
+        return __CARDPutControlBlock(card, CARD_RESULT_FATAL_ERROR);
+    }
+
+    dir = __CARDGetDirBlock(card);
+    ent = dir + fileInfo->fileNo;
+    result = __CARDIsWritable(card, ent);
+    if (result < 0) {
+        return __CARDPutControlBlock(card, result);
+    }
+
+    card->apiCallback = callback ? callback : __CARDDefaultApiCallback;
+
+    result = __CARDEraseSector(fileInfo->chan, card->sectorSize * fileInfo->iBlock, EraseCallback);
+    if (result < 0) {
+        __CARDPutControlBlock(card, result);
+    }
+
+    return result;
+}
+
+s32 CARDErase(CARDFileInfo* fileInfo, s32 length, s32 offset) {
+    s32 result = CARDEraseAsync(fileInfo, length, offset, __CARDSyncCallback);
+    if (result < 0) {
+        return result;
+    }
+
+    return __CARDSync(fileInfo->chan);
+}

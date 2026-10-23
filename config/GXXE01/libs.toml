@@ -759,19 +759,19 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AX.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXAlloc.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXAux.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXCL.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXComp.c"
@@ -779,23 +779,23 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXOut.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXProf.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXSPB.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/AXVPB.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ax/DSPCode.c"
-completed = true
+completed = false
 
 [[lib]]
 name = "axart"
@@ -806,24 +806,24 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axart.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axart3d.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartcents.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartenv.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartlfo.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartlpf.c"
-completed = true
+completed = false

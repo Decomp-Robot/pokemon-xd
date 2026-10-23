@@ -264,19 +264,16 @@ static u8 __AXART3DSrc[360+1] = {
 static f32 __AXART3DDopplerScale = 0;
 static f32 __AXART3DDistanceScale = 0;
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTSet3DDopplerScale(f32 scale) {
     ASSERTLINE(323, scale > 0);
     __AXART3DDopplerScale = scale;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTSet3DDistanceScale(f32 scale) {
     ASSERTLINE(340, scale > 0);
     __AXART3DDistanceScale = scale;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 void AXART3DSound(AXART_3D* articulator) {
     u32 hAngle;
     u32 vAngle;
