@@ -8,6 +8,14 @@ typedef struct tagSPRITE_WORK tagSPRITE_WORK;
 typedef struct tagWINDOW_WORK tagWINDOW_WORK;
 typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 
+// Cursor record of a window, handed to the sub-menu switcher by value. The
+// cursor itself is the window cursor at 0x02; 0x00 is the sub-menu state the
+// window keeps next to it.
+struct CURSOR {
+    s16 mSubMenu; // 0x00: sub-menu the window is in.
+    s16 mCursor;  // 0x02: cursor position of the window.
+};
+
 // Window work, partial. The sprite-work list head at 0x24 is walked by
 // menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
 // custom-menu argument at 0x68 is what the name-entry menus read back. The
@@ -37,10 +45,14 @@ struct tagWINDOW_WORK {
             u8 mColorA;          // 0x93: alpha channel; also read on its own.
         } mRgba;
     };
-    u8 _94[0x0A];                // 0x94-0x9D: unknown.
+    u8 _94[0x08];                // 0x94-0x9B: unknown.
+    s16 mSubMenu;                // 0x9C: sub-menu the window is in.
     s16 cursor;                  // 0x9E: selected cursor.
-    u8 _A0[0x02];                // 0xA0-0xA1: unknown.
-    s16 cursorTo;                // 0xA2: cursor the window is scrolled to.
+    s16 mUnkA0;                  // 0xA0: unknown.
+    union {
+        s16 mSubMenuID;          // 0xA2: last opened sub-menu.
+        s16 cursorTo;            // 0xA2: scroll destination.
+    };
     u8 mAccept;                  // 0xA4: set when the menu is confirmed.
     u8 mCancel;                  // 0xA5: set when the menu is cancelled.
 };

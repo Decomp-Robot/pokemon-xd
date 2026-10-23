@@ -1263,6 +1263,7 @@ void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party, Pokemon *pokemon
 void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry);
 
 /* Held item accessors and the bag of the work party. */
+u32 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
 u32 battlePokemonGetHeldItem(Pokemon *pokemon);
 u32 pokemonDoItemSoubi(Pokemon *pokemon, u32 itemID, u32 apply);
 s32 heroItemCheckAddItemDataId(Pokemon *party, u32 itemID);

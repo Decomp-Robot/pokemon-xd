@@ -39,7 +39,7 @@ extern void menuFaceDispSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 
 extern s32 pokemonGetStatus(Pokemon *pokemon, s32 arg1, s32 id, u16 arg3);
 extern void menuFaceLoad_Tool(Pokemon *pokemon, Pokemon *(*callback)(void *), void *context);
 extern FightRuleData *menuCBBios_CurrentRule(void);
-extern u16 pokemonGetHeldItem(Pokemon *pokemon);
+extern u16 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
 
 }
 
@@ -259,7 +259,7 @@ extern "C" void menuCBEntrySlotConditionsSetItemRegulation(Pokemon *party,
 {
     FightRuleData *rule = menuCBBios_CurrentRule();
 
-    pokemonGetHeldItem(pokemon);
+    battlePokemonStatusGetHeldItem(pokemon);
 
     if (!menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_ITEM)) {
         switch (rule->mHeldItemMode) {

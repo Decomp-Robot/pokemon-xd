@@ -29,7 +29,7 @@ extern "C" {
 extern FightRuleData *menuCBBios_CurrentRule(void);
 extern u8 menuCBRulesetGetDirty(void);
 extern Pokemon *heroBiosGetPokemonPtr(Pokemon *party, u16 slot);
-extern u16 pokemonGetHeldItem(Pokemon *pokemon);
+extern u16 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
 extern u16 battlePokemonGetSpecies(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetAttack(Pokemon *pokemon);
@@ -110,7 +110,7 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Pokemon *party, s32 entry)
     for (i = 0; i < 6; i++) {
         Pokemon *pokemon = heroBiosGetPokemonPtr(party, i);
 
-        pokemonGetHeldItem(pokemon);
+        battlePokemonStatusGetHeldItem(pokemon);
         menuCBEntrySlotFlagsClear(entry, i);
 
         menuCBTaisenWork.entryFlags[entry][i].levelBelowMinimum =
@@ -292,7 +292,7 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
         return !pokemon_GetTamagoFlag(pokemon);
 
     case POKEMON_CONDITION_HELD_ITEM:
-        return menuCBRule_CheckValidItem(pokemonGetHeldItem(pokemon));
+        return menuCBRule_CheckValidItem(battlePokemonStatusGetHeldItem(pokemon));
 
     case POKEMON_CONDITION_ILLEGAL_MOVE:
         for (i = 0; i < 4; i++) {
@@ -409,7 +409,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
             return 1;
         }
 
-        if (pokemonGetHeldItem(pokemon) == 0) {
+        if (battlePokemonStatusGetHeldItem(pokemon) == 0) {
             return 1;
         }
 
@@ -428,7 +428,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Pokemon *party, Pokemon *pok
                 continue;
             }
 
-            if (pokemonGetHeldItem(other) == pokemonGetHeldItem(pokemon)) {
+            if (battlePokemonStatusGetHeldItem(other) == battlePokemonStatusGetHeldItem(pokemon)) {
                 return 0;
             }
         }
@@ -482,8 +482,8 @@ extern "C" bool menuCBRule_CheckTrainerRegulation(Pokemon *party, FightRuleData 
                 continue;
             }
 
-            if (pokemonGetHeldItem(pokemon) != 0) {
-                sameItem &= pokemonGetHeldItem(pokemon) != pokemonGetHeldItem(other);
+            if (battlePokemonStatusGetHeldItem(pokemon) != 0) {
+                sameItem &= battlePokemonStatusGetHeldItem(pokemon) != battlePokemonStatusGetHeldItem(other);
             }
 
             sameSpecies &= battlePokemonGetSpecies(pokemon) != battlePokemonGetSpecies(other);
@@ -553,7 +553,7 @@ extern "C" bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleDat
         return pokemon_GetLevel(pokemon) <= rule->mPokemonLevelMax;
 
     case REGULATION_POKEMON_ITEM:
-        return menuCBRule_CheckRegulationItem(pokemonGetHeldItem(pokemon));
+        return menuCBRule_CheckRegulationItem(battlePokemonStatusGetHeldItem(pokemon));
 
     default:
         break;

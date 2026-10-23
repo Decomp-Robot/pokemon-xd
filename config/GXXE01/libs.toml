@@ -897,7 +897,7 @@ cflags = [
     "-fp hardware",
     "-Cpp_exceptions off",
     "-O4,p",
-    "-inline auto",
+    "-inline noauto",
     "-pragma \"cats off\"",
     "-pragma \"warn_notinlined off\"",
     "-maxerrors 1",
@@ -906,11 +906,13 @@ cflags = [
     "-fp_contract on",
     "-str reuse",
     "-multibyte",
+    "-use_lmw_stmw on",
     "-i include",
     "-i build/GXXE01/include",
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-lang=c++",
+    "-opt nopeephole",
 ]
 
 [[lib.object]]
