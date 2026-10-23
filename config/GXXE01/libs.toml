@@ -12,6 +12,10 @@ completed = false
 name = "src/decomp/zz_000c298_.c"
 add_to_all_targets = true
 
+[[lib.object]]
+name = "src/decomp/GSgfxCaptureSetTarget.c"
+add_to_all_targets = true
+
 [[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"

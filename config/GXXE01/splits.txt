@@ -13,6 +13,9 @@ Sections:
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
 
+src/decomp/GSgfxCaptureSetTarget.c:
+	.text       start:0x800056A0 end:0x800056A4
+
 src/decomp/zz_000c298_.c:
 	.text       start:0x8000C298 end:0x8000C29C
 
