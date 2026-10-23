@@ -29,7 +29,7 @@ extern "C" s32 zz_000e9d4_(tagWINDOW_WORK *window, tagSPRITE_WORK *work);
 // Last frame render time in timer units; frozen at 0 while paused.
 u32 timeGetLastFrameTime(void)
 {
-    u32 paused = zz_000e794_();
+    u32 paused = pauseCheck();
 
     if (paused != 0) {
         return 0;
@@ -40,7 +40,7 @@ u32 timeGetLastFrameTime(void)
 // Last frame render time in seconds; frozen at 0.0f while paused.
 f32 timeGetLastFrameSec(void)
 {
-    u32 paused = zz_000e794_();
+    u32 paused = pauseCheck();
 
     if (paused != 0) {
         return 0.0f;

@@ -2,7 +2,7 @@
 
 #pragma peephole off
 
-// Pause state; the rest of the game reads it through zz_000e794_. MWCC lays
+// Pause state; the rest of the game reads it through pauseCheck. MWCC lays
 // .sbss out in reverse declaration order, so the declarations below run back
 // to front over the block pauseState, pauseInitialized, pauseBgmID, pauseAppID.
 s32 pauseAppID;
@@ -26,7 +26,7 @@ extern void GSmovieAllPause(void);
 extern s32 GSgappCreate(s32 app, s32 a, s32 b, void (*callback)(void));
 
 // Pause flag query; game systems call this to skip their updates.
-u8 zz_000e794_(void)
+u8 pauseCheck(void)
 {
     return pauseState;
 }
@@ -66,7 +66,7 @@ void pauseOn(void)
 }
 
 // GSgapp callback for the pause app; intentionally empty.
-void zz_000e880_(void)
+void pauseAppCallback(void)
 {
 }
 
@@ -74,7 +74,7 @@ void pauseInit(void)
 {
     pauseState = 0;
     pauseInitialized = 1;
-    pauseAppID = GSgappCreate(1, 0, 0, zz_000e880_);
+    pauseAppID = GSgappCreate(1, 0, 0, pauseAppCallback);
 }
 
 #pragma peephole reset

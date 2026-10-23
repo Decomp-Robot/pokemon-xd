@@ -4,7 +4,7 @@
 #include <types.h>
 
 // Pause state (sbss 0x804EA6D0): nonzero while pauseOn holds the game paused.
-// Read all over the game through zz_000e794_ to skip updates while paused.
+// Read all over the game through pauseCheck to skip updates while paused.
 extern u8 pauseState;
 // Pause ready flag (sbss 0x804EA6D1): set by pauseInit; pauseOn needs it.
 extern u8 pauseInitialized;
@@ -18,11 +18,11 @@ extern "C" {
 #endif
 
 // Pause flag query used all over the game to skip updates while paused.
-u8 zz_000e794_(void);
+u8 pauseCheck(void);
 void pauseOff(void);
 void pauseOn(void);
 // GSgapp callback for the pause app; intentionally empty.
-void zz_000e880_(void);
+void pauseAppCallback(void);
 void pauseInit(void);
 
 #ifdef __cplusplus
