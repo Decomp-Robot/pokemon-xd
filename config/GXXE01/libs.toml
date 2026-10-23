@@ -339,3 +339,14 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDTransform.c"
 completed = false
+
+[[lib]]
+name = "ai"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/gx", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/ai/ai.c"
+completed = false

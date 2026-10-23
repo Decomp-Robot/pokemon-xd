@@ -185,6 +185,27 @@ ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3BBC end:0x800B3C20
 	.text       start:0x800B3C20 end:0x800B3D94
 
+ext/dolphin_sdk/ai/ai.c:
+	.text       start:0x800BC12C end:0x800BC170
+	.text       start:0x800BC170 end:0x800BC1F8
+	.text       start:0x800BC1F8 end:0x800BC210
+	.text       start:0x800BC210 end:0x800BC228
+	.text       start:0x800BC228 end:0x800BC300
+	.text       start:0x800BC300 end:0x800BC310
+	.text       start:0x800BC310 end:0x800BC3F0
+	.text       start:0x800BC3F0 end:0x800BC404
+	.text       start:0x800BC404 end:0x800BC4D8
+	.text       start:0x800BC4D8 end:0x800BC4E8
+	.text       start:0x800BC4E8 end:0x800BC504
+	.text       start:0x800BC504 end:0x800BC514
+	.text       start:0x800BC514 end:0x800BC530
+	.text       start:0x800BC530 end:0x800BC540
+	.text       start:0x800BC540 end:0x800BC6AC
+	.text       start:0x800BC6AC end:0x800BC728
+	.text       start:0x800BC728 end:0x800BC7D4
+	.text       start:0x800BC7D4 end:0x800BC82C
+	.text       start:0x800BC82C end:0x800BCA10
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
