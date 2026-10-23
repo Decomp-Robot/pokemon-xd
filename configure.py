@@ -14,7 +14,7 @@ import argparse
 import sys
 import tomllib
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from tools.config_loader import load_config
 from tools.project import (
@@ -38,20 +38,24 @@ def get_available_versions(config_dir: Path) -> List[str]:
     return sorted(versions)
 
 
-def get_default_version(config_dir: Path) -> Optional[str]:
+def get_default_version(config_dir: Path) -> str:
     """Load default version from config/default.toml."""
     default_path = config_dir / "default.toml"
-    if default_path.exists():
-        with open(default_path, "rb") as f:
-            data = tomllib.load(f)
-            return data.get("project", {}).get("default_version")
-    return None
+    with open(default_path, "rb") as f:
+        try:
+            return tomllib.load(f)["project"]["default_version"]
+        except KeyError as exc:
+            raise ValueError(f"{default_path}: missing [project].default_version") from exc
+
+
+def tool_path(cli_path: Path | None, configured_path: str | None) -> Path | None:
+    return cli_path or (Path(configured_path) if configured_path else None)
 
 
 # Discover available versions from config directory
 CONFIG_DIR = Path("config")
 AVAILABLE_VERSIONS = get_available_versions(CONFIG_DIR)
-DEFAULT_VERSION = get_default_version(CONFIG_DIR) or (AVAILABLE_VERSIONS[0] if AVAILABLE_VERSIONS else "GAMEID")
+DEFAULT_VERSION = get_default_version(CONFIG_DIR)
 
 # Parse command line arguments
 parser = argparse.ArgumentParser()
@@ -173,17 +177,17 @@ config.objdiff_tag = toml_config.tools.objdiff_tag
 config.sjiswrap_tag = toml_config.tools.sjiswrap_tag
 config.wibo_tag = toml_config.tools.wibo_tag
 
-# Apply custom tool paths from args
-config.binutils_path = args.binutils
-config.compilers_path = args.compilers
-config.dtk_path = args.dtk
-config.objdiff_path = args.objdiff
-config.sjiswrap_path = args.sjiswrap
+# Command-line tool paths override the project TOML settings
+config.binutils_path = tool_path(args.binutils, toml_config.tools.binutils_path)
+config.compilers_path = tool_path(args.compilers, toml_config.tools.compilers_path)
+config.dtk_path = tool_path(args.dtk, toml_config.tools.dtk_path)
+config.objdiff_path = tool_path(args.objdiff, toml_config.tools.objdiff_path)
+config.sjiswrap_path = tool_path(args.sjiswrap, toml_config.tools.sjiswrap_path)
 config.ninja_path = args.ninja
 
 # Version
 config.version = version
-version_num = 0  # TODO: load from version config if needed
+version_num = toml_config.version_num
 
 # Build settings
 config.build_dir = args.build_dir
@@ -191,7 +195,7 @@ config.generate_map = args.map
 config.non_matching = args.non_matching
 config.progress = args.progress
 if not is_windows():
-    config.wrapper = args.wrapper
+    config.wrapper = tool_path(args.wrapper, toml_config.tools.wrapper_path)
 
 # Don't build asm unless we're --non-matching
 if not config.non_matching:
@@ -212,7 +216,7 @@ version_str = version
 version_num_str = str(version_num)
 
 def subst(flags: List[str]) -> List[str]:
-    return [f.replace("$VERSION", version_str).replace("$VERSION_NUM", version_num_str) for f in flags]
+    return [f.replace("$VERSION_NUM", version_num_str).replace("$VERSION", version_str) for f in flags]
 
 # Get base cflags from config
 cflags_base = list(toml_config.build.cflags_base)
@@ -253,8 +257,12 @@ for lib in toml_config.libs:
         lib_cflags = cflags_runtime
     elif lib.cflags_preset == "rel":
         lib_cflags = cflags_rel
+    elif lib.cflags_preset == "game":
+        lib_cflags = cflags_base + lib.cflags_extra
     else:
         lib_cflags = cflags_base + lib.cflags_extra
+
+    lib_cflags = subst(lib_cflags)
 
     # Filter objects based on version and handle "equivalent" status
     objects = []
@@ -275,8 +283,30 @@ for lib in toml_config.libs:
             obj_completed = False
 
         obj_options: Dict[str, Any] = {}
+        if obj.add_to_all is not None:
+            obj_options["add_to_all"] = obj.add_to_all
         if obj.cflags is not None:
             obj_options["cflags"] = subst(obj.cflags)
+        if obj.asflags is not None:
+            obj_options["asflags"] = subst(obj.asflags)
+        if obj.mw_version is not None:
+            obj_options["mw_version"] = obj.mw_version
+        if obj.progress_category is not None:
+            obj_options["progress_category"] = obj.progress_category
+        if obj.scratch_preset_id is not None:
+            obj_options["scratch_preset_id"] = obj.scratch_preset_id
+        if obj.shift_jis is not None:
+            obj_options["shift_jis"] = obj.shift_jis
+        if obj.source is not None:
+            obj_options["source"] = obj.source
+        if obj.src_dir is not None:
+            obj_options["src_dir"] = obj.src_dir
+        if obj.extra_cflags is not None:
+            obj_options["extra_cflags"] = subst(obj.extra_cflags)
+        if obj.extra_asflags is not None:
+            obj_options["extra_asflags"] = subst(obj.extra_asflags)
+        if obj.extra_clang_flags is not None:
+            obj_options["extra_clang_flags"] = obj.extra_clang_flags
         objects.append(Object(obj_completed, obj.name, **obj_options))
 
     lib_config: Dict[str, Any] = {

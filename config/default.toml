@@ -5,6 +5,8 @@
 # Default game version (used when -v is not specified)
 # Available versions are auto-detected from config/{VERSION}/ directories
 default_version = "GXXE01"
+# Numeric version identifier (used for $VERSION_NUM substitution in flags)
+version_num = 0
 
 [tools]
 # Tool versions (git tags) - leave empty to use custom paths
@@ -107,15 +109,14 @@ ldflags_map = [
     "-mapunused",
 ]
 
-# Progress categories
-[progress]
-progress_report_args = []
-
-[progress.categories]
-game = "Game Code"
-sdk = "SDK Code"
-
 # Optional extra arguments to `objdiff-cli report generate`
 # Marks relocations as mismatching if the target value is different
 # Default is "functionRelocDiffs=none", which is most lenient
 # Example: "--config functionRelocDiffs=data_value"
+[progress]
+progress_report_args = []
+
+# Progress categories
+[progress.categories]
+game = "Game Code"
+sdk = "SDK Code"
