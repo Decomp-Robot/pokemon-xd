@@ -2,6 +2,12 @@
 
 /*
  * MSL memory routines.
+ *
+ * These are linked into .init ahead of the CRT copy tables so __start's
+ * __init_data can clear and copy the DOL data/bss sections.  memset is the
+ * public entry point; __fill_mem does the actual fill so the SDK can call it
+ * directly.  memcpy is overlap-aware, which the DOL copy tables do not need
+ * but the rest of the library assumes.
  */
 __declspec(section ".init") void __fill_mem(void *dest, int val, size_t count);
 
