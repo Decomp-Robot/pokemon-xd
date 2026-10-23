@@ -206,5 +206,9 @@ name = "ext/dolphin_sdk/gx/GXDraw.c"
 completed = false
 
 [[lib.object]]
+name = "ext/dolphin_sdk/gx/GXFrameBuf.c"
+completed = false
+
+[[lib.object]]
 name = "ext/dolphin_sdk/gx/GXFifo.c"
 completed = false

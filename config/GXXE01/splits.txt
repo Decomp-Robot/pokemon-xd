@@ -189,6 +189,9 @@ ext/dolphin_sdk/gx/GXAttr.c:
 	.text       start:0x800C91C0 end:0x800C9440
 	.text       start:0x800C9440 end:0x800C947C
 
+ext/dolphin_sdk/gx/GXFrameBuf.c:
+	.text       start:0x800CA118 end:0x800CAB4C
+
 ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC254 end:0x800CC2C0
 	.text       start:0x800CC2C0 end:0x800CC404
