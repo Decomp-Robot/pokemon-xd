@@ -1,5 +1,3 @@
-#include <GSthread.h>
-#include <camera.h>
 #include <winSprite.h>
 #include <WorldMap.h>
 #include <saveData.h>
@@ -79,7 +77,7 @@ extern u32 titleFlashHoldFrames;    // frames the flash end holds
 extern u32 titleEntryConfirmed;     // set when a select entry is confirmed
 extern f32 titleCursorFade;         // press-start prompt fade 0..1
 extern f32 titleBgmFadeSeconds;     // bgm fade-out seconds accumulated
-extern GSthread *titlePrereadThread; // null when no preread thread runs
+extern u32 titlePrereadThreadId;    // preread thread id, 0 when none runs
 extern u32 titleInitFlag;           // cleared when the title flow initializes
 extern s16 titleCursorFrame;       // press-start pulse frame, advanced % 1000
 
@@ -124,6 +122,10 @@ extern s32 titleSelectSlot;
 #endif
 
 extern "C" {
+void GSthreadSwitch(void);
+void GSthreadTerminate(u32 threadId);
+u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 closeProtected,
+    void (*entry)(void));
 s32 windowGetActiveID(void);
 tagWINDOW_WORK *windowSearchID(s32 id);
 struct tagWINDOW_KEY *windowGetKeyState(void);
@@ -160,29 +162,31 @@ void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index);
 u32 GSfsysWait(u32 id);
 /* Returns the menuTop work struct's "a screen transition is running" flag,
  * which gates whether the mode-select resources may be freed. */
-u8 menuIsTransitionPending(void);
+u8 fn_8002FC70(void);
 void winMsgClose(s32 id);
 u8 cameraSetType(s32 type);
 s32 getCurrentMapGroupId(void);
+/* Loads a camera resource for a map group. */
+void zz_01971c8_(s32 group, void *res, s32 flag, f32 rate);
 void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 /* Tests whether a save slot holds data. */
 /* Records whether the mode select screen may keep running. */
-void menuSetModeSelectEnabled(s32 a);
+void zz_0030324_(s32 a);
 /* Returns the entry the mode select screen settled on. */
-s32 menuRunModeSelect(void);
+s32 zz_002f718_(void);
 /* Reports whether a memcard task is still in flight. */
-s32 memcardGetTaskStatus(void);
+s32 zz_005c228_(void);
 void floorUnlinkWithSE(s32 a, s32 b);
 /* Returns the thread group id of the floor group on top of the stack. */
-u32 floorGetGroupID(void);
+u32 floorGetStackGroupID(void);
 /* Reports whether the preread loader is still busy. */
-u8 floorIsPopd(void);
+u8 zz_0125b44_(void);
 void _HSD_AObjForgetMemory(void);
 u8 menuIsOpen(s32 id);
 void menuCloseCustom(s32 id, s32 a, s32 b);
 /* Sets the battle CD id on the encounter data the select screen hands on. */
-void fightEncountDataBiosSetBattleCDId(void *data, s32 id);
+void zz_battle_set_battle_cd_id(void *data, s32 id);
 void fightEncountDataBiosSetFightTrainerDataId(void *data, s32 player, u16 id);
 void FlashSystemSetPlayFrameLabel(u32 flash, const char *start, const char *end);
 void FlashSystemSetLoopFlag(u32 flash, s32 flag);
@@ -293,7 +297,7 @@ extern "C" void menuTitleUpdate(void)
     if (state == TITLE_STATE_SELECT) {
         return;
     }
-    if (memcardGetTaskStatus() == 1) {
+    if (zz_005c228_() == 1) {
         return;
     }
     titleBgmFadeSeconds += titleFrameSeconds;
@@ -504,7 +508,7 @@ extern "C" void menuTitleMainSub(void)
             break;
 
         case TITLE_STATE_SELECT:
-            if (memcardGetTaskStatus() == 1) {
+            if (zz_005c228_() == 1) {
                 status = 5;
             } else {
                 status = memcardTaskCall(1, 2, 0);
@@ -518,9 +522,9 @@ extern "C" void menuTitleMainSub(void)
                     savedataCreate(0, 0);
                 }
                 if (saveDataGetMetadata(0, SAVE_METADATA_SAVE_COUNT) != 0U) {
-                    menuSetModeSelectEnabled(1);
+                    zz_0030324_(1);
                 } else {
-                    menuSetModeSelectEnabled(0);
+                    zz_0030324_(0);
                 }
                 titleState = TITLE_STATE_MAP_FADE;
             }
@@ -555,7 +559,7 @@ extern "C" void menuTitleLoadMapModels(void)
 extern "C" void menuTitleSetupMapCamera(void)
 {
     cameraSetType(TITLE_CAM_TYPE_MAP);
-    cameraLoadMapResource(getCurrentMapGroupId(), TITLE_MAP_CAM_RES, cZeroFloat, 1);
+    zz_01971c8_(getCurrentMapGroupId(), (void *)TITLE_MAP_CAM_RES, 1, cZeroFloat);
 }
 
 /* Stream in the title map group and start its models and camera. */
@@ -674,7 +678,7 @@ s32 selectMenu(void)
         GSthreadSwitch();
     } while ((u32)now < (u32)end);
     /* The select screen reports the chosen mode through its return value. */
-    return menuRunModeSelect();
+    return zz_002f718_();
 }
 
 /* Play the select-menu open flash (back_play..back_end) and wait. */
@@ -706,7 +710,7 @@ extern "C" void menuTitlePlaySe(s32 id)
 extern "C" void menuTitleCleanupSelect(void)
 {
     GSfsysWait(TITLE_SELECT_RES);
-    if (menuIsTransitionPending() == 0) {
+    if (fn_8002FC70() == 0) {
         GSfsysFree(TITLE_SELECT_RES);
         GSresFreeGroup(TITLE_SELECT_RES);
     }
@@ -728,16 +732,16 @@ extern "C" void menuTitleBattleSelectFree(void)
 /* Stop the title's loader thread if one is running. */
 extern "C" void menuTitleStopThread(void)
 {
-    if (titlePrereadThread != 0) {
-        GSthreadTerminate(titlePrereadThread);
-        titlePrereadThread = 0;
+    if (titlePrereadThreadId != 0) {
+        GSthreadTerminate(titlePrereadThreadId);
+        titlePrereadThreadId = 0;
     }
 }
 
 /* Wait until the loader thread clears its busy flag. */
 extern "C" void menuTitlePreReadWait(void)
 {
-    while (titlePrereadThread != 0) {
+    while (titlePrereadThreadId != 0) {
         GSthreadSwitch();
     }
 }
@@ -768,10 +772,10 @@ extern "C" void menuTitleStartBattleSelect(void)
     titleFrameSeconds = cZeroFloat;
     menuTitleReadWazaSelectMenu();
     encounter = deckDataVirtual_GetPtr(14);
-    fightEncountDataBiosSetBattleCDId(encounter, 0);
+    zz_battle_set_battle_cd_id(encounter, 0);
     fightEncountDataBiosSetFightTrainerDataId(encounter, 1, 2);
     menuTitleCreateThread();
-    if (floorIsPopd() == 0) {
+    if (zz_0125b44_() == 0) {
         TitleSelectWork *select;
         s32 slot = titleSelectSlot;
 
@@ -805,8 +809,8 @@ extern "C" void menuTitleStartBattleSelect(void)
 /* Start the title loader thread that prereads the fight data. */
 void menuTitleCreateThread(void)
 {
-    titlePrereadThread = GSthreadCreate(20, floorGetGroupID(), 8192, 1, 1,
-        (GSthreadEntry)menuTitlePreReadFightRegWzxData);
+    titlePrereadThreadId = GSthreadCreate(20, floorGetStackGroupID(), 8192, 1, 1,
+        menuTitlePreReadFightRegWzxData);
 }
 
 /* Body of the preread thread: hand the BGM over, wait for the map data to be
@@ -822,7 +826,7 @@ void menuTitlePreReadFightRegWzxData(void)
     menuTitleWaitBgmFade(1);
     GSfsysPreReadWait(roomDataGetFsysGidForLanguage(roomIDGetMapData(TITLE_PREREAD_ROOM_ID)));
     fightRegWzxLoadAll(-1);
-    titlePrereadThread = 0;
+    titlePrereadThreadId = 0;
 }
 
 /* Make sure the select menu resource group is in memory. */

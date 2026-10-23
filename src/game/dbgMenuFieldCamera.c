@@ -26,7 +26,7 @@ s32 dbgMenuFieldCameraChangeDisp(void)
     u32 roomID;
 
     if (!menuIsOpen(MENU_ID_FIELD_CAMERA_EDITOR)) {
-        roomID = floorGetCurrentRoomID();
+        roomID = roomGetCurrentRoomID();
         if (roomID != floorFieldCameraEditorGetFloorID()) {
             floorInitFieldCameraEditor(roomID);
             lbl_804EA698 = 0;

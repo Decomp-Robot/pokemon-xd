@@ -1,4 +1,3 @@
-#include <string.h>
 // Pokemon status menu (summary / waza / ribbon pages).
 #include <GSgfx.h>
 #include <menuItemBios.h>
@@ -83,6 +82,7 @@ s32 pokemonGetBall(Pokemon *pokemon);
 s32 mballBiosGetSpriteID(u8 ball);
 Pokemon *heroBiosGetPokemonPtr(void *trainer, u8 slot);
 u8 gamedataGetStatus(s32 p1, s32 p2);
+void *memset(void *dst, int value, unsigned long size);
 void *getTrainerDataStartOffset(s32 p1, s32 p2);
 u32 GSflagGet(s32 flag);
 void *gamedataBiosGetGamedataAtttestPtr(void *trainer);

@@ -2,7 +2,6 @@
 #define GS_MATH_H
 
 #include <types.h>
-#include <GStrig.h>
 
 #include <dolphin/mtx.h>
 #include <GSvec.h>

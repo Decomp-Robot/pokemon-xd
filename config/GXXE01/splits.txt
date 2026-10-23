@@ -1382,6 +1382,9 @@ game/GSmodelAnim.cpp:
 	.data       start:0x803D5058 end:0x803D5080
 	.sdata2     start:0x804ED408 end:0x804ED468
 
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
+
 game/GScolsys2.c:
 	.text       start:0x8011867C end:0x801186C4
 
@@ -1410,26 +1413,8 @@ game/GScolsys2Thru.cpp:
 	.text       start:0x8011BC34 end:0x8011D49C
 	.sdata2     start:0x804ED7E8 end:0x804ED800
 
-game/floorFieldCameraEditor.cpp:
-	.text       start:0x80124A70 end:0x801256A0
-	.bss        start:0x80447030 end:0x80447058
-	.sdata2     start:0x804ED928 end:0x804ED948
-
-game/floorOffscreen.cpp:
-	.text       start:0x801256A0 end:0x80125ADC
-	.bss        start:0x80447058 end:0x8044706C
-	.sdata      start:0x804E8398 end:0x804E839C
-	.sbss       start:0x804EB138 end:0x804EB150
-
-game/floor.cpp:
-	.text       start:0x80125ADC end:0x80125C08
-
-game/floorManager.cpp:
-	.text       start:0x80125C08 end:0x80125EB8
-	.rodata     start:0x802F32A8 end:0x802F32BC
-
-game/GSparticleModuleData.cpp:
-	.rodata     start:0x802F3590 end:0x802F3718
+ext/dolphin_sdk/gx/GXVert.c:
+	.text       start:0x80125678 end:0x80125684
 
 game/floorBgmMask.cpp:
 	.text       start:0x8012AD40 end:0x8012AD50

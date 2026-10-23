@@ -1,4 +1,3 @@
-#include <GSthread.h>
 #include <Pokemon.h>
 #include <gsFlag.h>
 #include <menuSub.h>
@@ -86,7 +85,14 @@ void menuScriptReadMail(u32 mail);
 // threads
 // A thin wrapper in the floor code that hands out the thread group id of the floor
 // on top of the stack; the entries below start their thread inside it.
-u32 floorGetGroupID(void);
+u32 floorGetStackGroupID(void);
+// The thread allocates its own stack. groupID says which group the thread
+// belongs to, usesFPU whether its context keeps the floating point registers,
+// and closeProtected keeps GSthreadClose from closing the thread.
+u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 closeProtected,
+    void (*entry)(void));
+void GSthreadSetArgs(u32 thread, s32 count, ...);
+
 // pokemon
 Pokemon *heroGetStatus(void *save, s32 flag, u16 slot);
 Pokemon *heroBiosGetPokemonPtr(s32 base, u16 slot);
@@ -270,7 +276,7 @@ extern "C" s32 dbgMenuMenuTestD2Present(s32 id)
     u32 index;
     s32 args[D2_PRESENT_ARGS_COUNT];
     s32 arg;
-    GSthread *thread;
+    u32 thread;
     s32 i;
 
     for (i = 0; i < D2_PRESENT_ARGS_COUNT; i++) {
@@ -282,7 +288,7 @@ extern "C" s32 dbgMenuMenuTestD2Present(s32 id)
         }
     }
     arg = args[index * 2 + 1];
-    thread = GSthreadCreate(THREAD_PRIORITY_NORMAL, floorGetGroupID(), THREAD_STACK_SIZE, 1, 1, (GSthreadEntry)dbgMenuMenuTestD2PresentThread);
+    thread = GSthreadCreate(THREAD_PRIORITY_NORMAL, floorGetStackGroupID(), THREAD_STACK_SIZE, 1, 1, (void (*)(void))dbgMenuMenuTestD2PresentThread);
     GSthreadSetArgs(thread, 1, arg);
     return 0;
 }
@@ -481,7 +487,7 @@ void testEvolution(void)
 // thread of its own.
 extern "C" s32 dbgMenuMenuTestEvolution(void)
 {
-    GSthreadCreate(THREAD_PRIORITY_NORMAL, floorGetGroupID(), THREAD_STACK_SIZE, 1, 1, (GSthreadEntry)testEvolution);
+    GSthreadCreate(THREAD_PRIORITY_NORMAL, floorGetStackGroupID(), THREAD_STACK_SIZE, 1, 1, testEvolution);
     return 0;
 }
 

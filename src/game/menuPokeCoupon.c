@@ -11,13 +11,13 @@ enum {
 
 struct MenuPokeCouponWork {
     s32 m_eRefer; // 0x00: coupon exchange state the menu acts on.
-    u8 reserved[4];
+    s32 _04;      // 0x04: not used by this unit.
 };
 
 extern struct MenuPokeCouponWork _menuPokeCouponWork;
 
 void menuShopOpen(s32 menuID);
-void floorChangeFloor(s32 id);
+void zz_0125b84_(s32 id);
 void __assert(const char *file, s32 line, const char *cond);
 
 /* Not called directly by other code; marked so the linker keeps them. */
@@ -25,7 +25,7 @@ void __assert(const char *file, s32 line, const char *cond);
 
 /* Puts the coupon work back into the invalid state, so the next
  * menuPokeCouponInit call re-reads it. */
-void menuPokeCouponReset(void)
+void psSetupTevInvalidState(void)
 {
     _menuPokeCouponWork.m_eRefer = POKECOUPONREFER_INVALID;
 }
@@ -40,7 +40,7 @@ void menuPokeCouponMain(void)
         menuShopOpen(10);
         break;
     }
-    floorChangeFloor(0x395);
+    zz_0125b84_(0x395);
 }
 
 void menuPokeCouponInit(void)

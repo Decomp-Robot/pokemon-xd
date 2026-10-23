@@ -37,7 +37,7 @@ s32 menuPdaMemoXDGetItem(void);
 void menuPdaDPMonList(void);
 void menuPdaMemoList(void);
 void menuPdaMailListXD(void);
-void menuPdaSearcher(void);
+void zz_0042c2c_(void);
 void menuButtonNormal(tagWINDOW_WORK *window);
 void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 on);
 s32 heroMoveGetLeader(void);
@@ -117,8 +117,8 @@ void menuPdaScript(u8 mode)
         FlashSystemSetNowFrameLabel(0x1FBD3000, menuPdaFlashDPMonStart);
         wait = FlashSystemGetFrameFromLabel(0x1FBD3000, menuPdaFlashDPMonEnd);
     }
-    menuPdaPrepareSelectionCursor(menuPdaWork.mRes);
-    menuPdaWork.mCursorY = menuPdaWork.mCursorTargetY;
+    zz_0039d2c_(menuPdaWork.mRes);
+    menuPdaWork.mFadeFrom = menuPdaWork.mFadeTo;
     FlashSystemSetLoopFlag(0x1FBD3000, 0);
     menuPdaWork.mSubmenuFlag = 0;
     menuPdaScriptSelectItems(mode);
@@ -235,7 +235,7 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
     if (window == 0) {
         return 0;
     }
-    if (menuPdaIsScriptWindow(window) != false) {
+    if (zz_003930c_(window) != false) {
         return 0;
     }
     menuData = menuDataBiosGetPtr(window->mMenuID);
@@ -308,7 +308,7 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
 // Button sound of the PDA frame menu; silent while a fight result shows.
 void menuPdaButton(tagWINDOW_WORK *window)
 {
-    if (floorStackGetCurrentRoomID() != 0x38C) {
+    if (fieldGetCurrentRoomID() != 0x38C) {
         menuButtonNormal(window);
     }
 }
@@ -435,7 +435,7 @@ void menuPda(void)
 
     scriptLightSetDisp(0x17CF1600, 0);
     scriptLightSetDisp(0x17CF1601, 0);
-    if (memcardGetTaskStatus() == 1) {
+    if (zz_005c228_() == 1) {
         flagSetTrue(0x3F2);
     }
     FlashSystemSetLoopFlag(0x1FBD3000, 1);
@@ -449,8 +449,8 @@ void menuPda(void)
     _menuPdaInit();
     _menuPdaStartEvent();
     _menuPdaSetMenuItem();
-    menuPdaPrepareSelectionCursor(menuPdaResTable[0]);
-    menuPdaWork.mCursorY = menuPdaWork.mCursorTargetY;
+    zz_0039d2c_(menuPdaResTable[0]);
+    menuPdaWork.mFadeFrom = menuPdaWork.mFadeTo;
     arg.mUnk04 = &menuPdaFrameValue0;
     arg.mUnk00 = 0;
     arg.mUnk01 = 0xFF;
@@ -484,10 +484,10 @@ void menuPda(void)
             menuPdaWork.mSubmenuFlag = 0;
             _menuPdaZoomOut();
             break;
-        case PDATOP_MENU_RES_SEARCHER:
+        case PDATOP_MENU_RES_EXTRA:
             _menuPdaTopClose();
             _menuPdaZoomIn();
-            menuPdaSearcher();
+            zz_0042c2c_();
             menuPdaWork.mSubmenuFlag = 0;
             _menuPdaZoomOut();
             break;
@@ -567,7 +567,7 @@ void _menuPdaStartEvent(void)
     void *model = GSresGetResourceAllGroup(0x17CF1000);
 
     GSmodelSetRenderLayer((_GSmodel*)model, 1, &layer);
-    cameraLoadMapResource(0x17, 0x17CF1800, menuPdaZero, 0);
+    zz_01971c8_(0x17, 0x17CF1800, menuPdaZero, 0);
     GSmodelSetRenderCamera((_GSmodel*)model, GSresGetResource(0x17, 0x17CF1800));
     GSmodelSetVisibility((_GSmodel*)model, 1);
     GSmodelSetBoundCheck((_GSmodel*)model, 0);

@@ -17,6 +17,14 @@ void GSgfxDLEndSurface(void);
 
 union CollisionDebugColor { u8 channels[4]; u32 packed; };
 
+inline void GXColor4u8(u8 red, u8 green, u8 blue, u8 alpha)
+{
+    GXWGFifo.u8 = red;
+    GXWGFifo.u8 = green;
+    GXWGFifo.u8 = blue;
+    GXWGFifo.u8 = alpha;
+}
+
 inline void writePackedCollisionDebugColor(u32* packed)
 {
     u8* color = (u8*)packed;

@@ -134,7 +134,7 @@ s32 zz_000b850_(s32 menuID, s32 type)
             }
         }
         memcpy(getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), bk_savedataPtr, 0x27FD0);
-        bk_savedataPtr = (u8 *)memcardMemFreeForSavedata(bk_savedataPtr);
+        bk_savedataPtr = (u8 *)zz_01ce1b0_(bk_savedataPtr);
         if (bk_savedataPtr != 0) {
             /* CP932 message: "free failed". */
             __assert("dbgMenuMemcard.c", 534, "!bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x89\xf0\x95\xfa\x8e\xb8\x94s\"");
