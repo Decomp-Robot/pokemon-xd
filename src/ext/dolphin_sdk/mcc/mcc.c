@@ -57,8 +57,10 @@ static void MCCTxCallback(void);
 static void MCCRxCallback(void);
 static int mccInitializeCheck(u8 timeout);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void mccDebugPrint(char* str) {}
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void callbackEventStream(MCC_CHANNEL chID, u32 event, u32 value) {
     value; // needed to bump registers. what?
 
@@ -79,6 +81,7 @@ static void callbackEventStream(MCC_CHANNEL chID, u32 event, u32 value) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 BOOL MCCStreamOpen(MCC_CHANNEL chID, u8 blockSize) {
     BOOL bResult;
 
@@ -93,11 +96,13 @@ BOOL MCCStreamOpen(MCC_CHANNEL chID, u8 blockSize) {
     return bResult;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCStreamClose(MCC_CHANNEL chID) {
     gChannelInfo[chID].isStreamOpened = FALSE;
     return MCCClose(chID);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCStreamWrite(MCC_CHANNEL chID, void* data, u32 dataBlockSize) {
     MCC_Info chanInfo;
     char* dataAddress;
@@ -159,6 +164,7 @@ int MCCStreamWrite(MCC_CHANNEL chID, void* data, u32 dataBlockSize) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 MCCStreamRead(MCC_CHANNEL chID, void* data) {
     MCC_Info chanInfo;
     char* dataAddress;
@@ -219,6 +225,7 @@ u32 MCCStreamRead(MCC_CHANNEL chID, void* data) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int SetUsbAdapterMode(u8 mode) {
     int result = 0;
 
@@ -233,6 +240,7 @@ static int SetUsbAdapterMode(u8 mode) {
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u8 GetUsbAdapterMode(void) {
     if (HIORead(0x680, m_szAdapterMode, 0x20) != 0) {
         DCInvalidateRange(m_szAdapterMode, 0x20);
@@ -241,18 +249,21 @@ static u8 GetUsbAdapterMode(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int InitializeCodeClear(void) {
     memset(m_szInitCode, 0, 0x20);
     DCFlushRange(m_szInitCode, 0x20);
     HIOWrite(0x600, m_szInitCode, 0x20);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int InitializeCodeSet(void) {
     strcpy(m_szInitCode, "HUDSON/USB2EXI/INITCODE/TARGET");
     DCFlushRange(m_szInitCode, 0x20);
     HIOWrite(0x600, m_szInitCode, 0x20);    
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int InitializeCodeCheck(void) {
     int result;
 
@@ -264,15 +275,18 @@ static int InitializeCodeCheck(void) {
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void AsyncResourceClearState(void) {
     gAsyncResourceStatus = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void AsyncResourceSetState(u16 state) {
     gAsyncResourceStatus &= 0xFFFF0FFF;
     gAsyncResourceStatus |= state;    
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void AsyncResourceStateBusy(u8 channel, u16 mode) {
     AsyncResourceClearState();
     AsyncResourceSetState(0x1000);
@@ -280,26 +294,32 @@ static void AsyncResourceStateBusy(u8 channel, u16 mode) {
     gAsyncResourceStatus |= mode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void AsyncResourceStateDone(void) {
     AsyncResourceSetState(0x2000);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u16 AsyncResourceGetStat(void) {
     return gAsyncResourceStatus & 0xF000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u16 AsyncResourceGetMode(void) {
     return gAsyncResourceStatus & 0xF00;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u8 AsyncResourceGetChannel(void) {
     return gAsyncResourceStatus;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int AsyncResourceIsBusy(void) {
     return AsyncResourceGetStat() & 0x1000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int LoadChannelInfo(MCC_ChannelInfo* info) {
     volatile int result = 0;
     u8 count;
@@ -331,6 +351,7 @@ static int LoadChannelInfo(MCC_ChannelInfo* info) {
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int FlushChannelInfo(MCC_ChannelInfo* info) {
     volatile int result;
     u8 count;
@@ -355,10 +376,12 @@ static int FlushChannelInfo(MCC_ChannelInfo* info) {
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void SetChannelInfoDirty(int dirty) {
     gIsChannelinfoDirty = dirty;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ClearChannelInfo(int i) {
     gChannelInfo[i].info.firstBlock = 0;
     gChannelInfo[i].info.blockLength = 0;
@@ -370,6 +393,7 @@ static void ClearChannelInfo(int i) {
     //! isStreamConnection isnt cleared. Intentional?
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void MakeMemoryMap(u8* map) {
     u8 iMap;
     u8 jMap;
@@ -390,6 +414,7 @@ static void MakeMemoryMap(u8* map) {
     *map = 0xFF;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int IsChannelOpened(MCC_CHANNEL chID) {
     u8 connectSide;
 
@@ -405,6 +430,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u8 SearchFreeBlocks(MCC_MODE mode, u8* index) {
     u8 map[16];
     u8 iMap;
@@ -447,6 +473,7 @@ static u8 SearchFreeBlocks(MCC_MODE mode, u8* index) {
     return fSize;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int NotifyCompulsorily(MCC_CHANNEL chID, u32 notify, u32 timeout) {
     u32 status;
     u32 notifyData;
@@ -491,14 +518,17 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int NotifyInit(void) {
     return NotifyCompulsorily(0, 1, 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int NotifyInitDone(void) {
     return NotifyCompulsorily(0, 2, 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int NotifyChannelEvent(MCC_CHANNEL chID, u32 notify) {
 #ifndef DEBUG
     int unused[2]; // fake but blah
@@ -517,6 +547,7 @@ static int NotifyChannelEvent(MCC_CHANNEL chID, u32 notify) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int WaitAMinute(int timeout, volatile int*  flag, int value) {
     u32 tickStart;
     u32 tickDist;
@@ -533,6 +564,7 @@ static int WaitAMinute(int timeout, volatile int*  flag, int value) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void MailboxCheck(void) {
     u32 mailbox;
     BOOL isNotify;
@@ -628,18 +660,22 @@ static void MailboxCheck(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void MCCExiCallback(void) {
     MailboxCheck();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void MCCTxCallback(void) {
     AsyncResourceStateDone();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void MCCRxCallback(void) {
     AsyncResourceStateDone();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int mccInitializeCheck(u8 timeout) {
     int dmyFlag;
     int i;
@@ -693,6 +729,7 @@ static int mccInitializeCheck(u8 timeout) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCInit(MCC_EXI exiChannel, u8 timeout, MCC_CBSysEvent callbackSysEvent) {
     int dmyFlag;
     u8 adapterMode;
@@ -749,6 +786,7 @@ int MCCInit(MCC_EXI exiChannel, u8 timeout, MCC_CBSysEvent callbackSysEvent) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void MCCExit(void) {
     u8 chID;
 
@@ -768,6 +806,7 @@ void MCCExit(void) {
     gMccSession = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCPing(void) {
     mccDebugPrint("MCCPing\n");
     if (!gMccInitialized) {
@@ -780,6 +819,7 @@ int MCCPing(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCEnumDevices(MCC_CBEnumDevices callbackEnumDevices) {
     if (callbackEnumDevices == NULL) {
         gLastError = 0xD;
@@ -795,6 +835,7 @@ int MCCEnumDevices(MCC_CBEnumDevices callbackEnumDevices) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u8 MCCGetFreeBlocks(MCC_MODE mode) {
 #ifndef DEBUG
     int unused[3]; // fake but blah
@@ -818,11 +859,13 @@ u8 MCCGetFreeBlocks(MCC_MODE mode) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u8 MCCGetLastError(void) {
     mccDebugPrint("MCCGetFreeBlocks\n"); //! wrong print?
     return gLastError;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
 #ifndef DEBUG
     int unused[3]; // fake but blah
@@ -850,6 +893,7 @@ int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
     MCC_Info info;
 #ifndef DEBUG
@@ -884,6 +928,7 @@ int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCNotify(MCC_CHANNEL chID, u32 notify) {
     MCC_CONNECT connect;
 #ifndef DEBUG
@@ -914,6 +959,7 @@ int MCCNotify(MCC_CHANNEL chID, u32 notify) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
     u32 oldMask;
 #ifndef DEBUG
@@ -939,6 +985,7 @@ u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
     return oldMask;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCOpen(MCC_CHANNEL chID, u8 blockSize, MCC_CBEvent callbackEvent) {
     u8 connectSide;
     u8 blockIndex;
@@ -1036,6 +1083,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCClose(MCC_CHANNEL chID) {
     u8 connectSide;
 #ifndef DEBUG
@@ -1092,6 +1140,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCLock(MCC_CHANNEL chID) {
 #ifndef DEBUG
     int unused[7]; // fake but blah
@@ -1145,6 +1194,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCUnlock(MCC_CHANNEL chID) {
 #ifndef DEBUG
     int unused[7]; // fake but blah
@@ -1198,6 +1248,7 @@ exit:
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCRead(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
 #ifndef DEBUG
     int unused[11]; // fake but blah
@@ -1284,6 +1335,7 @@ exit:;
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCWrite(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
 #ifndef DEBUG
     int unused[11]; // fake but blah
@@ -1375,6 +1427,7 @@ exit:
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int MCCCheckAsyncDone() {
     u16 stat;
     u16 mode;
