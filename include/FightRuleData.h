@@ -11,14 +11,20 @@ typedef struct FightRuleData FightRuleData;
 // (getTrainerDataStartOffset(0, 0xE)), the MenuCBTaisenWork work area
 // mirrors it, and the read-only defaults live in rodata. One record is 0x90
 // bytes; the m1E/m52 entry lists sit at their recorded (even) offsets.
+enum HeldItemMode {
+    HELD_ITEMS_ALLOWED = 0,
+    HELD_ITEMS_FORBIDDEN = 1,
+    HELD_ITEMS_RESTRICTED = 2
+};
+
 struct FightRuleData {
-    s16 m00;
-    s16 m02;
-    s16 m04;
+    s16 mPokemonLevelMin; // 0x00: lowest level an entered Pokemon may have.
+    s16 mPokemonLevelMax; // 0x02: highest level an entered Pokemon may have.
+    s16 mPokemonLevelSumMax; // 0x04: highest level sum a party may total.
     s16 m06;
-    u32 m08;
-    u8 m0C; // 0x0C: unknown.
-    u8 m0D; // 0x0D: unknown.
+    s32 mHeldItemMode; // HeldItemMode policy for entered Pokemon.
+    u8 mAllowSameSpecies; // 0x0C: lets a party hold the same species.
+    u8 mAllowSameItem; // 0x0D: lets a party hold the same held item.
     u8 mEnableSbToSleep; // 0x0E: menuCBRule_EnableSbToSleep reads it.
     u8 mEnableSbToIceed; // 0x0F: menuCBRule_EnableSbToIceed reads it.
     u8 mEnableSkillSwap; // 0x10: menuCBRule_EnableSkillSwap reads it.
@@ -27,10 +33,10 @@ struct FightRuleData {
     u8 mEnableSkillSonicBoom; // 0x13: menuCBRule_EnableSkill_SonicBoom reads it.
     s16 m14; // 0x14: battle time limit in minutes (readers multiply by 60).
     s16 m16; // 0x16: command time limit.
-    u8 m18; // 0x18: unknown.
+    u8 mAllowLegendPokemon; // 0x18: lets legendary Pokemon be entered.
     u8 mDeoxysCamouflage; // 0x19: menuCBRule_DEOKISISUCamouflage reads it.
-    s16 m1A; // 0x1A: regulation kind the rule set answers to.
-    s16 m1C; // 0x1C: entry pokemon limit while the rule set restricts.
+    s16 mPokemonCount; // 0x1A: normal number of Pokemon to select.
+    s16 mPokemonCountMode; // 0x1C: one selects single-Pokemon entry.
     u16 m1E[20]; // 0x1E: rule entry list (item/entry IDs), read as u16.
     u16 m46;
     u32 m48[2];

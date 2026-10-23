@@ -23,6 +23,14 @@ struct Pokemon {
 extern "C" {
 #endif
 
+/* pokemonGetStatus query IDs. POKEMON_STATUS_SPECIES reads the record's
+   species halfword (zero for an empty slot); POKEMON_STATUS_MOVE reads the
+   move ID of the slot the fourth argument selects. */
+enum PokemonStatusQuery {
+    POKEMON_STATUS_SPECIES = 0x6E,
+    POKEMON_STATUS_MOVE = 0x7F
+};
+
 void pokemonInit(Pokemon *pokemon);
 // Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most
 // ten characters; the name entry mode, the message layer and the link

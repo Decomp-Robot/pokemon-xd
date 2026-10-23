@@ -321,22 +321,22 @@ void menuCBEntryFlagsReset(void)
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].marked) {
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43b0 = 0;
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43b0b = 0;
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43ad = 0;
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].eggOrInvalidPokemon) {
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].levelBelowMinimum = 0;
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].levelAboveMaximum = 0;
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].partyLevelSumExceeded = 0;
         }
 
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43a8b) {
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43b0 = 0;
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43b0b = 0;
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43ad = 0;
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].marked = 1;
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].invalidPokemon) {
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].levelBelowMinimum = 0;
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].levelAboveMaximum = 0;
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].partyLevelSumExceeded = 0;
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].eggOrInvalidPokemon = 1;
         }
 
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].msg43ac &&
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].pending)
-            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].pending = 0;
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].invalidHeldItem &&
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].heldItemRestricted)
+            menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][i].heldItemRestricted = 0;
     }
 }
 
@@ -612,55 +612,55 @@ u8 menuCBPokemonMsgCheck(unsigned long bank, unsigned long index)
         menuCBPokemonReturnSelected();
         menuCBTaisenWork.dispState = 2;
 
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43af) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].legendPokemon) {
             menuCBTaisenWork.pokeMsgID = 0x43AF;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a2) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].duplicateSpecies) {
             menuCBTaisenWork.pokeMsgID = 0x43A2;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43b0 || menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43b0b) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].levelBelowMinimum || menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].levelAboveMaximum) {
             menuCBTaisenWork.pokeMsgID = 0x43B0;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a5) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].shadowPokemon) {
             menuCBTaisenWork.pokeMsgID = 0x43A5;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].marked) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].eggOrInvalidPokemon) {
             menuCBTaisenWork.pokeMsgID = 0x43A6;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a7) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].invalidMove) {
             menuCBTaisenWork.pokeMsgID = 0x43A7;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a8 || menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a8b) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].illegalPokemon || menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].invalidPokemon) {
             menuCBTaisenWork.pokeMsgID = 0x43A8;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43a9) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].heldItemForbidden) {
             menuCBTaisenWork.pokeMsgID = 0x43A9;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].pending) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].heldItemRestricted) {
             menuCBTaisenWork.pokeMsgID = 0x43AA;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43ab) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].duplicateHeldItem) {
             menuCBTaisenWork.pokeMsgID = 0x43AB;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43ac) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].invalidHeldItem) {
             menuCBTaisenWork.pokeMsgID = 0x43AC;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43ad) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].partyLevelSumExceeded) {
             menuCBTaisenWork.pokeMsgID = 0x43AD;
             return 0;
         }
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].msg43ae) {
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][sel].insufficientPokemon) {
             menuCBTaisenWork.pokeMsgID = 0x43AE;
             return 0;
         }
@@ -1068,31 +1068,31 @@ void menuCBStatusNumDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 kin
 
     switch (kind) {
     case 0:
-        num = menuCBTaisenWork.mEntryRule->m00 / 100;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelMin / 100;
         break;
     case 1:
-        num = (menuCBTaisenWork.mEntryRule->m00 % 100) / 10;
+        num = (menuCBTaisenWork.mEntryRule->mPokemonLevelMin % 100) / 10;
         break;
     case 2:
-        num = menuCBTaisenWork.mEntryRule->m00 % 10;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelMin % 10;
         break;
     case 3:
-        num = menuCBTaisenWork.mEntryRule->m02 / 100;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelMax / 100;
         break;
     case 4:
-        num = (menuCBTaisenWork.mEntryRule->m02 % 100) / 10;
+        num = (menuCBTaisenWork.mEntryRule->mPokemonLevelMax % 100) / 10;
         break;
     case 5:
-        num = menuCBTaisenWork.mEntryRule->m02 % 10;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelMax % 10;
         break;
     case 6:
-        num = menuCBTaisenWork.mEntryRule->m04 / 100;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelSumMax / 100;
         break;
     case 7:
-        num = (menuCBTaisenWork.mEntryRule->m04 % 100) / 10;
+        num = (menuCBTaisenWork.mEntryRule->mPokemonLevelSumMax % 100) / 10;
         break;
     case 8:
-        num = menuCBTaisenWork.mEntryRule->m04 % 10;
+        num = menuCBTaisenWork.mEntryRule->mPokemonLevelSumMax % 10;
         break;
 
     case 9: {
@@ -1140,14 +1140,14 @@ void menuCBStatusNumDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 kin
         break;
 
     case 13:
-        if (menuCBTaisenWork.mEntryRule->m1C == 1) {
+        if (menuCBTaisenWork.mEntryRule->mPokemonCountMode == 1) {
             GSmsgPrint2(window->mLayerID,
                         (s16)(sprite->mWidth / 2 -
                               (s16)(GSmsgGetMessageSize(0x4416) >> 16) / 2),
                         0, window->mRgba.mColorA | 0xFFFFFF00, 0x4416);
             return;
         }
-        num = menuCBTaisenWork.mEntryRule->m1A % 10;
+        num = menuCBTaisenWork.mEntryRule->mPokemonCount % 10;
         break;
     }
 
@@ -1449,7 +1449,7 @@ void menuCBPokemonEntryGiveItem(void)
 
     msgctrlSetValue(0x32, (unsigned long)name);
 
-    if ((s32)menuCBBios_CurrentRule()->m08 == 1) {
+    if ((s32)menuCBBios_CurrentRule()->mHeldItemMode == HELD_ITEMS_FORBIDDEN) {
         _menuCB_errorMsgDisp(0x43A9);
         return;
     }
@@ -1814,7 +1814,7 @@ void menuCBPokemonEntryCheck(void)
     if (menuCBEntrySlotConditionGet(0, -1) != 0) {
         menuCBTaisenWork.dispState = 2;
 
-        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][0].msg43ae)
+        if (menuCBTaisenWork.entryFlags[menuCBTaisenWork.entryNo][0].insufficientPokemon)
             menuCBTaisenWork.pokeMsgID = 0x43AE;
     }
 }

@@ -29,4 +29,13 @@ typedef struct MenuCBBattleWork {
 
 extern MenuCBBattleWork menuCBBattleStartWork;
 
+/* Battle types the link battles run in, as toolentryTaisenGetBattleType
+   reports them. _menuCBBattleStartSetIndex dispatches 0 to the double-battle
+   order, 1 to the single-battle order and 2 to the multi-battle order. */
+enum BattleType {
+    BATTLE_TYPE_DOUBLE = 0,
+    BATTLE_TYPE_SINGLE = 1,
+    BATTLE_TYPE_MULTI = 2
+};
+
 #endif

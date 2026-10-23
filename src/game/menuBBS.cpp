@@ -223,12 +223,12 @@ void menuCBRulesetInitDefault(MenuCBRuleSet *rules)
         rules->mRule[4] = *d;
         d = menuCBRule_GetDefaultRuleData(2);
         rules->mRule[5] = *d;
-        rules->mRule[3].m1C = 0;
-        rules->mRule[4].m1C = 0;
-        rules->mRule[5].m1C = 0;
-        rules->mRule[3].m1A = 4;
-        rules->mRule[4].m1A = 4;
-        rules->mRule[5].m1A = 4;
+        rules->mRule[3].mPokemonCountMode = 0;
+        rules->mRule[4].mPokemonCountMode = 0;
+        rules->mRule[5].mPokemonCountMode = 0;
+        rules->mRule[3].mPokemonCount = 4;
+        rules->mRule[4].mPokemonCount = 4;
+        rules->mRule[5].mPokemonCount = 4;
         for (i = 0; i < menuCBRule_RegulationItemNum; i++) {
             if (menuCBRule_RegulationItemID(i) == 0xBF) {
                 rules->mRule[1].m52[i] = 1;
@@ -312,12 +312,12 @@ void menuCBRulesetCopyToWork(MenuCBTaisenWork *w, MenuCBRuleSet *set)
     d = menuCBRule_GetDefaultRuleData(2);
     dst = &w->mRulesetData[5];
     *dst = *d;
-    w->mRulesetData[3].m1C = 0;
-    w->mRulesetData[4].m1C = 0;
-    w->mRulesetData[5].m1C = 0;
-    w->mRulesetData[3].m1A = 4;
-    w->mRulesetData[4].m1A = 4;
-    w->mRulesetData[5].m1A = 4;
+    w->mRulesetData[3].mPokemonCountMode = 0;
+    w->mRulesetData[4].mPokemonCountMode = 0;
+    w->mRulesetData[5].mPokemonCountMode = 0;
+    w->mRulesetData[3].mPokemonCount = 4;
+    w->mRulesetData[4].mPokemonCount = 4;
+    w->mRulesetData[5].mPokemonCount = 4;
     for (i = 0; i < menuCBRule_RegulationItemNum; i++) {
         if (menuCBRule_RegulationItemID(i) == 0xBF) {
             w->mRulesetData[1].m52[i] = 1;
@@ -887,8 +887,8 @@ extern "C" u16 menuCBPokemonEntryNumLimit(long port)
     u16 limit;
     u16 num;
 
-    if (menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].m1C == 0) {
-        limit = menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].m1A;
+    if (menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].mPokemonCountMode == 0) {
+        limit = menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].mPokemonCount;
     } else {
         limit = 1;
     }

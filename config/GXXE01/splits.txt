@@ -20,13 +20,13 @@ game/dbgMenuFight.cpp:
 	.text       start:0x80005798 end:0x80005DB0
 	.data       start:0x802FBF00 end:0x802FBF24
 
-game/dbgMenuFightMsgSpeed.c:
+decomp/dbgMenuFightSetMsgSpeed.c:
 	.text       start:0x800071B4 end:0x800071DC
 
 game/dbgMenuFlag.c:
 	.text       start:0x800083D4 end:0x800084F0
 
-game/memcardDebugSlots.c:
+decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
 game/dbgMenuMemcard.c:
@@ -103,7 +103,7 @@ game/WorldMapSdata2.s:
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
 
-game/WorldMapGetNowCursor.cpp:
+decomp/menuWorldMap.cpp:
 	.text       start:0x80010538 end:0x80010558
 
 game/WorldMap.cpp:
@@ -134,7 +134,7 @@ game/WorldMapCamData.cpp:
 game/menuPokemon.cpp:
 	.text       start:0x800136C8 end:0x800136F8
 
-game/pokemonIndex.cpp:
+decomp/pokemonindex.cpp:
 	.text       start:0x8001F1B8 end:0x8001F1D0
 
 game/menuPokemonCursor.cpp:
@@ -237,6 +237,12 @@ game/menuBBS.cpp:
 	.text       start:0x800484B4 end:0x8004B338
 	.sdata2     start:0x804EC3B8 end:0x804EC3C8
 
+game/menuCBPokemonEntry.cpp:
+	.text       start:0x8004B338 end:0x8004BBA0
+
+game/menuCBRule.cpp:
+	.text       start:0x8004BBA0 end:0x8004CD00
+
 game/menuPcBoxDougu.cpp:
 	.text       start:0x800692FC end:0x8006A8B4
 	.rodata     start:0x802EB5C0 end:0x802EB5D0
@@ -252,9 +258,6 @@ game/dbgMenuMenu.cpp:
 
 game/menuCBTaisenSdata2.s:
 	.sdata2     start:0x804EC720 end:0x804EC73C
-
-game/dbgMenuMenuTest.cpp:
-	.text       start:0x8006B3F8 end:0x8006BE28
 
 game/menuCBTaisen.cpp:
 	.text       start:0x8007E5AC end:0x8008250C
@@ -1278,15 +1281,6 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 	.text       start:0x800EB398 end:0x800EB3BC
 	.data       start:0x803D4EE0 end:0x803D4F78
 	.sbss       start:0x804EAED0 end:0x804EAED4
-
-game/GSmtx.cpp:
-	.text       start:0x800EF9F8 end:0x800EFA38
-
-game/GSquat.cpp:
-	.text       start:0x800EFA38 end:0x800EFA58
-	.ctors      start:0x802E9FB4 end:0x802E9FB8
-	.bss        start:0x80442E20 end:0x80442E30
-	.sdata2     start:0x804ED398 end:0x804ED3A0
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684

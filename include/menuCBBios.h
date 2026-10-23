@@ -11,29 +11,26 @@
  * keep their state here and address it directly; every member below sits at
  * the offset the corresponding menu reads or writes.
  */
-/* Slot flags of one entered Pokemon. Only the low two bytes carry flags; the
-   upper halfword is untouched. The bits that only ever trigger a message are
-   named after it: menuCBPokemonMsgCheck prints that message while the bit is
-   set. Of the conditions of a slot only the first one that is set is reported. */
+/* Entry failures, in message priority order. Only the low two bytes carry
+   flags. Egg and invalid entries are excluded from the level checks; an
+   invalid held item takes precedence over a rule-restricted held item. */
 typedef struct MenuCBEntrySlotFlags {
-    u8 msg43af : 1;  // byte 0 bit 7: reported as message 0x43AF.
-    u8 msg43a2 : 1;  // byte 0 bit 6: reported as message 0x43A2.
-    u8 msg43b0 : 1;  // byte 0 bit 5: reported as message 0x43B0.
-    u8 msg43b0b : 1; // byte 0 bit 4: a second condition reported as 0x43B0.
-    u8 msg43a5 : 1;  // byte 0 bit 3: reported as message 0x43A5.
-    u8 marked : 1;   // byte 0 bit 2: set while the slot holds an entry; the
-                     //              three conditions above are dropped with it.
-    u8 msg43a7 : 1;  // byte 0 bit 1: reported as message 0x43A7.
-    u8 msg43a8 : 1;  // byte 0 bit 0: reported as message 0x43A8.
-    u8 msg43a9 : 1;  // byte 1 bit 7: reported as message 0x43A9.
-    u8 pending : 1;  // byte 1 bit 6: cleared once msg43ac is set.
-    u8 msg43ab : 1;  // byte 1 bit 5: reported as message 0x43AB.
-    u8 msg43ac : 1;  // byte 1 bit 4: reported as message 0x43AC.
-    u8 msg43ad : 1;  // byte 1 bit 3: reported as message 0x43AD.
-    u8 msg43ae : 1;  // byte 1 bit 2: reported as message 0x43AE.
-    u8 msg43a8b : 1; // byte 1 bit 1: a second condition reported as 0x43A8; it
-                     //              also marks the slot.
-    u8 unknownFlag : 1; // byte 1 bit 0: no recovered code reads or writes it.
+    u8 legendPokemon : 1;
+    u8 duplicateSpecies : 1;
+    u8 levelBelowMinimum : 1;
+    u8 levelAboveMaximum : 1;
+    u8 shadowPokemon : 1;
+    u8 eggOrInvalidPokemon : 1;
+    u8 invalidMove : 1;
+    u8 illegalPokemon : 1;
+    u8 heldItemForbidden : 1;
+    u8 heldItemRestricted : 1;
+    u8 duplicateHeldItem : 1;
+    u8 invalidHeldItem : 1;
+    u8 partyLevelSumExceeded : 1;
+    u8 insufficientPokemon : 1;
+    u8 invalidPokemon : 1;
+    u8 unusedFlag : 1;
     u16 pad;
 } MenuCBEntrySlotFlags;
 
@@ -92,14 +89,14 @@ typedef struct MenuCBTaisenWork {
     /* 0xB11C */ u32 selectedValue; // entry menuCBSpriteColorIfMatch compares.
     /* 0xB120 */ u8 _B120[0xB124 - 0xB120];
     /* 0xB124 */ s32 mRuleCursorPrev; // row that cursor just left; -1 while no row
-                                  // transition is pending.
+                                  // transition is heldItemRestricted.
     /* 0xB128 */ u32 mRuleCursorPrevColor; // colour that row is drawn in.
     /* 0xB12C */ u32 mRuleCursorColor; // colour the cursor row is drawn in.
     /* 0xB130 */ u8 _B130[0xB138 - 0xB130];
     /* 0xB138 */ u32 savedColor; // window colour menuCBWindowColorSave stored.
     /* 0xB13C */ u8 _B13C[0xB144 - 0xB13C];
     /* 0xB144 */ s32 mEntryCursorPrev; // entry row that cursor just left; -1 while no
-                                  // row transition is pending.
+                                  // row transition is heldItemRestricted.
     /* 0xB148 */ u32 mEntryCursorPrevColor; // colour that row is drawn in.
     /* 0xB14C */ u32 mEntryCursorColor; // colour the cursor row is drawn in.
     /* 0xB150 */ u8 _B150[0xB1A0 - 0xB150];

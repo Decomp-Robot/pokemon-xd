@@ -8,7 +8,7 @@ extern const f32 lbl_804EBDF8;
 #pragma force_active on
 
 void *heroGetStatus(s32 a, s32 b, s32 c);
-u8 zz_battle_pokemon_stats_check_if_shadow_pokemon_c(void);
+u8 pokemonIsShadowPokemon(void *pokemon);
 void pokemonSetDp(void *pokemon, f32 dp);
 void preReliveSetParameter(s32 a, s32 b, s32 c);
 
@@ -18,7 +18,7 @@ s32 dbgMenuRelive(void)
 {
     void *hero = heroGetStatus(0, 3, 0);
 
-    if (!zz_battle_pokemon_stats_check_if_shadow_pokemon_c()) {
+    if (!pokemonIsShadowPokemon(hero)) {
         return 0;
     }
     pokemonSetDp(hero, lbl_804EBDF8);
