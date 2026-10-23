@@ -1,5 +1,4 @@
-#define windowGetKeyRepeat windowGetKeyRepeat_header
-#define windowGetKeyTrg windowGetKeyTrg_header
+#include <menuSpriteBios.h>
 #include <textureBios.h>
 #include <menu.h>
 #include <menuSub.h>
@@ -17,10 +16,6 @@
 #include <winSprite.h>
 #include <window.h>
 
-#undef windowGetKeyRepeat
-#undef windowGetKeyTrg
-extern "C" u32 windowGetKeyRepeat(void);
-extern "C" u32 windowGetKeyTrg(void);
 
 extern "C" {
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
@@ -29,14 +24,13 @@ GSgfxVF *GSgfxVFBuildTemp(int p1, int p2, int p3, int p4, int p5, int p6, int p7
 void GSgfxRenderDrawEnd(GSgfxLayer *layer);
 Pokemon *fightFloorGetDefPokemonPtr(int p1);
 u8 pokemonGetSex(Pokemon *pokemon);
-u16 battlePokemonGetSpecies(Pokemon *pokemon);
+u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
 int pokemon_SetNickname(Pokemon *pokemon, const u16 *name);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 u16 *pcboxGetPokemonName(int box, s8 slot);
 void pcboxSetPokemonBoxName(int box, s8 slot, const u16 *name);
 void dbgMenuSetOpenFlag(int flag);
 int GScharCmp(const u16 *a, const u16 *b);
-long windowGetActiveID(void);
 void winSeqSetMenu(long menuID, int seq);
 void menuModelSetFlag(MENU_MODEL *model, int flag);
 void menuModelAdjustCamera(MENU_MODEL *model);
@@ -60,8 +54,6 @@ void GSfloorPop(void);
 void GSfloorPush(int floor);
 int floorWaitForChange(void);
 f32 HSD_Randf(void);
-
-void menuSetDisp(int id, int on);
 double sin(double x);
 }
 
@@ -650,7 +642,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             u16 species;
 
             if (pokemonCheckValid(pokemon)) {
-                species = battlePokemonGetSpecies(pokemon);
+                species = pokemonBiosGetPokemonDataId(pokemon);
             } else {
                 species = 1;
             }
@@ -661,7 +653,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             break;
         }
         case NAME_ENTRY_MODE_POKEMON: {
-            u16 species = battlePokemonGetSpecies((Pokemon *)arg->mParam);
+            u16 species = pokemonBiosGetPokemonDataId((Pokemon *)arg->mParam);
             msgctrlSetValue(0x4E, species);
             width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
             GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
@@ -673,7 +665,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             u16 species;
 
             if (pokemonCheckValid(pokemon)) {
-                species = battlePokemonGetSpecies(pokemon);
+                species = pokemonBiosGetPokemonDataId(pokemon);
             } else {
                 species = 1;
             }
@@ -903,7 +895,7 @@ int input50onCell(NAME_ENTRY_ARG *arg)
 // Drive the name editor from the pad.
 int menuNameEntryInputButton(tagWINDOW_WORK *window)
 {
-    int repeat = windowGetKeyRepeat();
+    u16 repeat = windowGetKeyRepeat();
     u16 trg = windowGetKeyTrg();
     NAME_ENTRY_ARG *arg = window->mArg;
 
@@ -1351,7 +1343,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 // Load the ball textures for the background.
 int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    void *entry = textureBiosGetLanguageEntry(textureBiosGetDataTable(0x1E));
+    void *entry = menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(0x1E));
     int count;
     s16 texW = *(s16 *)((u8 *)entry + 4);
     s16 texH = *(s16 *)((u8 *)entry + 6);
@@ -1366,7 +1358,7 @@ int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             f32 y = ball->mY - h / 2.0f;
             u32 flags = ball->mFlags | ball->mAlpha;
 
-            textureBiosLoadSpriteId((int)(0.5f + x), (int)(0.5f + y), (int)(0.5f + w), (int)(0.5f + h),
+            windowDrawSprite2((short)(0.5f + x), (short)(0.5f + y), (short)(0.5f + w), (short)(0.5f + h),
                                     flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
         }
     }

@@ -133,7 +133,6 @@ void GSmemFree(void *ptr);
 }
 
 // Battle data of the Pokemon that is handed over.
-extern "C" u16 battlePokemonGetSpecies(struct Pokemon *pokemon);
 extern "C" u8 pokemon_GetTokuseiFlag(struct Pokemon *pokemon);
 extern "C" void pokemon_SetTokuseiFlag(struct Pokemon *pokemon, bool flag);
 extern "C" void gbaPokemonFromGC(struct Pokemon *pokemon, void *data);
@@ -204,8 +203,8 @@ extern "C" long gbaCommandChangePokemon(long chan, struct Pokemon *pokemon, u32 
     long result;
 
     request.wazaTarget = gbaPacketSwapLong(wazaTarget);
-    request.speciesPartner = gbaPacketSwapLong((partner << 16) | battlePokemonGetSpecies(pokemon));
-    if (battlePokemonGetSpecies(pokemon) == SPECIES_JIRACHI) {
+    request.speciesPartner = gbaPacketSwapLong((partner << 16) | pokemonBiosGetPokemonDataId(pokemon));
+    if (pokemonBiosGetPokemonDataId(pokemon) == SPECIES_JIRACHI) {
         pokemon_SetTokuseiFlag(pokemon, pokemon_GetTokuseiFlag(pokemon) == 0);
     }
     gbaPokemonFromGC(pokemon, request.packet);
@@ -487,7 +486,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
         fightOutPokemonGetRndStatus(targetPokemon, &random1, &random2);
         packet.header.random1 = gbaPacketSwapLong(random1);
         packet.header.random2 = gbaPacketSwapLong(random2);
-        species = battlePokemonGetSpecies(pokemon);
+        species = pokemonBiosGetPokemonDataId(pokemon);
         packet.header.species = gbaPacketSwapShort(species);
         if (species == SPECIES_JIRACHI) {
             // Ban the packet reports for the Pokemon that may not be sent
@@ -581,7 +580,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
                 if (len < GBA_SUMMARY_NAME_SIZE) {
                     packet.summary[i].name[len] = 0xFF;
                 }
-                species = battlePokemonGetSpecies(other);
+                species = pokemonBiosGetPokemonDataId(other);
                 packet.summary[i].sex = pokemonGetSex(other);
                 packet.summary[i].nidoranMale = species == SPECIES_NIDORAN_M;
                 packet.summary[i].nidoranFemale = species == SPECIES_NIDORAN_F;
@@ -594,13 +593,13 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
                 packet.summary[i].level = pokemonBiosGetLevel(other);
                 packet.summary[i].pid = gbaPacketSwapLong(pokemon_GetPid(other));
                 packet.summary[i].species =
-                    gbaPacketSwapShort(battlePokemonGetSpecies(other));
+                    gbaPacketSwapShort(pokemonBiosGetPokemonDataId(other));
                 packet.summary[i].hp =
                     gbaPacketSwapShort(battlePokemonStatusGetCurrentHp(other));
                 packet.summary[i].maxHp =
                     gbaPacketSwapShort(battlePokemonStatusGetMaxHp(other));
                 packet.summary[i].form = 0;
-                if (battlePokemonGetSpecies(other) == SPECIES_DEOXYS) {
+                if (pokemonBiosGetPokemonDataId(other) == SPECIES_DEOXYS) {
                     if (menuCBRule_DEOKISISUCamouflage() != 0) {
                         if (menuCBTaisenWork.battleMode == 2 || menuCBTaisenWork.mTrainer[0].mHomePlace == 0) {
                             packet.summary[i].form =

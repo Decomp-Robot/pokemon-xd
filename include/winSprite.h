@@ -10,6 +10,7 @@
 // Usable from C as well as C++.
 typedef struct tagSPRITE_WORK tagSPRITE_WORK;
 typedef struct tagWINDOW_WORK tagWINDOW_WORK;
+typedef struct tagWINDOW_KEY tagWINDOW_KEY;
 typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 
 // Cursor record of a window, handed to the sub-menu switcher by value. The
@@ -21,6 +22,8 @@ struct CURSOR {
 };
 
 // The cursor can also be copied as one word by selection-window hooks.
+enum WINDOW_FLAGS { WINDOW_FLAG_MESSAGE_PAUSED = 4 };
+
 typedef union WindowCursorState {
     u32 mWord;
     struct CURSOR mSelection;
@@ -51,7 +54,7 @@ enum WindowSequenceState {
 
 // Window state, sprite lists and custom-menu arguments.
 struct tagWINDOW_WORK {
-    u8 _00;                      // 0x00: unknown.
+    u8 mFlags;                   // 0x00: window flags.
     s8 mState;                   // 0x01: WINDOW_STATE lifecycle step.
     s8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
     u8 _03;                      // 0x03: unknown.
@@ -68,7 +71,9 @@ struct tagWINDOW_WORK {
         NAME_ENTRY_ARG *mArg;    // 0x68: name-entry argument.
         u32 mArgs[8];           // 0x68: custom-menu argument words.
     };
-    u8 _88[0x08];               // 0x88-0x8F: unknown.
+    long mCursorIndex;           // 0x88: cursor index before wrapping.
+    s16 mScrollX;                // 0x8C: sprite scroll offset.
+    s16 mScrollY;                // 0x8E
     union {
         u32 mColor;              // 0x90: RGBA colour passed to the message printer.
         struct {
@@ -104,7 +109,8 @@ struct tagWINDOW_WORK {
 // and chains them through +0x00.
 struct tagSPRITE_WORK {
     tagSPRITE_WORK *mNext; // 0x00: next node in the list.
-    u8 _04[0x02];          // 0x04-0x05: unknown.
+    u8 mSpriteFlags;
+    u8 mDrawFlags;
     s16 mItemID;           // 0x06: item id the node displays for the menu.
     u8 _08[0x40];          // 0x08-0x47: unknown.
     void *mHookFunction;   // 0x48: hook the node was registered with.
@@ -113,7 +119,11 @@ struct tagSPRITE_WORK {
     s16 mY;                // 0x52: y position the row hooks place the sprite at.
     s16 mWidth;            // 0x54: width of the sprite.
     s16 mHeight;           // 0x56: height of the sprite.
-    u8 _58[0x0C];          // 0x58-0x63: unknown.
+    unsigned long mTextureResourceID; // 0x58
+    s16 mTextureX;         // 0x5C: source rectangle in the texture.
+    s16 mTextureY;         // 0x5E
+    s16 mTextureWidth;     // 0x60
+    s16 mTextureHeight;    // 0x62
     /* 0x64-0x67: the sprite colour word. The title cursor hook clears the
      * whole word to -1 to drop whatever blend override is in place; the entry
      * menus set the channels apart on it, and everything else writes only the
@@ -135,9 +145,10 @@ struct tagSPRITE_WORK {
 // (menu.a window.o) and directly by the debug menus.
 struct tagWINDOW_KEY {
     u16 mKeyOn;     // 0x00: keys held this frame.
-    u16 _02;        // 0x02: unknown.
+    u16 mKeyState;  // 0x02
     u16 mKeyTrg;    // 0x04: keys pressed this frame.
     u16 mKeyRepeat; // 0x06: repeating keys.
+    u8 mExtendedInputState[0x12];
 };
 
 #ifdef __cplusplus
@@ -152,6 +163,12 @@ GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 // Key state of the window the debug menus read directly (menu.a window.o).
 struct tagWINDOW_KEY *windowGetKeyInfo();
 
+#ifdef __cplusplus
+GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+#endif
+tagWINDOW_WORK *windowSearchID(s32 id);
+
+void winSpriteDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 #ifdef __cplusplus
 }
 #endif

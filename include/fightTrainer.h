@@ -4,6 +4,8 @@
 #include <hero.h>
 #include <types.h>
 
+enum { FIGHT_TRAINER_STATUS_TYPE = 0x39 };
+
 typedef struct FIGHT_TRAINER FIGHT_TRAINER;
 
 // FIGHT_TRAINER -- one battle trainer record of the MenuCBTaisenWork work
@@ -39,6 +41,7 @@ s32 fightTrainerGetStatus(FIGHT_TRAINER *trainer, u16 trainerDataId,
                           s32 fieldId, s32 subIndex);
 void fightTrainerSetStatus(FIGHT_TRAINER *trainer, u16 trainerDataId,
                            s32 fieldId, s32 subIndex, s32 value);
+u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 
 #ifdef __cplusplus
 }

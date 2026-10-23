@@ -295,12 +295,12 @@ s32 menuPokemonOpenWazaLight(s8 index)
         i++;
     }
 
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
     menuPokemonWork.mSelecting = 1;
     selected = menuSubOpenSelect2(0, moveIds, count, 0x1bd - menuPokemonMoveSelectXAdjustment, menuPokemonMoveSelectYAdjustment + 0x12c,
                                   0, count, 0);
     menuPokemonWork.mSelecting = 0;
-    GSgfxResetRestore(1);
+    menuOffScreenSetPriority(1);
     return selected;
 }
 
@@ -389,11 +389,11 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
 
                 pokemon = _menuPokemonGetPokemonPtr(partyIndex);
 
-                if (pokemonIsShadow(pokemon) != 0) {
+                if (pokemonIsDarkPokemon(pokemon) != 0) {
                     msgId = MSG_TM_CANT;
                 } else {
-                    PokemonSpeciesStats *stats = pokemonDataGetSpeciesStats(
-                        battlePokemonGetSpecies(pokemon));
+                    PokemonSpeciesStats *stats = pokemonDataBiosGetPtr(
+                        pokemonBiosGetPokemonDataId(pokemon));
 
                     if (pokemonDataBiosGetWazaMcn(stats, machineNo) == 0) {
                         msgId = MSG_TM_CANT;
@@ -428,10 +428,10 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
         case PANEL_ITEM_MOVE_COMPATIBILITY_B: {
             pokemon = _menuPokemonGetPokemonPtr(partyIndex);
 
-            if (pokemonIsShadow(pokemon) != 0) {
+            if (pokemonIsDarkPokemon(pokemon) != 0) {
                 msgId = MSG_TM_CANT;
             } else if (pokemonDataCanLearnTutorMove(
-                           battlePokemonGetSpecies(pokemon), menuPokemonWork.mItemId) == 0) {
+                           pokemonBiosGetPokemonDataId(pokemon), menuPokemonWork.mItemId) == 0) {
                 msgId = MSG_TM_CANT;
             } else {
                 u8 order[12] = {7, 10, 2, 0, 5, 1, 4, 3, 6, 9, 11, 8};
@@ -484,7 +484,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
     case PANEL_ITEM_JOUTAI_A:
     case PANEL_ITEM_JOUTAI_B:
         if (info->mJoutaiId != 0)
-            textureBiosLoadSpriteId(0, 0, sprite->mWidth, sprite->mHeight, color, win,
+            windowDrawSprite2(0, 0, sprite->mWidth, sprite->mHeight, color, win,
                                     info->mJoutaiId, 0, winSpriteGetLayerID(win, sprite));
         return;
 
@@ -500,17 +500,17 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
     case PANEL_ITEM_HPTEXT_B:
         GSmsgPrint2(winSpriteGetLayerID(win, sprite), 0x2C, 0, color, MSG_JOUTAI_LIST);
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mHp);
-        GSmsgPrint(winSpriteGetLayerID(win, sprite), 0, 0, 0x2A, sprite->mHeight, color,
+        GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, 0x2A, sprite->mHeight, color,
                     MSG_HP_TEXT);
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mMaxHp);
-        GSmsgPrint(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth - 2, sprite->mHeight,
+        GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth - 2, sprite->mHeight,
                     color, MSG_HP_TEXT);
         return;
 
     case PANEL_ITEM_LEVEL_A:
     case PANEL_ITEM_LEVEL_B:
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mLevel);
-        GSmsgPrint(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color,
+        GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color,
                     MSG_LEVEL_TEXT);
         return;
 
@@ -541,7 +541,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
 
     case PANEL_ITEM_FACE_A:
     case PANEL_ITEM_FACE_B:
-        menuFaceDisplay(win, sprite, info->mFaceId);
+        menuFaceDispSub(win, sprite, info->mFaceId);
         return;
 
     case PANEL_ITEM_HPGAUGE_A:
@@ -563,7 +563,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
             if (gauge == 0)
                 return;
 
-            textureBiosLoadSpriteId(0, 0, gaugeWidth, sprite->mHeight, color, win, gauge, 0,
+            windowDrawSprite2(0, 0, gaugeWidth, sprite->mHeight, color, win, gauge, 0,
                                     winSpriteGetLayerID(win, sprite));
         }
         return;
@@ -992,7 +992,7 @@ s32 menuPokemonCtrl(tagWINDOW_WORK *win)
     if (info == 0)
         return 0;
 
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
 
     if (win->mState == WINDOW_SEQUENCE_OPEN) {
         win->cursorTo = -1;
@@ -1016,7 +1016,7 @@ s32 menuPokemonCtrl(tagWINDOW_WORK *win)
             win->mFlag = 1;
         }
 
-        GSgfxResetRestore(0);
+        menuOffScreenSetPriority(0);
     } else if (win->mState == WINDOW_SEQUENCE_CLOSE && win->mFlag == 0) {
         s32 i;
 
@@ -1037,7 +1037,7 @@ void menuPokemonClose(void)
     menuCloseCustom(MENU_ID_PARTY_LIST, 0, 1);
 
     if (menuPokemonWork.mState != PARTY_OPEN_OVERLAY) {
-        GSgfxResetRestore(1);
+        menuOffScreenSetPriority(1);
         GSfloorPop();
 
         if (menuPokemonWork.mFadeState != PARTY_FADE_FIGHT)
@@ -1064,7 +1064,7 @@ s32 _menuPokemonSub(unsigned char mode, unsigned long itemId, FIGHT_TRAINER *tra
     if (menuPokemonWork.mListEnabled == 0)
         menuPokemonWork.mCursorIndex = -1;
 
-    menuPokemonRefreshStatus();
+    menuPokemonUpdate();
     partyMenuLoadCounter = 0;
     menuFaceLoadPokemon(0, _menuPokemonCbLoadPokemonList, &partyMenuLoadCounter);
 
@@ -1124,7 +1124,7 @@ s32 _menuPokemonSub(unsigned char mode, unsigned long itemId, FIGHT_TRAINER *tra
             if (pokemon == 0)
                 continue;
 
-            if (pokemonIsShadow(pokemon) == 0) {
+            if (pokemonIsDarkPokemon(pokemon) == 0) {
                 winMsgOpen(2, MSG_SHADOW_HINT_A, 1, 0);
                 winMsgClose(1);
                 continue;
@@ -1185,7 +1185,7 @@ s32 _menuPokemonOpen(unsigned char mode, unsigned char bagPocket, unsigned char 
     case PARTY_MODE_USE_ITEM_FIELD:
     case PARTY_MODE_USE_ITEM_FIGHT:
     case PARTY_MODE_GIVE_ITEM:
-        GSgfxResetRestore(0);
+        menuOffScreenSetPriority(0);
         menuPokemonWork.mState = PARTY_OPEN_OVERLAY;
         menuPokemonWork.mFadeState = PARTY_FADE_NORMAL;
         break;
@@ -1234,7 +1234,7 @@ s32 _menuPokemonOpen(unsigned char mode, unsigned char bagPocket, unsigned char 
     case PARTY_MODE_USE_ITEM_FIELD:
     case PARTY_MODE_USE_ITEM_FIGHT:
     case PARTY_MODE_GIVE_ITEM:
-        GSgfxResetRestore(1);
+        menuOffScreenSetPriority(1);
         break;
     }
 
@@ -1277,10 +1277,10 @@ s32 menuPokemonOpen(unsigned char mode, unsigned short itemId, FIGHT_TRAINER *tr
 #pragma force_active on
 s32 menuPokemonMain(void)
 {
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
     _menuPokemonSub(menuPokemonWork.mMode, menuPokemonWork.mItemId, menuPokemonWork.mTrainer);
     menuPokemonClose();
-    GSgfxResetRestore(1);
+    menuOffScreenSetPriority(1);
     return 0;
 }
 
@@ -1309,7 +1309,7 @@ s32 _menuPokemonActionGive(s8 index, s16 bagSlot, u16 itemId, u16 *outItem)
 
     msgctrlSetValue(MSGCTRL_POKEMON_NAME,
                     (u32)&menuPokemonStatusTbl.mStatus[menuPokemonWork.mCursorIndex]);
-    held = battlePokemonGetHeldItem(pokemon);
+    held = pokemonGetSoubiItemDataId(pokemon);
     hero = _menuPokemonGetHeroPtr();
 
     if (hero == 0)
@@ -1368,7 +1368,7 @@ s32 _menuPokemonActionGive(s8 index, s16 bagSlot, u16 itemId, u16 *outItem)
     }
 
     winMsgClose(1);
-    menuPokemonRefreshStatus();
+    menuPokemonUpdate();
     return -1;
 }
 
@@ -1464,7 +1464,7 @@ s32 _menuPokemonActionField(signed char index)
                         GSthreadSwitch();
 
                     pokemonReplace(from, to);
-                    menuPokemonRefreshStatus();
+                    menuPokemonUpdate();
                     menuSubWait(0.25f);
 
                     _menuPokemonMovePanel(index, PARTY_PANEL_SHOW);
@@ -1586,7 +1586,7 @@ s8 _menuPokemonActionStatus(signed char index, bool field)
 
     fadeSet(FADE_OUT_BLACK, 0.25f);
     fadeCheck(1);
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
 
     if (field)
         menuPokemonStatusOpenFieldMenu(pokemon, _menuPokemonStatusCB, 0);
@@ -1594,7 +1594,7 @@ s8 _menuPokemonActionStatus(signed char index, bool field)
         menuPokemonStatusOpenFightMenu(menuPokemonWork.mTrainer, pokemon,
                                    _menuPokemonStatusCB, 0);
 
-    GSgfxResetRestore(1);
+    menuOffScreenSetPriority(1);
     _menuPokemonOpenList(0);
 
     fadeSet(FADE_IN_BLACK, 0.25f);
@@ -1657,7 +1657,7 @@ void _menuPokemonMakeStatus(MENU_POKEMON_STATUS_TBL *tbl)
 }
 
 // Refresh the party panel records.
-void menuPokemonRefreshStatus(void)
+void menuPokemonUpdate(void)
 {
     _menuPokemonMakeStatus(&menuPokemonStatusTbl);
 }

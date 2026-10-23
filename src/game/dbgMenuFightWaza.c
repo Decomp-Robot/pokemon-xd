@@ -1,9 +1,7 @@
 #include <menu.h>
 #include <types.h>
 #include <menuSub.h>
-#define wazaGetStatus wazaGetStatus_header
 #include <waza.h>
-#undef wazaGetStatus
 
 /* Waza (move) debug sub menu.  The waza data block is 0x38 bytes per waza id
  * (1..0x162) and is snapshotted while the menu is open. */
@@ -11,7 +9,6 @@ struct WazaData {
     u32 _00[0x38 / 4];
 };
 
-long wazaDataBiosGetPtr(unsigned long wazaNo);
 long dbgMenuFightGetWazaTypeId(u8 typeID);
 
 #pragma peephole off

@@ -1,5 +1,6 @@
 #include <fade.h>
 #include <savedata.h>
+#include <gamedata.h>
 #include <heroBios.h>
 #include <Pokemon.h>
 #include <gsFlag.h>
@@ -80,13 +81,11 @@ u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 cl
 void GSthreadSetArgs(u32 thread, s32 count, ...);
 
 // pokemon
-void *gamedataGetStatus(s32 a, s32 b);
 void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
 u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
 u32 memoDataGetPokemonTrainerRndFromID(s32 a, u16 species);
 void pokemonSetPid(Pokemon *pokemon, u32 rnd);
 void pokemonSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
-u8 pokemonCheckValid(Pokemon *pokemon);
 void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);
 void heroCatchPokemon(s32 a, Pokemon *pokemon, s32 b, s32 c, s32 d);
 

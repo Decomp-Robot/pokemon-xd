@@ -29,7 +29,7 @@ void GSgfxDLBeginSurface(u16 surface);
 void GSgfxBeginSurface(void* list);
 void GSgfxVertex3f(f32 x, f32 y, f32 z);
 void GSgfxColor4u8(u8 r, u8 g, u8 b, u8 a);
-void GSgfxLayerSetActive(s32 layer);
+void GSgfxLayerSetActive(GSgfxLayerID layer);
 void GScameraLoadActiveCameraMatrix(s32 layer);
 void GSgfxSelectVertexFormat(GSgfxVF* vf);
 }

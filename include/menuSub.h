@@ -35,6 +35,9 @@ void menuSubCursorAnimeValGet(f32 *offset, s32 *color);
 s32 menuSubOpenSelect2(s32 type, u32 *messageIds, s32 count, s32 x, s32 y,
                        s32 initialCursor, s32 displayedCount, s32 selectMode);
 void menuSubWait(f32 seconds);
+long menuSubOpenSelect(u8 type, unsigned long* choices, int quantity,
+                       long x, long y, long initialChoice);
+
 // Yes/No sub dialog: type selects the dialog, x/y position it.
 s8 menuSubOpenYesNo(u8 type, s32 x, s32 y, MENU_SUB_ANSWER flag);
 // Number entry sub dialog; value is both the initial value and the result.

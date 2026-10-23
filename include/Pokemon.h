@@ -2,17 +2,21 @@
 #define POKEMON_H
 
 #include <types.h>
+#include <darkPokemon.h>
 
 // Pokemon -- party/battle pokemon record.
 typedef struct Pokemon Pokemon;
 struct Pokemon {
-    u8 _00[0x02]; // 0x00-0x01: unknown.
+    u16 mPokemonDataId; // 0x00: species data ID.
     u16 mItemDataId; // 0x02: held item data ID.
     u32 _04[0x08]; // 0x04-0x23: unknown.
-    unsigned long mCatchTrainerRnd; // 0x24: original trainer random ID.
+    unsigned long mCatchTrainerRnd; // 0x24: catch trainer random identity value.
     u8 _28[0xC4 - 0x28]; // 0x28-0xC3: unknown.
 
 #ifdef __cplusplus
+    bool checkValid() const;
+    void setDarkPoint(float point);
+    u16 getPokemonDataId() const;
     u16 getItemDataId() const;
     u8 isDarkPokemon() const;
     unsigned long getCatchTrainerRnd() const;
@@ -20,26 +24,10 @@ struct Pokemon {
 #endif
 };
 
-// Shadow-data status thresholds: fought, snatched, and purified.
-enum darkPokemonStatus {
-    DARK_POKEMON_STATUS_NONE = 0,
-    DARK_POKEMON_STATUS_FIGHT = 1,
-    DARK_POKEMON_STATUS_SNATCH_SUCCESS = 3,
-    DARK_POKEMON_STATUS_RELIVED = 4,
+// Friendship changes selected by the event that caused them.
+enum POKEMON_FRIEND_FILTER_ID {
+    POKEMON_FRIEND_FILTER_LEARN_MOVE = 4
 };
-
-// DarkPokemon -- shadow Pokemon status and newly learned moves.
-#ifdef __cplusplus
-struct DarkPokemon {
-    void setStatus(darkPokemonStatus status);
-    darkPokemonStatus getStatus(void) const;
-    void setUpdate(bool update);
-    u8 isWazaNew(u8 index) const;
-    void setWazaNew(u8 index, bool value);
-};
-#else
-typedef struct DarkPokemon DarkPokemon;
-#endif
 
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
@@ -146,20 +134,42 @@ u8 pokemonCheckValid(Pokemon *pokemon);
 #endif
 u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
-u16 battlePokemonGetHeldItem(Pokemon *pokemon);
 u16 battlePokemonDataGetSpecies(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
+// Read a scalar field, or one indexed element of a field, from a Pokemon record.
 s32 pokemonGetStatus(void *record, s32 speciesId, u16 field, u16 elementIndex);
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
-u8 pokemonIsShadow(Pokemon *pokemon);
+u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);
+u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
+void pokemonInitJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
+void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u32 filterID);
+void pokemonWazaCreate(Pokemon *pokemon, u32 index, u16 wazaID);
+s8 pokemonSearchWazaDataId(Pokemon *pokemon, u16 wazaID);
 void pokemonReplace(Pokemon *dst, Pokemon *src);
-u16 battlePokemonGetSpecies(Pokemon *pokemon);
 u8 pokemonIsShadowPokemon(Pokemon *pokemon);
+// Species and held item of a party Pokemon record.
+u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
+u16 pokemonBiosGetItemDataId(Pokemon *pokemon);
+u16 pokemonGetSoubiItemDataId(Pokemon *pokemon);
+// Held item's equipment effect id.
+u16 pokemonGetSoubiItemSoubiDataId(Pokemon *pokemon);
+void pokemonGetFriendFormPokemonFriendFilterId(Pokemon *pokemon, u16 heldEffectID, u32 filterID);
+// Removes and returns the held item when apply is zero; otherwise equips itemID.
+u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 apply);
+
 void pokemonInit(Pokemon *pokemon);
+void pokemonCreate(Pokemon *pokemon, u16 species, int level, void *attest);
+void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);
+u16 pokemonBiosGetInitDp(Pokemon *pokemon);
+void pokemonSetDp(Pokemon *pokemon, f32 dp);
+// Level of a Pokemon record.
+u8 pokemonBiosGetLevel(Pokemon *pokemon);
+// Next move learned at this level; advances the learnset index.
+u16 pokemonGetOboeWazaDataId(Pokemon *pokemon, u8 level, u8 *outIndex);
 // Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most
 // ten characters; the name entry mode, the message layer and the link
 // exchange each copy them into their own name buffers.

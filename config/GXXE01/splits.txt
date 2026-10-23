@@ -76,6 +76,7 @@ game/dbgMenuItemCreate.c:
 
 game/dbgMenuRelive.c:
 	.text       start:0x8000E53C end:0x8000E5AC
+	.sdata2     start:0x804EBDF8 end:0x804EBE00
 
 game/menuPokeCoupon.c:
 	.text       start:0x8000E5AC end:0x8000E64C
@@ -120,35 +121,19 @@ game/menuPokemon.cpp:
 	.sbss       start:0x804EA710 end:0x804EA718
 	.sdata2     start:0x804EBF48 end:0x804EBF7C
 
-game/menuPocketToolData.s:
-	.sdata2     start:0x804EC064 end:0x804EC068 align:4
-
-game/pokemonIndex.cpp:
-	.text       start:0x8001F1B8 end:0x8001F1D0
-
-game/menuPokemonCursor.cpp:
-	.text       start:0x8001F754 end:0x8001F968
-
-game/menuInfoWindow.cpp:
-	.text       start:0x8001FBF8 end:0x8001FC2C
-
-game/menuMetaMenu.cpp:
-	.text       start:0x80020A7C end:0x80020B6C
-
-game/menuPtSpriteWork.cpp:
-	.text       start:0x8002189C end:0x800219D4
-
 game/menuPocketTool.cpp:
-	.text       start:0x80021C5C end:0x80021FB8
-	.sdata2     start:0x804EC068 end:0x804EC070
-
-game/bitTable.cpp:
-	.text       start:0x80021FFC end:0x80022080
+	.text       start:0x8001EC10 end:0x8002208C
+	.data       start:0x80322460 end:0x80322498
+	.bss        start:0x80428260 end:0x804282A0
+	.sdata      start:0x804E7ED8 end:0x804E7EE8
+	.sbss       start:0x804EA748 end:0x804EA760
+	.sdata2     start:0x804EC010 end:0x804EC098
+	.sbss2      start:0x804EFC98 end:0x804EFCA0
 
 game/menuPocket.cpp:
-	.text       start:0x80022080 end:0x80026898
+	.text       start:0x8002208C end:0x80026898
 	.rodata     start:0x802EA4C8 end:0x802EA788
-	.data       start:0x80322480 end:0x803224EC
+	.data       start:0x80322498 end:0x803224EC
 	.bss        start:0x804282A0 end:0x80428338
 	.sdata      start:0x804E7EE8 end:0x804E7EEC
 	.sbss       start:0x804EA760 end:0x804EA768
@@ -281,6 +266,13 @@ game/menuOrreColosseum.cpp:
 game/menuTitle.cpp:
 	.text       start:0x800A3150 end:0x800A423C
 	.sdata2     start:0x804ECA18 end:0x804ECA20
+
+game/menuUseItem.cpp:
+	.text       start:0x800A423C end:0x800A6138
+	.rodata     start:0x802EBBF8 end:0x802EBD60
+	.data       start:0x803CE730 end:0x803CE7B0
+	.sdata      start:0x804E80D0 end:0x804E80D8
+	.sdata2     start:0x804ECA58 end:0x804ECA78
 
 ext/dolphin_sdk/os/OSAlloc.cpp:
 	.text       start:0x800A7CDC end:0x800A8EA8

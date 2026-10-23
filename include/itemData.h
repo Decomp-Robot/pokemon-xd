@@ -3,10 +3,12 @@
 
 #include <types.h>
 
+enum ItemID { ITEM_COLOGNE_CASE = 0x200, ITEM_BATTLE_DISK_CASE = 0x215 };
+
 // Use routines receive an item ID and write the quantity consumed.
 // Completion finishes a battle selection; continue keeps the pocket open.
 // Close requests closing the pocket even in the field.
-typedef int (*PocketItemUseFunc)(int itemID, int *consumedQuantity);
+typedef s32 (*PocketItemUseFunc)(unsigned long itemID, s32 *consumedQuantity);
 
 enum PocketItemUseResult {
     POCKET_ITEM_USE_COMPLETE = 0,
@@ -21,11 +23,12 @@ struct ItemData {
     u8 mImportant; // 0x01: item cannot be thrown away or sold.
     u8 mUsable; // 0x02: item may be used.
     u8 mDepositAble; // 0x03: item may be put into the PC.
-    u8 _04[0x02]; // 0x04-0x05: unknown.
+    u8 mFunctionalID; // 0x04: index of the item-use parameters.
+    u8 mReservedFlags;
     u16 mPrice; // 0x06: price the item is sold for.
     u8 _08[0x08]; // 0x08-0x0F: unknown.
-    u32 mNameMsgID; // 0x10: message id of the item name.
-    u32 mDescriptionMsgID; // 0x14: message id describing the item.
+    u32 mDescriptionMsgID; // 0x10: message id describing the item.
+    u32 mNameMsgID; // 0x14: message id of the item name.
     u32 mMachineNo; // 0x18: machine number in the low byte.
     PocketItemUseFunc mFieldUseFunc; // 0x1C: routine the item runs in the field.
     PocketItemUseFunc mBattleUseFunc; // 0x20: routine the item runs in battle.
@@ -42,15 +45,17 @@ u8 itemDataBiosGetDeposit(ItemData *data);
 u8 itemDataBiosGetKinomiNo(u16 itemID);
 u8 itemDataBiosGetHidenMachineNo(ItemData *data);
 u8 itemDataBiosGetWazaMachineNo(ItemData *data);
-int itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
+u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 u8 itemDataBiosGetBagPocket(ItemData *data);
 u32 itemDataBiosGetDescriptionMsgID(ItemData *data);
 int itemDataBiosGetPrice(ItemData *data);
 int itemDataBiosGetNameMsgID(ItemData *data);
 PocketItemUseFunc itemDataBiosGetFieldUseFunc(ItemData *data);
-PocketItemUseFunc itemDataGetBattleUseCallback(ItemData *data);
+PocketItemUseFunc itemDataBiosGetBattleUseFunc(ItemData *data);
 u8 itemDataBiosGetUseful(ItemData *data);
 
+u8 itemDataCheckValid(u16 itemID);
+u8 itemDataBiosGetItemEffectParam(ItemData *data);
 #ifdef __cplusplus
 }
 #endif

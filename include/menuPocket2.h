@@ -25,8 +25,18 @@ enum PocketMessageID {
 
 struct FIGHT_TRAINER;
 struct Pokemon;
-struct FIGHT_POKEMON;
+struct FightPokemon;
 class Hero;
+
+enum MenuPocketMode {
+    MENU_POCKET_MODE_FIELD = 0,
+    MENU_POCKET_MODE_BATTLE = 1,
+    MENU_POCKET_MODE_GIVE = 2,
+    MENU_POCKET_MODE_SELL = 3,
+    MENU_POCKET_MODE_DEPOSIT = 4,
+    MENU_POCKET_MODE_SELECT = 5,
+    MENU_POCKET_MODE_BATTLE_DISK = 6
+};
 
 // Item-menu (pocket2) work (bss 0x804282E4, 0x54 bytes). Only the slots the
 // recovered pocket menu addresses are named; the rest of the block layout is
@@ -81,9 +91,9 @@ extern "C" {
 #endif
 
 // Party/battle contexts selected by the item menu.
-void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FIGHT_POKEMON **fightPokemon);
-void menuPocket2ClosePokemonMenu(u32 slot);
-s32 menuPocket2OpenPokemonMenu(u32 itemID, int wait);
+void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightPokemon **fightPokemon);
+void menuPocket2ClosePokemonMenu(s32 slot);
+s32 menuPocket2OpenPokemonMenu(unsigned long itemID, int wait);
 void menuPocketMain(void);
 u16 menuPocket2Call(int mode, int messageWindowID, Hero *hero);
 u16 menuPocket2Open(int mode, s32 *slotID, void *actor);

@@ -1,3 +1,4 @@
+#include <menuPocketTool.h>
 #include <heroItem.h>
 #include <fade.h>
 #include <savedata.h>
@@ -78,15 +79,10 @@ void GSfsysFree(s32 group);
 void GSresFreeGroup(s32 group);
 void GSsndPlay(s32 id, s32 a, s32 b);
 void GSsndStop(s32 id, s32 a, s32 b);
-void menuSetDisp(s32 menuID, s32 on);
 void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on);
 void spriteSetScissor(s32 layer, s32 x, s32 y, s32 w, s32 h);
 void spriteClearScissor(s32 layer);
-// Draw texture `textureID` at its own size and the given window colour.
-void menuPtSpriteDrawTexture(long textureID, long x, long y, u32 color);
 f32 timeGetLastFrameSec(void);
-// Texture bios: the table of texture `id`, and its entry for the current
-// language. The entry +4/+6 halfwords are the texture width/height.
 // Fade alpha the menu windows are drawn with.
 u32 animAlpha(void);
 // The full-screen base window (menu 0x119) the entry screens open on entry
@@ -108,6 +104,7 @@ void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 Pokemon *toolentryTaisenGetPokemonPtr(s32 bank, u32 index);
 u32 menuCBRule_RegulationItemID(s32 index);
 u8 itemDataCheckValid(u32 itemID);
+void *itemDataBiosGetPtr(u32 itemID);
 void pokemonAllKaihuku(Pokemon *pokemon);
 void battlePokemonGetPokeBody(CAnt *ant, Pokemon *pokemon);
 
@@ -670,7 +667,7 @@ u8 menuCBPokemonMsgCheck(unsigned long bank, unsigned long index)
 /* Level of pokemon, as the entry screens read it. */
 u8 _menuCBPokemonEntryGetlevel(Pokemon *pokemon)
 {
-    return pokemonGetStatus(pokemon, 0, 0x7A, 0);
+    return (u8)pokemonGetStatus(pokemon, 0, 0x7A, 0);
 }
 
 unsigned long menuCBPokemonGetIndex(unsigned long menuID, unsigned long index)
@@ -854,12 +851,9 @@ void menuCBAccessFlashDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                 fmod(menuCBAccessFlashPhase, menuCBAccessFlashWrapPeriod);
 
         u32 color = window->mRgba.mColorA | 0xFFFFFF00;
-        s16 *(*getDataTableWithColor)(s32, u32) =
-            (s16 * (*)(s32, u32))textureBiosGetDataTable;
-        s16 *tex = textureBiosGetLanguageEntry(
-            getDataTableWithColor(0x216, window->mRgba.mColorA));
-        s32 w = tex[2];
-        s32 h = tex[3];
+        MenuSpriteImage *image = menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(0x216));
+        s32 w = image->mWidth;
+        s32 h = image->mHeight;
 
         size = (s16)(menuCBAccessFlashSizeScale * tri);
         if (size > 4)
@@ -872,7 +866,7 @@ void menuCBAccessFlashDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                               color);
         menuPtSpriteDrawColor(0x216, (s16)(0x32 - size), (s16)(0x32 - size), -w,
                               -h, color);
-        menuPtSpriteDrawTexture(0x214, 7, 0x23, color);
+        menuPtSpriteDrawColor(0x214, 7, 0x23, color);
     }
 }
 
@@ -1392,7 +1386,7 @@ void menuCBPokemonEntryTakeItem(void)
 
     msgctrlSetValue(0x32, (unsigned long)name);
 
-    itemID = battlePokemonGetHeldItem(pokemon);
+    itemID = pokemonGetSoubiItemDataId(pokemon);
 
     if (itemID != 0) {
         if (heroItemCheckAddItemDataId(hero, itemID) <= 0) {
@@ -1466,7 +1460,7 @@ void menuCBPokemonEntryGiveItem(void)
         return;
     }
 
-    itemID = battlePokemonGetHeldItem(pokemon);
+    itemID = pokemonGetSoubiItemDataId(pokemon);
 
     if (itemID != 0) {
         msgctrlSetValue(0x2D, itemID);

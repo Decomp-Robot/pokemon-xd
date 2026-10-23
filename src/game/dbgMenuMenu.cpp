@@ -5,6 +5,7 @@
 #include <gsFlag.h>
 #include <types.h>
 #include <winSprite.h>
+#include <gamedata.h>
 
 // Debug menu entries for the world map, the Pokespot ("esaba") and the Under
 // ("undertaker"), and the cursor hooks of the windows those entries open.
@@ -94,7 +95,6 @@ u16 menuOrreColosseumGetResult(void);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon
-void *gamedataGetStatus(s32 a, s32 b);
 void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 a, s8 b, s32 c, void *status);
 u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
@@ -117,7 +117,7 @@ long undertakerGetStartFlagID(void);
 
 // Callees of the entries that run a menu script or a menu of their own; the
 // units defining them are not recovered yet.
-extern "C" void menuScriptTestMenuScreen(void);
+extern "C" void menuScriptUsohachi2(void);
 extern "C" void menuScriptTestLayerScreen(void);
 extern "C" s32 menuWazaOshieSelectFromPokemon(s32 pokemonSlot);
 extern "C" s32 menuWazaOshieSelectAll(u8 *selected);
@@ -159,7 +159,7 @@ void _setWorldMapFlagData(long mapIndex, long value)
 // Test entry: run the test script that opens and closes menu 0x101.
 extern "C" s32 dbgMenuMenuTestMenuScreen(void)
 {
-    menuScriptTestMenuScreen();
+    menuScriptUsohachi2();
     return 0;
 }
 

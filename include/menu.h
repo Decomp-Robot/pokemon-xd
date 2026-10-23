@@ -55,7 +55,7 @@ void menuDataBiosSetXY(s32 id, s16 x, s16 y);
 void menuDataBiosGetXY(s32 id, s16 *x, s16 *y);
 u8 menuDataBiosGetDispMax(s32 id);
 void menuFaceLoadPokemon(struct Pokemon *pokemon, void *(*callback)(void *), u16 *counter);
-void menuFaceDisplay(struct tagWINDOW_WORK *win, struct tagSPRITE_WORK *sprite, u16 faceId);
+void menuFaceDispSub(struct tagWINDOW_WORK *win, struct tagSPRITE_WORK *sprite, u16 faceId);
 
 // Opens a menu on the active window and optionally waits for a selection.
 s32 menuOpen(s32 menuID, s32 flag);
@@ -73,6 +73,11 @@ long menuOpenCustom(int menuID, int parentID, void *cursor, int flags, bool wait
 long menuOpenCustom(int menuID, int parentID, void *cursor, int flags, u8 wait, int mode, ...);
 #endif
 
+#ifdef __cplusplus
+void menuSetDisp(long menuID, bool display);
+#else
+void menuSetDisp(long menuID, u8 display);
+#endif
 #ifdef __cplusplus
 }
 #endif

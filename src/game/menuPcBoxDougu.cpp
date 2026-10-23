@@ -1,3 +1,4 @@
+#include <menuPocketTool.h>
 #include <heroItem.h>
 #include <fade.h>
 #include <menu.h>
@@ -79,10 +80,10 @@ extern "C" u32 sListCursorAnimeY;
 
 extern "C" {
 s32 windowGetActiveID(void);
+void menuButtonNormal(tagWINDOW_WORK *window);
 void spriteSetScissor(s32 layerID, s32 x, s32 y, s32 width, s32 height);
 void spriteClearScissor(s32 layerID);
 void spriteSetEnv(s32 layerID);
-void menuPtPlaySe(u32 seID);
 void menuSubCursorAnimeValGet(f32 *animeValues, s32 *animeColor);
 void menuSubCursorAnimeStart(void);
 void menuSubCursorAnimeInit(void);

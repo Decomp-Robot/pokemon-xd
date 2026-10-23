@@ -1,6 +1,10 @@
 #ifndef _MATH_H_
 #define _MATH_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define M_PI 3.14159265358979323846f
 
 extern float __float_nan[];
@@ -11,6 +15,8 @@ extern float __float_nan[];
 double fabs(double x);
 double sin(double x);
 double cos(double x);
+double fmod(double x, double y);
+double atan2(double y, double x);
 
 float sinf(float x);
 float cosf(float x);
@@ -38,14 +44,14 @@ double floor(double x);
 
 extern inline long __fpclassifyf(float value)
 {
-    const unsigned int exponentMask = 0x7F800000;
-    const unsigned int mantissaMask = 0x007FFFFF;
-    switch (*(unsigned int*)&value & exponentMask) {
+    const long exponentMask = 0x7F800000;
+    const long mantissaMask = 0x007FFFFF;
+    switch (*(long*)&value & exponentMask) {
     case exponentMask:
-        if (*(unsigned int*)&value & mantissaMask) return FP_NAN;
+        if (*(long*)&value & mantissaMask) return FP_NAN;
         return FP_INFINITE;
     case 0:
-        if (*(unsigned int*)&value & mantissaMask) return FP_SUBNORMAL;
+        if (*(long*)&value & mantissaMask) return FP_SUBNORMAL;
         return FP_ZERO;
     }
     return FP_NORMAL;
@@ -56,11 +62,12 @@ extern inline float sqrtf(float value)
     const double half = 0.5;
     const double three = 3.0;
     if (value > 0.0f) {
-        double estimate = __frsqrte((double)value);
-        estimate = half * estimate * (three - estimate * estimate * value);
-        estimate = half * estimate * (three - estimate * estimate * value);
-        estimate = half * estimate * (three - estimate * estimate * value);
-        return (float)(value * estimate);
+        double positiveValue = value;
+        double estimate = __frsqrte(positiveValue);
+        estimate = half * estimate * (three - estimate * estimate * positiveValue);
+        estimate = half * estimate * (three - estimate * estimate * positiveValue);
+        estimate = half * estimate * (three - estimate * estimate * positiveValue);
+        return (float)(positiveValue * estimate);
     } else if (value < 0.0) {
         return NAN;
     } else if (__fpclassifyf(value) == FP_NAN) {
@@ -87,6 +94,10 @@ long __fpclassifyd(double x);
 
 #ifdef __MWERKS__
 #pragma cplusplus reset
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

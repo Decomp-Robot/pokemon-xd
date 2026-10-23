@@ -161,7 +161,6 @@ extern "C" long getRibbonCnt(WorldMap* map);
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
 extern "C" void menuCursorNormal(tagWINDOW_WORK* window, long a);
-extern "C" u16 windowGetKeyRepeat();
 extern "C" s32 windowGetActiveID();
 extern "C" int menuOpenCustom(int menu, int window, void* work, int a, int b, int c, ...);
 extern "C" int menuClose(int menu);
@@ -176,7 +175,6 @@ extern "C" void GSthreadSwitch();
 extern "C" void GSfsysFree(long id);
 extern "C" void GSfsysPreRead(long id);
 extern "C" unsigned long roomDataGetFsysGidForLanguage(void* data);
-extern "C" void GSsndPlayNow(long id);
 extern "C" f32 worldMapGetFrameSec(WorldMap* map);
 extern "C" void floorSetFadeScript(long a, long b);
 extern "C" long getCurrentMapGroupId();

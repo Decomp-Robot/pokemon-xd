@@ -5,6 +5,8 @@
 #include <GSvec.h>
 #include <GStexture.h>
 
+extern "C" f32 GSgfxVideoGetLastRenderTime(void);
+
 // Write-gather FIFO the GS layers emit their primitives into.
 typedef union {
     u8 u8;
@@ -116,6 +118,8 @@ enum GSgfxLayerOffset { GS_LAYER_INSERT_AFTER = 2 };
 
 /* Registered graphics layer handle. */
 enum GSgfxLayerID { };
+
+extern "C" void GSgfxLayerSetActive(GSgfxLayerID layer);
 
 /* GX surface primitive type. */
 enum GSgfxPrimType { GSGFX_QUADS = 0x80, GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
@@ -565,7 +569,6 @@ void GSgfxBlendMode(s32 mode, s32 sourceFactor, s32 destinationFactor);
 
 
 extern "C" {
-u8 GSgfxResetRestore(s32 mode);
 u8 GSgfxVideoGetVsyncRate(void);
 void GSgfxVideoSetLockFrameRate(long frameRateLock);
 }

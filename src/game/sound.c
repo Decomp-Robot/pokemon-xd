@@ -41,7 +41,7 @@ extern u32 sndFrameToByteRate(u32 frame);
 /* Play/close wrappers filling in the engine's default arguments: the play one
    hands the caller's volume straight through, the close one stops the sound
    before the engine releases its work block. */
-extern void GSsndPlayDefault(s32 sndID, s32 time, s32 volume, s32 mode);
+extern void GSsndPlayVolume(s32 sndID, s32 time, s32 volume, s32 mode);
 extern void GSsndClose(s32 sndID);
 
 /* File system. */
@@ -105,7 +105,7 @@ s32 soundPlayME(s32 sndID, s32 time, s32 volume)
     if (sndID == 0 || (u32)sndID >= gSoundSEMaster->count) {
         return 0;
     }
-    GSsndPlayDefault(sndID, time, volume, 0);
+    GSsndPlayVolume(sndID, time, volume, 0);
     soundPlayWait(sndID);
     GSsndClose(sndID);
     return 1;
@@ -291,7 +291,7 @@ s32 _soundOpenPlay(s32 sndID, s32 time, s32 volume, s32 isBGM)
             gSoundCurrentBGMID = sndID;
         }
     }
-    GSsndPlayDefault(sndID, time, volume, 0);
+    GSsndPlayVolume(sndID, time, volume, 0);
 }
 
 void _soundFadeout(s32 fadeTime, s32 isBGM, s32 wait)

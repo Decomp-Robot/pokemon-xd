@@ -156,7 +156,7 @@ struct MenuPokemonStatusWork {
     u8 mWazaNew[4];          // 0x44: non-zero for waza not seen yet.
 };
 
-// Status-menu model (0xF0 bytes).
+// Model rendered by the status menu.
 extern "C" {
 extern MenuPokemonStatusWork menuPokemonStatusWork;
 extern MENU_MODEL_STATUS menuPokemonStatusModel;
@@ -227,6 +227,8 @@ extern "C" {
 
 void menuPokemonStatus(void);
 void menuPokemonStatusClose(void);
+// Refresh the party status table after an item changes a Pokemon.
+void menuPokemonUpdate(void);
 s32 menuPokemonStatusCtrl(tagWINDOW_WORK *window);
 void menuPokemonStatusCursor(tagWINDOW_WORK *window);
 void menuPokemonStatusCtrlRibbon(void);
@@ -254,8 +256,9 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 } // extern "C"
 
 // Helpers of the status menu.
+bool _menuPokemonStatusCheckWazaItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 long _menuCB_NotDarkWaza(long waza);
-u16 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot);
+u32 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot);
 u8 _menuPokemonStatusCheckDanny(Pokemon *pokemon);
 u8 _menuPokemonStatusCheckGinzaru(Pokemon *pokemon);
 u8 _menuPokemonStatusCheckOya(Pokemon *pokemon);

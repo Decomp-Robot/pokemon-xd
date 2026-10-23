@@ -150,6 +150,9 @@ u32 menuCBBios_PortIDtoControlerID(long portID);
 u16 battleGetResult(void);
 u16 toolentryTaisenGetPokemonHomePlace(s32 port);
 
+u16 menuCBTrainerBios_GetPlayerID(FIGHT_TRAINER *trainer);
+s32 menuCBTrainerBios_GetControlerID(FIGHT_TRAINER *trainer);
+void menuCBTrainerBios_SetControlerID(FIGHT_TRAINER *trainer, s32 controllerId);
 #ifdef __cplusplus
 }
 #endif

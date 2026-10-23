@@ -3,11 +3,14 @@
 
 #include "types.h"
 
+// Set the menu drawing priority and return the previous priority.
+extern "C" u8 menuOffScreenSetPriority(s32 priority);
+
 // Enable off-screen menu drawing and return the previous state.
 #ifdef __cplusplus
 extern "C" {
 #endif
-s32 menuOffScreenSetDrawEnable(s32 enable);
+s32 menuOffScreenSetDisp(s32 enable);
 void menuCreateOffScreen(float frames, float frames2);
 void menuReleaseOffScreen(float frames);
 u8 menuDisableOffScreenCheck(void);

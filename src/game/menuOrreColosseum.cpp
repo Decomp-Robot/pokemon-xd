@@ -159,11 +159,9 @@ Pokemon *_PokemonStatusDisp_CallBack(Pokemon *pokemon, MENU_POKEMON_CB_TYPE type
 
 extern "C" {
 u16 windowGetKeyTrg(void);
-u16 windowGetKeyRepeat(void);
 u8 menuOffScreenSetDisp(s32 flag);
 // Floor stack and fight-scene support shared with the fight module.
 void *fightGetMenuCtrlHero(void);
-
 
 u8 FlashSystemIsLastFrame(u32 handle);
 void FlashSystemSetPlayFrameLabel(u32 handle, const char *from, const char *to);
@@ -746,7 +744,7 @@ void menuOrre::SetNumber(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     for (j = 0; j < 4; j++) {
         if (i == mSelectList[j]) {
-            textureBiosLoadSpriteId(0, 0, sprite->mWidth, sprite->mHeight,
+            windowDrawSprite2(0, 0, sprite->mWidth, sprite->mHeight,
                                     0xFFFFFF00 | window->mRgba.mColorA, window,
                                     texIDs.id[j], 0,
                                     winSpriteGetLayerID(window, sprite));
@@ -777,7 +775,7 @@ u8 menuOrre::GetDeckPokemonSex(u16 index)
 
 u16 menuOrre::GetDeckPokemonMochimono(u16 index)
 {
-    return battlePokemonGetHeldItem(GetDeckPokemonPtr(index));
+    return pokemonGetSoubiItemDataId(GetDeckPokemonPtr(index));
 }
 
 Pokemon *menuOrre::GetDeckPokemonPtr(u16 index)
@@ -822,7 +820,7 @@ u8 menuOrre::GetTemochiPokemonSex(u16 index)
 
 u16 menuOrre::GetTemochiPokemonMochimono(u16 index)
 {
-    return battlePokemonGetHeldItem(GetTemochiPokemonPtr(index));
+    return pokemonGetSoubiItemDataId(GetTemochiPokemonPtr(index));
 }
 
 Pokemon *menuOrre::GetTemochiPokemonPtr(u16 index)
@@ -868,7 +866,7 @@ void menuOrre::RightPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     item = menuItemBiosGetPtr(MENU_ID_ORRE_TEAM_SELECT,
                                                 sprite->mItemID);
-    textureBiosLoadSpriteId(0, 0, item->mOffsetB, item->mOffsetC,
+    windowDrawSprite2(0, 0, item->mOffsetB, item->mOffsetC,
                             0xFFFFFF00 | window->mRgba.mColorA, window,
                             TEX_ID_ROW, 0,
                             winSpriteGetLayerID(window, sprite));
@@ -880,7 +878,7 @@ void menuOrre::RightPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
         msgctrlSetValue(MSGVAR_NAME, (s32)name);
     }
-    GSmsgPrint(winSpriteGetLayerID(window, sprite), item->mMessageX, item->mOffsetA,
+    GSmsgPrintRect(winSpriteGetLayerID(window, sprite), item->mMessageX, item->mOffsetA,
                 sprite->mWidth, sprite->mHeight,
                 0xFFFFFF00 | window->mRgba.mColorA, MSG_ID_ROW_NAME);
 
@@ -894,7 +892,7 @@ void menuOrre::RightPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
         msgctrlSetValue(MSGVAR_LEVEL, level);
     }
-    GSmsgPrint(winSpriteGetLayerID(window, sprite),
+    GSmsgPrintRect(winSpriteGetLayerID(window, sprite),
                 item->mMessageX + 4 + (s16)(width >> 16), item->mOffsetA + 2,
                 sprite->mWidth, sprite->mHeight,
                 0xFFFFFF00 | window->mRgba.mColorA, MSG_ID_ROW_LEVEL);
@@ -922,7 +920,7 @@ void menuOrre::RightPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if ((u16)GetDeckPokemonMochimono(i) != 0) {
         item = menuItemBiosGetPtr(MENU_ID_ORRE_TEAM_SELECT,
                                                     MENU_ITEM_DECK_ITEM);
-        textureBiosLoadSpriteId(item->mMessageX, item->mOffsetA, item->mOffsetB, item->mOffsetC,
+        windowDrawSprite2(item->mMessageX, item->mOffsetA, item->mOffsetB, item->mOffsetC,
                                 0xFFFFFF00 | window->mRgba.mColorA, window,
                                 TEX_ID_ITEM, 0,
                                 winSpriteGetLayerID(window, sprite));
@@ -961,7 +959,7 @@ void menuOrre::LeftPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     item = menuItemBiosGetPtr(MENU_ID_ORRE_TEAM_SELECT,
                                                 sprite->mItemID);
-    textureBiosLoadSpriteId(0, 0, item->mOffsetB, item->mOffsetC,
+    windowDrawSprite2(0, 0, item->mOffsetB, item->mOffsetC,
                             0xFFFFFF00 | window->mRgba.mColorA, window,
                             TEX_ID_ROW, 0,
                             winSpriteGetLayerID(window, sprite));
@@ -973,7 +971,7 @@ void menuOrre::LeftPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
         msgctrlSetValue(MSGVAR_NAME, (s32)name);
     }
-    GSmsgPrint(winSpriteGetLayerID(window, sprite), item->mMessageX, item->mOffsetA,
+    GSmsgPrintRect(winSpriteGetLayerID(window, sprite), item->mMessageX, item->mOffsetA,
                 sprite->mWidth, sprite->mHeight,
                 0xFFFFFF00 | window->mRgba.mColorA, MSG_ID_ROW_NAME);
 
@@ -987,7 +985,7 @@ void menuOrre::LeftPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
         msgctrlSetValue(MSGVAR_LEVEL, level);
     }
-    GSmsgPrint(winSpriteGetLayerID(window, sprite),
+    GSmsgPrintRect(winSpriteGetLayerID(window, sprite),
                 item->mMessageX + 4 + (s16)(width >> 16), item->mOffsetA + 2,
                 sprite->mWidth, sprite->mHeight,
                 0xFFFFFF00 | window->mRgba.mColorA, MSG_ID_ROW_LEVEL);
@@ -1015,7 +1013,7 @@ void menuOrre::LeftPanel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if ((u16)GetTemochiPokemonMochimono(i) != 0) {
         item = menuItemBiosGetPtr(MENU_ID_ORRE_TEAM_SELECT,
                                                     MENU_ITEM_TEMOCHI_ITEM);
-        textureBiosLoadSpriteId(item->mMessageX, item->mOffsetA, item->mOffsetB, item->mOffsetC,
+        windowDrawSprite2(item->mMessageX, item->mOffsetA, item->mOffsetB, item->mOffsetC,
                                 0xFFFFFF00 | window->mRgba.mColorA, window,
                                 TEX_ID_ITEM, 0,
                                 winSpriteGetLayerID(window, sprite));

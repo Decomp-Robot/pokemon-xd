@@ -3,7 +3,23 @@
 
 #include <types.h>
 
+/* Move-table record; fields are accessed through the move-data API. */
+typedef struct WazaData WazaData;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+long wazaGetStatus(long battleMoveData, unsigned long wazaID, unsigned short fieldID, long index);
+u8 wazaDB_GetCompatible(u32 wazaID);
+WazaData *wazaDataBiosGetPtr(u32 wazaID);
+u32 wazaDataBiosGetName(WazaData *data);
+#ifdef __cplusplus
+}
+#endif
+
 enum { WAZA_STATUS_TYPE = 0x1A };
+
+enum { WAZA_ID_MASK = 0xFFFF };
 
 // Waza (move) data fields read with wazaGetStatus. The status menu asks for
 // the move by waza number: its name message id, its base PP, its type id,
@@ -33,12 +49,23 @@ enum {
     WAZA_STATUS_TYPE_ID = WAZA_FIELD_TYPE
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-s32 wazaGetStatus(void *obj, u16 id, s32 field, s32 arg);
-#ifdef __cplusplus
-}
-#endif
+enum WAZA_COMPATIBILITY {
+    WAZA_COMPATIBILITY_UNDISPLAYED = 0,
+    WAZA_COMPATIBILITY_TYPE_CHART = 1,
+    WAZA_COMPATIBILITY_UNDISPLAYED_ALTERNATE = 2,
+    WAZA_COMPATIBILITY_UNDISPLAYED_OTHER = 3,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_GHOST = 4,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_GRASS = 5,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_POISON_OR_STEEL = 6,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_GROUND = 7,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_FLYING = 8,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_NORMAL = 9,
+    WAZA_COMPATIBILITY_SPECIAL_DISPLAY = 10,
+    WAZA_COMPATIBILITY_SPECIAL_DISPLAY_ALTERNATE = 11,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_DARK = 12,
+    WAZA_COMPATIBILITY_NO_EFFECT_ON_FIRE = 13,
+    WAZA_COMPATIBILITY_SPECIAL_DISPLAY_OTHER = 14,
+    WAZA_COMPATIBILITY_ALL_TYPES_NORMAL = 15,
+};
 
 #endif

@@ -1,3 +1,4 @@
+#include <menuPokemon.h>
 #include <libc/memory.h>
 #include <GSmsg.h>
 #include <msgctrl.h>
@@ -18,8 +19,9 @@
 #define menuPokemonOpenItemUse menuPokemonOpenItemUse_header
 #include <menuPokemon.h>
 #undef menuPokemonOpenItemUse
-extern "C" s32 menuPokemonOpenItemUse(int kind, int wait, u16 itemID, FIGHT_TRAINER *trainer);
 #include <GSgfx.h>
+#include <menuPocketTool.h>
+#include <menuOffScreen.h>
 
 extern "C" {
 u16 windowGetKeyTrg(void);
@@ -79,40 +81,7 @@ extern const PocketTabData lPocketTabData[];
 // Cursor position (0, 0) a tab's cursor is put back to when its list shrank.
 extern "C" PocketVec<short> pocketTabCursorResetPosition;
 
-// Frame hooks the meta-menu keeps for the menu it manages. The meta-menu's
-// draw hook runs the third for records that fill it, its tutorial prompt
-// gates on the fourth, the per-frame wait of an info window runs the fifth
-// and an A press on a tutorial message runs the last one. The pocket record
-// fills only the last three. No record in the game fills the first two.
-struct PocketMenuProcess {
-    void (*mInit)(); // 0x00: unused.
-    void (*mExit)(); // 0x04: unused.
-    void (*mDraw)(); // 0x08: extra drawing.
-    int (*mIsAnimationStateNone)(); // 0x0C: gate of the tutorial prompt.
-    void (*mMain)(); // 0x10: one frame of the menu.
-    void (*mDecide)(); // 0x14: A press on a tutorial message.
-};
-
-extern "C" int menuPocketIsAnimationStateNone(void);
-extern "C" void menuPocketTutorialDecideProc(void);
-// One waited frame of the pocket menu: hands the thread back to the menu
-// system. Owned by the menu bios.
-extern "C" void menuWaitFrame(void);
-
-// The pocket menu's record. The menu has no item animations, so the gate
-// always answers "none" and confirming a tutorial message does nothing.
-extern "C" PocketMenuProcess lPocketMenuProcess = {
-    0,
-    0,
-    0,
-    menuPocketIsAnimationStateNone,
-    menuWaitFrame,
-    menuPocketTutorialDecideProc,
-};
-
-// The rows the action menu is measured and laid out in, 0x54 bytes.
-// _setActMenuResizeWork fills the two measured columns from the menu data of
-// the row's item; the flag that follows belongs to the row's window.
+// Measured columns of the action-menu rows.
 struct ActMenuResizeEntry {
     u32 mItemID; // 0x00: menu-data id of the row.
     s16 mRowOffset; // 0x04: row y offset.
@@ -259,8 +228,7 @@ extern "C" void winMsgClose(int a);
 extern "C" int windowGetActiveID(void);
 
 extern "C" void GSsndPlay(int a, int b, int c);
-extern "C" void menuPtPlaySe(u32 seID); // plays one sound effect.
-u32 getMsgID(u8 *soundEffect, int window, MENU_SHOP_MSG_CODE messageCode, int parameterType, ...); // builds a shop message.
+extern "C" u32 menuShopGetMsgID(u8 *soundEffect, int window, int messageCode, int parameterType, ...);
 extern "C" void GSfloorPop(void);
 extern "C" void floorSetFadeScript(int a, int b);
 extern "C" PocketVec<short> cursorBiosGetPos(int cursorID);
@@ -268,9 +236,9 @@ extern "C" PocketVec<short> cursorBiosSetPos(int cursorID, PocketVec<short> pos)
 
 // ---- item, menu and hero data -------------------------------------------
 
-extern "C" void *wazaDataBiosGetPtr(u16 wazaID);
+extern "C" void *wazaDataBiosGetPtr(u32 wazaID);
 extern "C" u8 itemCheckValid(void *itemPtr);
-extern "C" u32 wazaDataBiosGetNameMsgID(void *data);
+extern "C" u32 wazaDataBiosGetName(void *data);
 
 extern "C" u16 itemSlotGetItemId(void *itemSlot);
 extern "C" u16 itemSlotGetCount(void *itemSlot);
@@ -288,10 +256,9 @@ namespace { const f32 pocketShopExitFadeTime = 0.5f; }
 
 
 struct Pokemon;
-struct FIGHT_POKEMON;
-extern "C" FIGHT_POKEMON *fightTrainer_GetFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
-extern "C" Pokemon *fightPokemonGetStatsStartPtr(FIGHT_POKEMON *pokemon);
-
+struct FightPokemon;
+extern "C" FightPokemon *fightTrainer_GetFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
+extern "C" Pokemon *fightPokemonGetStatsStartPtr(FightPokemon *pokemon);
 
 
 struct PocketNumberDigit {
@@ -538,18 +505,7 @@ u16 _getItemIDFromMenuPos(int tab, int menuPos);
 } // namespace
 
 
-// The pocket menu animates nothing, so its record in lPocketMenuProcess
-// always reports "no animation running".
-extern "C" int menuPocketIsAnimationStateNone(void)
-{
-    return 1;
-}
 
-// The pocket menu adds nothing to the A press that confirms a tutorial
-// message.
-extern "C" void menuPocketTutorialDecideProc(void)
-{
-}
 
 // Whether the sort cursor is drawn: the tab still has an item under the
 // cursor and no action has been chosen yet.
@@ -661,7 +617,7 @@ int _makeActMenu(SActionMenuItem *menu, int max, int tab, int menuPos)
     ItemData *data = itemDataBiosGetPtr(_getItemIDFromMenuPos(tab, menuPos));
     u8 usable;
 
-    if (itemDataGetBattleUseCallback(data) != 0) {
+    if (itemDataBiosGetBattleUseFunc(data) != 0) {
         usable = 1;
     } else {
         usable = 0;
@@ -765,13 +721,13 @@ int _execSell(int tab, u16 itemID, int menuPos)
 
     if (price <= 0) {
         menuPtPlaySe(0x13);
-        int msg = getMsgID(&se, window, MENU_MSG_ITEM_NUM, 0x2D, itemID, -1);
+        int msg = menuShopGetMsgID(&se, window, MENU_MSG_ITEM_NUM, 0x2D, itemID, -1);
         winMsgOpenWithSE(2, msg, 1, 0, se);
         winMsgClose(1);
         return 0;
     }
 
-    _setExplanationMsgID(getMsgID(&se, window, MENU_MSG_ITEM_PRICE, 0x2D, itemID, -1));
+    _setExplanationMsgID(menuShopGetMsgID(&se, window, MENU_MSG_ITEM_PRICE, 0x2D, itemID, -1));
 
     int digitCount;
 
@@ -791,7 +747,7 @@ int _execSell(int tab, u16 itemID, int menuPos)
 
     int total = unitPrice * num;
 
-    int msg = getMsgID(&se, window, MENU_MSG_SELL_TOTAL, 0x4B, total, -1);
+    int msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_TOTAL, 0x4B, total, -1);
     winMsgOpenWithSE(2, msg, 1, 0, se);
 
     s8 answer = (s8)menuSubOpenYesNo(0, -1, -1, 0);
@@ -804,7 +760,7 @@ int _execSell(int tab, u16 itemID, int menuPos)
     _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, num);
     GSsndPlay(0x1A, 0, 0);
     heroAddPokedoru(menuPocket2Work.mHero, total);
-    msg = getMsgID(&se, window, MENU_MSG_SELL_CONFIRM, 0x2D, itemID, 0x4B, total, -1);
+    msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_CONFIRM, 0x2D, itemID, 0x4B, total, -1);
     _menuCB_errorMsgDisp2(msg);
     return 1;
 }
@@ -842,7 +798,7 @@ int _execActionMenu(int tab, u16 itemID, int menuPos, u16 *outNum)
             _setExplanationMsgID(POCKET_MSG_COLOGNE_PROMPT);
 
             u16 cologne = menuPocketCologne(-1);
-            u32 cologneID = cologne;
+            unsigned long cologneID = cologne;
 
             if (cologneID == 0) {
                 return POCKET_ACTION_CONTINUE;
@@ -1104,7 +1060,7 @@ PocketItemUseFunc _getUseFunc(unsigned long itemID)
     if (menuPocket2Work.mMode == POCKET_MODE_FIELD) {
         return itemDataBiosGetFieldUseFunc(data);
     }
-    return itemDataGetBattleUseCallback(data);
+    return itemDataBiosGetBattleUseFunc(data);
 }
 
 // Count of the row `menuPos` of the tab.
@@ -1228,7 +1184,7 @@ int _openPokemonMenuForGiveItem(u16 itemID, u8 pocket, u8 menuItemIndex)
     menuCloseCustom(WIN_ID_SELECT_ITEM, 0, 1);
     menuPocket2Work.mCurrentSlotID = menuPokemonOpenItemGive(pocket, menuItemIndex, itemID, 0);
 
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
     menuPokemonClose();
 
     return (menuPocket2Work.mCurrentSlotID >> 31) ^ 1;
@@ -1370,7 +1326,7 @@ extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int 
         x2 += GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16;
     }
 
-    int nameID = wazaDataBiosGetNameMsgID(wazaDataBiosGetPtr(
+    int nameID = wazaDataBiosGetName(wazaDataBiosGetPtr(
         itemDataBiosGetWazaIDByWazaMachineNo(machine)));
 
     GSmsgPrint2(layer, x2 + 9, y, -1, nameID);
@@ -1622,7 +1578,7 @@ leave:
     }
 
     if (menuPocket2Work.mOwnsFloor != 0) {
-        GSgfxResetRestore(1);
+        menuOffScreenSetPriority(1);
         GSfloorPop();
         floorSetFadeScript(0, 0);
     }
@@ -1691,10 +1647,10 @@ u32 menuPocket2GetCurrentTemochiPokemonSlotID(void)
     return slot;
 }
 
-extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FIGHT_POKEMON **fightPokemon)
+extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightPokemon **fightPokemon)
 {
     Pokemon *partyPokemon;
-    FIGHT_POKEMON *battlePokemon;
+    FightPokemon *battlePokemon;
     if (menuPocket2Work.mMode == POCKET_MODE_BATTLE || menuPocket2Work.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
         battlePokemon = fightTrainer_GetFightPokemonPtr(menuPocket2Work.mTrainer, slot);
         partyPokemon = fightPokemonGetStatsStartPtr(battlePokemon);
@@ -1706,16 +1662,16 @@ extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FIGHT_
     *fightPokemon = battlePokemon;
 }
 
-extern "C" void menuPocket2ClosePokemonMenu(u32 slot)
+extern "C" void menuPocket2ClosePokemonMenu(s32 slot)
 {
     menuPocket2Work.mCurrentSlotID = slot;
     menuPokemonClose();
 }
 
-extern "C" s32 menuPocket2OpenPokemonMenu(u32 itemID, int wait)
+extern "C" s32 menuPocket2OpenPokemonMenu(unsigned long itemID, int wait)
 {
     menuCloseCustom(MENU_DATA_ACT_ROW, 0, 1);
-    int kind;
+    u8 kind;
     if (menuPocket2Work.mMode == POCKET_MODE_BATTLE || menuPocket2Work.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
         kind = POKEMON_ITEM_USE_BATTLE;
     } else {

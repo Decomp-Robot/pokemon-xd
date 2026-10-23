@@ -3,7 +3,8 @@
 
 #include <types.h>
 
-typedef struct PokemonSpeciesStats PokemonSpeciesStats;
+struct PokeStats;
+typedef struct PokeStats PokemonSpeciesStats;
 
 // Tutor selection, progression gate, and learned-state flag.
 typedef struct PokemonTutorMove {
@@ -17,7 +18,8 @@ typedef struct PokemonTutorMove {
 extern "C" {
 #endif
 extern const PokemonTutorMove *pokemonTutorMoveTable;
-PokemonSpeciesStats *pokemonDataGetSpeciesStats(u16 species);
+struct PokeStats *pokemonDataBiosGetPtr(u16 species);
+s32 pokemonDataBiosGetVoice(struct PokeStats *stats);
 u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
 u32 pokemonDataGetNameId(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);

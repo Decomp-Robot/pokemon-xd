@@ -14,12 +14,12 @@ u16 *GScharCpy(u16 *destination, const u16 *source);
 void GSmsgPrint2(s32 layer, long x, long y, u32 color, u32 msgID);
 u16 *GSmsgGetStringPtr(u32 messageID);
 s32 GSmsgGetLength(u32 messageID);
-void GSmsgPrint(s32 layer, s32 x, s32 y, s16 width, s16 height, u32 color, s32 messageID);
 void GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 width, s32 height, u32 color, u32 messageID);
 
-s32 GSmsgPrintRect(s32 layer, s32 x, s32 y, s32 width, s32 height,
+s32 GSmsgPrintRect(s32 layer, s32 x, s32 y, s16 width, s16 height,
                      u32 color, s32 msgID);
 
+u16 *GSmsgMakeGScharStr(u16 *message, s32 capacity, u32 messageID);
 #ifdef __cplusplus
 }
 #endif

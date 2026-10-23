@@ -13,6 +13,7 @@
 #include <Pokemon.h>
 #include <pokemonBios.h>
 #include <types.h>
+#include <waza.h>
 
 /* -------------------------------------------------------------------------
  * External data and functions
@@ -30,20 +31,19 @@ extern u16 *gLegendPokemonList;
 extern "C" {
 extern FightRuleData *menuCBBios_CurrentRule(void);
 extern u8 menuCBRulesetGetDirty(void);
-extern u16 battlePokemonStatusGetHeldItem(Pokemon *pokemon);
-extern u16 battlePokemonGetSpecies(Pokemon *pokemon);
+extern u16 pokemonBiosGetItemDataId(Pokemon *pokemon);
+extern u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetAttack(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetDef(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetSpAtk(Pokemon *pokemon);
 extern u16 battlePokemonStatusGetSpDef(Pokemon *pokemon);
-extern u8 pokemonIsShadow(Pokemon *pokemon);
+extern u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 extern u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 extern bool pokemonCheckValid(Pokemon *pokemon);
 extern void pokemonBiosCopy(Pokemon *dst, Pokemon *src);
 extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
 extern void pokemonResetBasisStatus(Pokemon *pokemon);
-extern u32 wazaDataBiosGetPtr(u16 id);
 extern u16 pokemonGetMaxHpEffort(Pokemon *pokemon);
 extern u16 pokemonGetPhyAtkEffort(Pokemon *pokemon);
 extern u16 pokemonGetPhyDefEffort(Pokemon *pokemon);
@@ -78,7 +78,7 @@ extern "C" u8 menuCBRule_CheckLegendPokemon(Pokemon *pokemon, FightRuleData *rul
         return 1;
     }
 
-    species = battlePokemonGetSpecies(pokemon);
+    species = pokemonBiosGetPokemonDataId(pokemon);
     count = *gLegendPokemonCount;
     list = gLegendPokemonList;
 
@@ -99,7 +99,7 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry)
     for (i = 0; i < 6; i++) {
         Pokemon *pokemon = heroBiosGetPokemonPtr(hero, i);
 
-        battlePokemonStatusGetHeldItem(pokemon);
+        pokemonBiosGetItemDataId(pokemon);
         menuCBEntrySlotFlagsClear(entry, i);
 
         menuCBTaisenWork.entryFlags[entry][i].levelBelowMinimum =
@@ -147,7 +147,7 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry)
 /* Mew and Deoxys may only be entered once the event released them. */
 extern "C" u8 menuCBRule_CheckPokemonEventFlag(Pokemon *pokemon)
 {
-    u16 species = battlePokemonGetSpecies(pokemon);
+    u16 species = pokemonBiosGetPokemonDataId(pokemon);
 
     switch (species) {
     case POKEMON_SPECIES_DEOXYS:
@@ -275,13 +275,13 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
         return 1;
 
     case POKEMON_CONDITION_SHADOW:
-        return !pokemonIsShadow(pokemon);
+        return !pokemonIsDarkPokemon(pokemon);
 
     case POKEMON_CONDITION_TAMAGO:
         return !pokemon_GetTamagoFlag(pokemon);
 
     case POKEMON_CONDITION_HELD_ITEM:
-        return menuCBRule_CheckValidItem(battlePokemonStatusGetHeldItem(pokemon));
+        return menuCBRule_CheckValidItem(pokemonBiosGetItemDataId(pokemon));
 
     case POKEMON_CONDITION_ILLEGAL_MOVE:
         for (i = 0; i < 4; i++) {
@@ -382,7 +382,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Hero *hero, Pokemon *pokemon
                 continue;
             }
 
-            if (battlePokemonGetSpecies(other) == battlePokemonGetSpecies(pokemon)) {
+            if (pokemonBiosGetPokemonDataId(other) == pokemonBiosGetPokemonDataId(pokemon)) {
                 return 0;
             }
         }
@@ -398,7 +398,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Hero *hero, Pokemon *pokemon
             return 1;
         }
 
-        if (battlePokemonStatusGetHeldItem(pokemon) == 0) {
+        if (pokemonBiosGetItemDataId(pokemon) == 0) {
             return 1;
         }
 
@@ -417,7 +417,7 @@ extern "C" bool menuCBRule_CheckTrainerRegulationAt(Hero *hero, Pokemon *pokemon
                 continue;
             }
 
-            if (battlePokemonStatusGetHeldItem(other) == battlePokemonStatusGetHeldItem(pokemon)) {
+            if (pokemonBiosGetItemDataId(other) == pokemonBiosGetItemDataId(pokemon)) {
                 return 0;
             }
         }
@@ -471,11 +471,11 @@ extern "C" bool menuCBRule_CheckTrainerRegulation(Hero *hero, FightRuleData *rul
                 continue;
             }
 
-            if (battlePokemonStatusGetHeldItem(pokemon) != 0) {
-                sameItem &= battlePokemonStatusGetHeldItem(pokemon) != battlePokemonStatusGetHeldItem(other);
+            if (pokemonBiosGetItemDataId(pokemon) != 0) {
+                sameItem &= pokemonBiosGetItemDataId(pokemon) != pokemonBiosGetItemDataId(other);
             }
 
-            sameSpecies &= battlePokemonGetSpecies(pokemon) != battlePokemonGetSpecies(other);
+            sameSpecies &= pokemonBiosGetPokemonDataId(pokemon) != pokemonBiosGetPokemonDataId(other);
         }
     }
 
@@ -542,7 +542,7 @@ extern "C" bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleDat
         return pokemonBiosGetLevel(pokemon) <= rule->mPokemonLevelMax;
 
     case REGULATION_POKEMON_ITEM:
-        return menuCBRule_CheckRegulationItem(battlePokemonStatusGetHeldItem(pokemon));
+        return menuCBRule_CheckRegulationItem(pokemonBiosGetItemDataId(pokemon));
 
     default:
         break;

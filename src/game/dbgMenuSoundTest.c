@@ -14,7 +14,7 @@ extern u32 *soundMusicListCount;
 extern u16 *soundMusicListIds;
 
 void GSsndSetMasterVolume(s32 volume, s32 time, s32 music, s32 fx);
-void sndPlay(u32 soundID, s32 bgm);
+void sndPlay(s32 soundID, s32 bgm);
 
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
@@ -120,7 +120,7 @@ s32 dbgMenuSoundTestBGM(void)
     return -1;
 }
 
-void sndPlay(u32 soundID, s32 bgm)
+void sndPlay(s32 soundID, s32 bgm)
 {
     s32 status = GSsndGetStatus(soundID);
 

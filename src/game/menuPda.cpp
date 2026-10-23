@@ -152,7 +152,7 @@ void menuPdaScript(u8 mode)
     menuClose(MENU_ID_PDA_BACKDROP);
     menuClose(MENU_ID_PDA_FRAME);
     menuCloseSync(MENU_ID_PDA_FRAME, 1);
-    GSgfxResetRestore(1);
+    menuOffScreenSetPriority(1);
     GSfloorPop();
 }
 
@@ -505,7 +505,7 @@ void menuPda(void)
     }
     _menPdaFadeOutWait();
     if (menuPdaWork.mFadeOutDone != 1) {
-        menuOffScreenSetDrawEnable(1);
+        menuOffScreenSetDisp(1);
         menuPdaWork.mFadeOutDone = 1;
     }
     _menuPdaTopClose();
@@ -515,7 +515,7 @@ void menuPda(void)
     menuCloseSync(MENU_ID_PDA_BACKDROP, 1);
     fightOutPokemonSetVisibility(PDA_MODEL_RESOURCE, 0);
     _menPdaFadeInWait();
-    GSgfxResetRestore(1);
+    menuOffScreenSetPriority(1);
     GSfloorPop();
     floorSetFadeScript(0, 0);
 }
@@ -577,7 +577,7 @@ void _menuPdaStartEvent(void)
     GSmodelSetVisibility((_GSmodel*)model, 1);
     GSmodelSetBoundCheck((_GSmodel*)model, 0);
     _menuPdaSetMotion(PDA_MODEL_RESOURCE, 0, menuPdaZero, false);
-    GSgfxResetRestore(0);
+    menuOffScreenSetPriority(0);
     GSthreadSwitch();
     _menuPdaWaitMotion(PDA_MODEL_RESOURCE);
     peopleTalkMessageBgmStart(PDA_MODEL_RESOURCE);

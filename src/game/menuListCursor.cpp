@@ -12,7 +12,6 @@ struct CursorAnimationOffsets {
 
 extern "C" {
 u16 windowGetKeyTrg(void);
-u16 windowGetKeyRepeat(void);
 u8 menuOffScreenSetDisp(s32 flag);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 s32 windowGetActiveID(void);

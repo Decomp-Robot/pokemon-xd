@@ -4,6 +4,8 @@
 #include <FightRuleData.h>
 #include <fightTrainer.h>
 #include <types.h>
+#include <menuSpriteBios.h>
+#include <winSprite.h>
 
 /* -------------------------------------------------------------------------
  * The rule set the connect-battle menus play with
@@ -75,17 +77,6 @@ typedef struct MenuCBPokemonEntryWork {
     /* 0x230 */ s32 mDisconnectedPort;
 } MenuCBPokemonEntryWork;
 
-/* Trainer name plate the connect-battle screens show, filled in from the
-   language entry table. */
-typedef struct MenuCBTrainerName {
-    u8 _00[0x54];
-    s16 mFamilyName;
-    s16 mGivenName;
-    s32 mMoney;
-    s16 mMoneyDigits;
-    s16 mPlayTime;
-} MenuCBTrainerName;
-
 /* One SI port as the input layer hands it to the menu callbacks.  The
    menus only ever move the value around, so it stays a scalar. */
 enum GSinputDevice {
@@ -95,13 +86,6 @@ enum GSinputDevice {
     /* 3 */ INPUT_DEVICE_3,
 };
 
-/* One entry of the per-language trainer name table. */
-typedef struct MenuCBLanguageEntry {
-    /* 0x00 */ s16 mPlayTime;
-    /* 0x02 */ s16 mMoneyDigits;
-    /* 0x04 */ s16 mFamilyName;
-    /* 0x06 */ s16 mGivenName;
-    /* 0x08 */ s32 mMoney;
-} MenuCBLanguageEntry;
+extern "C" void menuCBSetTrainerName(tagSPRITE_WORK* sprite, MenuSpriteData* spriteData);
 
 #endif

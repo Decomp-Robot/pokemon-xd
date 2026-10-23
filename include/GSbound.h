@@ -2,6 +2,7 @@
 #define GS_BOUND_H
 
 #include <types.h>
+#include <GSvec.h>
 
 /* Model-space bound accumulator. */
 struct GSbound {
@@ -12,6 +13,7 @@ struct GSbound {
 };
 
 extern "C" {
+void GSboundGetSize(void *bound, GSvec *size, GSmtx *transform, bool localAxes);
 bool GSboundHasAnimData(void *bound);
 void GSboundSetAnimIndex(void *bound, u32 index);
 void GSboundSetAnimFrame(void *bound, f32 frame);

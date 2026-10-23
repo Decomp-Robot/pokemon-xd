@@ -161,6 +161,9 @@ enum { FLOOR_ID_PARTY_MENU = 0x3A5 };
 
 // Party-menu work block, shared by menuPokemonInitWork and the party-menu
 // flow.
+enum { MENU_POKEMON_LIST = 0x4C };
+
+// Party-menu work cleared when the menu opens.
 struct MenuPokemonWork {
     u8 mMode;             // 0x00: menu mode the party menu was opened in.
     bool mListEnabled;    // 0x01: when zero, the party list cannot be opened.
@@ -256,7 +259,7 @@ void menuPokemonClose(void);
 u16 menuPokemonGetJoutaiSpriteID(Pokemon *pokemon, bool sprite);
 
 // Party menu entry points the rest of the game and the menu data call.
-void menuPokemonRefreshStatus(void);
+void menuPokemonUpdate(void);
 s32 menuPokemonCtrlWaza(void);
 void menuPokemonCloseWazaLight(void);
 s32 menuPokemonOpenWazaLight(s8 index);

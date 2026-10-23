@@ -67,7 +67,6 @@ extern void pokemon_SetNimbleness(Pokemon *pokemon, u16 value);
 extern s32 menuGBACGetRomVer(s32 index);
 extern u8 menuCBRule_DEOKISISUCamouflage(void);
 extern u16 menuCBRule_RegulationItemID(s32 index);
-extern const MenuCBLanguageEntry *textureBiosGetLanguageEntry(s32 index);
 extern s32 menuCB_MenuRollback(s32 menuID);
 extern s32 menuCB_MenuPop(void);
 extern void menuCB_MenuPush(s32 menuID);
@@ -386,16 +385,16 @@ extern "C" s32 menuCB_GetDisconnectedGBA(void)
     return 0;
 }
 
-/* Copy a language entry of the trainer name table into a name plate. */
-extern "C" void menuCBSetTrainerName(MenuCBTrainerName *name, s32 index)
+/* Copy the current language image into the sprite work. */
+extern "C" void menuCBSetTrainerName(tagSPRITE_WORK *sprite, MenuSpriteData *spriteData)
 {
-    const MenuCBLanguageEntry *entry = textureBiosGetLanguageEntry(index);
+    const MenuSpriteImage *image = menuSpriteBiosGetValPtr(spriteData);
 
-    name->mFamilyName = entry->mFamilyName;
-    name->mGivenName = entry->mGivenName;
-    name->mMoney = entry->mMoney;
-    name->mMoneyDigits = entry->mPlayTime;
-    name->mPlayTime = entry->mMoneyDigits;
+    sprite->mWidth = image->mWidth;
+    sprite->mHeight = image->mHeight;
+    sprite->mTextureResourceID = image->mResourceID;
+    sprite->mTextureX = image->mX;
+    sprite->mTextureY = image->mY;
 }
 
 /* -------------------------------------------------------------------------
