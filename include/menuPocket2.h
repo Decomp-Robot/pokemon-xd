@@ -8,12 +8,13 @@ class Hero;
 
 // Item-menu (pocket2) work (bss 0x804282E4, 0x54 bytes).
 // Partial declaration: only the slots addressed by the recovered helpers
-// are named (the hero and battle-trainer contexts at +0x08/+0x0C, current/
-// selected temochi slot IDs at +0x10/+0x14 and the last slot ID at +0x44);
-// the rest of the block layout is unrecovered, so it stays sized padding
-// here.
+// are named (the open-source mode at +0x04, the hero and battle-trainer
+// contexts at +0x08/+0x0C, current/selected temochi slot IDs at +0x10/+0x14
+// and the last slot ID at +0x44); the rest of the block layout is
+// unrecovered, so it stays sized padding here.
 struct MenuPocket2Work {
-    u8 _00[0x08];
+    u8 _00[0x04]; // 0x00-0x03: unknown.
+    s32 mMode; // 0x04: menu the pocket was opened from.
     FIGHT_TRAINER *mTrainer; // 0x08: battle trainer the menu acts on.
     Hero *mHero; // 0x0C: hero the menu acts on.
     u32 mCurrentSlotID; // 0x10: current temochi pokemon slot ID.
