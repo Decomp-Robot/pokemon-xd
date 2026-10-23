@@ -1488,6 +1488,11 @@ ext/musyx_sdk/runtime/CheapReverb/creverb.c:
 ext/musyx_sdk/runtime/CheapReverb/creverb_fx.c:
 	.text       start:0x801821BC end:0x801821BC
 
+ext/musyx_sdk/runtime/StdReverb/reverb_fx.c:
+	.text       start:0x801821BC end:0x80182218
+	.text       start:0x80182218 end:0x80182270
+	.text       start:0x80182270 end:0x801822B0
+
 ext/musyx_sdk/runtime/StdReverb/reverb.c:
 	.text       start:0x801822B0 end:0x801827BC
 	.text       start:0x801827BC end:0x801829D0

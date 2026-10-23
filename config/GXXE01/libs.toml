@@ -1270,3 +1270,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/StdReverb/reverb.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/StdReverb/reverb_fx.c"
+completed = true
