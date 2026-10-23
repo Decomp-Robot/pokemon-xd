@@ -260,6 +260,12 @@ ext/dolphin_sdk/card/CARDBlock.c:
 	.text       start:0x800C1F4C end:0x800C1FE8
 	.text       start:0x800C1FE8 end:0x800C2094
 
+ext/dolphin_sdk/card/CARDDir.c:
+	.text       start:0x800C2094 end:0x800C209C
+	.text       start:0x800C209C end:0x800C216C
+	.text       start:0x800C216C end:0x800C2234
+	.text       start:0x800C2234 end:0x800C22F8
+
 ext/dolphin_sdk/card/CARDCheck.c:
 	.text       start:0x800C22F8 end:0x800C24A8
 	.text       start:0x800C24A8 end:0x800C272C

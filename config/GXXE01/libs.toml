@@ -393,3 +393,7 @@ completed = false
 name = "ext/dolphin_sdk/card/CARDDelete.c"
 completed = false
 
+
+[[lib.object]]
+name = "ext/dolphin_sdk/card/CARDDir.c"
+completed = false
