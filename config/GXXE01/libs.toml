@@ -807,7 +807,6 @@ cflags = [
 name = "game/agbCommunication.cpp"
 completed = true
 cflags = [
-    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
@@ -839,7 +838,6 @@ cflags = [
 name = "game/floorRead.cpp"
 completed = true
 cflags = [
-    "-W error",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",

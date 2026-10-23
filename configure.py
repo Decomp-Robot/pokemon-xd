@@ -150,6 +150,7 @@ parser.add_argument(
     dest="warn",
     type=str,
     choices=["all", "off", "error"],
+    default="error",
     help="how to handle warnings",
 )
 parser.add_argument(
@@ -237,6 +238,11 @@ elif args.warn == "error":
 
 config.asflags = subst(toml_config.build.asflags)
 config.ldflags = subst(toml_config.build.ldflags)
+if args.warn == "error":
+    if "--fatal-warnings" not in config.asflags:
+        config.asflags.append("--fatal-warnings")
+    if "-w error" not in config.ldflags:
+        config.ldflags.append("-w error")
 if args.debug:
     config.ldflags.extend(toml_config.build.ldflags_debug)
 if args.map:
