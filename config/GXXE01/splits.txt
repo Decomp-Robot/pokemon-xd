@@ -2173,6 +2173,11 @@ game/app/fight/fightSeq/fightSeq.cpp:
 	.data       start:0x804184B0 end:0x80418730
 	.sdata2     start:0x804EEB98 end:0x804EEBA4
 
+game/pokemonRelive.cpp:
+	.text       start:0x80233B1C end:0x80233B20
+	.ctors      start:0x802E9FE4 end:0x802E9FE8
+	.sbss       start:0x804EB988 end:0x804EB990
+
 game/app/pokemon/pokemonWazaSequenceDisplay.cpp:
 	.text       start:0x80233B20 end:0x80233C8C
 	.sdata2     start:0x804EEBE0 end:0x804EEBE4
