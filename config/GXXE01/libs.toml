@@ -126,7 +126,7 @@ completed = true
 name = "game/menuKeyDisc.c"
 completed = true
 [[lib.object]]
-name = "decomp/pokemonindex.cpp"
+name = "game/pokemonIndex.cpp"
 completed = true
 
 [[lib.object]]
