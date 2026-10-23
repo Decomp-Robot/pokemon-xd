@@ -413,3 +413,6 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDNet.c"
 completed = false
+[[lib.object]]
+name = "ext/dolphin_sdk/card/CARDOpen.c"
+completed = false
