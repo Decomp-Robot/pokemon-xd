@@ -31,6 +31,7 @@ u32 DSPCheckMailFromDSP(void) {
     return (__DSPRegs[2] & (1 << 15)) >> 15;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DSPReadCPUToDSPMbox(void) {
     return (__DSPRegs[0] << 16) | __DSPRegs[1];
 }
@@ -44,6 +45,7 @@ void DSPSendMailToDSP(u32 mail) {
     __DSPRegs[1] = mail & 0xFFFF;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSPAssertInt(void) {
     BOOL old;
     u16 tmp;
@@ -83,10 +85,12 @@ void DSPInit(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 BOOL DSPCheckInit(void) {
     return __DSP_init_flag;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSPReset(void) {
     BOOL old;
     u16 tmp;
@@ -99,6 +103,7 @@ void DSPReset(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSPHalt(void) {
     BOOL old;
     u16 tmp;
@@ -110,6 +115,7 @@ void DSPHalt(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSPUnhalt(void) {
     BOOL old;
     u16 tmp;
@@ -121,6 +127,7 @@ void DSPUnhalt(void) {
     OSRestoreInterrupts(old);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DSPGetDMAStatus(void) {
     return (__DSPRegs[5] & (1 << 9));
 }
@@ -155,6 +162,7 @@ DSPTaskInfo* DSPCancelTask(DSPTaskInfo* task) {
     return task;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DSPTaskInfo* DSPAssertTask(DSPTaskInfo* task) {
     s32 old;
 

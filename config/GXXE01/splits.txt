@@ -373,6 +373,12 @@ ext/dolphin_sdk/ar/arq.c:
 	.text       start:0x800BE88C end:0x800BE8AC
 	.text       start:0x800BE8AC end:0x800BE8B4
 
+ext/dolphin_sdk/dsp/dsp.c:
+	.text       start:0x800BE8B4 end:0x800BEA74
+	.data       start:0x803D2AD8 end:0x803D2B58
+	.sdata      start:0x804E81D0 end:0x804E81D4
+	.sbss       start:0x804EAD70 end:0x804EAD74
+
 ext/dolphin_sdk/ax/AXAlloc.c:
 	.text       start:0x800BF34C end:0x800BF34C
 

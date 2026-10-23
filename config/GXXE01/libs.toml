@@ -375,6 +375,17 @@ name = "ext/dolphin_sdk/ar/arq.c"
 completed = false
 
 [[lib]]
+name = "dsp"
+mw_version = "GC/1.2.5n"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/dsp", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/dsp/dsp.c"
+completed = true
+
+[[lib]]
 name = "card"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
