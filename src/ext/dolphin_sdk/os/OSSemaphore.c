@@ -1,6 +1,7 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void OSInitSemaphore(OSSemaphore* sem, s32 count) {
     BOOL enabled = OSDisableInterrupts();
 
@@ -9,6 +10,7 @@ void OSInitSemaphore(OSSemaphore* sem, s32 count) {
     OSRestoreInterrupts(enabled);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 OSWaitSemaphore(OSSemaphore* sem) {
     BOOL enabled;
     s32 count;
@@ -24,6 +26,7 @@ s32 OSWaitSemaphore(OSSemaphore* sem) {
     return count;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 OSTryWaitSemaphore(OSSemaphore* sem) {
     BOOL enabled;
     s32 count;
@@ -38,6 +41,7 @@ s32 OSTryWaitSemaphore(OSSemaphore* sem) {
     return count;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 OSSignalSemaphore(OSSemaphore* sem) {
     BOOL enabled;
     s32 count;
@@ -51,6 +55,7 @@ s32 OSSignalSemaphore(OSSemaphore* sem) {
     return count;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 OSGetSemaphoreCount(OSSemaphore* sem) {
     return sem->count;
 }
