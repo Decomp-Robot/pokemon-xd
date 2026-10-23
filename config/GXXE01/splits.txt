@@ -258,9 +258,6 @@ ext/dolphin_sdk/dvd/fstload.c:
 	.sdata      start:0x804E8178 end:0x804E8188
 	.sbss       start:0x804EAC40 end:0x804EAC4C
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC12C end:0x800BC170
 	.text       start:0x800BC170 end:0x800BC1F8
@@ -662,6 +659,37 @@ TRK/TRK_memcpy_local.c:
 __fini_cpp_exceptions.cpp:
 	.text       start:0x800DA88C end:0x800DA8C0
 	.dtors      start:0x802EA000 end:0x802EA004
+
+ext/dolphin_sdk/exi/EXIBios.c:
+	.text       start:0x800E7AC0 end:0x800E7BB4
+	.text       start:0x800E7BB4 end:0x800E7E10
+	.text       start:0x800E7E10 end:0x800E7EB0
+	.text       start:0x800E7EB0 end:0x800E7F9C
+	.text       start:0x800E7F9C end:0x800E81E8
+	.text       start:0x800E81E8 end:0x800E8230
+	.text       start:0x800E8230 end:0x800E82AC
+	.text       start:0x800E82AC end:0x800E8420
+	.text       start:0x800E8420 end:0x800E84A0
+	.text       start:0x800E84A0 end:0x800E8554
+	.text       start:0x800E8554 end:0x800E8660
+	.text       start:0x800E8660 end:0x800E871C
+	.text       start:0x800E871C end:0x800E8848
+	.text       start:0x800E8848 end:0x800E8958
+	.text       start:0x800E8958 end:0x800E8A20
+	.text       start:0x800E8A20 end:0x800E8C38
+	.text       start:0x800E8C38 end:0x800E8D08
+	.text       start:0x800E8D08 end:0x800E8EDC
+	.text       start:0x800E8EDC end:0x800E8FD0
+	.text       start:0x800E8FD0 end:0x800E90AC
+	.text       start:0x800E90AC end:0x800E90C4
+	.text       start:0x800E90C4 end:0x800E90EC
+	.text       start:0x800E90EC end:0x800E949C
+	.bss        start:0x80442AF0 end:0x80442BB0
+	.sdata      start:0x804E8320 end:0x804E8324
+	.sbss       start:0x804EAEA8 end:0x804EAEAC
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684

@@ -274,7 +274,10 @@ for lib in toml_config.libs:
         else:
             obj_completed = False
 
-        objects.append(Object(obj_completed, obj.name))
+        obj_options: Dict[str, Any] = {}
+        if obj.cflags is not None:
+            obj_options["cflags"] = subst(obj.cflags)
+        objects.append(Object(obj_completed, obj.name, **obj_options))
 
     lib_config: Dict[str, Any] = {
         "lib": lib.name,
