@@ -19,9 +19,6 @@ decomp/dbgMenuGetGsinputMsgId.c:
 decomp/dbgMenuFightSetMsgSpeed.c:
 	.text       start:0x800071B4 end:0x800071DC
 
-game/dbgMenuFlag.c:
-	.text       start:0x800083D4 end:0x800084F0
-
 decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
