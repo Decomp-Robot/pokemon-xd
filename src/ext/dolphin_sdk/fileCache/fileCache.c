@@ -7,6 +7,7 @@ u8 DOCacheInitialized;
 static u8 AllocCacheNode(DSCacheNodePtr* cacheNode, char* name);
 static void FreeCacheNode(DSCacheNodePtr* cacheNode);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 DSCacheNodePtr DSAddCacheNode(DSCachePtr cache, char* name, Ptr data, Ptr OSFreeFunc) {
     DSCacheNodePtr cacheNode;
 
@@ -22,6 +23,7 @@ DSCacheNodePtr DSAddCacheNode(DSCachePtr cache, char* name, Ptr data, Ptr OSFree
     return cacheNode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u8 AllocCacheNode(DSCacheNodePtr* cacheNode, char* name) {
     if (*cacheNode) {
         FreeCacheNode(cacheNode);
@@ -40,6 +42,7 @@ static u8 AllocCacheNode(DSCacheNodePtr* cacheNode, char* name) {
     return TRUE;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSEmptyCache(DSCachePtr cache) {
     DSCacheNodePtr cursor;
     DSCacheNodePtr cacheNode;
@@ -53,6 +56,7 @@ void DSEmptyCache(DSCachePtr cache) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static DSCacheNodePtr FindCacheNode(DSCachePtr cache, char* name, Ptr data) {
     DSCacheNodePtr cacheNode;
 
@@ -75,6 +79,7 @@ static DSCacheNodePtr FindCacheNode(DSCachePtr cache, char* name, Ptr data) {
     return NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 Ptr DSGetCacheObj(DSCachePtr cache, char* name) {
     DSCacheNodePtr cacheNode;
 
@@ -86,6 +91,7 @@ Ptr DSGetCacheObj(DSCachePtr cache, char* name) {
     return NULL;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void FreeCacheNode(DSCacheNodePtr* cacheNode) {
     if (*cacheNode) {
         if ((*cacheNode)->Free) {
@@ -97,6 +103,7 @@ static void FreeCacheNode(DSCacheNodePtr* cacheNode) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSInitCache(DSCachePtr cache) {
     DSCacheNode cacheNode;
 
@@ -104,6 +111,7 @@ void DSInitCache(DSCachePtr cache) {
     DSInitList(&cache->CacheNodeList, (Ptr)&cacheNode, &cacheNode.Link);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSPurgeCache(DSCachePtr cache) {
     DSCacheNodePtr cursor;
     DSCacheNodePtr cacheNode;
@@ -119,6 +127,7 @@ void DSPurgeCache(DSCachePtr cache) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSReleaseCacheObj(DSCachePtr cache, Ptr data) {
     DSCacheNodePtr cacheNode;
 
@@ -135,10 +144,12 @@ void DSReleaseCacheObj(DSCachePtr cache, Ptr data) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DSSetCachePurgeFlag(DSCachePtr cache, u8 purgeFlag) {
     cache->PurgeFlag = purgeFlag;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void CSHInitDisplayCache(void) {
     DSInitCache(&DODisplayCache);
     DOCacheInitialized = TRUE;
