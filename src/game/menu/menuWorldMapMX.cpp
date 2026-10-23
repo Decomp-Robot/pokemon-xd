@@ -20,6 +20,7 @@
 #include <GSmath.h>
 #include <WorldMap.h>
 #include <time.h>
+#include <roomData.h>
 
 extern u8 worldMapMenuOpen;
 
@@ -58,7 +59,6 @@ extern "C" u8 menuScriptGetOpenWorldMapFlag();
 extern "C" void heroMovePoolCounter(long a, long b);
 
 extern "C" void GSthreadSwitch();
-extern "C" unsigned long roomDataGetFsysGidForLanguage(void* data);
 
 extern "C" void GSgfxVideoSetLockFrameRate(long rate);
 
@@ -796,7 +796,7 @@ void WorldMap::MainSub()
 void WorldMap::PreRead(long index)
 {
     WorldMapMapData* data = SearchData(_cursor_index[index]);
-    void* mapData;
+    RoomData* mapData;
 
     if (mModelWork->mScriptFlag != 0) {
         mapData = floorDataBiosGetPtr(mModelWork->mFloorID);

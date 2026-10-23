@@ -1,6 +1,7 @@
 #ifndef PE_BANK_DATA_H
 #define PE_BANK_DATA_H
 #include <peParticle.h>
+#include <peShape.h>
 #include <GSgfxLight.h>
 #include <HSDScene.h>
 
@@ -47,31 +48,9 @@ struct _peParticleStrip {
     };
 };
 
-struct _peLight {
-    u32 mFlags;
-    u8 mLightParameters[0x30];
-    peSpline *mPositionSplines[3];
-    peSpline *mDirectionSplines[3];
-    struct peColorSpline *mColorSpline;
-    peSpline *mAlphaSpline;
-    u8 mAttenuationParameters[0x18];
-    GSgfxColAu8 mColor;
-    f32 mShininess;
-    union {
-        s32 mResourceID;
-        void *mResource;
-    };
-    GSgfxLight *mDiffuseLight;
-    GSgfxLight *mSpecularLight;
-};
-
 enum peModelFlags {
     PE_MODEL_LOOP = 0x04,
     PE_MODEL_SHAPE_RESOURCE = 0x40,
-};
-enum peLightFlags {
-    PE_LIGHT_DIFFUSE = 0x200,
-    PE_LIGHT_SPECULAR = 0x400,
 };
 enum peStripFlags {
     PE_STRIP_TEXTURE_LIST = 0x400,

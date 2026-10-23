@@ -21,4 +21,8 @@ public:
     void checkWithBackupSet();
 };
 
+extern "C" {
+void reliveHallInfomationPokemonDP0(Pokemon *pokemon);
+}
+
 #endif

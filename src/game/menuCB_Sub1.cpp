@@ -1,4 +1,8 @@
 #include <GSmsg.h>
+#include <GSfsys.h>
+#include <GSres.h>
+#include <GSsnd.h>
+#include <fade.h>
 #include <menu.h>
 #include <itemData.h>
 #include <menuCB_Sub1.h>
@@ -28,6 +32,7 @@
 #include <msgctrl.h>
 #include <menuPokemonMessages.h>
 #include <menuCBCommon.h>
+#include <menuPokemonStatus.h>
 #include <menuTop.h>
 #include <pokecolo.h>
 #include <pause.h>
@@ -118,12 +123,6 @@ void *memcpy(void *dst, const void *src, u32 size);
 double fmod(double x, double y);
 
 s32 pokecoloGetCountryCode(void);
-void GSfsysReadWait(s32 group);
-void GSfsysFree(s32 group);
-void GSresFreeGroup(s32 group);
-void fadeSet(s32 kind, f32 value);
-void GSsndPlay(s32 id, s32 a, s32 b);
-void GSsndStop(s32 id, s32 a, s32 b);
 s32 menuOpen(s32 menuID, s32 arg);
 void menuCB_MenuDispCheckONorOFF(tagWINDOW_WORK *window, bool on);
 struct tagWINDOW_KEY *windowGetKeyInfo(void);
@@ -1306,7 +1305,6 @@ u16 *pokemon_GetNickname(Pokemon *pokemon);
 FightRuleData *menuCBBios_CurrentRule(void);
 u8 menuCBPokemonGetDataId(s32 port, s32 slot);
 s32 menuCBBattleStartGetStatus(void);
-void menuPokemonStatusOpenFromPokemonChange(Pokemon *pokemon, s32 a, s32 b);
 u32 menuCBBios_ParticipationPokemonMax(void);
 u16 toolentryTaisenGetPokemonNum(s32 port);
 s32 toolentryTaisengetEtnryPokemonOrderNum(s32 port);

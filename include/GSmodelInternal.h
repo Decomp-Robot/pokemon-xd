@@ -127,11 +127,11 @@ static inline void modelSetTextureAnimType(_GSmodel *model, s32 type)
     switch (model->mTexAnim.mType) {
     case MODEL_ANIM_PLAY_ONCE:
         HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK,
-                        (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
+                        (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
         break;
     case MODEL_ANIM_PLAY_LOOP:
         HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK,
-                        (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
+                        (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
         break;
     }
 }
@@ -203,7 +203,7 @@ static inline void modelPausePartAnimations(_GSmodel *model, u8 paused)
 static inline _HSD_AObj *modelGetAnimationObject(_HSD_JObj *joint, unsigned long animationMask)
 {
     _HSD_AObj *animation = NULL;
-    HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, animationMask, (void *)_modelGetAObjFunc,
+    HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, animationMask, (void (*)())_modelGetAObjFunc,
         HSD_ANIM_ARG_POINTER, &animation);
     return animation;
 }
@@ -221,7 +221,7 @@ static inline void modelSetTextureAnimationIndex(_GSmodel *model, unsigned long 
                 if ((model->mFlags & MODEL_FLAG_ROOT_ANIM_REMOVED) && joint->mAObj)
                 HSD_JObjRemoveAnim(joint);
                 model->mTexAnim.mEndFrame = 0.0f;
-                HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void *)_modelGetEndFrame,
+                HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void (*)())_modelGetEndFrame,
                     HSD_ANIM_ARG_POINTER, &model->mTexAnim.mEndFrame);
                 model->mTexAnim.mAnimation = modelGetAnimationObject(joint, MODEL_ANIM_TEXTURE_AOBJ);
             }
@@ -263,14 +263,14 @@ static inline void modelSetJointAnimationPolicy(_GSmodel *model, _HSD_JObj *join
     }
     switch (model->mAnim.mType) {
     case MODEL_ANIM_PLAY_ONCE:
-        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
+        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
         if (model->mFlags & MODEL_FLAG_BLEND_ACTIVE)
-            HSD_ForeachAnim(blendJoint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
+            HSD_ForeachAnim(blendJoint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
         break;
     case MODEL_ANIM_PLAY_LOOP:
-        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
+        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
         if (model->mFlags & MODEL_FLAG_BLEND_ACTIVE)
-            HSD_ForeachAnim(blendJoint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
+            HSD_ForeachAnim(blendJoint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
         break;
     }
     if (model->mFlags & MODEL_FLAG_PART_ANIM_MIX) {
@@ -286,10 +286,10 @@ static inline void modelSetMaterialAnimationType(_GSmodel *model, s32 type)
     model->mTexAnim.mType = type;
     switch (model->mTexAnim.mType) {
     case MODEL_ANIM_PLAY_ONCE:
-        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
+        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 0);
         break;
     case MODEL_ANIM_PLAY_LOOP:
-        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void *)_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
+        HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK, (void (*)())_modelSetLoopFlag, HSD_ANIM_ARG_UNSIGNED, 1);
         break;
     }
 }

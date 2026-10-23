@@ -20,8 +20,8 @@ enum {
 
 #ifdef __cplusplus
 long _menuCB_NotDarkWaza(long wazaID);
-void _menuCB_ErrorTAMAGOCheck();
-void _menuCBGCDelPokemon();
+void _menuCB_ErrorTAMAGOCheck(void);
+void _menuCBGCDelPokemon(void);
 extern "C" {
 void menuCB2DItemMsgDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 u32 menuCBRegionMsgID(u32 msgID);

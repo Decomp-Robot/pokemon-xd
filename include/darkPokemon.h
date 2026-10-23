@@ -4,14 +4,21 @@
 #include <types.h>
 
 #ifdef __cplusplus
-enum darkPokemonStatus { DARK_POKEMON_SNATCHED = 3 };
+enum darkPokemonStatus {
+    DARK_POKEMON_STATUS_NONE = 0,
+    DARK_POKEMON_STATUS_FIGHT = 1,
+    DARK_POKEMON_SNATCHED = 3,
+    DARK_POKEMON_STATUS_RELIVED = 4
+};
 class DarkPokemon {
 public:
     u16 getPokemonID() const;
     void setSnatchIndex(u8 index);
     u8 isWazaNew(u8 index) const;
     void setWazaNew(u8 index, bool value);
+    darkPokemonStatus getStatus() const;
     void setStatus(darkPokemonStatus status);
+    void setUpdate(bool update);
 private:
     u8 reserved[0x48];
 };

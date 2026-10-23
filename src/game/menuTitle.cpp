@@ -17,6 +17,7 @@
 #include <winSprite.h>
 #include <WorldMap.h>
 #include <fightEncountBios.h>
+#include <roomData.h>
 #include "GSmodel.h"
 
 #pragma force_active on
@@ -116,7 +117,6 @@ void dbgMenuSetOpenFlag(s32 flag);
 u8 GSsndIsPlayingStream(u32 streamID);
 f32 timeGetLastFrameSec(void);
 double sin(double x);
-u32 roomDataGetFsysGidForLanguage(void *mapData);
 void fightRegWzxLoadAll(s32 id);
 void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);

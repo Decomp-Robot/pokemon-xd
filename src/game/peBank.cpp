@@ -19,8 +19,6 @@ f32 HSD_Randf();
 }
 void GSboundDraw(GSbound *bound, GSgfxLayer *layer);
 
-extern "C" GStexture *GStextureLoad(void *data);
-extern "C" void GStextureFree(GStexture *texture);
 
 enum peBankStorage {
     PE_BANK_RENDER_PASS_SHIFT = 16,
@@ -350,7 +348,7 @@ void _peFreeInternalBankData(_particleData *data) {
     }
     default:
         return;
-    case PE_DATA_LIGHT:
+    case PE_DATA_SHAPE:
         goto releaseLights;
     }
 
@@ -359,18 +357,18 @@ releaseModelJoint:
     return;
 releaseLights:
     {
-        _peLight *light = (_peLight *)contents;
-        if (light->mDiffuseLight) {
+        _peShape *shape = (_peShape *)contents;
+        if (shape->diffuseLight) {
             g_particle_debug_stats.containerBytes -= sizeof(GSgfxLight);
             g_particle_debug_stats.totalBytes -= sizeof(GSgfxLight);
-            delete light->mDiffuseLight;
-            light->mDiffuseLight = 0;
+            delete shape->diffuseLight;
+            shape->diffuseLight = 0;
         }
-        if (light->mSpecularLight) {
+        if (shape->specularLight) {
             g_particle_debug_stats.containerBytes -= sizeof(GSgfxLight);
             g_particle_debug_stats.totalBytes -= sizeof(GSgfxLight);
-            delete light->mSpecularLight;
-            light->mSpecularLight = 0;
+            delete shape->specularLight;
+            shape->specularLight = 0;
         }
     }
 
@@ -629,45 +627,45 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             model->mRotationSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mRotationSplines[2], base);
             break;
         }
-        case PE_DATA_LIGHT: {
-            _peLight *light = (_peLight *)contents;
+        case PE_DATA_SHAPE: {
+            _peShape *shape = (_peShape *)contents;
             resourceCount = file->mResourceCount;
             _gpdResourceItem *resource = resources;
             while (resourceCount) {
-                if (light->mResourceID == resource->mResourceID) {
-                    light->mResource = (resource->mLoadFlags & GPD_RESOURCE_LOADED) == GPD_RESOURCE_LOADED ?
-                        resource->mData : 0;
+                if (shape->resourceID == resource->mResourceID) {
+                    shape->texture = (resource->mLoadFlags & GPD_RESOURCE_LOADED) == GPD_RESOURCE_LOADED ?
+                        resource->mTexture : 0;
                     break;
                 }
                 ++resource;
                 --resourceCount;
             }
-            if (!resourceCount) light->mResource = 0;
-            light->mColorSpline = (peColorSpline *)PE_BANK_RELOCATE_ADDRESS(light->mColorSpline, base);
-            light->mAlphaSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mAlphaSpline, base);
-            light->mPositionSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mPositionSplines[0], base);
-            light->mPositionSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mPositionSplines[1], base);
-            light->mPositionSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mPositionSplines[2], base);
-            light->mDirectionSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mDirectionSplines[0], base);
-            light->mDirectionSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mDirectionSplines[1], base);
-            light->mDirectionSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(light->mDirectionSplines[2], base);
-            if (light->mFlags & PE_LIGHT_DIFFUSE) {
+            if (!resourceCount) shape->texture = 0;
+            shape->colorSpline = (peColorSpline *)PE_BANK_RELOCATE_ADDRESS(shape->colorSpline, base);
+            shape->alphaSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->alphaSpline, base);
+            shape->rotationSpline[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->rotationSpline[0], base);
+            shape->rotationSpline[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->rotationSpline[1], base);
+            shape->rotationSpline[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->rotationSpline[2], base);
+            shape->scaleSpline[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->scaleSpline[0], base);
+            shape->scaleSpline[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->scaleSpline[1], base);
+            shape->scaleSpline[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(shape->scaleSpline[2], base);
+            if (shape->flags & PE_SHAPE_LIGHTING) {
                 GSgfxLight *diffuse = new GSgfxLight;
                 if (diffuse) {
                     g_particle_debug_stats.containerBytes += sizeof(GSgfxLight);
                     g_particle_debug_stats.totalBytes += sizeof(GSgfxLight);
-                    diffuse->MakeDiff(&light->mColor, &zeroVector, false);
-                    light->mDiffuseLight = diffuse;
-                    if (light->mFlags & PE_LIGHT_SPECULAR) {
+                    diffuse->MakeDiff(&shape->lightColor, &zeroVector, false);
+                    shape->diffuseLight = diffuse;
+                    if (shape->flags & PE_SHAPE_SPECULAR) {
                         GSgfxLight *specular = new GSgfxLight;
                         if (specular) {
                             g_particle_debug_stats.containerBytes += sizeof(GSgfxLight);
                             g_particle_debug_stats.totalBytes += sizeof(GSgfxLight);
-                            specular->MakeSpec(&light->mColor, &zAxisVector, light->mShininess, 0);
-                            light->mSpecularLight = specular;
-                        } else light->mFlags &= ~PE_LIGHT_SPECULAR;
+                            specular->MakeSpec(&shape->lightColor, &zAxisVector, shape->shininess, 0);
+                            shape->specularLight = specular;
+                        } else shape->flags &= ~PE_SHAPE_SPECULAR;
                     }
-                } else light->mFlags &= ~(PE_LIGHT_DIFFUSE | PE_LIGHT_SPECULAR);
+                } else shape->flags &= ~(PE_SHAPE_LIGHTING | PE_SHAPE_SPECULAR);
             }
             break;
         }

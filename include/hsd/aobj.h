@@ -30,6 +30,8 @@ void HSD_AObjSetRate(_HSD_AObj *aobj, f32 rate);
 void HSD_AObjSetFlags(_HSD_AObj *animation, u32 flags);
 void HSD_AObjClearFlags(_HSD_AObj *animation, u32 flags);
 u32 HSD_AObjGetFlags(_HSD_AObj *animation);
+void HSD_ForeachAnim(void *object, u32 objectType, u32 animationMask,
+                     void (*callback)(), u32 argumentType, ...);
 
 #line 170 "aobj.h"
 inline f32 HSD_AObjGetEndFrame(_HSD_AObj *aobj)

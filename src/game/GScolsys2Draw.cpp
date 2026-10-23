@@ -1,4 +1,5 @@
 #include <GScolsys2Internal.h>
+#include <GSinput.h>
 extern "C" {
 #include <dolphin/gx/GXEnum.h>
 }
@@ -10,7 +11,6 @@ void* memset(void* dst, int value, unsigned int size);
 void GSgfxDLBegin(void* list, GSgfxVF* vf, s32 size, s32 offset);
 void GSgfxDLEnd(void);
 void floorMapSetDisp(s32 flag);
-s32 GSinputButtonsPressed(s32 pad);
 void GSgfxDLEndSurface(void);
 }
 
@@ -200,13 +200,13 @@ extern "C" void GScolsys2Draw(void)
     if (file == 0) {
         return;
     }
-    if ((GSinputButtonsPressed(1) & GSCOLSYS2_DRAW_BUTTON_Z) != 0) {
+    if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSCOLSYS2_DRAW_BUTTON_Z) != 0) {
         floorMapSetDisp(0);
-    } else if ((GSinputButtonsPressed(1) & GSCOLSYS2_DRAW_BUTTON_X) != 0) {
+    } else if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSCOLSYS2_DRAW_BUTTON_X) != 0) {
         floorMapSetDisp(1);
     }
     GSgfxLayerSetActive((GSgfxLayerID)2);
-    GScameraLoadActiveCameraMatrix(2);
+    GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_FRONT);
     GSgfxSelectVertexFormat(gsColSysState.mVf);
     GSgfxBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA);

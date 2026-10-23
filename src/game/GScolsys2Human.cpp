@@ -71,7 +71,7 @@ extern "C" void GScolsys2HumanDispColision(void)
         return;
     }
     GSgfxLayerSetActive((GSgfxLayerID)2);
-    GScameraLoadActiveCameraMatrix(2);
+    GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_NONE);
     GSgfxSelectVertexFormat(GSgfxVFBuildTemp(GX_POS_XYZ, GX_F32, GX_FALSE, GX_NRM_XYZ,
                                            1, GX_RGBA8, 0, GX_TEX_S, GX_U8));

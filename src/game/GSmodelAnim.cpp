@@ -326,10 +326,10 @@ extern "C" void GSmodelSetBlendAnimIndex(_GSmodel *model, unsigned long fromInde
         HSD_JObjAnimAll(model->mJObj);
         HSD_JObjAnimAll(model->mBlendJObj);
         model->mAnim.mEndFrame = 0.0f;
-        HSD_ForeachAnim(model->mJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelGetEndFrame,
+        HSD_ForeachAnim(model->mJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
             HSD_ANIM_ARG_POINTER, &model->mAnim.mEndFrame);
         model->mBlendAnim.mEndFrame = 0.0f;
-        HSD_ForeachAnim(model->mBlendJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelGetEndFrame,
+        HSD_ForeachAnim(model->mBlendJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
             HSD_ANIM_ARG_POINTER, &model->mBlendAnim.mEndFrame);
         model->mAnim.mAnimation = modelGetAnimationObject(model->mJObj, MODEL_ANIM_JOINT_AOBJ);
         model->mBlendAnim.mAnimation = modelGetAnimationObject(model->mBlendJObj, MODEL_ANIM_JOINT_AOBJ);
@@ -493,7 +493,7 @@ extern "C" void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index)
             if ((model->mFlags & MODEL_FLAG_ROOT_ANIM_REMOVED) && joint->mAObj)
             HSD_JObjRemoveAnim(joint);
             model->mAnim.mEndFrame = 0.0f;
-            HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void *)_modelGetEndFrame,
+            HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
                 HSD_ANIM_ARG_POINTER, &model->mAnim.mEndFrame);
             model->mAnim.mAnimation = modelGetAnimationObject(joint, MODEL_ANIM_JOINT_AOBJ);
             if (model->mFlags & MODEL_FLAG_PART_ANIM_MIX) {
@@ -906,10 +906,10 @@ extern "C" void GSmodelUpdateAnimation(_GSmodel *model)
         if ((model->mFlags & MODEL_FLAG_ANIM_PRESENT) &&
             model->mAnim.mAnimation != NULL && model->mBlendAnim.mAnimation != NULL) {
             HSD_ForeachAnim(model->mJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void *)HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
                             modelAnimationFrameStep(model, &model->mAnim));
             HSD_ForeachAnim(model->mBlendJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void *)HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
                             modelAnimationFrameStep(model, &model->mBlendAnim));
         }
         HSD_JObjAnimAll(model->mJObj);
@@ -934,12 +934,12 @@ extern "C" void GSmodelUpdateAnimation(_GSmodel *model)
         }
         if ((model->mFlags & MODEL_FLAG_ANIM_PRESENT) && model->mAnim.mAnimation != NULL) {
             HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void *)HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
                             modelAnimationFrameStep(model, &model->mAnim));
         }
         if ((model->mFlags & MODEL_FLAG_TEXANIM_PRESENT) && model->mTexAnim.mAnimation != NULL) {
             HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK,
-                            (void *)HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
                             modelAnimationFrameStep(model, &model->mTexAnim));
         }
         HSD_JObjAnimAll(joint);

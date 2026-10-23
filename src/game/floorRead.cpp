@@ -4,6 +4,7 @@
 
 #include <types.h>
 #include <GSres.h>
+#include <GStexture.h>
 #include <GSfsys.h>
 #include <GSlight.h>
 #include <floorPostCall.h>
@@ -32,7 +33,6 @@ struct _HSD_SceneDesc {
 // Camera and ant helpers of the stage modules the reader hands resources to;
 // both are C++ functions of the game.
 void _registerCamera(unsigned long group, unsigned long res, _HSD_SceneDesc *scene);
-void *antGetGStexture(void *resource);
 bool _unloadLight(void *light, unsigned long group, unsigned long res);
 
 extern "C" {
@@ -54,8 +54,6 @@ extern "C" u32 floorReadMakeLightResID(u32 res);
 // texture of its ANT Pokemon and a GSW file.
 extern "C" void deckRegister(u32 group, u32 res);
 extern "C" void deckUnRegister(u32 group, u32 res);
-extern "C" void GStextureLoad(void *texture);
-extern "C" void GStextureFree(void *texture);
 extern "C" void FlashSystemInit(u32 res, void *resource);
 
 // The stage archive the fight runs in.

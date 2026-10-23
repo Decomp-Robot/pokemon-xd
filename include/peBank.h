@@ -17,7 +17,7 @@ enum ParticleDataKind {
     PE_DATA_PARTICLE = 1,
     PE_DATA_MODEL = 2,
     PE_DATA_DISTORTION = 3,
-    PE_DATA_LIGHT = 4,
+    PE_DATA_SHAPE = 4,
     PE_DATA_POSITION = 5,
     PE_DATA_PARTICLE_STRIP = 6,
 };

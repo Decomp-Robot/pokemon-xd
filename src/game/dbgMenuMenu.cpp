@@ -5,10 +5,11 @@
 #include <gamedata.h>
 #include <hero.h>
 #include <WorldMap.h>
-#include <gsFlag.h>
+#include <GSflag.h>
 #include <types.h>
 #include <winSprite.h>
 #include <menuSub.h>
+#include <menuOrre.h>
 
 // Debug menu entries for the world map, the Pokespot ("esaba") and the Under
 // ("undertaker"), and the cursor hooks of the windows those entries open.
@@ -88,7 +89,6 @@ void menuScriptEevee(void);
 void menuMoveDemo(s32 demo);
 void mewWazaSequence(void);
 void menuOrreColosseum(u16 encountID);
-void menuOrreColosseumGetResult(void);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon

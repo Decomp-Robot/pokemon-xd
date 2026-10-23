@@ -13,7 +13,7 @@
 #include <PokemonData.h>
 #include <GSmsg.h>
 #include <itemData.h>
-#include <gsFlag.h>
+#include <GSflag.h>
 #include <itemUse2Pokemon.h>
 #include <fightFloor.h>
 #include <fightEncountData.h>
@@ -40,7 +40,7 @@
 #include <itemParam.h>
 #include <GSinput.h>
 #include <menuScript.h>
-#include <reliveHall.h>
+#include <relivehall.h>
 #include <underTakerBios.h>
 #include <place.h>
 

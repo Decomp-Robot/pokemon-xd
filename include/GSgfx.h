@@ -3,6 +3,7 @@
 
 #include <GSmathTypes.h>
 #include <types.h>
+#include <GSgfxC.h>
 #include <GSvec.h>
 #include <GStexture.h>
 
@@ -723,10 +724,6 @@ GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
                          s32 colorCount, s32 colorType,
                          s32 texCoordCount, s32 texCoordComponents,
                          s32 texCoordType);
-void GSgfxZCompare(s32 enable, s32 comparison);
-void GSgfxPixelMode(s32 colorUpdate, s32 alphaUpdate, s32 depthUpdate);
-void GSgfxCullMode(s32 mode);
-void GSgfxBlendMode(s32 mode, s32 sourceFactor, s32 destinationFactor);
 }
 
 

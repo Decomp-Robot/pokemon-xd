@@ -8,6 +8,7 @@
 #include <menuItemBios.h>
 #include <menuModel.h>
 #include <menuPokemonStatus.h>
+#include <menuPokemon.h>
 #include <waza.h>
 #include <winSprite.h>
 #include <menu.h>
@@ -23,7 +24,7 @@
 #include <menuCBBios.h>
 #include <msgctrl.h>
 #include <GSthread.h>
-#include <gsFlag.h>
+#include <GSflag.h>
 #include <floor.h>
 #include <floorManager.h>
 #include <menuSub.h>
@@ -40,7 +41,6 @@ u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
 u8 fightKind_CheckFightKind(s32 kind);
 s32 getRibbonCount(void);
-u16 menuPokemonGetJoutaiSpriteID(Pokemon *pokemon, u8 largeIcon);
 u32 getRibbonMsgID(s32 ribbon);
 u8 exribbonGetNo(s32 ribbon);
 }

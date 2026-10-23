@@ -9,7 +9,6 @@ typedef struct RoomData RoomData;
 extern "C" {
 #endif
 
-RoomData *roomIDGetMapData(s32 roomID);
 u32 roomDataGetFsysGidForLanguage(RoomData *room);
 
 #ifdef __cplusplus

@@ -8,6 +8,7 @@ enum GStextureMipFilterMode { GS_TEXTURE_MIP_FILTER_NONE = 0 };
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct GStexture *GStextureLoad(void *data);
 void GStextureFree(struct GStexture *texture);
 void GStextureSetWrap(struct GStexture *texture, s32 wrapU, s32 wrapV);
 void GStextureSetFilter(struct GStexture *texture, s32 minFilter, s32 magFilter, s32 mipFilter);

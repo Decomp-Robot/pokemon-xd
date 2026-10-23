@@ -1,4 +1,5 @@
 #include <menu.h>
+#include <GSgfxC.h>
 #include <GSmsg.h>
 #include <types.h>
 #include <winSprite.h>
@@ -17,7 +18,6 @@ void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
 u8 menuIsOpen(long menuID);
-void GSgfxZCompare(u8 mode, long value);
 
 long GSlogGetLineCount(void);
 const char *GSlogGetLine(long line);

@@ -64,7 +64,10 @@ struct _peShape {
     GScolor ambientColor;
     GSgfxColAu8 lightColor;
     f32 shininess;
-    void *texture;
+    union {
+        s32 resourceID;
+        GStexture *texture;
+    };
     GSgfxLight *diffuseLight;
     GSgfxLight *specularLight;
 };
@@ -106,11 +109,5 @@ public:
     GSvec rotationSpeed;
     GScolor color;
 };
-
-struct GSbound;
-extern GSbound *g_currentBound;
-extern GSmtx *g_CameraMatrix;
-extern GSgfxLayer *g_current_layer;
-extern GSgfxLayerPass g_render_pass;
 
 #endif

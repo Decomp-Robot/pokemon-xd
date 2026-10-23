@@ -68,8 +68,6 @@ struct _HSD_AnimJoint {
 };
 
 extern "C" {
-void HSD_ForeachAnim(void *object, u32 objectType, u32 animationMask,
-                     void *callback, u32 argumentType, ...);
 void HSD_JObjAddAnim(_HSD_JObj *joint, _HSD_AnimJoint *jointAnimation,
                     _HSD_MatAnimJoint *materialAnimation,
                     _HSD_ShapeAnimJoint *shapeAnimation);

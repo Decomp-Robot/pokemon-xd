@@ -22,7 +22,7 @@
 #include <PokemonData.h>
 #include <hero.h>
 #include <heroBios.h>
-#include <gsFlag.h>
+#include <GSflag.h>
 #include <saveData.h>
 #include <heroItem.h>
 #include <itemData.h>

@@ -12,7 +12,6 @@ u32 fieldGetCurrentRoomID(void);
 u32 floorGetPreviousMap(void);
 u32 floorGetCurrentMap(void);
 void floorUnlinkWithSE(u32 roomID, long soundEffect);
-void* roomIDGetMapData(u32 roomID);
 u32 floorFieldCameraEditorGetFloorID(void);
 void floorInitFieldCameraEditor(u32 roomID);
 
