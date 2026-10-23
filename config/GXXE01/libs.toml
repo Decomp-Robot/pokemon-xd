@@ -749,3 +749,14 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/vi/initphilips.c"
 completed = true
+
+[[lib]]
+name = "ax"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/ax", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/ax/AX.c"
+completed = true
