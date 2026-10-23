@@ -226,6 +226,14 @@ ext/dolphin_sdk/dvd/dvd.c:
 	.sdata      start:0x804E8158 end:0x804E8170
 	.sbss       start:0x804EABE8 end:0x804EAC38
 
+ext/dolphin_sdk/dvd/dvdqueue.c:
+	.text       start:0x800B7D94 end:0x800B7DCC
+	.text       start:0x800B7DCC end:0x800B7E34
+	.text       start:0x800B7E34 end:0x800B7ED4
+	.text       start:0x800B7ED4 end:0x800B7F2C
+	.text       start:0x800B7F2C end:0x800B7F8C
+	.bss        start:0x8043E618 end:0x8043E638
+
 ext/dolphin_sdk/dvd/dvderror.c:
 	.text       start:0x800B7F8C end:0x800B80A8
 	.text       start:0x800B80A8 end:0x800B8124

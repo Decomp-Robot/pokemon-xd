@@ -472,3 +472,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/dvd/dvdlow.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/dvd/dvdqueue.c"
+completed = true
