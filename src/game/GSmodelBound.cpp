@@ -1,8 +1,5 @@
 #include <GSmodelInternal.h>
 
-/* Position-matrix selection persists between parser invocations. */
-extern void *const gsBoundParserCallbacks[6];
-
 struct GSmodelBoundCtx {
     _GSmodel *mModel;
     GSmtx *mPositionMatrix;
@@ -55,6 +52,26 @@ extern "C" void GSmodelRecalculateBound(_GSmodel *model)
     model->mScale.z = scaleZ;
 }
 
+/* Display-list parse callback list: slot 0 begins a surface, slot 2 reports
+ * each parsed vertex, and the remaining slots bracket each vertex and end the
+ * surface. */
+struct GSgfxParseCallbackList {
+    GSgfxParseSurfaceCB mBeginSurface;
+    void (*mBeginVertex)(void *userContext);
+    GSgfxParseVertexCB mVertex;
+    void (*mEndVertex)(void *userContext);
+    void (*mEndSurface)(void *userContext);
+};
+
+/* Parser callbacks: slot 0 begins a surface and slot 2 reports each vertex. */
+static GSgfxParseCallbackList cblist = {
+    _modelBoundBeginSurface,
+    0,
+    _modelBoundVertex,
+    0,
+    0,
+};
+
 /* GSmodelParse callback: walks one primitive object display list so its
  * vertices contribute to the model bound. */
 void _modelBoundPObj(_HSD_PObj *pobj, GSmtx *referenceMatrix, GSmtx *positionMatrix,
@@ -66,7 +83,7 @@ void _modelBoundPObj(_HSD_PObj *pobj, GSmtx *referenceMatrix, GSmtx *positionMat
     ctx.mPositionMatrix = positionMatrix;
     ctx.mMatrixPalette = matrixPalette;
     GSgfxParseDisplayList(pobj->mVtxAttr, pobj->mDisplayList, pobj->mDisplayListBlocks << 5,
-                          gsBoundParserCallbacks, &ctx);
+                          &cblist, &ctx);
 }
 
 /* Accumulates position attributes using the selected position matrix. */
@@ -76,16 +93,17 @@ void _modelBoundVertex(unsigned long attributeFlags, void *attributeData, void *
     GSmtx *mtx;
     f32 *src = (f32 *)attributeData;
 
-    static s32 gsBoundPositionMatrixIndex = 0;
+    /* Position-matrix selection persists between parser invocations. */
+    static s32 mtxidx = 0;
     if (attributeFlags & GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX) {
-        gsBoundPositionMatrixIndex = ((u8 *)attributeData)[0] / GS_GFX_POSITION_MATRIX_ROWS;
+        mtxidx = ((u8 *)attributeData)[0] / GS_GFX_POSITION_MATRIX_ROWS;
     }
     if (!(attributeFlags & GS_GFX_PARSE_ATTRIBUTE_POSITION)) {
         return;
     }
     /* A matrix-index attribute selects the surface's matrix palette. */
     if (ctx->mAttributeMask & GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX) {
-        mtx = &ctx->mMatrixPalette[gsBoundPositionMatrixIndex];
+        mtx = &ctx->mMatrixPalette[mtxidx];
     } else {
         mtx = ctx->mPositionMatrix;
     }

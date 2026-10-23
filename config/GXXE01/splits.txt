@@ -1497,6 +1497,7 @@ game/GSmodelBlend.cpp:
 
 game/GSmodelBound.cpp:
 	.text       start:0x800F1BD0 end:0x800F1E74
+	.data       start:0x803D5040 end:0x803D5058
 	.sbss       start:0x804EAF08 end:0x804EAF10
 	.sdata2     start:0x804ED400 end:0x804ED408
 
