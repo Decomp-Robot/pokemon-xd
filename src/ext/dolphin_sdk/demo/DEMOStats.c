@@ -35,6 +35,7 @@ static u32 fiReq;
 static void DEMOWriteStats(u8 update);
 static void DEMOWriteStats(u8 update);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetStats(DemoStatData* stat, u32 nstats, DEMO_STAT_DISP disp) {
     if (stat == 0 || nstats == 0) {
         DemoStatEnable = FALSE;
@@ -48,6 +49,7 @@ void DEMOSetStats(DemoStatData* stat, u32 nstats, DEMO_STAT_DISP disp) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DEMOWriteStats(u8 update) {
     u32 cnt0;
     u32 cnt1;
@@ -168,6 +170,7 @@ static void DEMOWriteStats(u8 update) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOUpdateStats(u8 inc) {
     DEMOWriteStats(inc);
     if (inc) {
@@ -178,6 +181,7 @@ void DEMOUpdateStats(u8 inc) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPrintStats(void) {
     GXRenderModeObj* rmode;
     u32 i;
