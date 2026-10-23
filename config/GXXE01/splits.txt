@@ -540,9 +540,6 @@ ext/dolphin_sdk/dvd/dvdFatal.c:
 	.sbss       start:0x804EAC38 end:0x804EAC3C
 	.sdata2     start:0x804ECB68 end:0x804ECB70
 
-game/GSparticleModuleData.cpp:
-	.rodata     start:0x802F3590 end:0x802F3718
-
 ext/dolphin_sdk/dvd/fstload.c:
 	.text       start:0x800B8348 end:0x800B8420
 	.text       start:0x800B8420 end:0x800B8588
@@ -1182,7 +1179,40 @@ ext/dolphin_sdk/perf/perfdraw.c:
 	.text       start:0x800D14B0 end:0x800D20A0
 	.text       start:0x800D20A0 end:0x800D27F4
 	.text       start:0x800D27F4 end:0x800D3910
-	.text       start:0x800D3910 end:0x800D39C8
+	.text       start:0x800D3910 end:0x800D39D0
+	.data       start:0x803D4290 end:0x803D4320
+	.bss        start:0x8043F938 end:0x8043F9C8
+	.sdata      start:0x804E8258 end:0x804E82D0
+	.sbss       start:0x804EAE30 end:0x804EAE48
+	.sdata2     start:0x804ECCD0 end:0x804ECD1C
+
+TRK/mainloop.c:
+	.text       start:0x800D39D0 end:0x800D3AC8
+
+TRK/nubevent.c:
+	.text       start:0x800D3AC8 end:0x800D3CF0
+
+TRK/nubinit.c:
+	.text       start:0x800D3CF0 end:0x800D3E88
+	.rodata     start:0x802EC1D0 end:0x802EC1FC
+
+TRK/msg.c:
+	.text       start:0x800D3E88 end:0x800D3ECC
+	.rodata     start:0x802EC200 end:0x802EC228
+
+TRK/msgbuf.c:
+	.text       start:0x800D3ECC end:0x800D4708
+	.rodata     start:0x802EC228 end:0x802EC248
+
+TRK/serpoll.c:
+	.text       start:0x800D4708 end:0x800D49C0
+	.rodata     start:0x802EC248 end:0x802EC3D8
+
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
+
+TRK/usr_put.c:
+	.text       start:0x800D49C0 end:0x800D4A4C
 
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0

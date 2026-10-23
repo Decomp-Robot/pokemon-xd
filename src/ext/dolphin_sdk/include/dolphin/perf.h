@@ -9,6 +9,9 @@ extern "C" {
 
 typedef u8 PERFId;
 
+/* sample id reserved for automatic samples, which carry no PerfEvent */
+#define PERF_AUTO_SAMPLE_ID 0xFF
+
 typedef enum  {
     PERF_CPU_EVENT,
     PERF_CPU_GP_EVENT,
@@ -60,7 +63,7 @@ typedef void* (*PERFAllocator)(u32 size);
 typedef void (*PERFDeallocator)(void* block);
 typedef void (*PERFDrawCallback)(void);
 
-extern void (*GameDrawInit)();
+extern PERFDrawCallback GameDrawInit;
 
 u32 PERFInit(u32 numSamples, u32 numFramesHistory, u32 numTypes, PERFAllocator allocator, PERFDeallocator deallocator, PERFDrawCallback initDraw);
 void PERFEventStart(PERFId id);

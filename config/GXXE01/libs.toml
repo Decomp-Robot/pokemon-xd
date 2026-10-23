@@ -278,6 +278,44 @@ completed = true
 name = "decomp/TRKReset.c"
 completed = true
 
+# The MetroTRK nub (TRK_MINNOW_DOLPHIN.a) is built with its own code
+# generation, so its units carry the settings the library used.
+
+[[lib.object]]
+name = "TRK/mainloop.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/nubevent.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/nubinit.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/msg.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/msgbuf.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto,deferred', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/serpoll.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
+[[lib.object]]
+name = "TRK/usr_put.c"
+cflags = ['-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse', '-multibyte', '-i include', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdatathreshold 3']
+completed = true
+
 [[lib.object]]
 name = "game/menuPokemonCursor.cpp"
 completed = true
@@ -1531,7 +1569,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/perf/perfdraw.c"
-completed = false
+completed = true
 
 [[lib]]
 name = "hio"

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void __PERFDrawInit(void (*id)());
+void __PERFDrawInit(PERFDrawCallback id);
 
 #ifdef __cplusplus
 }

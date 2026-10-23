@@ -1,8 +1,8 @@
 #include <dolphin.h>
 #include <dolphin/perf.h>
-#include "fake_tgmath.h"
 
 #include "__perf.h"
+#include <libc/tgmath.h>
 
 __declspec(weak) f32 HEIGHT(u32 a, f32 f);
 __declspec(weak) f32 COORD(u32 a);
@@ -27,7 +27,6 @@ static u32 DrawNumFrames = 3;
 static f32 DrawFrameW = 205.33333f;
 static GXColor DrawFrameBGColor = { 0xC8, 0xC8, 0xC8, 0xC8 };
 static GXColor DrawFrameColor = { 0x19, 0x19, 0x19, 0xC8 };
-static GXColor DrawCPUColor = { 0xFF, 0x19, 0x00, 0xC8 };
 static GXColor DrawFullColor = { 0xFF, 0x00, 0xFF, 0xC8 };
 static GXColor DrawGPColor = { 0x00, 0x64, 0xFF, 0xC8 };
 static GXColor DrawCPUCacheColor = { 0x00, 0x96, 0x00, 0xC8 };
@@ -47,16 +46,15 @@ static GXColor DrawPEColor = { 0x00, 0x00, 0xC8, 0xC8 };
 static GXColor DrawRFColor = { 0x00, 0xFF, 0xFF, 0xC8 };
 static GXColor DrawFIColor = { 0xC8, 0x64, 0x64, 0xC8 };
 static GXColor DrawGPXFIColor = { 0x00, 0xC8, 0x00, 0xAA };
-static GXColor DrawGPXFOColor = { 0x00, 0x00, 0xC8, 0xAA };
 static GXColor DrawGPRASIDLEColor = { 0xC8, 0xC8, 0x00, 0xAA };
 
+static BOOL bAutoScale = TRUE;
 static BOOL bDrawBWBar = TRUE;
 static BOOL bDrawCPUBar = TRUE;
 static BOOL bDrawXFBars = TRUE;
 static BOOL bDrawRASBar = TRUE;
-static BOOL bAutoScale = TRUE;
-
 static BOOL bDrawBWBarKey;
+
 static f32 lastx;
 
 static f32 FramePts[28] = {
@@ -104,7 +102,7 @@ static f32 GPPts[4] = {
     0.0f,
 };
 
-void (*GameDrawInit)();
+PERFDrawCallback GameDrawInit;
 Mtx mID;
 
 #ifndef DEBUG
@@ -117,7 +115,7 @@ inline f32 COORD(u32 a) {
 }
 #endif
 
-void __PERFDrawInit(void (*id)()) {
+void __PERFDrawInit(PERFDrawCallback id) {
     MTXIdentity(mID);
     GameDrawInit = id;
     DrawFrameMax = (OS_CORE_CLOCK / 60) * 3;
@@ -164,7 +162,7 @@ void PERFPreDraw(void) {
     GXSetNumTevStages(1);
     GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA6, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
 }
 
 static void DrawBWBar(PerfSample* s) {
@@ -310,7 +308,7 @@ __declspec(weak) f32 COORD(u32 a) {
 
 static void DrawKey(void) {
     u32 delta;
-    u32 foo[2];
+    u32 bwBarRange[2];
     f32 bwscale;
     f32 lastY;
     f32 x1;
@@ -321,73 +319,73 @@ static void DrawKey(void) {
     x2 = 616.0f;
     lastY = 7.0f + DrawFrameH;
     bwscale = 1.0f;
-    foo[0] = 0;
-    foo[1] = MaxBusTransactions / 10;
+    bwBarRange[0] = 0;
+    bwBarRange[1] = MaxBusTransactions / 10;
 
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) {
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPColor);
         lastY += height; 
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) {
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawTCColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPURDColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPUWRColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawDSPColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawIOColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawVIColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawPEColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawRFColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (bwBarRange[1] - bwBarRange[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawFIColor);
@@ -422,7 +420,7 @@ void PERFDumpScreen(void) {
         GXSetChanMatColor(GX_COLOR0A0, DrawFrameColor);
         GXSetLineWidth(0xCU, GX_TO_ZERO);
 
-        // different draw shape? Consider other forms of this draw macro that may work. If anything will work.
+        // Outline of the frame strip: two vertical edges and two horizontal edges.
         GXBegin(GX_LINES, GX_VTXFMT0, 8);
         GXPosition3f32(FramePts[0], FramePts[1], -1.0f);
         GXPosition3f32(FramePts[2], FramePts[3], -1.0f);
@@ -513,7 +511,7 @@ void PERFDumpScreen(void) {
 
         for (s = 0; s < PERFFrames[PERFCurrFrame].lastSample; s++) {
             id = samples[s].id;
-            if (id == 0xFF) {
+            if (id == PERF_AUTO_SAMPLE_ID) {
                 DrawBWBar(&samples[s]);
             } else {
                 switch(PERFEvents[id].type) {
@@ -579,7 +577,6 @@ void PERFDumpScreen(void) {
                         GXSetChanMatColor(GX_COLOR0A0, PERFEvents[id].color);
                         GXSetLineWidth(32, GX_TO_ZERO);
                         GXBegin(GX_LINES, GX_VTXFMT0, 2);
-                        !samples[s].cpuTimeStampStart; // needed to match
                         GXPosition3f32(COORD(samples[s].cpuTimeStampStart), (f32) ((id + 1) * 7), -1.0f);
                         GXPosition3f32(COORD(samples[s].cpuTimeStampEnd), (f32) ((id + 1) * 7), -1.0f);
                         GXEnd();
@@ -645,3 +642,6 @@ void PERFPostDraw(void) {
     GameDrawInit();
 }
 
+void PERFSetDrawBWBarKey(BOOL tf) {
+    bDrawBWBarKey = tf;
+}

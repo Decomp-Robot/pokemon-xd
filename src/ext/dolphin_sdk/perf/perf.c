@@ -199,18 +199,18 @@ u32 PERFInit(u32 numSamples, u32 numFramesHistory, u32 numTypes, PERFAllocator a
     PERFNumEvents = numTypes;
     PERFNumSamples = numSamples;
     
-    size = (numFramesHistory * 0x10);
-    size += (numFramesHistory * (numSamples * 0xB0));
-    size += (numTypes* 0x10);
+    size = (numFramesHistory * sizeof(Frame));
+    size += (numFramesHistory * (numSamples * sizeof(PerfSample)));
+    size += (numTypes* sizeof(PerfEvent));
     
-    PERFFrames = (Frame*)PerfAlloc(numFramesHistory * 0x10);
+    PERFFrames = (Frame*)PerfAlloc(numFramesHistory * sizeof(Frame));
 
     for (i = 0; i < PERFNumFrames; i++) {
-        PERFFrames[i].samples = (PerfSample *)PerfAlloc(numSamples* 0xB0);
+        PERFFrames[i].samples = (PerfSample *)PerfAlloc(numSamples* sizeof(PerfSample));
         PERFFrames[i].lastSample = 0;
     }
 
-    PERFEvents = (PerfEvent *)PerfAlloc(numTypes* 0x10);
+    PERFEvents = (PerfEvent *)PerfAlloc(numTypes* sizeof(PerfEvent));
 
     for (i = 0; i < numTypes; i++) {
         PERFEvents[i].name = 0;
@@ -270,7 +270,7 @@ void PERFEndFrame(void) {
 
 static void PERFStartAutoSample(void) {
     CurrAutoSample = PERFGetNewSample();
-    PERFFrames[PERFCurrFrame].samples[CurrAutoSample].id = 0xFF;
+    PERFFrames[PERFCurrFrame].samples[CurrAutoSample].id = PERF_AUTO_SAMPLE_ID;
     PERFFrames[PERFCurrFrame].samples[CurrAutoSample].interrupted = 0;
     PERFGetAllMemMetrics(&PERFFrames[PERFCurrFrame].samples[CurrAutoSample], 0);
     PERFFrames[PERFCurrFrame].samples[CurrAutoSample].gpTimeStampStart = PPCMfpmc4();
@@ -296,7 +296,6 @@ static void PERFTimerCallback(OSAlarm* alarm, OSContext* context) {
     if (PERFCurrSample != 0) {
         if (CurrToken < 0xFFFF) {
             sample = (u8)(u16)CurrToken;
-            // stupid CurrToken loading AGAIN
             if ((u8)((CurrToken >> 8) & 0xF) != (s32)magic) {
                 PERFEndAutoSample();
                 PERFStartAutoSample();
@@ -306,12 +305,12 @@ static void PERFTimerCallback(OSAlarm* alarm, OSContext* context) {
             ASSERTLINE(884, CurrAutoSample < 0);
 
             newsample = PERFGetNewSample();
-            memcpy(&PERFFrames[PERFCurrFrame].samples[newsample], &PERFFrames[PERFCurrFrame].samples[sample], 0xB0);
+            memcpy(&PERFFrames[PERFCurrFrame].samples[newsample], &PERFFrames[PERFCurrFrame].samples[sample], sizeof(PerfSample));
             PERFFrames[PERFCurrFrame].samples[newsample].gpTimeStampEnd = PPCMfpmc4();
             PERFFrames[PERFCurrFrame].samples[newsample].cacheMisses[1] = PPCMfpmc3();
             PERFFrames[PERFCurrFrame].samples[newsample].instructions[1] = PPCMfpmc1();
             PERFGetAllMemMetrics(&PERFFrames[PERFCurrFrame].samples[newsample], 1);
-            PERFFrames[PERFCurrFrame].samples[newsample].id = 0xFF;
+            PERFFrames[PERFCurrFrame].samples[newsample].id = PERF_AUTO_SAMPLE_ID;
             PERFFrames[PERFCurrFrame].samples[sample].gpTimeStampStart = PPCMfpmc4();
             PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[0] = PPCMfpmc3();
             PERFFrames[PERFCurrFrame].samples[sample].instructions[0] = PPCMfpmc1();
