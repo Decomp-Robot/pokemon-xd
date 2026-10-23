@@ -26,6 +26,7 @@ public:
     void endMECallback();
     void update(f32 deltaTime);
     void changeMode(BgmMaskMode mode) { mMode = mode; }
+    void setActive(u8 active) { mEnable = active; }
     u8 isEnable() { return mEnable; }
 
 private:

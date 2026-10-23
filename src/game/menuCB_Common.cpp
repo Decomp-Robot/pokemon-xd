@@ -33,9 +33,9 @@ extern "C" void menuCB_MessageDispOff(void)
 }
 
 /* Show a message window; the ID selects the script the window runs. */
-extern "C" void menuCB_MessageDispOn(s32 msgID, s32 windowID)
+extern "C" void menuCB_MessageDispOn(s32 msgID, bool mode)
 {
-    winMsgOpen(7, msgID, windowID, 0);
+    winMsgOpen(7, msgID, mode, 0);
 }
 
 /* Port of the GBA that is in the battle but not answering, 0 if all of

@@ -2098,6 +2098,23 @@ game/app/memo/memo.c:
 game/app/evolution/evolution.cpp:
 	.text       start:0x80234E58 end:0x80234F78
 
+game/app/people/peoplePartAnimation.cpp:
+	.text       start:0x802A1644 end:0x802A1A74
+	.sdata2     start:0x804EF908 end:0x804EF928
+
+game/app/people/peopleSave.cpp:
+	.text       start:0x802A1A74 end:0x802A2E58
+	.rodata     start:0x802FBA58 end:0x802FBA88
+
+game/app/people/peopleTalk.cpp:
+	.text       start:0x802A2E58 end:0x802A3820
+	.rodata     start:0x802FBA88 end:0x802FBAC4
+	.sbss       start:0x804EBC60 end:0x804EBC70
+	.sdata2     start:0x804EF928 end:0x804EF950
+
+game/app/people/peopleWalkList.cpp:
+	.text       start:0x802A3820 end:0x802A3B40
+
 src/init.c:
 	.init       start:0x80003458 end:0x80003488
 

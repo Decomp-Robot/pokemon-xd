@@ -5,15 +5,18 @@ struct tagSPRITE_WORK;
 #include <types.h>
 
 #ifdef __cplusplus
+typedef bool WinMsgBool;
 extern "C" {
+#else
+typedef u8 WinMsgBool;
 #endif
-void winMsgOpenWithSE(int kind, u32 message, int mode, int wait, u32 sound);
+void winMsgOpenWithSE(s8 kind, u32 message, WinMsgBool mode, WinMsgBool wait, u8 sound);
 
 s32 winMsgDraw(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
-void winMsgOpen(s32 mode, u32 messageID, s32 windowID, s32 wait);
-void winMsgClose(s32 wait);
-void winMsgOpenFight(s32 status, s32 speaker, s32 wait);
-void winMsgCloseFight(s32 wait);
+void winMsgOpen(s8 kind, u32 message, WinMsgBool mode, WinMsgBool wait);
+void winMsgClose(WinMsgBool wait);
+void winMsgOpenFight(u32 message, WinMsgBool mode, WinMsgBool wait);
+void winMsgCloseFight(WinMsgBool wait);
 u8 winMsgCloseCheckFight(void);
 #ifdef __cplusplus
 }
@@ -32,6 +35,8 @@ struct MENU_LVUP_STATUS {
 extern "C" {
 #endif
 s32 winMsgCheck(void);
+s32 winMsgCheckField(void);
+void winMsgOpenFieldWithSE(u32 message, WinMsgBool wait, WinMsgBool flags, u8 sound);
 #ifdef __cplusplus
 void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, bool wait);
 void winMsgCloseLevelUpStatus(bool wait);

@@ -9,6 +9,26 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/app/people/peoplePartAnimation.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
+
+[[lib.object]]
+name = "game/app/people/peopleSave.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
+
+[[lib.object]]
+name = "game/app/people/peopleTalk.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-rostr", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/app/people/peopleWalkList.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
+
+[[lib.object]]
 name = "game/GSbezier.cpp"
 completed = true
 mw_version = "GC/1.3"

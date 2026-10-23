@@ -12,7 +12,7 @@ typedef struct FlagWork {
 #ifdef __cplusplus
 extern "C" {
 #endif
-s32 GSflagTest(s32 flag);
+u8 GSflagTest(s32 flag);
 u32 GSflagGet(s32 flag);
 void GSflagSet(s32 flag, u32 value);
 void GSflagOn(s32 flag);

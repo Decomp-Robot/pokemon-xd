@@ -11,7 +11,6 @@
 void winMsgOpenError(s32 a, s32 b, s32 c);
 void winMsgCloseError(s32 id);
 void winMsgOpenField(s32 msg, s32 a, s32 b);
-void winMsgCloseFight(s32 id);
 void winMsgCloseField(s32 id);
 void GSthreadSwitch(void);
 void menuSubKeyWait(void);

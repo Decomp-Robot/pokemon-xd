@@ -36,7 +36,7 @@ extern "C" {
 s32 memcardTaskCall(s32 task, s32 flag, s32 arg);
 }
 
-extern "C" s32 menuSaveLoadCanSave(void);
+extern "C" u8 menuSaveLoadCanSave(void);
 
 void _SaveParameterSet(void);
 
@@ -211,7 +211,7 @@ void menuSaveload::SaveParameterSet()
 }
 
 // Saving is disabled for this ROM version and until the save flag is set.
-extern "C" s32 menuSaveLoadCanSave(void)
+extern "C" u8 menuSaveLoadCanSave(void)
 {
     if (pokecoloGetRomVersion() == 1) {
         return 0;

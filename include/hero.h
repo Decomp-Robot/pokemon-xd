@@ -193,6 +193,9 @@ enum HeroStatusID {
     HERO_STATUS_HIZUKI_NAME = 23
 };
 
+u8 heroMoveIsMember(s32 member);
+u8 heroMoveGetResID(u32* group, u32* id, s32 member);
+void heroMoveTermEvent(void);
 unsigned long heroGetPokeomCount(Hero* hero);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
 void heroSetStatus(Hero* hero, u16 statusID, u32 value);

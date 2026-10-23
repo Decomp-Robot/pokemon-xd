@@ -1,9 +1,9 @@
 #ifndef PEOPLE_INFO_BIOS_H
 #define PEOPLE_INFO_BIOS_H
 
-#include <types.h>
+#include <people.h>
 
-struct PeopleInfo;
+typedef tagPeopleInfoBios PeopleInfo;
 
 extern "C" {
 PeopleInfo *peopleInfoBiosGetPtr(unsigned long id);

@@ -9,6 +9,11 @@
 #include <GSpart.h>
 #include <hsd/scene.h>
 
+// Animation mode used by model and part animation controls.
+enum GSmodelAnimType {
+    GS_MODEL_ANIM_ONCE = 0,
+    GS_MODEL_ANIM_LOOP = 1
+};
 
 
 struct _HSD_AObj;
@@ -157,8 +162,11 @@ void GSmodelUpdateAnimation(_GSmodel *model);
 f32 GSmodelGetAnimFrameCount(_GSmodel *model, s32 index);
 s32 GSmodelIsNullAnimation(_GSmodel *model, s32 index);
 void GSmodelTraverseAnimJoint(void *jobj, void (*cb)(_HSD_AnimJoint *, void **, int), f32 *arg);
+GSvec *GSmodelGetPositionPtr(_GSmodel *model);
 void GSmodelGetPosition(_GSmodel *model, GSvec *position);
+GSvec *GSmodelGetRotationPtr(_GSmodel *model);
 void GSmodelGetRotation(_GSmodel *model, GSvec *rotation);
+void GSmodelSetRotation(_GSmodel *model, GSvec *rotation);
 void GSmodelParse(_GSmodel *model, s32 mode, GSmodelParseCb cb, void *userContext);
 u8 GSmodelCanShapeAnimate(_GSmodel *model);
 u8 GSmodelCanTexAnimate(_GSmodel *model);

@@ -1,5 +1,6 @@
 #include <GScolsys2Internal.h>
 #include <hero.h>
+#include <peopleTalk.h>
 extern "C" {
 #include <math.h>
 }
@@ -7,20 +8,14 @@ extern "C" {
 #include <dolphin/gx/GXEnum.h>
 }
 
-class tagPeopleWork {
-public:
-    bool isHero() const;
-    bool isFollower() const;
-};
+#include <people.h>
 
 extern "C" {
 void* peopleSearchID(s32 peopleId);
 s32 peopleGetHumanID(s32 groupId, s32 resourceId);
-s32 peopleGetPos(s32 groupId, s32 resourceId, GSvec* out);
-f32 peopleGetTalkDistance(s32 groupId, s32 resourceId);
 bool gimmickBoxFixDistanceForPushBox(f32* reach, void* work, f32 dx, f32 dz);
 u8 gimmickBoxIsBox(void* work);
-GSvec* peopleGetPositionPointer(void* work);
+GSvec* peopleBiosGetPosPtr(void* work);
 void GSgfxSetLineWidth(f32 width);
 void GSgfxSetPrimitiveType(s32 type);
 void GSgfxDrawBeginSurface(s32 count);
@@ -147,7 +142,7 @@ bool checkCollisionHeadToHead(GSCOLSYS2_HUMAN* a, GSCOLSYS2_HUMAN* b,
     if (characterA == 0) {
         return 0;
     }
-    positionA = peopleGetPositionPointer(characterA);
+    positionA = peopleBiosGetPosPtr(characterA);
     if (positionA == 0) {
         return 0;
     }
@@ -177,8 +172,8 @@ bool checkCollisionHeadToHead(GSCOLSYS2_HUMAN* a, GSCOLSYS2_HUMAN* b,
         return 0;
     }
     if (gimmickBoxIsBox(characterA) || gimmickBoxIsBox(characterA)) {
-        f32 yB = peopleGetPositionPointer(characterB)->y;
-        f32 yA = peopleGetPositionPointer(characterA)->y;
+        f32 yB = peopleBiosGetPosPtr(characterB)->y;
+        f32 yA = peopleBiosGetPosPtr(characterA)->y;
         f32 heightDifference = fabs(yA - yB);
         if (heightDifference > (2.0f)) return 0;
     }

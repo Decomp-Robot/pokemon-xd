@@ -12,7 +12,7 @@ extern "C" {
 
 s32 menuCB_MessageDispCheck(void);
 void menuCB_MessageDispOff(void);
-void menuCB_MessageDispOn(s32 msgID, s32 windowID);
+void menuCB_MessageDispOn(s32 msgID, bool mode);
 s32 menuCB_GetDisconnectedGBA(void);
 void menuCBSpriteSetData(struct tagSPRITE_WORK *sprite, struct MenuSpriteData *data);
 s32 menuCB_MenuRollback(s32 menuID);

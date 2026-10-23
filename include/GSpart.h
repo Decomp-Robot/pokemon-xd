@@ -31,7 +31,8 @@ extern "C" {
 GSpart *GSmodelGetPart(_GSmodel *model, s32 partIndex);
 s32 GSpartSetTexAnimIndex(GSpart *part, s32 materialIndex, s32 animIndex,
                          s32 animType, f32 frame);
-void GSpartSetAnimIndex(GSpart *part, s32 animIndex, s32 animType, f32 frame);
+void GSpartStopAnimIndex(GSpart *part, s32 animIndex);
+s32 GSpartSetAnimIndex(GSpart *part, s32 animIndex, s32 animType, f32 frame);
 void GSpartFree(GSpart *part);
 void *GSpartGetMaterial(GSpart *part, s32 materialIndex);
 void GSpartGetMatrix(GSpart *part, GSmtx *out);
