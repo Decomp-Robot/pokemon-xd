@@ -1,6 +1,8 @@
 #ifndef _DOLPHIN_TYPES_H_
 #define _DOLPHIN_TYPES_H_
 
+/* Game headers may supply the same ABI-sized scalar types. */
+#ifndef TYPES_H
 typedef signed   char          s8;
 typedef unsigned char          u8;
 typedef signed   short int     s16;
@@ -12,6 +14,7 @@ typedef unsigned long long int u64;
 
 typedef float  f32;
 typedef double f64;
+#endif
 
 typedef char *Ptr;
 

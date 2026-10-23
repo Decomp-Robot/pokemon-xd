@@ -1389,6 +1389,34 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 	.data       start:0x803D4EE0 end:0x803D4F78
 	.sbss       start:0x804EAED0 end:0x804EAED4
 
+game/GScolsys2.c:
+	.text       start:0x8011867C end:0x801186C4
+
+game/GScolsys2Draw.cpp:
+	.text       start:0x801186C4 end:0x8011908C
+	.sdata2     start:0x804ED720 end:0x804ED750
+
+game/GScolsys2Walk.cpp:
+	.text       start:0x8011908C end:0x801197D8
+	.sdata2     start:0x804ED750 end:0x804ED760
+
+game/GScolsys2Hit.cpp:
+	.text       start:0x801197D8 end:0x8011A75C
+	.sdata2     start:0x804ED760 end:0x804ED780
+
+game/GScolsys2Util.cpp:
+	.text       start:0x8011A75C end:0x8011ADA4
+	.sdata2     start:0x804ED780 end:0x804ED790
+
+game/GScolsys2Human.cpp:
+	.text       start:0x8011ADA4 end:0x8011BC34
+	.sbss       start:0x804EB0C8 end:0x804EB0D0
+	.sdata2     start:0x804ED790 end:0x804ED7E8
+
+game/GScolsys2Thru.cpp:
+	.text       start:0x8011BC34 end:0x8011D49C
+	.sdata2     start:0x804ED7E8 end:0x804ED800
+
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 

@@ -2,18 +2,14 @@
 #define GS_GFX_H
 
 #include <types.h>
+#include <GSvec.h>
 
 struct GSgfxVF;
 
-// Layer the GS engine routes a primitive to, passed by value to the layer
-// entry points (the sprite/text drawers hand it on unchanged). The ids are
-// the slots the layer setup registered; the enumerator names and values were
-// not recovered, so the handle stays a bare distinct type (see GSgfxPrimType).
+// Layer slot registered by the graphics layer setup.
 enum GSgfxLayerID { };
 
-// Primitive op a surface emits, following the GX primitive op encoding
-// (0x80 quads, 0x98 triangle strip; 0xA0 triangle fan also seen at call
-// sites). The enumerator names were not recovered.
+// Surface primitive operation, using the GX primitive encoding.
 enum GSgfxPrimType { };
 
 // Write-gather FIFO the GS layers emit their primitives into.
@@ -130,13 +126,6 @@ public:
     GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
 };
 
-// 3D/screen position vector (GSvec).
-struct GSvec {
-    f32 x;
-    f32 y;
-    f32 z;
-};
-
 // Which of the layer's two passes a render module is drawing for. The layer
 // builds and prerenders pass 0 before pass 1 and keeps a display list and a
 // render state per pass; blendMode() switches the current pass to 0 for an
@@ -161,5 +150,16 @@ struct GSgfxRenderModule {
 };
 
 #define GSGFX_RENDER_MODULE_SIGNATURE 0xB29A48E1
+extern "C" {
+GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
+                         s32 hasNormal, s32 normalComponents,
+                         s32 colorCount, s32 colorType,
+                         s32 texCoordCount, s32 texCoordComponents,
+                         s32 texCoordType);
+void GSgfxZCompare(s32 enable, s32 comparison);
+void GSgfxPixelMode(s32 colorUpdate, s32 alphaUpdate, s32 depthUpdate);
+void GSgfxCullMode(s32 mode);
+void GSgfxBlendMode(s32 mode, s32 sourceFactor, s32 destinationFactor);
+}
 
 #endif

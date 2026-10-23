@@ -9,6 +9,18 @@
 // itself is moved around as a whole -- heroBiosCopy transfers 0x978 bytes per
 // hero slot, and the trainer records keep two snapshots of it.
 #ifdef __cplusplus
+struct GSvec;
+
+enum HERO_RESOURCE_ID {
+    HERO_RESOURCE_MANA = 0x65,
+    HERO_RESOURCE_FOLLOWER_SLOT_2 = 0x68,
+    HERO_RESOURCE_FOLLOWER_SLOT_3 = 0x69
+};
+
+extern "C" void heroMoveGetLeaderPosition(GSvec* out);
+/* Member code of the selected follower, or 0 when the hero walks alone. */
+extern "C" u32 heroGetFollower(void);
+
 class Hero {
 public:
     u8 getFollowerID();
