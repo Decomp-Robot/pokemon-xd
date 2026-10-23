@@ -29,6 +29,10 @@ ext/dolphin_sdk/os/OSArena.c:
 	.text       start:0x800AA968 end:0x800AA970
 	.text       start:0x800AA970 end:0x800AA99C
 
+ext/dolphin_sdk/os/OSAudioSystem.c:
+	.text       start:0x800AA99C end:0x800AAB58
+	.text       start:0x800AAB58 end:0x800AAC30
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
