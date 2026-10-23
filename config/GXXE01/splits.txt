@@ -144,6 +144,14 @@ ext/dolphin_sdk/db/db.c:
 	.text       start:0x800B27F0 end:0x800B280C
 	.text       start:0x800B280C end:0x800B285C
 
+ext/dolphin_sdk/mtx/mtx.c:
+	.text       start:0x800B285C end:0x800B2888
+	.text       start:0x800B2888 end:0x800B28BC
+	.text       start:0x800B28BC end:0x800B2988
+	.text       start:0x800B2988 end:0x800B29D8
+	.text       start:0x800B29D8 end:0x800B2AD0
+	.text       start:0x800B2AD0 end:0x800B2B98
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
