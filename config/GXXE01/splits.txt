@@ -189,6 +189,17 @@ ext/dolphin_sdk/gx/GXAttr.c:
 	.text       start:0x800C91C0 end:0x800C9440
 	.text       start:0x800C9440 end:0x800C947C
 
+ext/dolphin_sdk/gx/GXGeometry.c:
+	.text       start:0x800C9DF8 end:0x800C9E78
+	.text       start:0x800C9E78 end:0x800C9F48
+	.text       start:0x800C9F48 end:0x800C9FD0
+	.text       start:0x800C9FD0 end:0x800CA010
+	.text       start:0x800CA010 end:0x800CA050
+	.text       start:0x800CA050 end:0x800CA098
+	.text       start:0x800CA098 end:0x800CA0C0
+	.text       start:0x800CA0C0 end:0x800CA0F4
+	.text       start:0x800CA0F4 end:0x800CA118
+
 ext/dolphin_sdk/gx/GXFrameBuf.c:
 	.text       start:0x800CA118 end:0x800CAB4C
 
