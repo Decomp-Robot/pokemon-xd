@@ -323,3 +323,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDLight.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gd/GDPixel.c"
+completed = false
