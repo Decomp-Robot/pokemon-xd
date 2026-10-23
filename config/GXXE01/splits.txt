@@ -1023,6 +1023,30 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+ext/musyx_sdk/runtime/seq.c:
+	.text       start:0x80161308 end:0x80161370
+	.text       start:0x80161370 end:0x80161E3C
+	.text       start:0x80161E3C end:0x80161EA0
+	.text       start:0x80161EA0 end:0x8016211C
+	.text       start:0x8016211C end:0x801623CC
+	.text       start:0x801623CC end:0x801624B0
+	.text       start:0x801624B0 end:0x801625B8
+	.text       start:0x801625B8 end:0x80162674
+	.text       start:0x80162674 end:0x80162840
+	.text       start:0x80162840 end:0x80163398
+	.text       start:0x80163398 end:0x801635B0
+	.text       start:0x801635B0 end:0x80164070
+	.text       start:0x80164070 end:0x801641E4
+	.text       start:0x801641E4 end:0x80164680
+	.text       start:0x80164680 end:0x8016509C
+	.text       start:0x8016509C end:0x80165244
+	.data       start:0x80405B00 end:0x80405B50
+	.bss        start:0x80448420 end:0x80449820
+	.bss        start:0x80449820 end:0x80455C60
+	.bss        start:0x80455C60 end:0x80455D60
+	.sbss       start:0x804EB300 end:0x804EB320
+	.sdata2     start:0x804EDD28 end:0x804EDD48
+
 ext/musyx_sdk/runtime/synth.c:
 	.text       start:0x80165244 end:0x80165288
 	.text       start:0x80165288 end:0x801652BC
