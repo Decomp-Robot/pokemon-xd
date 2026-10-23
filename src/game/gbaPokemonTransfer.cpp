@@ -4,6 +4,7 @@
 
 #include <gbaCommand.h>
 #include <types.h>
+#include <gbaAgb.h>
 
 /*
  * Pokemon transfer over the GBA link.
@@ -19,104 +20,8 @@
  * (agbRecvBuffers), which stage 9 points the work item at.
  */
 
-// Stage numbers of the polling variants of a stage run as 1000 + the stage.
-#define STAGE_POLL_BASE 1000
-// Milliseconds a stage waits for the link channel before it gives up on it, and
-// the period the download half polls the channel with.
-#define STAGE_TIMEOUT_MSEC 125
-#define STAGE_POLL_MSEC 100
-// Size of the packet a channel exchanges: the received packet is assembled in
-// one scratch buffer of this size per channel (agbRecvBuffers).
-#define AGB_PACKET_SIZE 0x278
-// Command byte of the download exchange, which the GBA echoes in the header of
-// its reply.
-#define AGB_DOWNLOAD_COMMAND 0x99
-
-// Bits of the channel status byte the link library reports for a channel. The
-// GBA sets the ready bit once it has put a word into the channel's receive
-// register, and keeps the busy bit set while it is not ready for the next word:
-// the reset handshake the link library runs for the channel waits for the busy
-// bit to clear before it exchanges a word.
-#define AGB_LINK_STATUS_BUSY 0x02
-#define AGB_LINK_STATUS_DATA_READY 0x08
-
-// Dolphin SDK Game Boy Advance link library (dolphin/gba).
-typedef void (*GBACallback)(long chan, long result);
-
-extern "C" long GBAGetStatusAsync(long chan, u8 *status, GBACallback callback);
-extern "C" long GBAReadAsync(long chan, void *dst, u8 *status, GBACallback callback);
-extern "C" long GBAWriteAsync(long chan, void *src, u8 *status, GBACallback callback);
-
-void _timer_set(long chan, unsigned long msec);
-void _job_type_clear(long chan, const char *jobName);
+// The packet stage hands the received Pokemon to the Pokemon module.
 extern "C" void pokeconv(void *record, void *packet);
-
-// Name each stage reports to the link job list when it releases the channel,
-// kept in the string pool of the link library.
-extern char agbJobName04[];   // "_getpokemon_04"
-extern char agbJobName05[];   // "_getpokemon_05"
-extern char agbJobName05s[];  // "_getpokemon_05s"
-extern char agbJobName06[];   // "_getpokemon_06"
-extern char agbJobName07[];   // "_getpokemon_07"
-extern char agbJobName07s[];  // "_getpokemon_07s"
-extern char agbJobName08[];   // "_getpokemon_08"
-extern char agbJobName09[];   // "_getpokemon_09"
-extern char agbJobName09s[];  // "_getpokemon_09s"
-extern char agbJobName10[];   // "_getpokemon_10"
-extern char agbJobName11[];   // "_getpokemon_11"
-
-// Forward declarations of the transfer stages, each one hands the channel on to
-// the stage that follows it in the chain. The second argument is the result the
-// link library hands to its callback: 1 ends the job, anything else leaves the
-// stage free to pass the next link call to the channel.
-void _getpokemon_04(long chan, long result);
-void _getpokemon_05(long chan, long result);
-void _getpokemon_05s(long chan, long result);
-void _getpokemon_06(long chan, long result);
-void _getpokemon_07(long chan, long result);
-void _getpokemon_07s(long chan, long result);
-void _getpokemon_08(long chan, long result);
-void _getpokemon_09(long chan, long result);
-void _getpokemon_09s(long chan, long result);
-void _getpokemon_10(long chan, long result);
-void _getpokemon_11(long chan, long result);
-
-// State of one GBA link channel: the status bytes the link library reports the
-// channel state in, the stage the channel runs, the packet buffer the transfer
-// is assembled in and the two destinations the packet is written to.
-struct AGBWork {
-    long jobType;            // 0x00: job the channel runs, 0 while none is active.
-    u8 linkStatus[0x04];     // 0x04: channel state reported by the link library.
-    long stage;              // 0x08: stage of the job the channel runs.
-    long active;             // 0x0C: nonzero while a transfer owns the channel.
-    long idleStage;          // 0x10: stage AGB_IsComplete resumes an idle channel.
-    long result;             // 0x14: return value of the last link call.
-    long status;             // 0x18: status AGB_GetStatus reports (0 = the packet
-                             //       is in, 1 = the job ended in error, 2 = the
-                             //       stage timed out, 3 = the job is running).
-    unsigned long packet;    // 0x1C: word the current read receives into.
-    u8 _20[0x1C];
-    unsigned long request;   // 0x3C: word the current write sends out.
-    unsigned long reply;     // 0x40: header word read back from the GBA.
-    unsigned long period;    // 0x44: polling period of the stage timer, in msec.
-    u8 _48[0x14];
-    unsigned long offset;    // 0x5C: write position in the packet buffer.
-    u8 _60[0x0C];
-    unsigned long tick;      // 0x6C: start tick of the stage timer.
-    unsigned long timeout;   // 0x70: stage timer length, in ticks.
-    unsigned long pollTick;  // 0x74: start tick of the polling timer.
-    unsigned long pollTimeout; // 0x78: polling timer length, in ticks.
-    unsigned long resetTick;    // 0x7C: start tick of the GBA reset handshake.
-    unsigned long resetTimeout; // 0x80: reset handshake length, in ticks.
-    u8 _84[0x08];               // 0x84-0x8B: unknown.
-    u8 *buffer;              // 0x8C: buffer the packet is assembled in.
-    u8 _90[0x04];
-    void *record;            // 0x94: Pokemon record the packet is converted into.
-    unsigned long *dest;     // 0x98: destination of the packet header word.
-};
-
-extern AGBWork AGBWorkArray[4];
-extern u8 agbRecvBuffers[];
 
 // _getpokemon_11(long, long): stage 11, last stage of the download half. Appends
 // the received word to the packet and keeps polling for the next one; once the
