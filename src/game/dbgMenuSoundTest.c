@@ -15,7 +15,7 @@ void menuClose(s32 menuID);
 void GSsndSetMasterVolume(s32 volume, s32 a, s32 b, s32 c);
 s32 GSsndGetStatus(u16 soundID);
 void sndPlay(u16 soundID, s32 bgm);
-void zz_01851c8_(u16 soundID);
+void GSsndClose(u16 soundID);
 void soundOpenPlay(u16 soundID, s32 a, s32 b);
 void soundOpenPlayEnv(u16 soundID, s32 a, s32 b);
 
@@ -92,7 +92,7 @@ s32 dbgMenuSoundTestENV(void)
                     case 1:
                     case 2:
                     case 3:
-                        zz_01851c8_(lbl_804E8834[i]);
+                        GSsndClose(lbl_804E8834[i]);
                         break;
                     }
                 }
@@ -131,7 +131,7 @@ void sndPlay(u16 soundID, s32 bgm)
         goto play;
     }
     if (status < 4) {
-        zz_01851c8_(soundID);
+        GSsndClose(soundID);
         return;
     }
 play:

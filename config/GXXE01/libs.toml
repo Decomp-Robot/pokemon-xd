@@ -915,6 +915,13 @@ cflags = [
     "-lang=c++",
 ]
 
+# The sound API's short id and volume wrappers stay out of line: the engine
+# entry points reach them as ordinary calls.
+[[lib.object]]
+name = "game/sound.c"
+completed = true
+extra_cflags = ["-inline noauto"]
+
 [[lib]]
 name = "menuCBBios"
 mw_version = "GC/2.6"
