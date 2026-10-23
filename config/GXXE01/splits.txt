@@ -22,6 +22,9 @@ decomp/dbgMenuFightSetMsgSpeed.c:
 decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
+game/menuPocketBattleDisk.cpp:
+	.text       start:0x8000EA94 end:0x8000EAD8
+
 decomp/menuWorldMap.cpp:
 	.text       start:0x80010538 end:0x80010558
 
