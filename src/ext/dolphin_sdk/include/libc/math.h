@@ -82,14 +82,8 @@ double fabs(double x);
 float fabsf(float x);
 #endif
 
-long __fpclassifyf(float x);
+#include <libc/fpclassify.h>
 long __fpclassifyd(double x);
-
-#define FP_NAN       1
-#define FP_INFINITE  2
-#define FP_ZERO      3
-#define FP_NORMAL    4
-#define FP_SUBNORMAL 5
 
 #define fpclassify(x) (sizeof(x) == sizeof(float) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)))
 #define isfinite(x) ((fpclassify(x) > FP_INFINITE))

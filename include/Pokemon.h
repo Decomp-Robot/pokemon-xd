@@ -22,12 +22,16 @@ struct Pokemon {
 
 // DarkPokemon -- the dark side of a shadow pokemon. Only the members the
 // status menu asks about are declared here.
+#ifdef __cplusplus
 struct DarkPokemon {
 #ifdef __cplusplus
     u8 isWazaNew(u8 index) const;
     void setWazaNew(u8 index, bool value);
 #endif
 };
+#else
+typedef struct DarkPokemon DarkPokemon;
+#endif
 
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
@@ -83,6 +87,7 @@ enum PokemonStatusQuery {
     POKEMON_STATUS_MOVE = 0x7F
 };
 
+u8 pokemonIsShadowPokemon(Pokemon *pokemon);
 void pokemonInit(Pokemon *pokemon);
 // Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most
 // ten characters; the name entry mode, the message layer and the link

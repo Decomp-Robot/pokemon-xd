@@ -97,44 +97,21 @@ game/time.cpp:
 	.text       start:0x8000E8CC end:0x8000EA94
 	.sdata2     start:0x804EBE00 end:0x804EBE10
 
-game/WorldMapSdata2.s:
-	.sdata2     start:0x804EBF04 end:0x804EBF08
-
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
 
-decomp/menuWorldMap.cpp:
-	.text       start:0x80010538 end:0x80010558
-
 game/WorldMap.cpp:
-	.text       start:0x80010558 end:0x80011E60
-	.sdata2     start:0x804EBF08 end:0x804EBF10
+	.text       start:0x80010538 end:0x800136C8
+	.data       start:0x80312278 end:0x803123AC
+	.sdata2     start:0x804EBEE0 end:0x804EBF44
 
 game/menuPocketToolData.s:
 	.sdata2     start:0x804EC064 end:0x804EC068
 
-game/WorldMapDebug.cpp:
-	.text       start:0x80012604 end:0x800126A0
-
-game/WorldMapCamera.cpp:
-	.text       start:0x800127F4 end:0x800128C8
-
-decomp/WorldMapIcon.cpp:
-	.text       start:0x80012FA8 end:0x80012FD8
-
-decomp/WorldMap.cpp:
-	.text       start:0x80013220 end:0x80013234
-
-game/WorldMapIcon.cpp:
-	.text       start:0x80013234 end:0x80013278
-
-game/WorldMapCamData.cpp:
-	.text       start:0x80013670 end:0x800136C8
-
 game/menuPokemon.cpp:
 	.text       start:0x800136C8 end:0x800136F8
 
-decomp/pokemonindex.cpp:
+game/pokemonIndex.cpp:
 	.text       start:0x8001F1B8 end:0x8001F1D0
 
 game/menuPokemonCursor.cpp:
@@ -143,7 +120,7 @@ game/menuPokemonCursor.cpp:
 game/menuInfoWindow.cpp:
 	.text       start:0x8001FBF8 end:0x8001FC2C
 
-decomp/menuMetaMenu.cpp:
+game/menuMetaMenu.cpp:
 	.text       start:0x80020A7C end:0x80020B6C
 
 game/menuPtSpriteWork.cpp:
@@ -209,12 +186,12 @@ game/menuPokemonStatus.cpp:
 	.sdata2     start:0x804EC190 end:0x804EC1BC
 
 game/menuSaveLoad.cpp:
-	.text       start:0x80037A48 end:0x800380C8
+	.text       start:0x80037A48 end:0x80038104
 	.data       start:0x8032E4E0 end:0x8032E508
 	.sdata2     start:0x804EC1C0 end:0x804EC1D0
 
 game/menuPda.cpp:
-	.text       start:0x800380C8 end:0x80038FAC
+	.text       start:0x80038104 end:0x80038FAC
 
 game/menuCBBattleResult.cpp:
 	.text       start:0x80046594 end:0x80046D5C
@@ -1267,9 +1244,6 @@ libc/ansi_fp.c:
 	.data       start:0x803D45A0 end:0x803D4704
 	.sdata2     start:0x804ECD20 end:0x804ECD50
 
-game/GSparticleModuleData.cpp:
-	.rodata     start:0x802F3590 end:0x802F3718
-
 libc/arith.c:
 	.text       start:0x800DE6B4 end:0x800DE6C4
 
@@ -1388,6 +1362,28 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 	.text       start:0x800EB398 end:0x800EB3BC
 	.data       start:0x803D4EE0 end:0x803D4F78
 	.sbss       start:0x804EAED0 end:0x804EAED4
+
+game/GSmodel/effects.cpp:
+	.text       start:0x800EFFCC end:0x800F0EE0
+	.sdata2     start:0x804ED3D8 end:0x804ED3E8
+
+game/GSmodelBlend.cpp:
+	.text       start:0x800F0EE0 end:0x800F1BD0
+	.sdata2     start:0x804ED3E8 end:0x804ED400
+
+game/GSmodelBound.cpp:
+	.text       start:0x800F1BD0 end:0x800F1E74
+	.sbss       start:0x804EAF08 end:0x804EAF10
+	.sdata2     start:0x804ED400 end:0x804ED408
+
+game/GSmodelAnim.cpp:
+	.text       start:0x800F1E74 end:0x800F6E30
+	.rodata     start:0x802ED068 end:0x802ED0A0
+	.data       start:0x803D5058 end:0x803D5080
+	.sdata2     start:0x804ED408 end:0x804ED468
+
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
 
 game/GScolsys2.c:
 	.text       start:0x8011867C end:0x801186C4

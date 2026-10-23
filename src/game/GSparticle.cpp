@@ -52,7 +52,6 @@ void DCFlushRange(void *addr, u32 size);
 /* Model layer: the model part a generator follows, the transform of that part
  * and the animation flag a model is switched to while a generator follows it. */
 extern "C" {
-GSpart *GSmodelGetPart(_GSmodel *model, u32 partIndex);
 void GSpartGetTransform(GSpart *part, GSvec *position, GSvec *rotation, GSvec *scale);
 void GSpartFree(GSpart *part);
 void GSmodelSet60fpsAnimFlag(_GSmodel *model, u32 flag);
@@ -60,7 +59,7 @@ void GSmodelSet60fpsAnimFlag(_GSmodel *model, u32 flag);
 
 /* Vector helpers of the GS math module. */
 extern "C" {
-void EulerToQuat(const GSvec *euler, f32 *quat);
+s32 EulerToQuat(const void *euler, void *quat);
 void GSvecMakeFromQuat(GSvec *euler, const f32 *quat);
 void GSvecTransformQuat(GSvec *out, const f32 *quat, const GSvec *v);
 void PSVECAdd(const GSvec *a, const GSvec *b, GSvec *out);
@@ -343,7 +342,7 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
     _GScamera *camera = GScameraGetActiveCamera();
     u32 group = GS_PARTICLE_DISP_GROUP_0;
 
-    fog = layer->mFog != 0;
+    fog = layer->mFogEnabled != 0;
 
     if (camera == 0 || !GScameraIsValid(camera)) return;
 
@@ -367,11 +366,11 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
         if (pass == GSGFX_LAYER_PASS_XLU && psDispHasRenderData(group) == 1) {
             bool rendered = false;
 
-            layer->mGroupBCache = 0;
-            layer->mPassState[0].mGroupBFlags |= GSGFX_PASS_GROUP_B_PARTICLES;
-            layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
-            layer->mPassState[1].mGroupBFlags |= GSGFX_PASS_GROUP_B_PARTICLES;
-            layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+            layer->mClipMode = 0;
+            layer->mRasterStateDirtyA |= GSGFX_PASS_GROUP_B_PARTICLES;
+            layer->mDirtyStateA |= GSGFX_PASS_FLAG_GROUP_B;
+            layer->mRasterStateDirtyB |= GSGFX_PASS_GROUP_B_PARTICLES;
+            layer->mDirtyStateB |= GSGFX_PASS_FLAG_GROUP_B;
             GScameraLoadProjection(camera, layer);
             GSgfxLayerBeginPass(layer);
             psDispSetProjection(layer->mProjection);
@@ -392,12 +391,12 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
                 psDispParticles(group, GS_PARTICLE_DISP_MODE_PLAIN, cam);
                 layer->InvalidateState();
             }
-            layer->mGroupACache0 = 0;
-            layer->mGroupACache1 = 0;
-            layer->mPassState[0].mGroupAFlags |= GSGFX_PASS_GROUP_A_PARTICLES;
-            layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
-            layer->mPassState[1].mGroupAFlags |= GSGFX_PASS_GROUP_A_PARTICLES;
-            layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+            layer->mTexCoordLineOffset0 = 0;
+            layer->mTexCoordPointOffset0 = 0;
+            layer->mTexCoordOffsetDirtyA |= GSGFX_PASS_GROUP_A_PARTICLES;
+            layer->mDirtyStateA |= GSGFX_PASS_FLAG_GROUP_A;
+            layer->mTexCoordOffsetDirtyB |= GSGFX_PASS_GROUP_A_PARTICLES;
+            layer->mDirtyStateB |= GSGFX_PASS_FLAG_GROUP_A;
             if (rendered) GScameraLoadActiveCameraMatrix(layer->mLayerID);
         }
         /* Every layer of the set ends the pass in the engine's layer call. */
@@ -884,7 +883,7 @@ void GSparticleAttachGeneratorToGSpart(_GSparticleGen *gen, GSpart *part, GSatta
         GSparticleGenWorkResetScale(gen);
 
         if (linkChildren)
-            psLinkChildGensToJObj(((_GSparticleGenWork *)gen->mLink)->mGenerator, part->mJObj);
+            psLinkChildGensToJObj(((_GSparticleGenWork *)gen->mLink)->mGenerator, part->mJoint);
     }
 
     gen->mAttachMode = mode;

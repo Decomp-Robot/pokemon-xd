@@ -2124,14 +2124,3 @@ long menuPokemonStatusOpenFieldMenu(Pokemon *pokemon, MENU_POKEMON_CB callback, 
 {
     return _menuPokemonStatusOpen(MENU_POKEMON_STATUS_FIELD_MENU, 0, pokemon, 0, callback, arg);
 }
-
-// Static initializer of the menuPokemonStatus module. The .ctors table entry
-// makes the C++ runtime run it once at startup (__init_cpp); the module itself
-// registers no startup work.
-extern "C" void menuPokemonStatusStaticInit(void)
-{
-}
-
-// .ctors entry holding the initializer address (SDK _ctors[] convention).
-extern "C" __declspec(section ".ctors") void (*const menuPokemonStatusStaticInit_ctor)(void) =
-    menuPokemonStatusStaticInit;

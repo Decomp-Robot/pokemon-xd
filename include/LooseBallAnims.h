@@ -6,7 +6,7 @@
 // LooseBallAnims -- loose-ball animation module.
 class LooseBallAnims {
 public:
-    static s32 GetDesperationInfo(s32 index);
+    static s32 GetDesperationInfo(int index);
 };
 
 #endif

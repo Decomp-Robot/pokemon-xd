@@ -4,36 +4,11 @@
 #include <types.h>
 #include <GSgfx.h>
 #include <particleEngine.h>
+#include <GSpart.h>
+#include <GSattach.h>
 
 struct _GSmodel;
 struct _HSD_JObj;
-
-/* Handle GSmodelGetPart hands out for one part of a model: GSpartCreate takes
- * it from a pool of 0xC-byte handles, GSpartFree gives it back. The generator
- * slots keep the part they are attached to as the model pointer plus the part
- * index. */
-struct GSpart {
-    u8 mInUse;         // 0x00: set while the handle is taken from the pool.
-    u8 _01;
-    u16 mIndex;        // 0x02: index of the part inside the model.
-    _GSmodel *mModel;  // 0x04: model the part belongs to.
-    _HSD_JObj *mJObj;  // 0x08: render JObj of the part.
-};
-
-/* Which components of the model part a generator follows while it is attached.
- * These are enumerated combinations, not bit sets: the generator update
- * switches on the exact value, so a combined mode has its own selector rather
- * than being the union of the single-component ones. */
-enum GSattachMode {
-    GS_ATTACH_NONE = 0,
-    GS_ATTACH_POSITION = 1,
-    GS_ATTACH_ROTATION = 2,
-    GS_ATTACH_SCALE = 3,
-    GS_ATTACH_POSITION_ROTATION = 4,
-    GS_ATTACH_ROTATION_SCALE = 5,
-    GS_ATTACH_POSITION_SCALE = 6,
-    GS_ATTACH_ALL = 7,
-};
 
 struct _GSparticleBank;
 

@@ -116,6 +116,7 @@ typedef struct MenuCBTaisenWork {
     /* 0xB4A0 */ u8 pageWrap; // set while the 2D list wraps around.
     /* 0xB4A1 */ u8 _B4A1[0xB524 - 0xB4A1];
     /* 0xB524 */ Pokemon *reliveDancers[8][4]; // Relive hall stage dancers.
+    /* 0xB5A4 */ u8 _B5A4[0xB5F8 - 0xB5A4];
 } MenuCBTaisenWork;
 
 extern MenuCBTaisenWork menuCBTaisenWork;
@@ -140,6 +141,7 @@ u32 menuCBBios_PortIDtoControlerID(long portID);
 // Result the fight layer reported for the battle that is running
 // (battleSetResult); 1 ends the link exchange.
 u16 battleGetResult(void);
+u16 toolentryTaisenGetPokemonHomePlace(s32 port);
 
 #ifdef __cplusplus
 }

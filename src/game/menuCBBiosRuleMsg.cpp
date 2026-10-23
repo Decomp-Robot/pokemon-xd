@@ -1,5 +1,6 @@
 #include <FightRuleData.h>
 #include <types.h>
+#include <saveData.h>
 
 /*
  * menuCBBiosRuleMsg.cpp
@@ -8,7 +9,6 @@
  * (getTrainerDataStartOffset(0, 0xE)).
  */
 
-extern "C" void *getTrainerDataStartOffset(s32 slot, s32 id);
 
 /*
  * Stamp or clear the message IDs of the six save-table rule slots: set marks
@@ -18,7 +18,7 @@ extern "C" void *getTrainerDataStartOffset(s32 slot, s32 id);
 extern "C" void menuCBBios_SetRuleMessages(u8 set)
 {
     FightRuleData *ruleData =
-        (FightRuleData *)getTrainerDataStartOffset(0, 0xE);
+        (FightRuleData *)getTrainerDataStartOffset(0, TRAINER_DATA_FIGHT_RULES);
 
     if (set == 1) {
         ruleData[0].mMsgId = 0x9124;

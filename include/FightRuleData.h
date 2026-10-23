@@ -47,4 +47,10 @@ struct FightRuleData {
     u8 m52[0x3E];
 };
 
+extern "C" {
+const FightRuleData *menuCBRule_GetDefaultRuleData(s32 index);
+u32 zz_004d0b4_(void);
+FightRuleData *zz_004d0d4_(s32 ruleId);
+}
+
 #endif

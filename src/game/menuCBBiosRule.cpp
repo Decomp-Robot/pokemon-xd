@@ -1,6 +1,7 @@
 #include <FightRuleData.h>
 #include <menuCBBios.h>
 #include <types.h>
+#include <saveData.h>
 
 /*
  * menuCBBiosRule.cpp
@@ -15,14 +16,7 @@
  * ---------------------------------------------------------------------- */
 
 extern "C" {
-void *getTrainerDataStartOffset(s32 slot, s32 id);
 
-// Rule menu module: the read-only default rule sets, the entry pokemon
-// limit of the current rule set and the working copy of a customizable
-// rule set.
-FightRuleData *menuCBRule_GetDefaultRuleData(s32 index);
-u32 zz_004d0b4_(void);
-FightRuleData *zz_004d0d4_(s32 ruleId);
 FightRuleData *menuCB_OreRule(void);
 }
 
@@ -36,10 +30,7 @@ extern "C" FightRuleData *menuCBBios_CurrentRule(void);
 extern "C" FightRuleData *menuCBBios_GetRulesetData(s32 ruleId);
 extern "C" void menuCBBios_InitDefaultRules(void);
 
-// Entry pokemon number limit of the current rule set, forwarded from the
-// rule module's accessor (zz_004d0b4_, in the still-unrecovered unit at
-// 0x8004D0B4): the entry screens cap their pokemon count with
-// min(toolentryTaisenGetPokemonNum(), this).
+// Pokemon entry limit of the current rule set.
 extern "C" u32 menuCBBios_GetPokemonNumLimit(void)
 {
     return zz_004d0b4_();
@@ -100,7 +91,7 @@ extern "C" FightRuleData *menuCBBios_GetRulesetData(s32 ruleId)
 extern "C" void menuCBBios_InitDefaultRules(void)
 {
     FightRuleData *ruleData =
-        (FightRuleData *)getTrainerDataStartOffset(0, 0xE);
+        (FightRuleData *)getTrainerDataStartOffset(0, TRAINER_DATA_FIGHT_RULES);
 
     ruleData[0] = *menuCBRule_GetDefaultRuleData(0);
     ruleData[1] = *menuCBRule_GetDefaultRuleData(1);

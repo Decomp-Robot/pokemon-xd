@@ -71,4 +71,7 @@ extern const f32 menuPdaAlphaFull;
 extern const char menuPdaPageStartFormat[];
 extern GSgfxLayerID menuPdaEventLayer[2];
 
+extern "C" bool zz_003930c_(tagWINDOW_WORK *window);
+extern "C" void zz_0039d2c_(s8 selection);
+
 #endif

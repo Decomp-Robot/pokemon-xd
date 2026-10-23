@@ -1,5 +1,6 @@
 #include <winSprite.h>
 #include <WorldMap.h>
+#include <saveData.h>
 
 #pragma force_active on
 
@@ -149,7 +150,7 @@ u32 roomDataGetFsysGidForLanguage(void *mapData);
 void fightRegWzxLoadAll(s32 id);
 void GSmodelSetAnimFrame(void *model, f32 frame);
 void GSmodelSetAnimRate(void *model, f32 rate);
-s32 GSmodelGetAnimFrameCount(void *model, s16 anim);
+f32 GSmodelGetAnimFrameCount(_GSmodel *model, s16 anim);
 void GSmodelSetAnimType(void *model, s32 type);
 void GSmodelStartAnimation(void *model);
 void GSmodelSetForceUseFractionalFramesFlag(void *model, s32 flag);
@@ -157,7 +158,7 @@ void GSmodelSet60fpsAnimFlag(void *model, s32 flag);
 void GSmodelSetVisibility(void *model, s32 visible);
 void GSmodelSetBoundCheck(void *model, s32 flag);
 /* Selects the animation a map model plays. */
-void zz_00f399c_(void *model, s16 id);
+void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index);
 u32 GSfsysWait(u32 id);
 /* Returns the menuTop work struct's "a screen transition is running" flag,
  * which gates whether the mode-select resources may be freed. */
@@ -170,7 +171,6 @@ void zz_01971c8_(s32 group, void *res, s32 flag, f32 rate);
 void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 /* Tests whether a save slot holds data. */
-u32 zz_0157d74_(s32 a, s32 b);
 /* Records whether the mode select screen may keep running. */
 void zz_0030324_(s32 a);
 /* Returns the entry the mode select screen settled on. */
@@ -521,7 +521,7 @@ extern "C" void menuTitleMainSub(void)
                 if (status != 3) {
                     savedataCreate(0, 0);
                 }
-                if (zz_0157d74_(0, 4) != 0U) {
+                if (saveDataGetMetadata(0, SAVE_METADATA_SAVE_COUNT) != 0U) {
                     zz_0030324_(1);
                 } else {
                     zz_0030324_(0);
@@ -586,10 +586,10 @@ extern "C" void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame)
     if (model == 0) {
         return;
     }
-    zz_00f399c_(model, anim);
+    GSmodelSetAnimIndex((_GSmodel *)model, (s16)anim);
     GSmodelSetAnimFrame(model, frame);
     GSmodelSetAnimRate(model, cHalfSecond);
-    GSmodelGetAnimFrameCount(model, anim);
+    GSmodelGetAnimFrameCount((_GSmodel *)model, (s16)anim);
     if (type != 0) {
         GSmodelSetAnimType(model, 1);
     } else {
@@ -602,15 +602,8 @@ extern "C" void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame)
     GSmodelSetBoundCheck(model, 0);
 }
 
-/* A fly-around map model together with its offscreen texture. */
-class TitleMapModel : public WorldMapModel {
-public:
-    TitleMapModel() { mOffscreenTexture = 0; }
-    ~TitleMapModel() { if (mOffscreenTexture != 0) { releaseOffscreenData(); } }
-};
-
 /* Drop a fly-around model holder once the model in it is no longer needed. */
-static inline void menuTitleModelFree(TitleMapModel *model)
+static inline void menuTitleModelFree(WorldMapModel *model)
 {
     if (model != 0) {
         delete model;
@@ -620,7 +613,7 @@ static inline void menuTitleModelFree(TitleMapModel *model)
 /* Read the requested map model in through a throw-away holder. */
 extern "C" void menuTitleModelCtor(u32 group, u32 modelID, bool visible)
 {
-    TitleMapModel *model = new TitleMapModel;
+    WorldMapModel *model = new WorldMapModel;
 
     model->SetModel(group, modelID, visible);
     menuTitleModelFree(model);
@@ -629,7 +622,7 @@ extern "C" void menuTitleModelCtor(u32 group, u32 modelID, bool visible)
 /* Detach the map model through a throw-away holder. */
 extern "C" void menuTitleModelDtor(u32 group, u32 modelID)
 {
-    TitleMapModel *model = new TitleMapModel;
+    WorldMapModel *model = new WorldMapModel;
 
     model->UnloadModel(group, modelID);
     menuTitleModelFree(model);

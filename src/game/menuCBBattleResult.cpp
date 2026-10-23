@@ -9,9 +9,6 @@
  * just played ended and, while the players still have to pick where their
  * Pokemon go, runs the selection dialogue.
  *
- * The module is a set of free functions. The entry points the menu system
- * calls are C functions; the helpers the screen code keeps to itself are C++
- * (which is why their linkage names are mangled).
  */
 
 /* Selection lists handed to menuSubOpenSelect*: the message IDs of the
@@ -40,7 +37,6 @@ s32 toolentryTaisenGetBattleType(void);
 s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
-u16 toolentryTaisenGetPokemonHomePlace(s32 index);
 s32 gameGetRegion(void);
 
 void menuSetEnablePort(s32 port);
@@ -69,9 +65,6 @@ u8 _menuCBResultCheckController1sub(void);
 void _menuCBResultCheckController1(void);
 s32 _menuCBResultCheckGBAPort(void);
 
-/* No-op default constructor of the trainer records that live in the work
-   area (built by the startup constructor, see fn_80046530). */
-extern "C" void menuTaisenTrainerCtor(void);
 extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work);
 extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work);
 extern "C" s32 menuCBResultCheckHomePlace(void);
@@ -82,7 +75,7 @@ extern "C" s32 menuCBResultCheckHomePlace(void);
 
 /* Nothing to fill in: the trainer records only need zeroed memory, which the
    bss work area already is. */
-extern "C" void menuTaisenTrainerCtor(void)
+FIGHT_TRAINER::FIGHT_TRAINER()
 {
 }
 

@@ -1,4 +1,6 @@
 #include <types.h>
+#include <memcard.h>
+#include <saveData.h>
 
 /* Save data handed to the memcard task; allocated and freed per use. */
 extern u8 *bk_savedataPtr;
@@ -26,17 +28,14 @@ void *GSdvdOpen(const char *fileName);
 void GSdvdRead(void *file, void *buf, u32 size, s32 offset);
 void GSdvdClose(void *file);
 void *GSfsysStreamHeaderPostFunc(const char *fileName);
-void zz_0187c74_(void *file, void *buf, u32 size, s32 offset);
-void *zz_00a77b0_(u32 size, u32 align);
+s32 zz_0187c74_(void *file, void *buf, u32 size, s32 offset);
+void *zz_00a77b0_(u32 size, u16 align);
 void GSmemFree(void *ptr);
-void *memcardMemAllocForSavedata(void);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
-void *zz_01ce1b0_(void *ptr);
 u8 _memcard_debug_type_check(s32 type);
 void memcard_debug_Load(u8 *buf);
 void memcard_debug_Load2(void);
 void memcard_debug_Save(u8 *buf);
-void *getTrainerDataStartOffset(s32 a, s32 b);
 s32 gameGetRegion(void);
 void gamedataSetStatus(void *gamedata, s32 index, s32 status);
 void __assert(const char *file, s32 line, const char *cond);
@@ -74,7 +73,7 @@ s32 zz_000b644_(s32 menuID, s32 type)
         GSdvdClose(file);
         memcard_debug_Load2();
     }
-    gamedata = getTrainerDataStartOffset(0, 1);
+    gamedata = getTrainerDataStartOffset(0, TRAINER_DATA_GAME_DATA);
     switch (gameGetRegion()) {
     case 0:
         gamedataSetStatus(gamedata, 2, 0xB);
@@ -122,7 +121,7 @@ s32 zz_000b850_(s32 menuID, s32 type)
             /* CP932 message: "out of memory". */
             __assert("dbgMenuMemcard.c", 501, "bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab\"");
         }
-        memcpy(bk_savedataPtr, getTrainerDataStartOffset(0, 0), 0x27FD0);
+        memcpy(bk_savedataPtr, getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
         if (memcardTaskCall(2, 2, 0) == 3) {
             if (GSdvdOpenTest(memcard_file_name_table[type])) {
                 file = GSdvdOpen(memcard_file_name_table[type]);
@@ -134,7 +133,7 @@ s32 zz_000b850_(s32 menuID, s32 type)
                 GSdvdClose(file);
             }
         }
-        memcpy(getTrainerDataStartOffset(0, 0), bk_savedataPtr, 0x27FD0);
+        memcpy(getTrainerDataStartOffset(0, TRAINER_DATA_SAVE_BLOCK), bk_savedataPtr, 0x27FD0);
         bk_savedataPtr = (u8 *)zz_01ce1b0_(bk_savedataPtr);
         if (bk_savedataPtr != 0) {
             /* CP932 message: "free failed". */

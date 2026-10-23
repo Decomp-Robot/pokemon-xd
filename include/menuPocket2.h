@@ -3,6 +3,16 @@
 
 #include <types.h>
 
+enum PocketItemID {
+    POCKET_ITEM_COLOGNE = 0x200,
+    POCKET_ITEM_BATTLE_DISK = 0x215,
+};
+
+enum PocketMessageID {
+    POCKET_MSG_CANNOT_DEPOSIT_ITEM = 0xC37B,
+    POCKET_MSG_DEPOSIT_QUANTITY = 0x3AAC,
+};
+
 struct FIGHT_TRAINER;
 class Hero;
 

@@ -12,7 +12,9 @@ public:
     f32 z; // 0x08
     f32 w; // 0x0C
 
-    GSquat() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
+    GSquat() {}
+    GSquat(f32 rotationX, f32 rotationY, f32 rotationZ, f32 rotationW)
+        : x(rotationX), y(rotationY), z(rotationZ), w(rotationW) {}
 };
 
 extern "C" GSquat zeroQuaternion;

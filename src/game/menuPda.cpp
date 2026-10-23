@@ -1,9 +1,14 @@
+#include <floorRoom.h>
+#include <pokecolo.h>
+#include <gsFlag.h>
+#include <camera.h>
 #include "GSgfx.h"
-#include "gsFlag.h"
+#include "GSmodel.h"
+#include "GSres.h"
 #include "menuItemBios.h"
 #include "menuPda.h"
+#include "menuOffScreen.h"
 #include "menuSub.h"
-#include "pdaMemoList.h"
 #include "time.h"
 #include "winSprite.h"
 
@@ -11,10 +16,6 @@
 // share the fade in menuPdaScriptFade and the PDA frame menu; the helpers behind
 // them drive the model, the top menu and the list cursors.
 
-// Callees shared with the rest of the game. The zz_ names are the
-// still-unrecovered symbols of the neighbouring objects (floor, model, save
-// and PDA sub-menu code); they are called here with the roles the call sites
-// and their arguments show.
 extern "C" {
 void menuOpen(s32 menuId, s32 mode);
 void menuClose(s32 menuId);
@@ -25,24 +26,13 @@ u32 windowGetKeyRepeat(void);
 void *windowGetCursorToItem(tagWINDOW_WORK *window);
 u8 *menuDataBiosGetPtr(long dataId);
 void menuItemBiosSetSelectFlag(s32 dataId, s32 itemId, s32 flag);
-void *GSresGetResourceAllGroup(unsigned long res);
-void *GSresGetResource(s32 group, unsigned long res);
 void GSthreadSwitch(void);
 void GSgfxResetRestore(int mode);
-void GSmodelSetVisibility(void *model, s32 visible);
-void GSmodelSetRenderLayer(void *model, s32 flag, GSgfxLayerID *layerId);
-void GSmodelSetBoundCheck(void *model, s32 on);
 void GSsndPlayNow(s32 id);
 void scriptLightSetDisp(unsigned long res, s32 on);
 void fightOutPokemonSetVisibility(unsigned long res, s32 visible);
 void floorSetFadeScript(s32 floor, s32 script);
-void zz_0114b9c_(s32 flag);
 void floorPop(void);
-s32 zz_005c228_(void);
-u32 zz_01262fc_(void);
-void zz_01971c8_(s32 flag, unsigned long res, f32 frame, s32 unk);
-void GSgfxLayerSetCamera(void *model, void *res);
-void zz_0039d2c_(s8 select);
 s32 menuPdaMemoXDGetItem(void);
 void menuPdaDPMonList(void);
 void menuPdaMemoList(void);
@@ -61,7 +51,7 @@ unsigned long FlashSystemGetNowFrame(unsigned long flash);
 int sprintf(char *buf, const char *format, ...);
 }
 
-// Helpers of the PDA menus recovered in this object and its neighbours.
+// PDA menu helpers.
 void _menuPdaInit(void);
 void _menuPdaStartEvent(void);
 void _menuPdaTopClose(void);
@@ -74,7 +64,6 @@ void _menPdaFadeOutWait(void);
 void _menPdaFadeInWait(void);
 void _menuPdaSetMotion(unsigned long res, s16 motion, f32 frame, bool loop);
 void _menuPdaWaitMotion(unsigned long res);
-extern "C" bool zz_003930c_(tagWINDOW_WORK *window);
 
 // Entry points of this object.
 extern "C" {
@@ -100,13 +89,6 @@ s32 _getMenuIndex(PDATOP_MENU_RES res);
 extern "C" const f32 menuPdaScriptFadeTime;
 extern "C" const f32 menuPdaZero;
 extern "C" const f32 menuPdaAlphaFull;
-
-// pdaMemoList::_menuClose(long)
-void pdaMemoList::_menuClose(long menu)
-{
-    menuClose(menu);
-    menuCloseSync(menu, 1);
-}
 
 extern "C" {
 
@@ -326,7 +308,7 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
 // Button sound of the PDA frame menu; silent while a fight result shows.
 void menuPdaButton(tagWINDOW_WORK *window)
 {
-    if (zz_01262fc_() != 0x38C) {
+    if (fieldGetCurrentRoomID() != 0x38C) {
         menuButtonNormal(window);
     }
 }
@@ -461,7 +443,7 @@ void menuPda(void)
     menuOpen(0xA8, 0);
     model = GSresGetResourceAllGroup(0x17CF1000);
     menuPdaModel = model;
-    GSmodelSetVisibility(model, 0);
+    GSmodelSetVisibility((_GSmodel*)model, 0);
     GSthreadSwitch();
     menuPdaWork.mExitFlag = 0;
     _menuPdaInit();
@@ -518,7 +500,7 @@ void menuPda(void)
     }
     _menPdaFadeOutWait();
     if (menuPdaWork.mFadeOutDone != 1) {
-        zz_0114b9c_(1);
+        menuOffScreenSetDrawEnable(1);
         menuPdaWork.mFadeOutDone = 1;
     }
     _menuPdaTopClose();
@@ -552,9 +534,7 @@ void menuPdaSetPageFlash(s32 res)
     FlashSystemSetNowFrameLabel(0x20543000, label);
 }
 
-// Idle thread of the PDA screen; the script system reaches it without a
-// direct call. The original object exports it (tdesc descriptor, kept so the
-// link reproduces the original DOL).
+// Idle thread of the PDA screen, entered by the script system.
 __declspec(export) void menuPdaMain(void)
 {
     for (;;) {
@@ -570,7 +550,7 @@ __declspec(export) void menuPdaInit(void)
 
     menuPdaModel = model;
     if (model != 0) {
-        GSmodelSetVisibility(model, 0);
+        GSmodelSetVisibility((_GSmodel*)model, 0);
         _menuPdaSetMotion(0x17CF1000, 0, menuPdaZero, false);
     }
     if (menuPdaSoundEnable != 0) {
@@ -586,11 +566,11 @@ void _menuPdaStartEvent(void)
     GSgfxLayerID layer = menuPdaEventLayer[0];
     void *model = GSresGetResourceAllGroup(0x17CF1000);
 
-    GSmodelSetRenderLayer(model, 1, &layer);
+    GSmodelSetRenderLayer((_GSmodel*)model, 1, &layer);
     zz_01971c8_(0x17, 0x17CF1800, menuPdaZero, 0);
-    GSgfxLayerSetCamera(model, GSresGetResource(0x17, 0x17CF1800));
-    GSmodelSetVisibility(model, 1);
-    GSmodelSetBoundCheck(model, 0);
+    GSmodelSetRenderCamera((_GSmodel*)model, GSresGetResource(0x17, 0x17CF1800));
+    GSmodelSetVisibility((_GSmodel*)model, 1);
+    GSmodelSetBoundCheck((_GSmodel*)model, 0);
     _menuPdaSetMotion(0x17CF1000, 0, menuPdaZero, false);
     GSgfxResetRestore(0);
     GSthreadSwitch();

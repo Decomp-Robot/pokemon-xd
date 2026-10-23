@@ -16,13 +16,19 @@ struct CURSOR {
     s16 mCursor;  // 0x02: cursor position of the window.
 };
 
+enum WINDOW_STATE {
+    WINDOW_STATE_INIT = 0,
+    WINDOW_STATE_ACTIVE = 2,
+    WINDOW_STATE_CLOSING = 3,
+};
+
 // Window work, partial. The sprite-work list head at 0x24 is walked by
 // menuPtWindowWorkDrawPrime; GetNowCursor reads the cursor at 0x9E. The
 // custom-menu argument at 0x68 is what the name-entry menus read back. The
 // remaining layout is unrecovered and stays sized padding here.
 struct tagWINDOW_WORK {
     u8 _00;                      // 0x00: unknown.
-    s8 mState;                   // 0x01: menu sequence step the window is in.
+    s8 mState;                   // 0x01: WINDOW_STATE lifecycle step.
     s8 mFlag;                    // 0x02: set by the step's hook, cleared when the step advances.
     u8 _03;                      // 0x03: unknown.
     long mMenuID;                // 0x04: menu data id used for item lookups.

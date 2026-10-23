@@ -2,14 +2,18 @@
 #define MENU_MODEL_H
 
 #include <types.h>
+#include <GSvec.h>
 
 // Work block of one rendered menu model. Only the species of the loaded model
-// is read back; the rest of the layout is unrecovered and stays sized padding.
+// and its transform are read back; the remaining layout stays sized padding.
 // nameEntryModel (menuNameEntry.cpp) fixes this one at 0xEC bytes.
 struct MENU_MODEL {
     u8 _00[0x24];
-    u16 mSpecies; // 0x24: species of the loaded model.
-    u8 _26[0xC6];
+    u16 mSpecies;
+    u8 _26[0x1A];
+    GSvec mAngle;
+    GSvec mOffset;
+    u8 _58[0x94];
 };
 
 // The status screen's model block (menuPokemonStatusModel) is four bytes

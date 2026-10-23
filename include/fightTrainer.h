@@ -17,6 +17,9 @@ typedef struct FIGHT_TRAINER FIGHT_TRAINER;
 // and writes that slot through the Pokemon accessors. The fight-side half of
 // the record belongs to the fight module and stays undeclared here.
 struct FIGHT_TRAINER {
+#ifdef __cplusplus
+    FIGHT_TRAINER();
+#endif
     u16 mDataId; // 0x00: fight trainer data ID the record is set to.
     u16 mResetDataId; // 0x02: reset data ID, kept in the head's Pokemon item slot.
     s32 mHomePlace; // 0x04: home place of the record's hero.

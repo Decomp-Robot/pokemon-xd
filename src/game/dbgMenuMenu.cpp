@@ -136,7 +136,7 @@ void _esabaSetPokemon(long place, long species);
 // none.
 s32 _getWorldMapFlagData(long mapIndex)
 {
-    WorldMapMapData *map = worldMapMapData;
+    WorldMapMapData *map = worldMapData;
 
     map += mapIndex;
 
@@ -149,7 +149,7 @@ s32 _getWorldMapFlagData(long mapIndex)
 // Store `value` in the flag of the map at `mapIndex`.
 void _setWorldMapFlagData(long mapIndex, long value)
 {
-    WorldMapMapData *map = worldMapMapData;
+    WorldMapMapData *map = worldMapData;
 
     map += mapIndex;
 
@@ -181,7 +181,7 @@ extern "C" s32 dbgMenuMenuTestWorlMapShow(void)
 
     sWorldMapMenuArg.mMapIndex = 0;
     sWorldMapMenuArg.mFlagValue = 0;
-    sWorldMapMenuArg.mMapCount = (u16)worldMapMapList->mMapCnt;
+    sWorldMapMenuArg.mMapCount = (u16)*worldMapRibbonCount;
 
     result = menuOpenCustom(WIN_ID_WORLDMAP_SHOW, windowGetActiveID(), 0, 0, 1, 1,
                             &sWorldMapMenuArg);
@@ -254,7 +254,7 @@ extern "C" s32 dbgMenuMenuTestWorlMapFlagSet(void)
 {
     sWorldMapMenuArg.mMapIndex = 0;
     sWorldMapMenuArg.mFlagValue = 0;
-    sWorldMapMenuArg.mMapCount = (u16)worldMapMapList->mMapCnt;
+    sWorldMapMenuArg.mMapCount = (u16)*worldMapRibbonCount;
 
     while (menuOpenCustom(WIN_ID_WORLDMAP_FLAGSET, windowGetActiveID(), 0, 0, 1, 1,
                           &sWorldMapMenuArg) != -1) {

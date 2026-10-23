@@ -4,5 +4,5 @@
  * static initializer of this translation unit instead of being stored in
  * read-only data, so the .ctors entry runs before main(). */
 extern "C" {
-GSquat zeroQuaternion;
+GSquat zeroQuaternion(0.0f, 0.0f, 0.0f, 1.0f);
 }
