@@ -1079,6 +1079,16 @@ ext/musyx_sdk/runtime/synth.c:
 	.sbss       start:0x804EB320 end:0x804EB368
 	.sdata2     start:0x804EDD48 end:0x804EDD88
 
+ext/musyx_sdk/runtime/seq_api.c:
+	.text       start:0x801686F0 end:0x80168720
+	.text       start:0x80168720 end:0x80168758
+	.text       start:0x80168758 end:0x801687A0
+	.text       start:0x801687A0 end:0x801687D8
+	.text       start:0x801687D8 end:0x80168830
+	.text       start:0x80168830 end:0x80168898
+	.text       start:0x80168898 end:0x801688B4
+	.text       start:0x801688B4 end:0x80168958
+
 ext/musyx_sdk/runtime/snd_synthapi.c:
 	.text       start:0x80168958 end:0x801689B8
 	.text       start:0x801689B8 end:0x801689F8
