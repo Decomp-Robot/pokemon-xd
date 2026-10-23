@@ -36,13 +36,25 @@ struct WorldMapCamData {
     f32 fov;
 };
 
+/* Icon work entry (0x2C bytes). SelectIcon and TargetDebug address the
+ * camera position at +0x08. */
+struct WorldMapIconWork {
+    u8 _00[0x08];
+    GSvec pos;
+    u8 _14[0x18];
+};
+
 /* Camera-blend work block (0x68 bytes, allocated by Init). IsBlending only
  * reads the blend parameter at +0x08, which ControlCamera drives from 0 to
  * 1 (its per-frame increment +0x10 is clamped so the blend never passes 1);
  * SetCameraWork targets the current slot at +0x18 while SetCameraNextWork
  * targets the pending slot at +0x40. */
 struct WorldMapCamWork {
-    u8 _00[0x08];
+    /* 0x00: debug target slot; TargetDebug shifts this to +0x04 and
+     * reloads it from the debug table. */
+    s32 _00;
+    /* 0x04: previous debug target slot. */
+    s32 _04;
     /* 0x08: camera blend parameter; 0 = camera at the old position,
      * 1 = fully blended to the new one. */
     f32 blend;
@@ -94,6 +106,7 @@ public:
     bool IsBlending();
     f32 GetAngle(long work);
     void SetCameraSpeed(f32 speed);
+    void TargetDebug(long index);
     void SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
     void SetCameraWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
     void GetCameraData(long index, GSvec* pos, f32* distance, f32* rotY, f32* rotX, f32* fov);
@@ -119,7 +132,7 @@ private:
     /* 0x0C: Icon works (array of 0x2C-byte WorldMapIconWork entries, one
      * per flag data entry). Init allocates and constructs the array;
      * InitModel, SelectIcon and SetCursorPosition index it. */
-    void* mIcons;
+    WorldMapIconWork* mIcons;
     /* 0x10..0x43: Unrecovered map state (cursor position, camera targets).
      * Only MainSub/ControlCamera touch these; left as padding until those
      * functions are recovered. */

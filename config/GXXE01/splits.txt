@@ -35,6 +35,9 @@ decomp/menuWorldMap.cpp:
 game/WorldMap.cpp:
 	.text       start:0x80011E30 end:0x80011E60
 
+game/WorldMapDebug.cpp:
+	.text       start:0x80012604 end:0x800126A0
+
 decomp/WorldMapIsBlending.cpp:
 	.text       start:0x800127F4 end:0x80012818
 
