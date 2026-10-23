@@ -1146,7 +1146,7 @@ completed = true
 
 [[lib]]
 name = "runtime"
-mw_version = "GC/2.6"
+mw_version = "GC/1.3.2r"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/musyx_sdk/msl", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/musyx_sdk/include", "-D__GEKKO__", "-DMUSY_VERSION_MAJOR=2", "-DMUSY_VERSION_MINOR=0", "-DMUSY_VERSION_PATCH=3", "-fp_contract off"]
@@ -1217,4 +1217,8 @@ completed = true
 
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/snd_midictrl.c"
+completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/synthvoice.c"
 completed = true
