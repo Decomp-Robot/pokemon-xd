@@ -1125,9 +1125,126 @@ completed = true
 name = "ext/dolphin_sdk/os/OSAlarm.c"
 completed = true
 
+# GSmemman.a heap allocator. OSAlloc.o, sysdolmem.o and poolAlloc.o were built
+# unoptimized: -O0,p keeps the spilled temporaries and dead stores the objects
+# still contain. All three share the settings below, and each of them is
+# required - -O4,p shrinks OSAlloc.o .text from 0x11CC to 0xFE8, the peephole
+# pass off grows it to 0x1214, -inline auto or -schedule off shrinks it to
+# 0x11C4, and without -use_lmw_stmw (0x1204) or without the readonly string pool
+# the object changes as well.
 [[lib.object]]
-name = "ext/dolphin_sdk/os/OSAlloc.c"
-completed = false
+name = "ext/dolphin_sdk/os/OSAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/sysdolmem.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/poolAlloc.cpp"
+completed = true
+mw_version = "GC/2.6"
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/os",
+    "-i src/ext/dolphin_sdk/dvd",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+    "-O0,p",
+    "-inline noauto",
+    "-opt peephole",
+    "-schedule on",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c++",
+]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSArena.c"

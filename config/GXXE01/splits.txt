@@ -257,8 +257,18 @@ game/menuTitle.cpp:
 	.text       start:0x800A3150 end:0x800A423C
 	.sdata2     start:0x804ECA18 end:0x804ECA20
 
-ext/dolphin_sdk/os/OSAlloc.c:
-	.text       start:0x800A7F18 end:0x800A7F34
+ext/dolphin_sdk/os/OSAlloc.cpp:
+	.text       start:0x800A7CDC end:0x800A8EA8
+	.rodata     start:0x802EBD60 end:0x802EC1A8
+	.sbss       start:0x804EAA80 end:0x804EAA92
+
+ext/dolphin_sdk/os/sysdolmem.cpp:
+	.text       start:0x800A8EA8 end:0x800A9118
+	.sbss       start:0x804EAA98 end:0x804EAAAC
+
+ext/dolphin_sdk/os/poolAlloc.cpp:
+	.text       start:0x800A9118 end:0x800A9320
+	.bss        start:0x8043D330 end:0x8043D6B0
 
 ext/dolphin_sdk/base/PPCArch.c:
 	.text       start:0x800A9574 end:0x800A96AC

@@ -7,21 +7,21 @@
 extern "C" {
 #endif
 
-typedef int OSHeapHandle;
+typedef s32 OSHeapHandle;
 
 extern volatile OSHeapHandle __OSCurrHeap;
 
-void* OSAllocFromHeap(int heap, u32 size);
+void* OSAllocFromHeap(s32 heap, s32 size);
 void* OSAllocFixed(void* rstart, void* rend);
-void OSFreeToHeap(int heap, void* ptr);
-int OSSetCurrentHeap(int heap);
-void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps);
-int OSCreateHeap(void* start, void* end);
-void OSDestroyHeap(int heap);
-void OSAddToHeap(int heap, void* start, void* end);
-s32 OSCheckHeap(int heap);
+void OSFreeToHeap(s32 heap, void* ptr);
+s32 OSSetCurrentHeap(s32 heap);
+void* OSInitAlloc(void* arenaStart, void* arenaEnd, s32 maxHeaps);
+s32 OSCreateHeap(void* start, void* end);
+void OSDestroyHeap(s32 heap);
+void OSAddToHeap(s32 heap, void* start, void* end);
+s32 OSCheckHeap(s32 heap);
 u32 OSReferentSize(void* ptr);
-void OSDumpHeap(int heap);
+void OSDumpHeap(s32 heap);
 void OSVisitAllocated(void (*visitor)(void*, u32));
 
 #define OSAlloc(size) OSAllocFromHeap(__OSCurrHeap, (size))

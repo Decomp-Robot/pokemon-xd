@@ -14,7 +14,7 @@ u32 __OSIsDebuggerPresent(void);
 void __OSPSInit(void);
 
 // OSAlloc
-extern volatile int __OSCurrHeap;
+extern volatile s32 __OSCurrHeap;
 
 // OSAudioSystem
 void __OSInitAudioSystem(void);
