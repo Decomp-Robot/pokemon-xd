@@ -1347,6 +1347,9 @@ libc/mem.c:
 libc/mem_funcs.c:
 	.text       start:0x800DF4B0 end:0x800DF780
 
+libc/string.c:
+	.text       start:0x800E1A8C end:0x800E1D68
+
 ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800E7008 end:0x800E700C
 	.text       start:0x800E700C end:0x800E7010

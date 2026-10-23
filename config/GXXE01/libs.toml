@@ -3618,6 +3618,10 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "libc/mem_funcs.c"
 completed = true
+[[lib.object]]
+name = "libc/string.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib]]
 name = "GSmemman"
