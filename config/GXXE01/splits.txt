@@ -1028,15 +1028,22 @@ ext/musyx_sdk/runtime/synth_dbtab.c:
 ext/dolphin_sdk/ax/AXComp.c:
 	.data       start:0x80406B20 end:0x80408560
 
+ext/dolphin_sdk/gx/GXVert.c:
+	.text       start:0x80125678 end:0x80125684
+
+ext/musyx_sdk/runtime/hw_volconv.c:
+	.text       start:0x8017A84C end:0x8017AF3C
+	.data       start:0x80408578 end:0x8040877C
+	.data       start:0x8040877C end:0x8040878C
+	.data       start:0x8040878C end:0x8040879C
+	.sdata2     start:0x804EDE08 end:0x804EDE3C
+
 ext/musyx_sdk/runtime/dsp_import.c:
 	.data       start:0x80409040 end:0x8040AF00
 	.sdata      start:0x804E8460 end:0x804E8468
 
 ext/dolphin_sdk/gd/GDTexture.c:
 	.sdata      start:0x804E8700 end:0x804E8738
-
-ext/dolphin_sdk/gx/GXVert.c:
-	.text       start:0x80125678 end:0x80125684
 
 ext/musyx_sdk/runtime/snd_math.c:
 	.text       start:0x8017D3D4 end:0x8017D480

@@ -1149,7 +1149,7 @@ name = "runtime"
 mw_version = "GC/2.6"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/musyx_sdk/include", "-D__GEKKO__", "-DMUSY_VERSION_MAJOR=2", "-DMUSY_VERSION_MINOR=0", "-DMUSY_VERSION_PATCH=3", "-fp_contract off"]
+cflags_extra = ["-i src/ext/musyx_sdk/msl", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/musyx_sdk/include", "-D__GEKKO__", "-DMUSY_VERSION_MAJOR=2", "-DMUSY_VERSION_MINOR=0", "-DMUSY_VERSION_PATCH=3", "-fp_contract off"]
 
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/synth_dbtab.c"
@@ -1161,4 +1161,8 @@ completed = true
 
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/snd_math.c"
+completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/hw_volconv.c"
 completed = true
