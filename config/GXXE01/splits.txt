@@ -34,6 +34,9 @@ decomp/pokemonindex.cpp:
 decomp/menuMetaMenu.cpp:
 	.text       start:0x80020A7C end:0x80020A90
 
+decomp/menuPocket.cpp:
+	.text       start:0x80021EC8 end:0x80021EFC
+
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
