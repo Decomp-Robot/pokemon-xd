@@ -384,6 +384,9 @@ __fini_cpp_exceptions.cpp:
 	.text       start:0x800DA88C end:0x800DA8C0
 	.dtors      start:0x802EA000 end:0x802EA004
 
+ext/dolphin_sdk/gx/GXVert.c:
+	.text       start:0x80125678 end:0x80125684
+
 ext/dolphin_sdk/os/__start.c:
 	.init       start:0x80003100 end:0x80003400
 
