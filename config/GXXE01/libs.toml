@@ -826,7 +826,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartenv.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/axart/axartlfo.c"

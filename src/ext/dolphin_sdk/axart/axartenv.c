@@ -2,6 +2,7 @@
 #include <dolphin/os.h>
 #include <dolphin/mix.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTPitchEnv(AXART_PITCH_ENV* articulator) {
     if (articulator->cents != articulator->target) {
         articulator->cents += articulator->delta;
@@ -17,6 +18,7 @@ void AXARTPitchEnv(AXART_PITCH_ENV* articulator) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXARTVolumeEnv(AXART_VOLUME_ENV* articulator) {
     if (articulator->attenuation != articulator->target) {
         articulator->attenuation += articulator->delta;
