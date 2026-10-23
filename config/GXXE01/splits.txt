@@ -529,6 +529,9 @@ ext/dolphin_sdk/demo/DEMOWin.c:
 ext/dolphin_sdk/fileCache/fileCache.c:
 	.text       start:0x800BF34C end:0x800BF34C
 
+ext/dolphin_sdk/support/HTable.c:
+	.text       start:0x800BF34C end:0x800BF34C
+
 ext/dolphin_sdk/card/CARDBios.c:
 	.text       start:0x800BF34C end:0x800BF424
 	.text       start:0x800BF424 end:0x800BF53C
