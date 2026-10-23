@@ -268,7 +268,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXVerifXF.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXVert.c"

@@ -63,6 +63,7 @@ static u8 lightRegisterNames[13][256] = {
 #define BYTE2(var) (((u8 *)&(var))[2])
 #define BYTE3(var) (((u8 *)&(var))[3])
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CountTextureTypes(void) {
     u32 i;
     u32 texgen_type;
@@ -92,28 +93,33 @@ static void CountTextureTypes(void) {
     numColorTextures = numColor0Textures + numColor1Textures;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void InitializeXFVerifyData(void) {
     CountTextureTypes();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckDirty(u32 index, const char* name) {
     if (!__gxVerif->xfRegsDirty[index - 0x1000] && __gxVerif->verifyLevel >= __gxvWarnLev[53]) {
         __GX_WARNF(GXWARN_XF_CTRL_UNINIT, index, name);
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckClean(u32 index, const char* name) {
     if (__gxVerif->xfRegsDirty[index - 0x1000] && __gxVerif->verifyLevel >= __gxvWarnLev[54]) {
         __GX_WARNF(GXWARN_XF_CTRL_INIT, index, name);
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckCTGColors(void) {
     if ((u32)(BYTE3(__gxVerif->xfRegs[9]) & 3) > 2 && __gxVerif->verifyLevel >= __gxvWarnLev[120]) {
         __GX_WARNF(120, (u8)(BYTE3(__gxVerif->xfRegs[9]) & 3));
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static GXBool __GXVertexPacketHas(GXAttr attr) {
     switch (attr) {
     case GX_VA_POS:        return GET_REG_FIELD(__GXData->vcdLo, 2, 9) != 0;
@@ -143,6 +149,7 @@ static GXBool __GXVertexPacketHas(GXAttr attr) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckVertexPacket(void) {
     u32 numHostTextures;
     u32 numHostTexAbsent;
@@ -188,6 +195,7 @@ static void CheckVertexPacket(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckSourceRows(void) {
     u32 i;
 
@@ -238,6 +246,7 @@ static void CheckSourceRows(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckTextureOrder(void) {
     u8 done = 0;
     u32 count = 0;
@@ -279,6 +288,7 @@ static void CheckTextureOrder(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckRAM(u8 Normal, u32 StartingAddress, u32 Count, GXWarnID WarnID, char* Str) {
     u32 i;
     u8 printedPreamble;
@@ -301,6 +311,7 @@ static void CheckRAM(u8 Normal, u32 StartingAddress, u32 Count, GXWarnID WarnID,
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckBumpmapTextures(void) {
     u32 i;
     u32 BumpMapSource;
@@ -346,6 +357,7 @@ static void CheckBumpmapTextures(void) {
     lightRAMOffset; lightRAMOffset;  // needed to match
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckTextureTransformMatrices(void) {
     u32 i;
     u32 StartingAddress;
@@ -458,6 +470,7 @@ static void CheckTextureTransformMatrices(void) {
     MtxIndexInVertexPacket;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckInputForms(void) {
     u32 i;
 
@@ -478,6 +491,7 @@ static void CheckInputForms(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckLight(u32 lightSource) {
     u32 lightRAMOffset;
     u8 printedPreamble;
@@ -499,6 +513,7 @@ static void CheckLight(u32 lightSource) {
 }
 
 // NONMATCHING
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckColor0(void) {
     char Preamble[256];
     u8 haveLight;
@@ -604,6 +619,7 @@ static void CheckColor0(void) {
 }
 
 // NONMATCHING
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckColor1(void) {
     u8 usingColor1;
     char Preamble[256];
@@ -715,6 +731,7 @@ static void CheckColor1(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckViewport(void) {
     f32 vl;
     f32 vr;
@@ -743,6 +760,7 @@ static void CheckViewport(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ComputeSignExponentMantissa(f32 floatVal, u32* sign, u32* exponent, u32* mantissa) {
     u32 intVal = *(u32*)&floatVal;
 
@@ -751,6 +769,7 @@ static void ComputeSignExponentMantissa(f32 floatVal, u32* sign, u32* exponent, 
     *mantissa = intVal & 0x7FFFFF;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckFloatingPointValue(u8 dirtyBit, u32 value, char* label) {
     u32 sign;
     u32 exponent;
@@ -800,6 +819,7 @@ static void CheckFloatingPointValue(u8 dirtyBit, u32 value, char* label) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckMatrixRAMRanges(void) {
     u32 i;
     char label[256];
@@ -810,6 +830,7 @@ static void CheckMatrixRAMRanges(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckNormalRAMRanges(void) {
     u32 i;
     char label[256];
@@ -820,6 +841,7 @@ static void CheckNormalRAMRanges(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckDMatrixRAMRanges(void) {
     u32 i;
     char label[256];
@@ -830,6 +852,7 @@ static void CheckDMatrixRAMRanges(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckLightRAMRanges(void) {
     u32 lightSource;
     u32 lightRAMOffset;
@@ -849,6 +872,7 @@ static void CheckLightRAMRanges(void) {
     i; lightSource;  // needed to match
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckControlRAMRanges(void) {
     CheckFloatingPointValue(__gxVerif->xfRegsDirty[0x1A], __gxVerif->xfRegs[0x1A], "Viewport Scale X");
     CheckFloatingPointValue(__gxVerif->xfRegsDirty[0x1B], __gxVerif->xfRegs[0x1B], "Viewport Scale Y");
@@ -864,6 +888,7 @@ static void CheckControlRAMRanges(void) {
     CheckFloatingPointValue(__gxVerif->xfRegsDirty[0x25], __gxVerif->xfRegs[0x25], "Projection Matrix F Value");
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckFloatingPointRanges(void) {
     CheckMatrixRAMRanges();
     CheckNormalRAMRanges();
@@ -872,6 +897,7 @@ static void CheckFloatingPointRanges(void) {
     CheckControlRAMRanges();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckMatrixIndices(void) {
     if (!__GXVertexPacketHas(GX_VA_PNMTXIDX)
      || !__GXVertexPacketHas(GX_VA_TEX0MTXIDX)
@@ -897,6 +923,7 @@ static void CheckMatrixIndices(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckErrors(void) {
     u32 i;
     char registerName[80];
@@ -969,6 +996,7 @@ static void CheckErrors(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void CheckWarnings(void) {
     if (__gxVerif->verifyLevel >= 1) {
         CheckInputForms();
@@ -985,10 +1013,12 @@ static void CheckWarnings(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void DumpXFRegisters(void) {
     static u8 firstTime = 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __GXVerifyXF(void) {
     if (internalDebug) {
         DumpXFRegisters();
