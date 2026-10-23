@@ -2,6 +2,7 @@
 
 #include "__card.h"
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void EraseCallback(s32 chan, s32 result) {
     CARDControl* card;
     CARDCallback callback;
@@ -55,6 +56,7 @@ error:
     callback(chan, result);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 CARDEraseAsync(CARDFileInfo* fileInfo, s32 length, s32 offset, CARDCallback callback) {
     CARDControl* card;
     s32 result;
@@ -92,6 +94,7 @@ s32 CARDEraseAsync(CARDFileInfo* fileInfo, s32 length, s32 offset, CARDCallback 
     return result;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 CARDErase(CARDFileInfo* fileInfo, s32 length, s32 offset) {
     s32 result = CARDEraseAsync(fileInfo, length, offset, __CARDSyncCallback);
     if (result < 0) {
