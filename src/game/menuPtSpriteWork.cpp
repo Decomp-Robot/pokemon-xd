@@ -26,14 +26,14 @@ tagMENU_ITEM_DATA *menuPtItemGetBySpriteWork(tagWINDOW_WORK *window, tagSPRITE_W
 
 unsigned long menuPtSpriteWorkGetIndexFromId(tagWINDOW_WORK *window, tagSPRITE_WORK *work, unsigned long itemID)
 {
-    tagSPRITE_WORK *node = menuPtSpriteWorkGetByItemID(window, itemID, 0);
+    tagSPRITE_WORK *sprite = menuPtSpriteWorkGetByItemID(window, itemID, 0);
     unsigned long index = 0;
 
     while (1) {
-        if (node == work) {
+        if (sprite == work) {
             break;
         }
-        node = node->mNext;
+        sprite = sprite->mNext;
         index++;
     }
 
