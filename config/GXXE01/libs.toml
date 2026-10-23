@@ -3429,6 +3429,9 @@ completed = true
 name = "libc/direct_io.c"
 completed = true
 [[lib.object]]
+name = "libc/errno.c"
+completed = true
+[[lib.object]]
 name = "libc/file_io.c"
 completed = true
 [[lib.object]]
