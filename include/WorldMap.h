@@ -204,12 +204,30 @@ struct WorldMapScooterData {
 /* Map data entry returned by SearchData; the move demo reads the model id at
  * +0x14 and MainSub releases the object at +0x1C. */
 struct WorldMapMapData {
-    u8 _00[0x14];
+    u8 _00[0x04];                // 0x00-0x03: unknown.
+    /* 0x04: save flag the map keeps its state in, 0 while it has none.
+     * SearchDataFloorID reads it (and skips maps without one),
+     * _getWorldMapFlagData/_setWorldMapFlagData store the map's state in it. */
+    u32 mFlagID;
+    u8 _08[0x0C];                // 0x08-0x13: unknown.
     u32 mModelID;
     u8 _18[0x04];
     void* mExtra;
     u8 _20[0x04];
 };
+
+/* The map list the world map loads: the number of maps the map is made of at
+ * +0. getRibbonCnt hands it out and Init sizes the per-map works with it; no
+ * other field of the block is read by the recovered units. */
+struct WorldMapMapList {
+    u32 mMapCnt;                 // 0x00: number of maps in the world map.
+};
+
+/* The map list and the map records it counts, one WorldMapMapData per map.
+ * Both are set by the code loading the world map data and are shared by the
+ * map module, the PDA's map search and the debug menu's world map entries. */
+extern WorldMapMapList* worldMapMapList;
+extern WorldMapMapData* worldMapMapData;
 
 /* Attachment modes of WorldMapModel::ModelAttach. */
 enum GSattachMode {
