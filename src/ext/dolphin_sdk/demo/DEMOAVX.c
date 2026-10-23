@@ -19,6 +19,7 @@ static u32 __AVX_buffer_size = 0;
 
 static BOOL flag = FALSE;
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOAVX_isr(void) {
     u32 frame_address;
 
@@ -40,6 +41,7 @@ static void __DEMOAVX_isr(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DEMOAVXGetNumFilled(void) {
     u32 tmp;
     BOOL old;
@@ -53,10 +55,12 @@ u32 DEMOAVXGetNumFilled(void) {
     return tmp;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DEMOAVXGetFrameCounter(void) {
     return __AVX_curr_frame;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DEMOAVXRefreshBuffer(u32* start_index, u32* end_index) {
     u32 num_filled;
     u32 curr_frame;
@@ -88,6 +92,7 @@ u32 DEMOAVXRefreshBuffer(u32* start_index, u32* end_index) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOAVXInit(s16* left, s16* right, u32 size) {
     __AVX_left_buffer  = left;
     __AVX_right_buffer = right;
@@ -97,6 +102,7 @@ void DEMOAVXInit(s16* left, s16* right, u32 size) {
     DEMOAVXAttach(__AVX_internal_buffer, 10);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOAVXAttach(void* buffer, u32 num_frames) {
     BOOL old;
     u32 i;
