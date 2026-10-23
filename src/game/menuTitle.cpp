@@ -98,7 +98,7 @@ extern u32 _menuTitleSeCount;    // frames the flash end holds
 extern u32 _menuTitleType;     // set when a select entry is confirmed
 extern f32 _menuTitleFrameCount;         // press-start prompt fade 0..1
 extern f32 _menuTitleAutoDemoCount;     // bgm fade-out seconds accumulated
-extern u32 _gsthread_ptr_fight_reg_wzx;    // preread thread id, 0 when none runs
+extern GSthread *_gsthread_ptr_fight_reg_wzx;    // preread thread, 0 when none runs
 extern u32 _menuTitleSkipFlag;           // cleared when the title flow initializes
 extern s16 _titleCursorTimer;       // press-start pulse frame, advanced % 1000
 

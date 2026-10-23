@@ -23,7 +23,6 @@ s32 pokemonDataBiosGetVoice(PokemonSpeciesStats *stats);
 u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
 u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);
-u8 pokemonDataCanLearnTutorMove(u16 species, u16 itemId);
 
 void *pokemonSeikakuDataBiosGetPtr(u8 id);
 

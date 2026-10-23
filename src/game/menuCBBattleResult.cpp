@@ -4,6 +4,7 @@
 #include <msgctrl.h>
 #include <gbaCommand.h>
 #include <menuCBBios.h>
+#include <FightResult.h>
 #include <types.h>
 
 /*
@@ -93,7 +94,7 @@ extern "C" void menuCB_BattleResult(_MENUCBWORK *work)
 extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
 {
     s32 homePlace = -1;
-    u16 battleResult = battleGetResult();
+    u16 battleResult = fightGetFightResultId();
     u8 shown = 0;
     s32 state;
     s32 menuID;

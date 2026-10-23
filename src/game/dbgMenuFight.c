@@ -767,7 +767,7 @@ s32 dbgMenuFightEncountSelect(void)
 }
 s32 dbgMenuFightEncount(u16 encount)
 {
-    u32 thread = GSthreadCreate(1, GSfloorGetCurrentFloorGroupID(), 0x4000, 1, 1, (GSthreadEntry)fightEncount);
+    GSthread *thread = GSthreadCreate(1, GSfloorGetCurrentFloorGroupID(), 0x4000, 1, 1, (GSthreadEntry)fightEncount);
     if (thread != 0) {
         GSthreadSetArgs(thread, 1, encount);
         GSthreadSetName(thread, "fightEnc(Debug)");

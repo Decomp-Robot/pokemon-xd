@@ -1641,6 +1641,126 @@ extra_cflags = [
 ]
 
 [[lib]]
+name = "fade.a"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/fade/fade_effect.cpp"
+completed = true
+cflags = [
+    "-i src/ext/msl/include",
+
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-W error",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse,readonly",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
+name = "game/app/fade/fade_fluid.cpp"
+completed = true
+cflags = [
+    "-i src/ext/msl/include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-W error",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse,readonly",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib]]
+name = "script.a"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/script/appScript.cpp"
+completed = true
+cflags = [
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,s",
+    "-inline deferred",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-W error",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse,readonly",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+# The sound engine's stream callbacks: the file system and the audio loader
+# reach them as ordinary calls, so they stay out of line.
+
+
+[[lib]]
 name = "TRK_MINNOW_DOLPHIN"
 mw_version = "GC/2.6"
 cflags_preset = "sdk"

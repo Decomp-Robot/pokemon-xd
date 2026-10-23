@@ -3,6 +3,13 @@
 
 #include <types.h>
 
+// Handle of a registered resource: the group and resource id pair the
+// resource system resolves a resource with.
+struct GSresID {
+    unsigned long groupId;
+    unsigned long resourceId;
+};
+
 // Release callback of an entry of the resource system: resFreeResource hands
 // it the resource the entry has stored together with the group id and
 // resource id the resource is registered under, and gives the entry up once

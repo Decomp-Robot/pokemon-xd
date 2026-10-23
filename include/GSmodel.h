@@ -76,6 +76,7 @@ struct _GSmodelAnimCBData {
 };
 typedef _GSmodelAnimCBData GSmodelAnimEndedEvent;
 struct _GSmodel;
+typedef struct _GSmodel GSmodel;
 typedef void (*GSmodelAnimEndedCallback)(_GSmodel *, GSmodelAnimEndedEvent *);
 typedef GSattachMode GSmodelAttachmentType;
 
@@ -135,6 +136,9 @@ void GSmodelFree(_GSmodel* model);
 void GSmodelAttachToGSpart(_GSmodel* model, GSpart* part, GSattachMode mode, u8 inheritScale, u8 keepTransform);
 #endif
 GSbound *GSmodelGetBound(_GSmodel *model);
+void GSmodelAddPosition(GSmodel *model, GSvec *position);
+void GSmodelRecalculateBound(GSmodel *model);
+void GSmodelIterateList(void (*callback)(GSmodel *, void *), void *userContext);
 void GSmodelForceAnimTransformUpdate(_GSmodel *model);
 void GSmodelSetAnimRate(_GSmodel *model, f32 rate);
 void GSmodelSetAnimIndex(_GSmodel *model, u32 index);

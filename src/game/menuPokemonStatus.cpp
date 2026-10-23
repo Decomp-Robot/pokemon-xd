@@ -1187,7 +1187,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     unsigned long messageParameter;
     u32 color;
     u16 textureID;
-    s32 ball;
+    u8 ball;
 
     if (pokemon == 0)
         return;
@@ -1329,9 +1329,9 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     }
 
     case MENU_POKEMON_STATUS_ITEM_BALL: {
-        ball = pokemonGetBall(pokemon);
+        ball = pokemonBiosGetCatchBallId(pokemon);
 
-        if ((u8)ball == 0)
+        if (ball == 0)
             return;
         item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_HEAD, MENU_POKEMON_STATUS_ITEM_BALL);
         windowDrawSprite2(0, 0, item->mWidth, item->mHeight, 0xFFFFFFFF, window,

@@ -11,6 +11,7 @@
 #include <gbaCommand.h>
 #include <gbaAgb.h>
 #include <menuCBBios.h>
+#include <FightResult.h>
 #include <types.h>
 
 /*
@@ -589,7 +590,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
                 + count * sizeof(GbaBattleSummary));
         gba_SIProbe_ErrorCntClear(channelIndex);
         for (;;) {
-            if (battleGetResult() == 1) {
+            if (fightGetFightResultId() == 1) {
                 PKJB_ReturnTitle(channelIndex);
                 return GBA_ACTION_BATTLE_RESULT;
             }

@@ -2024,6 +2024,24 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.sdata      start:0x804E8468 end:0x804E846C
 	.sdata2     start:0x804EDF48 end:0x804EDF60
 
+game/app/fade/fade_effect.cpp:
+	.text       start:0x801B711C end:0x801B715C
+	.ctors      start:0x802E9FD8 end:0x802E9FDC
+	.bss        start:0x80478210 end:0x8047840C
+
+game/app/fade/fade_fluid.cpp:
+	.text       start:0x801B715C end:0x801B8474
+	.rodata     start:0x802F4A78 end:0x802F4AB8
+	.bss        start:0x80478A88 end:0x80478AC4
+	.sbss       start:0x804EB6C0 end:0x804EB6C4
+	.sdata2     start:0x804EE658 end:0x804EE6B8
+
+game/app/script/appScript.cpp:
+	.text       start:0x801B8474 end:0x801BE3CC
+	.rodata     start:0x802F4AB8 end:0x802F4C50
+	.data       start:0x8040B9C0 end:0x8040BCCC
+	.sdata2     start:0x804EE6B8 end:0x804EE700
+
 game/app/fight/fightFloor.cpp:
 	.text       start:0x801F5AAC end:0x801F5B38
 	.ctors      start:0x802E9FDC end:0x802E9FE0

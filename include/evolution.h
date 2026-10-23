@@ -44,6 +44,8 @@ s32 pokemonEvolutionCheck(Pokemon *pokemon, s32 evoMode, u16 itemID, u16 *outAdd
 // (button mask 0x200), and fade lets the routine fade the screen itself
 // (the item handlers fade themselves). The scene opening is unconditional.
 // Reports the scene result.
+void evolution(void);
+
 s32 pokemonEvolutionAll(Pokemon *pokemon, s32 evoSpecies, u16 addedSpecies, POKEMON_EVOLUTION_INFO *info, Hero *hero, s32 registerMemo, s32 enableCancel, s32 fade);
 
 // Teaches wazaID through the move-learning scene. windowType selects the

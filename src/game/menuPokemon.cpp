@@ -20,6 +20,7 @@
 #include <menuPokemonMessages.h>
 #include <Pokemon.h>
 #include <PokemonData.h>
+#include <pokemonDB.h>
 #include <hero.h>
 #include <heroBios.h>
 #include <GSflag.h>
@@ -433,7 +434,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
 
             if (pokemonIsDarkPokemon(pokemon) != 0) {
                 msgId = MSG_TM_CANT;
-            } else if (pokemonDataCanLearnTutorMove(
+            } else if (pokemonDB_GetTeachWaza(
                            pokemonBiosGetPokemonDataId(pokemon), menuPokemonWork.mItemId) == 0) {
                 msgId = MSG_TM_CANT;
             } else {

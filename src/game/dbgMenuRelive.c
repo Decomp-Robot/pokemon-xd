@@ -1,14 +1,12 @@
 #include <types.h>
 #include <hero.h>
+#include <pokemonRelive.h>
 
 /* Debug menu that forces the hero's active pokemon to relive (purify) and
  * re-arms the relive parameters. */
 
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
-
-
-void preReliveSetParameter(s32 a, s32 b, s32 c);
 
 #pragma peephole off
 

@@ -1,10 +1,12 @@
 #ifndef FIGHT_RESULT_H
 #define FIGHT_RESULT_H
 
+#include <types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-long fightGetFightResultId(void);
+u16 fightGetFightResultId(void);
 #ifdef __cplusplus
 }
 #endif

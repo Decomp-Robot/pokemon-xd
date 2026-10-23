@@ -25,6 +25,7 @@ struct Pokemon {
     DarkPokemon* getDarkPokemon();
     PokemonData* getPokemonDataPtr() const;
     u16 getItemDataId() const;
+    bool isLegend() const;
     u8 isDarkPokemon() const;
     unsigned long getCatchTrainerRnd() const;
     void setCatchTrainerRnd(unsigned long rnd);
@@ -202,7 +203,12 @@ u8 pokemonGetDarkPokemonLevel(Pokemon *pokemon);
 
 u8 pokemonIsShinyFromPIDAndTID(Pokemon *pokemon);
 
-s32 pokemonGetBall(Pokemon *pokemon);
+void pokemonPlayVoice(Pokemon *pokemon);
+void pokemonWazaForget(Pokemon *pokemon, int slot);
+int pokemonGetWazaCount(Pokemon *pokemon);
+s8 pokemonSetWazaStatus(Pokemon *pokemon, u16 wazaID, u8 replace);
+void pokemonWazaCopy(Pokemon *pokemon, u16 destination, u16 source);
+u16 *pokemon_GetName(Pokemon *pokemon);
 #ifdef __cplusplus
 }
 #endif

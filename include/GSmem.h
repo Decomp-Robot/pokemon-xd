@@ -12,6 +12,8 @@ void* GSmemAllocClr(u32 size);
 void* GSmemAllocAlign(u32 size, u16 alignment);
 void* GSmemAllocAlignFromEnd(u32 size, u16 alignment);
 void GSmemFree(void* ptr);
+long GSmemGetCurrentHeap(void);
+long GSmemSetAllocMethodHeap(long heap, long method);
 
 #ifdef __cplusplus
 }

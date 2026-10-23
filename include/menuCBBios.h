@@ -206,7 +206,6 @@ void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *pokemon, s32 i
 void menuCBRule_GetTaikaiFieldFirstDraw(Hero *hero);
 void menuCBRule_ErrorFlagSetItemGetTiming(Hero *hero, Pokemon *pokemon, s32 slot);
 void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry);
-u16 battleGetResult(void);
 }
 
 void _menuCBBios_RecoverAllPokemons(Hero *hero);

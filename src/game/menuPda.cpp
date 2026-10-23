@@ -16,6 +16,7 @@
 #include <GSmodel.h>
 #include <GSres.h>
 #include <floorManager.h>
+#include <script.h>
 #include "GSgfx.h"
 #include "GSmodel.h"
 #include "GSres.h"
@@ -37,7 +38,6 @@ static s16 _cursor_index[5];
 extern "C" {
 double acos(double value);
 void GSthreadSwitch(void);
-void scriptLightSetDisp(unsigned long res, s32 on);
 
 void GSfloorPop(void);
 s32 pokecoloGetRomVersion(void);

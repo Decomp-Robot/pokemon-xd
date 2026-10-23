@@ -3,6 +3,8 @@
 
 #include <types.h>
 
+typedef struct GSthread GSthread;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,11 +12,11 @@ void GSthreadUnblockGroup(unsigned long group);
 
 typedef void (*GSthreadEntry)(void);
 
-u32 GSthreadCreate(s32 priority, u32 groupId, u32 stackSize, s32 saveFpr,
-                   s32 terminateOnExit, GSthreadEntry entry);
-void GSthreadSetArgs(u32 threadId, s32 count, ...);
-void GSthreadSetName(u32 threadId, const char *name);
-void GSthreadTerminate(u32 threadId);
+GSthread *GSthreadCreate(s32 priority, u32 groupId, u32 stackSize, s32 saveFpr,
+                         s32 terminateOnExit, GSthreadEntry entry);
+void GSthreadSetArgs(GSthread *thread, s32 count, ...);
+void GSthreadSetName(GSthread *thread, const char *name);
+void GSthreadTerminate(GSthread *thread);
 void GSthreadSwitch(void);
 
 #ifdef __cplusplus

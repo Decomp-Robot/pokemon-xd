@@ -123,12 +123,12 @@ u32 soundGetVolume(s32 sndID)
     return GSsndGetVolume(sndID);
 }
 
-void soundSetVolume(s32 volume, s32 time)
+s32 soundSetVolume(s32 volume, s32 time)
 {
     soundSetVolumeID(soundGetBGMID(), time, volume);
 }
 
-void soundSetVolumeID(s32 sndID, u32 time, s32 volume)
+s32 soundSetVolumeID(s32 sndID, u32 time, s32 volume)
 {
     GSsndSetOriginalVolume(sndID, time, volume);
 }
@@ -157,7 +157,7 @@ s32 soundCreateEmitter(s32 sndID, f32 x, f32 y, f32 z)
     return SND_BOOL((u32)emitter);
 }
 
-void soundStopEnv(s32 fadeTime)
+s32 soundStopEnv(s32 fadeTime)
 {
     soundStop(soundPlayEnvID, fadeTime);
 }

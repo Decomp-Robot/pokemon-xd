@@ -1,20 +1,15 @@
 #include <types.h>
+#include <GSflag.h>
 
-/* Debug-menu flag list: gDbgMenuFlagWork holds the entry count and the id of
- * the first entry; gDbgMenuFlagIdTable holds one linked record per entry. */
-typedef struct {
-    u32 count;
-    s16 head;
-} FlagWork;
-
+/* Debug-menu flag list: flag_data_number holds the entry count and the id of
+ * the first entry; flag_data holds one linked record per entry. */
 typedef struct {
     s16 unk0;
     s16 unk1;
     s16 next;
 } FlagEntry;
 
-extern FlagWork *gDbgMenuFlagWork;
-extern FlagEntry *gDbgMenuFlagIdTable;
+extern FlagEntry *flag_data;
 
 /* Id of the cursor-th entry of the flag list. */
 #pragma peephole off
@@ -26,15 +21,15 @@ u16 _dbgMenuFlagGetID(s32 cursor)
     if (cursor < 0) {
         return 0;
     }
-    if (cursor >= gDbgMenuFlagWork->count) {
+    if (cursor >= flag_data_number->count) {
         return 0;
     }
-    node = gDbgMenuFlagWork->head;
+    node = flag_data_number->head;
     if (cursor != 0) {
         for (i = 0; i < cursor - 1; i++) {
-            node = gDbgMenuFlagIdTable[node].next;
+            node = flag_data[node].next;
         }
-        node = gDbgMenuFlagIdTable[node].next;
+        node = flag_data[node].next;
     }
     return node;
 }

@@ -99,7 +99,6 @@ void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
 // pokespot ("esaba")
 void esabaGet(s32 place);
 void esabaPut(s32 place);
-void esabaSet(s32 place);
 u16 esabaGetPokemonMax(u16 place);
 void esabaSetPokemon(u16 place, u16 species);
 

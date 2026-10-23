@@ -46,6 +46,15 @@ u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 equip);
 u16 pokemonBiosGetPokemonWazaDataId(Pokemon *pokemon, u16 slot);
 u8 pokemonBiosGetPokemonWazaPp(Pokemon *pokemon, u16 slot);
 u32 pokemonTokuseiDataBiosGetDoc(PokemonTokuseiData *data);
+u8 pokemonBiosGetCatchBallId(Pokemon *pokemon);
+unsigned long pokemonBiosGetCatchTrainerRnd(Pokemon *pokemon);
+#ifdef __cplusplus
+bool pokemonBiosGetDarkFlag(Pokemon *pokemon);
+#else
+u8 pokemonBiosGetDarkFlag(Pokemon *pokemon);
+#endif
+int pokemonBiosGetDp(Pokemon *pokemon);
+u16 pokemonBiosGetFriend(Pokemon *pokemon);
 #ifdef __cplusplus
 }
 #endif

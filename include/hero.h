@@ -55,6 +55,8 @@ public:
     u8 getHeroStyle() const;
     Pokemon* getPokemon(long slot);
     const Pokemon* getPokemon(long slot) const;
+    void setMeetDarkPokemonCount(u8 count);
+    u8 getMeetDarkPokemonCount() const;
     void itemSort(u8 kind); // sorts the item list of one pocket.
 
 private:

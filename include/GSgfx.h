@@ -66,7 +66,7 @@ struct GSgfxTunitOpState { u32 operation, bias, scale; u8 clamp; u8 reserved[3];
 
 enum GSgfxCullType { GSGFX_CULL_NONE = 0, GSGFX_CULL_BACK = 2 , GS_GFX_CULL_NONE = 0, GSGFX_CULL_FRONT = 1, GSGFX_CULL_ALL = 3 };
 enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0 , GS_GFX_CLIP_ENABLED = 0 };
-enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_ALWAYS = 7, GSGFX_Z_COMPARE_LEQUAL = 3 , GS_GFX_Z_COMPARE_LEQUAL = 3 };
+enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_LESS = 1, GSGFX_Z_COMPARE_ALWAYS = 7, GSGFX_Z_COMPARE_LEQUAL = 3, GS_GFX_Z_COMPARE_LEQUAL = 3 };
 enum GSgfxACmpFunc { GSGFX_A_COMPARE_ALWAYS = 7 , GS_GFX_A_COMPARE_ALWAYS = 7 };
 enum GSgfxAlphaOp { GSGFX_ALPHA_AND = 0 , GS_GFX_ALPHA_AND = 0 };
 enum GSgfxTunitOp { GSGFX_TUNIT_OP_ADD = 0 };

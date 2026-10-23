@@ -25,7 +25,7 @@ u32 GSinputButtonsPressed(enum GSinputDevice device);
 #ifdef __cplusplus
 extern "C" {
 #endif
-void GSinputMotorStart(u32 chan, s32 mode, s32 strength, s32 duration, s32 decay);
+void GSinputMotorStart(u32 chan, u8 mode, u8 strength, u32 duration, u8 decay);
 #ifdef __cplusplus
 }
 #endif
