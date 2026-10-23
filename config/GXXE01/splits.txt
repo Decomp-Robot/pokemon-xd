@@ -143,9 +143,6 @@ ext/dolphin_sdk/os/OSThread.c:
 	.sdata      start:0x804E8138 end:0x804E8140
 	.sbss       start:0x804EAB60 end:0x804EAB70
 
-ext/dolphin_sdk/gd/GDTexture.c:
-	.sdata      start:0x804E8700 end:0x804E8738
-
 ext/dolphin_sdk/os/OSTime.c:
 	.text       start:0x800B2244 end:0x800B225C
 	.text       start:0x800B225C end:0x800B2264
@@ -205,6 +202,20 @@ ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3964 end:0x800B3BBC
 	.text       start:0x800B3BBC end:0x800B3C20
 	.text       start:0x800B3C20 end:0x800B3D94
+
+ext/dolphin_sdk/os/__start.c:
+	.init       start:0x80003100 end:0x80003400
+	.sbss       start:0x804EAB70 end:0x804EAB78
+
+ext/dolphin_sdk/dvd/dvd.c:
+	.text       start:0x800B5540 end:0x800B7D94
+	.data       start:0x803D1FD0 end:0x803D2154
+	.bss        start:0x8043E580 end:0x8043E618
+	.sdata      start:0x804E8158 end:0x804E8170
+	.sbss       start:0x804EABE8 end:0x804EAC38
+
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
 
 ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC12C end:0x800BC170
@@ -610,10 +621,6 @@ __fini_cpp_exceptions.cpp:
 
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
-
-ext/dolphin_sdk/os/__start.c:
-	.init       start:0x80003100 end:0x80003400
-	.sbss       start:0x804EAB70 end:0x804EAB78
 
 src/init.c:
 	.init       start:0x80003400 end:0x80005544
