@@ -4,3 +4,5 @@ symbols: config/GXXE01/symbols.txt
 splits: config/GXXE01/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
+force_active:
+  - OSLink

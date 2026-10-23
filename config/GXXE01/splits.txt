@@ -289,6 +289,7 @@ ext/dolphin_sdk/card/CARDRdwr.c:
 	.text       start:0x800C1C28 end:0x800C1C90
 
 ext/dolphin_sdk/card/CARDBlock.c:
+	.text       start:0x800C1C90 end:0x800C1C98
 	.text       start:0x800C1C98 end:0x800C1D6C
 	.text       start:0x800C1D6C end:0x800C1E34
 	.text       start:0x800C1E34 end:0x800C1F4C
