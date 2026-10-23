@@ -2,15 +2,9 @@
 #define MENU_POKEMON_CURSOR_H
 
 #include <CAnt.h>
+#include <PocketVec.h>
 #include <Pokemon.h>
 #include <types.h>
-
-// 2D position vector used by the pocket-menu cursor tables.
-template <typename T>
-struct PocketVec {
-    T x;
-    T y;
-};
 
 // Party-menu cursor: the pokemon it currently points at, the position
 // table entry it sits on and the model state of both records.
