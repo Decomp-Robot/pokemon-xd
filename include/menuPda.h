@@ -30,7 +30,7 @@ struct PDA_FRAME_ARG {
     u8 mUnk02;   // 0x02: 0.
     u8 _03;      // 0x03: padding, untouched.
     s32 *mTitleMessageID; // 0x04: title message id.
-    s32 *mPreviousRes; // 0x08: second value the frame menu fills in.
+    s32 *mLineAnimTime; // 0x08: line animation time output.
 };
 
 // Work area of the PDA menus: the selected top menu entry, the submenu state,

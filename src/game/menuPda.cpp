@@ -478,7 +478,7 @@ void menuPda(void)
     arg.mUnk00 = 0;
     arg.mUnk01 = 0xFF;
     arg.mUnk02 = 0;
-    arg.mPreviousRes = &LineAnimTime;
+    arg.mLineAnimTime = &LineAnimTime;
     menuOpenCustom(0x6C, windowGetActiveID(), 0, 0, 0, 1, &arg);
     while (_menuPdaStatus.mExitFlag == 0) {
         _menuPdaSetMenuItem();
