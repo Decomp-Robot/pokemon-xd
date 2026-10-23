@@ -92,6 +92,27 @@ ext/dolphin_sdk/os/OSResetSW.c:
 	.text       start:0x800AFE78 end:0x800AFF6C
 	.text       start:0x800AFF6C end:0x800B0204
 
+ext/dolphin_sdk/os/OSRtc.c:
+	.text       start:0x800B0204 end:0x800B0264
+	.text       start:0x800B0264 end:0x800B037C
+	.text       start:0x800B037C end:0x800B04B8
+	.text       start:0x800B04B8 end:0x800B0514
+	.text       start:0x800B0514 end:0x800B0570
+	.text       start:0x800B0570 end:0x800B08AC
+	.text       start:0x800B08AC end:0x800B08D0
+	.text       start:0x800B08D0 end:0x800B08F4
+	.text       start:0x800B08F4 end:0x800B0904
+	.text       start:0x800B0904 end:0x800B0A28
+	.text       start:0x800B0A28 end:0x800B0AA8
+	.text       start:0x800B0AA8 end:0x800B0B4C
+	.text       start:0x800B0B4C end:0x800B0BBC
+	.text       start:0x800B0BBC end:0x800B0C60
+	.text       start:0x800B0C60 end:0x800B0CCC
+	.text       start:0x800B0CCC end:0x800B0D50
+	.text       start:0x800B0D50 end:0x800B0DFC
+	.text       start:0x800B0DFC end:0x800B0E6C
+	.text       start:0x800B0E6C end:0x800B0F24
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
