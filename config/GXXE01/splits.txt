@@ -121,6 +121,10 @@ game/menuTop.cpp:
 	.text       start:0x8003032C end:0x80030330
 	.ctors      start:0x802E9F88 end:0x802E9F8C
 
+game/menuNameEntry.cpp:
+	.text       start:0x8003343C end:0x80033440
+	.ctors      start:0x802E9F8C end:0x802E9F90
+
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
