@@ -1,5 +1,6 @@
 #include <charPipeline/structures/dolphinString.h>
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u8 Strcat(char* str1, char* str2, char* dst) {
     char* srcCursor = str1;
     char* dstCursor = dst;;
@@ -31,6 +32,7 @@ u8 Strcat(char* str1, char* str2, char* dst) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void Strcpy(char* dst, char* src) {
     do {
         *dst = *src;
@@ -39,6 +41,7 @@ void Strcpy(char* dst, char* src) {
     } while ((s8)*src != 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s8 Strcmp(char* str1, char* str2) {
     char* cursor1 = str1;
     char* cursor2 = str2;
@@ -57,6 +60,7 @@ s8 Strcmp(char* str1, char* str2) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 Strlen(char* str) {
     char* cursor = str;
     u32 counter = 0;
