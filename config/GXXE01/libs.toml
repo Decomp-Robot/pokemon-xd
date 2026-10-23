@@ -200,3 +200,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXDisplayList.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gx/GXDraw.c"
+completed = false
