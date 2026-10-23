@@ -331,3 +331,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDTev.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gd/GDTexture.c"
+completed = false

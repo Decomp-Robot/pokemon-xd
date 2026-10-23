@@ -13,6 +13,9 @@ Sections:
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
 
+ext/dolphin_sdk/gd/GDTexture.c:
+	.sdata      start:0x804E8700 end:0x804E8738
+
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
