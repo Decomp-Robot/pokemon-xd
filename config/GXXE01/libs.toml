@@ -3696,6 +3696,9 @@ completed = true
 name = "libc/FILE_POS.c"
 completed = true
 [[lib.object]]
+name = "libc/wchar_io.c"
+completed = true
+[[lib.object]]
 name = "libc/locale.c"
 completed = true
 # MSL const data stays out of .sdata2: the original .sdata2 listing has no

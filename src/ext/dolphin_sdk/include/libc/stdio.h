@@ -20,7 +20,7 @@ typedef struct FILE {
         unsigned short io_mode : 3;        /* 0x04 bits 3-5 */
         unsigned short buffer_mode : 2;     /* 0x04 bits 1-2 */
         unsigned short file_kind : 3;             /* 0x04 bit 0, 0x05 bits 6-7 */
-        unsigned short        : 2;           /* 0x05 bits 4-5 */
+        unsigned short orientation : 2;      /* 0x05 bits 4-5 */
         unsigned short binary_io : 1;             /* 0x05 bit 3 */
         unsigned short        : 3;           /* 0x05 bits 0-2 */
     } flags;                /* 0x04 */
