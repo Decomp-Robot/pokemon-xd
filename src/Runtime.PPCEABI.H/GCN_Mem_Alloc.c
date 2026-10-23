@@ -16,8 +16,8 @@ extern void OSReport(const char *msg, ...);
  * The library reports these two when it has to build a default heap on
  * demand, and remembers its handle so it only builds one.
  */
-extern const char defaultHeapWarning[];
-extern const char defaultHeapArenaWarning[];
+const char defaultHeapWarning[] = "GCN_Mem_Alloc.c : InitDefaultHeap. No Heap Available\n";
+const char defaultHeapArenaWarning[] = "Metrowerks CW runtime library initializing default heap\n";
 
 /* The arena the default heap is built from is aligned to thirty-two bytes. */
 #define ALIGN32(x) ((void *)(((unsigned long)(x) + 0x1F) & ~31UL))
