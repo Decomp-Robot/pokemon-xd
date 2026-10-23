@@ -309,6 +309,12 @@ ext/dolphin_sdk/card/CARDCreate.c:
 	.text       start:0x800C4AA8 end:0x800C4BD8
 	.text       start:0x800C4BD8 end:0x800C4DF8
 
+ext/dolphin_sdk/card/CARDRead.c:
+	.text       start:0x800C4DF8 end:0x800C4FB0
+	.text       start:0x800C4FB0 end:0x800C50E0
+	.text       start:0x800C50E0 end:0x800C5224
+	.text       start:0x800C5224 end:0x800C52B0
+
 ext/dolphin_sdk/card/CARDErase.c:
 	.text       start:0x800C52B0 end:0x800C5420
 
