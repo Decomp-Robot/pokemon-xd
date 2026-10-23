@@ -19,7 +19,8 @@ s32 windowGetActiveID(void);
 void menuSubCursorAnimeValGet(f32 *values, s32 *anime);
 s32 winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *work);
 void winSpriteSetDisp(tagSPRITE_WORK *work, s32 disp);
-void zz_0114ea8_(s16 x, s16 y, s32 a, tagWINDOW_WORK *window, u16 item, u32 flags, s32 layer, f32 *vals, s32 anime);
+void windowDrawCursorSprite(s16 x, s16 y, u32 color, tagWINDOW_WORK *window, u16 itemID, u32 flags, s32 layer,
+                            f32 *animeValues, u32 animeColor);
 }
 
 // Cursor hooks registered by the item tables.
@@ -55,7 +56,7 @@ s32 zz_000e97c_(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
     tagMENU_ITEM_DATA *item;
 
     item = menuItemBiosGetPtr(window->mMenuID, work->mItemID);
-    work->mCursorY = (s16)(item->mOffsetA + getCursorPositionY());
+    work->mY = (s16)(item->mOffsetA + getCursorPositionY());
     return 0;
 }
 
@@ -75,7 +76,7 @@ s32 zz_000e9d4_(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
         menuSubCursorAnimeValGet((f32 *)vals, &anime);
     }
     layer = winSpriteGetLayerID(window, work);
-    zz_0114ea8_(0, getCursorPositionY(), -1, window, 194, 0, layer, (f32 *)vals, anime);
+    windowDrawCursorSprite(0, getCursorPositionY(), -1, window, 194, 0, layer, (f32 *)vals, anime);
     winSpriteSetDisp(work, 0);
     return 0;
 }

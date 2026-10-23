@@ -346,6 +346,35 @@ name = "game/menuPocketToolData.s"
 completed = true
 
 [[lib.object]]
+name = "game/menuPcBoxDougu.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/menuPocketTool.cpp"
 completed = true
 cflags = [

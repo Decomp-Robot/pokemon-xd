@@ -152,7 +152,7 @@ int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     cursor = window->cursor;
     if (cursor >= 0) {
         menuSubDrawCursorBackAnimeOnOffAuto(window, winSpriteGetLayerID(window, sprite), 0, cursor << 5,
-                                            sprite->mX, sprite->mY, window->mRgba.mColorA, 1);
+                                            sprite->mWidth, sprite->mHeight, window->mRgba.mColorA, 1);
     }
     return 0;
 }
@@ -188,7 +188,7 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
     GXWGFifo.u8 = 0xFF;
     GXWGFifo.f32 = zero;
     GXWGFifo.f32 = zero;
-    x = sprite->mX;
+    x = sprite->mWidth;
     GXWGFifo.s16 = x;
     GXWGFifo.u16 = 0;
     GXWGFifo.u8 = 0xFF;
@@ -197,7 +197,7 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
     GXWGFifo.u8 = 0xFF;
     GXWGFifo.f32 = one;
     GXWGFifo.f32 = zero;
-    y = sprite->mY;
+    y = sprite->mHeight;
     GXWGFifo.u16 = 0;
     GXWGFifo.s16 = y;
     GXWGFifo.u8 = 0xFF;
@@ -206,8 +206,8 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
     GXWGFifo.u8 = 0xFF;
     GXWGFifo.f32 = zero;
     GXWGFifo.f32 = one;
-    x = sprite->mX;
-    y = sprite->mY;
+    x = sprite->mWidth;
+    y = sprite->mHeight;
     GXWGFifo.s16 = x;
     GXWGFifo.s16 = y;
     GXWGFifo.u8 = 0xFF;
@@ -656,7 +656,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if (window->mMenuID == NAME_ENTRY_MENU_ID_SELECT) {
         width = GSmsgGetMessageSize(0x3B11) >> 16;
 
-        GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
+        GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
                     window->mRgba.mColorA | 0xFFFFFF00, 0x3B11);
     } else {
         arg = window->mArg;
@@ -672,7 +672,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             }
             msgctrlSetValue(0x4E, species);
             width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
@@ -680,7 +680,7 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             u16 species = battlePokemonGetSpecies((Pokemon *)arg->mParam);
             msgctrlSetValue(0x4E, species);
             width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
@@ -695,14 +695,14 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             }
             msgctrlSetValue(0x4E, species);
             width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }
         default: {
             width = GSmsgGetMessageSize(nameEntryModeData[arg->mMode].mMessageID) >> 16;
 
-            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mX - width) / 2, 0,
+            GSmsgPrint2(winSpriteGetLayerID(window, sprite), (sprite->mWidth - width) / 2, 0,
                         window->mRgba.mColorA | 0xFFFFFF00, nameEntryModeData[arg->mMode].mMessageID);
             break;
         }

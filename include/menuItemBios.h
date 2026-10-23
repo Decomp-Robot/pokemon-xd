@@ -14,7 +14,8 @@ struct tagMENU_ITEM_DATA {
     u8 mShownFlag : 1;    // byte 0 bit 7: the row is shown in the menu.
     u8 mChainEndFlag : 1; // byte 0 bit 6: last row of the item chain.
     u8 mFlags : 6;        // byte 0 bits 0-5: unknown.
-    u8 _01[0x07];         // 0x01-0x07: unknown.
+    u8 _01[0x05];         // 0x01-0x05: unknown.
+    s16 mMessageX; // 0x06: x origin the row's centered message is placed from.
     s16 mOffsetA;  // 0x08: row offset, a y offset for the item cursor.
     s16 mOffsetB;  // 0x0A: row offset, the x position of the row values.
     s16 mOffsetC;  // 0x0C: row offset measured for the menu columns.

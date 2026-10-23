@@ -194,7 +194,7 @@ extern "C" int menuSubOpenYesNo(int a, int b, int c, int d);
 extern "C" void GSgfxResetRestore(int a);
 extern "C" void GSmsgPrint2(int layer, int x, u32 y, int a, u32 msgID);
 extern "C" void GSsndPlay(int a, int b, int c);
-extern "C" void zz_0020dd8_(u32 seID); // plays one sound effect.
+extern "C" void menuPtPlaySe(u32 seID); // plays one sound effect.
 extern "C" u32 zz_0060d08_(u8 *pSeOut, int a, int msgCode, int b, ...); // builds a shop message.
 extern "C" unsigned long GSmsgGetMessageSize(u32 msgID); // width of one message (size packed: width in the high half).
 extern "C" void floorPop(void);
@@ -217,8 +217,8 @@ extern "C" u8 itemDataBiosGetWazaMachineNo(ItemData *data);
 extern "C" int itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 extern "C" void *wazaDataBiosGetPtr(u16 wazaID);
 extern "C" u8 itemCheckValid(void *itemPtr);
-extern "C" u8 zz_item_data_get_bag_pocket(ItemData *data);
-extern "C" u32 zz_item_data_get_name_id(ItemData *data);
+extern "C" u8 itemDataBiosGetBagPocket(ItemData *data);
+extern "C" u32 itemDataBiosGetNameId(ItemData *data);
 extern "C" u32 zz_move_data_get_name_id(void *data);
 
 
@@ -226,10 +226,10 @@ extern "C" u32 zz_move_data_get_name_id(void *data);
 // the pocket offers and `outMax` its stock maximum.
 extern "C" void *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 kind, u16 *outNum, u16 *outMax, int a, int b);
 extern "C" void *heroHizukiItemGetItemAryPtr(Hero *hero, u16 *outNum, int a, int b, int c);
-extern "C" u16 zz_015e6d0_(void *itemSlot);
-extern "C" u16 zz_015e6b8_(void *itemSlot);
+extern "C" u16 itemSlotGetItemId(void *itemSlot);
+extern "C" u16 itemSlotGetCount(void *itemSlot);
 extern "C" int zz_015ea84_(ItemData *data);
-extern "C" int zz_015eb1c_(ItemData *data);
+extern "C" int itemDataBiosGetDescriptionId(ItemData *data);
 extern "C" u32 zz_item_data_get_function_pointer(ItemData *data);
 extern "C" u32 zz_item_data_get_function_pointer_2(ItemData *data);
 extern "C" u32 heroGetStatus(Hero *hero, int statusID, int fallback);
@@ -353,7 +353,7 @@ namespace {
 // Plays the information beep and shows one message window.
 void _infoBeep(unsigned long msgID)
 {
-    zz_0020dd8_(0x13);
+    menuPtPlaySe(0x13);
     winMsgOpen(2, msgID, 1, 0);
     winMsgClose(1);
 }
@@ -468,7 +468,7 @@ s32 _execSell(int tab, u16 itemID, int menuPos)
     u8 se;
 
     if (price <= 0) {
-        zz_0020dd8_(0x13);
+        menuPtPlaySe(0x13);
         s32 msg = zz_0060d08_(&se, window, MENU_MSG_ITEM_NUM, 0x2D, itemID, -1);
         winMsgOpenWithSE(2, msg, 1, 0, se);
         winMsgClose(1);
@@ -783,7 +783,7 @@ s32 _getItemPrice(int itemID)
 // Bag pocket the item belongs to, ItemData::mBagPocket.
 extern "C" u8 _getItemBagPocket(int itemID)
 {
-    return zz_item_data_get_bag_pocket(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetBagPocket(itemDataBiosGetPtr((u16)itemID));
 }
 
 // Whether the item may be put into the PC, ItemData::mDepositAble.
@@ -822,7 +822,7 @@ u16 _getItemNumFromMenuPos(int tab, int menuPos)
     for (i = 0; i < num; i++, ary = (u8 *)ary + 4) {
         if (itemCheckValid(ary)) {
             if (++n >= menuPos) {
-                return zz_015e6b8_(ary);
+                return itemSlotGetCount(ary);
             }
         }
     }
@@ -841,7 +841,7 @@ s32 _getStockMaxFromTagID(int tab)
 // Description message id of the item, ItemData::mDescriptionMsgID.
 extern "C" int _getItemDescriptionMsgID(int itemID)
 {
-    return zz_015eb1c_(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetDescriptionId(itemDataBiosGetPtr((u16)itemID));
 }
 
 // Number of rows the tab holds.
@@ -1187,7 +1187,7 @@ __declspec(weak) void _setExplanationMsgID(unsigned long msgID)
 // Message id of the item name.
 extern "C" __declspec(weak) u32 zz_0023c68_(int itemID)
 {
-    return zz_item_data_get_name_id(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetNameId(itemDataBiosGetPtr((u16)itemID));
 }
 
 // Item id of the row `menuPos` of the tab.
@@ -1201,7 +1201,7 @@ __declspec(weak) u16 _getItemIDFromMenuPos(int tab, int menuPos)
     for (s32 i = 0; i < num; i++, ary = (u8 *)ary + 4) {
         if (itemCheckValid(ary)) {
             if (++n >= menuPos) {
-                return zz_015e6d0_(ary);
+                return itemSlotGetItemId(ary);
             }
         }
     }

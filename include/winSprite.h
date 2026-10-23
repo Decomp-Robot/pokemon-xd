@@ -54,10 +54,10 @@ struct tagSPRITE_WORK {
     u8 _08[0x40];          // 0x08-0x47: unknown.
     void *mHookFunction;   // 0x48: hook the node was registered with.
     u32 mMsgID;            // 0x4C: message id the node prints.
-    u8 _50[0x02];          // 0x50-0x51: unknown.
-    s16 mCursorY;          // 0x52: y position set by the item cursor hooks.
-    s16 mX;                // 0x54: x position.
-    s16 mY;                // 0x56: y position.
+    s16 mX;                // 0x50: x position the row hooks place the sprite at.
+    s16 mY;                // 0x52: y position the row hooks place the sprite at.
+    s16 mWidth;            // 0x54: width of the sprite.
+    s16 mHeight;           // 0x56: height of the sprite.
     u8 _58[0x0C];          // 0x58-0x63: unknown.
     /* 0x64-0x67: the title cursor hook clears the whole word to -1 to drop
      * whatever blend override is in place, while everything else writes only

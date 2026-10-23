@@ -228,6 +228,12 @@ game/menuBBS.cpp:
 	.text       start:0x800484B4 end:0x8004B338
 	.sdata2     start:0x804EC3B8 end:0x804EC3C8
 
+game/menuPcBoxDougu.cpp:
+	.text       start:0x800692FC end:0x8006A8B4
+	.rodata     start:0x802EB5C0 end:0x802EB5D0
+	.sbss       start:0x804EA980 end:0x804EA9A8
+	.sdata2     start:0x804EC6A0 end:0x804EC6C0
+
 game/menuOrre.cpp:
 	.text       start:0x800A314C end:0x800A3150
 	.ctors      start:0x802E9FAC end:0x802E9FB0
