@@ -253,6 +253,12 @@ ext/dolphin_sdk/card/CARDBios.c:
 	.text       start:0x800C0734 end:0x800C0784
 	.text       start:0x800C0784 end:0x800C07A0
 
+ext/dolphin_sdk/card/CARDRdwr.c:
+	.text       start:0x800C1A00 end:0x800C1ADC
+	.text       start:0x800C1ADC end:0x800C1B40
+	.text       start:0x800C1B40 end:0x800C1C28
+	.text       start:0x800C1C28 end:0x800C1C90
+
 ext/dolphin_sdk/card/CARDBlock.c:
 	.text       start:0x800C1C98 end:0x800C1D6C
 	.text       start:0x800C1D6C end:0x800C1E34
