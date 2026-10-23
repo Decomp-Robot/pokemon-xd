@@ -55,17 +55,6 @@ name = "decomp/dbgMenuGetGsinputMsgId.c"
 completed = true
 
 [[lib]]
-name = "menuInfoWindow"
-mw_version = "GC/2.6"
-cflags_preset = "game"
-progress_category = "game"
-cflags_extra = ["-opt", "nopeephole"]
-
-[[lib.object]]
-name = "game/menuInfoWindow.cpp"
-completed = true
-
-[[lib]]
 name = "menuPocket"
 mw_version = "GC/1.3.2"
 cflags_preset = "game"
