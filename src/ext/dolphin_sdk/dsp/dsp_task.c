@@ -5,8 +5,6 @@
 
 #include "__dsp.h"
 
-static u32 t0, t1, t2;  // unused
-
 DSPTaskInfo* __DSP_curr_task;
 DSPTaskInfo* __DSP_first_task;
 DSPTaskInfo* __DSP_last_task;
@@ -315,6 +313,7 @@ void __DSP_insert_task(DSPTaskInfo* task) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __DSP_add_task(DSPTaskInfo* task) {
     ASSERTMSGLINE(771, task != NULL, "__DSP_add_task(): Why are you adding a NULL task?\n");
 

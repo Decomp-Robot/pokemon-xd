@@ -385,6 +385,15 @@ ext/dolphin_sdk/dsp/dsp_debug.c:
 ext/dolphin_sdk/dsp/dsp_perf.c:
 	.text       start:0x800BEAC4 end:0x800BEAC4
 
+ext/dolphin_sdk/dsp/dsp_task.c:
+	.text       start:0x800BEAC4 end:0x800BEEE8
+	.text       start:0x800BEEE8 end:0x800BF088
+	.text       start:0x800BF088 end:0x800BF214
+	.text       start:0x800BF214 end:0x800BF2B4
+	.text       start:0x800BF2B4 end:0x800BF348
+	.data       start:0x803D2B58 end:0x803D2C98
+	.sbss       start:0x804EAD78 end:0x804EAD90
+
 ext/dolphin_sdk/ax/AXAlloc.c:
 	.text       start:0x800BF34C end:0x800BF34C
 
