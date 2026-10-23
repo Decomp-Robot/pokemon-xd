@@ -1243,6 +1243,11 @@ TRK/targcont.c:
 TRK/target_options.c:
 	.text       start:0x800D9030 end:0x800D904C
 
+Runtime.PPCEABI.H/NMWException.cpp:
+	extab       start:0x80005600 end:0x80005640
+	extabindex  start:0x80005640 end:0x80005670
+	.text       start:0x800D9D28 end:0x800DA05C
+
 __fini_cpp_exceptions.cpp:
 	.text       start:0x800DA88C end:0x800DA8C0
 	.dtors      start:0x802EA000 end:0x802EA004

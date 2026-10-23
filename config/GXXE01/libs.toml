@@ -3371,6 +3371,11 @@ name = "Runtime.PPCEABI.H/GCN_Mem_Alloc.c"
 completed = true
 
 [[lib.object]]
+name = "Runtime.PPCEABI.H/NMWException.cpp"
+completed = true
+extra_cflags = ["-Cpp_exceptions on", "-inline deferred"]
+
+[[lib.object]]
 name = "__fini_cpp_exceptions.cpp"
 completed = false
 [[lib]]
