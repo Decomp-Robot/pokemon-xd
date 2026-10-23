@@ -3440,6 +3440,9 @@ completed = true
 [[lib.object]]
 name = "libc/mbstring.c"
 completed = true
+[[lib.object]]
+name = "libc/mem_funcs.c"
+completed = true
 
 [[lib]]
 name = "GSmemman"

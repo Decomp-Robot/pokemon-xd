@@ -1301,6 +1301,9 @@ libc/FILE_POS.c:
 libc/mbstring.c:
 	.text       start:0x800DF228 end:0x800DF340
 
+libc/mem_funcs.c:
+	.text       start:0x800DF4B0 end:0x800DF780
+
 ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800E7008 end:0x800E700C
 	.text       start:0x800E700C end:0x800E7010
