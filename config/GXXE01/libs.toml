@@ -91,3 +91,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSRtc.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSSemaphore.c"
+completed = false
