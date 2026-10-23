@@ -63,3 +63,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSInterrupt.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/os/OSLink.c"
+completed = false

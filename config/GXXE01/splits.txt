@@ -65,6 +65,9 @@ ext/dolphin_sdk/os/OSFont.c:
 ext/dolphin_sdk/os/OSInterrupt.c:
 	.text       start:0x800AE37C end:0x800AEBE8
 
+ext/dolphin_sdk/os/OSLink.c:
+	.text       start:0x800AEBE8 end:0x800AF610
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
