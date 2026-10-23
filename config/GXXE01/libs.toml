@@ -81,6 +81,16 @@ name = "game/menuPocketBattleDisk.cpp"
 completed = true
 
 [[lib]]
+name = "menuCBBios"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/menuCBBios.c"
+completed = true
+
+[[lib]]
 name = "base"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
