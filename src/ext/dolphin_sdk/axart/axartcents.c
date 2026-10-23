@@ -256,6 +256,7 @@ static f32 __AXLFOSemitonesTableDown[128] = {
     0.000652f,
 };
 
+// UNUSED: the game never calls this; dead-stripped at link.
 f32 AXARTCents(s32 cents) {
     if (cents > 0) {
         s32 octaves = cents / 1200;
