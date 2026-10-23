@@ -1190,3 +1190,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/hardware.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/profile.c"
+completed = true
