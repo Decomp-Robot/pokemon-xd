@@ -15,8 +15,8 @@ SECTIONS
     _stack_addr = (_stack_end + $STACKSIZE + 0x7) & ~0x7;
     _db_stack_addr = (_stack_addr + 0x2000);
     _db_stack_end = _stack_addr;
-    __ArenaLo = (_db_stack_addr + 0x1f) & ~0x1f;
-    __ArenaHi = $ARENAHI;
+    __ArenaLo = 0x80507DA0;
+    __ArenaHi = 0x81700000;
 }
 
 FORCEACTIVE
