@@ -373,6 +373,9 @@ ext/dolphin_sdk/ar/arq.c:
 	.text       start:0x800BE88C end:0x800BE8AC
 	.text       start:0x800BE8AC end:0x800BE8B4
 
+ext/dolphin_sdk/ax/AX.c:
+	.text       start:0x800BF34C end:0x800BF34C
+
 ext/dolphin_sdk/card/CARDBios.c:
 	.text       start:0x800BF34C end:0x800BF424
 	.text       start:0x800BF424 end:0x800BF53C
