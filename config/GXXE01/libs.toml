@@ -444,7 +444,7 @@ completed = false
 
 [[lib]]
 name = "dvd"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__"]
@@ -452,3 +452,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/dvd/dvd.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/dvd/dvderror.c"
+completed = true
