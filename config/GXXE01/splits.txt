@@ -161,6 +161,14 @@ ext/dolphin_sdk/mtx/mtx44.c:
 	.text       start:0x800B3434 end:0x800B3504
 	.text       start:0x800B3504 end:0x800B359C
 
+ext/dolphin_sdk/mtx/quat.c:
+	.text       start:0x800B3824 end:0x800B3880
+	.text       start:0x800B3880 end:0x800B38D8
+	.text       start:0x800B38D8 end:0x800B3964
+	.text       start:0x800B3964 end:0x800B3BBC
+	.text       start:0x800B3BBC end:0x800B3C20
+	.text       start:0x800B3C20 end:0x800B3D94
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260

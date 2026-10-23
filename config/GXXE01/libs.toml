@@ -292,3 +292,7 @@ completed = false
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/mtxstack.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/mtx/quat.c"
+completed = false
