@@ -1,5 +1,7 @@
 #include <GScolsys2Internal.h>
 
+enum { GSCOLSYS2_THRU_EDGE_0_FLAG = 1, GSCOLSYS2_THRU_EDGE_1_FLAG = 2, GSCOLSYS2_THRU_EDGE_2_FLAG = 4 };
+
 inline void getThruCellBounds(GSvec* start, f32 radius, CCD_THRUMDL_HEAD* head, s32* ix0, s32* iz0, s32* ix1, s32* iz1)
 {
     GSvec minimum, maximum;
@@ -57,7 +59,7 @@ inline bool checkThruFace(GSvec* normal, GSvec* triangle, GSvec* position, f32 r
 inline bool checkThruEdge(GSvec* normal, GSvec* triangle, GSvec* position, f32 radiusSquared, u16 flags)
 {
     GSvec closest;
-    u16 edgeMask[3] = {1, 2, 4};
+    u16 edgeMask[3] = {GSCOLSYS2_THRU_EDGE_0_FLAG, GSCOLSYS2_THRU_EDGE_1_FLAG, GSCOLSYS2_THRU_EDGE_2_FLAG};
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, position) < 0.0f) {
         return false;
     }
@@ -82,7 +84,7 @@ inline bool checkThruEdge(GSvec* normal, GSvec* triangle, GSvec* position, f32 r
 
 inline bool checkThruVertex(GSvec* normal, GSvec* triangle, GSvec* position, f32 radiusSquared, u16 flags)
 {
-    u16 pointMask[3] = {1, 2, 4};
+    u16 pointMask[3] = {GSCOLSYS2_THRU_EDGE_0_FLAG, GSCOLSYS2_THRU_EDGE_1_FLAG, GSCOLSYS2_THRU_EDGE_2_FLAG};
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, position) < 0.0f) {
         return false;
     }
@@ -262,7 +264,7 @@ s32 getFixedMdlEventList(GSvec* start, GSvec* end, f32 radius,
     s32* cell;
     s32* triangleIndices;
     s32 cellX;
-    enum { triggerEdgeMask = 0x7 };
+    enum { triggerEdgeMask = GSCOLSYS2_THRU_EDGE_0_FLAG | GSCOLSYS2_THRU_EDGE_1_FLAG | GSCOLSYS2_THRU_EDGE_2_FLAG };
     s32 minCellX;
     s32 minCellZ;
     s32 maxCellX;
@@ -409,7 +411,7 @@ s32 getFixedMdlEventList(GSvec* start, GSvec* end, f32 radius,
 s32 getMdlEventList(GSvec* start, GSvec* end, f32 radius, CCD_THRUMDL_HEAD* head,
                     GSmtx* mtx, GSmtx* rotMtx, GScolsys2Thru_c* out)
 {
-    enum { triggerEdgeMask = 0x7 };
+    enum { triggerEdgeMask = GSCOLSYS2_THRU_EDGE_0_FLAG | GSCOLSYS2_THRU_EDGE_1_FLAG | GSCOLSYS2_THRU_EDGE_2_FLAG };
     GSvec worldNormal;
     GSvec worldPoints[3];
     CCD_THRUMDL* modelCursor;
