@@ -26,7 +26,10 @@ game/dbgMenuFight.c:
 	.sdata2     start:0x804EBDC0 end:0x804EBDC8
 
 game/dbgMenuFlag.c:
-	.text       start:0x800083D4 end:0x800084F0
+	.text       start:0x8000804C end:0x800084F0
+	.bss        start:0x80420640 end:0x804206C0
+	.sdata      start:0x804E7E38 end:0x804E7E3C
+	.sdata2     start:0x804EBDC8 end:0x804EBDD4
 
 game/dbgMenuMemcard.c:
 	.text       start:0x8000B620 end:0x8000BAE4
