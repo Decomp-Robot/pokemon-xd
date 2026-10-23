@@ -123,7 +123,8 @@ extern s32 titleSelectSlot;
 extern "C" {
 void GSthreadSwitch(void);
 void GSthreadTerminate(u32 threadId);
-u32 GSthreadCreate(s32 prio, void *arg, u32 stackSize, s32 useStack, s32 attr, void (*entry)(void));
+u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 closeProtected,
+    void (*entry)(void));
 s32 windowGetActiveID(void);
 tagWINDOW_WORK *windowSearchID(s32 id);
 struct tagWINDOW_KEY *windowGetKeyState(void);
@@ -177,8 +178,8 @@ s32 zz_002f718_(void);
 /* Reports whether a memcard task is still in flight. */
 s32 zz_005c228_(void);
 void floorUnlinkWithSE(s32 a, s32 b);
-/* Returns the argument the preread thread is started with. */
-void *zz_0125b04_(void);
+/* Returns the thread group id of the floor group on top of the stack. */
+u32 floorGetStackGroupID(void);
 /* Reports whether the preread loader is still busy. */
 u8 zz_0125b44_(void);
 void _HSD_AObjForgetMemory(void);
@@ -198,7 +199,6 @@ void winSpriteSetDisp(tagSPRITE_WORK *sprite, s32 disp);
 
 /* Functions of this module. */
 extern "C" {
-void _menuTitleNormalButton__FP14tagWINDOW_WORK(tagWINDOW_WORK *window);
 void menuTitleLoadMap(void);
 void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame);
 
@@ -206,14 +206,12 @@ void menuTitleModelCtor(unsigned int group, unsigned int modelID, bool visible);
 void menuTitleModelDtor(unsigned int group, unsigned int modelID);
 u8 menuTitleWaitBgmFade(u8 wait);
 void menuTitlePlayBGM(void);
-s32 _selectMenu__Fv(void);
 void menuTitleOpenSelectAnime2(void);
 void menuTitlePlaySelectOpenFlash(void);
 void menuTitleCleanupSelect(void);
 void menuTitleBattleSelectFree(void);
 void menuTitleMain(void);
 void menuTitleStartBattleSelect(void);
-void _menuTitlePreReadFightRegWzxData__Fv(void);
 void menuTitleReadWazaSelectMenu(void);
 void menuTitleLoadMapModels(void);
 void menuTitleSetupMapCamera(void);
@@ -231,8 +229,13 @@ void menuTitleSetState(s32 entry);
 void menuTitleCloseMenuIfOpen(s32 id, s32 flag);
 
 void menuTitleOpenSelectAnime(void);
-void _CreateThread__Fv(void);
 }
+
+/* Functions of this module that are compiled as C++. */
+void menuTitleNormalButton(tagWINDOW_WORK *window);
+s32 selectMenu(void);
+void menuTitlePreReadFightRegWzxData(void);
+void menuTitleCreateThread(void);
 
 /* -------------------------------------------------------------------------
  * Title screen flow
@@ -327,12 +330,12 @@ extern "C" void menuTitleButton(tagWINDOW_WORK *window)
     dbgMenuSetOpenFlag(1);
     u32 end = (u32)FlashSystemGetFrameFromLabel(TITLE_FLASH, cLabelEnd);
     if ((u32)FlashSystemGetNowFrame(TITLE_FLASH) >= end) {
-        _menuTitleNormalButton__FP14tagWINDOW_WORK(window);
+        menuTitleNormalButton(window);
     }
 }
 
 /* Standard title button handling: confirm on Start/A. */
-extern "C" void _menuTitleNormalButton__FP14tagWINDOW_WORK(tagWINDOW_WORK *window)
+void menuTitleNormalButton(tagWINDOW_WORK *window)
 {
     struct tagWINDOW_KEY *key;
 
@@ -528,7 +531,7 @@ extern "C" void menuTitleMainSub(void)
             break;
 
         case TITLE_STATE_MAP_FADE:
-            s32 selResult = _selectMenu__Fv();
+            s32 selResult = selectMenu();
             if (selResult < 0 || selResult == 4) {
                 menuTitleOpenSelectAnime();
                 titleState = TITLE_STATE_FLASH_BACK;
@@ -667,7 +670,7 @@ extern "C" void menuTitlePlayBGM(void)
 
 /* Play the mode-select flash movie from menu_play to menu_end, wait for the
  * end frame, then hand over to the select screen. */
-extern "C" s32 _selectMenu__Fv(void)
+s32 selectMenu(void)
 {
     s32 end;
 
@@ -778,7 +781,7 @@ extern "C" void menuTitleStartBattleSelect(void)
     encounter = deckDataVirtual_GetPtr(14);
     zz_battle_set_battle_cd_id(encounter, 0);
     fightEncountDataBiosSetFightTrainerDataId(encounter, 1, 2);
-    _CreateThread__Fv();
+    menuTitleCreateThread();
     if (zz_0125b44_() == 0) {
         TitleSelectWork *select;
         s32 slot = titleSelectSlot;
@@ -811,15 +814,15 @@ extern "C" void menuTitleStartBattleSelect(void)
 }
 
 /* Start the title loader thread that prereads the fight data. */
-extern "C" void _CreateThread__Fv(void)
+void menuTitleCreateThread(void)
 {
-    titlePrereadThreadId = GSthreadCreate(20, zz_0125b04_(), 8192, 1, 1,
-        _menuTitlePreReadFightRegWzxData__Fv);
+    titlePrereadThreadId = GSthreadCreate(20, floorGetStackGroupID(), 8192, 1, 1,
+        menuTitlePreReadFightRegWzxData);
 }
 
 /* Body of the preread thread: hand the BGM over, wait for the map data to be
  * streamed in, then load the fight registry and clear the thread id. */
-extern "C" void _menuTitlePreReadFightRegWzxData__Fv(void)
+void menuTitlePreReadFightRegWzxData(void)
 {
     for (;;) {
         if (soundGetBGMID() == TITLE_BGM_ID) {

@@ -1,4 +1,5 @@
 #include "menuSaveLoad.h"
+#include "gsFlag.h"
 #include "menuSub.h"
 #include "pdaMemoList.h"
 
@@ -32,7 +33,6 @@ void *zz_014bb50_(void);
 unsigned long zz_0157d74_(void *save, s32 slot);
 void zz_0157c18_(s32 msgID, s32 flag, void *text);
 void zz_01ce1b0_(void *buffer);
-s32 zz_flag_get_boolean_value(s32 flag);
 void *memcardMemAllocForSavedata(void);
 s32 memcardTaskCall(s32 task, s32 flag, s32 arg);
 void *memcpy(void *dst, const void *src, unsigned long len);
@@ -40,7 +40,6 @@ void *getTrainerDataStartOffset(void *save, s32 slot);
 Pokemon *heroGetStatus(void *save, s32 flag, u16 slot);
 s32 darkPokemonGetMeetNum(void);
 void peopleTalkMessageBgmSetVolumeRate(f64 rate);
-unsigned long GSflagGet(long flag);
 s32 menuOpen(s32 menuId, s32 mode);
 void winMsgOpen(s32 p1, s32 msgID, s32 p2, s32 p3);
 void winMsgClose(s32 p1);
@@ -242,7 +241,7 @@ extern "C" s32 menuSaveLoadCanSave(void)
     if (zz_005c228_() == 1) {
         return 0;
     }
-    return zz_flag_get_boolean_value(0x3DE);
+    return flagGetBooleanValue(0x3DE);
 }
 
 // Window step control of the report menu: step 0 loads the save message,

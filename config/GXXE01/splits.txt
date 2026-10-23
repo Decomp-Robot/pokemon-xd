@@ -167,7 +167,7 @@ game/menuPocket2.cpp:
 	.text       start:0x80026718 end:0x80026898
 
 game/gbaExchange.cpp:
-	.text       start:0x80027E44 end:0x80027E84
+	.text       start:0x80027E44 end:0x80027E6C
 
 game/gbaCommand.cpp:
 	.text       start:0x80027E84 end:0x80027EB8
@@ -252,6 +252,9 @@ game/dbgMenuMenu.cpp:
 
 game/menuCBTaisenSdata2.s:
 	.sdata2     start:0x804EC720 end:0x804EC73C
+
+game/dbgMenuMenuTest.cpp:
+	.text       start:0x8006B3F8 end:0x8006BE28
 
 game/menuCBTaisen.cpp:
 	.text       start:0x8007E5AC end:0x8008250C

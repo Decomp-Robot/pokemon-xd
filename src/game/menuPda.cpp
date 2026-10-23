@@ -1,4 +1,5 @@
 #include "GSgfx.h"
+#include "gsFlag.h"
 #include "menuItemBios.h"
 #include "menuPda.h"
 #include "menuSub.h"
@@ -37,7 +38,6 @@ void fightOutPokemonSetVisibility(unsigned long res, s32 visible);
 void floorSetFadeScript(s32 floor, s32 script);
 void zz_0114b9c_(s32 flag);
 void floorPop(void);
-void zz_01a0340_(s32 id);
 s32 zz_005c228_(void);
 u32 zz_01262fc_(void);
 void zz_01971c8_(s32 flag, unsigned long res, f32 frame, s32 unk);
@@ -454,7 +454,7 @@ void menuPda(void)
     scriptLightSetDisp(0x17CF1600, 0);
     scriptLightSetDisp(0x17CF1601, 0);
     if (zz_005c228_() == 1) {
-        zz_01a0340_(0x3F2);
+        flagSetTrue(0x3F2);
     }
     FlashSystemSetLoopFlag(0x1FBD3000, 1);
     FlashSystemSetLoopFlag(0x20543000, 0);

@@ -1,5 +1,6 @@
 #include <Pokemon.h>
 #include <WorldMap.h>
+#include <gsFlag.h>
 #include <types.h>
 #include <winSprite.h>
 
@@ -78,14 +79,9 @@ s32 windowGetActiveID(void);
 
 // menuSub.a
 s32 menuSubOpenSelect2(s32 kind, void *list, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
-u8 menuSubOpenNumberInput(u32 value, u32 *out, u8 mode, s16 x, s16 y, s32 unk);
+u8 menuSubOpenNumberInput(u32 value, u32 *out, u8 mode, s16 x, s16 y, bool closeOnExit);
 
 // flags
-u8 zz_flag_get_boolean_value(long flag);
-void zz_01a031c_(long flag);
-void zz_01a0340_(long flag);
-u32 GSflagGet(s32 flag);
-void GSflagSet(s32 flag, s32 value);
 
 // menu scripts
 void menuScriptOpenWorldMap(u16 mapIndex);
@@ -97,7 +93,7 @@ void menuScriptEevee(void);
 void menuMoveDemo(s32 demo);
 void mewWazaSequence(void);
 void menuOrreColosseum(u16 encountID);
-void zz_00a15f4_(void);
+u16 menuOrreGetBattleResult(void);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon
@@ -106,8 +102,8 @@ void *gamedataGetStatus(s32 a, s32 b);
 void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 a, s8 b, s32 c, void *status);
 u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
-void zz_014588c_(Pokemon *pokemon, u32 rnd);
-void zz_014583c_(Pokemon *pokemon, u32 rnd);
+void pokemonSetPid(Pokemon *pokemon, u32 rnd);
+void pokemonSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
 
 // pokespot ("esaba")
 void esabaGet(s32 place);
@@ -125,10 +121,10 @@ long undertakerGetStartFlagID(void);
 
 // Callees of the entries that run a menu script or a menu of their own; the
 // units defining them are not recovered yet.
-extern "C" void zz_005ede0_(void);
-extern "C" void zz_00870a0_(void);
-extern "C" void zz_005ed48_(s32 value);
-extern "C" void zz_005ec30_(s32 *value);
+extern "C" void menuScriptTestMenuScreen(void);
+extern "C" void menuScriptTestLayerScreen(void);
+extern "C" s32 menuWazaOshieSelectFromPokemon(s32 pokemonSlot);
+extern "C" s32 menuWazaOshieSelectAll(u8 *selected);
 
 // Helpers defined further down the unit.
 void _pokemonCreate(Pokemon *pokemon, unsigned short species, unsigned long rnd);
@@ -164,10 +160,10 @@ void _setWorldMapFlagData(long mapIndex, long value)
 
 #pragma force_active on
 
-// Test entry: run its menu script.
-extern "C" s32 zz_006a92c_(void)
+// Test entry: run the test script that opens and closes menu 0x101.
+extern "C" s32 dbgMenuMenuTestMenuScreen(void)
 {
-    zz_005ede0_();
+    menuScriptTestMenuScreen();
     return 0;
 }
 
@@ -312,10 +308,10 @@ extern "C" s32 dbgMenuUnderTakerebugCursor(tagWINDOW_WORK *window)
     return 0;
 }
 
-// Test entry: run its menu script.
-extern "C" s32 zz_006ad7c_(void)
+// Test entry: run the test script that draws menu 0x112 on graphics layer 7.
+extern "C" s32 dbgMenuMenuTestLayerScreen(void)
 {
-    zz_00870a0_();
+    menuScriptTestLayerScreen();
     return 0;
 }
 
@@ -335,10 +331,10 @@ extern "C" s32 dbgMenuMenuUnderTakerSetPlace(void)
 // Test entry: switch the flag that turns the Under icon on and off.
 extern "C" s32 dbgMenuMenuUnderTakerIconFlagOnOff(void)
 {
-    if (zz_flag_get_boolean_value(UNDERTAKER_ICON_FLAG)) {
-        zz_01a031c_(UNDERTAKER_ICON_FLAG);
+    if ((u8)flagGetBooleanValue(UNDERTAKER_ICON_FLAG)) {
+        flagSetFalse(UNDERTAKER_ICON_FLAG);
     } else {
-        zz_01a0340_(UNDERTAKER_ICON_FLAG);
+        flagSetTrue(UNDERTAKER_ICON_FLAG);
     }
     return 0;
 }
@@ -366,10 +362,10 @@ extern "C" s32 dbgMenuMenuUnderTakerOnOff(void)
 {
     long flag = undertakerGetStartFlagID();
 
-    if (zz_flag_get_boolean_value(flag)) {
-        zz_01a031c_(flag);
+    if ((u8)flagGetBooleanValue(flag)) {
+        flagSetFalse(flag);
     } else {
-        zz_01a0340_(flag);
+        flagSetTrue(flag);
     }
     return 0;
 }
@@ -450,8 +446,8 @@ void _pokemonCreate(Pokemon *pokemon, unsigned short species, unsigned long rnd)
 
     pokemonCreate(pokemon, species, 10, gamedataGetStatus(0, 1));
     rndValue = memoDataGetPokemonRndFromID(0, species);
-    zz_014588c_(pokemon, rndValue);
-    zz_014583c_(pokemon, rnd);
+    pokemonSetPid(pokemon, rndValue);
+    pokemonSetCatchTrainerRnd(pokemon, rnd);
 }
 
 // Hand the pokemon of the spot to the spot's setter.
@@ -513,23 +509,25 @@ extern "C" s32 dbgMenuMenuTestOrreColosseumMenu(void)
         encount = 0;
     }
     menuOrreColosseum(_testEncount[encount]);
-    zz_00a15f4_();
+    // menuOrreColosseum clears the Orre battle result and the battle floor
+    // stores fightEncount's return there; the value is only read back here.
+    menuOrreGetBattleResult();
     return 0;
 }
 
-// Test entry: run the Basan move-tutor menu.
+// Test entry: run the Basan move-tutor menu over the whole move table.
 extern "C" s32 dbgMenuMenuTestWazaOshieBasanMenu(void)
 {
-    s32 value;
+    u8 selected;
 
-    zz_005ec30_(&value);
+    menuWazaOshieSelectAll(&selected);
     return 0;
 }
 
-// Test entry: pick a move from the move list.
-extern "C" s32 zz_006b388_(s32, s32 value)
+// Test entry: pick a move from the list one Pokemon slot can learn.
+extern "C" s32 dbgMenuMenuTestWazaOshieSelectFromPokemon(s32, s32 pokemonSlot)
 {
-    zz_005ed48_(value);
+    menuWazaOshieSelectFromPokemon(pokemonSlot);
     return 0;
 }
 

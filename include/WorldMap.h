@@ -74,10 +74,15 @@ struct WorldMapWork {
     u8 _91[0x03];                // 0x91-0x93: unknown.
 };
 
-/* Per-ribbon link record (8 bytes): the distance to the neighbouring ribbon
+/* _EmitParams record (8 bytes). The map attests the class (its ctor is in
+ * the map module's model code, outside the recovered units; the pe particle
+ * node Start functions take it as their last argument). The map module uses
+ * it as the per-ribbon link record: the distance to the neighbouring ribbon
  * and the angle it is seen under, relative to the icon that owns the array.
- * The constructor clears both fields; the particle node Start functions take
- * one as their last argument. */
+ * The user-provided constructor copies the TU's shared 0.0f literal into
+ * both fields, so MWCC allocates its arrays through __construct_new_array
+ * with a 0x10-byte header that the delete[] in ~WorldMapIconWork strips
+ * again. */
 struct _EmitParams {
     _EmitParams();
     f32 dist;                    // 0x00
@@ -97,7 +102,7 @@ struct WorldMapIconWork {
      * angle between two icons can be taken over this vector. */
     GSvec screen;
     /* 0x28: one _EmitParams per ribbon, allocated with new[] in the
-     * constructor. */
+     * constructor (0x10 array header in front of the entries). */
     _EmitParams* mDist;
     ~WorldMapIconWork();
 };
@@ -207,7 +212,8 @@ struct WorldMapMapData {
 };
 
 /* The map list the world map loads: the number of maps the map is made of at
- * +0. getRibbonCnt hands it out and Init sizes the per-map works with it. */
+ * +0. getRibbonCnt hands it out and Init sizes the per-map works with it; no
+ * other field of the block is read by the recovered units. */
 struct WorldMapMapList {
     u32 mMapCnt;                 // 0x00: number of maps in the world map.
 };
@@ -298,7 +304,7 @@ public:
  * The constructor only initializes the base texture handle and the two work
  * pointers; the icon array at 0x0C, the cursor state and the camera work at
  * 0x44 are set up by Init and the other member functions, so only the
- * members used by them are declared here. */
+ * members those functions have exposed so far are declared here. */
 class WorldMap : public WorldMapModel {
 public:
     WorldMap();
@@ -350,16 +356,19 @@ private:
      * Release frees it and nulls the pointer. GetNowCursor reads the
      * selected cursor at +0x30 of this same block (see WorldMapWork). */
     WorldMapWork* mModelWork;
-    /* 0x0C: Icon works, one entry per ribbon (0x2C bytes each), sized by
-     * getRibbonCnt. InitModel, SelectIcon and SetCursorPosition index the
-     * entries. */
+    /* 0x0C: Icon works. Init allocates the array with
+     * `new WorldMapIconWork[getRibbonCnt(this)]` (0x2C bytes per entry); the
+     * 0x10-byte block header __construct_new_array installs in front of the
+     * entries is where the per-icon distance arrays start (see
+     * WorldMapIconWork::mDist). InitModel, SelectIcon and SetCursorPosition
+     * index the entries. */
     WorldMapIconWork* mIcons;
-    /* 0x10..0x1B: unknown. */
+    /* 0x10..0x1B: unrecovered map state (cursor position, camera targets). */
     u8 _10[0x0C];
     /* 0x1C: menu mode; Button and ControlPad only forward pad input while
      * this does not read 1. */
     u8 mMenuMode;
-    /* 0x1D..0x43: unknown. */
+    /* 0x1D..0x43: unrecovered map state. */
     u8 _1D[0x27];
     /* 0x44: Camera work block (0x68 bytes). Init allocates it and zeroes
      * the blend fields; IsBlending reads the blend parameter at +0x08 and

@@ -403,6 +403,35 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/dbgMenuMenuTest.cpp"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/menuPocketTool.cpp"
 completed = true
 cflags = [
