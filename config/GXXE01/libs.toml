@@ -2669,7 +2669,8 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXVerifRAS.c"
-completed = true
+# No target text/functions exist for this object; retained C is unverified.
+completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXVerifXF.c"

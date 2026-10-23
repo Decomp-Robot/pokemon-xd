@@ -31,18 +31,6 @@ static char* TevRegNames[8] = {0};
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
-#if DEBUG
-static char _521[] = "A";
-static char _522[] = "B";
-static char _523[] = "C";
-static char _524[] = "D";
-// UNUSED: the game never calls this; dead-stripped at link.
-asm void __GXVerifyTEV(void) {
-    nofralloc
-#include "../../nonmatchings/__GXVerifyTEV.s"
-}
-#pragma peephole on
-#else
 void __GXVerifyTEV(void) {
     u32 i; // r31
     u32 nTev; // r29
@@ -262,7 +250,6 @@ void __GXVerifyTEV(void) {
         __gxVerif->cb(2, 0x2EU, __gxvWarnings[0x2E]);
     }
 }
-#endif
 
 // UNUSED: the game never calls this; dead-stripped at link.
 
