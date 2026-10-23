@@ -912,3 +912,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/syn/synpitch.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/syn/synsample.c"
+completed = true

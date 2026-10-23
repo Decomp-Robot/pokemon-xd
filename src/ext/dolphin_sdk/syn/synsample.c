@@ -11,6 +11,7 @@ static void __SYNSetupAdpcm(SYNVOICE* voice);
 static void __SYNSetupPcm16(SYNVOICE* voice);
 static void __SYNSetupPcm8(SYNVOICE* voice);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static u32 __SYNGetNibbleAddress(u32 count) {
     u32 samples = count;
     u32 frames = (samples / 14);
@@ -19,6 +20,7 @@ static u32 __SYNGetNibbleAddress(u32 count) {
     return (frames * 0x10) + 2 + samplesLeft;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNSetupAdpcm(SYNVOICE* voice) {
     AXVPB* axvpb = voice->axvpb;
 
@@ -101,6 +103,7 @@ static void __SYNSetupAdpcm(SYNVOICE* voice) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNSetupPcm16(SYNVOICE* voice) {
     AXVPB* axvpb = voice->axvpb;
 
@@ -161,6 +164,7 @@ static void __SYNSetupPcm16(SYNVOICE* voice) {
     axvpb->sync |= 0x21000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __SYNSetupPcm8(SYNVOICE* voice) {
     AXVPB* axvpb = voice->axvpb;
 
@@ -221,6 +225,7 @@ static void __SYNSetupPcm8(SYNVOICE* voice) {
     axvpb->sync |= 0x21000;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupSample(SYNVOICE* voice) {
     ASSERTLINE(361, voice);
 
