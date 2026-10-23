@@ -1210,3 +1210,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/synth_adsr.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/synthdata.c"
+completed = true

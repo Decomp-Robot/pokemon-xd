@@ -1023,6 +1023,36 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+ext/musyx_sdk/runtime/synthdata.c:
+	.text       start:0x8016D330 end:0x8016D520
+	.text       start:0x8016D520 end:0x8016D69C
+	.text       start:0x8016D69C end:0x8016D8E4
+	.text       start:0x8016D8E4 end:0x8016DAA8
+	.text       start:0x8016DAA8 end:0x8016DCAC
+	.text       start:0x8016DCAC end:0x8016DE28
+	.text       start:0x8016DE28 end:0x8016DF90
+	.text       start:0x8016DF90 end:0x8016E068
+	.text       start:0x8016E068 end:0x8016E104
+	.text       start:0x8016E104 end:0x8016E244
+	.text       start:0x8016E244 end:0x8016E530
+	.text       start:0x8016E530 end:0x8016E7B4
+	.text       start:0x8016E7B4 end:0x8016E7C4
+	.text       start:0x8016E7C4 end:0x8016E850
+	.text       start:0x8016E850 end:0x8016E860
+	.text       start:0x8016E860 end:0x8016E990
+	.text       start:0x8016E990 end:0x8016E9A0
+	.text       start:0x8016E9A0 end:0x8016E9FC
+	.text       start:0x8016E9FC end:0x8016EA58
+	.text       start:0x8016EA58 end:0x8016EA68
+	.text       start:0x8016EA68 end:0x8016EAE4
+	.text       start:0x8016EAE4 end:0x8016EAF4
+	.text       start:0x8016EAF4 end:0x8016EB90
+	.text       start:0x8016EB90 end:0x8016EC74
+	.text       start:0x8016EC74 end:0x8016EC94
+	.bss        start:0x80458D48 end:0x80467548
+	.bss        start:0x80467548 end:0x80467580
+	.sbss       start:0x804EB378 end:0x804EB3C8
+
 ext/musyx_sdk/runtime/synth_ac.c:
 	.text       start:0x801756A4 end:0x801756E0
 	.text       start:0x801756E0 end:0x801757C4
