@@ -6,6 +6,7 @@
 
 #include "__syn.h"
 
+// UNUSED: the game never calls this; dead-stripped at link.
 s32 __SYNGetEnvelopeTime(s32 scale, s32 mod, u8 key) {
     if (scale == 0x80000000) {
         return 0;
@@ -18,6 +19,7 @@ s32 __SYNGetEnvelopeTime(s32 scale, s32 mod, u8 key) {
     return (1000.0f* powf(2.0f, ((f32)scale + (mod* __SYNn128[key])) / (65535* 1200)));
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupVolumeEnvelope(SYNVOICE* voice) {
     ASSERTLINE(46, voice);
 
@@ -56,6 +58,7 @@ void __SYNSetupVolumeEnvelope(SYNVOICE* voice) {
     voice->veRelease = voice->art->eg1Release;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupPitchEnvelope(SYNVOICE* voice) {
     ASSERTLINE(110, voice);
 
@@ -94,6 +97,7 @@ void __SYNSetupPitchEnvelope(SYNVOICE* voice) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNRunVolumeEnvelope(SYNVOICE* voice) {
     ASSERTLINE(178, voice);
 
@@ -131,6 +135,7 @@ void __SYNRunVolumeEnvelope(SYNVOICE* voice) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNRunPitchEnvelope(SYNVOICE* voice) {
     ASSERTLINE(243, voice);
 

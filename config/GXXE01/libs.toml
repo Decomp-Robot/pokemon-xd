@@ -896,3 +896,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/syn/synctrl.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/syn/synenv.c"
+completed = true
