@@ -1543,5 +1543,8 @@ src/init.c:
 decomp/TRKMemory.c:
 	.init       start:0x80003488 end:0x800034AC
 
+decomp/TRKReset.c:
+	.init       start:0x800053E0 end:0x8000540C
+
 Runtime.PPCEABI.H/MemFuncs.c:
 	.init       start:0x8000540C end:0x80005544

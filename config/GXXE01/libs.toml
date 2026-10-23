@@ -49,6 +49,10 @@ name = "decomp/TRKMemory.c"
 completed = true
 
 [[lib.object]]
+name = "decomp/TRKReset.c"
+completed = true
+
+[[lib.object]]
 name = "game/menuPokemonCursor.cpp"
 completed = true
 
