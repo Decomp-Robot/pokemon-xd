@@ -53,9 +53,6 @@ decomp/menuMetaMenu.cpp:
 decomp/menuPocket.cpp:
 	.text       start:0x80021EC8 end:0x80021EFC
 
-game/menuPocket2.cpp:
-	.text       start:0x80024118 end:0x80024134
-
 game/gbaExchange.cpp:
 	.text       start:0x80027E44 end:0x80027E6C
 

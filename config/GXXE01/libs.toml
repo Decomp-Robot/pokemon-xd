@@ -91,10 +91,6 @@ completed = true
 name = "game/menuPocketBattleDisk.cpp"
 completed = true
 
-[[lib.object]]
-name = "game/menuPocket2.cpp"
-completed = true
-
 [[lib]]
 name = "menuCBBios"
 mw_version = "GC/2.6"
