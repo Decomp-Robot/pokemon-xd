@@ -3441,6 +3441,10 @@ completed = true
 name = "libc/mbstring.c"
 completed = true
 [[lib.object]]
+name = "libc/mem.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+[[lib.object]]
 name = "libc/mem_funcs.c"
 completed = true
 

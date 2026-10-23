@@ -1305,6 +1305,9 @@ libc/FILE_POS.c:
 libc/mbstring.c:
 	.text       start:0x800DF228 end:0x800DF340
 
+libc/mem.c:
+	.text       start:0x800DF340 end:0x800DF4B0
+
 libc/mem_funcs.c:
 	.text       start:0x800DF4B0 end:0x800DF780
 
