@@ -1266,3 +1266,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/CheapReverb/creverb.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/CheapReverb/creverb_fx.c"
+completed = true
