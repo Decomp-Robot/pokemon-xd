@@ -1020,6 +1020,16 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 	.data       start:0x803D4EE0 end:0x803D4F78
 	.sbss       start:0x804EAED0 end:0x804EAED4
 
+ext/dolphin_sdk/gx/GXVert.c:
+	.text       start:0x80125678 end:0x80125684
+
+ext/musyx_sdk/runtime/synth_ac.c:
+	.text       start:0x801756A4 end:0x801756E0
+	.text       start:0x801756E0 end:0x801757C4
+	.data       start:0x80405F98 end:0x80406198
+	.data       start:0x80406198 end:0x80406398
+	.sdata2     start:0x804EDDC8 end:0x804EDDDC
+
 ext/musyx_sdk/runtime/synth_dbtab.c:
 	.data       start:0x80406398 end:0x8040651C
 	.data       start:0x8040651C end:0x8040691C
@@ -1027,9 +1037,6 @@ ext/musyx_sdk/runtime/synth_dbtab.c:
 
 ext/dolphin_sdk/ax/AXComp.c:
 	.data       start:0x80406B20 end:0x80408560
-
-ext/dolphin_sdk/gx/GXVert.c:
-	.text       start:0x80125678 end:0x80125684
 
 ext/musyx_sdk/runtime/hw_dspctrl.c:
 	.text       start:0x801771DC end:0x80177590
