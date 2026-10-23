@@ -10,7 +10,6 @@ from .config_models import (
     LibraryDef,
     ObjectDef,
     ToolVersions,
-    VersionConfig,
     VersionFlags,
 )
 
