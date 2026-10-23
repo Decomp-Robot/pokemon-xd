@@ -80,6 +80,7 @@ game/menuPokeCoupon.c:
 
 game/dbgMenuToolBattle.c:
 	.text       start:0x8000E64C end:0x8000E720
+	.sbss       start:0x804EA6B8 end:0x804EA6C8
 
 game/menuKeyDisc.c:
 	.text       start:0x8000E720 end:0x8000E74C
