@@ -158,6 +158,14 @@ ext/dolphin_sdk/perf/perf.c:
 	.text       start:0x800D1138 end:0x800D11C4
 	.text       start:0x800D11C4 end:0x800D1258
 
+ext/dolphin_sdk/perf/perfdraw.c:
+	.text       start:0x800D1258 end:0x800D1350
+	.text       start:0x800D1350 end:0x800D14B0
+	.text       start:0x800D14B0 end:0x800D20A0
+	.text       start:0x800D20A0 end:0x800D27F4
+	.text       start:0x800D27F4 end:0x800D3910
+	.text       start:0x800D3910 end:0x800D39C8
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
