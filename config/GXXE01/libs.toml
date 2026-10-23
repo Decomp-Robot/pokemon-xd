@@ -741,3 +741,7 @@ completed = true
 [[lib.object]]
 name = "ext/dolphin_sdk/vi/i2c.c"
 completed = true
+
+[[lib.object]]
+name = "ext/dolphin_sdk/vi/initphilips.c"
+completed = true
