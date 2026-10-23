@@ -33,6 +33,7 @@ static void __NoHangRetraceCallback(u32 count);
 static void __NoHangDoneRender(void);
 static void __DEMODiagnoseHang(void);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOInit(GXRenderModeObj* mode) {
     OSInit();
     DVDInit();
@@ -47,6 +48,7 @@ void DEMOInit(GXRenderModeObj* mode) {
     __DEMOInitVI();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
     if (mode != NULL) {
         rmodeobj = *mode;
@@ -76,6 +78,7 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
     rmode = &rmodeobj;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOInitMem(void) {
     void* arenaLo = OSGetArenaLo();
     void* arenaHi = OSGetArenaHi();
@@ -100,6 +103,7 @@ static void __DEMOInitMem(void) {
     OSSetArenaLo((arenaLo = arenaHi));
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOInitGX(void) {
     u16 xfbHeight;
     f32 yScale;
@@ -124,6 +128,7 @@ static void __DEMOInitGX(void) {
     GXSetDispCopyGamma(0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOInitVI(void) {
     u32 nin;
 
@@ -137,8 +142,10 @@ static void __DEMOInitVI(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOInitForEmu(void) {}
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOBeforeRender(void) {
     if (GPHangWorkaround != 0) {
         GXSetDrawSync(0xFEEB);
@@ -155,6 +162,7 @@ void DEMOBeforeRender(void) {
     GXInvalidateTexAll();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMODoneRender(void) {
     if (GPHangWorkaround != 0) {
         ASSERTMSGLINE(749, !DemoStatEnable, "DEMOStats and GP hang diagnosis are mutually exclusive");
@@ -177,6 +185,7 @@ void DEMODoneRender(void) {
     DEMOSwapBuffers();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSwapBuffers(void) {
     VISetNextFrameBuffer(DemoCurrentBuffer);
     if (DemoFirstFrame != 0) {
@@ -194,6 +203,7 @@ void DEMOSwapBuffers(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d) {
     u32 swap = 0;
 
@@ -231,6 +241,7 @@ void DEMOSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXT
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetTevOp(GXTevStageID id, GXTevMode mode) {
     GXTevColorArg carg = GX_CC_RASC;
     GXTevAlphaArg aarg = GX_TEVSTAGE5;
@@ -270,14 +281,17 @@ void DEMOSetTevOp(GXTevStageID id, GXTevMode mode) {
     GXSetTevAlphaOp(id, 0, 0, 0, 1, 0);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 GXRenderModeObj* DEMOGetRenderModeObj(void) {
     return rmode;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 u32 DEMOGetCurrentBuffer(void) {
     return (u32)DemoCurrentBuffer;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOEnableGPHangWorkaround(u32 timeoutFrames) {
     if (timeoutFrames != 0) {
         ASSERTMSGLINE(989, !DemoStatEnable, "DEMOStats and GP hang diagnosis are mutually exclusive");
@@ -293,6 +307,7 @@ void DEMOEnableGPHangWorkaround(u32 timeoutFrames) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __NoHangRetraceCallback(u32 count) {
     static u32 ovFrameCount = 0;
     static u32 lastOvc = 0;
@@ -318,6 +333,7 @@ static void __NoHangRetraceCallback(u32 count) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __NoHangDoneRender(void) {
     BOOL abort = FALSE;
 
@@ -339,6 +355,7 @@ static void __NoHangDoneRender(void) {
     DEMOSwapBuffers();
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOSetGPHangMetric(u8 enable) {
     if (enable) {
         GXSetGPMetric(GX_PERF0_NONE, GX_PERF1_NONE);
@@ -367,6 +384,7 @@ void DEMOSetGPHangMetric(u8 enable) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMODiagnoseHang(void) {
     u32 xfTop0, xfBot0, suRdy0, r0Rdy0;
     u32 xfTop1, xfBot1, suRdy1, r0Rdy1;
@@ -398,6 +416,7 @@ static void __DEMODiagnoseHang(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void DEMOReInit(GXRenderModeObj* mode) {
     u32 fbSize;
     GXFifoObj tmpobj;
