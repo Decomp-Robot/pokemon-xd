@@ -144,6 +144,33 @@ ext/dolphin_sdk/db/db.c:
 	.text       start:0x800B27F0 end:0x800B280C
 	.text       start:0x800B280C end:0x800B285C
 
+ext/dolphin_sdk/gx/GXFifo.c:
+	.text       start:0x800C74CC end:0x800C7600
+	.text       start:0x800C7600 end:0x800C766C
+	.text       start:0x800C766C end:0x800C76DC
+	.text       start:0x800C76DC end:0x800C76E8
+	.text       start:0x800C76E8 end:0x800C7810
+	.text       start:0x800C7810 end:0x800C79B0
+	.text       start:0x800C79B0 end:0x800C79E4
+	.text       start:0x800C79E4 end:0x800C7AAC
+	.text       start:0x800C7AAC end:0x800C7B48
+	.text       start:0x800C7B48 end:0x800C7B98
+	.text       start:0x800C7B98 end:0x800C7C30
+	.text       start:0x800C7C30 end:0x800C7C38
+	.text       start:0x800C7C38 end:0x800C7C40
+	.text       start:0x800C7C40 end:0x800C7C84
+	.text       start:0x800C7C84 end:0x800C7D38
+	.text       start:0x800C7D38 end:0x800C7D8C
+	.text       start:0x800C7D8C end:0x800C7DD8
+	.text       start:0x800C7DD8 end:0x800C7DFC
+	.text       start:0x800C7DFC end:0x800C7E20
+	.text       start:0x800C7E20 end:0x800C7E54
+	.text       start:0x800C7E54 end:0x800C7E84
+	.text       start:0x800C7E84 end:0x800C7EB4
+	.text       start:0x800C7EB4 end:0x800C7FB4
+	.text       start:0x800C7FB4 end:0x800C7FBC
+	.text       start:0x800C7FBC end:0x800C7FC4
+
 ext/dolphin_sdk/gx/GXAttr.c:
 	.text       start:0x800C7FC4 end:0x800C8230
 	.text       start:0x800C8230 end:0x800C84B8
