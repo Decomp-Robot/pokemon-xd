@@ -190,9 +190,14 @@ game/menuPokemonStatus.cpp:
 	.text       start:0x80037A44 end:0x80037A48
 	.ctors      start:0x802E9F90 end:0x802E9F94
 
+game/menuCBBattleResult.cpp:
+	.text       start:0x80046594 end:0x80046D5C
+	.data       start:0x8032EAE0 end:0x8032EB08
+
 game/menuCBBattleStart.cpp:
-	.text       start:0x800477F4 end:0x800477F8
+	.text       start:0x80046D5C end:0x800477F8
 	.ctors      start:0x802E9F98 end:0x802E9F9C
+	.rodata     start:0x802EAAD8 end:0x802EABF8
 
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
