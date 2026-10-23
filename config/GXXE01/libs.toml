@@ -41,6 +41,10 @@ name = "game/WorldMap.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/WorldMapCamera.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/WorldMapIcon.cpp"
 completed = true
 

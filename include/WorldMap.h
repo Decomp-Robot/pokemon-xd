@@ -19,11 +19,18 @@ struct WorldMapWork {
     s32 cursor;
 };
 
+/* 3D position vector (GSvec). */
+struct GSvec {
+    f32 x;
+    f32 y;
+    f32 z;
+};
+
 /* Camera-blend work block (0x68 bytes, allocated by Init). IsBlending only
  * reads the blend parameter at +0x08, which ControlCamera drives from 0 to
  * 1 (its per-frame increment +0x10 is clamped so the blend never passes 1);
- * the rest of the block (target position/angle work at +0x18, camera
- * position at +0x40) is still unrecovered. */
+ * SetCameraWork targets the current slot at +0x18 while SetCameraNextWork
+ * targets the pending slot at +0x40. */
 struct WorldMapCamWork {
     u8 _00[0x08];
     /* 0x08: camera blend parameter; 0 = camera at the old position,
@@ -36,7 +43,18 @@ struct WorldMapCamWork {
     f32 _10;
     /* 0x14: elapsed camera-move time; ControlCamera accumulates dt here. */
     f32 _14;
-    u8 _18[0x50];
+    u8 _18[0x28];
+    /* 0x40: pending camera target position (ControlCamera blends to it). */
+    GSvec nextPos;
+    /* 0x4C/0x50/0x54: pending blend range (start/end/current). */
+    f32 _4C;
+    f32 _50;
+    f32 _54;
+    /* 0x58/0x5C/0x60/0x64: pending distance and angle parameters. */
+    f32 _58;
+    f32 _5C;
+    f32 _60;
+    f32 _64;
 };
 
 /* Partial WorldMap declaration (0x48 bytes; menuWorldMapMXInit allocates
@@ -56,6 +74,7 @@ public:
     bool IsBlending();
     f32 GetAngle(long work);
     void SetCameraSpeed(f32 speed);
+    void SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov);
 
 private:
     /* 0x00: Purpose unknown. No WorldMap member function besides the
