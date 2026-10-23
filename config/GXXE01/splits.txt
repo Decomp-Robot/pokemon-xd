@@ -1115,6 +1115,58 @@ ext/musyx_sdk/runtime/snd_math.c:
 	.text       start:0x8017D598 end:0x8017D794
 	.sdata2     start:0x804EDE90 end:0x804EDEAC
 
+ext/musyx_sdk/runtime/snd_midictrl.c:
+	.text       start:0x8017D794 end:0x8017D7B8
+	.text       start:0x8017D7B8 end:0x8017D998
+	.text       start:0x8017D998 end:0x8017DBBC
+	.text       start:0x8017DBBC end:0x8017DDE0
+	.text       start:0x8017DDE0 end:0x8017E2FC
+	.text       start:0x8017E2FC end:0x8017E420
+	.text       start:0x8017E420 end:0x8017E510
+	.text       start:0x8017E510 end:0x8017E7D4
+	.text       start:0x8017E7D4 end:0x8017E818
+	.text       start:0x8017E818 end:0x8017E874
+	.text       start:0x8017E874 end:0x8017E90C
+	.text       start:0x8017E90C end:0x8017EA20
+	.text       start:0x8017EA20 end:0x8017EA5C
+	.text       start:0x8017EA5C end:0x8017EA98
+	.text       start:0x8017EA98 end:0x8017EF38
+	.text       start:0x8017EF38 end:0x8017EF80
+	.text       start:0x8017EF80 end:0x8017EFC8
+	.text       start:0x8017EFC8 end:0x8017F010
+	.text       start:0x8017F010 end:0x8017F058
+	.text       start:0x8017F058 end:0x8017F0A0
+	.text       start:0x8017F0A0 end:0x8017F0E8
+	.text       start:0x8017F0E8 end:0x8017F130
+	.text       start:0x8017F130 end:0x8017F178
+	.text       start:0x8017F178 end:0x8017F1C0
+	.text       start:0x8017F1C0 end:0x8017F208
+	.text       start:0x8017F208 end:0x8017F250
+	.text       start:0x8017F250 end:0x8017F298
+	.text       start:0x8017F298 end:0x8017F2E0
+	.text       start:0x8017F2E0 end:0x8017F328
+	.text       start:0x8017F328 end:0x8017F3DC
+	.text       start:0x8017F3DC end:0x8017F490
+	.text       start:0x8017F490 end:0x8017F754
+	.text       start:0x8017F754 end:0x8017F7C4
+	.text       start:0x8017F7C4 end:0x8017F8C0
+	.text       start:0x8017F8C0 end:0x8017FAA4
+	.rodata     start:0x802F3B60 end:0x802F3BE8
+	.rodata     start:0x802F3BE8 end:0x802F3C70
+	.data       start:0x804087A0 end:0x804087B0
+	.data       start:0x804087B0 end:0x804087C0
+	.data       start:0x804087C0 end:0x804087E4
+	.data       start:0x804087E4 end:0x80408808
+	.data       start:0x80408808 end:0x8040882C
+	.bss        start:0x8046AFF8 end:0x8046B1F8
+	.bss        start:0x8046B1F8 end:0x8046F4F8
+	.bss        start:0x8046F4F8 end:0x8046F978
+	.bss        start:0x8046F978 end:0x80471AF8
+	.bss        start:0x80471AF8 end:0x80471D38
+	.bss        start:0x80471D38 end:0x80471DB8
+	.bss        start:0x80471DB8 end:0x80471DF8
+	.sbss       start:0x804EB470 end:0x804EB478
+
 ext/musyx_sdk/runtime/snd_service.c:
 	.text       start:0x8017FAA4 end:0x8017FAC0
 	.text       start:0x8017FAC0 end:0x8017FB4C
