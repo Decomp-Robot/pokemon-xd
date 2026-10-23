@@ -1,13 +1,12 @@
 /* Decimal <-> binary floating point conversions. */
 
+#include "ctype_inline.h"
+
 extern double copysign(double x, double y);
 extern double pow(double x, double y);
 extern double ldexp(double x, int e);
 extern double frexp(double x, int *e);
 extern double modf(double x, double *iptr);
-
-extern char __ctype_map[256];
-extern signed char __lower_map[];
 
 /*
  * A decimal significand held as one digit per byte.
@@ -99,14 +98,6 @@ inline int __count_trailing_zeros(unsigned long value) {
 }
 /* Bit of the character classification table that marks a decimal digit. */
 #define CTYPE_DIGIT 0x10
-
-/* Lower-case a character through the lower-case table. */
-inline int __tolower(int c) {
-    if (c == -1) {
-        return -1;
-    }
-    return (unsigned char)__lower_map[c];
-}
 
 /*
  * True when decimal a is the smaller of the two, comparing magnitudes.
