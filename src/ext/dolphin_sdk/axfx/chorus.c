@@ -116,6 +116,7 @@ const static double i2fMagic = 4503601774854144.0;
 static void do_src1(AXFX_CHORUS_SRCINFO* src);
 static void do_src2(AXFX_CHORUS_SRCINFO* src);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 asm static void do_src1(register AXFX_CHORUS_SRCINFO* src) {
     nofralloc
 	stwu r1, -64(r1)
@@ -227,6 +228,7 @@ L_00000160:
     blr
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 asm static void do_src2(register AXFX_CHORUS_SRCINFO* src) {
     nofralloc
 	stwu r1, -64(r1)
@@ -360,6 +362,7 @@ L_00000344:
 	blr
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXChorusInit(AXFX_CHORUS* c) {
     s32* left;
     s32* right;
@@ -411,6 +414,7 @@ int AXFXChorusInit(AXFX_CHORUS* c) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXChorusShutdown(AXFX_CHORUS* c) {
     BOOL old;
 
@@ -420,6 +424,7 @@ int AXFXChorusShutdown(AXFX_CHORUS* c) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int AXFXChorusSettings(AXFX_CHORUS* c) {
     BOOL old;
 
@@ -439,6 +444,7 @@ int AXFXChorusSettings(AXFX_CHORUS* c) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void AXFXChorusCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_CHORUS* chorus) {
     s32* leftD;
     s32* rightD;
