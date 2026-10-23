@@ -72,6 +72,7 @@ static f32 __SYNLfo[64] = {
     -0.098020f,
 };
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNSetupLfo(SYNVOICE* voice) {
     ASSERTLINE(47, voice);
 
@@ -84,6 +85,7 @@ void __SYNSetupLfo(SYNVOICE* voice) {
     voice->lfoModCents = voice->art->lfoMod2Pitch;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void __SYNRunLfo(SYNVOICE* voice) {
     f32 lfoAmplitude;
     f32 lfoModWheel;
