@@ -1079,6 +1079,8 @@ ext/dolphin_sdk/gx/GXGeometry.c:
 
 ext/dolphin_sdk/gx/GXFrameBuf.c:
 	.text       start:0x800CA118 end:0x800CAB4C
+	.data       start:0x803D3358 end:0x803D3AA0
+	.sdata2     start:0x804ECB98 end:0x804ECBA8
 
 ext/dolphin_sdk/gx/GXLight.c:
 	.text       start:0x800CAB4C end:0x800CAB68
