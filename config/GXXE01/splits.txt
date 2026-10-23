@@ -1995,6 +1995,11 @@ game/pokemonRelive.cpp:
 	.ctors      start:0x802E9FE4 end:0x802E9FE8
 	.sbss       start:0x804EB988 end:0x804EB990
 
+game/GSAPI/GSscript/tvariant.cpp:
+	.text       start:0x802424B0 end:0x802424B4
+	.ctors      start:0x802E9FE8 end:0x802E9FEC
+	.bss        start:0x804B0F80 end:0x804B0F8C
+
 game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.text       start:0x8025C940 end:0x8025CA38
 	.sdata      start:0x804E8610 end:0x804E8618
