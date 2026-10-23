@@ -1242,3 +1242,7 @@ completed = true
 [[lib.object]]
 name = "ext/musyx_sdk/runtime/snd_init.c"
 completed = true
+
+[[lib.object]]
+name = "ext/musyx_sdk/runtime/snd_synthapi.c"
+completed = true
