@@ -49,6 +49,17 @@ name = "game/menuPokemonCursor.cpp"
 completed = true
 
 [[lib]]
+name = "menuInfoWindow"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-opt", "nopeephole"]
+
+[[lib.object]]
+name = "game/menuInfoWindow.cpp"
+completed = true
+
+[[lib]]
 name = "dbgMenu"
 mw_version = "GC/1.2.5n"
 cflags_preset = "game"
