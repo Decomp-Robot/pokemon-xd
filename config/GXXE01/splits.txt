@@ -218,6 +218,15 @@ ext/dolphin_sdk/ar/ar.c:
 	.text       start:0x800BCCEC end:0x800BCCFC
 	.text       start:0x800BCCFC end:0x800BE4F0
 
+ext/dolphin_sdk/ar/arq.c:
+	.text       start:0x800BE4F0 end:0x800BE5F0
+	.text       start:0x800BE5F0 end:0x800BE5F4
+	.text       start:0x800BE5F4 end:0x800BE6C0
+	.text       start:0x800BE6C0 end:0x800BE730
+	.text       start:0x800BE730 end:0x800BE88C
+	.text       start:0x800BE88C end:0x800BE8AC
+	.text       start:0x800BE8AC end:0x800BE8B4
+
 ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C6140 end:0x800C623C
 	.text       start:0x800C623C end:0x800C6260
