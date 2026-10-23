@@ -22,6 +22,10 @@ decomp/dbgMenuFightSetMsgSpeed.c:
 decomp/_memcard_debug_type_check.c:
 	.text       start:0x8000B620 end:0x8000B644
 
+Runtime.PPCEABI.H/global_destructor_chain.c:
+	.text       start:0x8000E74C end:0x8000E794
+	.sbss       start:0x804EA6C8 end:0x804EA6CC
+
 game/menuPocketBattleDisk.cpp:
 	.text       start:0x8000EA94 end:0x8000EAD8
 

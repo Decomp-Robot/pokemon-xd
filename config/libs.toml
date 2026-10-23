@@ -9,7 +9,7 @@ progress_category = "sdk"
 
 [[lib.object]]
 name = "Runtime.PPCEABI.H/global_destructor_chain.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"
