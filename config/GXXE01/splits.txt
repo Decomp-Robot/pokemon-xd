@@ -1429,6 +1429,11 @@ ext/dolphin_sdk/odemustubs/odemustubs.c:
 ext/dolphin_sdk/odenotstub/odenotstub.c:
 	.text       start:0x800E7048 end:0x800E7048
 
+ext/dolphin_sdk/OdemuExi2Lib/DebuggerDriver.c:
+	.text       start:0x800E7048 end:0x800E7AC0
+	.sdata      start:0x804E8318 end:0x804E8320
+	.sbss       start:0x804EAE90 end:0x804EAEA8
+
 ext/dolphin_sdk/exi/EXIBios.c:
 	.text       start:0x800E7AC0 end:0x800E7BB4
 	.text       start:0x800E7BB4 end:0x800E7E10

@@ -17,7 +17,7 @@ typedef struct DBInterface {
 extern DBInterface* __DBInterface;
 
 void DBInit(void);
-void DBInitComm(int* inputFlagPtr, int* mtrCallback);
+void DBInitComm(u8** inputFlagPtr, void (*mtrCallback)(s32, OSContext*));
 void __DBExceptionDestination(void);
 void __DBExceptionDestinationAux(void);
 BOOL __DBIsExceptionMarked(__OSException exception);
