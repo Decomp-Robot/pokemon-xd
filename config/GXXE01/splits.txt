@@ -171,6 +171,11 @@ ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC474 end:0x800CC4A4
 	.text       start:0x800CC4A4 end:0x800CC4C8
 
+ext/dolphin_sdk/gx/GXDisplayList.c:
+	.text       start:0x800CEF58 end:0x800CF024
+	.text       start:0x800CF024 end:0x800CF0E8
+	.text       start:0x800CF0E8 end:0x800CF158
+
 ext/dolphin_sdk/perf/perf.c:
 	.text       start:0x800D018C end:0x800D0234
 	.text       start:0x800D0234 end:0x800D033C
