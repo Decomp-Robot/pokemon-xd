@@ -170,13 +170,5 @@ void __AXProcessAux(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXRegisterAuxACallback(void (*callback)(void*, void*), void* context) {
-    __AXCallbackAuxA = callback;
-    __AXContextAuxA = context;    
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXRegisterAuxBCallback(void (*callback)(void*, void*), void* context) {
-    __AXCallbackAuxB = callback;
-    __AXContextAuxB = context;    
-}

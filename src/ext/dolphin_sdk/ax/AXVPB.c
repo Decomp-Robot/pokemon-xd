@@ -585,64 +585,10 @@ void AXSetVoiceSrcType(AXVPB* p, u32 type) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceState(AXVPB* p, u16 state) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.state = state;
-    p->sync |= AX_SYNC_FLAG_COPYSTATE;
-    if (state == 0) {
-        p->depop = 1;
-    }
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceType(AXVPB* p, u16 type) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.type = type;
-    p->sync |= AX_SYNC_FLAG_COPYTYPE;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceMix(AXVPB* p, AXPBMIX* mix) {
-    BOOL old;
-    u16 mixerCtrl;
-    u16* dst;
-    u16* src;
-    
-    src = (u16*)mix;
-    dst = (u16*)&p->pb.mix;
-    mixerCtrl = 0;
-
-    old = OSDisableInterrupts();
-
-    if ((*dst++ = *src++)) mixerCtrl |= 0x1;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x9;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x2;
-    if ((*dst++ = *src++)) mixerCtrl |= 0xA;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x10;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x50;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x20;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x60;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x200;
-    if ((*dst++ = *src++)) mixerCtrl |= 0xA00;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x400;
-    if ((*dst++ = *src++)) mixerCtrl |= 0xC00;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x1000;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x3000;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x4;
-    if ((*dst++ = *src++)) mixerCtrl |= 0xC;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x80;
-    if ((*dst++ = *src++)) mixerCtrl |= 0x180;
-
-    p->pb.mixerCtrl = mixerCtrl;
-    p->sync |= (AX_SYNC_FLAG_COPYAXPBMIX | AX_SYNC_FLAG_COPYMXRCTRL);
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoiceItdOn(AXVPB* p) {
@@ -668,54 +614,10 @@ void AXSetVoiceItdTarget(AXVPB* p, u16 lShift, u16 rShift) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceUpdateIncrement(AXVPB* p) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->updateMS++;
-    p->sync |= AX_SYNC_FLAG_COPYUPDATE;
-    ASSERTMSGLINE(1191, p->updateMS <= 4, "PB updates cannot exceed 5ms\n");
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceUpdateWrite(AXVPB* p, u16 param, u16 data) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->updateCounter+=2;
-    ASSERTMSGLINE(1205, p->updateCounter <= 128, "PB update block exceeded 128 words\n");
-
-    *(p->updateWrite) = param; p->updateWrite+=1;
-    *(p->updateWrite) = data; p->updateWrite+=1;
-    p->sync |= AX_SYNC_FLAG_COPYUPDATE;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceDpop(AXVPB* p, AXPBDPOP* dpop) {
-    BOOL old;
-    u16* dst;
-    u16* src;
-
-    dst = (void*)&p->pb.dpop;
-    src = (void*)dpop;
-
-    old = OSDisableInterrupts();
-    {
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-    }
-    p->sync |= AX_SYNC_FLAG_COPYDPOP;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoiceVe(AXVPB* p, AXPBVE* ve) {
@@ -729,85 +631,10 @@ void AXSetVoiceVe(AXVPB* p, AXPBVE* ve) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceVeDelta(AXVPB* p, s16 delta) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.ve.currentDelta = delta;
-    p->sync |= AX_SYNC_FLAG_SWAPVOL;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceFir(AXVPB* p, AXPBFIR* fir) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.fir.numCoefs = fir->numCoefs;
-    p->pb.fir.coefsHi = fir->coefsHi;
-    p->pb.fir.coefsLo = fir->coefsLo;
-    p->sync |= AX_SYNC_FLAG_COPYFIR;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceAddr(AXVPB* p, AXPBADDR* addr) {
-    BOOL old;
-    u32* dst;
-    u32* src;
-
-    dst = (void*)&p->pb.addr;
-    src = (void*)addr;
-
-    old = OSDisableInterrupts();
-    {
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src);
-    }
-
-    switch(addr->format) {
-    case 0:
-        ASSERTMSGLINE(1335, (addr->loopAddressLo & 0xF) > 1, "*** loop address on ADPCM frame header! ***\n");
-        ASSERTMSGLINE(1340, (addr->endAddressLo & 0xF) > 1, "*** end address on ADPCM frame header! ***\n");
-        ASSERTMSGLINE(1345, (addr->currentAddressLo & 0xF) > 1, "*** current address on ADPCM frame header! ***\n");
-        break;
-    case 10:
-        dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0x08000000; dst+=1;
-        *(dst) = 0; dst+=1;
-        break;
-    case 25:
-        dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0; dst+=1;
-        *(dst) = 0x01000000; dst+=1;
-        *(dst) = 0; dst+=1;
-        break;
-    default:
-        ASSERTMSGLINE(1389, 0, "unknown addr->formaqt in PB\n");
-        break;
-    }
-
-    p->sync &= ~(AX_SYNC_FLAG_COPYLOOP | AX_SYNC_FLAG_COPYLOOPADDR | AX_SYNC_FLAG_COPYENDADDR | AX_SYNC_FLAG_COPYCURADDR);
-    p->sync |= (AX_SYNC_FLAG_COPYADDR | AX_SYNC_FLAG_COPYADPCM);
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoiceLoop(AXVPB* p, u16 loop) {
@@ -820,37 +647,10 @@ void AXSetVoiceLoop(AXVPB* p, u16 loop) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceLoopAddr(AXVPB* p, u32 addr) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.addr.loopAddressHi = (addr >> 0x10);
-    p->pb.addr.loopAddressLo = (addr);
-    p->sync |= AX_SYNC_FLAG_COPYLOOPADDR;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceEndAddr(AXVPB* p, u32 addr) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.addr.endAddressHi = (addr >> 0x10);
-    p->pb.addr.endAddressLo = (addr);
-    p->sync |= AX_SYNC_FLAG_COPYENDADDR;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceCurrentAddr(AXVPB* p, u32 addr) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    p->pb.addr.currentAddressHi = (addr >> 0x10);
-    p->pb.addr.currentAddressLo = (addr);
-    p->sync |= AX_SYNC_FLAG_COPYCURADDR;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoiceAdpcm(AXVPB* p, AXPBADPCM* adpcm) {
@@ -920,22 +720,6 @@ void AXSetVoiceSrcRatio(AXVPB* p, float ratio) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceAdpcmLoop(AXVPB* p, AXPBADPCMLOOP* adpcmloop) {
-    BOOL old;
-    u16* dst;
-    u16* src;
-
-    dst = (void*)&p->pb.adpcmLoop;
-    src = (void*)adpcmloop;
-    old = OSDisableInterrupts();
-    {
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-        *(dst) = *(src); dst+=1; src+=1;
-    }
-    p->sync |= AX_SYNC_FLAG_COPYADPCMLOOP;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXSetVoiceLpf(AXVPB* p, AXPBLPF* lpf) {
@@ -958,44 +742,13 @@ void AXSetVoiceLpf(AXVPB* p, AXPBLPF* lpf) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetVoiceLpfCoefs(AXVPB* p, u16 a0, u16 b0) {
-    BOOL old;
-    old = OSDisableInterrupts();
-
-    p->pb.lpf.a0 = a0;
-    p->pb.lpf.b0 = b0;
-    p->sync |= 0x400000;
-
-    OSRestoreInterrupts(old);
-}
 
 #define PI 3.14159265358979323846f
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXGetLpfCoefs(u16 freq, u16* a0, u16* b0) {
-    f32 bb;
-    f32 cc;
-
-    ASSERTMSGLINE(1616, freq <= 16000, "freq is out of range");
-
-    cc = 2.0f - cos(((PI * 2) * (f32)freq) / 32000.0f);
-    bb = sqrt((cc * cc) - 1.0f) - cc;
-
-    *b0 = 32768.0f * -bb;
-    *a0 = 0x7FFF - *b0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetMaxDspCycles(u32 cycles) {
-    __AXMaxDspCycles = cycles;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AXGetMaxDspCycles(void) {
-    return __AXMaxDspCycles;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AXGetDspCycles(void) {
-    return __AXRecDspCycles;
-}

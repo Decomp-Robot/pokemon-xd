@@ -91,127 +91,14 @@ static void ttyMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int TTYInit(MCC_EXI exiChannel, MCC_CHANNEL chID) {
-    if (ttyIsInitialized()) {
-        return 0;
-    }
-
-    OSRegisterVersion(__TTYVersion);
-
-    if (MCCInit(exiChannel, 5, NULL) && MCCOpen(chID, 1, ttyMccChannelEvent)) {
-        gOldEvent = MCCSetChannelEventMask(chID, 0x30);
-        ttyClearProperty(chID);
-        return 1;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void TTYExit(void) {
-    if (ttyIsInitialized()) {
-        MCCSetChannelEventMask(gChID, gOldEvent);
-        if (MCCClose(gChID) != 0) {
-            ttyClearProperty(0);
-        }
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int TTYQuery(void) {
-    u32 tick;
-
-    if (ttyIsInitialized()) {
-        gQuery = 0;
-        if (MCCNotify(gChID, 0x100210)) {
-            return ttyWaiting(5, &gQuery);
-        }
-    }
-
-    tick = OSGetTick();
-    do {} while(OSTicksToSeconds(OSGetTick() - tick) < 5);
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int TTYPrintf(const char* format, ...) {
-    if (ttyIsInitialized() && format != NULL) {
-        MCC_Hdr* hdr;
-        u32* id;
-        char* str;
-        u32 maxDataSize;
-        u32 formatLength;
-        u32 dataSize;
-        int err;
-        char* eof;
-        va_list argptr;
-        u32 prosecced;
-
-        hdr = (void*)&gBuf;
-        id = (u32*)(hdr + 1);
-        str = (char*)(id + 1);
-    
-        maxDataSize = 8179;
-        formatLength = strlen(format);
-        if (formatLength > maxDataSize) {
-            eof = (void*)((-1 + maxDataSize + (u32)format));
-            *(eof) = 0;
-        }
-    
-        va_start(argptr, format);
-        err = vsprintf(str, format, argptr);
-        if (strlen(str) < maxDataSize) {
-            str[strlen(str)] = 0;
-        } else {
-            err = -1;
-        }
-    
-        if (err < 0) {
-            return 0;
-        }
-    
-        hdr->length = strlen(str) + 13;
-        hdr->rsvd = 0;
-        hdr->protocol = 0x210;
-        dataSize = OSRoundUp32B(hdr->length) & ~1;
-        if ((0x2000 - (gBufTail - gBufHead)) <= dataSize) {
-            ttyFlush(gPrintfID, 1);
-        }
-    
-        gPrintfID += 1;
-        gPrintfID = (u8) gPrintfID;
-        *id = gPrintfID;
-    
-        if ((0x2000 - (gBufTail & 0x1FFF)) < dataSize) {
-            prosecced = 0x2000 - (gBufTail & 0x1FFF);
-            ttyWrite(gBufTail & 0x1FFF, (char*)&gBuf, prosecced);
-            ttyWrite(0, (char*)&gBuf + prosecced, dataSize - prosecced);
-        } else {
-            ttyWrite(gBufTail & 0x1FFF, (char*)&gBuf, dataSize);
-        }
-    
-        gBufTail += dataSize;
-        if (strchr(str, '\n') != 0) {
-            ttyFlush(gPrintfID, TRUE);
-        } else if (gPrintfID == 0xFF) {
-            ttyFlush(gPrintfID, TRUE);
-        }
-    
-        va_end(format);
-        return 1;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int TTYFlush(void) {
-    if (!ttyIsInitialized()) {
-        return 0;
-    }
-
-    return ttyFlush(gPrintfID, TRUE);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void ttyClearProperty(MCC_CHANNEL chID) {

@@ -1019,14 +1019,5 @@ static void DumpXFRegisters(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __GXVerifyXF(void) {
-    if (internalDebug) {
-        DumpXFRegisters();
-    }
-    InitializeXFVerifyData();
-    CheckErrors();
-    CheckWarnings();
-    DumpCount++;
-}
 
 #endif

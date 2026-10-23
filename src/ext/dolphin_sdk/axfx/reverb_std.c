@@ -136,7 +136,6 @@ static int ReverbSTDModify(AXFX_REVSTD_WORK* rv, f32 coloration, f32 time, f32 m
 				  predelay >= 0.0f && predelay <= 0.1f,
 				  "The value of specified parameter is out of range.");
 
-
     if ((coloration < 0.0f ) || (coloration > 1.0f ) 
      || (time       < 0.01f) || (time       > 10.0f) 
      || (mix        < 0.0f ) || (mix        > 1.0f ) 
@@ -470,43 +469,9 @@ static void ReverbSTDFree(AXFX_REVSTD_WORK* rv) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbStdInit(AXFX_REVERBSTD* rev) {
-    int ret;
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    rev->tempDisableFX = 0;
-    ret = ReverbSTDCreate(&rev->rv, rev->coloration, rev->time, rev->mix, rev->damping, rev->preDelay);
-    OSRestoreInterrupts(old);
-    return ret;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbStdShutdown(AXFX_REVERBSTD* rev) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    ReverbSTDFree(&rev->rv);
-    OSRestoreInterrupts(old);
-    return 1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbStdSettings(AXFX_REVERBSTD* rev) {
-	int ret;
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    rev->tempDisableFX = 1;
-    ret = ReverbSTDModify(&rev->rv, rev->coloration, rev->time, rev->mix, rev->damping, rev->preDelay);
-    rev->tempDisableFX = 0;
-    OSRestoreInterrupts(old);
-    return ret;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXFXReverbStdCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_REVERBSTD* reverb) {
-    if (reverb->tempDisableFX == 0) {
-        ReverbSTDCallback(bufferUpdate->left, bufferUpdate->right, bufferUpdate->surround, &reverb->rv);
-    }
-}

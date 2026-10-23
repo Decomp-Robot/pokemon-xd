@@ -820,20 +820,6 @@ int MCCPing(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int MCCEnumDevices(MCC_CBEnumDevices callbackEnumDevices) {
-    if (callbackEnumDevices == NULL) {
-        gLastError = 0xD;
-    }
-
-    if (HIOEnumDevices(callbackEnumDevices) == 0) {
-        gLastError = 0xD;
-    } else {
-        gLastError = 0;
-        return 1;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 u8 MCCGetFreeBlocks(MCC_MODE mode) {
@@ -934,7 +920,6 @@ int MCCNotify(MCC_CHANNEL chID, u32 notify) {
 #ifndef DEBUG
     int unused[3]; // fake but blah
 #endif
-
 
     mccDebugPrint("MCCNotify\n");
     if (!gMccInitialized) {

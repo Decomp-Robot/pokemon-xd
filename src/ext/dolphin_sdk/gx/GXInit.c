@@ -79,12 +79,6 @@ static int __GXShutdown(int final);
 
 static OSResetFunctionInfo GXResetFuncInfo = {__GXShutdown, 0x7F, NULL, NULL};
 
-asm BOOL IsWriteGatherBufferEmpty(void) {
-    sync
-    mfspr r3, WPAR
-    andi. r3, r3, 1
-}
-
 static void EnableWriteGatherPipe(void) {
     u32 hid2 = PPCMfhid2();
 

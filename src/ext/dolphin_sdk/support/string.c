@@ -1,36 +1,6 @@
 #include <charPipeline/structures/dolphinString.h>
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u8 Strcat(char* str1, char* str2, char* dst) {
-    char* srcCursor = str1;
-    char* dstCursor = dst;;
-
-    if (!dst) {
-        return 0;
-    }
-    if (!str1) {
-        return 0;
-    }
-    if (!str2) {
-        return 0;
-    }
-
-    while ((s8)*srcCursor != 0) {
-        *dstCursor = *srcCursor;
-        dstCursor++;
-        srcCursor++;
-    }
-
-    srcCursor = str2;
-    while ((s8)*srcCursor != 0) {
-        *dstCursor = *srcCursor;
-        dstCursor++;
-        srcCursor++;
-    }
-
-    *dstCursor = 0;
-    return 1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void Strcpy(char* dst, char* src) {

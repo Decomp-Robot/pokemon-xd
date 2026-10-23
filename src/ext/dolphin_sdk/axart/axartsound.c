@@ -115,10 +115,3 @@ void AXARTServiceSound(AXART_SOUND* sound) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXARTAddArticulator(AXART_SOUND* sound, AXART_ART* articulator) {
-    ASSERTLINE(232, sound);
-    ASSERTLINE(233, articulator);
-
-    articulator->next = sound->articulators;
-    sound->articulators = articulator;
-}

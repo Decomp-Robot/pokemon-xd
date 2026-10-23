@@ -168,11 +168,6 @@ void __AXClQuit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetMode(u32 mode) {
-    if (__AXClMode != mode) {
-        __AXClMode = mode;
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 u32 AXGetMode(void) {
@@ -180,6 +175,3 @@ u32 AXGetMode(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetCompressor(u32 i) {
-    __AXCompressor = i;
-}

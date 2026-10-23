@@ -83,24 +83,6 @@ u32 ARAlloc(u32 length) {
     return tmp;
 }
 
-u32 ARFree(u32* length) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    __AR_BlockLength -= 1;
-    if (length) {
-        *length = *__AR_BlockLength;
-    }
-    __AR_StackPointer -= *__AR_BlockLength;
-    __AR_FreeBlocks += 1;
-    OSRestoreInterrupts(old);
-    return __AR_StackPointer;
-}
-
-BOOL ARCheckInit(void) {
-    return __AR_init_flag;
-}
-
 u32 ARInit(u32* stack_index_addr, u32 num_entries) {
     BOOL old;
     u16 refresh;
@@ -129,10 +111,6 @@ u32 ARInit(u32* stack_index_addr, u32 num_entries) {
     return __AR_StackPointer;
 }
 
-void ARReset(void) {
-    __AR_init_flag = FALSE;
-}
-
 void ARSetSize(void) {
 #ifdef DEBUG
     OSReport("ARSetSize(): I don't do anything anymore!\n");
@@ -145,10 +123,6 @@ u32 ARGetBaseAddress(void) {
 
 u32 ARGetSize(void) {
     return __AR_Size;
-}
-
-u32 ARGetInternalSize(void) {
-    return __AR_InternalSize;
 }
 
 void ARClear(u32 flag) {

@@ -176,7 +176,6 @@ static int ReverbHIModifyDpl2(AXFX_REVHI_WORK_DPL2* rv, f32 coloration, f32 time
     return ReverbHICreateDpl2(rv, coloration, time, mix, damping, preDelay);
 }
 
-
 const static f32 value0_6 = 0.6f;
 const static f32 value0_3 = 0.3f;
 const static double i2fMagic = 4503601774854144.0;
@@ -540,12 +539,6 @@ L_00000C7C:
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-static void ReverbHICallbackDpl2(s32* l, s32* r, s32* ls, s32* rs, AXFX_REVHI_WORK_DPL2* rv) {
-    HandleReverbDpl2(l, rv, 0);
-    HandleReverbDpl2(r, rv, 1);
-    HandleReverbDpl2(ls, rv, 2);
-    HandleReverbDpl2(rs, rv, 3);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void ReverbHIDpl2Free(AXFX_REVHI_WORK_DPL2* rv) {
@@ -576,39 +569,10 @@ static void ReverbHIDpl2Free(AXFX_REVHI_WORK_DPL2* rv) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbHiInitDpl2(AXFX_REVERBHI_DPL2* reverb) {
-    int ret;
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    reverb->tempDisableFX = 0;
-    ret = ReverbHICreateDpl2(&reverb->rv, reverb->coloration, reverb->time, reverb->mix, reverb->damping, reverb->preDelay);
-    OSRestoreInterrupts(old);
-    return ret;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbHiShutdownDpl2(AXFX_REVERBHI_DPL2* reverb) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    ReverbHIDpl2Free(&reverb->rv);
-    OSRestoreInterrupts(old);
-    return 1;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXReverbHiSettingsDpl2(AXFX_REVERBHI_DPL2* rev) {
-    int ret;
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    rev->tempDisableFX = 1;
-    ret = ReverbHIModifyDpl2(&rev->rv, rev->coloration, rev->time, rev->mix, rev->damping, rev->preDelay);
-    rev->tempDisableFX = 0;
-    OSRestoreInterrupts(old);
-    return ret;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void AXFXReverbHiCallbackDpl2(AXFX_BUFFERUPDATE_DPL2* bufferUpdate, AXFX_REVERBHI_DPL2* reverb) {

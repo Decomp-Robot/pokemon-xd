@@ -22,7 +22,6 @@ extern int __DSP_rude_task_pending;
 
 static BOOL __DSP_init_flag;
 
-
 u32 DSPCheckMailToDSP(void) {
     return (__DSPRegs[0] & (1 << 15)) >> 15;
 }
@@ -32,9 +31,6 @@ u32 DSPCheckMailFromDSP(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DSPReadCPUToDSPMbox(void) {
-    return (__DSPRegs[0] << 16) | __DSPRegs[1];
-}
 
 u32 DSPReadMailFromDSP(void) {
     return (__DSPRegs[2] << 16) | __DSPRegs[3];
@@ -91,46 +87,12 @@ BOOL DSPCheckInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSPReset(void) {
-    BOOL old;
-    u16 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __DSPRegs[5];
-    tmp = (tmp & ~0xA8) | 0x800 | 1;
-    __DSPRegs[5] = tmp;
-    __DSP_init_flag = 0;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSPHalt(void) {
-    BOOL old;
-    u16 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __DSPRegs[5];
-    tmp = (tmp & ~0xA8) | 4;
-    __DSPRegs[5] = tmp;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSPUnhalt(void) {
-    BOOL old;
-    u16 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __DSPRegs[5];
-    tmp = (tmp & ~0xAC);
-    __DSPRegs[5] = tmp;
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DSPGetDMAStatus(void) {
-    return (__DSPRegs[5] & (1 << 9));
-}
 
 DSPTaskInfo* DSPAddTask(DSPTaskInfo* task) {
     BOOL old;

@@ -2,33 +2,10 @@
 #include <charPipeline/structures/List.h>
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInitHTable(DSHashTable* hTable, u16 size, DSList* listArray, DSHashFunc* hashFunc, Ptr obj, DSLinkPtr link) {
-    u16 i;
-
-    hTable->table = listArray;
-    hTable->tableSize = size;
-    hTable->hash = hashFunc;
-    for (i = 0; i < size; i++) {
-        DSInitList(&listArray[i], obj, link);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInsertHTableObj(DSHashTable* hTable, Ptr obj) {
-    DSList* list = &hTable->table[hTable->hash(obj)];
-    DSInsertListObject(list, 0, obj);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSHTableToList(DSHashTable* hTable, DSList* list) {
-    DSLink* link = NULL;
-    u16 i = 0;
-
-    list->Offset = hTable->table[i].Offset;
-    for (i = 0; i < hTable->tableSize; i++) {
-        DSAttachList(list, &hTable->table[i]);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void* DSNextHTableObj(DSHashTable* hTable, Ptr obj) {

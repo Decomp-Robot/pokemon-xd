@@ -477,14 +477,8 @@ typedef struct XY {
 } XY;
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void PADSetSamplingRate(u32 msec) {
-    SISetSamplingRate(msec);
-}
 
 #if DEBUG
-void __PADTestSamplingRate(u32 tvmode) {
-    __SITestSamplingRate(tvmode);
-}
 #endif
 
 void PADControlAllMotors(const u32* commandArray) {
@@ -560,9 +554,6 @@ void PADSetSpec(u32 spec) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 PADGetSpec(void) {
-    return Spec;
-}
 
 static void SPEC0_MakeStatus(s32 chan, PADStatus* status, u32 data[2]) {
     status->button = 0;
@@ -717,16 +708,6 @@ static void SPEC2_MakeStatus(s32 chan, PADStatus* status, u32 data[2]) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int PADGetType(s32 chan, u32* type) {
-    u32 chanBit;
-
-    *type = SIGetType(chan);
-    chanBit = PAD_CHAN0_BIT >> chan;
-    if (ResettingBits & chanBit || ResettingChan == chan || !(EnabledBits & chanBit)) {
-        return 0;
-    }
-    return 1;
-}
 
 BOOL PADSync(void) {
     return ResettingBits == 0 && (s32)ResettingChan == 32 && !SIBusy();
@@ -834,14 +815,3 @@ BOOL __PADDisableRumble(BOOL disable) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-BOOL PADIsBarrel(s32 chan) {
-    if (chan < 0 || chan >= 4) {
-        return FALSE;
-    }
-
-    if (BarrelBits & (PAD_CHAN0_BIT >> chan)) {
-        return TRUE;
-    }
-    
-    return FALSE;
-}

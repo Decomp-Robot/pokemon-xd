@@ -1,24 +1,8 @@
 #include <charPipeline/structures/Tree.h>
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSExtractBranch(DSTreePtr tree, Ptr obj) {
-    DSBranchPtr branch = (DSBranchPtr)(obj + tree->Offset);
-    Ptr cursor = branch->Children;
-    Ptr next;
-
-    while (cursor) {
-        next = ((DSBranchPtr)(cursor + tree->Offset))->Next;
-        DSInsertBranchBelow(tree, branch->Parent, cursor);
-        cursor = next;
-    }
-    DSRemoveBranch(tree, obj);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInitTree(DSTreePtr tree, Ptr obj, DSBranchPtr branch) {
-    tree->Root = NULL;
-    tree->Offset = (Ptr)branch - obj;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DSInsertBranchBelow(DSTreePtr tree, Ptr cursor, Ptr obj) {
@@ -54,33 +38,6 @@ void DSInsertBranchBelow(DSTreePtr tree, Ptr cursor, Ptr obj) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DSInsertBranchBeside(DSTreePtr tree, Ptr cursor, Ptr obj) {
-    DSBranchPtr parent;
-    DSBranchPtr branch;
-
-    branch = (DSBranchPtr)(obj + tree->Offset);
-    if (!cursor) {
-        if (!tree->Root) {
-            tree->Root = obj;
-            branch->Next = NULL;
-            branch->Prev = NULL;
-            branch->Children = NULL;
-            branch->Parent = NULL;
-            return;
-        }
-        cursor = tree->Root;
-    }
-
-    while (((DSBranchPtr)(cursor + tree->Offset))->Next) {
-        cursor = ((DSBranchPtr)(cursor + tree->Offset))->Next;
-    }
-
-    parent = (DSBranchPtr)(cursor + tree->Offset);
-    parent->Next = obj;
-    branch->Prev = cursor;
-    branch->Next = NULL;
-    branch->Parent = parent->Parent;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DSRemoveBranch(DSTreePtr tree, Ptr obj) {

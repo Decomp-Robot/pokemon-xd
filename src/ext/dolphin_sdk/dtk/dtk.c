@@ -210,23 +210,6 @@ static void __DTKCallbackForPrevTrack(s32 result, DVDCommandBlock* block) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DTKInit(void) {
-    __DTKCurrentTrack = NULL;
-    __DTKPlayListHead = NULL;
-    __DTKPlayListTail = NULL;
-    __DTKState = DTK_STATE_STOP;
-    __DTKRepeatMode = DTK_MODE_NOREPEAT;
-    __DTKPosition = 0;
-    __DTKInterruptFrequency = 48000;
-    __DTKVolumeL = 255;
-    __DTKVolumeR = 255;
-
-    AISetStreamVolLeft(0);
-    AISetStreamVolRight(0);
-    AIRegisterStreamCallback(__DTKCallbackForAIInterrupt);
-    AIResetStreamSampleCount();
-    AISetStreamPlayState(0);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DTKShutdown(void) {
@@ -244,93 +227,8 @@ void DTKShutdown(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKQueueTrack(char* fileName, DTKTrack* track, u32 eventMask, DTKCallback callback) {
-    u32 startTrack;
-    BOOL old;
-
-    startTrack = 0;
-    if (!DVDOpen(fileName, &track->dvdFileInfo)) {
-        return 1;
-    }
-
-    old = OSDisableInterrupts();
-    track->fileName = fileName;
-    track->eventMask = eventMask;
-    track->callback = callback;
-
-    if (__DTKPlayListHead == NULL) {
-        __DTKPlayListHead = track;
-        __DTKPlayListTail = track;
-        track->prev = NULL;
-        track->next = NULL;
-        if (__DTKState == DTK_STATE_RUN) {
-            startTrack = 1;
-        }
-    } else {
-        __DTKPlayListTail->next = track;
-        track->prev = __DTKPlayListTail;
-        __DTKPlayListTail = track;
-        track->next = NULL;
-    }
-
-    if (__DTKCurrentTrack == NULL) {
-        __DTKCurrentTrack = track;
-    }
-
-    OSRestoreInterrupts(old);
-    __DTKCheckUserCallback(track, 8);
-
-    if (startTrack != 0) {
-        __DTKState = DTK_STATE_BUSY;
-        __DTKPrepareCurrentTrack();
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKRemoveTrack(DTKTrack* track) {
-    BOOL old;
-
-    if (track == __DTKCurrentTrack) {
-        return 2;
-    }
-
-    old = OSDisableInterrupts();
-    DVDClose(&track->dvdFileInfo);
-
-    if (track == __DTKPlayListHead && track == __DTKPlayListTail) {
-        __DTKPlayListHead = NULL;
-        __DTKPlayListTail = NULL;
-        OSRestoreInterrupts(old);
-        return 0;
-    }
-
-    if (track == __DTKPlayListHead) {
-        __DTKPlayListHead = track->next;
-        __DTKPlayListHead->prev = NULL;
-        if (__DTKRepeatMode == DTK_MODE_ALLREPEAT) {
-            __DTKPlayListTail->next = __DTKPlayListHead;
-        }
-        OSRestoreInterrupts(old);
-        return 0;
-    }
-
-    if (track == __DTKPlayListTail) {
-        __DTKPlayListTail = track->prev;
-        __DTKPlayListTail->next = NULL;
-        if (__DTKRepeatMode == DTK_MODE_ALLREPEAT) {
-            __DTKPlayListTail->next = __DTKPlayListHead;
-        }
-        OSRestoreInterrupts(old);
-        return 0;
-    }
-
-    track->prev->next = track->next;
-    track->next->prev = track->prev;
-    OSRestoreInterrupts(old);
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 int DTKFlushTracks(DTKFlushCallback callback) {
@@ -352,21 +250,10 @@ int DTKFlushTracks(DTKFlushCallback callback) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DTKSetSampleRate(u32 samplerate) {
-    // obsolete
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DTKSetInterruptFrequency(u32 samples) {
-    __DTKInterruptFrequency = samples;
-    AIResetStreamSampleCount();
-    AISetStreamTrigger(__DTKInterruptFrequency);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DTKSetRepeatMode(u32 repeat) {
-    __DTKRepeatMode = repeat;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 int DTKSetState(u32 state) {
@@ -425,77 +312,18 @@ int DTKSetState(u32 state) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DTKNextTrack(void) {
-    if (__DTKState == DTK_STATE_BUSY) {
-        return 0;
-    }
-
-    if (__DTKCurrentTrack) {
-        __DTKTempState = __DTKState;
-        __DTKState = DTK_STATE_BUSY;
-        if (__DTKTempState == DTK_STATE_RUN) {
-            AISetStreamVolLeft(0);
-            AISetStreamVolRight(0);
-            DVDCancelStreamAsync(&__block_for_next_track, __DTKCallbackForNextTrack);
-        } else {
-            __DTKForward();
-            __DTKState = __DTKTempState;
-        }
-
-        return 1;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DTKPrevTrack(void) {
-    if (__DTKState == DTK_STATE_BUSY) {
-        return 0;
-    }
-
-    if (__DTKCurrentTrack) {
-        __DTKTempState = __DTKState;
-        __DTKState = DTK_STATE_BUSY;
-        if (__DTKTempState == DTK_STATE_RUN) {
-            AISetStreamVolLeft(0);
-            AISetStreamVolRight(0);
-            DVDCancelStreamAsync(&__block_for_prev_track, __DTKCallbackForPrevTrack);
-        } else {
-            __DTKBackward();
-            __DTKState = __DTKTempState;
-        }
-
-        return 1;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKGetSampleRate(void) {
-    return 1;  // obsolete
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKGetRepeatMode(void) {
-    return __DTKRepeatMode;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKGetState(void) {
-    return __DTKState;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKGetPosition(void) {
-    return __DTKPosition;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DTKGetInterruptFrequency(void) {
-    return __DTKInterruptFrequency;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 DTKTrack* DTKGetCurrentTrack(void) {
@@ -503,16 +331,5 @@ DTKTrack* DTKGetCurrentTrack(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DTKSetVolume(u8 left, u8 right) {
-    __DTKVolumeL = left;
-    __DTKVolumeR = right;
-    if (__DTKState == DTK_STATE_RUN) {
-        AISetStreamVolLeft(left);
-        AISetStreamVolRight(right);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u16 DTKGetVolume(void) {
-    return (__DTKVolumeL << 8) | __DTKVolumeR;
-}

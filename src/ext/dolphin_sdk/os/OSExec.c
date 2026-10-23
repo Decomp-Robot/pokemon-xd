@@ -332,18 +332,3 @@ void __OSBootDol(u32 doloffset, u32 restartCode, const char** argv) {
     __OSBootDolSimple(-1, restartCode, saveStart, saveEnd, FALSE, argvlen, argvToPass);
 }
 
-static void ExecCommon(const char* dolfile, const char** argv) {
-    DVDFileInfo fileInfo;
-    u32 doloff;
-
-    if ((s8)*dolfile == '\0') {
-        doloff = 0;
-    } else if (DVDOpen((char*)dolfile, &fileInfo)) {
-        doloff = fileInfo.startAddr;
-    } else {
-        ASSERTMSGLINE(LINE(689, 695, 697), 0, "OSExec(): The specified file doesn't exist");
-        return;
-    }
-
-    __OSBootDol(doloff, 0xC0000000, argv);
-}

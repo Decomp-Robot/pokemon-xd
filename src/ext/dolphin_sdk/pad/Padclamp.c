@@ -144,14 +144,3 @@ void PADClamp(PADStatus * status) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void PADClampCircle(PADStatus* status) {
-    int i;
-    for (i = 0; i < 4; ++i, status++) {
-        if (status->err == PAD_ERR_NONE) {
-            ClampCircle(&status->stickX, &status->stickY, ClampRegion.radStick, ClampRegion.minStick);
-            ClampCircle(&status->substickX, &status->substickY, ClampRegion.radSubstick, ClampRegion.minSubstick);
-            ClampTrigger(&status->triggerLeft, ClampRegion.minTrigger, ClampRegion.maxTrigger);
-            ClampTrigger(&status->triggerRight, ClampRegion.minTrigger, ClampRegion.maxTrigger);
-        }
-    }
-}

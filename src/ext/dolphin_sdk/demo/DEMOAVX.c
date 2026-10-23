@@ -61,46 +61,8 @@ u32 DEMOAVXGetFrameCounter(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DEMOAVXRefreshBuffer(u32* start_index, u32* end_index) {
-    u32 num_filled;
-    u32 curr_frame;
-    u32 i;
-    u32 j;
-
-    if (flag) {
-        num_filled = DEMOAVXGetNumFilled();
-        curr_frame = (__AVX_num_frames + DEMOAVXGetFrameCounter() - num_filled) % __AVX_num_frames;
-
-        *start_index = __AVX_write_ptr;
-
-        for (i = 0; i < num_filled; i++) {
-            DCInvalidateRange((void*)&__AVX_buffer[curr_frame * 320], 640);
-
-            for (j = 0; j < 320; j += 2) {
-                __AVX_left_buffer [__AVX_write_ptr] = __AVX_buffer[curr_frame * 320 + j];
-                __AVX_right_buffer[__AVX_write_ptr] = __AVX_buffer[curr_frame * 320 + j + 1];
-                __AVX_write_ptr = (__AVX_write_ptr + 1) % __AVX_buffer_size;
-            }
-
-            curr_frame = (curr_frame + 1) % __AVX_num_frames;
-        }
-
-        *end_index = __AVX_write_ptr;
-        return num_filled * 160;
-    }
-
-    return 0;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOAVXInit(s16* left, s16* right, u32 size) {
-    __AVX_left_buffer  = left;
-    __AVX_right_buffer = right;
-    __AVX_write_ptr = 0;
-    __AVX_buffer_size = size;
-
-    DEMOAVXAttach(__AVX_internal_buffer, 10);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DEMOAVXAttach(void* buffer, u32 num_frames) {

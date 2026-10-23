@@ -502,17 +502,6 @@ DVDLowCallback DVDLowClearCallback(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link
-u32 DVDLowGetCoverStatus(void) {
-	if ((__OSGetSystemTime() - LastResetEnd) <  OSMillisecondsToTicks(100)) {
-        return 0;
-    }
-
-    if (__DIRegs[1] & 1) {
-        return 1;
-    }
-
-    return 2;
-}
 
 void __DVDLowSetWAType(u32 type, s32 seekLoc) {
 	BOOL enabled;

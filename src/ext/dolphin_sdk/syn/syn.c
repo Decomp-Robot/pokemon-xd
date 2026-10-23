@@ -72,18 +72,6 @@ void SYNQuit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SYNRunAudioFrame(void) {
-    int i;
-    SYNSYNTH* synth;
-
-    for (i = 0; i < 64; i++) {
-        __SYNServiceVoice(i);
-    }
-
-    for (synth = __SYNSynthList; synth; synth = synth->next) {
-        __SYNRunInputBufferEvents(synth);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void SYNInitSynth(SYNSYNTH* synth, void* wavetable, u32 aramBase, u32 zeroBase, u32 priorityVoiceAlloc, u32 priorityNoteOn, u32 priorityNoteRelease) {
@@ -185,7 +173,3 @@ s32 SYNGetMasterVolume(SYNSYNTH* synth) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 SYNGetActiveNotes(SYNSYNTH* synth) {
-    ASSERTLINE(289, synth);
-    return synth->notes;
-}

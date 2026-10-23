@@ -287,25 +287,8 @@ GXRenderModeObj* DEMOGetRenderModeObj(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 DEMOGetCurrentBuffer(void) {
-    return (u32)DemoCurrentBuffer;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOEnableGPHangWorkaround(u32 timeoutFrames) {
-    if (timeoutFrames != 0) {
-        ASSERTMSGLINE(989, !DemoStatEnable, "DEMOStats and GP hang diagnosis are mutually exclusive");
-        GPHangWorkaround = 1;
-        FrameMissThreshold = timeoutFrames;
-        VISetPreRetraceCallback(__NoHangRetraceCallback);
-        DEMOSetGPHangMetric(1);
-    } else {
-        GPHangWorkaround = 0;
-        FrameMissThreshold = 0;
-        DEMOSetGPHangMetric(0);
-        VISetPreRetraceCallback(NULL);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void __NoHangRetraceCallback(u32 count) {

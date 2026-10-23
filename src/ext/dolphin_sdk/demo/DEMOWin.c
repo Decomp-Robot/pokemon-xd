@@ -2,7 +2,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/demo.h>
 
-
 static u32 __DEMOWIN_PAD_repeat_threshold = 0x0000000F;
 static u32 __DEMOWIN_PAD_repeat_rate = 0x00000002;
 
@@ -22,13 +21,6 @@ static u16 __DEMOWinMenu_get_user_input(DEMOWinPadInfo* p);
 static void __DEMOWinList_refresh_list(DEMOWindow* w);
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinInit() {
-    __first_node = NULL;
-    __last_node = NULL;
-    __curr_node = NULL;
-    __rmp = DEMOGetRenderModeObj();
-    GXSetCopyClear((GXColor){0, 0, 0, 0}, 0xFFFFFF);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 DEMOWindow* DEMOWinCreateWindow(s32 x1, s32 y1, s32 x2, s32 y2, char* caption, u16 scroll, void* func) {
@@ -140,44 +132,6 @@ void DEMOWinSetWindowColor(DEMOWindow* handle, u32 item, u8 r, u8 g, u8 b, u8 a)
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinLogPrintf(DEMOWindow* handle, char* fmt, ...) {
-    va_list vlist;
-    char buffer[128];
-    u16 len;
-    u16 i;
-    BOOL old;
-    u16 index;
-
-    va_start(vlist, fmt);
-    vsprintf(buffer, fmt, vlist);
-    
-    old = OSDisableInterrupts();
-    len = strlen(buffer);
-    for (i = 0; i < len; i++) {
-        if(buffer[i] == 0xA) {
-            handle->curr_output_line = (handle->curr_output_line + 1) % handle->total_lines;
-            handle->curr_view_line = (handle->curr_view_line + 1) % handle->total_lines;
-            handle->curr_output_col = 0;
-            index = handle->curr_output_col + (handle->curr_output_line* handle->char_width);
-            memset(&handle->buffer[index], ' ', handle->char_width);
-        } else {
-            index = handle->curr_output_col + (handle->curr_output_line* handle->char_width);
-            handle->buffer[index] = buffer[i];
-            handle->curr_output_col++;
-        }
-
-        if (handle->curr_output_col >= handle->char_width) {
-            handle->curr_output_col = 0;
-            handle->curr_output_line = (handle->curr_output_line + 1) % handle->total_lines;
-            handle->curr_view_line = (handle->curr_view_line + 1) % handle->total_lines;
-            index = handle->curr_output_col + (handle->curr_output_line* handle->char_width);
-            memset(&handle->buffer[index], ' ', handle->char_width);
-        }
-    }
-
-    OSRestoreInterrupts(old);
-    va_end(vlist);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DEMOWinPrintfXY(DEMOWindow* handle, u16 col, u16 row, char* fmt, ...) {
@@ -871,16 +825,8 @@ static u16 __DEMOWinMenu_get_user_input(DEMOWinPadInfo* p) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinSetRepeat(u32 threshold, u32 rate) {
-    __DEMOWIN_PAD_repeat_rate = rate;
-    __DEMOWIN_PAD_repeat_threshold = threshold;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinResetRepeat(void) {
-    __DEMOWIN_PAD_repeat_threshold = 15;
-    __DEMOWIN_PAD_repeat_rate = 2;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 DEMOWinListbox* DEMOWinCreateListWindow(DEMOWinListbox* list, u16 x, u16 y) {
@@ -914,13 +860,6 @@ DEMOWinListbox* DEMOWinCreateListWindow(DEMOWinListbox* list, u16 x, u16 y) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinDestroyListWindow(DEMOWinListbox* list) {
-    if (list->handle) {
-        DEMOWinCloseWindow(list->handle);
-        DEMOWinDestroyWindow(list->handle);
-        list->handle = NULL;
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void __DEMOWinList_refresh_list(DEMOWindow* w) {
@@ -958,9 +897,6 @@ static void __DEMOWinList_refresh_list(DEMOWindow* w) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOWinListSetCursor(DEMOWinListbox* list, int x) {
-    list->cursor_state = x;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 s32 DEMOWinListScrollList(DEMOWinListbox* list, u32 dir) {

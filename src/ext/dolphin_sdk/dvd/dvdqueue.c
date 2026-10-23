@@ -148,27 +148,3 @@ static char* CommandNames[16] = {
 };
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DVDDumpWaitingQueue(void) {
-    u32 i;
-    DVDCommandBlock* start;
-    DVDCommandBlock* q;
-
-    OSReport("==== DVD Waiting Queue Status ====\n");
-    for (i = 0; i < 4; i++) {
-        OSReport("< Queue #%d > ", i);
-        start = (DVDCommandBlock*)&WaitingQueue[i];
-        if (start->next == start) {
-            OSReport("None\n");
-        } else {
-            OSReport("\n");
-            for (q = start->next; q != start; q = q->next) {
-                OSReport("0x%08x: Command: %s ", q, CommandNames[q->command]);
-                if (q->command == 1) {
-                    OSReport("Disk offset: %d, Length: %d, Addr: 0x%08x\n", q->offset, q->length, q->addr);
-                } else {
-                    OSReport("\n");
-                }
-            }
-        }
-    }
-}

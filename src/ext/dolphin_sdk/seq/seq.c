@@ -319,75 +319,10 @@ void SEQInit(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQQuit(void) {
-    __SEQSequenceList = NULL;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQRunAudioFrame(void) {
-    SEQSEQUENCE* sequence;
-    u32 i;
-    SEQTRACK* track;
-    u32 ticks;
-
-    for (sequence = __SEQSequenceList; sequence; sequence = sequence->next) {
-        if ((sequence->state == 1) || (sequence->state == 2)) {
-            for (i = 0; i < sequence->nTracks; i++) {
-                track = &sequence->track[i];
-                if ((track->state == 1) || (track->state == 2)) {
-                    ticks = track->ticksPerFrame;
-                    if (track->delay > ticks) {
-                        track->delay -= ticks;
-                    } else {
-                        while (ticks >= track->delay) {
-                            ticks -= track->delay;
-                            __SEQRunEvent(&sequence->synth, track);
-                            if (track->state != 0) {
-                                track->delay = __SEQGetIntTrack(track) << 0x10;
-                            } else {
-                                break;
-                            }
-                        }
-
-                        track->delay -= ticks;
-                    }
-                }
-            }
-        }
-
-        if (sequence->end != 0) {
-            if (sequence->state == 2) {
-                SEQSetState(sequence, 0);
-                SEQSetState(sequence, 2);
-            } else {
-                SEQSetState(sequence, 0);
-            }
-        }
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQAddSequence(SEQSEQUENCE* sequence, u8* midiStream, void* wt, u32 aramBase, u32 zeroBase, u32 priorityVoiceAlloc, u32 priorityNoteOn, u32 priorityNoteRelease) {
-    int i;
-
-    ASSERTLINE(559, sequence);
-    ASSERTLINE(560, midiStream);
-    ASSERTLINE(561, wt);
-    ASSERTLINE(562, aramBase);
-    ASSERTLINE(563, (priorityVoiceAlloc < 32) && (priorityVoiceAlloc > 0));
-    ASSERTLINE(564, (priorityNoteOn < 32) && (priorityNoteOn > 0));
-    ASSERTLINE(565, (priorityNoteRelease < 32) && (priorityNoteRelease > 0));
-
-    SYNInitSynth(&sequence->synth, wt, aramBase, zeroBase, priorityVoiceAlloc, priorityNoteOn, priorityNoteRelease);
-    sequence->state = 0;
-
-    for(i = 0; i < 0x80; i++) {
-        sequence->callback[i] = 0;
-    }
-
-    __SEQReadHeader(sequence, midiStream);
-    __SEQPushSequenceList(sequence);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void SEQRemoveSequence(SEQSEQUENCE* sequence) {
@@ -397,12 +332,6 @@ void SEQRemoveSequence(SEQSEQUENCE* sequence) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQRegisterControllerCallback(SEQSEQUENCE* sequence, u8 controller, void (*callback)(void*, u8)) {
-    ASSERTLINE(617, sequence);
-    ASSERTLINE(618, controller < 128);
-    ASSERTLINE(619, callback);
-    sequence->callback[controller] = callback;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void SEQSetState(SEQSEQUENCE* sequence, u32 state) {
@@ -450,43 +379,11 @@ void SEQSetState(SEQSEQUENCE* sequence, u32 state) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 SEQGetState(SEQSEQUENCE* sequence) {
-    ASSERTLINE(700, sequence);
-    return sequence->state;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQSetTempo(SEQSEQUENCE* sequence, u32 trackIndex, f32 bpm) {
-    int i;
-
-    ASSERTLINE(711, sequence);
-    ASSERTLINE(712, (trackIndex < sequence->nTracks) || (trackIndex == SEQ_ALL_TRACKS));
-
-    if (trackIndex == -1) {
-        for (i = 0; i < sequence->nTracks; i++) {
-            __SEQSetTicksPerFrame(&sequence->track[i], bpm / 60.0f);
-        }
-        return;
-    }
-
-    __SEQSetTicksPerFrame(&sequence->track[trackIndex], bpm / 60.0f);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-f32 SEQGetTempo(SEQSEQUENCE* sequence, u32 trackIndex) {
-    ASSERTLINE(733, sequence);
-    ASSERTLINE(734, trackIndex < sequence->nTracks);
-    return 60.0f* sequence->track[trackIndex].beatsPerSec;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SEQSetVolume(SEQSEQUENCE* sequence, s32 dB) {
-    ASSERTLINE(745, sequence);
-    SYNSetMasterVolume(&sequence->synth, dB);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-long SEQGetVolume(SEQSEQUENCE* sequence) {
-    ASSERTLINE(756, sequence);
-    SYNGetMasterVolume(&sequence->synth);
-}

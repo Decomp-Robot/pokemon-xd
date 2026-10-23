@@ -82,10 +82,3 @@ static int __CARDEnablePerm(u8 perm, BOOL enable) {
     return prev;
 }
 
-int __CARDEnableGlobal(BOOL enable) {
-    return __CARDEnablePerm(0x20, enable);
-}
-
-int __CARDEnableCompany(BOOL enable) {
-    return __CARDEnablePerm(0x40, enable);
-}

@@ -257,79 +257,13 @@ u32 __AMPushBuffered(char* path, void* buffer, u32 buffer_size, AMCallback callb
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AMPop(void) {
-    BOOL old;
-    old = OSDisableInterrupts();
-
-    if (__AMPendingReads == 0) {
-        if (__AMStackLocation > 1) {
-            __AMFreeBytes += __AMStackPointer[__AMStackLocation] - __AMStackPointer[__AMStackLocation - 1];
-            __AMStackLocation--;
-        }
-    }
-
-    OSRestoreInterrupts(old);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AMGetZeroBuffer(void) {
-    return __AMStackPointer[0];
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AMGetReadStatus(void) {
-    BOOL old;
-    u32 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __AMPendingReads;
-
-    OSRestoreInterrupts(old);
-    return tmp;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AMGetFreeSize(void) {
-    BOOL old;
-    u32 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __AMFreeBytes;
-
-    OSRestoreInterrupts(old);
-    return tmp;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 AMGetStackPointer(void) {
-    BOOL old;
-    u32 tmp;
-
-    old = OSDisableInterrupts();
-    tmp = __AMStackPointer[__AMStackLocation];
-
-    OSRestoreInterrupts(old);
-    return tmp;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AMInit(u32 aramBase, u32 aramBytes) {
-    u32 i;
-    u8 __AMZeroBuffer[256 + 31];
-    u8* ptr;
-
-    ASSERTLINE(760, aramBytes);
-
-    ptr = (u8*)OSRoundUp32B(__AMZeroBuffer);
-
-    __AMStackLocation = 0;
-    __AMStackPointer[0] = aramBase;
-    __AMFreeBytes = aramBytes;
-    __AMPendingReads = 0;
-
-    for (i = 0; i < 256; i++) {
-        ptr[i] = 0;
-    }
-
-    AMPushData(ptr, 256);
-}

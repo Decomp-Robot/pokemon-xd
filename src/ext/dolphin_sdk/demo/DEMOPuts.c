@@ -181,21 +181,8 @@ OSFontHeader* DEMOInitROMFont(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOSetROMFontSize(s16 size, s16 space) {
-    FontSize = size * 16;
-    FontSpace = space * 16;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOGetROMFontSize(s16* size, s16* space) {
-    if (size != 0) {
-        *size = FontSize / 16;
-    }
-
-    if (space != 0) {
-        *space = FontSpace / 16;
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void DrawFontChar(int x, int y, int z, int xChar, int yChar) {
@@ -281,59 +268,8 @@ int DEMORFPuts(s16 x, s16 y, s16 z, char* string) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DEMORFPutsEx(s16 x, s16 y, s16 z, char* string, s16 maxWidth, int length) {
-    s32 cx;
-    void* image;
-    s32 xChar;
-    s32 yChar;
-    s32 width;
-    char* end;
-
-    ASSERTLINE(636, FontData);
-    LastSheet = NULL;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 4);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 0);
-
-    x *= 16;
-    y *= 16;
-    z *= 16;
-    maxWidth *= 16;
-
-    end = (char*)&string[length];
-    width = 0;
-    while (*string && string < end) {
-        if (*string == '\n') {
-            width = 0;
-            y += FontData->leading * FontSize / FontData->cellWidth;
-            string++;
-        } else {
-            string = OSGetFontTexture(string, &image, &xChar, &yChar, &cx);
-            if (maxWidth < width + (FontSize * cx / FontData->cellWidth) + FontSpace) {
-                width = 0;
-                y += FontData->leading * FontSize / FontData->cellWidth;
-            }
-            LoadSheet(image, GX_TEXMAP0);
-            DrawFontChar(x + width, y, z, xChar, yChar);
-            width = FontSpace + (FontSize * cx / FontData->cellWidth) + width;
-        }
-    }
-
-    return (width + 15) / 16;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DEMORFPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
-    va_list vlist;
-    char buf[256];
-
-    va_start(vlist, fmt);
-    vsprintf(buf, fmt, vlist);
-    DEMORFPuts(x, y, z, buf);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 char* DEMODumpROMFont(char* string) {
@@ -373,48 +309,5 @@ char* DEMODumpROMFont(char* string) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DEMOGetRFTextWidth(char* string) {
-    s32 cx;
-    s32 width;
-    s32 maxWidth;
-
-    ASSERTLINE(779, FontData);
-    maxWidth = width = 0;
-
-    while (*string != 0) {
-        if (*string == '\n') {
-            if (maxWidth < width) {
-                maxWidth = width;
-            }
-
-            width = 0;
-        }
-
-        string = OSGetFontWidth(string, &cx);
-        width = FontSpace + ((FontSize * cx) / FontData->cellWidth) + width;
-    }
-
-    if (maxWidth < width) {
-        maxWidth = width;
-    }
-
-    return (maxWidth + 15) / 16;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int DEMOGetRFTextHeight(char* string) {
-    s32 height;
-
-    ASSERTLINE(815, FontData);
-
-    height = 1;
-    while (*string) {
-        if (*string == '\n') {
-            height++;
-        }
-        string++;
-    }
-
-    height *= FontData->leading * FontSize / FontData->cellWidth;
-    return (height + 15) / 16;
-}

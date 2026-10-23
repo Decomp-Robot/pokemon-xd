@@ -15,25 +15,6 @@ BOOL __SIResetSteering;
 static OSResetFunctionInfo ResetFunctionInfo = {OnReset, 127};
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void SIInitSteering(void) {
-    static BOOL initialized;
-    SISteeringControl* sc;
-    s32 chan;
-
-    if (!initialized) {
-        initialized = TRUE;
-
-        for (chan = 0; chan < 4; chan++) {
-            sc = &__SISteering[chan];
-            sc->ret = 0;
-            OSInitThreadQueue(&sc->threadQueue);
-        }
-
-        SIRefreshSamplingRate();
-        __SIResetSteering = 0;
-        OSRegisterResetFunction(&ResetFunctionInfo);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void DefaultCallback(s32, s32) {}

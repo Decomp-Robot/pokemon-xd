@@ -112,9 +112,6 @@ static void __AXDSPInitCallback(void* task) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXSetStepMode(u32 i) {
-    __AXDebugSteppingMode = i;
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 static void __AXDSPResumeCallback(void* task) {

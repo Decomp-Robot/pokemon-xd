@@ -181,17 +181,6 @@ static void __OSSwitchThread(OSThread* nextThread) {
     OSLoadContext(&nextThread->context);
 }
 
-BOOL OSIsThreadSuspended(OSThread* thread) {
-    if (thread->suspend > 0) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-BOOL OSIsThreadTerminated(OSThread* thread) {
-    return (thread->state == OS_THREAD_STATE_MORIBUND || thread->state == 0) ? TRUE : FALSE;
-}
-
 static BOOL __OSIsThreadActive(OSThread* thread) {
     OSThread* active;
 
@@ -311,18 +300,6 @@ static void UpdatePriority(OSThread* thread) {
         }
         priority = __OSGetEffectivePriority(thread);
         if (thread->priority == priority) {
-            break;
-        }
-        thread = SetEffectivePriority(thread, priority);
-        if (thread == 0) {
-            break;
-        }
-    }
-}
-
-void __OSPromoteThread(OSThread* thread, s32 priority) {
-    while (1) {
-        if (thread->suspend > 0 || thread->priority <= priority) {
             break;
         }
         thread = SetEffectivePriority(thread, priority);
@@ -704,10 +681,6 @@ int OSSetThreadPriority(OSThread* thread, s32 priority) {
     return 1;
 }
 
-s32 OSGetThreadPriority(OSThread* thread) {
-    return thread->base;
-}
-
 OSThread* OSSetIdleFunction(OSIdleFunction idleFunction, void* param, void* stack, u32 stackSize) {
     if (idleFunction) {
         if (IdleThread.state == 0) {
@@ -847,17 +820,6 @@ void OSClearStack(u8 val) {
     sp = OSGetStackPointer();
     for (p = __OSCurrentThread->stackEnd + 1; (u32)p < sp; ++p) {
         *p = pattern;
-    }
-}
-
-void OSSetThreadSpecific(s32 index, void* ptr) {
-    OSThread* thread;
-
-    thread = __OSCurrentThread;
-    ASSERTLINE(LINE(1573, 1604, 1604), 0 <= index && index < OS_THREAD_SPECIFIC_MAX);
-
-    if (thread != 0 && index >= 0 && index < OS_THREAD_SPECIFIC_MAX) {
-        thread->specific[index] = ptr;
     }
 }
 

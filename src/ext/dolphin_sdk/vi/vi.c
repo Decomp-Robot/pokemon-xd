@@ -142,7 +142,6 @@ int __VIGetLatch0Position(s16* px, s16* py);
 int __VIGetLatch1Position(s16* px, s16* py);
 int __VIGetLatchPosition(u32 port, s16* px, s16* py);
 
-
 static u32 getEncoderType(void) {
     return 1;
 }
@@ -967,18 +966,6 @@ void* VIGetCurrentFrameBuffer(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void VISetNextRightFrameBuffer(void* fb) {
-    BOOL enabled;
-
-    ASSERTMSGLINEV(2284, ((u32)fb & 0x1F) == 0,
-        "VISetNextFrameBuffer(): Frame buffer address(0x%08x) is not 32byte aligned\n",
-        fb);
-    enabled = OSDisableInterrupts();
-    HorVer.rbufAddr = (u32)fb;
-    FBSet = 1;
-    setFbbRegs(&HorVer, &HorVer.tfbb, &HorVer.bfbb, &HorVer.rtfbb, &HorVer.rbfbb);
-    OSRestoreInterrupts(enabled);
-}
 
 void VISetBlack(BOOL black) {
     BOOL enabled;
@@ -992,19 +979,6 @@ void VISetBlack(BOOL black) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void VISet3D(BOOL threeD) {
-    BOOL enabled;
-    u32 reg;
-
-    enabled = OSDisableInterrupts();
-    HorVer.threeD = threeD;
-    reg = regs[1];
-    OLD_SET_REG_FIELD(2355, reg, 1, 3, HorVer.threeD);
-    regs[1] = reg;
-    MARK_CHANGED(1);
-    setScalingRegs(HorVer.PanSizeX, HorVer.DispSizeX, HorVer.threeD);
-    OSRestoreInterrupts(enabled);
-}
 
 u32 VIGetRetraceCount(void) {
     return retraceCount;
@@ -1093,21 +1067,6 @@ u32 VIGetTvFormat(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-u32 VIGetScanMode(void) {
-    u32 scanMode;
-    BOOL enabled = OSDisableInterrupts();
-
-    if ((u32)(__VIRegs[54] & 1) == 1) {
-        scanMode = 2;
-    } else if (!((__VIRegs[1] & (1 << 2)) >> 2)) {
-        scanMode = 0;
-    } else {
-        scanMode = 1;
-    }
-    
-    OSRestoreInterrupts(enabled);
-    return scanMode;
-}
 
 u32 VIGetDTVStatus(void) {
     u32 dtvStatus;
@@ -1119,33 +1078,8 @@ u32 VIGetDTVStatus(void) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __VISetAdjustingValues(s16 x, s16 y) {
-    BOOL enabled;
-    VITiming* tm;
-
-    ASSERTMSGLINE(2611, (y & 1) == 0, "__VISetAdjustValues(): y offset should be an even number");
-    enabled = OSDisableInterrupts();
-    displayOffsetH = x;
-    displayOffsetV = y;
-    tm = HorVer.timing;
-    AdjustPosition(tm->acv);
-    setHorizontalRegs(tm, HorVer.AdjustedDispPosX, HorVer.DispSizeX);
-    if (FBSet != 0) {
-        setFbbRegs(&HorVer, &HorVer.tfbb, &HorVer.bfbb, &HorVer.rtfbb, &HorVer.rbfbb);
-    }
-    setVerticalRegs(HorVer.AdjustedDispPosY, HorVer.AdjustedDispSizeY, tm->equ, tm->acv, tm->prbOdd, tm->prbEven, tm->psbOdd, tm->psbEven, HorVer.black);
-    OSRestoreInterrupts(enabled);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void __VIGetAdjustingValues(s16* x, s16* y) {
-    BOOL enabled;
-
-    enabled = OSDisableInterrupts();
-    *x = displayOffsetH;
-    *y = displayOffsetV;
-    OSRestoreInterrupts(enabled);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void __VIEnableRawPositionInterrupt(s16 x, s16 y, void (*callback)(s16, s16)) {

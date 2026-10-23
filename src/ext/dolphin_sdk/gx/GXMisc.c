@@ -173,9 +173,6 @@ void __GXBypass(u32 reg) {
     __GXData->bpSentNot = 0;
 }
 
-u16 __GXReadPEReg(u32 reg) {
-    return GX_GET_PE_REG(reg);
-}
 #endif
 
 void GXPokeAlphaMode(GXCompare func, u8 threshold) {
@@ -247,33 +244,6 @@ void GXPokeZMode(GXBool compare_enable, GXCompare func, GXBool update_enable) {
     SET_REG_FIELD(768, reg, 3, 1, func);
     SET_REG_FIELD(769, reg, 1, 4, update_enable);
     GX_SET_PE_REG(0, reg);
-}
-
-void GXPeekARGB(u16 x, u16 y, u32* color) {
-    u32 addr = (u32)OSPhysicalToUncached(0x08000000);
-
-    SET_REG_FIELD(792, addr, 10, 2, x);
-    SET_REG_FIELD(793, addr, 10, 12, y);
-    SET_REG_FIELD(793, addr, 2, 22, 0);
-    *color = *(u32*)addr;
-}
-
-void GXPokeARGB(u16 x, u16 y, u32 color) {
-    u32 addr = (u32)OSPhysicalToUncached(0x08000000);
-
-    SET_REG_FIELD(0x322, addr, 10, 2, x);
-    SET_REG_FIELD(0x323, addr, 10, 12, y);
-    SET_REG_FIELD(0x323, addr, 2, 22, 0);
-    *(u32*)addr = color;
-}
-
-void GXPeekZ(u16 x, u16 y, u32* z) {
-    u32 addr = (u32)OSPhysicalToUncached(0x08000000);
-
-    SET_REG_FIELD(812, addr, 10, 2, x);
-    SET_REG_FIELD(813, addr, 10, 12, y);
-    SET_REG_FIELD(813, addr, 2, 22, 1);
-    *z = *(u32*)addr;
 }
 
 void GXPokeZ(u16 x, u16 y, u32 z) {

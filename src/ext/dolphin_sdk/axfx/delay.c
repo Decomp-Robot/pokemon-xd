@@ -5,41 +5,6 @@
 #include "__axfx.h"
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void AXFXDelayCallback(AXFX_BUFFERUPDATE* bufferUpdate, AXFX_DELAY* delay) {
-    s32 l;
-    s32 r;
-    s32 s;
-    s32* lBuf;
-    s32* rBuf;
-    s32* sBuf;
-    u32 i;
-    s32* left;
-    s32* right;
-    s32* sur;
-
-    left = bufferUpdate->left;
-    right = bufferUpdate->right;
-    sur = bufferUpdate->surround;
-    lBuf = delay->left + (delay->currentPos[0] * 0xA0);
-    rBuf = delay->right + (delay->currentPos[1] * 0xA0);
-    sBuf = delay->sur + (delay->currentPos[2] * 0xA0);
-
-    for (i = 0; i < 160; i++) {
-        l = *lBuf;
-        r = *rBuf;
-        s = *sBuf;
-        *lBuf++ = *left + ((s32)(l* delay->currentFeedback[0]) >> 7);
-        *rBuf++ = *right + ((s32)(r* delay->currentFeedback[1]) >> 7);
-        *sBuf++ = *sur + ((s32)(s* delay->currentFeedback[2]) >> 7);
-        *left++ = (s32)(l* delay->currentOutput[0]) >> 7;
-        *right++ = (s32)(r* delay->currentOutput[1]) >> 7;
-        *sur++ = (s32)(s* delay->currentOutput[2]) >> 7;
-    }
-
-    delay->currentPos[0] = (s32) ((delay->currentPos[0] + 1) % delay->currentSize[0]);
-    delay->currentPos[1] = (s32) ((delay->currentPos[1] + 1) % delay->currentSize[1]);
-    delay->currentPos[2] = (s32) ((delay->currentPos[2] + 1) % delay->currentSize[2]);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 int AXFXDelaySettings(AXFX_DELAY* delay) {
@@ -115,16 +80,6 @@ int AXFXDelaySettings(AXFX_DELAY* delay) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int AXFXDelayInit(AXFX_DELAY* delay) {
-    BOOL old;
-
-    old = OSDisableInterrupts();
-    delay->left = NULL;
-    delay->right = NULL;
-    delay->sur = NULL;
-    OSRestoreInterrupts(old);
-    AXFXDelaySettings(delay);
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 int AXFXDelayShutdown(AXFX_DELAY* delay) {

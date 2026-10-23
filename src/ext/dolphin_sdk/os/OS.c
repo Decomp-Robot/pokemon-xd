@@ -77,10 +77,6 @@ void __OSDBINTEND(void);
 void __OSDBJUMPSTART(void);
 void __OSDBJUMPEND(void);
 
-u32 __OSIsDebuggerPresent(void) {
-    return *(u32*)OSPhysicalToCached(0x40);
-}
-
 /* clang-format off */
 #ifdef __GEKKO__
 asm void __OSFPRInit(void) {

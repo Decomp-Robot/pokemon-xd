@@ -69,29 +69,6 @@ static void DEMOPadCopy(PADStatus* pad, DEMODMPad* dmpad) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-void DEMOPadRead(void) {
-    s32 i;
-    u32 ResetReq = 0;
-
-    PADRead(&Pad[0]);
-    PADClamp(&Pad[0]);
-
-    DemoNumValidPads = 0;
-
-    for (i = 0; i < 4; i++) {
-        if (Pad[i].err == 0 || Pad[i].err == -3) {
-            DemoNumValidPads++;
-        } else if (Pad[i].err == -1) {
-            ResetReq |= PadChanMask[i];
-        }
-
-        DEMOPadCopy(&Pad[i], &DemoPad[i]);
-    }
-
-    if (ResetReq != 0) {
-        PADReset(ResetReq);
-    }
-}
 
 // UNUSED: the game never calls this; dead-stripped at link.
 void DEMOPadInit(void) {

@@ -397,44 +397,6 @@ int EXIDetach(s32 chan) {
 }
 
 // UNUSED: the game never calls this; dead-stripped at link.
-int EXISelectSD(s32 chan, u32 dev, u32 freq) {
-    EXIControl* exi;
-    u32 cpr;
-    BOOL enabled;
-
-    exi = &Ecb[chan];
-
-    ASSERTLINE(908, 0 <= chan && chan < MAX_CHAN);
-    ASSERTLINE(909, chan == 0 && dev < MAX_DEV || dev == 0);
-    ASSERTLINE(910, freq < MAX_FREQ);
-    ASSERTLINE(911, !(exi->state & STATE_SELECTED));
-
-    enabled = OSDisableInterrupts();
-    if ((exi->state & STATE_SELECTED) || ((chan != 2) && (((dev == 0) && !(exi->state & STATE_ATTACHED) && (EXIProbe(chan) == 0)) || !(exi->state & STATE_LOCKED) || (exi->dev != dev)))) {
-        OSRestoreInterrupts(enabled);
-        return 0;
-    }
-
-    exi->state |= STATE_SELECTED;
-    cpr = __EXIRegs[(chan * 5)];
-    cpr &= 0x405;
-    cpr |= freq * 0x10;
-    __EXIRegs[(chan * 5)] = cpr;
-
-    if (exi->state & STATE_ATTACHED) {
-        switch (chan) {
-        case 0:
-            __OSMaskInterrupts(0x100000U);
-            break;
-        case 1:
-            __OSMaskInterrupts(0x20000U);
-            break;
-        }
-    }
-
-    OSRestoreInterrupts(enabled);
-    return 1;
-}
 
 int EXISelect(s32 chan, u32 dev, u32 freq) {
     EXIControl* exi;

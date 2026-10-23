@@ -351,18 +351,6 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
 }
 
 // UNUSED: dead-stripped from the DOL (game never calls it)
-static u32 SISync(void) {
-    BOOL enabled;
-    u32 sr;
-
-    do {} while(__SIRegs[SI_COMCSR_IDX] & SI_COMCSR_TSTART_MASK);
-
-    enabled = OSDisableInterrupts();
-    sr = CompleteTransfer();
-    SITransferNext(4);
-    OSRestoreInterrupts(enabled);
-    return sr;
-}
 
 u32 SIGetStatus(s32 chan) {
     BOOL enabled;

@@ -218,47 +218,6 @@ s32 __CARDClearStatus(s32 chan) {
     return err ? CARD_RESULT_NOCARD : CARD_RESULT_READY;
 }
 
-s32 __CARDSleep(s32 chan) {
-    int err;
-    u32 cmd;
-
-    ASSERTLINE(511, 0 <= chan && chan < 2);
-
-    if (!EXISelect(chan, 0, CARDFreq)) {
-        return CARD_RESULT_NOCARD;
-    }
-    cmd = 0x88000000;
-    err = 0;
-    err |= !EXIImm(chan, &cmd, 1, EXI_WRITE, 0);
-    err |= !EXISync(chan);
-    err |= !EXIDeselect(chan);
-
-    if(err) {
-        return CARD_RESULT_NOCARD;
-    }
-    return CARD_RESULT_READY;
-}
-
-s32 __CARDWakeup(s32 chan) {
-    int err;
-    u32 cmd;
-
-    ASSERTLINE(530, 0 <= chan && chan < 2);
-    if (!EXISelect(chan, 0, CARDFreq)) {
-        return CARD_RESULT_NOCARD;
-    }
-    cmd = 0x87000000;
-    err = 0;
-    err |= !EXIImm(chan, &cmd, 1, EXI_WRITE, 0);
-    err |= !EXISync(chan);
-    err |= !EXIDeselect(chan);
-
-    if(err) {
-        return CARD_RESULT_NOCARD;
-    }
-    return CARD_RESULT_READY;
-}
-
 static void TimeoutHandler(OSAlarm* alarm, OSContext* context) {
     s32 chan;
     CARDControl* card;
@@ -623,19 +582,6 @@ u16 __CARDGetFontEncode(void) {
     return __CARDEncode;
 }
 
-u16 __CARDSetFontEncode(u16 encode) {
-    u16 prev = __CARDEncode;
-
-    switch (encode) {
-    case CARD_ENCODE_ANSI:
-    case CARD_ENCODE_SJIS:
-        __CARDEncode = encode;
-        break;
-    }
-    
-    return prev;
-}
-
 void __CARDSetDiskID(const DVDDiskID* id) {
     __CARDBlock[0].diskID = id ? id : &__CARDDiskNone;
     __CARDBlock[1].diskID = id ? id : &__CARDDiskNone;
@@ -756,47 +702,6 @@ s32 CARDFreeBlocks(s32 chan, s32* byteNotUsed, s32* filesNotUsed) {
     return __CARDPutControlBlock(card, CARD_RESULT_READY);
 }
 
-s32 CARDGetEncoding(s32 chan, u16* encode) {
-    CARDControl* card;
-    CARDID* id;
-    s32 result;
-
-    result = __CARDGetControlBlock(chan, &card);
-    if (result < 0) {
-        return result;
-    }
-
-    id = card->workArea;
-    *encode = id->encode;
-    return __CARDPutControlBlock(card, CARD_RESULT_READY);
-}
-
-s32 CARDGetMemSize(s32 chan, u16* size) {
-    CARDControl* card;
-    s32 result;
-
-    result = __CARDGetControlBlock(chan, &card);
-    if (result < 0) {
-        return result;
-    }
-
-    *size = card->size;
-    return __CARDPutControlBlock(card, CARD_RESULT_READY);
-}
-
-s32 CARDGetSectorSize(s32 chan, u32* size) {
-    CARDControl* card;
-    s32 result;
-
-    result = __CARDGetControlBlock(chan, &card);
-    if (result < 0) {
-        return result;
-    }
-
-    *size = card->sectorSize;
-    return __CARDPutControlBlock(card, CARD_RESULT_READY);
-}
-
 s32 __CARDSync(s32 chan) {
     CARDControl* block;
     s32 result;
@@ -822,35 +727,7 @@ static BOOL OnReset(BOOL final) {
     return TRUE;
 }
 
-BOOL CARDSetFastMode(BOOL enable) {
-    u16 prev = __CARDFastMode;
-    __CARDFastMode = enable ? TRUE : FALSE;
-
-    return prev ? TRUE : FALSE;
-}
-
 BOOL CARDGetFastMode(void) {
     return __CARDFastMode ? TRUE : FALSE;
 }
 
-s32 CARDGetCurrentMode(s32 chan, u32* mode) {
-    CARDControl* card;
-    s32 result;
-
-    result = __CARDGetControlBlock(chan, &card);
-    if (result < 0) {
-        return result;
-    }
-
-    switch (card->pageSize) {
-    case 512:
-        *mode = 1;
-        break;
-    case 128:
-    default:
-        *mode = 0;
-        break;
-    }
-
-    return __CARDPutControlBlock(card, CARD_RESULT_READY);
-}
