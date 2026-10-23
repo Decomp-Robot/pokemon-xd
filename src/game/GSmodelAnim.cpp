@@ -745,6 +745,7 @@ void modelUpdateTransform(_GSmodel *model)
     model->mFlags |= MODEL_FLAG_TRANSFORM_UPDATED;
 }
 
+// Update attached models first so their transforms are current when applied here.
 void modelUpdateAttachments(_GSmodel *model)
 {
     if (model->mAttachmentType == GS_ATTACH_NONE) return;
