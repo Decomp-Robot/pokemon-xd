@@ -1,28 +1,17 @@
-#include <heroItem.h>
+#include <hero.h>
 #include <menu.h>
 #include <types.h>
+#include <itemDataBios.h>
 #include <winSprite.h>
 
 /* Debug "create item" menu: picks an item id and an amount and hands them to
- * the hero's item list.  dbgItemCreateInitialized is the once-only setup flag, dbgItemCreateSelectedItem
- * the item id cursor and dbgItemCreateQuantity the amount cursor; itemNameTableCount points at
- * the item name table count. */
+ * the hero's item list. */
 
-extern s32 dbgItemCreateInitialized;
-extern s32 dbgItemCreateSelectedItem;
-extern s32 dbgItemCreateQuantity;
-extern s32 *itemNameTableCount;
+extern s32 initFlag;
+extern s32 ItemID;
+extern s32 Num;
+extern s32 *item_data_index_number;
 
-u8 itemDataCheckValid(u16 itemID);
-
-enum {
-    DEBUG_ITEM_PREVIOUS_FIELD = 0x1,
-    DEBUG_ITEM_NEXT_FIELD = 0x2,
-    DEBUG_ITEM_DECREMENT_ONE = 0x4,
-    DEBUG_ITEM_INCREMENT_ONE = 0x8,
-    DEBUG_ITEM_DECREMENT_TEN = 0x200,
-    DEBUG_ITEM_INCREMENT_TEN = 0x400
-};
 
 #pragma peephole off
 #pragma dont_inline on
@@ -32,28 +21,28 @@ void nbItemCtrl(void)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & DEBUG_ITEM_INCREMENT_ONE) {
-        dbgItemCreateQuantity++;
-        if (dbgItemCreateQuantity > 999) {
-            dbgItemCreateQuantity = 999;
+    if (key->mKeyRepeat & 0x8) {
+        Num++;
+        if (Num > 999) {
+            Num = 999;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_INCREMENT_TEN) {
-        dbgItemCreateQuantity += 10;
-        if (dbgItemCreateQuantity > 999) {
-            dbgItemCreateQuantity = 999;
+    if (key->mKeyRepeat & 0x400) {
+        Num += 10;
+        if (Num > 999) {
+            Num = 999;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_DECREMENT_ONE) {
-        dbgItemCreateQuantity--;
-        if (dbgItemCreateQuantity < 0) {
-            dbgItemCreateQuantity = 0;
+    if (key->mKeyRepeat & 0x4) {
+        Num--;
+        if (Num < 0) {
+            Num = 0;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_DECREMENT_TEN) {
-        dbgItemCreateQuantity -= 10;
-        if (dbgItemCreateQuantity < 0) {
-            dbgItemCreateQuantity = 0;
+    if (key->mKeyRepeat & 0x200) {
+        Num -= 10;
+        if (Num < 0) {
+            Num = 0;
         }
     }
 }
@@ -62,26 +51,26 @@ void itemNameCtrl(void)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & DEBUG_ITEM_INCREMENT_ONE) {
-        if (++dbgItemCreateSelectedItem >= *itemNameTableCount) {
-            dbgItemCreateSelectedItem = *itemNameTableCount - 1;
+    if (key->mKeyRepeat & 0x8) {
+        if (++ItemID >= *item_data_index_number) {
+            ItemID = *item_data_index_number - 1;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_INCREMENT_TEN) {
-        if ((dbgItemCreateSelectedItem += 10) >= *itemNameTableCount) {
-            dbgItemCreateSelectedItem = *itemNameTableCount - 1;
+    if (key->mKeyRepeat & 0x400) {
+        if ((ItemID += 10) >= *item_data_index_number) {
+            ItemID = *item_data_index_number - 1;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_DECREMENT_ONE) {
-        dbgItemCreateSelectedItem--;
-        if (dbgItemCreateSelectedItem < 0) {
-            dbgItemCreateSelectedItem = 0;
+    if (key->mKeyRepeat & 0x4) {
+        ItemID--;
+        if (ItemID < 0) {
+            ItemID = 0;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_DECREMENT_TEN) {
-        dbgItemCreateSelectedItem -= 10;
-        if (dbgItemCreateSelectedItem < 0) {
-            dbgItemCreateSelectedItem = 0;
+    if (key->mKeyRepeat & 0x200) {
+        ItemID -= 10;
+        if (ItemID < 0) {
+            ItemID = 0;
         }
     }
 }
@@ -90,17 +79,17 @@ s32 menuDbgItemCreateCursor(struct tagWINDOW_WORK *window)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & DEBUG_ITEM_PREVIOUS_FIELD) {
-        if (--window->mCursorState.mSelection.mCursor < 0) {
-            window->mCursorState.mSelection.mCursor = 0;
+    if (key->mKeyRepeat & 0x1) {
+        if (--window->mCursor.y < 0) {
+            window->mCursor.y = 0;
         }
     }
-    if (key->mKeyRepeat & DEBUG_ITEM_NEXT_FIELD) {
-        if (++window->mCursorState.mSelection.mCursor > 1) {
-            window->mCursorState.mSelection.mCursor = 1;
+    if (key->mKeyRepeat & 0x2) {
+        if (++window->mCursor.y > 1) {
+            window->mCursor.y = 1;
         }
     }
-    switch (window->mCursorState.mSelection.mCursor) {
+    switch (window->mCursor.y) {
     case 0:
         itemNameCtrl();
         break;
@@ -115,19 +104,19 @@ void menuDbgItemCreate(void)
 {
     s32 ret;
 
-    if (dbgItemCreateInitialized == 0) {
-        dbgItemCreateSelectedItem = 1;
-        dbgItemCreateInitialized = 1;
+    if (initFlag == 0) {
+        ItemID = 1;
+        initFlag = 1;
     }
-    dbgItemCreateQuantity = 1;
+    Num = 1;
     for (;;) {
         if (menuOpen(MENU_ID_DEBUG_ITEM_CREATE, 1) == -1) {
             break;
         }
-        if (!itemDataCheckValid((u16)dbgItemCreateSelectedItem)) {
+        if (!itemDataCheckValid((u16)ItemID)) {
             continue;
         }
-        if (dbgItemCreateQuantity < 1 || dbgItemCreateQuantity > 999) {
+        if (Num < 1 || Num > 999) {
             continue;
         }
         ret = menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1);
@@ -135,7 +124,7 @@ void menuDbgItemCreate(void)
         if (ret != 0) {
             continue;
         }
-        heroItemAddItemDataId(0, (u16)dbgItemCreateSelectedItem, (u16)dbgItemCreateQuantity, -1);
+        heroItemAddItemDataId(0, (u16)ItemID, (u16)Num, -1);
     }
     menuClose(MENU_ID_DEBUG_ITEM_CREATE);
     menuCloseSync(MENU_ID_DEBUG_ITEM_CREATE, 1);

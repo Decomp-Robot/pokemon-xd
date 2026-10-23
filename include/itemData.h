@@ -8,7 +8,7 @@ enum ItemID { ITEM_COLOGNE_CASE = 0x200, ITEM_BATTLE_DISK_CASE = 0x215 };
 // Use routines receive an item ID and write the quantity consumed.
 // Completion finishes a battle selection; continue keeps the pocket open.
 // Close requests closing the pocket even in the field.
-typedef s32 (*PocketItemUseFunc)(unsigned long itemID, s32 *consumedQuantity);
+typedef int (*PocketItemUseFunc)(unsigned long itemID, int *consumedQuantity);
 
 enum PocketItemUseResult {
     POCKET_ITEM_USE_COMPLETE = 0,
@@ -46,10 +46,10 @@ u8 itemDataBiosGetKinomiNo(u16 itemID);
 u8 itemDataBiosGetHidenMachineNo(ItemData *data);
 u8 itemDataBiosGetWazaMachineNo(ItemData *data);
 u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
-u8 itemDataBiosGetBagPocket(ItemData *data);
-u32 itemDataBiosGetDescriptionMsgID(ItemData *data);
+u8 itemDataBiosGetKind(ItemData *data);
+u32 itemDataBiosGetDoc(ItemData *data);
 int itemDataBiosGetPrice(ItemData *data);
-int itemDataBiosGetNameMsgID(ItemData *data);
+int itemDataBiosGetName(ItemData *data);
 PocketItemUseFunc itemDataBiosGetFieldUseFunc(ItemData *data);
 PocketItemUseFunc itemDataBiosGetBattleUseFunc(ItemData *data);
 u8 itemDataBiosGetUseful(ItemData *data);

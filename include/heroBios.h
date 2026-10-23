@@ -9,8 +9,9 @@ extern "C" {
 #endif
 
 
-u16 *heroBiosGetNamePtr(void *hero);
-Pokemon *heroBiosGetPokemonPtr(void *hero, u16 slot);
+u16 *heroBiosGetNamePtr(Hero *hero);
+u32 heroBiosGetRnd(Hero *hero);
+Pokemon *heroBiosGetPokemonPtr(Hero *hero, u16 slot);
 
 #ifdef __cplusplus
 }

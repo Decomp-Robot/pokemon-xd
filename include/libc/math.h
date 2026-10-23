@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 double sin(double x);
+double fmod(double numerator, double denominator);
 
 #ifdef __cplusplus
 }

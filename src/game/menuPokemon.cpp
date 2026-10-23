@@ -1,12 +1,14 @@
 #include <string.h>
 #include <textureBios.h>
 #include <floor.h>
+#include <floorManager.h>
 #include <GSmsg.h>
 #include <fade.h>
 #include <waza.h>
 #include <menuWazaStatus.h>
 #include <winSpriteDisplay.h>
 #include <menu.h>
+#include <menuFace.h>
 #include <menuPokemon.h>
 #include <menuCBBios.h>
 #include <fightTrainerPokemon.h>
@@ -23,10 +25,7 @@
 #include <gsFlag.h>
 #include <saveData.h>
 #include <heroItem.h>
-#define itemDataBiosGetWazaIDByWazaMachineNo itemDataBiosGetWazaIDByWazaMachineNo_header
 #include <itemData.h>
-#undef itemDataBiosGetWazaIDByWazaMachineNo
-extern "C" u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 #include <time.h>
 #include <window.h>
 #include <winMsg.h>
@@ -37,7 +36,7 @@ extern "C" u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 #include <GSgfx.h>
 #include <GSthread.h>
 #include <sound.h>
-#include <PokemonBios.h>
+#include <pokemonBios.h>
 #include <libc/math.h>
 
 // Party menus and panel callbacks.
@@ -87,7 +86,7 @@ enum PartyMenuKeyMask {
     PARTY_KEY_CANCEL = 0x20,
 };
 
-// Item pockets (itemDataBiosGetBagPocket).
+// Item pockets (itemDataBiosGetKind).
 enum { ITEM_POCKET_TM = 4 };
 
 // Item ids the party panel's sprite hook dispatches on. The panel window
@@ -161,7 +160,7 @@ Pokemon *_menuPokemonStatusCB(Pokemon *pokemon, MENU_POKEMON_CB_TYPE type, long 
 s32 _menuPokemonSub(unsigned char mode, unsigned long itemId, FIGHT_TRAINER *trainer);
 s32 _menuPokemonOpen(unsigned char mode, unsigned char bagPocket, unsigned char bagSlot,
                      unsigned short itemId, FIGHT_TRAINER *trainer, bool listEnabled);
-void *_menuPokemonCbLoadPokemonList(void *arg);
+Pokemon *_menuPokemonCbLoadPokemonList(void *arg);
 s32 _menuPokemonActionFight(signed char index);
 s32 _menuPokemonActionField(signed char index);
 u8 _menuPokemonMovePanel(long slot, unsigned char step);
@@ -259,13 +258,16 @@ s32 menuPokemonCtrlWaza(void)
 }
 
 // Closes the move-panel light window the party menu opened.
+#pragma force_active on
 void menuPokemonCloseWazaLight(void)
 {
     menuCloseCustom(MENU_ID_WAZA_LIGHT, 0, 1);
 }
+#pragma force_active reset
 
 // Opens the move-select window over the pokemon's known moves and returns the
 // chosen move slot.
+#pragma force_active on
 s32 menuPokemonOpenWazaLight(s8 index)
 {
     static MENU_WAZA_STATUS partyMenuMoveStatus;
@@ -303,6 +305,7 @@ s32 menuPokemonOpenWazaLight(s8 index)
     menuOffScreenSetPriority(1);
     return selected;
 }
+#pragma force_active reset
 
 // Status-menu callback: steps the party cursor and returns the pokemon the
 // status menu should show.
@@ -381,7 +384,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
     if (menuPokemonWork.mMode == PARTY_MODE_USE_ITEM_FIELD || menuPokemonWork.mMode == PARTY_MODE_USE_ITEM_FIGHT) {
         item = itemDataBiosGetPtr(menuPokemonWork.mItemId);
 
-        if (itemDataBiosGetBagPocket(item) == ITEM_POCKET_TM) {
+        if (itemDataBiosGetKind(item) == ITEM_POCKET_TM) {
             switch (sprite->mItemID) {
             case PANEL_ITEM_MOVE_COMPATIBILITY_A:
             case PANEL_ITEM_MOVE_COMPATIBILITY_B: {
@@ -797,7 +800,7 @@ void menuPokemonDrawHelp(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
         case PARTY_MODE_USE_ITEM_FIGHT: {
             ItemData *item = itemDataBiosGetPtr(menuPokemonWork.mItemId);
 
-            if (itemDataBiosGetBagPocket(item) == ITEM_POCKET_TM)
+            if (itemDataBiosGetKind(item) == ITEM_POCKET_TM)
                 msgId = MSG_HELP_TM;
             else if (menuPokemonWork.mSelecting != 0)
                 msgId = MSG_HELP_TM_SELECT;
@@ -879,7 +882,7 @@ void menuPokemonButton(tagWINDOW_WORK *win)
 void menuPokemonCursor(tagWINDOW_WORK *win)
 {
     u8 freeSlots[7];
-    s8 cursor = win->mCursorState.mSelection.mCursor;
+    s8 cursor = win->mCursor.y;
     s8 moved = 0;
     s32 i;
 
@@ -975,11 +978,11 @@ void menuPokemonCursor(tagWINDOW_WORK *win)
         }
     }
 
-    if (win->mCursorState.mSelection.mCursor != cursor) {
-        menuPokemonWork.mCursor = win->mCursorState.mSelection.mCursor;
+    if (win->mCursor.y != cursor) {
+        menuPokemonWork.mCursor = win->mCursor.y;
         menuPokemonWork.mCursorIndex = cursor;
         menuPokemonWork.mNextIndex = cursor;
-        win->mCursorState.mSelection.mCursor = cursor;
+        win->mCursor.y = cursor;
     }
 }
 
@@ -1066,7 +1069,7 @@ s32 _menuPokemonSub(unsigned char mode, unsigned long itemId, FIGHT_TRAINER *tra
 
     menuPokemonUpdate();
     partyMenuLoadCounter = 0;
-    menuFaceLoadPokemon(0, _menuPokemonCbLoadPokemonList, &partyMenuLoadCounter);
+    menuFaceLoad(0, _menuPokemonCbLoadPokemonList, &partyMenuLoadCounter);
 
     for (i = 0; i < 6; i++) {
         if (_menuPokemonGetPokemonPtr(i) == 0)
@@ -1288,10 +1291,10 @@ s32 menuPokemonMain(void)
 
 // Face-load callback: fetches the pokemon of the current counter slot and
 // advances the counter.
-void *_menuPokemonCbLoadPokemonList(void *arg)
+Pokemon *_menuPokemonCbLoadPokemonList(void *arg)
 {
     u16 *counter = (u16 *)arg;
-    void *pokemon = _menuPokemonGetPokemonPtr(*counter);
+    Pokemon *pokemon = _menuPokemonGetPokemonPtr(*counter);
 
     (*counter)++;
     return pokemon;
@@ -1734,7 +1737,7 @@ Hero *_menuPokemonGetHeroPtr(void)
         if (GSflagGet(HERO_PTR_FLAG) == 0)
             return (Hero *)savedataGetStatus(0, TRAINER_DATA_HERO);
 
-        return menuCBBios_GetBattleHeroPtr();
+        return menuCBBios_GetRegisteredHero();
 
     case PARTY_SOURCE_FIGHT_TRAINER:
         if (trainer == 0) {

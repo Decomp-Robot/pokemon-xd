@@ -70,7 +70,7 @@ typedef struct {
 
 typedef struct {
     s32 lock;              // lock word handed to TRKLock/TRKUnlock
-    s32 count;             // events currently queued
+    int count;             // events currently queued
     s32 next;              // slot the next TRKGetNextEvent takes from
     TRKEvent events[NUBQUEUELENGTH];  // ring of pending events
     NubEventID eventID;       // id handed to the next posted event

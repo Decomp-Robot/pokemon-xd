@@ -1,11 +1,89 @@
 #ifndef GS_GFX_H
 #define GS_GFX_H
 
+#include <GSmathTypes.h>
 #include <types.h>
 #include <GSvec.h>
 #include <GStexture.h>
 
-extern "C" f32 GSgfxVideoGetLastRenderTime(void);
+struct GSgfxVF {
+    u32 reserved[0x110];
+};
+
+struct GSgfxLight;
+struct GSgfxMatrixStackEntry {
+    u8 reservedHeader[4];
+    GSmtx mMatrix;
+    u8 reserved[0x30];
+};
+class GSgfxMatrixStack {
+public:
+    void push(GSmtx *mtx);
+    void pushMult(GSmtx *mtx);
+    void pop(void);
+    GSmtx *top(void);
+    GSmtx *currentMatrix() { return &mCurrentEntry->mMatrix; }
+    u8 reservedHeader[4];
+    GSgfxMatrixStackEntry *mCurrentEntry;
+};
+
+
+union GScolor { u32 rgba; struct { u8 r, g, b, a; } channels; };
+enum GSgfxTunitKReg { GSGFX_KREG0, GSGFX_KREG1, GSGFX_KREG2, GSGFX_KREG3 };
+// Texel filter a layer loads its texture with (GStextureSetFilter): 0 keeps the
+// nearest texel, 2 blends the neighbours linearly.
+enum GStextureFilter { GS_TEXTURE_FILTER_NEAREST = 0, GS_TEXTURE_FILTER_LINEAR = 2 };
+enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR };
+enum GSgfxCunitSrc { GSGFX_CUNIT_REGISTER };
+enum GSgfxLightType { GSGFX_LIGHT_DIRECTIONAL, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_POINT };
+enum GSgfxDiffuseFunc { GSGFX_DIFFUSE_NONE, GSGFX_DIFFUSE_SIGN, GSGFX_DIFFUSE_CLAMP };
+enum GSgfxTunitCArg {
+    GSGFX_TUNIT_C_PREV = 0,
+    GSGFX_TUNIT_C_TEXC = 8,
+    GSGFX_TUNIT_C_RASC = 10,
+    GSGFX_TUNIT_C_ONE = 12,
+    GSGFX_TUNIT_C_KONST = 14,
+    GSGFX_TUNIT_C_ZERO = 15
+};
+enum GSgfxTunitAArg {
+    GSGFX_TUNIT_A_PREV = 0,
+    GSGFX_TUNIT_A_TEXA = 4,
+    GSGFX_TUNIT_A_RASA = 5,
+    GSGFX_TUNIT_A_KONST = 6,
+    GSGFX_TUNIT_A_ZERO = 7
+};
+enum GSgfxKColorSelection { GSGFX_KCOLOR_K0 = 12, GSGFX_KCOLOR_K1 = 13, GSGFX_KCOLOR_K2 = 14, GSGFX_KCOLOR_K3 = 15 };
+enum GSgfxKAlphaSelection { GSGFX_KALPHA_K0 = 28, GSGFX_KALPHA_K1 = 29, GSGFX_KALPHA_K2 = 30, GSGFX_KALPHA_K3 = 31 };
+enum GSgfxTunitSentinel { GSGFX_TUNIT_NO_TEXTURE = 255 };
+enum GSgfxTunitChannel { GSGFX_TUNIT_CHANNEL_COLOR1A = 1 };
+struct GSgfxTunitOrder { u32 texCoord, texMap, channel; };
+struct GSgfxTunitInputs { u32 a, b, c, d; };
+// Texture-unit operation state stored by each layer stage.
+struct GSgfxTunitOpState { u32 operation, bias, scale; u8 clamp; u8 reserved[3]; u32 output; };
+
+enum GSgfxCullType { GSGFX_CULL_NONE = 0, GSGFX_CULL_BACK = 2 , GS_GFX_CULL_NONE = 0, GSGFX_CULL_FRONT = 1, GSGFX_CULL_ALL = 3 };
+enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0 , GS_GFX_CLIP_ENABLED = 0 };
+enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_LEQUAL = 3 , GS_GFX_Z_COMPARE_LEQUAL = 3 };
+enum GSgfxACmpFunc { GSGFX_A_COMPARE_ALWAYS = 7 , GS_GFX_A_COMPARE_ALWAYS = 7 };
+enum GSgfxAlphaOp { GSGFX_ALPHA_AND = 0 , GS_GFX_ALPHA_AND = 0 };
+enum GSgfxTunitOp { GSGFX_TUNIT_OP_ADD = 0 };
+enum GSgfxTunitBias { GSGFX_TUNIT_BIAS_ZERO = 0 };
+enum GSgfxTunitScale { GSGFX_TUNIT_SCALE_ONE = 0 };
+enum GSgfxTunitReg { GSGFX_TUNIT_REG_PREV = 0 };
+
+
+// Layer selected for a primitive submission.
+#include <GSgfxTypes.h>
+
+// Primitive operation emitted by a surface.
+enum GSgfxPrimType { GSGFX_PRIM_TRIANGLE_FAN = 0xA0 , GSGFX_QUADS = 0x80, GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
+enum GSgfxLogicOp { GSGFX_LOGIC_NOOP = 5 };
+enum GSgfxBlendType { GSGFX_BLEND_NONE, GSGFX_BLEND_BLEND, GSGFX_BLEND_LOGIC, GSGFX_BLEND_SUBTRACT , GS_GFX_BLEND_NONE = 0, GS_GFX_BLEND_ALPHA = 1 };
+enum GSgfxBlendFactor { GSGFX_BLEND_ZERO, GSGFX_BLEND_ONE, GSGFX_BLEND_SRC_COLOR, GSGFX_BLEND_INV_SRC_COLOR, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_INV_SRC_ALPHA, GSGFX_BLEND_DST_ALPHA, GSGFX_BLEND_INV_DST_ALPHA , GS_GFX_FACTOR_ZERO = 0, GS_GFX_FACTOR_ONE = 1 };
+enum GSgfxLayerPass {
+    GSGFX_LAYER_PASS_OPAQUE = 0,
+    GSGFX_LAYER_PASS_XLU = 1, GS_GFX_PASS_OPAQUE = 0, GS_GFX_PASS_TRANSLUCENT = 1 };
+struct GSgfxDrawPass { u8 _00[0xBC]; };
 
 // Write-gather FIFO the GS layers emit their primitives into.
 typedef union {
@@ -19,6 +97,12 @@ typedef union {
 } PPCWGPipe;
 
 #define GXWGFifo (*(volatile PPCWGPipe *)0xCC008000)
+
+// Texture the layers cache and the game sprites draw.
+struct GStexture {
+    u8 _00[0x07];
+    u8 mStateDirty; // 0x07: nonzero when cached sampler state must be updated.
+};
 
 // Layer commands of the frame (GSgfxLayer +0x04): the bits the render modules
 // set and the layer's own setup pass consumes one by one.
@@ -34,7 +118,10 @@ enum GSgfxPassFlag {
     GSGFX_PASS_FLAG_GROUP_A = 0x1,
     GSGFX_PASS_FLAG_GROUP_B = 0x2,
     GSGFX_PASS_FLAG_LIGHT = 0x4,
+    GSGFX_PASS_FLAG_TUNIT = 0x8,
+    GSGFX_PASS_FLAG_KCOLOR = 0x10,
     GSGFX_PASS_FLAG_GPU_STATE = 0x40,
+    GSGFX_PASS_FLAG_INDIRECT = 0x80,
 };
 
 // Dirty bits the particle module sets in the pass state's first GX group.
@@ -45,10 +132,15 @@ enum GSgfxPassGroupAFlag {
 // Dirty bits the particle module sets in the pass state's second GX group.
 enum GSgfxPassGroupBFlag {
     GSGFX_PASS_GROUP_B_PARTICLES = 0x4,
+    GSGFX_PASS_GROUP_B_CULL = 0x2,
 };
+
+enum GSgfxLightStateFlag { GSGFX_LIGHT_STATE_CHANNEL_COUNT = 1, GSGFX_LIGHT_STATE_POSITION = 2, GSGFX_LIGHT_STATE_DIRECTION = 4, GSGFX_LIGHT_STATE_LIGHTS = 16 };
+enum GSgfxTunitCountFlag { GSGFX_TUNIT_COUNT_DIRTY = 1 };
 
 // Dirty bits of the GPU state group (GSgfxPassState +0x64).
 enum GSgfxGpuFlag {
+    GSGFX_GPU_BLEND = 0x1,
     GSGFX_GPU_FOG = 0x40,
     GSGFX_GPU_FOG_ADJ_TABLE = 0x100,
     GSGFX_GPU_FOG_RANGE_ADJ = 0x200,
@@ -60,17 +152,35 @@ enum GSgfxGpuFlag {
 // 0x0C/0x10/0x64 carry the dirty bits of the groups they name.
 struct GSgfxPassState {
     u32 mFlags;          // 0x00: setup groups the pass still has to run.
-    u8 _04[0x08];
+    u32 mGeometryFlags;  // 0x04
+    u8 _08[0x04];
     u32 mGroupAFlags;    // 0x0C: dirty bits of the pass state's first group.
     u32 mGroupBFlags;    // 0x10: dirty bits of the pass state's second group.
-    u8 _14[0x50];
+    u32 mLightFlags;     // 0x14
+    u8 _18[0x04];
+    u32 mAmbientFlags;   // 0x1C
+    u32 mMaterialFlags;  // 0x20
+    u32 mTunitCountFlags;// 0x24
+    u32 mTunitOrderFlags;// 0x28
+    u32 mColorInputFlags;// 0x2C
+    u32 mAlphaInputFlags;// 0x30
+    u32 mColorOpFlags;   // 0x34
+    u32 mAlphaOpFlags;   // 0x38
+    u8 _3C[4];
+    u32 mIndirectOperationFlags; // 0x40
+    u32 mIndirectStageFlags; // 0x44
+    u32 mIndirectOrderFlags; // 0x48
+    u32 mIndirectScaleFlags; // 0x4C
+    u32 mKColorFlags;    // 0x50
+    u32 mKColorSelFlags; // 0x54
+    u32 mKAlphaSelFlags; // 0x58
+    u8 _5C[0x08];
     u32 mGpuFlags;       // 0x64: dirty bits of the GPU state setup.
     u8 _68[0x2C];
     u32 mTextureState;   // 0x94: bits of the texture slots the pass loaded.
-    GStexture *mTexture; // 0x98: the texture slots, one entry per slot.
-    u8 _9C[0x1C];
-};
+    GStexture *mTextures[8]; // 0x98: textures cached by this render pass.
 
+};
 
 enum GSgfxDLFlags {
     GS_DISPLAY_LIST_ALLOCATED = 1,
@@ -78,8 +188,6 @@ enum GSgfxDLFlags {
 };
 
 enum { GS_DISPLAY_LIST_HEADER_BYTES = 3 };
-
-struct GSgfxVF;
 struct GSgfxDL {
     u16 mFlags;
     u16 mVertexStride;
@@ -100,46 +208,19 @@ struct GSgfxDL {
     void Invalidate() { mFlags |= GS_DISPLAY_LIST_DIRTY; }
 };
 
-struct GSgfxVF {
-    u8 storage[0x440];
-};
-
-extern "C" {
-void *GSgfxVFCreate(void *vf);
-void GSgfxVFFree(void *vf);
-void GSgfxVFInit(void *vf);
-void GSgfxVFSetElement(void *vf, s32 attribute, u32 componentCount, u32 componentFormat, u8 fractionalBits);
-void GSgfxVFSetArray(void *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayMetadata);
-}
-void GSgfxRenderWaitForDrawComplete();
-class GSgfxLayerConfig;
-/* Layer registration offset. */
 enum GSgfxLayerOffset { GS_LAYER_INSERT_AFTER = 2 };
 
-/* Registered graphics layer handle. */
-enum GSgfxLayerID { };
 
-extern "C" void GSgfxLayerSetActive(GSgfxLayerID layer);
-
-/* GX surface primitive type. */
-enum GSgfxPrimType { GSGFX_QUADS = 0x80, GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
-
-/* Operation the texture generator performs. */
 enum GSgfxTgenFunc { GS_GFX_TGEN_MTX3X4 = 0, GS_GFX_TGEN_MTX2X4 = 1 };
 
-/* Coordinate source the texture generator samples from. */
 enum GSgfxTgenSrc { GS_GFX_TGEN_SRC_POSITION = 0, GS_GFX_TGEN_SRC_TEX0 = 4 };
 
-/* TEV texture-unit combiner preset. */
 enum GSgfxTunitFunc { GS_GFX_TUNIT_TEXTURE_REPLACE = 3 };
 
-/* Indirect-texture matrix selector. */
 enum GSgfxIndTexMtxID { GS_GFX_IND_MTX0 = 1 };
 
-/* Kind of a GSgfx layer. */
 enum GSgfxLayerType { GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
 
-/* One registered layer slot of the layer registry. */
 class GSgfxLayerConfig {
 public:
     static void Remove(GSgfxLayerID id);
@@ -150,25 +231,6 @@ public:
                    bool clearDepth, GSgfxLayerID relativeLayerID, GSgfxLayerOffset offset);
 };
 
-
-/* Stack the layers push their world transforms onto. */
-struct GSgfxMatrixStackEntry {
-    u8 reservedHeader[4];
-    GSmtx mMatrix;
-    u8 reserved[0x30];
-};
-class GSgfxMatrixStack {
-public:
-    void push(GSmtx *mtx);
-    void pushMult(GSmtx *mtx);
-    void pop(void);
-    GSmtx *top(void);
-    GSmtx *currentMatrix() { return &mCurrentEntry->mMatrix; }
-    u8 reservedHeader[4];
-    GSgfxMatrixStackEntry *mCurrentEntry;
-};
-
-// Partial layout of the graphics layer and its two render-pass caches.
 enum GSgfxCachedStateConstants {
     GS_GFX_DIRTY_GEOMETRY = 0x1,
     GS_GFX_DIRTY_RASTER = 0x2,
@@ -216,189 +278,294 @@ enum GSgfxCachedStateConstants {
     GS_GFX_COLOR_CHANNEL_NULL = 0xFF,
 };
 
-enum GSgfxCullType {
-    GS_GFX_CULL_NONE = 0,
-    GSGFX_CULL_NONE = GS_GFX_CULL_NONE,
-    GSGFX_CULL_FRONT = 1,
-    GSGFX_CULL_BACK = 2,
-    GSGFX_CULL_ALL = 3,
-};
-enum GSgfxClipMode { GS_GFX_CLIP_ENABLED = 0 };
-enum GSgfxZCmpFunc { GS_GFX_Z_COMPARE_LEQUAL = 3 };
-enum GSgfxACmpFunc { GS_GFX_A_COMPARE_ALWAYS = 7 };
-enum GSgfxAlphaOp { GS_GFX_ALPHA_AND = 0 };
-enum GSgfxBlendType { GS_GFX_BLEND_NONE = 0, GS_GFX_BLEND_ALPHA = 1 };
-enum GSgfxBlendFactor { GS_GFX_FACTOR_ZERO = 0, GS_GFX_FACTOR_ONE = 1 };
-enum GSgfxLayerPass {
-    GS_GFX_PASS_OPAQUE = 0, GS_GFX_PASS_TRANSLUCENT = 1,
-    GSGFX_LAYER_PASS_OPAQUE = GS_GFX_PASS_OPAQUE,
-    GSGFX_LAYER_PASS_XLU = GS_GFX_PASS_TRANSLUCENT
-};
-struct GSgfxLayerFifo { u8 storage[0xBC]; };
-
+// Graphics state and draw commands for one layer.
 class GSgfxLayer {
 public:
-    void markDirty(u32 &stateA, u32 &stateB, u32 stateMask, u32 groupMask)
-    {
-        stateA |= stateMask;
-        mDirtyStateA |= groupMask;
-        stateB |= stateMask;
-        mDirtyStateB |= groupMask;
+    void FlushState();
+    void endSurface();
+    void beginSurface(u16 count);
+    void beginSurface(GSgfxPrimType type, GSgfxVF *format, u16 count) {
+        mPrimitiveType = type;
+        setRenderStateAndSelect(format);
+        beginSurface(count);
     }
-    void tunitCount(u8 count)
-    {
-        mTevStageCount = count;
-        markDirty(mTevStateDirtyA, mTevStateDirtyB, GS_GFX_TEV_DIRTY_COUNT, GS_GFX_DIRTY_TEV);
-    }
-    void indTexCount(u8 count)
-    {
-        mIndirectStageCount = count;
-        markDirty(mIndirectStateDirtyA, mIndirectStateDirtyB, GS_GFX_INDIRECT_DIRTY_COUNT, GS_GFX_DIRTY_INDIRECT);
-    }
-    void tgenCount(u8 count)
-    {
-        mTexGenCount = count;
-        markDirty(mGeometryStateDirtyA, mGeometryStateDirtyB, GS_GFX_GEOMETRY_DIRTY_TEXGEN_COUNT, GS_GFX_DIRTY_GEOMETRY);
-    }
-    void channelCount(u8 count)
-    {
-        mChannelCount = count;
-        markDirty(mChannelStateDirtyA, mChannelStateDirtyB, GS_GFX_CHANNEL_DIRTY_COUNT, GS_GFX_DIRTY_CHANNELS);
-    }
-    void destinationAlpha(bool on, u8 alpha)
-    {
-        mDestinationAlphaEnabled = on;
-        mDestinationAlpha = alpha;
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_DESTINATION_ALPHA, GS_GFX_DIRTY_PIXEL);
-    }
-    void dither(bool on)
-    {
-        mDitherEnabled = on;
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_DITHER, GS_GFX_DIRTY_PIXEL);
-    }
-    void SetRenderPass(GSgfxLayerPass pass)
-    {
-        if (mRenderPass != pass) {
-            mRenderPass = pass;
-            mCurrentRenderPassFifo = &mRenderPassFifos[mRenderPass];
+    void SetRenderPass(GSgfxLayerPass pass) {
+        if (mCurrentPass != pass) {
+            mCurrentPass = pass;
+            mDrawPass = &mDrawPasses[mCurrentPass];
         }
     }
-    void cullMode(GSgfxCullType mode)
-    {
-        mCullType = mode;
-        markDirty(mRasterStateDirtyA, mRasterStateDirtyB, GS_GFX_RASTER_DIRTY_CULL, GS_GFX_DIRTY_RASTER);
+    void blendMode(GSgfxBlendType type, GSgfxBlendFactor src, GSgfxBlendFactor dst, bool selectPass) {
+        if (type == GSGFX_BLEND_NONE) {
+            if (selectPass) SetRenderPass(GSGFX_LAYER_PASS_OPAQUE);
+            mBlendType = GSGFX_BLEND_NONE;
+            mBlendSrc = GSGFX_BLEND_ONE;
+            mBlendDst = GSGFX_BLEND_ONE;
+            mBlendLogic = GSGFX_LOGIC_NOOP;
+        } else {
+            if (selectPass) SetRenderPass(GSGFX_LAYER_PASS_XLU);
+            mBlendType = type;
+            mBlendSrc = src;
+            mBlendDst = dst;
+            mBlendLogic = GSGFX_LOGIC_NOOP;
+        }
+        mPassState[0].mGpuFlags |= GSGFX_GPU_BLEND;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= GSGFX_GPU_BLEND;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
     }
-    void clipMode(GSgfxClipMode mode)
-    {
+
+
+    void tunitKRegSel(u8 stage, GSgfxTunitKReg reg);
+    void cunitChannelGen(u8 channel, GSgfxCunitAlpha alpha,
+                         GSgfxCunitSrc ambient, GSgfxCunitSrc material,
+                         unsigned long lightMask, GSgfxLight **lights,
+                         GSgfxLightType type, GSgfxDiffuseFunc diffuse);
+    void drawCube();
+    void drawCylinder(u8 slices);
+    void drawDodecaedron();
+    void drawIcosahedron();
+    void drawOctahedron();
+    void drawSphere(u8 slices);
+    void drawSphere(u8 stacks, u8 slices);
+    void drawTorus(f32 radius, u8 stacks, u8 slices);
+    void cullMode(GSgfxCullType mode) {
+        mCullMode = mode;
+        mPassState[0].mGroupBFlags |= GSGFX_PASS_GROUP_B_CULL;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+        mPassState[1].mGroupBFlags |= GSGFX_PASS_GROUP_B_CULL;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+    }
+    void cunitCount(u8 count) {
+        mCunitCount = count;
+        mPassState[0].mLightFlags |= GSGFX_LIGHT_STATE_CHANNEL_COUNT;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+        mPassState[1].mLightFlags |= GSGFX_LIGHT_STATE_CHANNEL_COUNT;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+    }
+    void tunitCount(u8 count) {
+        mTunitCount = count;
+        mPassState[0].mTunitCountFlags |= GSGFX_TUNIT_COUNT_DIRTY;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mTunitCountFlags |= GSGFX_TUNIT_COUNT_DIRTY;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitMapping(u8 stage, u8 coord, u8 map, u8 channel) {
+        mTunitOrder[stage].texCoord = coord;
+        mTunitOrder[stage].texMap = map;
+        if (channel != GSGFX_TUNIT_NO_TEXTURE)
+            mTunitOrder[stage].channel = channel + 4;
+        else
+            mTunitOrder[stage].channel = GSGFX_TUNIT_NO_TEXTURE;
+        mPassState[0].mTunitOrderFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mTunitOrderFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitColorArg(u8 stage, GSgfxTunitCArg a, GSgfxTunitCArg b, GSgfxTunitCArg c, GSgfxTunitCArg d) {
+        mTunitColorInputs[stage].a = a;
+        mTunitColorInputs[stage].b = b;
+        mTunitColorInputs[stage].c = c;
+        mTunitColorInputs[stage].d = d;
+        mPassState[0].mColorInputFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mColorInputFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitAlphaArg(u8 stage, GSgfxTunitAArg a, GSgfxTunitAArg b, GSgfxTunitAArg c, GSgfxTunitAArg d) {
+        mTunitAlphaInputs[stage].a = a;
+        mTunitAlphaInputs[stage].b = b;
+        mTunitAlphaInputs[stage].c = c;
+        mTunitAlphaInputs[stage].d = d;
+        mPassState[0].mAlphaInputFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mAlphaInputFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitColorOp(u8 stage, GSgfxTunitOp operation, GSgfxTunitBias bias, GSgfxTunitScale scale, bool clamp, GSgfxTunitReg output) {
+        mTunitColorOp[stage].operation = operation;
+        mTunitColorOp[stage].bias = bias;
+        mTunitColorOp[stage].scale = scale;
+        mTunitColorOp[stage].clamp = clamp;
+        mTunitColorOp[stage].output = output;
+        mPassState[0].mColorOpFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mColorOpFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitAlphaOp(u8 stage, GSgfxTunitOp operation, GSgfxTunitBias bias, GSgfxTunitScale scale, bool clamp, GSgfxTunitReg output) {
+        mTunitAlphaOp[stage].operation = operation;
+        mTunitAlphaOp[stage].bias = bias;
+        mTunitAlphaOp[stage].scale = scale;
+        mTunitAlphaOp[stage].clamp = clamp;
+        mTunitAlphaOp[stage].output = output;
+        mPassState[0].mAlphaOpFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mAlphaOpFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void tunitKColorSel(u8 stage, u32 select) {
+        mTunitKColorSel[stage] = select;
+        mPassState[0].mKColorSelFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+        mPassState[1].mKColorSelFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+    }
+    void tunitKAlphaSel(u8 stage, u32 select) {
+        mTunitKAlphaSel[stage] = select;
+        mPassState[0].mKAlphaSelFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+        mPassState[1].mKAlphaSelFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+    }
+    void tunitKColor(u8 reg, GScolor color) {
+        mTunitKColor[reg].rgba = color.rgba;
+        mPassState[0].mKColorFlags |= 1 << reg;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+        mPassState[1].mKColorFlags |= 1 << reg;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_KCOLOR;
+    }
+    void cunitColor(u8 channel, GScolor ambient, GScolor material) {
+        mAmbientColor[channel].rgba = ambient.rgba;
+        mMaterialColor[channel].rgba = material.rgba;
+        mPassState[0].mAmbientFlags |= 1 << channel;
+        mPassState[0].mMaterialFlags |= 1 << channel;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+        mPassState[1].mAmbientFlags |= 1 << channel;
+        mPassState[1].mMaterialFlags |= 1 << channel;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+    }
+    void cunitLights(u8 count, GSgfxLight **lights) {
+        mLightCount = count;
+        for (u8 i = 0; i < 8; ++i) {
+            if (i < count) mLights[i] = lights[i];
+            else mLights[i] = 0;
+        }
+        mPassState[0].mLightFlags |= GSGFX_LIGHT_STATE_LIGHTS;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+        mPassState[1].mLightFlags |= GSGFX_LIGHT_STATE_LIGHTS;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+    }
+
+    void tgenCount(u8 count) {
+        mTexGenCount = count;
+        mPassState[0].mGeometryFlags |= 1;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mGeometryFlags |= 1;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    }
+    void channelCount(u8 count) {
+        mCunitCount = count;
+        mPassState[0].mLightFlags |= GSGFX_LIGHT_STATE_CHANNEL_COUNT;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+        mPassState[1].mLightFlags |= GSGFX_LIGHT_STATE_CHANNEL_COUNT;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+    }
+    void indTexCount(u8 count) {
+        mIndirectStageCount = count;
+        mPassState[0].mIndirectStageFlags |= 1;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+        mPassState[1].mIndirectStageFlags |= 1;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+    }
+    void destinationAlpha(bool on, u8 alpha) {
+        mDestinationAlphaEnabled = on;
+        mDestinationAlpha = alpha;
+        mPassState[0].mGpuFlags |= 0x2;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= 0x2;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+    }
+    void dither(bool on) {
+        mDitherEnabled = on;
+        mPassState[0].mGpuFlags |= 0x20;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= 0x20;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+    }
+    void clipMode(GSgfxClipMode mode) {
         mClipMode = mode;
-        markDirty(mRasterStateDirtyA, mRasterStateDirtyB, GS_GFX_RASTER_DIRTY_CLIP, GS_GFX_DIRTY_RASTER);
+        mPassState[0].mGroupBFlags |= 0x4;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+        mPassState[1].mGroupBFlags |= 0x4;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
     }
-    void coplanar(bool on)
-    {
+    void coplanar(bool on) {
         mCoplanarEnabled = on;
-        markDirty(mRasterStateDirtyA, mRasterStateDirtyB, GS_GFX_RASTER_DIRTY_COPLANAR, GS_GFX_DIRTY_RASTER);
+        mPassState[0].mGroupBFlags |= 0x8;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+        mPassState[1].mGroupBFlags |= 0x8;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
     }
-    void pixelMode(bool color, bool alpha, bool depth)
-    {
-        mColorUpdateEnabled = color == true ? 1 : 0;
-        mAlphaUpdateEnabled = alpha == true ? 1 : 0;
-        mDepthUpdateEnabled = depth == true ? 1 : 0;
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_WRITE_ENABLES, GS_GFX_DIRTY_PIXEL);
+    void pixelMode(bool color, bool alpha, bool depth) {
+        mColorUpdateEnabled = color;
+        mAlphaUpdateEnabled = alpha;
+        mDepthUpdateEnabled = depth;
+        mPassState[0].mGpuFlags |= 0x4;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= 0x4;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
     }
-    void zCompare(bool on, GSgfxZCmpFunc func)
-    {
-        mDepthCompareEnabled = on == true ? 1 : 0;
-        mDepthCompareFunction = func;
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_DEPTH_COMPARE, GS_GFX_DIRTY_PIXEL);
+    void zCompare(bool enable, GSgfxZCmpFunc function) {
+        mDepthCompareEnabled = enable;
+        mDepthCompareFunction = function;
+        mPassState[0].mGpuFlags |= 0x8;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= 0x8;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
     }
-    void alphaCompare(bool on, GSgfxACmpFunc func0, u8 ref0, GSgfxAlphaOp op, GSgfxACmpFunc func1, u8 ref1)
-    {
-        if (on == true) {
-            mAlphaCompareFunction0 = func0;
-            mAlphaCompareReference0 = ref0;
-            mAlphaCompareOperation = op;
-            mAlphaCompareFunction1 = func1;
-            mAlphaCompareReference1 = ref1;
+    void alphaCompare(bool enable, GSgfxACmpFunc function0, u8 reference0,
+                      GSgfxAlphaOp operation, GSgfxACmpFunc function1, u8 reference1) {
+        if (enable) {
+            mAlphaCompareFunction0 = function0;
+            mAlphaCompareReference0 = reference0;
+            mAlphaCompareOperation = operation;
+            mAlphaCompareFunction1 = function1;
+            mAlphaCompareReference1 = reference1;
             mDepthCompareBeforeTexture = 0;
         } else {
-            mAlphaCompareFunction0 = GS_GFX_COMPARE_ALWAYS;
+            mAlphaCompareFunction0 = GSGFX_A_COMPARE_ALWAYS;
             mAlphaCompareReference0 = 0;
-            mAlphaCompareOperation = GS_GFX_ALPHA_COMPARE_AND;
-            mAlphaCompareFunction1 = GS_GFX_COMPARE_ALWAYS;
+            mAlphaCompareOperation = GSGFX_ALPHA_AND;
+            mAlphaCompareFunction1 = GSGFX_A_COMPARE_ALWAYS;
             mAlphaCompareReference1 = 0;
             mDepthCompareBeforeTexture = 1;
         }
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_ALPHA_COMPARE, GS_GFX_DIRTY_PIXEL);
+        mPassState[0].mGpuFlags |= 0x10;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mGpuFlags |= 0x10;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
     }
-    void blendMode(GSgfxBlendType type, GSgfxBlendFactor src, GSgfxBlendFactor dst, bool selectPass)
-    {
-        if (type == GS_GFX_BLEND_NONE) {
-            if (selectPass == true) SetRenderPass(GS_GFX_PASS_OPAQUE);
-            mBlendType = GS_GFX_BLEND_NONE;
-            mBlendSourceFactor = GS_GFX_BLEND_FACTOR_ONE;
-            mBlendDestinationFactor = GS_GFX_BLEND_FACTOR_ONE;
-            mBlendLogicOperation = GS_GFX_LOGIC_NOOP;
-        } else {
-            if (selectPass == true) SetRenderPass(GS_GFX_PASS_TRANSLUCENT);
-            mBlendType = type;
-            mBlendSourceFactor = src;
-            mBlendDestinationFactor = dst;
-            mBlendLogicOperation = GS_GFX_LOGIC_NOOP;
+    void fog(bool on) {
+        mFog = on;
+        mPassState[0].mGpuFlags |= GSGFX_GPU_FOG;
+        mPassState[1].mGpuFlags |= GSGFX_GPU_FOG;
+        if (on) {
+            mPassState[0].mGpuFlags |= GSGFX_GPU_FOG_RANGE_ADJ;
+            mPassState[1].mGpuFlags |= GSGFX_GPU_FOG_RANGE_ADJ;
+            if (mFogRangeAdj) {
+                mPassState[0].mGpuFlags |= GSGFX_GPU_FOG_ADJ_TABLE;
+                mPassState[1].mGpuFlags |= GSGFX_GPU_FOG_ADJ_TABLE;
+            }
         }
-        markDirty(mPixelStateDirtyA, mPixelStateDirtyB, GS_GFX_PIXEL_DIRTY_BLEND, GS_GFX_DIRTY_PIXEL);
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
+    }
+    void texSelect(u8 textureMap, GStexture *texture) {
+        if (mPassState[0].mTextures[textureMap] != texture ||
+            mPassState[1].mTextures[textureMap] != texture || texture->mStateDirty != 0) {
+            mPassState[0].mTextures[textureMap] = texture;
+            mPassState[0].mTextureState |= 1 << textureMap;
+            mPassState[1].mTextures[textureMap] = texture;
+            mPassState[1].mTextureState |= 1 << textureMap;
+        }
     }
     void InvalidateState();
     void setRenderStateAndSelect(GSgfxVF *vf);
-    void beginSurface(u16 vertexCount);
     void primitiveType(GSgfxPrimType type);
-    void endSurface(void);
     void dlDraw(GSgfxDL *displayList);
-    /* Returns whether the layer is visible. */
     bool IsLayerVisible(void);
     void SetLayerVisibility(bool on);
-
-    /* Enable fog and refresh its range adjustment when needed. */
-    void fog(bool on)
-    {
-        mFogEnabled = on;
-        mPixelStateDirtyA |= GS_GFX_PIXEL_DIRTY_FOG;
-        mPixelStateDirtyB |= GS_GFX_PIXEL_DIRTY_FOG;
-        if (on) {
-            mPixelStateDirtyA |= GS_GFX_PIXEL_DIRTY_FOG_RANGE_UPLOAD;
-            mPixelStateDirtyB |= GS_GFX_PIXEL_DIRTY_FOG_RANGE_UPLOAD;
-            if (mFogRangeAdjustEnabled) {
-                mPixelStateDirtyA |= GS_GFX_PIXEL_DIRTY_FOG_RANGE_TABLE;
-                mPixelStateDirtyB |= GS_GFX_PIXEL_DIRTY_FOG_RANGE_TABLE;
-            }
-        }
-        mDirtyStateA |= GS_GFX_DIRTY_PIXEL;
-        mDirtyStateB |= GS_GFX_DIRTY_PIXEL;
-    }
-
-    void tunitMapping(u8 stage, u8 texCoord, u8 textureMap, u8 colorChannel)
-    {
-        mTevOrders[stage][GS_GFX_TEV_ORDER_TEXCOORD] = texCoord;
-        mTevOrders[stage][GS_GFX_TEV_ORDER_TEXTURE_MAP] = textureMap;
-        if (colorChannel != GS_GFX_COLOR_CHANNEL_NULL) {
-            mTevOrders[stage][GS_GFX_TEV_ORDER_COLOR_CHANNEL] = colorChannel + 4;
-        } else {
-            mTevOrders[stage][GS_GFX_TEV_ORDER_COLOR_CHANNEL] = GS_GFX_COLOR_CHANNEL_NULL;
-        }
-        markDirty(mTevOrderDirtyA, mTevOrderDirtyB, 1 << stage, GS_GFX_DIRTY_TEV);
-    }
-
-    void texSelect(u8 textureMap, GStexture *texture)
-    {
-        if (mTexturesA[textureMap] != texture ||
-            mTexturesB[textureMap] != texture ||
-            texture->mTextureObjectDirty != 0) {
-            mTexturesA[textureMap] = texture;
-            mTextureDirtyA |= 1 << textureMap;
-            mTexturesB[textureMap] = texture;
-            mTextureDirtyB |= 1 << textureMap;
-        }
-    }
-
     void tunitFunc(u8 textureUnit, GSgfxTunitFunc func);
     void tgenFunc(u8 texGen, GSgfxTgenFunc func, GSgfxTgenSrc src, GSmtx *textureMatrix,
                   bool normalize, GSmtx *postMatrix);
@@ -416,130 +583,124 @@ public:
     u8 mTexCoordLineOffset0;
     u8 mTexCoordPointOffset0;
     u8 _0D46[0x0E];
-    u8 mProjection[0x1C];
-    u16 mScissorX; // Scissor X origin.
-    u16 mScissorY; // Scissor Y origin.
-    u16 mScissorWidth; // Scissor width.
-    u16 mScissorHeight; // Scissor height.
+    u8 mProjection[0x1C]; // 0xD54: projection data.
+    u16 mScissorX; // 0xD70
+    u16 mScissorY; // 0xD72
+    u16 mScissorWidth; // 0xD74
+    u16 mScissorHeight; // 0xD76
     u8 _0D78[0x10];
-    u8 mCoplanarEnabled;
-    u8 _0D89[0x3];
-    u32 mCullType;         // 0xD8C: Face culling mode (cullMode stores here).
-    u32 mClipMode;
-    u8 _0D94[0x24];
-    u8 mChannelCount;
-    u8 _0DB9[0xF3];
-    u8 mTevStageCount;
-    u8 _0EAD[0x3];
-    s32 mTevOrders[16][3];
-    u8 reservedTevState[0x4B0];
+    u8 mCoplanarEnabled; // 0xD88
+    u8 _0D89[3];
+    u32 mCullMode;       // 0xD8C
+    GSgfxClipMode mClipMode; // 0xD90
+    u8 mLightCount;        // 0xD94
+    u8 _0D95[3];
+    GSgfxLight *mLights[8];// 0xD98
+    u8 mCunitCount;        // 0xDB8
+    u8 _0DB9[0xE9C - 0xDB9];
+    GScolor mAmbientColor[2]; // 0xE9C
+    GScolor mMaterialColor[2];// 0xEA4
+    u8 mTunitCount;        // 0xEAC
+    u8 _0EAD[3];
+    GSgfxTunitOrder mTunitOrder[16]; // 0xEB0
+    GSgfxTunitInputs mTunitColorInputs[16]; // 0xF70
+    GSgfxTunitInputs mTunitAlphaInputs[16]; // 0x1070
+    GSgfxTunitOpState mTunitColorOp[16]; // 0x1170
+    GSgfxTunitOpState mTunitAlphaOp[16]; // 0x12B0
+    u8 _13F0[0x30];
     u32 mTevIndirectOperation0;
     u8 mTevIndirectStage0;
     u8 mTevWarpSignedOffset0;
     u8 mTevWarpReplaceMode0;
-    u8 _1427[0x1];
+    u8 _1427;
     u32 mTevWarpMatrix0;
     u8 _142C[0x84];
-    u8 mIndirectStageCount;
-    u8 _14B1[0x3];
+    u8 mIndirectStageCount; // 0x14B0
+    u8 _14B1[3];
     u32 mIndirectTexCoord0;
     u32 mIndirectTextureMap0;
     u8 _14BC[0x18];
     u32 mIndirectCoordScaleS0;
     u32 mIndirectCoordScaleT0;
     u8 _14DC[0x18];
-    u32 mKonstColors[2]; // 0x14F4: Packed constant colors.
-    u8 _14FC[0x148];
-    u32 mBlendType;
-    u32 mBlendSourceFactor;
-    u32 mBlendDestinationFactor;
-    u32 mBlendLogicOperation;
-    u8 mDestinationAlphaEnabled;
-    u8 mDestinationAlpha;
-    u8 mColorUpdateEnabled;
-    u8 mAlphaUpdateEnabled;
-    u8 mDepthUpdateEnabled;
-    u8 _1659[0x3];
-    u8 mDepthCompareEnabled;
-    u8 _165D[0x3];
-    u32 mDepthCompareFunction;
-    u32 mAlphaCompareFunction0;
-    u32 mAlphaCompareOperation;
-    u32 mAlphaCompareFunction1;
-    u8 mAlphaCompareReference0;
-    u8 mAlphaCompareReference1;
-    u8 mDepthCompareBeforeTexture;
-    u8 _1673[0x1];
-    u8 mDitherEnabled;
-    u8 _1675[0x31];
-    u8 mFogRangeAdjustEnabled;
-    u8 mFogEnabled;
-    u32 mDirtyStateA;
-    u32 mGeometryStateDirtyA;
-    u8 _16B0[0x4];
-    u32 mTexCoordOffsetDirtyA;
-    u32 mRasterStateDirtyA;
-    u32 mChannelStateDirtyA;
-    u8 _16C0[0xC];
-    u32 mTevStateDirtyA;
-    u32 mTevOrderDirtyA;
-    u8 _16D4[0x14];
-    u32 mTevIndirectDirtyA;
-    u32 mIndirectStateDirtyA;
-    u32 mIndirectOrderDirtyA;
-    u32 mIndirectCoordScaleDirtyA;
-    u32 mTevKonstColorsDirtyA;
-    u8 _16FC[0x10];
-    u32 mPixelStateDirtyA;
-    u8 _1710[0x2C];
-    u32 mTextureDirtyA;
-    GStexture *mTexturesA[8];
-    u32 mDirtyStateB;
-    u32 mGeometryStateDirtyB;
-    u8 _1768[0x4];
-    u32 mTexCoordOffsetDirtyB;
-    u32 mRasterStateDirtyB;
-    u32 mChannelStateDirtyB;
-    u8 _1778[0xC];
-    u32 mTevStateDirtyB;
-    u32 mTevOrderDirtyB;
-    u8 _178C[0x14];
-    u32 mTevIndirectDirtyB;
-    u32 mIndirectStateDirtyB;
-    u32 mIndirectOrderDirtyB;
-    u32 mIndirectCoordScaleDirtyB;
-    u32 mTevKonstColorsDirtyB;
-    u8 _17B4[0x10];
-    u32 mPixelStateDirtyB;
-    u8 _17C8[0x2C];
-    u32 mTextureDirtyB;
-    GStexture *mTexturesB[8];
-    GSgfxLayerFifo mRenderPassFifos[2];
-    GSgfxLayerFifo *mCurrentRenderPassFifo;
-    GSgfxLayerPass mRenderPass;
-    GSgfxPrimType mPrimitiveType; // 0x1998: Primitive op the surface emits.
-    void * mVertexFormat;
-    GSgfxMatrixStack * mMatrixStack; // 0x19A0: Transform stack of the pass.
-
+    GScolor mTunitKColor[4]; // 0x14F4
+    u32 mTunitKColorSel[16]; // 0x1504
+    u32 mTunitKAlphaSel[16]; // 0x1544
+    u8 _1584[0x1644 - 0x1584];
+    GSgfxBlendType mBlendType; // 0x1644
+    GSgfxBlendFactor mBlendSrc; // 0x1648
+    GSgfxBlendFactor mBlendDst; // 0x164C
+    GSgfxLogicOp mBlendLogic; // 0x1650
+    u8 mDestinationAlphaEnabled; // 0x1654
+    u8 mDestinationAlpha; // 0x1655
+    u8 mColorUpdateEnabled; // 0x1656
+    u8 mAlphaUpdateEnabled; // 0x1657
+    u8 mDepthUpdateEnabled; // 0x1658
+    u8 _1659[3];
+    u8 mDepthCompareEnabled; // 0x165C
+    u8 _165D[3];
+    GSgfxZCmpFunc mDepthCompareFunction; // 0x1660
+    GSgfxACmpFunc mAlphaCompareFunction0; // 0x1664
+    GSgfxAlphaOp mAlphaCompareOperation; // 0x1668
+    GSgfxACmpFunc mAlphaCompareFunction1; // 0x166C
+    u8 mAlphaCompareReference0; // 0x1670
+    u8 mAlphaCompareReference1; // 0x1671
+    u8 mDepthCompareBeforeTexture; // 0x1672
+    u8 _1673;
+    u8 mDitherEnabled; // 0x1674
+    u8 _1675[0x16A6 - 0x1675];
+    u8 mFogRangeAdj;       // 0x16A6: fog range adjustment is set up.
+    u8 mFog;               // 0x16A7: the layer draws with fog.
+    GSgfxPassState mPassState[2]; // 0x16A8: one state per render pass.
+    GSgfxDrawPass mDrawPasses[2]; // 0x1818
+    GSgfxDrawPass *mDrawPass; // 0x1990
+    GSgfxLayerPass mCurrentPass; // 0x1994
+    GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
+    GSgfxVF *mVertexFormat; // 0x199C
+    GSgfxMatrixStack *mMatrixStack; // 0x19A0
 };
 
-extern "C" {
-typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
-typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
+struct GSgfxLight {
+    GSgfxLight();
+    void MakeDiff(GSgfxColAu8 *color, GSvec *position, bool attenuation);
+    void MakeSpec(GSgfxColAu8 *color, GSvec *direction, f32 shininess, GSvec *position);
+    u16 mFlags;
+    u8 _02[2];
+    GSgfxLightType mType;
+    u8 _08[4];
+    GSvec mPosition;
+    GSvec mDirection;
+    u8 _24[0x80 - 0x24];
 
-void GSgfxParseDisplayList(void *vtxAttr, void *dl, u32 size, const void *callbacks, void *ctx);
-u32 GSgfxPerfbarCPUEntry(u32 id);
-/* Either dimension output may be null. */
-void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
-GSgfxLayer *GSgfxLayerFindByName(const char *name);
-GSgfxLayer *GSgfxLayerFindByID(s32 id);
-void *GSgfxLayerGetFrameBufferTexture(void);
-}
+    void position(GSvec *pos) {
+        switch (mType) {
+        case GSGFX_LIGHT_POINT: mPosition = *pos; break;
+        case GSGFX_LIGHT_SPOT: mPosition = *pos; break;
+        case GSGFX_LIGHT_DIRECTIONAL: return;
+        }
+        mFlags |= GSGFX_LIGHT_STATE_POSITION;
+    }
+    void direction(GSvec *dir) {
+        switch (mType) {
+        case GSGFX_LIGHT_DIRECTIONAL:
+        case GSGFX_LIGHT_SPOT:
+            mDirection = *dir;
+            mFlags |= GSGFX_LIGHT_STATE_DIRECTION;
+            break;
+        }
+    }
+};
+extern "C" GSgfxVF *GSgfxVFGetPredef(u32 format);
+extern "C" GSgfxVF *GSgfxVFBuildTemp(s32 p1, s32 p2, s32 p3, s32 p4, s32 p5, s32 p6, s32 p7, s32 p8, s32 p9);
+void GSprimSetup2DRender(GSgfxLayer *layer);
+extern "C" GSgfxLayer *GSgfxLayerFindByID(GSgfxLayerID id);
 
-/* Display-list parser attribute-presence flags. */
-#define GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX 0x1u
-#define GS_GFX_PARSE_ATTRIBUTE_POSITION 0x2u
-#define GS_GFX_POSITION_MATRIX_ROWS 3
+// Which of the layer's two passes a render module is drawing for. The layer
+// builds and prerenders pass 0 before pass 1 and keeps a display list and a
+// render state per pass; blendMode() switches the current pass to 0 for an
+// unblended surface and to 1 for a blended one. The particles belong to the
+// second pass.
+
 
 // One entry of the render module list GSgfxRenderModuleRegister builds. The
 // engine calls the hooks once per frame; fastRender is used on the frames the
@@ -556,6 +717,7 @@ struct GSgfxRenderModule {
 
 #define GSGFX_RENDER_MODULE_SIGNATURE 0xB29A48E1
 extern "C" {
+void GSgfxDLPrimitiveType(u32 primitive);
 GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
                          s32 hasNormal, s32 normalComponents,
                          s32 colorCount, s32 colorType,
@@ -573,4 +735,30 @@ u8 GSgfxVideoGetVsyncRate(void);
 void GSgfxVideoSetLockFrameRate(long frameRateLock);
 }
 
+
+extern "C" {
+void GSgfxLayerSetActive(GSgfxLayerID layer);
+
+}
+
+
+extern "C" f32 GSgfxVideoGetLastRenderTime(void);
+void GSgfxRenderWaitForDrawComplete();
+typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
+typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
+#define GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX 0x1u
+#define GS_GFX_PARSE_ATTRIBUTE_POSITION 0x2u
+#define GS_GFX_POSITION_MATRIX_ROWS 3
+extern "C" {
+void GSgfxParseDisplayList(void *vtxAttr, void *dl, u32 size, const void *callbacks, void *ctx);
+u32 GSgfxPerfbarCPUEntry(u32 id);
+void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
+GSgfxLayer *GSgfxLayerFindByName(const char *name);
+void *GSgfxLayerGetFrameBufferTexture(void);
+void *GSgfxVFCreate(void *vf);
+void GSgfxVFFree(void *vf);
+void GSgfxVFInit(void *vf);
+void GSgfxVFSetElement(void *vf, s32 attribute, u32 componentCount, u32 componentFormat, u8 fractionalBits);
+void GSgfxVFSetArray(void *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayMetadata);
+}
 #endif

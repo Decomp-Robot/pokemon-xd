@@ -1,15 +1,20 @@
 #ifndef MENUFACE_H
 #define MENUFACE_H
 
+#include <Pokemon.h>
 #include <types.h>
-#include <GSvec.h>
 
-struct tagWINDOW_WORK;
-struct tagSPRITE_WORK;
-
+#ifdef __cplusplus
 extern "C" {
-void menuFaceDispFromID3(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 faceID,
-                       GSivec2 *size, GSivec2 *position);
+#endif
+
+typedef Pokemon *(*MenuFaceLoadCallback)(void *context);
+void menuFaceLoad(Pokemon *pokemon, MenuFaceLoadCallback callback, void *context);
+u32 menuFaceGetID(Pokemon *pokemon);
+s8 menuFaceSearchEnable(u32 faceId);
+
+#ifdef __cplusplus
 }
+#endif
 
 #endif

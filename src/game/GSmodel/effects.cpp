@@ -27,8 +27,8 @@ void modelDistortionRender(void)
 {
     bool fog;
     GSgfxLayer *layer;
-    void *cam;
-    void *tex;
+    _GScamera *cam;
+    GStexture *tex;
     u32 token;
     _GSmodel *m;
     u8 wanted;
@@ -50,7 +50,7 @@ void modelDistortionRender(void)
     if (!layer->IsLayerVisible()) {
         return;
     }
-    tex = GSgfxLayerGetFrameBufferTexture();
+    tex = (GStexture *)GSgfxLayerGetFrameBufferTexture();
     if (tex == NULL) {
         return;
     }
@@ -69,7 +69,7 @@ void modelDistortionRender(void)
         return;
     }
     token = GSgfxPerfbarCPUEntry(GSGFX_PERFBAR_MODEL_DISTORTION);
-    fog = layer->mFogEnabled;
+    fog = layer->mFog;
     layer->fog(false);
     GScameraLoadActiveCameraMatrix(layer->mLayerID);
     GScameraGetPerspective(cam, &fovY, &aspect, &nearZ, &nearZ);
@@ -82,7 +82,10 @@ void modelDistortionRender(void)
     layer->mScissorX = 0;
     layer->mScissorY = 0;
     GSgfxVideoGetEFBSize(&layer->mScissorWidth, &layer->mScissorHeight);
-    layer->markDirty(layer->mRasterStateDirtyA, layer->mRasterStateDirtyB, GS_GFX_RASTER_DIRTY_SCISSOR, GS_GFX_DIRTY_RASTER);
+    layer->mPassState[0].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_RASTER;
+    layer->mPassState[1].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_RASTER;
     layer->pixelMode(true, false, false);
     layer->zCompare(true, GS_GFX_Z_COMPARE_LEQUAL);
     layer->alphaCompare(false, GS_GFX_A_COMPARE_ALWAYS, 0, GS_GFX_ALPHA_AND, GS_GFX_A_COMPARE_ALWAYS, 0);
@@ -95,24 +98,36 @@ void modelDistortionRender(void)
     layer->channelCount(0);
     layer->tunitFunc(0, GS_GFX_TUNIT_TEXTURE_REPLACE);
     layer->tunitMapping(0, 1, 1, GS_GFX_COLOR_CHANNEL_NULL);
-    layer->texSelect(1, (GStexture *)tex);
+    layer->texSelect(1, tex);
     layer->mIndirectTexCoord0 = 0;
     layer->mIndirectTextureMap0 = 0;
-    layer->markDirty(layer->mIndirectOrderDirtyA, layer->mIndirectOrderDirtyB, GS_GFX_STAGE_ZERO_MASK, GS_GFX_DIRTY_INDIRECT);
+    layer->mPassState[0].mIndirectOrderFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_INDIRECT;
+    layer->mPassState[1].mIndirectOrderFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_INDIRECT;
     layer->mIndirectCoordScaleS0 = GS_GFX_INDIRECT_SCALE_ONE;
     layer->mIndirectCoordScaleT0 = GS_GFX_INDIRECT_SCALE_ONE;
-    layer->markDirty(layer->mIndirectCoordScaleDirtyA, layer->mIndirectCoordScaleDirtyB, GS_GFX_STAGE_ZERO_MASK, GS_GFX_DIRTY_INDIRECT);
+    layer->mPassState[0].mIndirectScaleFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_INDIRECT;
+    layer->mPassState[1].mIndirectScaleFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_INDIRECT;
     /* Warp the framebuffer coordinates with indirect texture stage zero. */
     layer->mTevIndirectOperation0 = GS_GFX_INDIRECT_WARP;
     layer->mTevIndirectStage0 = 0;
     layer->mTevWarpSignedOffset0 = 1;
     layer->mTevWarpReplaceMode0 = 0;
     layer->mTevWarpMatrix0 = 1;
-    layer->markDirty(layer->mTevIndirectDirtyA, layer->mTevIndirectDirtyB, GS_GFX_STAGE_ZERO_MASK, GS_GFX_DIRTY_TEV);
+    layer->mPassState[0].mIndirectOperationFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_TEV;
+    layer->mPassState[1].mIndirectOperationFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_TEV;
     layer->tgenFunc(0, GS_GFX_TGEN_MTX2X4, GS_GFX_TGEN_SRC_TEX0, NULL, false, NULL);
     layer->mTexCoordLineOffset0 = 0;
     layer->mTexCoordPointOffset0 = 0;
-    layer->markDirty(layer->mTexCoordOffsetDirtyA, layer->mTexCoordOffsetDirtyB, GS_GFX_TEXCOORD_ZERO_MASK, GS_GFX_DIRTY_GEOMETRY);
+    layer->mPassState[0].mGroupAFlags |= GS_GFX_TEXCOORD_ZERO_MASK;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_GEOMETRY;
+    layer->mPassState[1].mGroupAFlags |= GS_GFX_TEXCOORD_ZERO_MASK;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_GEOMETRY;
     /* Every model that still holds the distortion class draws its pass. */
     for (m = (_GSmodel *)gsModelList; m != NULL;
          m = m->mNext) {
@@ -122,7 +137,10 @@ void modelDistortionRender(void)
         }
     }
     layer->mTevIndirectOperation0 = GS_GFX_INDIRECT_DIRECT;
-    layer->markDirty(layer->mTevIndirectDirtyA, layer->mTevIndirectDirtyB, GS_GFX_STAGE_ZERO_MASK, GS_GFX_DIRTY_TEV);
+    layer->mPassState[0].mIndirectOperationFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[0].mFlags |= GS_GFX_DIRTY_TEV;
+    layer->mPassState[1].mIndirectOperationFlags |= GS_GFX_STAGE_ZERO_MASK;
+    layer->mPassState[1].mFlags |= GS_GFX_DIRTY_TEV;
     layer->indTexCount(0);
     if (fog) {
         layer->fog(fog);
@@ -161,9 +179,9 @@ void _modelDrawDistortionSub(_GSmodel *model, GSgfxLayer *layer, GSmtx *mtx,
         return;
     }
     GSpartGetMatrix(partHandle, &m);
-    v.x = m.m[0][3];
-    v.y = m.m[1][3];
-    v.z = m.m[2][3];
+    v.x = m.m03;
+    v.y = m.m13;
+    v.z = m.m23;
     GSpartFree(partHandle);
     /* The effect fades with the distance to the camera; the reciprocal is
      * clamped so a part right on the camera cannot blow the scale up. */
@@ -187,7 +205,7 @@ void _modelDrawDistortionSub(_GSmodel *model, GSgfxLayer *layer, GSmtx *mtx,
             scale[5] = 0.5f * recip;
         }
     }
-    tex = (GStexture *)model->mDistortionTexture;
+    tex = model->mDistortionTexture;
     layer->texSelect(0, tex);
     layer->mMatrixStack->pushMult(&m);
     GSmtx cameraTransform = *mtx * *layer->mMatrixStack->currentMatrix();
@@ -289,7 +307,7 @@ extern "C" void GSmodelCreateDistortion(_GSmodel *model, u16 part, u8 material,
     model->mDistortionPart = (u16)part;
     model->mDistortionMaterial = (u8)material;
     model->mDistortionPrimitive = distortionPrimitive;
-    model->mDistortionTexture = (void *)GSmemAlloc(DISTORTION_TEXTURE_STORAGE_BYTES);
+    model->mDistortionTexture = (GStexture *)GSmemAllocClr(DISTORTION_TEXTURE_STORAGE_BYTES);
     if (model->mDistortionTexture == NULL) {
         return;
     }

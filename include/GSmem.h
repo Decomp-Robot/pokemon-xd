@@ -1,5 +1,5 @@
-#ifndef GS_MEM_H
-#define GS_MEM_H
+#ifndef GSMEM_H
+#define GSMEM_H
 
 #include <types.h>
 
@@ -7,9 +7,11 @@
 extern "C" {
 #endif
 
-void *GSmemAlloc(u32 size);
-void *GSmemAllocNoClr(unsigned long size);
-void GSmemFree(void *ptr);
+void* GSmemAlloc(u32 size);
+void* GSmemAllocClr(u32 size);
+void* GSmemAllocAlign(u32 size, u16 alignment);
+void* GSmemAllocAlignFromEnd(u32 size, u16 alignment);
+void GSmemFree(void* ptr);
 
 #ifdef __cplusplus
 }

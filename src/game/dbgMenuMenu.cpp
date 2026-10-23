@@ -1,11 +1,14 @@
+#include <esaba.h>
 #include <menu.h>
+#include <GSflag.h>
 #include <Pokemon.h>
-#include <heroStatus.h>
+#include <gamedata.h>
+#include <hero.h>
 #include <WorldMap.h>
 #include <gsFlag.h>
 #include <types.h>
 #include <winSprite.h>
-#include <gamedata.h>
+#include <menuSub.h>
 
 // Debug menu entries for the world map, the Pokespot ("esaba") and the Under
 // ("undertaker"), and the cursor hooks of the windows those entries open.
@@ -32,7 +35,7 @@ static const u32 lPokespotSelectGenerateRow[] = {0x0000F86F};
 static const u32 lPokespotSelectHeroRow[] = {0x0000F146};
 
 // Places the Under menu can send the hero to; undertakerGetPlace fills them.
-static u32 sUnderTakerPlaces[8]; // 0x80435B40
+static u32 _undertakerFloorID[8];
 
 // Encounter numbers of the Orre Colosseum test entry, picked by the number the
 // player enters there; anything outside the table starts its first entry.
@@ -43,13 +46,13 @@ u16 _testEncount[0x1C] = {
 };
 
 // Argument the world map windows are opened with.
-static WorldMapMenuArg sWorldMapMenuArg; // 0x804EA9A8
+static WorldMapMenuArg _debugWorldMapData;
 // Number of places undertakerGetPlace reported for the Under place window.
-static u32 sUnderTakerPlaceCount;        // 0x804EA9B0
+static u32 _undertakerFloorCount;
 // Pokespot the Pokespot entries work on, and the species the Pokespot window
 // reports for it.
-static s32 sEsabaPlaceID;                // 0x804EA9B4
-static u16 sEsabaSpecies[4];             // 0x804EA9B8
+static s32 _esabaPlace;
+static u16 _esabaSelectPokemon;
 
 // Window ids of the debug menus the entries below open.
 #define WIN_ID_WORLDMAP_SHOW 0xD7
@@ -59,9 +62,7 @@ static u16 sEsabaSpecies[4];             // 0x804EA9B8
 #define WIN_ID_POKESPOT 0x10A
 #define WIN_ID_UNDERTAKER_PLACE 0x111
 
-// The two species the Pokespot entry hands to the spot as they are, without
-// generating a pokemon for them. The game data that names species is not part
-// of this checkout, so the two keep their numbers as names.
+// Fixed species placed in the Pokespot without generating a Pokemon.
 #define SPECIES_POKESPOT_FIXED_1 0x19D
 #define SPECIES_POKESPOT_FIXED_2 0x19E
 // Flag that turns the Under icon on and off.
@@ -71,13 +72,9 @@ static u16 sEsabaSpecies[4];             // 0x804EA9B8
 
 extern "C" {
 // menu.a
+u8 menuIsOpen(s32 menuID);
 // The 3rd argument is the cursor the window starts on, the 7th and later
 // arguments are the window's own argument record.
-s32 windowGetActiveID(void);
-
-// menuSub.a
-s32 menuSubOpenSelect2(s32 kind, void *list, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
-u8 menuSubOpenNumberInput(u32 value, u32 *out, u8 mode, s16 x, s16 y, bool closeOnExit);
 
 // flags
 
@@ -91,15 +88,13 @@ void menuScriptEevee(void);
 void menuMoveDemo(s32 demo);
 void mewWazaSequence(void);
 void menuOrreColosseum(u16 encountID);
-u16 menuOrreColosseumGetResult(void);
+void menuOrreColosseumGetResult(void);
 void menuIntUnderTakerOpenIcon(void);
 
 // pokemon
-void pokemonCreate(Pokemon *pokemon, u16 species, s32 level, void *status);
-u32 pokemonCreateRndFit(Pokemon *pokemon, s8 a, s8 b, s32 c, void *status);
 u32 memoDataGetPokemonRndFromID(s32 a, u16 species);
-void pokemonSetPid(Pokemon *pokemon, u32 rnd);
-void pokemonSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
+void pokemonBiosSetRnd(Pokemon *pokemon, u32 rnd);
+void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
 
 // pokespot ("esaba")
 void esabaGet(s32 place);
@@ -107,7 +102,6 @@ void esabaPut(s32 place);
 void esabaSet(s32 place);
 u16 esabaGetPokemonMax(u16 place);
 void esabaSetPokemon(u16 place, u16 species);
-void esabaGetPokemonRnd(s32 place, u32 rnd);
 
 // Under ("undertaker")
 u32 undertakerGetPlace(u32 *places);
@@ -115,12 +109,11 @@ void undertakerSetPlace(u32 place);
 long undertakerGetStartFlagID(void);
 }
 
-// Callees of the entries that run a menu script or a menu of their own; the
-// units defining them are not recovered yet.
+// Menu scripts.
 extern "C" void menuScriptUsohachi2(void);
-extern "C" void menuScriptTestLayerScreen(void);
-extern "C" s32 menuWazaOshieSelectFromPokemon(s32 pokemonSlot);
-extern "C" s32 menuWazaOshieSelectAll(u8 *selected);
+extern "C" void menuNintendoWarning(void);
+extern "C" void menuScriptWazaMeijin(s32 value);
+extern "C" void menuScriptWazaBasan(s32 *value);
 
 // Helpers defined further down the unit.
 void _pokemonCreate(Pokemon *pokemon, unsigned short species, unsigned long rnd);
@@ -132,7 +125,7 @@ void _esabaSetPokemon(long place, long species);
 // none.
 s32 _getWorldMapFlagData(long mapIndex)
 {
-    WorldMapMapData *map = worldMapData;
+    WorldMapMapData *map = worldmapXD_data;
 
     map += mapIndex;
 
@@ -145,7 +138,7 @@ s32 _getWorldMapFlagData(long mapIndex)
 // Store `value` in the flag of the map at `mapIndex`.
 void _setWorldMapFlagData(long mapIndex, long value)
 {
-    WorldMapMapData *map = worldMapData;
+    WorldMapMapData *map = worldmapXD_data;
 
     map += mapIndex;
 
@@ -156,8 +149,8 @@ void _setWorldMapFlagData(long mapIndex, long value)
 
 #pragma force_active on
 
-// Test entry: run the test script that opens and closes menu 0x101.
-extern "C" s32 dbgMenuMenuTestMenuScreen(void)
+// Test entry: run its menu script.
+extern "C" s32 dbgMenuMenuTestUsohachi2(void)
 {
     menuScriptUsohachi2();
     return 0;
@@ -175,17 +168,17 @@ extern "C" s32 dbgMenuMenuTestWorlMapShow(void)
 {
     s32 result;
 
-    sWorldMapMenuArg.mMapIndex = 0;
-    sWorldMapMenuArg.mFlagValue = 0;
-    sWorldMapMenuArg.mMapCount = (u16)*worldMapRibbonCount;
+    _debugWorldMapData.mMapIndex = 0;
+    _debugWorldMapData.mFlagValue = 0;
+    _debugWorldMapData.mMapCount = (u16)*worldmapXD_data_number;
 
     result = menuOpenCustom(WIN_ID_WORLDMAP_SHOW, windowGetActiveID(), 0, 0, 1, 1,
-                            &sWorldMapMenuArg);
+                            &_debugWorldMapData);
     menuClose(WIN_ID_WORLDMAP_SHOW);
     menuCloseSync(WIN_ID_WORLDMAP_SHOW, 1);
 
     if (result >= 0) {
-        menuScriptOpenWorldMap(sWorldMapMenuArg.mMapIndex);
+        menuScriptOpenWorldMap(_debugWorldMapData.mMapIndex);
     }
     return 0;
 }
@@ -200,17 +193,17 @@ extern "C" s32 dbgMenuMenuWorldMapCursor(tagWINDOW_WORK *window)
 
     if (window->mMenuID != WIN_ID_WORLDMAP_SHOW) {
         if (key->mKeyRepeat & 0x1) {
-            if (--window->mCursorState.mSelection.mCursor < 0) {
-                window->mCursorState.mSelection.mCursor = 0;
+            if (--window->mCursor.y < 0) {
+                window->mCursor.y = 0;
             }
         } else if (key->mKeyRepeat & 0x2) {
-            if (++window->mCursorState.mSelection.mCursor > 1) {
-                window->mCursorState.mSelection.mCursor = 1;
+            if (++window->mCursor.y > 1) {
+                window->mCursor.y = 1;
             }
         }
     }
 
-    switch (window->mCursorState.mSelection.mCursor) {
+    switch (window->mCursor.y) {
     case 0:
         if (key->mKeyRepeat & 0x8) {
             if (arg->mMapIndex < (u16)(arg->mMapCount - 1)) {
@@ -248,12 +241,12 @@ extern "C" s32 dbgMenuMenuWorldMapCursor(tagWINDOW_WORK *window)
 // Test entry: edit the flag of every map in a row until the window is left.
 extern "C" s32 dbgMenuMenuTestWorlMapFlagSet(void)
 {
-    sWorldMapMenuArg.mMapIndex = 0;
-    sWorldMapMenuArg.mFlagValue = 0;
-    sWorldMapMenuArg.mMapCount = (u16)*worldMapRibbonCount;
+    _debugWorldMapData.mMapIndex = 0;
+    _debugWorldMapData.mFlagValue = 0;
+    _debugWorldMapData.mMapCount = (u16)*worldmapXD_data_number;
 
     while (menuOpenCustom(WIN_ID_WORLDMAP_FLAGSET, windowGetActiveID(), 0, 0, 1, 1,
-                          &sWorldMapMenuArg) != -1) {
+                          &_debugWorldMapData) != -1) {
     }
     menuClose(WIN_ID_WORLDMAP_FLAGSET);
     menuCloseSync(WIN_ID_WORLDMAP_FLAGSET, 1);
@@ -267,17 +260,17 @@ extern "C" s32 dbgMenuMenuTestWorlMapFlagSet(void)
 extern "C" s32 dbgMenuEsabaDebugCursor(tagWINDOW_WORK *window)
 {
     tagWINDOW_KEY *key = windowGetKeyInfo();
-    u16 count = esabaGetPokemonMax((u16)sEsabaPlaceID);
+    u16 count = esabaGetPokemonMax((u16)_esabaPlace);
 
     if (key->mKeyRepeat & 0x5) {
-        if (--window->mCursorState.mSelection.mCursor < 0) {
-            window->mCursorState.mSelection.mCursor = 0;
+        if (--window->mCursor.y < 0) {
+            window->mCursor.y = 0;
         }
     } else if (key->mKeyRepeat & 0xA) {
         u16 maxRow = count + 3;
 
-        if (++window->mCursorState.mSelection.mCursor >= maxRow) {
-            window->mCursorState.mSelection.mCursor = (s16)(maxRow - 1);
+        if (++window->mCursor.y >= maxRow) {
+            window->mCursor.y = (s16)(maxRow - 1);
         }
     }
     return 0;
@@ -289,35 +282,35 @@ extern "C" s32 dbgMenuUnderTakerebugCursor(tagWINDOW_WORK *window)
 {
     tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    sUnderTakerPlaceCount = undertakerGetPlace(sUnderTakerPlaces);
-    if (sUnderTakerPlaceCount != 0) {
+    _undertakerFloorCount = undertakerGetPlace(_undertakerFloorID);
+    if (_undertakerFloorCount != 0) {
         if (key->mKeyRepeat & 0x5) {
-            if (--window->mCursorState.mSelection.mCursor < 0) {
-                window->mCursorState.mSelection.mCursor = 0;
+            if (--window->mCursor.y < 0) {
+                window->mCursor.y = 0;
             }
         } else if (key->mKeyRepeat & 0xA) {
-            if (++window->mCursorState.mSelection.mCursor >= sUnderTakerPlaceCount) {
-                window->mCursorState.mSelection.mCursor = (s16)(sUnderTakerPlaceCount - 1);
+            if (++window->mCursor.y >= _undertakerFloorCount) {
+                window->mCursor.y = (s16)(_undertakerFloorCount - 1);
             }
         }
     }
     return 0;
 }
 
-// Test entry: run the test script that draws menu 0x112 on graphics layer 7.
-extern "C" s32 dbgMenuMenuTestLayerScreen(void)
+// Test entry: run its menu script.
+extern "C" s32 dbgMenuMenuTestNintendoWarning(void)
 {
-    menuScriptTestLayerScreen();
+    menuNintendoWarning();
     return 0;
 }
 
 // Test entry: send the hero to the place the Under menu picked.
-extern "C" s32 dbgMenuMenuUnderTakerSetPlace(void)
+extern "C" s32 dbgMenuMenuUnderTakerIconAppear(void)
 {
     s32 place = menuOpenCustom(WIN_ID_UNDERTAKER_PLACE, windowGetActiveID(), 0, 0, 1, 0);
 
-    if (place >= 0 && sUnderTakerPlaces[place] != 0) {
-        undertakerSetPlace(sUnderTakerPlaces[place]);
+    if (place >= 0 && _undertakerFloorID[place] != 0) {
+        undertakerSetPlace(_undertakerFloorID[place]);
     }
     menuClose(WIN_ID_UNDERTAKER_PLACE);
     menuCloseSync(WIN_ID_UNDERTAKER_PLACE, 1);
@@ -327,16 +320,16 @@ extern "C" s32 dbgMenuMenuUnderTakerSetPlace(void)
 // Test entry: switch the flag that turns the Under icon on and off.
 extern "C" s32 dbgMenuMenuUnderTakerIconFlagOnOff(void)
 {
-    if ((u8)flagGetBooleanValue(UNDERTAKER_ICON_FLAG)) {
-        flagSetFalse(UNDERTAKER_ICON_FLAG);
+    if ((u8)GSflagTest(UNDERTAKER_ICON_FLAG)) {
+        GSflagOff(UNDERTAKER_ICON_FLAG);
     } else {
-        flagSetTrue(UNDERTAKER_ICON_FLAG);
+        GSflagOn(UNDERTAKER_ICON_FLAG);
     }
     return 0;
 }
 
 // Test entry: open the Under icon.
-extern "C" s32 dbgMenuMenuTestUnderTakerIcon(void)
+extern "C" s32 dbgMenuMenuUnderTakerIconOnOff(void)
 {
     menuIntUnderTakerOpenIcon();
     return 0;
@@ -358,10 +351,10 @@ extern "C" s32 dbgMenuMenuUnderTakerOnOff(void)
 {
     long flag = undertakerGetStartFlagID();
 
-    if ((u8)flagGetBooleanValue(flag)) {
-        flagSetFalse(flag);
+    if ((u8)GSflagTest(flag)) {
+        GSflagOff(flag);
     } else {
-        flagSetTrue(flag);
+        GSflagOn(flag);
     }
     return 0;
 }
@@ -392,43 +385,43 @@ extern "C" s32 dbgMenuMenuEsabaDisp(void)
 }
 
 // Test entry: generate the pokemon the spot the entries work on holds.
-extern "C" s32 dbgMenuMenuTestPokespotGenerate(void)
+extern "C" s32 dbgMenuMenuTestEsabaPokemon(void)
 {
     u32 select[2];
     Pokemon pokemon;
-    Pokemon *hero;
+    u32 trainerRnd;
     s32 result;
 
     select[0] = lPokespotSelectGenerateRow[0];
     select[1] = lPokespotSelectHeroRow[0];
-    sEsabaSpecies[0] = 0;
-    hero = (Pokemon *)heroGetStatus(0, HERO_STATUS_TRAINER_ID, 0);
+    _esabaSelectPokemon = 0;
+    trainerRnd = heroGetStatus(0, HERO_STATUS_TRAINER_RND, 0);
 
     result = menuOpenCustom(WIN_ID_POKESPOT, windowGetActiveID(), 0, 0, 1, 0);
     if (result > 0) {
-        if (sEsabaSpecies[0] == SPECIES_POKESPOT_FIXED_1 ||
-            sEsabaSpecies[0] == SPECIES_POKESPOT_FIXED_2) {
+        if (_esabaSelectPokemon == SPECIES_POKESPOT_FIXED_1 ||
+            _esabaSelectPokemon == SPECIES_POKESPOT_FIXED_2) {
             // These two species need no generated pokemon.
-            _esabaSetPokemon(sEsabaPlaceID, sEsabaSpecies[0]);
+            _esabaSetPokemon(_esabaPlace, _esabaSelectPokemon);
         } else {
             switch (menuSubOpenSelect2(0, select, 2, 0x96, 0x96, 0, 2, 1)) {
             case 0:
-                _esabaSetPokemon(sEsabaPlaceID, sEsabaSpecies[0]);
+                _esabaSetPokemon(_esabaPlace, _esabaSelectPokemon);
                 u32 rnd;
 
-                _pokemonCreate(&pokemon, sEsabaSpecies[0], (u32)hero);
-                rnd = pokemonCreateRndFit(&pokemon, -1, -1, 0, hero);
-                esabaGetPokemonRnd(sEsabaPlaceID, rnd);
+                _pokemonCreate(&pokemon, _esabaSelectPokemon, trainerRnd);
+                rnd = pokemonCreateRndFit(&pokemon, -1, -1, 0, trainerRnd);
+                esabaSetPokemonRnd(_esabaPlace, rnd);
                 break;
 
             case 1:
-                _esabaSetPokemon(sEsabaPlaceID, sEsabaSpecies[0]);
-                esabaGetPokemonRnd(sEsabaPlaceID, (u32)hero);
+                _esabaSetPokemon(_esabaPlace, _esabaSelectPokemon);
+                esabaSetPokemonRnd(_esabaPlace, trainerRnd);
                 break;
             }
         }
     } else if (result == 0) {
-        _esabaSetPokemon(sEsabaPlaceID, sEsabaSpecies[0]);
+        _esabaSetPokemon(_esabaPlace, _esabaSelectPokemon);
     }
     menuClose(WIN_ID_POKESPOT);
     menuCloseSync(WIN_ID_POKESPOT, 1);
@@ -442,53 +435,53 @@ void _pokemonCreate(Pokemon *pokemon, unsigned short species, unsigned long rnd)
 
     pokemonCreate(pokemon, species, 10, gamedataGetStatus(0, 1));
     rndValue = memoDataGetPokemonRndFromID(0, species);
-    pokemonSetPid(pokemon, rndValue);
-    pokemonSetCatchTrainerRnd(pokemon, rnd);
+    pokemonBiosSetRnd(pokemon, rndValue);
+    pokemonBiosSetCatchTrainerRnd(pokemon, rnd);
 }
 
 // Hand the pokemon of the spot to the spot's setter.
 void _esabaSetPokemon(long place, long species)
 {
-    esabaSetPokemon((u16)sEsabaPlaceID, sEsabaSpecies[0]);
+    esabaSetPokemon((u16)_esabaPlace, _esabaSelectPokemon);
 }
 
 // Test entry: hand the spot's pokemon out.
-extern "C" s32 dbgMenuMenuTestEsabaSet(void)
+extern "C" s32 dbgMenuMenuTestEsabaGet(void)
 {
-    esabaGet(sEsabaPlaceID);
+    esabaGet(_esabaPlace);
     return 0;
 }
 
 // Test entry: put the spot pokemon back.
-extern "C" s32 dbgMenuMenuEsabaPut(void)
+extern "C" s32 dbgMenuMenuTestEsabaPut(void)
 {
-    esabaPut(sEsabaPlaceID);
+    esabaPut(_esabaPlace);
     return 0;
 }
 
 // Test entry: reset the spot from the place the entries work on.
-extern "C" s32 dbgMenuMenuEsabaSet(void)
+extern "C" s32 dbgMenuMenuTestEsabaSet(void)
 {
-    esabaSet(sEsabaPlaceID);
+    esabaSet(_esabaPlace);
     return 0;
 }
 
 // Callback the Pokespot menu hands the place it picked to.
 extern "C" s32 dbgMenuMenuSetPlace(s32, s32 place)
 {
-    sEsabaPlaceID = place;
+    _esabaPlace = place;
     return 1;
 }
 
 // Test entry: run the move-tutor demo of the move master.
-extern "C" s32 dbgMenuMenuTestWazaOshieMeijinMenu(s32, s32 demo)
+extern "C" s32 dbgMenuMenuMoveDemo(s32, s32 demo)
 {
     menuMoveDemo(demo);
     return 0;
 }
 
 // Test entry: run the move sequence of Mew.
-extern "C" s32 dbgMenuMenuTestMewWaza(void)
+extern "C" s32 dbgMenuMenuTestMewWazaMenu(void)
 {
     mewWazaSequence();
     return 0;
@@ -505,8 +498,6 @@ extern "C" s32 dbgMenuMenuTestOrreColosseumMenu(void)
         encount = 0;
     }
     menuOrreColosseum(_testEncount[encount]);
-    // menuOrreColosseum clears the Orre battle result and the battle floor
-    // stores fightEncount's return there; the value is only read back here.
     menuOrreColosseumGetResult();
     return 0;
 }
@@ -514,28 +505,28 @@ extern "C" s32 dbgMenuMenuTestOrreColosseumMenu(void)
 // Test entry: run the Basan move-tutor menu over the whole move table.
 extern "C" s32 dbgMenuMenuTestWazaOshieBasanMenu(void)
 {
-    u8 selected;
+    s32 selected;
 
-    menuWazaOshieSelectAll(&selected);
+    menuScriptWazaBasan(&selected);
     return 0;
 }
 
-// Test entry: pick a move from the list one Pokemon slot can learn.
-extern "C" s32 dbgMenuMenuTestWazaOshieSelectFromPokemon(s32, s32 pokemonSlot)
+// Test entry: pick a move from the move list.
+extern "C" s32 dbgMenuMenuTestWazaOshieMeijinMenu(s32, s32 value)
 {
-    menuWazaOshieSelectFromPokemon(pokemonSlot);
+    menuScriptWazaMeijin(value);
     return 0;
 }
 
 // Test entry: run the hall tutorial script.
-extern "C" s32 dbgMenuMenuTestTutorial(void)
+extern "C" s32 dbgMenuMenuTestTutorialMenu(void)
 {
     menuScriptTutorial();
     return 0;
 }
 
 // Test entry: run the Eevee evolution script.
-extern "C" s32 dbgMenuMenuTestEevee(void)
+extern "C" s32 dbgMenuMenuTestEeveeMenu(void)
 {
     menuScriptEevee();
     return 0;

@@ -1,23 +1,22 @@
 /*
- * Fixed-size cell pools (GSmemman.a poolAlloc member).
+ * Fixed-size memory pools.
  */
 
 #include <dolphin/os.h>
 #include <string.h>
 
-#include <GSmemman.h>
+#include "GSmemman.h"
 
-/* Free cells chain through a 4-byte link stored ahead of the user payload. */
-class GSmemPoolCell {
-public:
-    GSmemPoolCell* next; /* 0x00 */
+namespace {
+struct CellLink {
+    CellLink* next;
 };
+}
 
-/* Pool state save/clear/restore around free-list updates. */
-u32 _getDabr(void);
-void _setDabr(unsigned long state);
+GSmemPoolAllocator _poolArea[POOL_MAX];
 
-GSmemPoolAllocator gPoolTable[POOL_MAX];
+void _setDabr(u32 dabr);
+u32 _getDabr();
 
 extern "C" u32 GSmemGetFreePool(GSmemPoolAllocator* pool) {
     if (pool) {
@@ -30,17 +29,17 @@ extern "C" void GSmemDumpPool(GSmemPoolAllocator* pool) {
     s32 i;
 
     if (pool) {
-        GSmemDumpPoolInfo(pool);
+        pool->dump();
         return;
     }
     for (i = 0; i < POOL_MAX; i++) {
-        if (gPoolTable[i].cellCount != 0) {
-            GSmemDumpPoolInfo(&gPoolTable[i]);
+        if (_poolArea[i].cellCount != 0) {
+            _poolArea[i].dump();
         }
     }
 }
 
-extern "C" u8 GSmemPoolIsRegistration(GSmemPoolAllocator* pool, void* ptr) {
+extern "C" u8 GSmemIsRegistrationPool(GSmemPoolAllocator* pool, void* ptr) {
     return pool->isRegistration(ptr);
 }
 
@@ -61,28 +60,25 @@ extern "C" GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize) {
     s32 i;
 
     for (i = 0; i < POOL_MAX; i++) {
-        if (gPoolTable[i].cellCount == 0) {
+        if (_poolArea[i].cellCount == 0) {
             break;
         }
     }
-    if (gPoolTable[i].cellCount != 0) {
+    if (_poolArea[i].cellCount != 0) {
         return 0;
     }
-    gPoolTable[i].init(cellCount, cellSize);
-    return &gPoolTable[i];
+    _poolArea[i].init(cellCount, cellSize);
+    return &_poolArea[i];
 }
 
-/* Clears the whole pool table; called from GSmemInit. */
-extern "C" void GSmemInitPool(void) {
-    memset(gPoolTable, 0, sizeof(gPoolTable));
+extern "C" void GSmemInitPool() {
+    memset(_poolArea, 0, sizeof(_poolArea));
 }
 
-/* The pool dump is compiled out of retail. */
-extern "C" void GSmemDumpPoolInfo(GSmemPoolAllocator* pool) {
-}
+void GSmemPoolAllocator::dump() {}
 
 u8 GSmemPoolAllocator::isRegistration(void* ptr) {
-    if (ptr == 0) {
+    if (!ptr) {
         return 0;
     }
     if (ptr >= begin && ptr < end) {
@@ -96,68 +92,66 @@ u32 GSmemPoolAllocator::getFreeCell() const {
 }
 
 void GSmemPoolAllocator::freeCell(void* ptr) {
-    GSmemPoolCell* cell;
+    u32 dabr;
 
-    if (!ptr) {
-        return;
+    if (ptr) {
+        ptr = (u8*)ptr - sizeof(void*);
+        void*& cell = *(void**)ptr;
+        cell = freeCellList;
+        usedCellCount--;
+        dabr = _getDabr();
+        _setDabr(0);
+        freeCellList = &cell;
+        _setDabr(dabr);
     }
-    ptr = (GSmemPoolCell*)ptr - 1;
-    cell = (GSmemPoolCell*)ptr;
-    cell->next = (GSmemPoolCell*)freeCellList;
-    usedCellCount--;
-    u32 state = _getDabr();
-    _setDabr(0);
-    freeCellList = cell;
-    _setDabr(state);
 }
 
 void* GSmemPoolAllocator::allocCell() {
-    GSmemPoolCell* cell;
-    u32 state;
+    void* cell;
+    u32 dabr;
 
-    cell = (GSmemPoolCell*)freeCellList;
-    state = _getDabr();
+    cell = freeCellList;
+    dabr = _getDabr();
     _setDabr(0);
-    if (cell != 0) {
-        freeCellList = cell->next;
+    if (cell) {
+        freeCellList = *(void**)cell;
     } else {
-        _setDabr(state);
+        _setDabr(dabr);
         return 0;
     }
-    _setDabr(state);
+    _setDabr(dabr);
     memset(cell, 0, cellSize);
     usedCellCount++;
     if (usedCellCount > peakCellCount) {
         peakCellCount = usedCellCount;
     }
-    return (void*)(cell + 1);
+    return (u8*)cell + sizeof(void*);
 }
 
-/* cellSize grows by the link word and rounds up to the cell alignment. */
-void GSmemPoolAllocator::init(u32 cellCount, u32 cellSize) {
-    u8* cursor;
+void GSmemPoolAllocator::init(u32 count, u32 size) {
     u32 i;
-    GSmemPoolCell* last;
-    u8* next;
-    this->cellCount = cellCount;
-    this->cellSize = cellSize = ROUNDUP(cellSize + sizeof(GSmemPoolCell), 4);
-    begin = (u8*)GSmemAlloc((cellCount + 1) * cellSize);
-    end = begin + cellCount * cellSize;
+    CellLink* lastCell;
+    CellLink* cell;
+
+    cellCount = count;
+    cellSize = size = (size + sizeof(void*) + 3) & ~3;
+    begin = (u8*)GSmemAllocClr((count + 1) * size);
+    end = begin + count * size;
     freeCellList = begin;
-    last = 0;
-    cursor = begin;
-    for (i = 0; i < cellCount; i++) {
-        next = cursor + cellSize;
-        last = (GSmemPoolCell*)cursor;
-        ((GSmemPoolCell*)cursor)->next = (GSmemPoolCell*)next;
-        cursor = next;
+    lastCell = 0;
+    i = 0;
+    cell = (CellLink*)begin;
+    for (; i < count; i++) {
+        CellLink* nextCell = (CellLink*)((u8*)cell + size);
+        lastCell = cell;
+        cell->next = nextCell;
+        cell = nextCell;
     }
-    last->next = 0;
+    lastCell->next = 0;
 }
 
-void _setDabr(unsigned long state) {
-}
+void _setDabr(u32) {}
 
-u32 _getDabr(void) {
+u32 _getDabr() {
     return 0;
 }

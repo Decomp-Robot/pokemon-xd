@@ -1,3 +1,4 @@
+#include <menuOffScreen.h>
 #include <menu.h>
 #include <menuPocketBattleDisk.h>
 #include <winSprite.h>
@@ -12,7 +13,6 @@ struct CursorAnimationOffsets {
 
 extern "C" {
 u16 windowGetKeyTrg(void);
-u8 menuOffScreenSetDisp(s32 flag);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 s32 windowGetActiveID(void);
 void menuSubCursorAnimeValGet(f32 *values, s32 *anime);

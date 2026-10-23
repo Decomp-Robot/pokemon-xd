@@ -135,9 +135,7 @@ BOOL GBAWrite(long chan, const void *src, u8 *status);
 BOOL GBAReset(long chan, u8 *status);
 }
 
-// Job framework of the link layer: the timer a stage arms, the hook a stage
-// reports the job it leaves behind through (the name is not used by the shipped
-// build) and the work record of a channel.
+// Job framework and channel initialization.
 void _timer_set(long chan, unsigned long msec);
 void _job_type_clear(long chan, const char *jobName);
 void _AGB_Work_Clear(long chan);
@@ -168,15 +166,19 @@ long AGB_Prepare(const char *path);
 // one of them takes the channel over, runs its exchange and reports the code of
 // the exchange (0 when the GBA answered); the caller polls the exchange with
 // the matching status entry point until it is through.
+long PKJB_ExchangeEnd(long chan);
 long PKJB_ReturnTitle(long chan);
-long PKJB_ReturnTitleWait(long chan);
 long PKJB_ExchangeIsPrepared(long chan);
-long PKJB_EntryRequest(long chan, void *data);
-long PKJB_EntryRequestWait(long chan, unsigned long data);
+long PKJB_ExchangeStart(long chan, void *data);
+long PKJB_EntryRequest(long chan, unsigned long data);
 long PKJB_EntryGetStatus(long chan, unsigned long *data);
 long PKJB_BattleGetStatus(long chan, unsigned long *status);
 long PKJB_BattleRequest(long chan, const u8 *data, int size);
 long PKJB_GetKey(long chan, u16 *key);
+long PKJB_SendWazaText(long chan, void *data);
+long PKJB_IdleSend(long chan);
+void AGB_FileBuffFree(void);
+void AGB_FileBuffAlloc(void);
 
 #ifdef __cplusplus
 }
@@ -340,7 +342,7 @@ extern u8 agbRecvBuffers[];
 // Scratch buffer the code read out of the .jb file is loaded into, and the
 // length of the code it holds (the upload sends that many bytes out). The
 // buffer is handed out by AGB_FileBuffAlloc and released again by
-// GSscratchWaitForCompletion, both in game/gbaCommandLink.cpp; the length is
+// AGB_FileBuffFree, both in agbCommunication.cpp; the length is
 // what _ReadJBCode read.
 extern u8 *gbaFileBuffer;
 extern unsigned long gbaFileSize;

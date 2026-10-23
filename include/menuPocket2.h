@@ -2,6 +2,7 @@
 #define MENU_POCKET2_H
 
 #include <types.h>
+#include <Pokemon.h>
 
 enum {
     POCKET_MODE_COUNT = 7,
@@ -28,19 +29,7 @@ struct Pokemon;
 struct FightPokemon;
 class Hero;
 
-enum MenuPocketMode {
-    MENU_POCKET_MODE_FIELD = 0,
-    MENU_POCKET_MODE_BATTLE = 1,
-    MENU_POCKET_MODE_GIVE = 2,
-    MENU_POCKET_MODE_SELL = 3,
-    MENU_POCKET_MODE_DEPOSIT = 4,
-    MENU_POCKET_MODE_SELECT = 5,
-    MENU_POCKET_MODE_BATTLE_DISK = 6
-};
-
-// Item-menu (pocket2) work (bss 0x804282E4, 0x54 bytes). Only the slots the
-// recovered pocket menu addresses are named; the rest of the block layout is
-// unrecovered and stays sized padding here.
+// Item-menu work shared by the pocket and party menus.
 struct MenuPocket2Work {
     u8 mOwnsFloor; // 0x00: this invocation owns a pushed pocket floor.
     u8 _01[0x03]; // 0x01-0x03: padding.
@@ -49,31 +38,28 @@ struct MenuPocket2Work {
     Hero *mHero; // 0x0C: hero the menu acts on.
     u32 mCurrentSlotID; // 0x10: current temochi pokemon slot ID.
     u32 mSelectedSlotID; // 0x14: selected temochi pokemon slot ID.
-    f32 mTitleScroll; // 0x18: horizontal offset during tab transitions.
+    f32 mTabScroll; // 0x18: horizontal list and title scroll.
     f32 mListScroll; // 0x1C: how far the item list is scrolled, in pixels.
     u8 mListScrollFlag; // 0x20: non-zero while the list is scrolled.
-    u8 _21[0x03]; // 0x21-0x23: alignment.
-    f32 mRollFade; // 0x24: pulse phase of the scroll arrows.
+    u8 _21[0x03]; // 0x21-0x23: padding.
+    f32 mRollPhase; // 0x24: scroll-arrow animation phase.
     u32 mExplanationMsgID; // 0x28: message shown under the item list.
     s32 mResult; // 0x2C: result of the pocket loop, stored by menuPocketMain.
     s32 mMsgWindowID; // 0x30: window the shop messages are printed into.
     s32 mNumInputValue; // 0x34: value the number menu returned.
-    s32 mSwapItemIndex; // 0x38: marked item index for swapping; -1 when none.
-    u8 mSelectingItem; // 0x3C: non-zero while the item-list selection is active.
+    s32 mExchangeSlot; // 0x38: slot being exchanged; -1 while no exchange is active.
+    u8 mListActive; // 0x3C: non-zero while selecting an item.
     u8 _3D[0x03]; // 0x3D-0x3F: padding.
     s32 mTab; // 0x40: tab the item list shows.
     u32 mLastSlotID; // 0x44: last selected slot ID.
-    f32 mSelectedItemPulseTime; // 0x48: elapsed time of the swap-marker pulse.
+    f32 mExchangeTime; // 0x48: exchange-cursor blink time.
     u8 mSkipActMenuResize; // 0x4C: non-zero skips the action-menu measurement.
     u8 _4D[0x07]; // 0x4D-0x53: remainder of the block; unknown here.
 };
 
-extern MenuPocket2Work menuPocket2Work;
+extern MenuPocket2Work Data;
 
-// Item-script queue (bss 0x804282A0, 0x44 bytes): the item scripts the
-// pocket menu queues for the script engine, eight entries plus the number
-// of live entries. An entry is an item ID and the script queued for it;
-// the two bytes between them are alignment padding.
+// Item scripts queued for the script engine.
 struct MenuPocket2ItemScriptEntry {
     u16 mID; // 0x0: item the script belongs to.
     s32 mScript; // 0x4: script queued for the item.
@@ -84,20 +70,18 @@ struct MenuPocket2ItemScript {
     s32 mCount; // 0x40: number of live entries.
 };
 
-extern MenuPocket2ItemScript menuPocket2ItemScript;
+extern MenuPocket2ItemScript menuPocketWork;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Party/battle contexts selected by the item menu.
 void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightPokemon **fightPokemon);
 void menuPocket2ClosePokemonMenu(s32 slot);
-s32 menuPocket2OpenPokemonMenu(unsigned long itemID, int wait);
+u32 menuPocket2OpenPokemonMenu(u32 item, s32 wait);
+u16 menuPocket2Call(s32 mode, u32 messageWindow, Hero *hero);
+u16 menuPocket2Open(s32 mode, s32 *slot, void *context);
 void menuPocketMain(void);
-u16 menuPocket2Call(int mode, int messageWindowID, Hero *hero);
-u16 menuPocket2Open(int mode, s32 *slotID, void *actor);
-
 void menuPocket2GetHero(Hero **hero, FIGHT_TRAINER **trainer);
 u32 menuPocket2GetCurrentTemochiPokemonSlotID(void);
 u8 menuPocket2GetLastSlotID(void);

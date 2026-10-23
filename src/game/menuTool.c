@@ -1,13 +1,17 @@
-#include <types.h>
+#include <menuTool.h>
 
-extern s32 menuToolSelect;
+#pragma force_active on
+
+s32 _menuToolSelect;
 
 void menuToolSetSelect(s32 select)
 {
-    menuToolSelect = select;
+    _menuToolSelect = select;
 }
 
 void menuToolInit(void)
 {
-    menuToolSelect = 0;
+    _menuToolSelect = 0;
 }
+
+#pragma force_active reset

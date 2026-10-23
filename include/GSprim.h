@@ -1,19 +1,16 @@
-#ifndef GS_PRIM_H
-#define GS_PRIM_H
-
-#include <GSgfxLight.h>
+#ifndef GSPRIM_H
+#define GSPRIM_H
+#include <GSgfxTypes.h>
+#include <GSmathTypes.h>
 #include <GStexture.h>
 
-enum GSprimQuadVertexOrder {
-    GS_PRIM_QUAD_VERTEX_ORDER_STRIP = 0,
-    GS_PRIM_QUAD_VERTEX_ORDER_QUAD = 1
-};
-
+#ifdef __cplusplus
 extern "C" {
-void GSprimSetQuadVertexOrder(long order);
-void GSprimDraw2DQuad4V(const float vertices[4][2], GSgfxColAu8 color);
-void GSprimDraw2DTexQuad4V(const float vertices[4][2], const float texCoords[4][2],
-                          GStexture* texture, GSgfxColAu8 color);
+#endif
+void GSprimSetQuadVertexOrder(s32 order);
+void GSprimDraw2DQuad4V(GSvec2 *vertices, GSgfxColAu8 color);
+void GSprimDraw2DTexQuad4V(GSvec2 *vertices, GSvec2 *texCoords, GStexture *texture, GSgfxColAu8 color);
+#ifdef __cplusplus
 }
-
+#endif
 #endif

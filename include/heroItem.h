@@ -2,6 +2,7 @@
 #define HERO_ITEM_H
 
 #include <types.h>
+#include <item.h>
 
 #ifdef __cplusplus
 class Hero;
@@ -18,10 +19,10 @@ s32 heroItemDecItemDataId(Hero *hero, u16 itemID, u16 count, s16 itemPosition);
 
 // A null hero selects the current hero. All metadata outputs are optional.
 // Slot count is the array length; stock maximum is the limit per stack.
-void *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 itemKind,
+ItemSlot *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 itemKind,
                                      u16 *outSlotCount, u16 *outStockMaximum,
                                      u8 *outSortMode, u8 *outStackMode);
-void *heroHizukiItemGetItemAryPtr(Hero *hero, u16 *outSlotCount,
+ItemSlot *heroHizukiItemGetItemAryPtr(Hero *hero, u16 *outSlotCount,
                                  u16 *outStockMaximum, u8 *outSortMode,
                                  u8 *outStackMode);
 

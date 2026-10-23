@@ -218,7 +218,7 @@ f32 GScolsy2UtilGetSidePlanePoint(GSvec* normal, void* tri, GSvec* pos);
 
 f32 GScolsys2HumanGetHumanRadius(s32 index);
 void GScolsys2HumanDispColision(void);
-s32 GScolsys2HumanCollision(s32 index, GSvec* a, GSvec* b, GSvec* out);
+s32 GScolsys2HumanCollision(int index, GSvec* a, GSvec* b, GSvec* out);
 s32 GScolsys2HumanEnable(s32 index, s32 enable);
 s32 GScolsys2HumanAddCurrentFloor(s32* slotIndex, void* character);
 f32 GScolsys2HumanGetWalkHeight(GSvec* pos);

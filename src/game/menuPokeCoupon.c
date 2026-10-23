@@ -1,4 +1,5 @@
 #include <types.h>
+#include <floorManager.h>
 
 /* PokeCoupon exchange menu: opened by the shop code after menuPokeCouponInit.
  * The coupon work is read by the GBA side of the exchange while the menu runs. */
@@ -17,7 +18,6 @@ struct MenuPokeCouponWork {
 extern struct MenuPokeCouponWork _menuPokeCouponWork;
 
 void menuShopOpen(s32 menuID);
-void zz_0125b84_(s32 id);
 void __assert(const char *file, s32 line, const char *cond);
 
 /* Not called directly by other code; marked so the linker keeps them. */
@@ -40,7 +40,7 @@ void menuPokeCouponMain(void)
         menuShopOpen(10);
         break;
     }
-    zz_0125b84_(0x395);
+    GSfloorChange(0x395);
 }
 
 void menuPokeCouponInit(void)

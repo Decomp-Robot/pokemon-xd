@@ -11,7 +11,6 @@ void GSgfxDLBegin(void* list, GSgfxVF* vf, s32 size, s32 offset);
 void GSgfxDLEnd(void);
 void floorMapSetDisp(s32 flag);
 s32 GSinputButtonsPressed(s32 pad);
-void GSgfxDLSetPrimitiveType(u32 primitive);
 void GSgfxDLEndSurface(void);
 }
 
@@ -39,12 +38,12 @@ template <class Model, class Head> inline void drawDebugMesh(Head* head, GSmtx* 
     Model* mdl;
 
     mdl = (Model*)head->mModel;
-    GSgfxDLSetPrimitiveType(GX_TRIANGLES);
+    GSgfxDLPrimitiveType(GX_TRIANGLES);
     for (t = 0; t < (u32)head->mCount; t++, mdl++) {
         GSgfxDLBeginSurface(3);
         for (k = 0; k < 3; k++) {
             GSvec v;
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[k], &v);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[k], (Vec *)&v);
             GXWGFifo.f32 = v.x;
             GXWGFifo.f32 = v.y;
             GXWGFifo.f32 = v.z;
@@ -68,9 +67,9 @@ void drawHitMdl(CCD_HITMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
     mdl = (CCD_HITMDL*)head->mModel;
     for (t = 0; t < (u32)head->mCount; t++, mdl++) {
         for (i = 0; i < 3; i++) {
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[i], &tri[i]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[i], (Vec *)&tri[i]);
         }
-        GSgfxDLSetPrimitiveType(GX_LINES);
+        GSgfxDLPrimitiveType(GX_LINES);
         for (i = 0; i < 3; i++) {
             s32 j = i + 1;
 
@@ -104,7 +103,7 @@ void drawWalkMdl(CCD_WALKMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
     CCD_WALKMDL* mdl;
     s32 k;
 
-    GSgfxDLSetPrimitiveType(GX_TRIANGLES);
+    GSgfxDLPrimitiveType(GX_TRIANGLES);
     mdl = (CCD_WALKMDL*)head->mModel;
     for (t = 0; t < (u32)head->mCount; t++, mdl++) {
         s32 lo;
@@ -129,7 +128,7 @@ void drawWalkMdl(CCD_WALKMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
         for (k = 0; k < 3; k++) {
             GSvec v;
 
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[k], &v);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[k], (Vec *)&v);
             GXWGFifo.f32 = v.x;
             GXWGFifo.f32 = (0.1f) + v.y;
             GXWGFifo.f32 = v.z;

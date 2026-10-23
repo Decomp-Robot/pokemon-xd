@@ -1,27 +1,38 @@
 #include <menuPokemon.h>
 #include <libc/memory.h>
 #include <GSmsg.h>
+#include <sprite.h>
+#include <GSsnd.h>
+#include <winMsg.h>
 #include <msgctrl.h>
 #include <fade.h>
 #include <menuSub.h>
 #include <floor.h>
+#include <floorManager.h>
 #include <time.h>
 #include <menu.h>
 #include <menuPocket2.h>
 #include <menuItemBios.h>
 #include <itemData.h>
 #include <winSprite.h>
-#include <PocketVec.h>
+#include <cursorBios.h>
 #include <hero.h>
 #include <heroBios.h>
 #include <heroItem.h>
 #include <pcbox.h>
-#define menuPokemonOpenItemUse menuPokemonOpenItemUse_header
 #include <menuPokemon.h>
-#undef menuPokemonOpenItemUse
 #include <GSgfx.h>
 #include <menuPocketTool.h>
 #include <menuOffScreen.h>
+#include <menuShop.h>
+#include <window.h>
+#include <item.h>
+#include <itemBios.h>
+#include <menuSub.h>
+#include <floor.h>
+#include <waza.h>
+#include <fightTrainerPokemon.h>
+#include <winSeq.h>
 
 extern "C" {
 u16 windowGetKeyTrg(void);
@@ -79,7 +90,7 @@ struct PocketTabData {
 extern const PocketTabData lPocketTabData[];
 
 // Cursor position (0, 0) a tab's cursor is put back to when its list shrank.
-extern "C" PocketVec<short> pocketTabCursorResetPosition;
+extern "C" CURSOR pocketTabCursorResetPosition;
 
 // Measured columns of the action-menu rows.
 struct ActMenuResizeEntry {
@@ -132,12 +143,6 @@ ActMenuResizeEntry ActMenuResizeWork[7] = {
     {ACTION_ROW_4_CURSOR, 0, 0, 0, {0, 0, 0}},
 };
 } // namespace
-
-// One entry of a hero item array: the item held and how many of it.
-struct PocketItemSlot {
-    u16 mItemID; // 0x00: item of the entry.
-    u16 mNum; // 0x02: how many of it the hero holds.
-};
 
 // Window ids of the pocket menus.
 enum {
@@ -216,32 +221,15 @@ struct PocketNumberInputParam {
     int mUnitPrice;
 };
 
-extern "C" void winSeqSetMenu(int menuID, int sequenceID);
-extern "C" void menuSubCursorAnimeInit(void);
-extern "C" void menuSubCursorAnimeStart(void);
 
 // ---- engine and library entry points -------------------------------------
 
-extern "C" void winMsgOpen(int mode, u32 msgID, int a, int b);
 extern "C" void winMsgOpenWithSE(int mode, u32 msgID, int a, int b, u32 se);
-extern "C" void winMsgClose(int a);
-extern "C" int windowGetActiveID(void);
 
-extern "C" void GSsndPlay(int a, int b, int c);
-extern "C" u32 menuShopGetMsgID(u8 *soundEffect, int window, int messageCode, int parameterType, ...);
-extern "C" void GSfloorPop(void);
-extern "C" void floorSetFadeScript(int a, int b);
-extern "C" PocketVec<short> cursorBiosGetPos(int cursorID);
-extern "C" PocketVec<short> cursorBiosSetPos(int cursorID, PocketVec<short> pos);
 
 // ---- item, menu and hero data -------------------------------------------
 
-extern "C" void *wazaDataBiosGetPtr(u32 wazaID);
-extern "C" u8 itemCheckValid(void *itemPtr);
-extern "C" u32 wazaDataBiosGetName(void *data);
 
-extern "C" u16 itemSlotGetItemId(void *itemSlot);
-extern "C" u16 itemSlotGetCount(void *itemSlot);
 extern "C" void heroAddPokedoru(Hero *hero, u32 money);
 extern "C" void menuPocketBattleDiskMain(int a, FIGHT_TRAINER *trainer, Hero *hero);
 extern "C" u16 menuPocketCologne(int a);
@@ -257,8 +245,6 @@ namespace { const f32 pocketShopExitFadeTime = 0.5f; }
 
 struct Pokemon;
 struct FightPokemon;
-extern "C" FightPokemon *fightTrainer_GetFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
-extern "C" Pokemon *fightPokemonGetStatsStartPtr(FightPokemon *pokemon);
 
 
 struct PocketNumberDigit {
@@ -271,7 +257,7 @@ struct PocketNumberMenu {
     const PocketNumberDigit *mDigits;
     int mDigitCount;
 };
-extern "C" const PocketNumberMenu pocketNumberMenuTable[4];
+namespace { extern const PocketNumberMenu MenuPocket2Num[4]; }
 
 enum {
     POCKET_MODE_SHOP_SELL = POCKET_MODE_SELL,
@@ -414,22 +400,22 @@ const SActionMenuItem BattleKeyItemActions[] = {
 };
 } // namespace
 
-extern "C" void menuPocketPrintItemRow(GSgfxLayerID layer, int x, int y, int tab, int index);
-extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int tab, int index);
-extern "C" void menuPocketPrintBerryRow(GSgfxLayerID layer, int x, int y, int tab, int index);
+namespace { void _printItemDouguBall(GSgfxLayerID layer, int x, int y, int tab, int index); }
+namespace { void _printItemWazaMachine(GSgfxLayerID layer, int x, int y, int tab, int index); }
+namespace { void _printItemKinomi(GSgfxLayerID layer, int x, int y, int tab, int index); }
 
 const PocketTabData lPocketTabData[] = {
     {POCKET_ITEMS, 1, 1, 0, POCKET_ITEMS_TAB, POCKET_ITEMS_ACTIVE_TAB,
-     menuPocketPrintItemRow, POCKET_ITEMS_CURSOR, 0, POCKET_ITEMS_TAB_NAME,
+     _printItemDouguBall, POCKET_ITEMS_CURSOR, 0, POCKET_ITEMS_TAB_NAME,
      FieldItemActions, BattleItemActions},
     {POCKET_BALLS, 1, 1, 0, POCKET_BALLS_TAB, POCKET_BALLS_ACTIVE_TAB,
-     menuPocketPrintItemRow, POCKET_BALLS_CURSOR, 0, POCKET_BALLS_TAB_NAME,
+     _printItemDouguBall, POCKET_BALLS_CURSOR, 0, POCKET_BALLS_TAB_NAME,
      FieldBallActions, BattleBallActions},
     {POCKET_MACHINES, 0, 0, 0, POCKET_MACHINES_TAB, POCKET_MACHINES_ACTIVE_TAB,
-     menuPocketPrintMachineRow, POCKET_MACHINES_CURSOR, 0, POCKET_MACHINES_TAB_NAME,
+     _printItemWazaMachine, POCKET_MACHINES_CURSOR, 0, POCKET_MACHINES_TAB_NAME,
      FieldMachineActions, BattleMachineActions},
     {POCKET_BERRIES, 0, 0, 0, POCKET_BERRIES_TAB, POCKET_BERRIES_ACTIVE_TAB,
-     menuPocketPrintBerryRow, POCKET_BERRIES_CURSOR, 0, POCKET_BERRIES_TAB_NAME,
+     _printItemKinomi, POCKET_BERRIES_CURSOR, 0, POCKET_BERRIES_TAB_NAME,
      FieldBerryActions, BattleBerryActions},
     {POCKET_KEY_ITEMS, 1, 0, 0, POCKET_KEY_ITEMS_TAB, POCKET_KEY_ITEMS_ACTIVE_TAB,
      _printItemTaisetsu, POCKET_KEY_ITEMS_CURSOR, 0, POCKET_KEY_ITEMS_TAB_NAME,
@@ -459,22 +445,24 @@ const PocketNumberDigit NumPriceWinItem3[] = {
     {PRICE_THREE_DIGIT_UNITS, PRICE_THREE_DIGIT_UNITS_CURSOR, 0}
 };
 } // namespace
-extern "C" const PocketNumberMenu pocketNumberMenuTable[] = {
+namespace {
+const PocketNumberMenu MenuPocket2Num[] = {
     {WIN_ID_NUMBER_ITEM_TWO_DIGITS, NumWinItem2, POCKET_NUMBER_TWO_DIGITS},
     {WIN_ID_NUMBER_ITEM_THREE_DIGITS, NumWinItem3, POCKET_NUMBER_THREE_DIGITS},
     {WIN_ID_NUMBER_PRICE_TWO_DIGITS, NumPriceWinItem2, POCKET_NUMBER_TWO_DIGITS},
     {WIN_ID_NUMBER_PRICE_THREE_DIGITS, NumPriceWinItem3, POCKET_NUMBER_THREE_DIGITS}
 };
+} // namespace
 
 
 namespace {
 struct PocketExitMessageTable { u32 mMessages[7]; };
-const PocketExitMessageTable pocketExitMessages = {
+const PocketExitMessageTable PocketExitMessages = {
     {POCKET_FIELD_EMPTY_MESSAGE, POCKET_BATTLE_EMPTY_MESSAGE, POCKET_GIVE_EMPTY_MESSAGE, POCKET_SELL_EMPTY_MESSAGE, POCKET_DEPOSIT_EMPTY_MESSAGE, POCKET_GIVE_EMPTY_MESSAGE, POCKET_BATTLE_EMPTY_MESSAGE}
 };
 struct PocketActionItemTable { int mItems[4]; };
-const PocketActionItemTable pocketActionTextItems = {{ACTION_ROW_1_TEXT, ACTION_ROW_2_TEXT, ACTION_ROW_3_TEXT, ACTION_ROW_4_TEXT}};
-const PocketActionItemTable pocketActionCursorItems = {{ACTION_ROW_1_CURSOR, ACTION_ROW_2_CURSOR, ACTION_ROW_3_CURSOR, ACTION_ROW_4_CURSOR}};
+const PocketActionItemTable ActionTextItems = {{ACTION_ROW_1_TEXT, ACTION_ROW_2_TEXT, ACTION_ROW_3_TEXT, ACTION_ROW_4_TEXT}};
+const PocketActionItemTable ActionCursorItems = {{ACTION_ROW_1_CURSOR, ACTION_ROW_2_CURSOR, ACTION_ROW_3_CURSOR, ACTION_ROW_4_CURSOR}};
 struct PocketCursorAnimationValues { f32 mValues[2]; };
 static inline PocketCursorAnimationValues pocketListCursorDefaults()
 {
@@ -489,14 +477,16 @@ static inline PocketCursorAnimationValues pocketActionCursorDefaults()
 }
 } // namespace
 
+
+
 const SActionMenuTable sActionMenuSuteru = {
     {{POCKET_DISCARD_CONFIRM, 0, 0}, {POCKET_DISCARD_CANCEL, 0, 0}}
 };
 
 // Item-script queue and the pocket window's shared state.
-MenuPocket2ItemScript menuPocket2ItemScript;
-MenuPocket2Work menuPocket2Work;
-extern "C" PocketVec<short> pocketTabCursorResetPosition = {0, 0};
+MenuPocket2ItemScript menuPocketWork;
+MenuPocket2Work Data;
+extern "C" CURSOR pocketTabCursorResetPosition = {0, 0};
 
 
 
@@ -511,15 +501,15 @@ u16 _getItemIDFromMenuPos(int tab, int menuPos);
 // cursor and no action has been chosen yet.
 extern "C" u8 menuPocketIsSortCursorDisp(tagWINDOW_WORK *window)
 {
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
 
-    if (menuPocket2Work.mSwapItemIndex >= 0) {
+    if (Data.mExchangeSlot >= 0) {
         return 0;
     }
 
     int menuPos = pos.x + pos.y;
 
-    if (_getItemIDFromMenuPos(window->mCursorState.mSelection.mCursor, menuPos) == 0 && menuPos == 0) {
+    if (_getItemIDFromMenuPos(window->mCursor.y, menuPos) == 0 && menuPos == 0) {
         return 0;
     }
     return 1;
@@ -529,11 +519,11 @@ extern "C" u8 menuPocketIsSortCursorDisp(tagWINDOW_WORK *window)
 // already chosen.
 extern "C" u8 menuPocketIsIrekaeCursorDisp(tagWINDOW_WORK *window)
 {
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     int menuPos = pos.x + pos.y;
 
-    if (_getItemIDFromMenuPos(window->mCursorState.mSelection.mCursor, menuPos) == 0
-        && menuPocket2Work.mSwapItemIndex < 0) {
+    if (_getItemIDFromMenuPos(window->mCursor.y, menuPos) == 0
+        && Data.mExchangeSlot < 0) {
         return 0;
     }
     return 1;
@@ -550,19 +540,19 @@ int _actMotaseruNormal(int tab, int menuPos, int *num);
 int _actTukauNormal(int tab, int menuPos, int *num);
 } // namespace
 
-extern "C" u32 menuPocketGetItemDescriptionMessage(int itemID);
+namespace { u32 _getItemInstMsg(unsigned long itemID); }
 namespace {
 void _setExplanationMsgID(unsigned long msgID);
 } // namespace
 
-extern "C" void menuPocketDrawVisibleList(GSgfxLayerID layer, int x, int tab, unsigned short *pos);
-extern "C" void menuPocketPrintItemRow(GSgfxLayerID layer, int x, int y, int tab, int index);
+namespace { void _printItemList(GSgfxLayerID layer, int x, int tab, CURSOR &pos); }
+namespace { void _printItemDouguBall(GSgfxLayerID layer, int x, int y, int tab, int index); }
 namespace {
 void _printItemTaisetsu(GSgfxLayerID layer, int x, int y, int tab, int index);
 } // namespace
 
-extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int tab, int index);
-extern "C" void menuPocketPrintBerryRow(GSgfxLayerID layer, int x, int y, int tab, int index);
+namespace { void _printItemWazaMachine(GSgfxLayerID layer, int x, int y, int tab, int index); }
+namespace { void _printItemKinomi(GSgfxLayerID layer, int x, int y, int tab, int index); }
 namespace {
 u16 _menuPocketLoop(void);
 } // namespace
@@ -588,9 +578,9 @@ u8 _depositPC(u16 itemID, int count);
 int _getItemPrice(int itemID);
 PocketItemUseFunc _getUseFunc(unsigned long itemID);
 int _openPokemonMenuForGiveItem(u16 itemID, u8 pocket, u8 menuItemIndex);
-extern "C" u8 _getItemBagPocket(int itemID);
-extern "C" u8 _getDepositAble(u16 itemID);
-extern "C" int _getItemNameMsgID(int itemID);
+u8 _getItemKind(int itemID);
+u8 _getItemDeposit(u16 itemID);
+int _getItemNameMsg(unsigned long itemID);
 }
 
 namespace {
@@ -623,8 +613,8 @@ int _makeActMenu(SActionMenuItem *menu, int max, int tab, int menuPos)
         usable = 0;
     }
 
-    int mode = menuPocket2Work.mMode;
-    const PocketTabData *tabData = &lPocketTabData[menuPocket2Work.mTab];
+    int mode = Data.mMode;
+    const PocketTabData *tabData = &lPocketTabData[Data.mTab];
     const SActionMenuItem *src;
 
     if (mode == POCKET_MODE_BATTLE || mode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
@@ -671,7 +661,7 @@ void _setActMenuResizeWork(void)
 // finished (or failed), 1 while the pocket should go on.
 int _execDeposit(int tab, u16 itemID, int menuPos)
 {
-    if (!_getDepositAble(itemID)) {
+    if (!_getItemDeposit(itemID)) {
         msgctrlSetValue(MSG_VAR_ITEM_ID, itemID);
         _infoBeep(POCKET_MSG_CANNOT_DEPOSIT_ITEM);
         return 0;
@@ -679,7 +669,7 @@ int _execDeposit(int tab, u16 itemID, int menuPos)
 
     int num;
 
-    if ((u8)lPocketTabData[menuPocket2Work.mTab].mItemKind != POCKET_KEY_ITEMS) {
+    if ((u8)lPocketTabData[Data.mTab].mItemKind != POCKET_KEY_ITEMS) {
         _setExplanationMsgID(POCKET_MSG_DEPOSIT_QUANTITY);
 
         int digitCount;
@@ -705,7 +695,7 @@ int _execDeposit(int tab, u16 itemID, int menuPos)
         return 0;
     }
 
-    _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, num);
+    _decItem(itemID, lPocketTabData[Data.mTab].mItemKind, menuPos, num);
     msgctrlSetValue(MSG_VAR_ITEM_ID, itemID);
     msgctrlSetValue(MSG_VAR_ITEM_QUANTITY, num);
     _infoOnly(POCKET_MSG_ITEM_DEPOSITED);
@@ -715,7 +705,7 @@ int _execDeposit(int tab, u16 itemID, int menuPos)
 // Sells the chosen number of the item.
 int _execSell(int tab, u16 itemID, int menuPos)
 {
-    int window = menuPocket2Work.mMsgWindowID;
+    int window = Data.mMsgWindowID;
     int price = _getItemPrice(itemID);
     u8 se;
 
@@ -757,9 +747,9 @@ int _execSell(int tab, u16 itemID, int menuPos)
         return 0;
     }
 
-    _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, num);
+    _decItem(itemID, lPocketTabData[Data.mTab].mItemKind, menuPos, num);
     GSsndPlay(0x1A, 0, 0);
-    heroAddPokedoru(menuPocket2Work.mHero, total);
+    heroAddPokedoru(Data.mHero, total);
     msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_CONFIRM, 0x2D, itemID, 0x4B, total, -1);
     _infoOnly(msg);
     return 1;
@@ -774,7 +764,7 @@ int _execGive(int tab, u16 itemID, int menuPos)
         return 0;
     }
 
-    menuPocket2Work.mLastSlotID = menuPos;
+    Data.mLastSlotID = menuPos;
     return 1;
 }
 
@@ -788,10 +778,10 @@ int _execActionMenu(int tab, u16 itemID, int menuPos, u16 *outNum)
 
     *outNum = 0;
 
-    if (menuPocket2Work.mMode == POCKET_MODE_FIELD) {
+    if (Data.mMode == POCKET_MODE_FIELD) {
         if (itemID == POCKET_ITEM_BATTLE_DISK) {
             _setExplanationMsgID(POCKET_MSG_BATTLE_DISK_PROMPT);
-            menuPocketBattleDiskMain(-1, menuPocket2Work.mTrainer, menuPocket2Work.mHero);
+            menuPocketBattleDiskMain(-1, Data.mTrainer, Data.mHero);
             return POCKET_ACTION_CONTINUE;
         }
         if (itemID == POCKET_ITEM_COLOGNE) {
@@ -840,9 +830,9 @@ int _execActionMenu(int tab, u16 itemID, int menuPos, u16 *outNum)
     switch (func(tab, menuPos, &msgID)) {
     case POCKET_ACTION_COMPLETE:
         if (msgID > 0) {
-            _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, msgID);
+            _decItem(itemID, lPocketTabData[Data.mTab].mItemKind, menuPos, msgID);
         }
-        menuPocket2Work.mLastSlotID = menuPos;
+        Data.mLastSlotID = menuPos;
         return POCKET_ACTION_COMPLETE;
 
     case POCKET_ACTION_CONTINUE:
@@ -850,7 +840,7 @@ int _execActionMenu(int tab, u16 itemID, int menuPos, u16 *outNum)
 
     case POCKET_ACTION_CLOSE:
         if (msgID > 0) {
-            _decItem(itemID, lPocketTabData[menuPocket2Work.mTab].mItemKind, menuPos, msgID);
+            _decItem(itemID, lPocketTabData[Data.mTab].mItemKind, menuPos, msgID);
         }
         return POCKET_ACTION_CLOSE;
     }
@@ -919,7 +909,7 @@ u8 _depositPC(u16 itemID, int count)
 namespace {
 u32 _getMoney(void)
 {
-    return heroGetStatus(menuPocket2Work.mHero, HERO_STATUS_MONEY, 0);
+    return heroGetStatus(Data.mHero, HERO_STATUS_MONEY, 0);
 }
 } // namespace
 
@@ -934,9 +924,9 @@ void _swapItemSlot(int item, int from, int dest)
         return;
     }
 
-    PocketItemSlot *ary = (PocketItemSlot *)heroItemGetItemKindToItemAryPtr(
-        menuPocket2Work.mHero, (u8)item, &num, 0, 0, 0);
-    PocketItemSlot entry = ary[from];
+    ItemSlot *ary = heroItemGetItemKindToItemAryPtr(
+        Data.mHero, (u8)item, &num, 0, 0, 0);
+    ItemSlot entry = ary[from];
 
     if (from != num - 1) {
         memmove(ary + from, ary + from + 1, (num - from - 1) * 4);
@@ -955,13 +945,13 @@ void _swapItemSlot(int item, int from, int dest)
 namespace {
 void _sortItemsThisTab(u8 tab)
 {
-    menuPocket2Work.mHero->itemSort(tab);
+    Data.mHero->itemSort(tab);
 }
 
 // Takes `count` of the item out of the hero list.
 void _decItem(u16 itemID, int kind, int menuPos, int count)
 {
-    heroItemDecItemDataId(menuPocket2Work.mHero, itemID, count, menuPos);
+    heroItemDecItemDataId(Data.mHero, itemID, count, menuPos);
 }
 
 // Opens the action menu and returns the row that was picked, -1 when it was
@@ -1020,7 +1010,7 @@ int _openNumberInputMenu(int initialQuantity, int maxQuantity, int digitCount, i
     param.mWindowID = windowID;
     param.mMaximumQuantity = maxQuantity;
     param.mUnitPrice = unitPrice;
-    menuPocket2Work.mNumInputValue = initialQuantity;
+    Data.mNumInputValue = initialQuantity;
 
     int *windowArgs = (int *)&param + 1;
     int result = menuOpenCustom(windowID, windowGetActiveID(), &param, 0, 1, 1, windowArgs);
@@ -1028,10 +1018,10 @@ int _openNumberInputMenu(int initialQuantity, int maxQuantity, int digitCount, i
     menuClose(windowID);
     menuCloseSync(windowID, 1);
 
-    if (result == -1 || menuPocket2Work.mNumInputValue == 0) {
+    if (result == -1 || Data.mNumInputValue == 0) {
         return -1;
     }
-    return menuPocket2Work.mNumInputValue;
+    return Data.mNumInputValue;
 }
 
 // Price the item is sold for.
@@ -1041,13 +1031,13 @@ int _getItemPrice(int itemID)
 }
 
 // Bag pocket the item belongs to, ItemData::mBagPocket.
-extern "C" u8 _getItemBagPocket(int itemID)
+u8 _getItemKind(int itemID)
 {
-    return itemDataBiosGetBagPocket(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetKind(itemDataBiosGetPtr((u16)itemID));
 }
 
 // Whether the item may be put into the PC, ItemData::mDepositAble.
-extern "C" u8 _getDepositAble(u16 itemID)
+u8 _getItemDeposit(u16 itemID)
 {
     return itemDataBiosGetDeposit(itemDataBiosGetPtr(itemID));
 }
@@ -1057,7 +1047,7 @@ PocketItemUseFunc _getUseFunc(unsigned long itemID)
 {
     ItemData *data = itemDataBiosGetPtr((u16)itemID);
 
-    if (menuPocket2Work.mMode == POCKET_MODE_FIELD) {
+    if (Data.mMode == POCKET_MODE_FIELD) {
         return itemDataBiosGetFieldUseFunc(data);
     }
     return itemDataBiosGetBattleUseFunc(data);
@@ -1068,21 +1058,21 @@ u16 _getItemNumFromMenuPos(int tab, int menuPos)
 {
     u16 num;
     int kind = lPocketTabData[tab].mItemKind;
-    void *ary;
+    ItemSlot *ary;
 
     if (kind >= 0) {
-        ary = heroItemGetItemKindToItemAryPtr(menuPocket2Work.mHero, (u8)kind, &num, 0, 0, 0);
+        ary = heroItemGetItemKindToItemAryPtr(Data.mHero, (u8)kind, &num, 0, 0, 0);
     } else {
-        ary = heroHizukiItemGetItemAryPtr(menuPocket2Work.mHero, &num, 0, 0, 0);
+        ary = heroHizukiItemGetItemAryPtr(Data.mHero, &num, 0, 0, 0);
     }
 
     int i;
     int n = -1;
 
-    for (i = 0; i < num; i++, ary = (u8 *)ary + 4) {
+    for (i = 0; i < num; i++, ary++) {
         if (itemCheckValid(ary)) {
             if (++n >= menuPos) {
-                return itemSlotGetCount(ary);
+                return itemBiosGetNum(ary);
             }
         }
     }
@@ -1094,14 +1084,14 @@ int _getStockMaxFromTagID(int tab)
 {
     u16 num;
 
-    heroItemGetItemKindToItemAryPtr(menuPocket2Work.mHero, (u8)lPocketTabData[tab].mItemKind, 0, &num, 0, 0);
+    heroItemGetItemKindToItemAryPtr(Data.mHero, (u8)lPocketTabData[tab].mItemKind, 0, &num, 0, 0);
     return num;
 }
 
 // Name message id of the item, ItemData::mNameMsgID.
-extern "C" int _getItemNameMsgID(int itemID)
+int _getItemNameMsg(unsigned long itemID)
 {
-    return itemDataBiosGetNameMsgID(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetName(itemDataBiosGetPtr((u16)itemID));
 }
 
 } // namespace
@@ -1112,18 +1102,18 @@ int _getNbItemSlot(int tab)
 {
     u16 num;
     int kind = lPocketTabData[tab].mItemKind;
-    void *ary;
+    ItemSlot *ary;
 
     if (kind >= 0) {
-        ary = heroItemGetItemKindToItemAryPtr(menuPocket2Work.mHero, (u8)kind, &num, 0, 0, 0);
+        ary = heroItemGetItemKindToItemAryPtr(Data.mHero, (u8)kind, &num, 0, 0, 0);
     } else {
-        ary = heroHizukiItemGetItemAryPtr(menuPocket2Work.mHero, &num, 0, 0, 0);
+        ary = heroHizukiItemGetItemAryPtr(Data.mHero, &num, 0, 0, 0);
     }
 
     int i;
     int nb = 0;
 
-    for (i = 0; i < num; i++, ary = (u8 *)ary + 4) {
+    for (i = 0; i < num; i++, ary++) {
         if (itemCheckValid(ary)) {
             nb++;
         }
@@ -1182,12 +1172,12 @@ int _actSuteruNormal(int tab, int menuPos, int *num)
 int _openPokemonMenuForGiveItem(u16 itemID, u8 pocket, u8 menuItemIndex)
 {
     menuCloseCustom(WIN_ID_SELECT_ITEM, 0, 1);
-    menuPocket2Work.mCurrentSlotID = menuPokemonOpenItemGive(pocket, menuItemIndex, itemID, 0);
+    Data.mCurrentSlotID = menuPokemonOpenItemGive(pocket, menuItemIndex, itemID, 0);
 
     menuOffScreenSetPriority(0);
     menuPokemonClose();
 
-    return (menuPocket2Work.mCurrentSlotID >> 31) ^ 1;
+    return (Data.mCurrentSlotID >> 31) ^ 1;
 }
 
 } // namespace
@@ -1205,7 +1195,7 @@ int _actMotaseruNormal(int tab, int menuPos, int *num)
         return 0;
     }
 
-    u8 pocket = _getItemBagPocket(itemID);
+    u8 pocket = _getItemKind(itemID);
 
     if (!(u8)_openPokemonMenuForGiveItem(itemID, pocket, (u8)menuPos)) {
         return 1;
@@ -1258,9 +1248,10 @@ int _actTukauNormal(int tab, int menuPos, int *num)
 
 
 // Prints the name of the item of one row.
-extern "C" void menuPocketPrintItemRow(GSgfxLayerID layer, int x, int y, int tab, int index)
+namespace {
+void _printItemDouguBall(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
-    u32 msgID = _getItemNameMsgID(_getItemIDFromMenuPos(tab, index));
+    u32 msgID = _getItemNameMsg(_getItemIDFromMenuPos(tab, index));
 
     if (msgID != 0) {
         GSmsgPrint2(layer, x, y, -1, msgID);
@@ -1286,10 +1277,12 @@ extern "C" void menuPocketPrintItemRow(GSgfxLayerID layer, int x, int y, int tab
 
     GSmsgPrint2(layer, ox2 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
+} // namespace
 
 // Prints one row of the technical-machine tab: the number of the machine,
 // the move it teaches and the number of items held.
-extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int tab, int index)
+namespace {
+void _printItemWazaMachine(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
     int x2;
     s16 off2;
@@ -1326,8 +1319,8 @@ extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int 
         x2 += GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16;
     }
 
-    int nameID = wazaDataBiosGetName(wazaDataBiosGetPtr(
-        itemDataBiosGetWazaIDByWazaMachineNo(machine)));
+    u32 wazaID = itemDataBiosGetWazaIDByWazaMachineNo(machine);
+    int nameID = wazaDataBiosGetName(wazaDataBiosGetPtr((u16)wazaID));
 
     GSmsgPrint2(layer, x2 + 9, y, -1, nameID);
 
@@ -1351,10 +1344,12 @@ extern "C" void menuPocketPrintMachineRow(GSgfxLayerID layer, int x, int y, int 
 
     GSmsgPrint2(layer, ox2 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
+} // namespace
 
 // Prints one row of the berry tab: the number of berries and the name of the
 // berry.
-extern "C" void menuPocketPrintBerryRow(GSgfxLayerID layer, int x, int y, int tab, int index)
+namespace {
+void _printItemKinomi(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
     s16 off2;
 
@@ -1375,7 +1370,7 @@ extern "C" void menuPocketPrintBerryRow(GSgfxLayerID layer, int x, int y, int ta
     GSmsgPrint2(layer, ox, y, -1, POCKET_DIGIT_MSG);
     ox += GSmsgGetMessageSize(POCKET_DIGIT_MSG) >> 16;
 
-    int infoMsgID = _getItemNameMsgID(itemID);
+    int infoMsgID = _getItemNameMsg(itemID);
 
     GSmsgPrint2(layer, ox + 9, y, -1, infoMsgID);
 
@@ -1399,13 +1394,14 @@ extern "C" void menuPocketPrintBerryRow(GSgfxLayerID layer, int x, int y, int ta
 
     GSmsgPrint2(layer, ox3 - off2 + 1, y, -1, POCKET_DIGIT_MSG);
 }
+} // namespace
 
 // Prints the name of the item of one row; used by the tabs whose rows only
 // show a name, the key-item and TM tabs.
 namespace {
 void _printItemTaisetsu(GSgfxLayerID layer, int x, int y, int tab, int index)
 {
-    u32 msgID = _getItemNameMsgID(_getItemIDFromMenuPos(tab, index));
+    u32 msgID = _getItemNameMsg(_getItemIDFromMenuPos(tab, index));
 
     if (msgID != 0) {
         GSmsgPrint2(layer, x, y, -1, msgID);
@@ -1415,24 +1411,25 @@ void _printItemTaisetsu(GSgfxLayerID layer, int x, int y, int tab, int index)
 
 
 // Draws the rows of the tab list that are visible around the cursor.
-extern "C" void menuPocketDrawVisibleList(GSgfxLayerID layer, int x, int tab, unsigned short *pos)
+namespace {
+void _printItemList(GSgfxLayerID layer, int x, int tab, CURSOR &pos)
 {
     int y = 0;
     const PocketTabData *tabData = &lPocketTabData[tab];
     int num = _getNbItemSlot(tab);
-    int index = *(s16 *)pos;
+    int index = pos.x;
     int first = 0;
     int rows = 9;
     int scroll = 0;
 
-    if (pocketScrollZero != menuPocket2Work.mListScroll && menuPocket2Work.mListScrollFlag != 0) {
-        if (menuPocket2Work.mListScroll < pocketScrollZero) {
+    if (pocketScrollZero != Data.mListScroll && Data.mListScrollFlag != 0) {
+        if (Data.mListScroll < pocketScrollZero) {
             index--;
             first = -1;
         } else {
             rows = 10;
         }
-        scroll = (int)menuPocket2Work.mListScroll;
+        scroll = (int)Data.mListScroll;
     }
 
     y = first * 30;
@@ -1451,24 +1448,27 @@ extern "C" void menuPocketDrawVisibleList(GSgfxLayerID layer, int x, int tab, un
     if (i < rows) {
         int yPos = i * 30 - scroll;
 
-        GSmsgPrint2(layer, x, yPos, -1, menuPocket2Work.mMode == POCKET_MODE_DEPOSIT ? POCKET_MSG_DEPOSIT_EXIT_LABEL : POCKET_MSG_EXIT_LABEL);
+        GSmsgPrint2(layer, x, yPos, -1, Data.mMode == POCKET_MODE_DEPOSIT ? POCKET_MSG_DEPOSIT_EXIT_LABEL : POCKET_MSG_EXIT_LABEL);
     }
 }
+} // namespace
 
 // Sets the message shown under the item list.
 namespace {
 void _setExplanationMsgID(unsigned long msgID)
 {
-    menuPocket2Work.mExplanationMsgID = msgID;
+    Data.mExplanationMsgID = msgID;
 }
 } // namespace
 
 
 // Message id of the item description.
-extern "C" u32 menuPocketGetItemDescriptionMessage(int itemID)
+namespace {
+u32 _getItemInstMsg(unsigned long itemID)
 {
-    return itemDataBiosGetDescriptionMsgID(itemDataBiosGetPtr((u16)itemID));
+    return itemDataBiosGetDoc(itemDataBiosGetPtr((u16)itemID));
 }
+} // namespace
 
 // Item id of the row `menuPos` of the tab.
 namespace {
@@ -1476,13 +1476,13 @@ u16 _getItemIDFromMenuPos(int tab, int menuPos)
 {
     u16 num;
     PocketTabData *tabData = (PocketTabData *)&lPocketTabData[tab];
-    void *ary = heroItemGetItemKindToItemAryPtr(menuPocket2Work.mHero, tabData->mItemKind, &num, 0, 0, 0);
+    ItemSlot *ary = heroItemGetItemKindToItemAryPtr(Data.mHero, tabData->mItemKind, &num, 0, 0, 0);
     int n = -1;
 
-    for (int i = 0; i < num; i++, ary = (u8 *)ary + 4) {
+    for (int i = 0; i < num; i++, ary++) {
         if (itemCheckValid(ary)) {
             if (++n >= menuPos) {
-                return itemSlotGetItemId(ary);
+                return itemBiosGetItemDataId(ary);
             }
         }
     }
@@ -1493,7 +1493,7 @@ u16 _getItemIDFromMenuPos(int tab, int menuPos)
 // is on; 0 when the window was left.
 u16 _selectItem(int &menuPos, long *slotID)
 {
-    menuPocket2Work.mSwapItemIndex = -1;
+    Data.mExchangeSlot = -1;
 
     int tab = menuOpenCustom(WIN_ID_SELECT_ITEM, windowGetActiveID(), slotID, 0, 1, 0);
 
@@ -1501,9 +1501,9 @@ u16 _selectItem(int &menuPos, long *slotID)
         return 0;
     }
 
-    menuPocket2Work.mTab = tab;
+    Data.mTab = tab;
 
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[tab].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[tab].mCursorID);
 
     menuPos = pos.x + pos.y;
     return _getItemIDFromMenuPos(tab, menuPos);
@@ -1516,11 +1516,11 @@ u16 _selectItem(int &menuPos, long *slotID)
 namespace {
 u16 _menuPocketLoop(void)
 {
-    PocketVec<short> pos;
+    CURSOR pos;
 
     memset(&pos, 0, sizeof(pos));
 
-    if (menuPocket2Work.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
+    if (Data.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
         pos.y = 1;
     } else {
         pos = cursorBiosGetPos(2);
@@ -1530,14 +1530,14 @@ u16 _menuPocketLoop(void)
     long *pSlotID = &slotID;
 
     for (int i = 0; i < 5; i++) {
-        PocketVec<short> tabPos = cursorBiosGetPos(lPocketTabData[i].mCursorID);
+        CURSOR tabPos = cursorBiosGetPos(lPocketTabData[i].mCursorID);
 
         if (tabPos.x + tabPos.y >= _getNbItemSlot(i) + 1) {
             cursorBiosSetPos(lPocketTabData[i].mCursorID, pocketTabCursorResetPosition);
         }
     }
 
-    if (menuPocket2Work.mSkipActMenuResize == 0) {
+    if (Data.mSkipActMenuResize == 0) {
         _setActMenuResizeWork();
     }
 
@@ -1545,9 +1545,9 @@ u16 _menuPocketLoop(void)
     int menuPos = 0;
 
     for (;;) {
-        menuPocket2Work.mSelectingItem = 1;
+        Data.mListActive = 1;
         item = _selectItem(menuPos, pSlotID);
-        menuPocket2Work.mSelectingItem = 0;
+        Data.mListActive = 0;
         pSlotID = 0;
 
         if (item == 0) {
@@ -1555,7 +1555,7 @@ u16 _menuPocketLoop(void)
         }
 
         u16 out;
-        int result = _afterDecideItem(menuPocket2Work.mMode, menuPocket2Work.mTab, item, menuPos, &out);
+        int result = _afterDecideItem(Data.mMode, Data.mTab, item, menuPos, &out);
 
         if (out != 0) {
             item = out;
@@ -1572,12 +1572,12 @@ u16 _menuPocketLoop(void)
 leave:
     menuCloseCustom(WIN_ID_SELECT_ITEM, 0, 1);
 
-    if (menuPocket2Work.mMode == POCKET_MODE_DEPOSIT) {
+    if (Data.mMode == POCKET_MODE_DEPOSIT) {
         fadeSet(3, pocketShopExitFadeTime);
         fadeCheck(1);
     }
 
-    if (menuPocket2Work.mOwnsFloor != 0) {
+    if (Data.mOwnsFloor != 0) {
         menuOffScreenSetPriority(1);
         GSfloorPop();
         floorSetFadeScript(0, 0);
@@ -1592,11 +1592,11 @@ leave:
 namespace {
 u8 _IsSortAble(tagWINDOW_WORK *window)
 {
-    if (menuPocket2Work.mMode == POCKET_MODE_SHOP_SELL || menuPocket2Work.mMode == POCKET_MODE_DEPOSIT || menuPocket2Work.mMode == POCKET_MODE_GIVE_RESTRICTED) {
+    if (Data.mMode == POCKET_MODE_SHOP_SELL || Data.mMode == POCKET_MODE_DEPOSIT || Data.mMode == POCKET_MODE_GIVE_RESTRICTED) {
         return 0;
     }
 
-    return lPocketTabData[window->mCursorState.mSelection.mCursor].mSortAble;
+    return lPocketTabData[window->mCursor.y].mSortAble;
 }
 } // namespace
 
@@ -1605,19 +1605,19 @@ u8 _IsSortAble(tagWINDOW_WORK *window)
 namespace {
 u8 _IsIrekaeAble(tagWINDOW_WORK *window)
 {
-    if (menuPocket2Work.mMode == POCKET_MODE_SHOP_SELL || menuPocket2Work.mMode == POCKET_MODE_DEPOSIT || menuPocket2Work.mMode == POCKET_MODE_GIVE_RESTRICTED) {
+    if (Data.mMode == POCKET_MODE_SHOP_SELL || Data.mMode == POCKET_MODE_DEPOSIT || Data.mMode == POCKET_MODE_GIVE_RESTRICTED) {
         return 0;
     }
 
-    return lPocketTabData[window->mCursorState.mSelection.mCursor].mSwapAble;
+    return lPocketTabData[window->mCursor.y].mSwapAble;
 }
 } // namespace
 
 
 extern "C" int menuPocket2PrintExplanation(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-    u32 msgID = menuPocket2Work.mExplanationMsgID;
+    cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+    u32 msgID = Data.mExplanationMsgID;
     if (msgID != 0) {
         GSmsgPrint2(winSpriteGetLayerID(window, sprite), 0, 0, -1, msgID);
     }
@@ -1628,67 +1628,75 @@ extern "C" int menuPocket2PrintExplanation(tagWINDOW_WORK *window, tagSPRITE_WOR
 
 
 // menuPocket2GetHero -- fetch the hero and battle-trainer contexts the
-// pocket menu latched in menuPocket2Work.
+// pocket menu latched in Data.
+#pragma force_active on
 void menuPocket2GetHero(Hero **hero, FIGHT_TRAINER **trainer)
 {
-    *hero = menuPocket2Work.mHero;
-    *trainer = menuPocket2Work.mTrainer;
+    *hero = Data.mHero;
+    *trainer = Data.mTrainer;
 }
+#pragma force_active reset
 
 // menuPocket2GetCurrentTemochiPokemonSlotID -- snapshot the selected
-// temochi pokemon slot ID into the current slot field of menuPocket2Work,
+// temochi pokemon slot ID into the current slot field of Data,
 // returning the snapshotted ID.
+#pragma force_active on
 u32 menuPocket2GetCurrentTemochiPokemonSlotID(void)
 {
     u32 slot;
 
-    slot = menuPocket2Work.mSelectedSlotID;
-    menuPocket2Work.mCurrentSlotID = slot;
+    slot = Data.mSelectedSlotID;
+    Data.mCurrentSlotID = slot;
     return slot;
 }
+#pragma force_active reset
 
 extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightPokemon **fightPokemon)
 {
     Pokemon *partyPokemon;
     FightPokemon *battlePokemon;
-    if (menuPocket2Work.mMode == POCKET_MODE_BATTLE || menuPocket2Work.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
-        battlePokemon = fightTrainer_GetFightPokemonPtr(menuPocket2Work.mTrainer, slot);
-        partyPokemon = fightPokemonGetStatsStartPtr(battlePokemon);
+    if (Data.mMode == POCKET_MODE_BATTLE || Data.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
+        battlePokemon = fightTrainerBiosGetFightPokemonPtr(Data.mTrainer, (u16)slot);
+        partyPokemon = fightPokemonGetPokemonPtr(battlePokemon);
     } else {
-        partyPokemon = (Pokemon *)heroGetStatus(menuPocket2Work.mHero, HERO_STATUS_POKEMON, slot & PARTY_SLOT_INDEX_MASK);
+        partyPokemon = (Pokemon *)heroGetStatus(Data.mHero, HERO_STATUS_POKEMON, (u16)slot);
         battlePokemon = 0;
     }
     *pokemon = partyPokemon;
     *fightPokemon = battlePokemon;
 }
 
+#pragma force_active on
 extern "C" void menuPocket2ClosePokemonMenu(s32 slot)
 {
-    menuPocket2Work.mCurrentSlotID = slot;
+    Data.mCurrentSlotID = slot;
     menuPokemonClose();
 }
+#pragma force_active reset
 
-extern "C" s32 menuPocket2OpenPokemonMenu(unsigned long itemID, int wait)
+#pragma force_active on
+extern "C" u32 menuPocket2OpenPokemonMenu(u32 itemID, s32 wait)
 {
     menuCloseCustom(MENU_DATA_ACT_ROW, 0, 1);
     u8 kind;
-    if (menuPocket2Work.mMode == POCKET_MODE_BATTLE || menuPocket2Work.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
+    if (Data.mMode == POCKET_MODE_BATTLE || Data.mMode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
         kind = POKEMON_ITEM_USE_BATTLE;
     } else {
         kind = POKEMON_ITEM_USE_PARTY;
     }
     u8 waitFlag = wait != 0;
-    s32 slot = menuPokemonOpenItemUse(kind, waitFlag, itemID, menuPocket2Work.mTrainer);
+    s32 slot = menuPokemonOpenItemUse(kind, waitFlag, itemID, Data.mTrainer);
     if (wait == 0) {
         slot = -1;
     }
     return slot;
 }
+#pragma force_active reset
 
 extern "C" int menuPocket2DrawNumMenuCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 *param = (s32 *)window->mArgs[0];
-    const PocketNumberMenu *menu = pocketNumberMenuTable;
+    const PocketNumberMenu *menu = MenuPocket2Num;
     u32 i;
     for (i = 0; i < POCKET_NUMBER_MENU_COUNT; menu++, i++) {
         if (param[POCKET_NUMBER_ARG_WINDOW_ID] == menu->mWindowID) {
@@ -1698,11 +1706,11 @@ extern "C" int menuPocket2DrawNumMenuCursor(tagWINDOW_WORK *window, tagSPRITE_WO
     if (i >= POCKET_NUMBER_MENU_COUNT) {
         return 0;
     }
-    if (window->mCursorState.mSelection.mCursor < 0 || window->mCursorState.mSelection.mCursor >= pocketNumberMenuTable[i].mDigitCount) {
+    if (window->mCursor.y < 0 || window->mCursor.y >= MenuPocket2Num[i].mDigitCount) {
         return 0;
     }
-    const PocketNumberDigit *digit = pocketNumberMenuTable[i].mDigits;
-    digit += window->mCursorState.mSelection.mCursor;
+    const PocketNumberDigit *digit = MenuPocket2Num[i].mDigits;
+    digit += window->mCursor.y;
     if (digit->mCursorTopItemID == sprite->mItemID || digit->mCursorBottomItemID == sprite->mItemID) {
         sprite->mRgba.mAlpha = 255;
     } else {
@@ -1717,7 +1725,7 @@ extern "C" int menuPocket2PrintPrice(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
     if (param[POCKET_NUMBER_ARG_UNIT_PRICE] <= 0) {
         return 0;
     }
-    msgctrlSetValue(MSG_VALUE_PRICE, param[POCKET_NUMBER_ARG_UNIT_PRICE] * menuPocket2Work.mNumInputValue);
+    msgctrlSetValue(MSG_VALUE_PRICE, param[POCKET_NUMBER_ARG_UNIT_PRICE] * Data.mNumInputValue);
     s16 width = GSmsgGetMessageSize(POCKET_PRICE_MSG) >> 16;
     GSmsgPrint2(winSpriteGetLayerID(window, sprite), sprite->mWidth - width, 0, -1, POCKET_PRICE_MSG);
     return 0;
@@ -1726,7 +1734,7 @@ extern "C" int menuPocket2PrintPrice(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
 extern "C" int menuPocket2PrintNumMenu(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 *param = (s32 *)window->mArgs[0];
-    const PocketNumberMenu *menu = pocketNumberMenuTable;
+    const PocketNumberMenu *menu = MenuPocket2Num;
     u32 i;
     for (i = 0; i < POCKET_NUMBER_MENU_COUNT; menu++, i++) {
         if (param[POCKET_NUMBER_ARG_WINDOW_ID] == menu->mWindowID) {
@@ -1736,22 +1744,22 @@ extern "C" int menuPocket2PrintNumMenu(tagWINDOW_WORK *window, tagSPRITE_WORK *s
     if (i >= POCKET_NUMBER_MENU_COUNT) {
         return 0;
     }
-    const PocketNumberDigit *digit = pocketNumberMenuTable[i].mDigits;
+    const PocketNumberDigit *digit = MenuPocket2Num[i].mDigits;
     int index;
-    for (index = 0; index < pocketNumberMenuTable[i].mDigitCount; index++, digit++) {
+    for (index = 0; index < MenuPocket2Num[i].mDigitCount; index++, digit++) {
         if (sprite->mItemID == digit->mDigitItemID) {
             break;
         }
     }
-    if (index >= pocketNumberMenuTable[i].mDigitCount) {
+    if (index >= MenuPocket2Num[i].mDigitCount) {
         return 0;
     }
     int n;
     int divisor = 1;
-    for (n = 0; n < pocketNumberMenuTable[i].mDigitCount - index - 1; n++) {
+    for (n = 0; n < MenuPocket2Num[i].mDigitCount - index - 1; n++) {
         divisor *= 10;
     }
-    int value = menuPocket2Work.mNumInputValue / divisor;
+    int value = Data.mNumInputValue / divisor;
     value %= 10;
     msgctrlSetValue(MSG_VALUE_DIGIT, value);
     GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, -1, POCKET_DIGIT_MSG);
@@ -1761,7 +1769,7 @@ extern "C" int menuPocket2PrintNumMenu(tagWINDOW_WORK *window, tagSPRITE_WORK *s
 extern "C" int menuPocketInputNumber(tagWINDOW_WORK *window, int value, int max, u16 repeatKeys, int digits, int sound, int unusedCursorSound)
 {
     u16 keys = repeatKeys;
-    int place = digits - window->mCursorState.mSelection.mCursor - 1;
+    int place = digits - window->mCursor.y - 1;
     if (keys & (POCKET_KEY_UP | POCKET_KEY_DOWN | POCKET_KEY_LEFT | POCKET_KEY_RIGHT)) {
         int oldValue = value;
         int divisor = 1;
@@ -1819,12 +1827,12 @@ extern "C" int menuPocketInputNumber(tagWINDOW_WORK *window, int value, int max,
                 }
             }
         } else if (keys & POCKET_KEY_RIGHT) {
-            if (++window->mCursorState.mSelection.mCursor >= digits) {
-                window->mCursorState.mSelection.mCursor = (s8)(digits - 1);
+            if (++window->mCursor.y >= digits) {
+                window->mCursor.y = (s8)(digits - 1);
             }
         } else if (keys & POCKET_KEY_LEFT) {
-            if (--window->mCursorState.mSelection.mCursor < 0) {
-                window->mCursorState.mSelection.mCursor = 0;
+            if (--window->mCursor.y < 0) {
+                window->mCursor.y = 0;
             }
         }
         if (oldValue != value) {
@@ -1838,7 +1846,7 @@ extern "C" int menuPocket2NumCursor(tagWINDOW_WORK *window)
 {
     s32 *param = (s32 *)window->mArgs[0];
     u16 keys = windowGetKeyRepeat();
-    const PocketNumberMenu *menu = pocketNumberMenuTable;
+    const PocketNumberMenu *menu = MenuPocket2Num;
     u32 i;
     for (i = 0; i < POCKET_NUMBER_MENU_COUNT; menu++, i++) {
         if (param[POCKET_NUMBER_ARG_WINDOW_ID] == menu->mWindowID) {
@@ -1848,8 +1856,8 @@ extern "C" int menuPocket2NumCursor(tagWINDOW_WORK *window)
     if (i >= POCKET_NUMBER_MENU_COUNT) {
         return 0;
     }
-    menuPocket2Work.mNumInputValue = menuPocketInputNumber(window, menuPocket2Work.mNumInputValue,
-        param[POCKET_NUMBER_ARG_MAX_VALUE], keys, pocketNumberMenuTable[i].mDigitCount,
+    Data.mNumInputValue = menuPocketInputNumber(window, Data.mNumInputValue,
+        param[POCKET_NUMBER_ARG_MAX_VALUE], keys, MenuPocket2Num[i].mDigitCount,
         POCKET_NUMBER_CURSOR_SOUND, POCKET_NUMBER_UNUSED_CURSOR_SOUND);
     return 0;
 }
@@ -1880,14 +1888,9 @@ struct PocketActionWindowParam {
     int mCount;
 };
 
-extern "C" void menuSubCursorAnimeValGet(f32 *values, int *animation);
-extern "C" void windowDrawCursorSprite(s16 x, s16 y, int color, tagWINDOW_WORK *window, u16 item, u32 flags, int layer, f32 *values, int animation);
-extern "C" void spriteSetScissor(GSgfxLayerID layer, int x, int y, int width, int height);
-extern "C" void spriteClearScissor(GSgfxLayerID layer);
-extern "C" void spriteSetEnv(GSgfxLayerID layer);
 
 
-extern "C" int menuPocketActionRowSpacing(tagWINDOW_WORK *window);
+int _actionMenuLineHeight(tagWINDOW_WORK *window);
 
 enum {
     POCKET_ACTION_ROWS = 4,
@@ -1908,13 +1911,13 @@ enum {
     POCKET_MAIN_LIST_CURSOR = 0xB1,
 };
 
-extern "C" int menuPocket2SetActionCursorY(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawActionCursorLine(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     PocketActionWindowParam *param = (PocketActionWindowParam *)window->mArgs[0];
     int rowOffset = POCKET_ACTION_ROWS - param->mCount;
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-    int spacing = menuPocketActionRowSpacing(window);
-    int y = window->mCursorState.mSelection.mCursor + rowOffset;
+    int spacing = _actionMenuLineHeight(window);
+    int y = window->mCursor.y + rowOffset;
     y *= spacing;
     sprite->mY = item->mOffsetA + y;
     return 0;
@@ -1922,16 +1925,16 @@ extern "C" int menuPocket2SetActionCursorY(tagWINDOW_WORK *window, tagSPRITE_WOR
 
 extern "C" int menuPocket2DrawActionCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    PocketActionItemTable cursorItems = pocketActionCursorItems;
+    PocketActionItemTable cursorItems = ActionCursorItems;
     PocketActionWindowParam *param = (PocketActionWindowParam *)window->mArgs[0];
     int rowOffset = POCKET_ACTION_ROWS - param->mCount;
-    int row = window->mCursorState.mSelection.mCursor + rowOffset;
+    int row = window->mCursor.y + rowOffset;
     if (row < 0 || row >= POCKET_ACTION_ROWS) {
         return 0;
     }
     if (sprite->mItemID == cursorItems.mItems[row]) {
         PocketCursorAnimationValues values = pocketActionCursorDefaults();
-        int animation;
+        s32 animation;
 
 
         animation = -1;
@@ -1939,7 +1942,7 @@ extern "C" int menuPocket2DrawActionCursor(tagWINDOW_WORK *window, tagSPRITE_WOR
             menuSubCursorAnimeValGet(values.mValues, &animation);
         }
         int layer = winSpriteGetLayerID(window, sprite);
-        windowDrawCursorSprite(0, 0, -1, window, MENU_LIST_CURSOR_TEXTURE, 0, layer, values.mValues, animation);
+        windowDrawSpriteCursor(0, 0, -1, window, MENU_LIST_CURSOR_TEXTURE, 0, layer, values.mValues, animation);
     }
     winSpriteSetDisp(sprite, 0);
     return 0;
@@ -1950,7 +1953,7 @@ extern "C" int menuPocket2DrawActionText(tagWINDOW_WORK *window, tagSPRITE_WORK 
     PocketActionWindowParam *param = (PocketActionWindowParam *)window->mArgs[0];
     int textItems[POCKET_ACTION_ROWS];
     for (int row = 0; row < POCKET_ACTION_ROWS; ++row) {
-        textItems[row] = pocketActionTextItems.mItems[row];
+        textItems[row] = ActionTextItems.mItems[row];
     }
     int row;
     for (row = 0; row < POCKET_ACTION_ROWS; ++row) {
@@ -1977,7 +1980,7 @@ extern "C" int menuPocket2DrawActionMenu(tagWINDOW_WORK *window, tagSPRITE_WORK 
             }
         }
         if (row < 7) {
-            int spacing = menuPocketActionRowSpacing(window);
+            int spacing = _actionMenuLineHeight(window);
             int offset = (POCKET_ACTION_ROWS - param->mCount) * spacing;
             sprite->mY = ActMenuResizeWork[row].mRowOffset + offset;
             if (ActMenuResizeWork[row].mFlag) {
@@ -1988,7 +1991,7 @@ extern "C" int menuPocket2DrawActionMenu(tagWINDOW_WORK *window, tagSPRITE_WORK 
     return 0;
 }
 
-extern "C" int menuPocketActionRowSpacing(tagWINDOW_WORK *window)
+int _actionMenuLineHeight(tagWINDOW_WORK *window)
 {
     tagMENU_ITEM_DATA *second = menuItemBiosGetPtr(window->mMenuID, POCKET_ACTION_CURSOR_ROW_2);
     tagMENU_ITEM_DATA *first = menuItemBiosGetPtr(window->mMenuID, ACTION_ROW_4_CURSOR);
@@ -2003,23 +2006,23 @@ extern "C" int menuPocket2ActionCursor(tagWINDOW_WORK *window)
 {
     PocketActionWindowParam *param = (PocketActionWindowParam *)window->mArgs[0];
     u16 keys = windowGetKeyRepeat();
-    WindowCursorState old = window->mCursorState;
+    CURSOR old = window->mCursor;
     int count = param->mCount;
     if (keys & POCKET_KEY_DOWN) {
-        int row = window->mCursorState.mSelection.mCursor + 1;
+        int row = window->mCursor.y + 1;
         if (row >= count) {
             row = 0;
         }
-        window->mCursorState.mSelection.mCursor = (s8)row;
+        window->mCursor.y = (s8)row;
     }
     if (keys & POCKET_KEY_UP) {
-        int row = window->mCursorState.mSelection.mCursor - 1;
+        int row = window->mCursor.y - 1;
         if (row < 0) {
             row = count - 1;
         }
-        window->mCursorState.mSelection.mCursor = (s8)row;
+        window->mCursor.y = (s8)row;
     }
-    if (old.mValue.cursor != window->mCursorState.mSelection.mCursor || old.mValue.mPosX != window->mCursorState.mValue.mPosX) {
+    if (old.y != window->mCursor.y || old.x != window->mCursor.x) {
         menuSubCursorAnimeStart();
     }
     return 0;
@@ -2031,7 +2034,7 @@ extern "C" int menuPocket2ActionCtrl(tagWINDOW_WORK *window)
     case 0:
         if (window->mFlag == 0) {
             winSeqSetMenu(WIN_ID_ACTION_MENU, POCKET_ACTION_OPEN_SEQUENCE);
-            menuPocket2Work.mSelectedItemPulseTime = 0.0f;
+            Data.mExchangeTime = 0.0f;
             window->mFlag = 1;
             menuSubCursorAnimeInit();
         }
@@ -2046,38 +2049,38 @@ extern "C" int menuPocket2ActionCtrl(tagWINDOW_WORK *window)
     return 0;
 }
 
-extern "C" int menuPocket2DrawList(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2PrintItemList(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_LIST_SCISSOR_ITEM);
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
     spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mOffsetB, scissor->mOffsetC);
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-    menuPocketDrawVisibleList(winSpriteGetLayerID(window, sprite), menuPocket2Work.mTitleScroll, window->mCursorState.mSelection.mCursor, (unsigned short *)&pos);
-    if (0.0f != menuPocket2Work.mTitleScroll) {
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+    _printItemList(winSpriteGetLayerID(window, sprite), Data.mTabScroll, window->mCursor.y, pos);
+    if (0.0f != Data.mTabScroll) {
         int tab;
         f32 offset;
-        if (menuPocket2Work.mTitleScroll > 0.0f) {
-            tab = window->mCursorState.mSelection.mCursor - 1;
+        if (Data.mTabScroll > 0.0f) {
+            tab = window->mCursor.y - 1;
             if (tab < 0) {
                 tab = POCKET_TAB_COUNT - 1;
             }
-            offset = menuPocket2Work.mTitleScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
         } else {
-            tab = window->mCursorState.mSelection.mCursor + 1;
+            tab = window->mCursor.y + 1;
             if ((unsigned int)tab >= POCKET_TAB_COUNT) {
                 tab = 0;
             }
-            offset = menuPocket2Work.mTitleScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
         }
-        PocketVec<short> neighbor = cursorBiosGetPos(lPocketTabData[tab].mCursorID);
-        menuPocketDrawVisibleList(winSpriteGetLayerID(window, sprite), offset, tab, (unsigned short *)&neighbor);
+        CURSOR neighbor = cursorBiosGetPos(lPocketTabData[tab].mCursorID);
+        _printItemList(winSpriteGetLayerID(window, sprite), offset, tab, neighbor);
     }
     spriteClearScissor(winSpriteGetLayerID(window, sprite));
     spriteSetEnv(winSpriteGetLayerID(window, sprite));
     return 0;
 }
 
-extern "C" int menuPocket2DrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2PrintItemKind(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s16 nextWidth;
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_TITLE_SCISSOR_ITEM);
@@ -2085,23 +2088,23 @@ extern "C" int menuPocket2DrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
     spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mOffsetB, scissor->mOffsetC);
     int tab;
     int center = sprite->mWidth / 2;
-    u32 message = lPocketTabData[window->mCursorState.mSelection.mCursor].mTitleMsgID;
+    u32 message = lPocketTabData[window->mCursor.y].mTitleMsgID;
     s16 width = GSmsgGetMessageSize(message) >> 16;
-    GSmsgPrint2(winSpriteGetLayerID(window, sprite), center - width / 2 + (int)menuPocket2Work.mTitleScroll, 0, -1, message);
-    if (0.0f != menuPocket2Work.mTitleScroll) {
+    GSmsgPrint2(winSpriteGetLayerID(window, sprite), center - width / 2 + (int)Data.mTabScroll, 0, -1, message);
+    if (0.0f != Data.mTabScroll) {
         f32 offset;
-        if (menuPocket2Work.mTitleScroll > 0.0f) {
-            tab = window->mCursorState.mSelection.mCursor - 1;
+        if (Data.mTabScroll > 0.0f) {
+            tab = window->mCursor.y - 1;
             if (tab < 0) {
                 tab = POCKET_TAB_COUNT - 1;
             }
-            offset = menuPocket2Work.mTitleScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll - menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
         } else {
-            tab = window->mCursorState.mSelection.mCursor + 1;
+            tab = window->mCursor.y + 1;
             if ((unsigned int)tab >= POCKET_TAB_COUNT) {
                 tab = 0;
             }
-            offset = menuPocket2Work.mTitleScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
+            offset = Data.mTabScroll + menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_LIST_SCISSOR_ITEM)->mOffsetB;
         }
         message = lPocketTabData[tab].mTitleMsgID;
         nextWidth = (s16)(GSmsgGetMessageSize(message) >> 16);
@@ -2114,13 +2117,13 @@ extern "C" int menuPocket2DrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
 
 extern "C" int menuPocket2DrawRollDown(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    if (!menuPocket2Work.mSelectingItem) {
+    if (!Data.mListActive) {
         return 0;
     }
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-    int count = _getNbItemSlot(window->mCursorState.mSelection.mCursor) + 1;
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+    int count = _getNbItemSlot(window->mCursor.y) + 1;
     if (pos.x + POCKET_LIST_ROWS < count) {
-        sprite->mRgba.mAlpha = 255.0f * (1.0f - menuPocket2Work.mRollFade);
+        sprite->mRgba.mAlpha = 255.0f * (1.0f - Data.mRollPhase);
     } else {
         sprite->mRgba.mAlpha = 0;
     }
@@ -2129,41 +2132,41 @@ extern "C" int menuPocket2DrawRollDown(tagWINDOW_WORK *window, tagSPRITE_WORK *s
 
 extern "C" int menuPocket2DrawTitleLR(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    winSpriteSetDisp(sprite, menuPocket2Work.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE);
+    winSpriteSetDisp(sprite, Data.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE);
     return 0;
 }
 
 extern "C" int menuPocket2DrawRollUp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    if (!menuPocket2Work.mSelectingItem) {
+    if (!Data.mListActive) {
         return 0;
     }
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     if (pos.x > 0) {
-        sprite->mRgba.mAlpha = 255.0f * (1.0f - menuPocket2Work.mRollFade);
+        sprite->mRgba.mAlpha = 255.0f * (1.0f - Data.mRollPhase);
     } else {
         sprite->mRgba.mAlpha = 0;
     }
     return 0;
 }
 
-extern "C" int menuPocket2DrawSelectedItemCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawExchangeCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     int y = pos.y * POCKET_ROW_HEIGHT;
-    if (!menuPocket2Work.mListScrollFlag) {
-        y += (s16)menuPocket2Work.mListScroll;
+    if (!Data.mListScrollFlag) {
+        y += (s16)Data.mListScroll;
     }
-    if (menuPocket2Work.mSwapItemIndex >= 0) {
+    if (Data.mExchangeSlot >= 0) {
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
         sprite->mY = item->mOffsetA + y;
         winSpriteSetDisp(sprite, 1);
         static f32 pulsePeriod = 0.5f;
-        menuPocket2Work.mSelectedItemPulseTime += timeGetLastFrameSec();
-        if (menuPocket2Work.mSelectedItemPulseTime > pulsePeriod) {
-            menuPocket2Work.mSelectedItemPulseTime = 0.0f;
+        Data.mExchangeTime += timeGetLastFrameSec();
+        if (Data.mExchangeTime > pulsePeriod) {
+            Data.mExchangeTime = 0.0f;
         }
-        f32 pulse = menuPocket2Work.mSelectedItemPulseTime / pulsePeriod;
+        f32 pulse = Data.mExchangeTime / pulsePeriod;
         if (pulse > 0.5f) {
             pulse = 1.0f - pulse;
         }
@@ -2175,17 +2178,17 @@ extern "C" int menuPocket2DrawSelectedItemCursor(tagWINDOW_WORK *window, tagSPRI
     return 0;
 }
 
-extern "C" int menuPocket2DrawListCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawBallCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     int y = pos.y * POCKET_ROW_HEIGHT;
-    if (!menuPocket2Work.mListScrollFlag) {
-        y += (s16)menuPocket2Work.mListScroll;
+    if (!Data.mListScrollFlag) {
+        y += (s16)Data.mListScroll;
     }
-    if ((u8)(menuPocket2Work.mSwapItemIndex >= 0) ^ (u8)(sprite->mItemID == POCKET_MAIN_LIST_CURSOR)) {
-        if (0.0f == menuPocket2Work.mTitleScroll) {
+    if ((u8)(Data.mExchangeSlot >= 0) ^ (u8)(sprite->mItemID == POCKET_MAIN_LIST_CURSOR)) {
+        if (0.0f == Data.mTabScroll) {
             PocketCursorAnimationValues values = pocketListCursorDefaults();
-            int animation;
+            s32 animation;
 
 
             animation = -1;
@@ -2193,7 +2196,7 @@ extern "C" int menuPocket2DrawListCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
                 menuSubCursorAnimeValGet(values.mValues, &animation);
             }
             int layer = winSpriteGetLayerID(window, sprite);
-            windowDrawCursorSprite(0, y, -1, window, MENU_LIST_CURSOR_TEXTURE, 0, layer, values.mValues, animation);
+            windowDrawSpriteCursor(0, y, -1, window, MENU_LIST_CURSOR_TEXTURE, 0, layer, values.mValues, animation);
         }
     }
     winSpriteSetDisp(sprite, 0);
@@ -2201,20 +2204,19 @@ extern "C" int menuPocket2DrawListCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
 }
 
 
-extern "C" void menuSubDrawCursorBack2(GSgfxLayerID layer, int x, int y, int width, int height, u8 alpha, int style, int variant);
 
 enum {
 };
 
-extern "C" int menuPocket2DrawSwapCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+    CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     int y;
     u8 visible;
-    if (menuPocket2Work.mSwapItemIndex >= 0) {
-        y = (menuPocket2Work.mSwapItemIndex - pos.x) * POCKET_ROW_HEIGHT;
-        if (menuPocket2Work.mListScrollFlag) {
-            y -= (int)menuPocket2Work.mListScroll;
+    if (Data.mExchangeSlot >= 0) {
+        y = (Data.mExchangeSlot - pos.x) * POCKET_ROW_HEIGHT;
+        if (Data.mListScrollFlag) {
+            y -= (int)Data.mListScroll;
         }
         visible = 0;
         if (y >= 0 && y < POCKET_LIST_ROWS * POCKET_ROW_HEIGHT) {
@@ -2222,18 +2224,18 @@ extern "C" int menuPocket2DrawSwapCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
         }
     } else {
         y = pos.y * POCKET_ROW_HEIGHT;
-        if (!menuPocket2Work.mListScrollFlag) {
-            y += (int)menuPocket2Work.mListScroll;
+        if (!Data.mListScrollFlag) {
+            y += (int)Data.mListScroll;
         }
         visible = 1;
     }
-    if (0.0f != menuPocket2Work.mTitleScroll) {
+    if (0.0f != Data.mTabScroll) {
         visible = 0;
     }
     if (visible) {
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
         sprite->mY = (s16)(item->mOffsetA + y);
-        if (menuPocket2Work.mSwapItemIndex >= 0) {
+        if (Data.mExchangeSlot >= 0) {
             winSpriteSetDisp(sprite, 0);
             tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
             menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0, item->mOffsetB, item->mOffsetC, sprite->mRgba.mAlpha, 1, 1);
@@ -2246,11 +2248,8 @@ extern "C" int menuPocket2DrawSwapCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
     return 0;
 }
 
-extern "C" u8 winSeqCheckMove(long menuID);
-extern "C" void menuButtonNormal(tagWINDOW_WORK *window);
 extern "C" u8 menuPocketIsSortCursorDisp(tagWINDOW_WORK *window);
 extern "C" u8 menuPocketIsIrekaeCursorDisp(tagWINDOW_WORK *window);
-extern "C" void menuSubCursorAnimeMain(void);
 void menuPocketToolFloatToZero(float &value, float step);
 
 
@@ -2287,41 +2286,41 @@ enum {
 };
 
 
-extern "C" int menuPocket2ListInput(tagWINDOW_WORK *window)
+extern "C" int menuPocket2Cursor(tagWINDOW_WORK *window)
 {
     u16 repeatKeys = windowGetKeyRepeat();
     u16 triggerKeys = windowGetKeyTrg();
     int itemIndex;
     u8 moved = 0;
     u32 sound = 0;
-    PocketExitMessageTable exitMessages = pocketExitMessages;
+    PocketExitMessageTable exitMessages = PocketExitMessages;
 
-    if (0.0f != menuPocket2Work.mTitleScroll || 0.0f != menuPocket2Work.mListScroll || winSeqCheckMove(window->mMenuID)) return 0;
+    if (0.0f != Data.mTabScroll || 0.0f != Data.mListScroll || winSeqCheckMove(window->mMenuID)) return 0;
 
-    PocketVec<short> position;
-    position = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-    _getNbItemSlot(window->mCursorState.mSelection.mCursor);
+    CURSOR position;
+    position = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+    _getNbItemSlot(window->mCursor.y);
     itemIndex = position.x + position.y;
 
-    if (menuPocket2Work.mSwapItemIndex < 0) {
+    if (Data.mExchangeSlot < 0) {
         if (triggerKeys & POCKET_KEY_SWAP) {
-            if (_IsIrekaeAble(window) && _getItemIDFromMenuPos(window->mCursorState.mSelection.mCursor, itemIndex)) {
-                menuPocket2Work.mSwapItemIndex = itemIndex;
+            if (_IsIrekaeAble(window) && _getItemIDFromMenuPos(window->mCursor.y, itemIndex)) {
+                Data.mExchangeSlot = itemIndex;
                 sound = POCKET_SFX_CONFIRM;
             }
         }
     } else if (triggerKeys & (POCKET_KEY_CONFIRM | POCKET_KEY_SWAP)) {
-        _swapItemSlot(lPocketTabData[window->mCursorState.mSelection.mCursor].mItemKind, menuPocket2Work.mSwapItemIndex, itemIndex);
-        menuPocket2Work.mSwapItemIndex = -1;
+        _swapItemSlot(lPocketTabData[window->mCursor.y].mItemKind, Data.mExchangeSlot, itemIndex);
+        Data.mExchangeSlot = -1;
         sound = POCKET_SFX_CONFIRM;
     } else if (triggerKeys & (POCKET_KEY_CANCEL | POCKET_KEY_SWAP)) {
-        menuPocket2Work.mSwapItemIndex = -1;
+        Data.mExchangeSlot = -1;
         sound = POCKET_SFX_CANCEL;
     }
 
-    position = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-    PocketVec<short> oldPosition = position;
-    int rowCount = _getNbItemSlot(window->mCursorState.mSelection.mCursor) + 1;
+    position = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+    CURSOR oldPosition = position;
+    int rowCount = _getNbItemSlot(window->mCursor.y) + 1;
 
     if (repeatKeys & POCKET_KEY_DOWN) {
         position.y++;
@@ -2330,13 +2329,13 @@ extern "C" int menuPocket2ListInput(tagWINDOW_WORK *window)
             if (position.y >= POCKET_VISIBLE_ROWS) {
                 position.x++;
                 position.y--;
-                menuPocket2Work.mListScrollFlag = 1;
+                Data.mListScrollFlag = 1;
                 sound = POCKET_SFX_MOVE;
             } else {
-                menuPocket2Work.mListScrollFlag = 0;
+                Data.mListScrollFlag = 0;
                 sound = POCKET_SFX_MOVE;
             }
-            menuPocket2Work.mListScroll = -30.0f;
+            Data.mListScroll = -30.0f;
         }
         moved = 1;
     }
@@ -2346,43 +2345,43 @@ extern "C" int menuPocket2ListInput(tagWINDOW_WORK *window)
             if (position.y < 0) {
                 position.y = 0;
                 position.x--;
-                menuPocket2Work.mListScrollFlag = 1;
+                Data.mListScrollFlag = 1;
                 sound = POCKET_SFX_MOVE;
             } else {
-                menuPocket2Work.mListScrollFlag = 0;
+                Data.mListScrollFlag = 0;
                 sound = POCKET_SFX_MOVE;
             }
-            menuPocket2Work.mListScroll = 30.0f;
+            Data.mListScroll = 30.0f;
         }
         moved = 1;
     }
-    cursorBiosSetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID, position);
+    cursorBiosSetPos(lPocketTabData[window->mCursor.y].mCursorID, position);
     if (oldPosition.y != position.y || oldPosition.x != position.x) menuSubCursorAnimeStart();
 
-    if (menuPocket2Work.mSwapItemIndex < 0 && !moved) {
-        if ((repeatKeys & POCKET_KEY_RIGHT) && menuPocket2Work.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
-            if ((u32)++window->mCursorState.mSelection.mCursor >= POCKET_TAB_COUNT) window->mCursorState.mSelection.mCursor = 0;
-            menuPocket2Work.mTitleScroll = menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
+    if (Data.mExchangeSlot < 0 && !moved) {
+        if ((repeatKeys & POCKET_KEY_RIGHT) && Data.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
+            if ((u32)++window->mCursor.y >= POCKET_TAB_COUNT) window->mCursor.y = 0;
+            Data.mTabScroll = menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
             sound = POCKET_SFX_TAB;
-        } else if ((repeatKeys & POCKET_KEY_LEFT) && menuPocket2Work.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
-            if (--window->mCursorState.mSelection.mCursor < 0) window->mCursorState.mSelection.mCursor = POCKET_TAB_COUNT - 1;
-            menuPocket2Work.mTitleScroll = -menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
+        } else if ((repeatKeys & POCKET_KEY_LEFT) && Data.mMode != POCKET_MODE_SNATCH_ONLY_BATTLE) {
+            if (--window->mCursor.y < 0) window->mCursor.y = POCKET_TAB_COUNT - 1;
+            Data.mTabScroll = -menuItemBiosGetPtr(WIN_ID_SELECT_ITEM, POCKET_ITEM_TAB_LAYOUT)->mOffsetB;
             sound = POCKET_SFX_TAB;
         } else if ((triggerKeys & POCKET_KEY_SORT) && _IsSortAble(window)) {
             sound = POCKET_SFX_CONFIRM;
-            _sortItemsThisTab(lPocketTabData[window->mCursorState.mSelection.mCursor].mItemKind);
+            _sortItemsThisTab(lPocketTabData[window->mCursor.y].mItemKind);
         }
-        cursorBiosSetPos(POCKET_CURSOR_TAB, window->mCursorState.mPosition);
+        cursorBiosSetPos(POCKET_CURSOR_TAB, window->mCursor);
     }
     if (sound) menuPtPlaySe(sound);
     u32 message;
-    if (menuPocket2Work.mSwapItemIndex >= 0) message = POCKET_MSG_SWAP;
+    if (Data.mExchangeSlot >= 0) message = POCKET_MSG_SWAP;
     else {
-        position = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
+        position = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
         itemIndex = position.x + position.y;
-        u16 item = _getItemIDFromMenuPos(window->mCursorState.mSelection.mCursor, itemIndex);
-        if (item) message = menuPocketGetItemDescriptionMessage(item);
-        else message = exitMessages.mMessages[menuPocket2Work.mMode];
+        u16 item = _getItemIDFromMenuPos(window->mCursor.y, itemIndex);
+        if (item) message = _getItemInstMsg(item);
+        else message = exitMessages.mMessages[Data.mMode];
     }
     _setExplanationMsgID(message);
     return 0;
@@ -2390,65 +2389,65 @@ extern "C" int menuPocket2ListInput(tagWINDOW_WORK *window)
 
 extern "C" void menuPocket2Button(tagWINDOW_WORK *window)
 {
-    if (menuPocket2Work.mSwapItemIndex >= 0 || winSeqCheckMove(window->mMenuID)) return;
+    if (Data.mExchangeSlot >= 0 || winSeqCheckMove(window->mMenuID)) return;
     u16 keys = windowGetKeyTrg();
     if (keys & POCKET_KEY_CONFIRM) menuPtPlaySe(POCKET_SFX_CONFIRM);
     menuButtonNormal(window);
 }
 
-extern "C" int menuPocket2DrawSortText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawSortButtonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     bool display = false;
-    if (_IsSortAble(window) && menuPocket2Work.mSelectingItem && menuPocketIsSortCursorDisp(window)) display = 1;
+    if (_IsSortAble(window) && Data.mListActive && menuPocketIsSortCursorDisp(window)) display = 1;
     winSpriteSetDisp(sprite, display);
     return 0;
 }
-extern "C" int menuPocket2DrawSwapText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawExchangeButtonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     bool display = false;
-    if (_IsIrekaeAble(window) && menuPocket2Work.mSelectingItem && menuPocketIsIrekaeCursorDisp(window)) display = 1;
+    if (_IsIrekaeAble(window) && Data.mListActive && menuPocketIsIrekaeCursorDisp(window)) display = 1;
     winSpriteSetDisp(sprite, display);
     return 0;
 }
 extern "C" int menuPocket2DrawSortButton(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     bool display = false;
-    if (_IsSortAble(window) && menuPocket2Work.mSelectingItem && menuPocketIsSortCursorDisp(window)) display = 1;
+    if (_IsSortAble(window) && Data.mListActive && menuPocketIsSortCursorDisp(window)) display = 1;
     winSpriteSetDisp(sprite, display);
     return 0;
 }
-extern "C" int menuPocket2DrawSwapButton(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawExchangeButton(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     bool display = false;
-    if (_IsIrekaeAble(window) && menuPocket2Work.mSelectingItem && menuPocketIsIrekaeCursorDisp(window)) display = 1;
+    if (_IsIrekaeAble(window) && Data.mListActive && menuPocketIsIrekaeCursorDisp(window)) display = 1;
     winSpriteSetDisp(sprite, display);
     return 0;
 }
 extern "C" int menuPocket2PrintMoney(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     u32 money = _getMoney();
-    if (menuPocket2Work.mMode != POCKET_MODE_SHOP_SELL) return 0;
+    if (Data.mMode != POCKET_MODE_SHOP_SELL) return 0;
     msgctrlSetValue(POCKET_MSG_VAR_MONEY, money);
     s16 width = (s16)(GSmsgGetMessageSize(POCKET_MSG_MONEY) >> 16);
     GSgfxLayerID layer = winSpriteGetLayerID(window, sprite);
     GSmsgPrint2(layer, sprite->mWidth - width, 0, -1, POCKET_MSG_MONEY);
     return 0;
 }
-extern "C" int menuPocket2DrawMoney(tagWINDOW_WORK *, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawMoneyBack(tagWINDOW_WORK *, tagSPRITE_WORK *sprite)
 {
-    if (menuPocket2Work.mMode != POCKET_MODE_SHOP_SELL) sprite->mRgba.mAlpha = 0;
+    if (Data.mMode != POCKET_MODE_SHOP_SELL) sprite->mRgba.mAlpha = 0;
     else sprite->mRgba.mAlpha = 255;
     return 0;
 }
-extern "C" int menuPocket2DrawMoneyFrame(tagWINDOW_WORK *, tagSPRITE_WORK *sprite)
+extern "C" int menuPocket2DrawMoney(tagWINDOW_WORK *, tagSPRITE_WORK *sprite)
 {
-    if (menuPocket2Work.mMode != POCKET_MODE_SHOP_SELL) sprite->mRgba.mAlpha = 0;
+    if (Data.mMode != POCKET_MODE_SHOP_SELL) sprite->mRgba.mAlpha = 0;
     else sprite->mRgba.mAlpha = 255;
     return 0;
 }
 extern "C" int menuPocket2DrawActiveTab(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    if (sprite->mItemID == (s32)lPocketTabData[window->mCursorState.mSelection.mCursor].mActiveTabItemID) sprite->mColor = 0xFFFFFFFF;
+    if (sprite->mItemID == (s32)lPocketTabData[window->mCursor.y].mActiveTabItemID) sprite->mColor = 0xFFFFFFFF;
     else sprite->mRgba.mAlpha = 0;
     return 0;
 }
@@ -2459,17 +2458,17 @@ extern "C" int menuPocket2Ctrl(tagWINDOW_WORK *window)
         if (!window->mFlag) {
             menuPtPlaySe(POCKET_SFX_OPEN);
             winSeqSetMenu(WIN_ID_SELECT_ITEM, POCKET_SEQUENCE_OPEN);
-            PocketVec<short> pos = cursorBiosGetPos(lPocketTabData[window->mCursorState.mSelection.mCursor].mCursorID);
-            _setExplanationMsgID(menuPocketGetItemDescriptionMessage(_getItemIDFromMenuPos(window->mCursorState.mSelection.mCursor, pos.x + pos.y)));
+            CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
+            _setExplanationMsgID(_getItemInstMsg(_getItemIDFromMenuPos(window->mCursor.y, pos.x + pos.y)));
             window->mFlag = 1;
             menuSubCursorAnimeInit();
         }
         break;
     case POCKET_STATE_ACTIVE:
-        menuPocketToolFloatToZero(menuPocket2Work.mTitleScroll, 23.0f);
-        menuPocketToolFloatToZero(menuPocket2Work.mListScroll, 7.0f);
-        menuPocket2Work.mRollFade += 1.0f / 30.0f;
-        if (menuPocket2Work.mRollFade > 1.0f) menuPocket2Work.mRollFade = 0.0f;
+        menuPocketToolFloatToZero(Data.mTabScroll, 23.0f);
+        menuPocketToolFloatToZero(Data.mListScroll, 7.0f);
+        Data.mRollPhase += 1.0f / 30.0f;
+        if (Data.mRollPhase > 1.0f) Data.mRollPhase = 0.0f;
         menuSubCursorAnimeMain();
         break;
     case POCKET_STATE_CLOSE:
@@ -2485,38 +2484,38 @@ extern "C" int menuPocket2Ctrl(tagWINDOW_WORK *window)
 #pragma force_active on
 extern "C" void menuPocketMain(void)
 {
-    menuPocket2Work.mResult = _menuPocketLoop();
+    Data.mResult = _menuPocketLoop();
 }
 #pragma force_active reset
-extern "C" u16 menuPocket2Call(int mode, int messageWindowID, Hero *hero)
+extern "C" u16 menuPocket2Call(s32 mode, u32 messageWindowID, Hero *hero)
 {
-    memset(&menuPocket2Work, 0, POCKET_INITIAL_WORK_SIZE);
-    menuPocket2Work.mMode = mode;
-    menuPocket2Work.mHero = hero;
-    menuPocket2Work.mMsgWindowID = messageWindowID;
+    memset(&Data, 0, POCKET_INITIAL_WORK_SIZE);
+    Data.mMode = mode;
+    Data.mHero = hero;
+    Data.mMsgWindowID = messageWindowID;
     return _menuPocketLoop();
 }
-extern "C" u16 menuPocket2Open(int mode, s32 *slotID, void *actor)
+extern "C" u16 menuPocket2Open(s32 mode, s32 *slotID, void *actor)
 {
-    memset(&menuPocket2Work, 0, POCKET_INITIAL_WORK_SIZE);
-    menuPocket2Work.mMode = mode;
+    memset(&Data, 0, POCKET_INITIAL_WORK_SIZE);
+    Data.mMode = mode;
     if (mode == POCKET_MODE_BATTLE || mode == POCKET_MODE_SNATCH_ONLY_BATTLE) {
-        menuPocket2Work.mTrainer = (FIGHT_TRAINER *)actor;
-        menuPocket2Work.mHero = fightTrainer_GetDataPtr((FIGHT_TRAINER *)actor);
-        menuPocket2Work.mCurrentSlotID = *slotID;
-        menuPocket2Work.mSelectedSlotID = menuPocket2Work.mCurrentSlotID;
-        if (*slotID < 0 || *slotID >= POCKET_INITIAL_SLOT_LIMIT) menuPocket2Work.mCurrentSlotID = 0;
+        Data.mTrainer = (FIGHT_TRAINER *)actor;
+        Data.mHero = fightTrainerBiosGetHeroPtr((FIGHT_TRAINER *)actor);
+        Data.mCurrentSlotID = *slotID;
+        Data.mSelectedSlotID = Data.mCurrentSlotID;
+        if (*slotID < 0 || *slotID >= POCKET_INITIAL_SLOT_LIMIT) Data.mCurrentSlotID = 0;
     } else {
-        menuPocket2Work.mHero = (Hero *)actor;
-        menuPocket2Work.mCurrentSlotID = -1;
+        Data.mHero = (Hero *)actor;
+        Data.mCurrentSlotID = -1;
     }
-    menuPocket2Work.mOwnsFloor = 1;
+    Data.mOwnsFloor = 1;
     GSfloorPush(POCKET_MENU_FLOOR);
     floorSetFadeScript(0, 0);
     floorWaitForChange();
-    if (menuPocket2Work.mResult == 0) return 0;
-    if (slotID) *slotID = menuPocket2Work.mCurrentSlotID;
-    return menuPocket2Work.mResult;
+    if (Data.mResult == 0) return 0;
+    if (slotID) *slotID = Data.mCurrentSlotID;
+    return Data.mResult;
 }
 
 
@@ -2530,14 +2529,14 @@ extern "C" u16 menuPocket2Open(int mode, s32 *slotID, void *actor)
 // Return the last selected pocket slot.
 u8 menuPocket2GetLastSlotID(void)
 {
-    return menuPocket2Work.mLastSlotID;
+    return Data.mLastSlotID;
 }
 
 // menuPocketClearItemScript -- drop every queued item script.
 void menuPocketClearItemScript(void)
 {
-    memset(menuPocket2ItemScript.mEntries, 0, sizeof(menuPocket2ItemScript.mEntries));
-    menuPocket2ItemScript.mCount = 0;
+    memset(menuPocketWork.mEntries, 0, sizeof(menuPocketWork.mEntries));
+    menuPocketWork.mCount = 0;
 }
 
 // menuPocket2GetItemScript -- script queued for the given item, or -1 when
@@ -2547,9 +2546,9 @@ s32 menuPocket2GetItemScript(u16 id)
     s32 script = -1;
     s32 i;
 
-    for (i = 0; i < menuPocket2ItemScript.mCount; i++) {
-        if (menuPocket2ItemScript.mEntries[i].mID == id) {
-            script = menuPocket2ItemScript.mEntries[i].mScript;
+    for (i = 0; i < menuPocketWork.mCount; i++) {
+        if (menuPocketWork.mEntries[i].mID == id) {
+            script = menuPocketWork.mEntries[i].mScript;
             break;
         }
     }
@@ -2564,17 +2563,17 @@ void menuPocket2AddItemScript(u32 item, u32 script)
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        MenuPocket2ItemScriptEntry *entry = &menuPocket2ItemScript.mEntries[i];
+        MenuPocket2ItemScriptEntry *entry = &menuPocketWork.mEntries[i];
         if (entry->mID == (u16)item && entry->mScript == script) {
             return;
         }
     }
 
-    if (menuPocket2ItemScript.mCount >= 7) {
+    if (menuPocketWork.mCount >= 7) {
         return;
     }
 
-    menuPocket2ItemScript.mEntries[menuPocket2ItemScript.mCount].mID = (u16)item;
-    menuPocket2ItemScript.mEntries[menuPocket2ItemScript.mCount].mScript = script;
-    menuPocket2ItemScript.mCount++;
+    menuPocketWork.mEntries[menuPocketWork.mCount].mID = (u16)item;
+    menuPocketWork.mEntries[menuPocketWork.mCount].mScript = script;
+    menuPocketWork.mCount++;
 }

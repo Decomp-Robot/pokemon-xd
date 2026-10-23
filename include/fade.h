@@ -3,21 +3,16 @@
 
 #include <types.h>
 
-enum FadeKind {
-    FADE_IN_BLACK = 2,
-    FADE_OUT_BLACK = 3,
-};
-enum { FADE_MODE_IN = 2, FADE_MODE_OUT = 3 };
+enum FadeKind { FADE_IN_BLACK = 2, FADE_OUT_BLACK = 3 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+void fadeSetToBlackOutIfNotBlack(f32 time);
+void fadeSetToBlackInIfBlack(f32 time);
 
-// Returns the fade state, optionally waiting for the active fade to finish.
-s8 fadeCheck(u8 waitForCompletion);
-void fadeSet(s32 kind, f32 duration);
-void fadeSetToBlackOutIfNotBlack(f32 durationSeconds);
-void fadeSetToBlackInIfBlack(f32 durationSeconds);
+void fadeSet(u16 flags, f32 duration);
+s8 fadeCheck(u8 wait);
 
 #ifdef __cplusplus
 }

@@ -5,8 +5,7 @@
 // direction helpers that measure the angle between two of them.
 template <typename T>
 struct PocketVec {
-    static PocketVec zero;
-
+    static PocketVec<T> zero;
     T x;
     T y;
 };

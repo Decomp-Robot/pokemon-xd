@@ -9,15 +9,6 @@
 
 #include <GSmemman.h>
 
-/* Format text of the heap dump routine. */
-const char heapDumpText[] =
-    "\nOSDumpHeap(%d):\n\0"
-    "--------Inactive\n\0"
-    "addr\tend\tsize\tprev\tnext\n\0"
-    "--------Allocated\n\0"
-    "%08xh\t%08xh\t%x\t%08xh\t%08xh\n\0"
-    "--------Free\n";
-
 /* Heap consistency checks report the failing condition and the line recorded
  * for it. */
 #define ASSERTREPORT(line, cond) \
@@ -97,7 +88,7 @@ extern "C" s32 OSGetHeapSize(s32 heap) {
     return hd->size;
 }
 
-extern "C" s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, u32 arg, u32 arg2) {
+extern "C" s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, void* context, void* context2) {
     GSmemCell* cell;
     s32 count;
 
@@ -108,7 +99,7 @@ extern "C" s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, u32 a
     if (HeapArray[heap].size >= 0) {
         for (cell = HeapArray[heap].allocated; cell != NULL; cell = cell->next) {
             if (visitor != NULL) {
-                visitor(cell->get_area(&HeapArray[heap]), cell->size, arg, arg2);
+                visitor(cell->get_area(&HeapArray[heap]), cell->size, context, context2);
             }
             count += 1;
         }
@@ -121,6 +112,29 @@ extern "C" u32 OSReferentSize(void* ptr) {
 
     cell = (GSmemCell*)((u32)ptr - HEADERSIZE);
     return (u32)(cell->size - HEADERSIZE);
+}
+
+extern "C" void OSDumpHeap(s32 heap) {
+    GSmemHeapDesc* hd;
+    GSmemCell* cell;
+
+    OSReport("\nOSDumpHeap(%d):\n", heap);
+    hd = &HeapArray[heap];
+    if (hd->size < 0) {
+        OSReport("--------Inactive\n");
+        return;
+    }
+    OSReport("addr\tend\tsize\tprev\tnext\n");
+    OSReport("--------Allocated\n");
+    for (cell = hd->allocated; cell != NULL; cell = cell->next) {
+        OSReport("%08xh\t%08xh\t%x\t%08xh\t%08xh\n", cell,
+                 (char*)cell + cell->size, cell->size, cell->prev, cell->next);
+    }
+    OSReport("--------Free\n");
+    for (cell = hd->free; cell != NULL; cell = cell->next) {
+        OSReport("%08xh\t%08xh\t%x\t%08xh\t%08xh\n", cell,
+                 (char*)cell + cell->size, cell->size, cell->prev, cell->next);
+    }
 }
 
 extern "C" s32 OSCheckHeap(s32 heap) {
@@ -465,7 +479,7 @@ extern "C" void* OSAllocFromHeap(s32 heap, s32 size) {
         }
     }
     hd->allocated = DLAddFront(hd->allocated, cell);
-    cell->id = GSmemGetCellId();
+    cell->layer = GSmemGetCurrentLayer();
     hd->outOfMemory = 0;
     return cell->get_area(hd);
 }

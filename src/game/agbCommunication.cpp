@@ -1,10 +1,8 @@
-#include <dolphin/os.h>
-#include <dolphin/si.h>
 #include <gbaAgb.h>
 #include <gbaCommand.h>
-#include <types.h>
-#include <GSdvd.h>
 #include <GSmem.h>
+#include <GSdvd.h>
+#include <menuCBBios.h>
 
 #define GBA_FILE_BUFFER_SIZE 0x20000
 #define GBA_FILE_BUFFER_ALIGN 0x20
@@ -115,33 +113,39 @@
 
 // Reads the code the GBA has to run out of the file the path names into dst and
 // reports its length through size, rounded up to the transfer unit of the link.
-void _ReadJBCode(const char *path, u8 *dst, unsigned long *size);
+
+
+// Handler of the sleep alarm of _sleep_thread, which resumes the thread that
+// suspended itself there.
+static void _alarm_handler(OSAlarm *alarm, OSContext *context);
 
 // Hands the CPU on to the other threads of the game (the cooperative scheduler
 // the link layer polls the other channels with).
 extern "C" void GSthreadSwitch(void);
 
-// Exchange layers the entry points of this unit build on. They live in the
-// integrated link TUs, as do the upload resume stages AGB_IsComplete runs
-// idle channels on; the SI probe the idle poke reads is the cached
-// controller-type lookup of the integrated battle BIOS module.
+// Suspends the calling thread for the given number of milliseconds; the alarm
+// the thread is woken by runs after them.
+void _sleep_thread(int msec);
+
+// The exchange layers the request wrappers of the battle menus build on: the
+// handshake of a request, the two kinds of blocks a request is written out in,
+// the word exchange the requests open with and the poll every read works on.
 long _InitialExchange(long chan);
 long _SendRecv(long chan, unsigned long data, unsigned long *result);
+long _GBATimerRead(long chan, u8 *dst, u8 *status, int msec);
+long _BulkSend(long chan, const u8 *data, int size);
 long _BulkSend2(long chan, const u8 *data, int size);
+long _AGB_ExchangeStart(long chan, u8 *data);
+long _AGB_ExchangeIsPrepared(long chan);
+long _AGB_ExchangeEnd(long chan);
+long _AGB_EntryRequest(long chan, unsigned long data);
+long _AGB_BattleRequest(long chan, const u8 *data, int size);
+long _AGB_ReturnTitle(long chan);
+long _AGB_EntryGetStatus(long chan, unsigned long *data);
 long _AGB_SendWazaText(long chan, u8 *data);
-void _upload_00s(long chan, long result);
-void _upload_16s0(long chan, long result);
-void _upload_16s(long chan, long result);
-
-extern "C" u32 menuCBBios_PortIDtoControlerID(long portID);
 
 // Number of SI channels a record of AGBWork is kept for.
 #define AGB_CHANNEL_COUNT 4
-
-// Module storage of the link library (job records, code path, packet scratch
-// buffers, sleep alarm, file buffer, game code, sleeping thread) is owned by
-// the integrated link TUs under the shared names of include/gbaAgb.h; this
-// unit only runs the key, code and exchange entry points on it.
 
 // Byte of the word a boot key is looked up under, and the byte the key the GBA
 // answers the key exchange with is checked against.
@@ -209,8 +213,17 @@ extern "C" u32 menuCBBios_PortIDtoControlerID(long portID);
 #define GBA_IMAGE_CHECKSUM_END 0xBD
 
 
-// AGB_Initialize(long): takes a channel over for a transfer, which only goes
-// through while no other job is running on it.
+
+void _AdjustGbaImageRegistry(u8 *image, char *gameId);
+
+// Alarm and thread _sleep_thread blocks the calling thread with: the handler of
+// the alarm resumes the thread that suspended itself. Both live in the data of
+// the link library, so the wake handler of the alarm can reach the thread.
+extern OSAlarm agbSleepAlarm;
+extern OSThread *agbSleepThread;
+
+extern "C" void pokeconv(void *record, void *packet);
+
 long AGB_Initialize(long chan)
 {
     if (chan < 0 || chan > AGB_CHANNEL_COUNT - 1) {
@@ -224,7 +237,6 @@ long AGB_Initialize(long chan)
     return 1;
 }
 
-// AGB_Terminate_init(void): gives all four channels back.
 extern "C" void AGB_Terminate_init(void)
 {
     long chan;
@@ -235,8 +247,6 @@ extern "C" void AGB_Terminate_init(void)
     }
 }
 
-// AGB_Terminate(long): gives the channel of a transfer back, and reports that a
-// transfer which was still running is over with an error.
 extern "C" long AGB_Terminate(long chan)
 {
     if (chan < 0 || chan > AGB_CHANNEL_COUNT - 1) {
@@ -252,8 +262,6 @@ extern "C" long AGB_Terminate(long chan)
     return 1;
 }
 
-// AGB_GetStatus(long): reports how the transfer of a channel ended, or that the
-// channel it was asked for does not exist.
 extern "C" long AGB_GetStatus(long chan)
 {
     if (chan < 0 || chan > AGB_CHANNEL_COUNT - 1) {
@@ -262,8 +270,6 @@ extern "C" long AGB_GetStatus(long chan)
     return AGBWorkArray[chan].status;
 }
 
-// AGB_IsComplete(long): runs the step a channel that was left idle has to
-// resume on, and reports whether the channel is free again afterwards.
 extern "C" long AGB_IsComplete(long chan)
 {
     if (chan < 0 || chan > AGB_CHANNEL_COUNT - 1) {
@@ -285,7 +291,6 @@ extern "C" long AGB_IsComplete(long chan)
     return AGBWorkArray[chan].jobType == 0;
 }
 
-// Clear transfer state, leaving the channel free for the next job.
 void _AGB_Work_Clear(long chan)
 {
     AGBWorkArray[chan].packet = 0;
@@ -321,8 +326,6 @@ void _AGB_Work_Clear(long chan)
     AGBWorkArray[chan].idleStage = 0;
 }
 
-// _job_type_clear(long, const char *): reports that a stage leaves the channel
-// behind and takes it out of the job it ran.
 void _job_type_clear(long chan, const char *jobName)
 {
     AGBWorkArray[chan].active = 0;
@@ -330,25 +333,18 @@ void _job_type_clear(long chan, const char *jobName)
     AGBWorkArray[chan].idleStage = 0;
 }
 
-// _timer_set(long, unsigned long): arms the stage timer of a channel from a
-// length in milliseconds and starts it at the current tick.
 void _timer_set(long chan, unsigned long msec)
 {
     AGBWorkArray[chan].timeout = msec * (OS_TIMER_CLOCK / 1000);
     AGBWorkArray[chan].tick = OSGetTick();
 }
 
-// SwapEndian(unsigned long): turns the byte order of the GBA into the one of the
-// GameCube, which is how the words that cross the link are coded.
 unsigned long SwapEndian(unsigned long value)
 {
     return ((value >> 24) & 0xFF) | ((value >> 8) & 0xFF00) |
            ((value << 8) & 0xFF0000) | ((value << 24) & 0xFF000000);
 }
 
-// _PKJBUpGenerateKeyA(void): spins until the ticks of the GBA hand out a word
-// with a balanced number of set bits; that word is the key the exchange codes
-// the packets with.
 unsigned long _PKJBUpGenerateKeyA(void)
 {
     unsigned long tries = 0;
@@ -383,10 +379,6 @@ unsigned long _PKJBUpGenerateKeyA(void)
     }
 }
 
-// _PKJBUpValidateKeyB(unsigned long): checks the key the GBA answers the key
-// exchange with. The key has to be tagged with the byte of the exchange and to
-// carry a balanced number of set bits; the key without that byte is handed back
-// for the coding of the packets.
 u32 _PKJBUpValidateKeyB(u32 key)
 {
     u32 keyB;
@@ -415,9 +407,6 @@ u32 _PKJBUpValidateKeyB(u32 key)
     return keyB;
 }
 
-// _AdjustGbaImageRegistry(unsigned char *, char *): stamps the game code of the
-// disc into the header of the image of the GBA and checksums the header with
-// it, so the GBA can tell whether the code it was handed runs on this game.
 void _AdjustGbaImageRegistry(unsigned char *image, char *gameId)
 {
     long i;
@@ -435,10 +424,6 @@ void _AdjustGbaImageRegistry(unsigned char *image, char *gameId)
     image[i] = (u8)checksum;
 }
 
-// _ReadJBCode(const char *, u8 *, unsigned long *): reads the code the GBA has
-// to run out of the disc into the file buffer of the link. The length is handed
-// back rounded up to the transfer unit of the link, and the game code of the
-// disc is stamped into the header of the image.
 void _ReadJBCode(const char *path, u8 *dst, unsigned long *size)
 {
     GSdvdFile *file;
@@ -462,8 +447,6 @@ void _ReadJBCode(const char *path, u8 *dst, unsigned long *size)
     _AdjustGbaImageRegistry(dst, (char *)&gbaGameId);
 }
 
-// _PKJBUpCalcCrc(unsigned long, unsigned long): shifts the bits of the checksum
-// out of the word, taking the polynomial in for every bit that was set.
 unsigned long _PKJBUpCalcCrc(unsigned long word, unsigned long checksum)
 {
     unsigned long crc = word ^ checksum;
@@ -481,10 +464,6 @@ unsigned long _PKJBUpCalcCrc(unsigned long word, unsigned long checksum)
     return crc;
 }
 
-// _PKJBUpFindBootKey(unsigned long, unsigned long): looks the boot key of the
-// GBA up out of the checksum its code answered the reset of the upload with.
-// The boot keys are one step apart, and the key that comes with one of them is
-// handed back with its own byte in the top half of the word.
 unsigned long _PKJBUpFindBootKey(unsigned long key, unsigned long checksum)
 {
     unsigned long candidate;
@@ -506,7 +485,6 @@ unsigned long _PKJBUpFindBootKey(unsigned long key, unsigned long checksum)
     return PKJB_BOOT_KEY_NONE;
 }
 
-// Read the GBA input keys. Reject responses with an unexpected command byte.
 extern "C" long PKJB_GetKey(long chan, u16 *key)
 {
     unsigned long answer;
@@ -527,16 +505,13 @@ extern "C" long PKJB_GetKey(long chan, u16 *key)
     return 0;
 }
 
-// PKJB_IdleSend(long): pokes a GBA that sits on the port in its idle loop, so
-// it notices that a link battle is about to start. Reports 1 while the port does
-// not carry a GBA, 2 when the poke did not go through, and 0 when it did.
 extern "C" long PKJB_IdleSend(long chan)
 {
     u8 status;
     unsigned long poke;
     unsigned long id;
 
-    id = menuCBBios_PortIDtoControlerID(chan);
+    id = gba_SIProbe(chan);
     if (id - GBA_PORT_ID) {
         return 1;
     }
@@ -547,10 +522,6 @@ extern "C" long PKJB_IdleSend(long chan)
     return 2;
 }
 
-// PKJB_SendWazaText(long, void *): sends the waza docs of a party out to the
-// GBA of a link battle. The key layer of the game is set to the state a write
-// takes, the exchange of the waza text runs, and the key goes back to the state
-// a transfer waits in.
 extern "C" long PKJB_SendWazaText(long chan, void *data)
 {
     long keyChan = chan + 1;
@@ -562,3 +533,1832 @@ extern "C" long PKJB_SendWazaText(long chan, void *data)
     return result;
 }
 
+long _AGB_SendWazaText(long chan, u8 *data)
+{
+    u32 timeout = OSMillisecondsToTicks(AGB_WAZA_TEXT_MSEC);
+    u32 start;
+    u32 word;
+    u32 elapsed;
+    BOOL expired;
+    long result;
+
+    start = OSGetTick();
+    do {
+        elapsed = OSGetTick() - start;
+        expired = elapsed > timeout;
+        result = _InitialExchange(chan);
+    } while (result == AGB_LINK_NO_GBA && !expired);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    result = _SendRecv(chan, AGB_COMMAND_WAZA_TEXT, &word);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    if ((word >> 24) != AGB_COMMAND_WAZA_TEXT) {
+        return AGB_LINK_ANSWER;
+    }
+    return _BulkSend2(chan, data, AGB_WAZA_TEXT_SIZE);
+}
+
+long PKJB_EntryRequest(long chan, unsigned long data)
+{
+    long port = chan + 1;
+    long result;
+    u32 timeout;
+    u32 start;
+    u32 elapsed;
+    BOOL expired;
+
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    start = OSGetTick();
+    do {
+        elapsed = OSGetTick() - start;
+        expired = elapsed > timeout;
+        result = _AGB_EntryRequest(chan, data);
+    } while (result == AGB_LINK_NO_GBA && !expired);
+    gbaCommandSetKeyState(port, result != AGB_LINK_ANSWERED
+            ? GBA_KEY_COMMAND_READ : GBA_KEY_COMMAND_IDLE);
+    return result;
+}
+
+long _AGB_EntryRequest(long chan, unsigned long data)
+{
+    u32 answer;
+    u32 request;
+    u32 timeout;
+    u32 start;
+    u8 status;
+    long result;
+
+    result = _InitialExchange(chan);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    request = AGB_COMMAND_ENTRY;
+    result = _SendRecv(chan, request, &answer);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    if ((answer >> 24) != AGB_COMMAND_ENTRY) {
+        return AGB_LINK_ANSWER;
+    }
+    request = SwapEndian(data);
+    GBAWrite(chan, &request, &status);
+    timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    start = OSGetTick();
+    for (;;) {
+        if (OSGetTick() - start > timeout) {
+            return AGB_LINK_WAIT_TIMEOUT;
+        }
+        if (GBAGetStatus(chan, &status)) {
+            return AGB_LINK_WAIT_STATUS;
+        }
+        if ((status & AGB_LINK_STATUS_BUSY) == 0) {
+            return AGB_LINK_ANSWERED;
+        }
+    }
+}
+
+long PKJB_BattleRequest(long chan, const u8 *data, int size)
+{
+    long port = chan + 1;
+    long result;
+    u32 timeout;
+    u32 start;
+    u32 elapsed;
+    BOOL expired;
+
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    start = OSGetTick();
+    do {
+        elapsed = OSGetTick() - start;
+        expired = elapsed > timeout;
+        result = _AGB_BattleRequest(chan, data, size);
+    } while (result == AGB_LINK_NO_GBA && !expired);
+    gbaCommandSetKeyState(port, result != AGB_LINK_ANSWERED
+            ? GBA_KEY_COMMAND_READ : GBA_KEY_COMMAND_IDLE);
+    return result;
+}
+
+long _AGB_BattleRequest(long chan, const u8 *data, int size)
+{
+    u32 word;
+    long result;
+
+    result = _InitialExchange(chan);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    result = _SendRecv(chan, AGB_COMMAND_BATTLE, &word);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    if ((word >> 24) != AGB_COMMAND_BATTLE) {
+        return AGB_LINK_ANSWER;
+    }
+    return _BulkSend2(chan, data, size);
+}
+
+long PKJB_EntryGetStatus(long chan, unsigned long *data)
+{
+    return _AGB_EntryGetStatus(chan, data);
+}
+
+long _AGB_EntryGetStatus(long chan, unsigned long *data)
+{
+    u8 status;
+    u32 wait;
+    u32 word;
+
+    if (gba_SIProbe(chan) != AGB_SI_TYPE_GBA) {
+        return AGB_LINK_NO_GBA;
+    }
+    if (GBAGetStatus(chan, &status)) {
+        return AGB_LINK_NOT_ANSWERING;
+    }
+    if ((status & AGB_LINK_STATUS_DATA_READY) == 0) {
+        wait = AGB_ENTRY_STATUS_WAIT;
+        GBAWrite(chan, &wait, &status);
+        return AGB_LINK_NOT_READY;
+    }
+    if (GBARead(chan, &word, &status)) {
+        return AGB_LINK_READ;
+    }
+    *data = word;
+    return AGB_LINK_ANSWERED;
+}
+
+long PKJB_BattleGetStatus(long chan, unsigned long *status)
+{
+    long result = _AGB_EntryGetStatus(chan, status);
+
+    if (result >= 0) {
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    }
+    return result;
+}
+
+long PKJB_ReturnTitle(long chan)
+{
+    long port = chan + 1;
+    long result;
+
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    result = _AGB_ReturnTitle(chan);
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_READ);
+    return result;
+}
+
+long _AGB_ReturnTitle(long chan)
+{
+    u32 word;
+    long written;
+    u32 timeout;
+    u32 start;
+    u8 status;
+    u16 key;
+    long result;
+
+    result = _InitialExchange(chan);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    word = AGB_COMMAND_RETURN_TITLE;
+    written = GBAWrite(chan, &word, &status);
+    if (written != 0) {
+        return AGB_LINK_HANDSHAKE_WRITE;
+    }
+    timeout = OSSecondsToTicks(AGB_RETURN_TITLE_SECS);
+    start = OSGetTick();
+    for (;;) {
+        if (OSGetTick() - start > timeout) {
+            return AGB_LINK_WAIT_TIMEOUT;
+        }
+        result = PKJB_GetKey(chan, &key);
+        GSthreadSwitch();
+        if (result == 0) {
+            return written;
+        }
+    }
+}
+
+long _InitialExchange(long chan)
+{
+    u8 status;
+    u32 word;
+    u32 timeout;
+    u32 start;
+    long result;
+
+    if (gba_SIProbe(chan) != AGB_SI_TYPE_GBA) {
+        return AGB_LINK_NO_GBA;
+    }
+    if (GBAReset(chan, &status)) {
+        return AGB_LINK_NOT_ANSWERING;
+    }
+    result = _GBATimerRead(chan, (u8 *)&word, &status, AGB_EXCHANGE_MSEC);
+    if (result != AGB_LINK_ANSWERED) {
+        return result + AGB_LINK_NOT_ANSWERING;
+    }
+    if (word != gbaGameId) {
+        return AGB_LINK_GAME_CODE;
+    }
+    if (GBAGetStatus(chan, &status)) {
+        return AGB_LINK_GET_STATUS;
+    }
+    if (GBAWrite(chan, &word, &status)) {
+        return AGB_LINK_WRITE;
+    }
+    timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    start = OSGetTick();
+    for (;;) {
+        if (OSGetTick() - start > timeout) {
+            return AGB_LINK_READY_TIMEOUT;
+        }
+        if (GBAGetStatus(chan, &status)) {
+            return AGB_LINK_READY_STATUS;
+        }
+        if ((status & AGB_LINK_STATUS_BUSY) == 0) {
+            return AGB_LINK_ANSWERED;
+        }
+    }
+}
+
+long _GBATimerRead(long chan, u8 *dst, u8 *status, int msec)
+{
+    u32 timeout = OSMillisecondsToTicks(msec);
+    u32 start = OSGetTick();
+    u8 pollStatus;
+
+    for (;;) {
+        if (OSGetTick() - start > timeout) {
+            return AGB_LINK_READ_TIMEOUT;
+        }
+        if (GBAGetStatus(chan, &pollStatus)) {
+            return AGB_LINK_READ_STATUS;
+        }
+        if ((pollStatus & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+                != AGB_LINK_STATUS_DATA_READY) {
+            continue;
+        }
+        if (GBARead(chan, dst, status)) {
+            return AGB_LINK_READ;
+        }
+        return AGB_LINK_ANSWERED;
+    }
+}
+
+long _SendRecv(long chan, unsigned long data, unsigned long *result)
+{
+    u8 status;
+    long ret;
+
+    if (GBAWrite(chan, &data, &status)) {
+        return AGB_LINK_HANDSHAKE_WRITE;
+    }
+    ret = _GBATimerRead(chan, (u8 *)result, &status, AGB_EXCHANGE_MSEC);
+    if (ret != AGB_LINK_ANSWERED) {
+        return ret + AGB_LINK_HANDSHAKE_WRITE;
+    }
+    return AGB_LINK_ANSWERED;
+}
+
+long _BulkSend(long chan, const u8 *data, int size)
+{
+    u32 timeout;
+    u32 start;
+    u32 word;
+    u8 status;
+    int i;
+
+    for (i = 0; i < size; i += 4) {
+        word = *(unsigned long *)(data + i);
+        if (GBAWrite(chan, &word, &status)) {
+            return AGB_LINK_BLOCK_WRITE;
+        }
+        timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+        start = OSGetTick();
+        for (;;) {
+            if (OSGetTick() - start > timeout) {
+                return AGB_LINK_BLOCK_TAKEN;
+            }
+            if (GBAGetStatus(chan, &status)) {
+                return AGB_LINK_BLOCK_STATUS;
+            }
+            if ((status & AGB_LINK_STATUS_BUSY) == 0) {
+                break;
+            }
+        }
+    }
+    return AGB_LINK_ANSWERED;
+}
+
+long _BulkSend2(long chan, const u8 *data, int size)
+{
+    u32 timeout;
+    u32 start;
+    u32 word;
+    u8 status;
+    int i;
+
+    for (i = 0; i < size; i += 4) {
+        word = *(unsigned long *)(data + i);
+        if (GBAWrite(chan, &word, &status)) {
+            return AGB_LINK_BLOCK_WRITE;
+        }
+        timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+        start = OSGetTick();
+        for (;;) {
+            if (OSGetTick() - start > timeout) {
+                return AGB_LINK_BLOCK_TAKEN;
+            }
+            if (GBAGetStatus(chan, &status)) {
+                return AGB_LINK_BLOCK_STATUS;
+            }
+            if ((status & AGB_LINK_STATUS_BUSY) == 0) {
+                break;
+            }
+        }
+        if ((i % AGB_BLOCK_SWITCH) == 0) {
+            GSthreadSwitch();
+        }
+    }
+    return AGB_LINK_ANSWERED;
+}
+
+long PKJB_ExchangeStart(long chan, void *data)
+{
+    long port = chan + 1;
+    long result;
+    u32 timeout;
+    u32 start;
+    u32 elapsed;
+    BOOL expired;
+
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    start = OSGetTick();
+    do {
+        elapsed = OSGetTick() - start;
+        expired = elapsed > timeout;
+        result = _AGB_ExchangeStart(chan, (u8 *)data);
+    } while (result == AGB_LINK_NO_GBA && !expired);
+    gbaCommandSetKeyState(port, result != AGB_LINK_ANSWERED
+            ? GBA_KEY_COMMAND_READ : GBA_KEY_COMMAND_IDLE);
+    return result;
+}
+
+long _AGB_ExchangeStart(long chan, u8 *data)
+{
+    u32 timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
+    u32 start;
+    u32 word;
+    long result;
+
+    start = OSGetTick();
+    for (;;) {
+        if (OSGetTick() - start > timeout) {
+            return AGB_LINK_NO_GBA;
+        }
+        if (gba_SIProbe(chan) != AGB_SI_TYPE_GBA) {
+            continue;
+        }
+        result = _InitialExchange(chan);
+        if (result != AGB_LINK_ANSWERED) {
+            return result;
+        }
+        result = _SendRecv(chan, AGB_COMMAND_LOAD, &word);
+        if (result != AGB_LINK_ANSWERED) {
+            return result;
+        }
+        if ((word >> 24) != AGB_COMMAND_LOAD) {
+            return AGB_LINK_ANSWER;
+        }
+        _BulkSend(chan, data, AGB_ENTRY_REQUEST_SIZE);
+        return AGB_LINK_ANSWERED;
+    }
+}
+
+static void _alarm_handler(OSAlarm *alarm, OSContext *context)
+{
+    OSResumeThread(agbSleepThread);
+}
+
+void _sleep_thread(int msec)
+{
+    BOOL level;
+
+    agbSleepThread = OSGetCurrentThread();
+    OSCreateAlarm(&agbSleepAlarm);
+    level = OSDisableInterrupts();
+    OSSetAlarm(&agbSleepAlarm, OSMillisecondsToTicks(msec), _alarm_handler);
+    OSSuspendThread(agbSleepThread);
+    OSRestoreInterrupts(level);
+}
+
+long PKJB_ExchangeIsPrepared(long chan)
+{
+    long result = _AGB_ExchangeIsPrepared(chan);
+
+    if (result == AGB_LINK_ANSWERED || result >= AGB_LINK_READ) {
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    }
+    return result;
+}
+
+long _AGB_ExchangeIsPrepared(long chan)
+{
+    u32 word;
+    u8 status;
+
+    _sleep_thread(AGB_PREPARED_SLEEP_MSEC);
+    if (gba_SIProbe(chan) != AGB_SI_TYPE_GBA) {
+        return AGB_LINK_NO_GBA;
+    }
+    if (GBAGetStatus(chan, &status)) {
+        return AGB_LINK_NOT_ANSWERING;
+    }
+    if ((status & AGB_LINK_STATUS_DATA_READY) == 0) {
+        return AGB_LINK_NOT_READY;
+    }
+    if (GBARead(chan, &word, &status)) {
+        return AGB_LINK_READ;
+    }
+    if (word != 0) {
+        return AGB_LINK_WORD_HELD;
+    }
+    return AGB_LINK_ANSWERED;
+}
+
+long PKJB_ExchangeEnd(long chan)
+{
+    long port = chan + 1;
+    long result;
+
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    result = _AGB_ExchangeEnd(chan);
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_READ);
+    return result;
+}
+
+long _AGB_ExchangeEnd(long chan)
+{
+    long result;
+    u32 word;
+    u8 status;
+    long ret;
+
+    result = _InitialExchange(chan);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    result = _SendRecv(chan, AGB_COMMAND_END, &word);
+    if (result != AGB_LINK_ANSWERED) {
+        return result;
+    }
+    if ((word >> 24) != AGB_COMMAND_END) {
+        return AGB_LINK_ANSWER;
+    }
+    ret = _GBATimerRead(chan, (u8 *)&word, &status, AGB_END_READ_MSEC);
+    if (ret != AGB_LINK_ANSWERED) {
+        return ret + AGB_LINK_ANSWER;
+    }
+    if (word != 0) {
+        return AGB_LINK_WORD_LEFT;
+    }
+    return AGB_LINK_ANSWERED;
+}
+
+long AGB_Prepare(const char *path)
+{
+    DVDDiskID *id;
+
+    if (strlen(path) >= AGB_JB_PATH_MAX) {
+        return 0;
+    }
+    strcpy(gbaJbFilePath, path);
+    id = DVDGetCurrentDiskID();
+    memcpy(&gbaGameId, id, 4);
+    if (gbaLinkUninitialized) {
+        GBAInit();
+        gbaLinkUninitialized = 0;
+    }
+    _ReadJBCode(path, gbaFileBuffer, &gbaFileSize);
+    return 1;
+}
+
+long AGB_Upload(long chan, long mode)
+{
+    if (AGB_Initialize(chan) == 0) {
+        return 0;
+    }
+    _AGB_Work_Clear(chan);
+    AGBWorkArray[chan].jobType = AGB_JOB_TYPE_UPLOAD;
+    AGBWorkArray[chan].status = AGB_STATUS_RUNNING;
+    AGBWorkArray[chan].active = 1;
+    if (mode == AGB_UPLOAD_MODE_POKEMON) {
+        AGBWorkArray[chan].pollTimeout = OSSecondsToTicks(AGB_UPLOAD_WAIT_SECS);
+    } else {
+        AGBWorkArray[chan].pollTimeout = OSSecondsToTicks(AGB_UPLOAD_WAIT_SECS);
+    }
+    AGBWorkArray[chan].pollTick = OSGetTick();
+    AGBWorkArray[chan].size = gbaFileSize;
+    AGBWorkArray[chan].buffer = gbaFileBuffer;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_NONE);
+    _upload_00s(chan, 0);
+    return 1;
+}
+
+void _upload_00s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_UPLOAD_00S;
+    AGBWorkArray[chan].idleStage = AGB_IDLE_NONE;
+    AGBWorkArray[chan].result = SIProbe(chan);
+    if (AGBWorkArray[chan].result == AGB_SI_TYPE_GBA) {
+        AGBWorkArray[chan].result =
+            GBAResetAsync(chan, AGBWorkArray[chan].linkStatus, _upload_01);
+        if (AGBWorkArray[chan].result == 2) {
+            AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+        }
+        return;
+    }
+    if (OSGetTick() - AGBWorkArray[chan].pollTick
+            >= AGBWorkArray[chan].pollTimeout) {
+        _job_type_clear(chan, agbUploadJobName00s);
+        AGBWorkArray[chan].status = AGB_STATUS_NO_ANSWER;
+        return;
+    }
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+}
+
+void _upload_01(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 1;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_02);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_02(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 2;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    if (AGBWorkArray[chan].linkStatus[0] == AGB_LINK_STATUS_RESET_ANSWER) {
+        AGBWorkArray[chan].result = GBAReadAsync(chan, &AGBWorkArray[chan].keyA,
+            AGBWorkArray[chan].linkStatus, _upload_03);
+        if (AGBWorkArray[chan].result == 2) {
+            goto done;
+        }
+        return;
+    }
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_02);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_03(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 3;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    if (AGBWorkArray[chan].keyA == AGB_GAME_CODE_RUBY_JP
+        || AGBWorkArray[chan].keyA == AGB_GAME_CODE_RUBY_US) {
+        goto read;
+    }
+    if (OSGetTick() - AGBWorkArray[chan].pollTick < AGBWorkArray[chan].pollTimeout) {
+        goto done;
+    }
+    _job_type_clear(chan, agbUploadJobName03);
+    AGBWorkArray[chan].status = AGB_STATUS_NO_ANSWER;
+    return;
+read:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_04);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_04(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 4;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    if (AGBWorkArray[chan].linkStatus[0] != AGB_LINK_STATUS_SYNC_READY) {
+        goto done;
+    }
+    AGBWorkArray[chan].result = GBAWriteAsync(chan, &AGBWorkArray[chan].keyA,
+        AGBWorkArray[chan].linkStatus, _upload_05);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_05(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 5;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_06);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_06(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 6;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    AGBWorkArray[chan].idleStage = AGB_IDLE_UPLOAD_START;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_SYNC_STATE)
+            != AGB_LINK_STATUS_SYNC_READY) {
+        goto done;
+    }
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_BUSY) != 0) {
+        goto wait;
+    }
+    AGBWorkArray[chan].keyA = _PKJBUpGenerateKeyA();
+    AGBWorkArray[chan].packet = SwapEndian(AGBWorkArray[chan].keyA);
+    AGBWorkArray[chan].result = GBAWriteAsync(chan, &AGBWorkArray[chan].packet,
+        AGBWorkArray[chan].linkStatus, _upload_07);
+    if (AGBWorkArray[chan].result == 2) {
+        _job_type_clear(chan, agbUploadJobName06);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        return;
+    }
+wait:
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_06);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_07(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 7;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName07);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_08);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_08(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 8;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName08);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if (AGBWorkArray[chan].linkStatus[0]
+            == (AGB_LINK_STATUS_SYNC_PACKET | AGB_LINK_STATUS_DATA_READY)) {
+        AGBWorkArray[chan].result =
+            GBAReadAsync(chan, &AGBWorkArray[chan].bootKey,
+                AGBWorkArray[chan].linkStatus, _upload_09);
+        if (AGBWorkArray[chan].result != 2) {
+            return;
+        }
+        goto done;
+    }
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_08);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_09(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 9;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName09);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    AGBWorkArray[chan].keyB =
+        _PKJBUpValidateKeyB(SwapEndian(AGBWorkArray[chan].bootKey));
+    if (AGBWorkArray[chan].keyB == 0) {
+        goto done;
+    }
+    {
+        // Number of 8-byte blocks the packet is made of, less the block the
+        // length word itself occupies; the length is aligned to a block first.
+        unsigned long blocks = (AGBWorkArray[chan].size + 7) & ~7;
+
+        AGBWorkArray[chan].size = blocks;
+        blocks = SwapEndian(blocks / 8 - 1);
+        AGBWorkArray[chan].result =
+            GBAWriteAsync(chan, &blocks, AGBWorkArray[chan].linkStatus, _upload_10);
+        if (AGBWorkArray[chan].result != 2) {
+            return;
+        }
+    }
+    goto done;
+}
+
+void _upload_10(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 10;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName10);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_11);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_11(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 11;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName11);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_SYNC_STATE)
+            != AGB_LINK_STATUS_SYNC_PACKET) {
+        goto done;
+    }
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_BUSY) != 0) {
+        goto idle;
+    }
+    // Both seeds of the packet coding are derived from the two keys of the
+    // exchange, the checksum from their sum and the rolling key from it stepped
+    // once.
+    AGBWorkArray[chan].checksum = AGBWorkArray[chan].keyA ^ AGBWorkArray[chan].keyB;
+    AGBWorkArray[chan].key =
+        (AGBWorkArray[chan].keyA ^ AGBWorkArray[chan].keyB) * AGB_KEY_MULTIPLIER + 1;
+    AGBWorkArray[chan].syncCode = AGB_SYNC_CODE_PACKET;
+    AGBWorkArray[chan].offset = 0;
+    _upload_11s(chan, result);
+    return;
+idle:
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_11);
+    if (AGBWorkArray[chan].result == 2) {
+        goto done;
+    }
+}
+
+void _upload_11s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 11;
+    AGBWorkArray[chan].codedWord =
+        SwapEndian(*(unsigned long *)(AGBWorkArray[chan].buffer
+            + AGBWorkArray[chan].offset));
+    if (AGBWorkArray[chan].offset >= AGB_PACKET_HEADER_SIZE) {
+        AGBWorkArray[chan].plainWord = AGBWorkArray[chan].codedWord;
+        AGBWorkArray[chan].codedWord -= AGBWorkArray[chan].checksum;
+        AGBWorkArray[chan].codedWord ^= AGBWorkArray[chan].key;
+        AGBWorkArray[chan].checksum =
+            _PKJBUpCalcCrc(AGBWorkArray[chan].checksum, AGBWorkArray[chan].plainWord);
+        AGBWorkArray[chan].key =
+            AGBWorkArray[chan].key * AGB_KEY_MULTIPLIER + 1;
+    }
+    AGBWorkArray[chan].linkWord = SwapEndian(AGBWorkArray[chan].codedWord);
+send:
+    AGBWorkArray[chan].result =
+        GBAWriteAsync(chan, &AGBWorkArray[chan].linkWord,
+            AGBWorkArray[chan].linkStatus, _upload_12);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    if (OSGetTick() - AGBWorkArray[chan].tick <= AGBWorkArray[chan].timeout) {
+        goto send;
+    }
+    _job_type_clear(chan, agbUploadJobName11s);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+}
+
+void _upload_12(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 12;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName12);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_SYNC_STATE)
+            != AGBWorkArray[chan].syncCode) {
+        goto done;
+    }
+    AGBWorkArray[chan].syncCode ^= AGB_SYNC_CODE_STEP;
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    _upload_12s(chan, result);
+}
+
+void _upload_12s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 12;
+retry:
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        _job_type_clear(chan, agbUploadJobName12s);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        return;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_13);
+    if (AGBWorkArray[chan].result == 2) {
+        goto retry;
+    }
+}
+
+void _upload_13(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 13;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName13);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_SYNC_TAKEN) == 0) {
+        goto done;
+    }
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_BUSY) != 0) {
+        goto idle;
+    }
+    AGBWorkArray[chan].offset += 4;
+    if (AGBWorkArray[chan].offset < AGBWorkArray[chan].size) {
+        _upload_11s(chan, result);
+        return;
+    }
+    AGBWorkArray[chan].timeout = OSSecondsToTicks(10);
+    AGBWorkArray[chan].tick = OSGetTick();
+    _upload_13s(chan, result);
+    return;
+idle:
+    _upload_12s(chan, result);
+}
+
+void _upload_13s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 13;
+    if (OSGetTick() - AGBWorkArray[chan].tick <= AGBWorkArray[chan].timeout) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName13s);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_14);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_14(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 14;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName14);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_SYNC_STATE)
+            != AGB_LINK_STATUS_SYNC_PACKET) {
+        goto done;
+    }
+    if ((AGBWorkArray[chan].linkStatus[0]
+            & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+            != AGB_LINK_STATUS_DATA_READY) {
+        goto idle;
+    }
+    AGBWorkArray[chan].result =
+        GBAReadAsync(chan, &AGBWorkArray[chan].linkWord,
+            AGBWorkArray[chan].linkStatus, _upload_15);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _upload_13s(chan, result);
+}
+
+void _upload_15(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 15;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbUploadJobName15);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkWord >> 24) == AGB_WORD_KIND_BOOT_KEY) {
+        AGBWorkArray[chan].bootKey =
+            _PKJBUpFindBootKey(SwapEndian(AGBWorkArray[chan].linkWord),
+                AGBWorkArray[chan].checksum);
+        if (AGBWorkArray[chan].bootKey == 0) {
+            goto done;
+        }
+        AGBWorkArray[chan].bootKey = SwapEndian(AGBWorkArray[chan].bootKey);
+        AGBWorkArray[chan].result =
+            GBAWriteAsync(chan, &AGBWorkArray[chan].bootKey,
+                AGBWorkArray[chan].linkStatus, _upload_16);
+        if (AGBWorkArray[chan].result != 2) {
+            return;
+        }
+        goto done;
+    }
+    if ((AGBWorkArray[chan].linkWord >> 24) != AGB_WORD_KIND_ACCEPTED) {
+        goto done;
+    }
+    _upload_13s(chan, result);
+}
+
+void _upload_16(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 16;
+    if (result == 1) {
+        _job_type_clear(chan, agbUploadJobName16);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        return;
+    }
+    AGBWorkArray[chan].timeout = OSSecondsToTicks(1);
+    AGBWorkArray[chan].tick = OSGetTick();
+    _upload_16s0(chan, result);
+}
+
+void _upload_16s0(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL0_BASE + 16;
+    AGBWorkArray[chan].idleStage = AGB_IDLE_NONE;
+    if (OSGetTick() - AGBWorkArray[chan].tick > AGBWorkArray[chan].timeout) {
+        _job_type_clear(chan, agbUploadJobName16s0);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        return;
+    }
+    AGBWorkArray[chan].result = SIProbe(chan);
+    if (AGBWorkArray[chan].result != AGB_SI_TYPE_GBA) {
+        AGBWorkArray[chan].resetTimeout = OSSecondsToTicks(8);
+        AGBWorkArray[chan].resetTick = OSGetTick();
+        AGBWorkArray[chan].result =
+            GBAResetAsync(chan, AGBWorkArray[chan].linkStatus, _upload_17);
+        if (AGBWorkArray[chan].result == 2) {
+            _upload_16s(chan, result);
+        }
+        return;
+    }
+    AGBWorkArray[chan].idleStage = AGB_IDLE_RESET_16S0;
+}
+
+void _upload_16s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 16;
+    AGBWorkArray[chan].idleStage = AGB_IDLE_NONE;
+    if (OSGetTick() - AGBWorkArray[chan].resetTick > AGBWorkArray[chan].resetTimeout) {
+        _job_type_clear(chan, agbUploadJobName16s);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        return;
+    }
+    AGBWorkArray[chan].result = SIProbe(chan);
+    if (AGBWorkArray[chan].result != AGB_SI_TYPE_GBA) {
+        AGBWorkArray[chan].idleStage = AGB_IDLE_RESET_16S;
+        return;
+    }
+    AGBWorkArray[chan].result =
+        GBAResetAsync(chan, AGBWorkArray[chan].linkStatus, _upload_17);
+    if (AGBWorkArray[chan].result == 2) {
+        AGBWorkArray[chan].idleStage = AGB_IDLE_RESET_16S;
+    }
+}
+
+void _upload_17(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 17;
+    if (result == 1) {
+        _upload_16s(chan, result);
+        return;
+    }
+    AGBWorkArray[chan].period = PACKET_POLL_MSEC;
+    AGBWorkArray[chan].pollTimeout = OSMillisecondsToTicks(AGBWorkArray[chan].period);
+    AGBWorkArray[chan].pollTick = OSGetTick();
+    _upload_17s(chan, result);
+}
+
+void _upload_17s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 17;
+    if (OSGetTick() - AGBWorkArray[chan].pollTick <= AGBWorkArray[chan].pollTimeout) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_18);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_18(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 18;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0]
+            & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+            != AGB_LINK_STATUS_DATA_READY) {
+        goto idle;
+    }
+    AGBWorkArray[chan].result =
+        GBAReadAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _upload_19);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _upload_17s(chan, result);
+}
+
+void _upload_19(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 19;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    if (gbaGameId != AGBWorkArray[chan].reply) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_20);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_20(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 20;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAWriteAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _upload_21);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_21(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 21;
+    if (result == 1) {
+        _upload_16s(chan, result);
+        return;
+    }
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    _upload_21s(chan, result);
+}
+
+void _upload_21s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 21;
+    if (OSGetTick() - AGBWorkArray[chan].tick <= AGBWorkArray[chan].timeout) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_22);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_22(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 22;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_BUSY) != 0) {
+        goto idle;
+    }
+    AGBWorkArray[chan].request = AGB_UPLOAD_COMMAND;
+    AGBWorkArray[chan].result =
+        GBAWriteAsync(chan, &AGBWorkArray[chan].request, AGBWorkArray[chan].linkStatus,
+            _upload_23);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _upload_21s(chan, result);
+}
+
+void _upload_23(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 23;
+    if (result == 1) {
+        _upload_16s(chan, result);
+        return;
+    }
+    AGBWorkArray[chan].period = STAGE_POLL_MSEC;
+    AGBWorkArray[chan].pollTimeout = OSMillisecondsToTicks(AGBWorkArray[chan].period);
+    AGBWorkArray[chan].pollTick = OSGetTick();
+    _upload_23s(chan, result);
+}
+
+void _upload_23s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 23;
+    if (OSGetTick() - AGBWorkArray[chan].pollTick <= AGBWorkArray[chan].pollTimeout) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _upload_24);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _upload_24(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 24;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0]
+            & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+            != AGB_LINK_STATUS_DATA_READY) {
+        goto idle;
+    }
+    AGBWorkArray[chan].result =
+        GBAReadAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _upload_25);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _upload_23s(chan, result);
+}
+
+void _upload_25(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 25;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _upload_16s(chan, result);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].reply >> 24) != AGB_UPLOAD_COMMAND) {
+        goto done;
+    }
+    _job_type_clear(chan, agbUploadJobName25);
+    AGBWorkArray[chan].status = AGB_STATUS_COMPLETE;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+}
+
+long AGB_GetPokemon(long chan, void *record, unsigned long *dest)
+{
+    // The key layer of the link drives the four SI ports, the job runs per channel.
+    long port;
+
+    if (AGB_Initialize(chan) == 0) {
+        return 0;
+    }
+    port = chan + 1;
+    gbaCommandSetKeyState(port, GBA_KEY_COMMAND_TRANSFER);
+    _AGB_Work_Clear(chan);
+    AGBWorkArray[chan].jobType = AGB_JOB_TYPE_GET_POKEMON;
+    AGBWorkArray[chan].status = AGB_STATUS_RUNNING;
+    AGBWorkArray[chan].active = 1;
+    AGBWorkArray[chan].record = record;
+    AGBWorkArray[chan].dest = dest;
+    AGBWorkArray[chan].result = SIProbe(chan);
+    if (AGBWorkArray[chan].result != AGB_SI_TYPE_GBA) {
+failed:
+        // The job that could not start releases the channel the way every stage
+        // releases it when it ends in error.
+        _job_type_clear(chan, agbJobNameGetPokemon);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        gbaCommandSetKeyState(port, GBA_KEY_COMMAND_READ);
+        return 0;
+    }
+    AGBWorkArray[chan].result =
+        GBAResetAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_01);
+    if (AGBWorkArray[chan].result == 2) {
+        goto failed;
+    }
+    return 1;
+}
+
+void _getpokemon_01(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 1;
+    if (result == 1) {
+        _job_type_clear(chan, agbJobName01);
+        AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+        return;
+    }
+    AGBWorkArray[chan].period = PACKET_POLL_MSEC;
+    AGBWorkArray[chan].pollTimeout = OSMillisecondsToTicks(AGBWorkArray[chan].period);
+    AGBWorkArray[chan].pollTick = OSGetTick();
+    _getpokemon_01s(chan, result);
+}
+
+void _getpokemon_01s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 1;
+    if (OSGetTick() - AGBWorkArray[chan].pollTick <= AGBWorkArray[chan].pollTimeout) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName01s);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_02);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_02(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 2;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName02);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0]
+            & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+            != AGB_LINK_STATUS_DATA_READY) {
+        goto idle;
+    }
+    AGBWorkArray[chan].result =
+        GBAReadAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _getpokemon_03);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _getpokemon_01s(chan, result);
+}
+
+void _getpokemon_03(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 3;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName03);
+    AGBWorkArray[chan].status = AGB_STATUS_ERROR;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if (gbaGameId != AGBWorkArray[chan].reply) {
+        goto done;
+    }
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_04);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_04(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 4;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName04);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAWriteAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _getpokemon_05);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_05(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 5;
+    if (result == 1) {
+        _job_type_clear(chan, agbJobName05);
+        AGBWorkArray[chan].status = 1;
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+        return;
+    }
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    _getpokemon_05s(chan, result);
+}
+
+void _getpokemon_05s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 5;
+    if (OSGetTick() - AGBWorkArray[chan].tick <= AGBWorkArray[chan].timeout) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName05s);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_06);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_06(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 6;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName06);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_BUSY) != 0) {
+        goto idle;
+    }
+    AGBWorkArray[chan].request = AGB_DOWNLOAD_COMMAND;
+    AGBWorkArray[chan].result =
+        GBAWriteAsync(chan, &AGBWorkArray[chan].request, AGBWorkArray[chan].linkStatus,
+            _getpokemon_07);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _getpokemon_05s(chan, result);
+}
+
+void _getpokemon_07(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 7;
+    if (result == 1) {
+        _job_type_clear(chan, agbJobName07);
+        AGBWorkArray[chan].status = 1;
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+        return;
+    }
+    AGBWorkArray[chan].period = STAGE_POLL_MSEC;
+    AGBWorkArray[chan].pollTimeout = OSMillisecondsToTicks(AGBWorkArray[chan].period);
+    AGBWorkArray[chan].pollTick = OSGetTick();
+    _getpokemon_07s(chan, result);
+}
+
+void _getpokemon_07s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 7;
+    if (OSGetTick() - AGBWorkArray[chan].pollTick <= AGBWorkArray[chan].pollTimeout) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName07s);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_08);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_08(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 8;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName08);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0]
+            & (AGB_LINK_STATUS_BUSY | AGB_LINK_STATUS_DATA_READY))
+            != AGB_LINK_STATUS_DATA_READY) {
+        goto idle;
+    }
+    AGBWorkArray[chan].result =
+        GBAReadAsync(chan, &AGBWorkArray[chan].reply, AGBWorkArray[chan].linkStatus,
+            _getpokemon_09);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+idle:
+    _getpokemon_07s(chan, result);
+}
+
+void _getpokemon_09(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 9;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName09);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].reply >> 24) != AGB_DOWNLOAD_COMMAND) {
+        goto done;
+    }
+    AGBWorkArray[chan].offset = 0;
+    AGBWorkArray[chan].buffer = &agbRecvBuffers[chan * AGB_PACKET_SIZE];
+    _timer_set(chan, STAGE_TIMEOUT_MSEC);
+    _getpokemon_09s(chan, result);
+}
+
+void _getpokemon_09s(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = STAGE_POLL_BASE + 9;
+    if (OSGetTick() - AGBWorkArray[chan].tick <= AGBWorkArray[chan].timeout) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName09s);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    AGBWorkArray[chan].result =
+        GBAGetStatusAsync(chan, AGBWorkArray[chan].linkStatus, _getpokemon_10);
+    if (AGBWorkArray[chan].result != 2) {
+        return;
+    }
+    goto done;
+}
+
+void _getpokemon_10(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 10;
+    if (result != 1) {
+        goto transfer;
+    }
+done:
+    _job_type_clear(chan, agbJobName10);
+    AGBWorkArray[chan].status = 1;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+    return;
+transfer:
+    if ((AGBWorkArray[chan].linkStatus[0] & AGB_LINK_STATUS_DATA_READY) != 0) {
+        AGBWorkArray[chan].result =
+            GBAReadAsync(chan, &AGBWorkArray[chan].packet, AGBWorkArray[chan].linkStatus,
+                _getpokemon_11);
+        if (AGBWorkArray[chan].result != 2) {
+            return;
+        }
+        goto done;
+    }
+    _getpokemon_09s(chan, result);
+}
+
+void _getpokemon_11(long chan, long result)
+{
+    if (AGBWorkArray[chan].active == 0) {
+        return;
+    }
+    AGBWorkArray[chan].stage = 11;
+    if (result == 1) {
+        _job_type_clear(chan, agbJobName11);
+        AGBWorkArray[chan].status = 1;
+        gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+        return;
+    }
+    *(unsigned long *)(AGBWorkArray[chan].buffer + AGBWorkArray[chan].offset) =
+        AGBWorkArray[chan].packet;
+    AGBWorkArray[chan].offset += 4;
+    if (AGBWorkArray[chan].offset < AGB_PACKET_SIZE) {
+        _timer_set(chan, STAGE_TIMEOUT_MSEC);
+        _getpokemon_09s(chan, result);
+        return;
+    }
+    pokeconv(AGBWorkArray[chan].record, AGBWorkArray[chan].buffer);
+    {
+        u8 *packet = AGBWorkArray[chan].buffer;
+
+        *AGBWorkArray[chan].dest =
+            (packet[3] << 24) | (packet[2] << 16) | (packet[1] << 8) | packet[0];
+    }
+    _job_type_clear(chan, agbJobName11);
+    AGBWorkArray[chan].status = 0;
+    gbaCommandSetKeyState(chan + 1, GBA_KEY_COMMAND_READ);
+}
+
+extern "C" void AGB_FileBuffAlloc(void)
+{
+    gbaFileBuffer = (u8 *)GSmemAllocAlign(GBA_FILE_BUFFER_SIZE, GBA_FILE_BUFFER_ALIGN);
+}
+
+extern "C" void AGB_FileBuffFree(void)
+{
+    GSmemFree(gbaFileBuffer);
+    gbaFileBuffer = 0;
+}

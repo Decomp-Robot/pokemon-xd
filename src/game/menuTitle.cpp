@@ -1,16 +1,23 @@
-#include <fade.h>
-#include <menu.h>
-#include <window.h>
+#include <menuDataBios.h>
+#include <menuTop.h>
+#include <GSsnd.h>
+#include <GSthread.h>
+#include <winMsg.h>
+#include <menuTool.h>
+#include <flashsystem.h>
+#include <GSres.h>
+#include <floorManager.h>
 #include <gamedata.h>
-#include <floor.h>
+#include <fade.h>
 #include <camera.h>
+#include <GSfsys.h>
+#include <menu.h>
+#include <sound.h>
+#include <floor.h>
 #include <winSprite.h>
 #include <WorldMap.h>
-#include <savedata.h>
-#include <fightEncountData.h>
 #include <fightEncountBios.h>
-#include <menuTop.h>
-#include <pokecolo.h>
+#include "GSmodel.h"
 
 #pragma force_active on
 
@@ -36,7 +43,7 @@
 /* Camera types accepted by cameraSetType. */
 #define TITLE_CAM_TYPE_MAP 4 // the fly-around map camera
 
-// States of menuTitleMainSub, kept in titleState.
+// States of menuTitleMainSub, kept in _menuTitleStatus.
 enum {
     TITLE_STATE_0 = 0,
     TITLE_STATE_FLASH_BACK = 1,
@@ -52,8 +59,7 @@ enum {
 
 // Window menu id the title screen opens.
 #define TITLE_MENU_ID 17
-/* The two further window menus the mode-select screen leaves open behind it;
- * nothing recovered so far says which screen part each one belongs to. */
+/* Additional windows retained by the mode-select screen. */
 #define TITLE_SELECT_MENU_ID_1 0x116
 #define TITLE_SELECT_MENU_ID_2 0x118
 /* Confirm sound played when the title prompt is accepted. */
@@ -69,124 +75,72 @@ enum {
 /* Address of the waza select menu resource. */
 #define TITLE_WAZA_SELECT_RES 0x200A3000
 
+/* Mode-select entry defaults the battle select screen starts from. */
+struct TitleSelectWork {
+    u8 _00[0x10];
+    f32 mRows[4][3];
+    s16 mPages[5]; // +0x40..+0x48: entry pages, -1 until filled
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Title-screen work variables. */
-extern s32 titleEntrySelected;      // mode select entry recorded by menuTitleSetStartStatus
-extern s32 titleBgmWaitCounter;     // battle-select menu open attempts
-extern u32 titleState;              // menuTitleMainSub state machine step
-extern f32 titleFlashWaitTime;      // seconds left of the flash fade hold
-extern f32 titleFrameSeconds;       // last frame time, for the map fade
-extern f32 titleFlashFadeAlpha;     // accumulated flash fade seconds
-extern u32 titleFlashHoldFrames;    // frames the flash end holds
-extern u32 titleEntryConfirmed;     // set when a select entry is confirmed
-extern f32 titleCursorFade;         // press-start prompt fade 0..1
-extern f32 titleBgmFadeSeconds;     // bgm fade-out seconds accumulated
-extern u32 titlePrereadThreadId;    // preread thread id, 0 when none runs
-extern u32 titleInitFlag;           // cleared when the title flow initializes
-extern s16 titleCursorFrame;       // press-start pulse frame, advanced % 1000
+extern s32 _menuTitleStartStatus;      // mode select entry recorded by menuTitleSetStartStatus
+extern s32 _menuTitleDiskCoverOpen;     // battle-select menu open attempts
+extern u32 _menuTitleStatus;              // menuTitleMainSub state machine step
+extern f32 _menuTitleTimer;      // seconds left of the flash fade hold
+extern f32 _menuTitleFrameSec;       // last frame time, for the map fade
+extern f32 _menuTitleSeFrame;     // accumulated flash fade seconds
+extern u32 _menuTitleSeCount;    // frames the flash end holds
+extern u32 _menuTitleType;     // set when a select entry is confirmed
+extern f32 _menuTitleFrameCount;         // press-start prompt fade 0..1
+extern f32 _menuTitleAutoDemoCount;     // bgm fade-out seconds accumulated
+extern u32 _gsthread_ptr_fight_reg_wzx;    // preread thread id, 0 when none runs
+extern u32 _menuTitleSkipFlag;           // cleared when the title flow initializes
+extern s16 _titleCursorTimer;       // press-start pulse frame, advanced % 1000
 
-/* rodata: flash frame labels and the press-start item id table. The frame
- * labels are named after the labels themselves ("menu_play"/"menu_end" for
- * the mode select movie, "back_play"/"back_end" for the confirm movie). */
-extern const char cLabelEnd[4];      // "end"
-extern const char cLabelStart[6];    // "start"
-extern const char cLabelBack[5];     // "back"
-extern const char cLabelWindow[7];   // "window"
-extern const char cLabelMenuPlay[10]; // "menu_play"
-extern const char cLabelMenuEnd[9];  // "menu_end"
-extern const char cLabelBackPlay[10]; // "back_play"
-extern const char cLabelBackEnd[9];  // "back_end"
-extern const s32 titleCursorItemIDs[5]; // 0x802EBBB0
+/* Mode-select work block the entry menus read back. */
+extern TitleSelectWork _menuTitleWork;
 
-/* sdata2 constants shared with the title flow. */
-extern const f32 cHalfSecond;       // 0.5f
-extern const f32 cZeroFloat;        // 0.0f
-extern const f32 cOneFloat;         // 1.0f
-extern const f32 cSixtyHalfFloat;   // 60.5f
-extern const f32 cPiFloat;          // pi
-extern const f32 cThirtyFloat;      // 30.0f
-extern const f32 cAlphaBaseFloat;   // 128.0f
-extern const f32 cSixtyFloat;       // 60.0f
-extern const f32 cTwoFloat;         // 2.0f
-extern const f32 cPos300Float;      // 300.0f
-extern const f32 cNeg300Float;      // -300.0f
-extern const f32 cPos400Float;      // 400.0f
-extern const f32 cNeg400Float;      // -400.0f
-extern const f32 cPos500Float;      // 500.0f
-extern const f32 cNeg500Float;      // -500.0f
-
-/* Mode-select work block the entry menus read back (bss 0x8043D2A8). */
-extern u8 titleSelectWork[];
-
-/* Battle-select slot the next entry uses, 0..3 (sdata 0x804E80B8). */
-extern s32 titleSelectSlot;
+/* Battle-select slot the next entry uses, 0..3. */
+extern s32 _menuTitleWorkPat;
 
 #ifdef __cplusplus
 }
 #endif
 
 extern "C" {
-void GSthreadSwitch(void);
-void GSthreadTerminate(u32 threadId);
-u32 GSthreadCreate(s32 priority, u32 groupID, u32 stackSize, s32 usesFPU, s32 closeProtected,
-    void (*entry)(void));
-s32 windowGetActiveID(void);
-struct tagWINDOW_KEY *windowGetKeyInfo(void);
 void dbgMenuSetOpenFlag(s32 flag);
-void *menuDataBiosGetPtr(s32 menuID);
-void GSsndPlay(s32 id, s32 a, s32 b);
-u32 soundGetBGMID(void);
-void soundOpenPlay(u32 soundID, s32 a, s32 b);
-void soundOpenPlayFadeOutIn(u32 soundID, u32 next, s32 a, s32 b);
 u8 GSsndIsPlayingStream(u32 streamID);
 f32 timeGetLastFrameSec(void);
 double sin(double x);
-void *GSresGetResourceAllGroup(void *group);
-void GSresFreeGroup(u32 group);
-void GSfsysFree(u32 id);
-void GSfsysPreReadWait(u32 id);
-void GSfsysReadWait(u32 id);
-void *roomIDGetMapData(s32 roomID);
 u32 roomDataGetFsysGidForLanguage(void *mapData);
 void fightRegWzxLoadAll(s32 id);
-void GSmodelSetAnimFrame(void *model, f32 frame);
-void GSmodelSetAnimRate(void *model, f32 rate);
-f32 GSmodelGetAnimFrameCount(_GSmodel *model, s16 anim);
-void GSmodelSetAnimType(void *model, s32 type);
-void GSmodelStartAnimation(void *model);
-void GSmodelSetForceUseFractionalFramesFlag(void *model, s32 flag);
-void GSmodelSet60fpsAnimFlag(void *model, s32 flag);
-void GSmodelSetVisibility(void *model, s32 visible);
-void GSmodelSetBoundCheck(void *model, s32 flag);
-/* Selects the animation a map model plays. */
-void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index);
-u32 GSfsysWait(u32 id);
-void winMsgClose(s32 id);
-s32 getCurrentMapGroupId(void);
 void savedataCreate(s32 a, s32 b);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
-void floorUnlinkWithSE(s32 a, s32 b);
-/* Returns the thread group id of the floor group on top of the stack. */
-u32 floorGetStackGroupID(void);
-void menuToolInit(void);
-void FlashSystemSetPlayFrameLabel(u32 flash, const char *start, const char *end);
-void FlashSystemSetLoopFlag(u32 flash, s32 flag);
-void FlashSystemSetNowFrameLabel(u32 flash, const char *label);
-s32 FlashSystemGetFrameFromLabel(u32 flash, const char *label);
-s32 FlashSystemGetNowFrame(u32 flash);
-void FlashSystemPlayAndWait(u32 flash, const char *start, const char *end);
+/* Records whether the mode select screen may keep running. */
+void menuTopSetInitCursor(s32 a);
+s32 pokecoloGetRomVersion(void);
+u8 menuIsOpen(s32 id);
+/* Sets the battle CD id on the encounter data the select screen hands on. */
 }
 
 /* Functions of this module. */
+void _menuTitleNormalButton(tagWINDOW_WORK *window);
+s32 _selectMenu(void);
+void _CreateThread(void);
+void _menuTitlePreReadFightRegWzxData(void);
+void _menuTitleSetSE(u32 id);
+void _menuTitleClose2(s32 id, u32 flag);
+
 extern "C" {
 void menuTitleLoadMap(void);
-void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame);
+void menuTitleSetupModel(u32 resourceID, s16 animationIndex, u8 animationType, f32 startFrame);
 
-void menuTitleModelCtor(unsigned int group, unsigned int modelID, bool visible);
-void menuTitleModelDtor(unsigned int group, unsigned int modelID);
+void menuTitleModelCtor(u32 group, u32 modelID, bool visible);
+void menuTitleModelDtor(u32 group, u32 modelID);
 u8 menuTitlePlayBGMWait(u8 wait);
 void menuTitlePlayBGM(void);
 void menuTitleOpenSelectAnime2(void);
@@ -208,12 +162,10 @@ void menuTitleHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuTitleMainSub(void);
 void menuTitleBattlePreReadCheck(void);
 void menuTitleSetStartStatus(s32 entry);
+
 void menuTitleCloseSelectAnime(void);
 }
 
-/* Functions of this module that are compiled as C++. */
-static void _menuTitleSetSE(unsigned long id);
-static void _menuTitleClose2(long id, unsigned long flag);
 void _menuTitleNormalButton(tagWINDOW_WORK *window);
 s32 _selectMenu(void);
 void _menuTitlePreReadFightRegWzxData(void);
@@ -223,15 +175,7 @@ void _CreateThread(void);
  * Title screen flow
  * ---------------------------------------------------------------------- */
 
-/* Mode-select entry defaults the battle select screen starts from. */
-struct TitleSelectWork {
-    u8 _00[0x10];
-    /* +0x10..+0x3C: twelve floats in four rows of three - the 300/400/500
-     * distances, their negation, and two all-zero rows. What they select is
-     * not established by the callers seen so far. */
-    f32 mRows[4][3];
-    s16 mPages[5]; // +0x40..+0x48: entry pages, -1 until filled
-};
+
 
 /* Open the title window over the currently active one. */
 extern "C" void menuTitleOpenMenu(void)
@@ -243,14 +187,14 @@ extern "C" void menuTitleOpenMenu(void)
 /* Selected entry of the mode-select menu. */
 extern "C" s16 menuTitleGetSelect(s32 entry)
 {
-    TitleSelectWork *select = (TitleSelectWork *)titleSelectWork;
+    TitleSelectWork *select = &_menuTitleWork;
 
     return select->mPages[entry];
 }
 
 extern "C" void menuTitleSetSelect(s32 entry, s16 value)
 {
-    TitleSelectWork *select = (TitleSelectWork *)titleSelectWork;
+    TitleSelectWork *select = &_menuTitleWork;
 
     select->mPages[entry] = value;
 }
@@ -262,18 +206,18 @@ extern "C" void menuTitleFunc(void)
     s32 state;
 
     menuTitleCursorAnimeMain();
-    titleFrameSeconds = timeGetLastFrameSec();
-    titleCursorFade += titleFrameSeconds * cHalfSecond;
-    if (titleCursorFade >= cOneFloat) {
-        titleCursorFade = cZeroFloat;
+    _menuTitleFrameSec = timeGetLastFrameSec();
+    _menuTitleFrameCount += _menuTitleFrameSec / 2.0f;
+    if (_menuTitleFrameCount >= 1.0f) {
+        _menuTitleFrameCount = 0.0f;
     }
 
-    state = (s32)titleState;
+    state = (s32)_menuTitleStatus;
     if (state < 30) {
         return;
     }
     if (state == TITLE_STATE_MAP_FADE) {
-        titleCursorFade = cZeroFloat;
+        _menuTitleFrameCount = 0.0f;
         return;
     }
     if (state == TITLE_STATE_SELECT) {
@@ -282,12 +226,12 @@ extern "C" void menuTitleFunc(void)
     if (pokecoloGetRomVersion() == 1) {
         return;
     }
-    titleBgmFadeSeconds += titleFrameSeconds;
-    if (!(titleBgmFadeSeconds >= cSixtyHalfFloat)) {
+    _menuTitleAutoDemoCount += _menuTitleFrameSec;
+    if (!(_menuTitleAutoDemoCount >= 60.5f)) {
         return;
     }
-    titleBgmFadeSeconds = cZeroFloat;
-    state = (s32)titleState;
+    _menuTitleAutoDemoCount = 0.0f;
+    state = (s32)_menuTitleStatus;
     /* The flow ends once it quits; until then the flash confirm step has
      * nothing left to do either. */
     if (state == TITLE_STATE_QUIT) {
@@ -298,7 +242,7 @@ extern "C" void menuTitleFunc(void)
             return;
         }
     }
-    titleState = TITLE_STATE_MAP;
+    _menuTitleStatus = TITLE_STATE_MAP;
     menuTitleSetStartStatus(TITLE_STATE_0);
 }
 
@@ -310,8 +254,8 @@ extern "C" void menuTitleButton(tagWINDOW_WORK *window)
         return;
     }
     dbgMenuSetOpenFlag(1);
-    u32 end = (u32)FlashSystemGetFrameFromLabel(TITLE_FLASH, cLabelEnd);
-    if ((u32)FlashSystemGetNowFrame(TITLE_FLASH) >= end) {
+    u32 end = FlashSystemGetFrameFromLabel(TITLE_FLASH, "end");
+    if (FlashSystemGetNowFrame(TITLE_FLASH) >= end) {
         _menuTitleNormalButton(window);
     }
 }
@@ -321,7 +265,7 @@ void _menuTitleNormalButton(tagWINDOW_WORK *window)
 {
     struct tagWINDOW_KEY *key;
 
-    if ((s32)titleState >= TITLE_STATE_MAP_FADE) {
+    if ((s32)_menuTitleStatus >= TITLE_STATE_MAP_FADE) {
         return;
     }
     if (window == 0) {
@@ -348,13 +292,14 @@ extern "C" void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
     f32 alpha;
 
     if (window == windowSearchID(windowGetActiveID())) {
-        s32 frame = titleCursorFrame;
+        s32 frame = _titleCursorTimer;
 
         phase = frame % 60;
         sprite->mColor = -1;
         if (phase < 30) {
-            angle = cPiFloat * ((f32)phase / cThirtyFloat);
-            alpha = cAlphaBaseFloat * (f32)sin(angle);
+            angle = 3.14f * ((f32)phase / 30.0f);
+            alpha = (f32)sin(angle);
+            alpha = 128.0f * alpha;
             sprite->mRgba.mAlpha -= (u8)alpha;
         }
     } else {
@@ -371,10 +316,10 @@ extern "C" void menuTitleCursorAnimeMain(void)
     f32 cycles;
 
     seconds = timeGetLastFrameSec();
-    frame = titleCursorFrame;
-    cycles = cSixtyFloat * seconds + (f32)frame;
+    frame = _titleCursorTimer;
+    cycles = 60.0f * seconds + (f32)frame;
     frame = (s32)cycles;
-    titleCursorFrame = (s16)(frame % 1000);
+    _titleCursorTimer = (s16)(frame % 1000);
 }
 
 /* Cursor hook of the press-start entries (item ids 61-63, 66, 67):
@@ -400,15 +345,10 @@ extern "C" void menuTitleHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 /* Show the entry the select cursor sits on, hide the others. */
 extern "C" void menuTitleCursorShowSelected(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    s32 ids[5];
-    s16 cur = window->mCursorState.mSelection.mCursor;
+    s32 ids[5] = {61, 62, 63, 66, 67};
+    s16 cur = window->mCursor.y;
     s32 entry;
-    s32 i;
 
-    /* Snapshot the item id table, then find the entry the sprite belongs to. */
-    for (i = 0; i < 5; i++) {
-        ids[i] = titleCursorItemIDs[i];
-    }
     for (entry = 0; entry < 5; entry++) {
         if (ids[entry] == sprite->mItemID) {
             break;
@@ -428,62 +368,62 @@ extern "C" void menuTitleMainSub(void)
     s32 status;
     s32 running = 1;
 
-    titleState = TITLE_STATE_0;
-    titleFlashFadeAlpha = titleFlashWaitTime = cZeroFloat;
-    titleFlashHoldFrames = 0;
-    titleInitFlag = 0;
+    _menuTitleStatus = TITLE_STATE_0;
+    _menuTitleSeFrame = _menuTitleTimer = 0.0f;
+    _menuTitleSeCount = 0;
+    _menuTitleSkipFlag = 0;
     menuTitlePlayBGM();
     menuTitlePlayBGMWait(1);
-    if (titleEntrySelected == 1) {
-        titleState = TITLE_STATE_FLASH_BACK;
-        titleEntrySelected = 0;
-        titleEntryConfirmed = 1;
+    if (_menuTitleStartStatus == 1) {
+        _menuTitleStatus = TITLE_STATE_FLASH_BACK;
+        _menuTitleStartStatus = 0;
+        _menuTitleType = 1;
     } else {
-        titleEntryConfirmed = 0;
+        _menuTitleType = 0;
     }
     menuTitleLoadMap();
 
     do {
-        switch (titleState) {
+        switch (_menuTitleStatus) {
         case TITLE_STATE_0:
             FlashSystemSetLoopFlag(TITLE_FLASH, 0);
-            FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelStart, cLabelEnd);
-            FlashSystemSetNowFrameLabel(TITLE_FLASH, cLabelStart);
-            titleState = TITLE_STATE_FLASH_START;
+            FlashSystemSetPlayFrameLabel(TITLE_FLASH, "start", "end");
+            FlashSystemSetNowFrameLabel(TITLE_FLASH, "start");
+            _menuTitleStatus = TITLE_STATE_FLASH_START;
             break;
 
         case TITLE_STATE_FLASH_BACK:
             FlashSystemSetLoopFlag(TITLE_FLASH, 0);
-            FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelBack, cLabelEnd);
-            FlashSystemSetNowFrameLabel(TITLE_FLASH, cLabelBack);
-            titleState = TITLE_STATE_FLASH_START;
+            FlashSystemSetPlayFrameLabel(TITLE_FLASH, "back", "end");
+            FlashSystemSetNowFrameLabel(TITLE_FLASH, "back");
+            _menuTitleStatus = TITLE_STATE_FLASH_START;
             break;
 
         case TITLE_STATE_MAP:
-            titleState = TITLE_STATE_QUIT;
+            _menuTitleStatus = TITLE_STATE_QUIT;
             break;
 
         case TITLE_STATE_FLASH_START:
-            titleState = TITLE_STATE_WAIT_FLASH;
+            _menuTitleStatus = TITLE_STATE_WAIT_FLASH;
             break;
 
         case TITLE_STATE_WAIT_FLASH:
             if (menuOpenCustom(TITLE_MENU_ID, windowGetActiveID(), 0, 0, 1, 0) >= 0) {
                 FlashSystemSetLoopFlag(TITLE_FLASH, 0);
-                FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelEnd, cLabelWindow);
-                titleState = TITLE_STATE_CONFIRM;
-                titleFlashWaitTime = cZeroFloat;
+                FlashSystemSetPlayFrameLabel(TITLE_FLASH, "end", "window");
+                _menuTitleStatus = TITLE_STATE_CONFIRM;
+                _menuTitleTimer = 0.0f;
             }
             break;
 
         case TITLE_STATE_CONFIRM:
-            while (titleFlashWaitTime < cOneFloat) {
-                titleFlashWaitTime += timeGetLastFrameSec();
+            while (_menuTitleTimer < 1.0f) {
+                _menuTitleTimer += timeGetLastFrameSec();
                 GSthreadSwitch();
             }
-            FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelWindow, cLabelWindow);
-            FlashSystemSetNowFrameLabel(TITLE_FLASH, cLabelWindow);
-            titleState = TITLE_STATE_SELECT;
+            FlashSystemSetPlayFrameLabel(TITLE_FLASH, "window", "window");
+            FlashSystemSetNowFrameLabel(TITLE_FLASH, "window");
+            _menuTitleStatus = TITLE_STATE_SELECT;
             break;
 
         case TITLE_STATE_SELECT_IN:
@@ -496,19 +436,19 @@ extern "C" void menuTitleMainSub(void)
                 status = memcardTaskCall(1, 2, 0);
             }
             if (status == -1) {
-                titleState = TITLE_STATE_WAIT_FLASH;
-                FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelBack, cLabelEnd);
-                FlashSystemSetNowFrameLabel(TITLE_FLASH, cLabelBack);
+                _menuTitleStatus = TITLE_STATE_WAIT_FLASH;
+                FlashSystemSetPlayFrameLabel(TITLE_FLASH, "back", "end");
+                FlashSystemSetNowFrameLabel(TITLE_FLASH, "back");
             } else {
                 if (status != 3) {
                     savedataCreate(0, 0);
                 }
-                if (gamedatasaveGetStatus(0, SAVE_METADATA_SAVE_COUNT) != 0U) {
+                if (gamedatasaveGetStatus(0, 4) != 0U) {
                     menuTopSetInitCursor(1);
                 } else {
                     menuTopSetInitCursor(0);
                 }
-                titleState = TITLE_STATE_MAP_FADE;
+                _menuTitleStatus = TITLE_STATE_MAP_FADE;
             }
             break;
 
@@ -516,8 +456,8 @@ extern "C" void menuTitleMainSub(void)
             s32 selResult = _selectMenu();
             if (selResult < 0 || selResult == 4) {
                 menuTitleCloseSelectAnime();
-                titleState = TITLE_STATE_FLASH_BACK;
-                titleBgmFadeSeconds = cZeroFloat;
+                _menuTitleStatus = TITLE_STATE_FLASH_BACK;
+                _menuTitleAutoDemoCount = 0.0f;
             }
             break;
 
@@ -531,23 +471,23 @@ extern "C" void menuTitleMainSub(void)
 /* Load the four map models the fly-around shows. */
 extern "C" void menuTitleLoadMapModels(void)
 {
-    menuTitleSetupModel((void *)TITLE_MAP_RES_A, 0, 1, cZeroFloat);
-    menuTitleSetupModel((void *)TITLE_MAP_RES_B, 0, 1, cZeroFloat);
-    menuTitleSetupModel((void *)TITLE_MAP_RES_C, 0, 1, cZeroFloat);
-    menuTitleSetupModel((void *)TITLE_MAP_RES_D, 0, 1, cZeroFloat);
+    menuTitleSetupModel(TITLE_MAP_RES_A, 0, 1, 0.0f);
+    menuTitleSetupModel(TITLE_MAP_RES_B, 0, 1, 0.0f);
+    menuTitleSetupModel(TITLE_MAP_RES_C, 0, 1, 0.0f);
+    menuTitleSetupModel(TITLE_MAP_RES_D, 0, 1, 0.0f);
 }
 
 /* Point the fly-around camera at the map group. */
 extern "C" void menuTitleSetupMapCamera(void)
 {
-    cameraSetType(TITLE_CAM_TYPE_MAP);
-    cameraPlayAnime(getCurrentMapGroupId(), TITLE_MAP_CAM_RES, cZeroFloat, 1);
+    cameraSetType(4);
+    cameraPlayAnime(floorGetCurrentGroupID(), TITLE_MAP_CAM_RES, 0.0f, 1);
 }
 
 /* Stream in the title map group and start its models and camera. */
 extern "C" void menuTitleLoadMap(void)
 {
-    menuTitleModelCtor(getCurrentMapGroupId(), TITLE_MAP_MODEL_RES, 1);
+    menuTitleModelCtor(floorGetCurrentGroupID(), TITLE_MAP_MODEL_RES, 1);
     menuTitleLoadMapModels();
     menuTitleSetupMapCamera();
 }
@@ -555,24 +495,24 @@ extern "C" void menuTitleLoadMap(void)
 /* Release the title map group's models. */
 extern "C" void menuTitleUnloadMapModels(void)
 {
-    menuTitleModelDtor(getCurrentMapGroupId(), TITLE_MAP_MODEL_RES);
+    menuTitleModelDtor(floorGetCurrentGroupID(), TITLE_MAP_MODEL_RES);
 }
 
 /* Set up one fly-around model: read it, set its base frame and rate, and
  * start it at 60fps. */
-extern "C" void menuTitleSetupModel(void *res, s32 anim, u8 type, f32 frame)
+extern "C" void menuTitleSetupModel(u32 resourceID, s16 animationIndex, u8 animationType, f32 startFrame)
 {
-    void *model;
+    _GSmodel *model;
 
-    model = GSresGetResourceAllGroup(res);
+    model = (_GSmodel *)GSresGetResourceAllGroup(resourceID);
     if (model == 0) {
         return;
     }
-    GSmodelSetAnimIndex((_GSmodel *)model, (s16)anim);
-    GSmodelSetAnimFrame(model, frame);
-    GSmodelSetAnimRate(model, cHalfSecond);
-    GSmodelGetAnimFrameCount((_GSmodel *)model, (s16)anim);
-    if (type != 0) {
+    GSmodelSetAnimIndex(model, animationIndex);
+    GSmodelSetAnimFrame(model, startFrame);
+    GSmodelSetAnimRate(model, 0.5f);
+    GSmodelGetAnimFrameCount(model, (s32)animationIndex);
+    if (animationType != 0) {
         GSmodelSetAnimType(model, 1);
     } else {
         GSmodelSetAnimType(model, 0);
@@ -619,11 +559,11 @@ extern "C" u8 menuTitlePlayBGMWait(u8 wait)
     if (wait == 0) {
         return GSsndIsPlayingStream(TITLE_BGM_ID);
     }
-    elapsed = cZeroFloat;
+    elapsed = 0.0f;
     for (;;) {
         if (GSsndIsPlayingStream(TITLE_BGM_ID) != 1) {
             elapsed = elapsed + timeGetLastFrameSec();
-            if (elapsed >= cTwoFloat) {
+            if (elapsed >= 2.0f) {
                 break;
             }
             GSthreadSwitch();
@@ -640,49 +580,49 @@ extern "C" void menuTitlePlayBGM(void)
     if (soundGetBGMID() != TITLE_BGM_ID) {
         soundOpenPlay(TITLE_BGM_ID, 0, 255);
     }
-    titleBgmFadeSeconds = cZeroFloat;
+    _menuTitleAutoDemoCount = 0.0f;
 }
 
 /* Play the mode-select flash movie from menu_play to menu_end, wait for the
  * end frame, then hand over to the select screen. */
 s32 _selectMenu(void)
 {
-    s32 end;
+    u32 end;
 
-    s32 now;
+    u32 now;
 
-    FlashSystemSetPlayFrameLabel(TITLE_FLASH, cLabelMenuPlay, cLabelMenuEnd);
+    FlashSystemSetPlayFrameLabel(TITLE_FLASH, "menu_play", "menu_end");
     FlashSystemSetLoopFlag(TITLE_FLASH, 0);
-    FlashSystemSetNowFrameLabel(TITLE_FLASH, cLabelMenuPlay);
-    end = FlashSystemGetFrameFromLabel(TITLE_FLASH, cLabelMenuEnd);
+    FlashSystemSetNowFrameLabel(TITLE_FLASH, "menu_play");
+    end = FlashSystemGetFrameFromLabel(TITLE_FLASH, "menu_end");
     do {
         now = FlashSystemGetNowFrame(TITLE_FLASH);
         GSthreadSwitch();
-    } while ((u32)now < (u32)end);
+    } while (now < end);
     /* The select screen reports the chosen mode through its return value. */
     return menuTopSelectMode();
 }
 
-/* Play the select-menu open flash (back_play..back_end) and wait. */
+/* Play the select-menu return flash (back_play..back_end) and wait. */
 extern "C" void menuTitleCloseSelectAnime(void)
 {
-    FlashSystemPlayAndWait(TITLE_FLASH, cLabelBackPlay, cLabelBackEnd);
+    FlashSystemPlayAndWait(TITLE_FLASH, "back_play", "back_end");
 }
 
 /* Play the mode-select close flash, which starts and ends on menu_end. */
 extern "C" void menuTitleOpenSelectAnime2(void)
 {
-    FlashSystemPlayAndWait(TITLE_FLASH, cLabelMenuEnd, cLabelMenuEnd);
+    FlashSystemPlayAndWait(TITLE_FLASH, "menu_end", "menu_end");
 }
 
 /* Play the mode-select open flash (menu_play..menu_end) and wait. */
 extern "C" void menuTitleOpenSelectAnime(void)
 {
-    FlashSystemPlayAndWait(TITLE_FLASH, cLabelMenuPlay, cLabelMenuEnd);
+    FlashSystemPlayAndWait(TITLE_FLASH, "menu_play", "menu_end");
 }
 
 /* Play a UI sound effect. */
-static void _menuTitleSetSE(unsigned long id)
+void _menuTitleSetSE(u32 id)
 {
     GSsndPlay(id, 0, 0);
 }
@@ -714,16 +654,16 @@ extern "C" void menuTitleBattleSelectFree(void)
 /* Stop the title's loader thread if one is running. */
 extern "C" void menuTitleBattlePreReadCheck(void)
 {
-    if (titlePrereadThreadId != 0) {
-        GSthreadTerminate(titlePrereadThreadId);
-        titlePrereadThreadId = 0;
+    if (_gsthread_ptr_fight_reg_wzx != 0) {
+        GSthreadTerminate(_gsthread_ptr_fight_reg_wzx);
+        _gsthread_ptr_fight_reg_wzx = 0;
     }
 }
 
 /* Wait until the loader thread clears its busy flag. */
 extern "C" void menuTitlePreReadWait(void)
 {
-    while (titlePrereadThreadId != 0) {
+    while (_gsthread_ptr_fight_reg_wzx != 0) {
         GSthreadSwitch();
     }
 }
@@ -733,10 +673,10 @@ extern "C" void menuTitlePreReadWait(void)
 extern "C" void menuTitleMain(void)
 {
     for (;;) {
-        if ((s32)titleState == (s32)TITLE_STATE_MAP) {
+        if ((s32)_menuTitleStatus == (s32)TITLE_STATE_MAP) {
             soundOpenPlayFadeOutIn(TITLE_BGM_ID, TITLE_BGM_FADE_TIME, 0, 127);
-            floorUnlinkWithSE(TITLE_UNLINK_ROOM_ID, 0);
-            titleState = TITLE_STATE_QUIT;
+            floorLink(TITLE_UNLINK_ROOM_ID, 0);
+            _menuTitleStatus = TITLE_STATE_QUIT;
             continue;
         }
         GSthreadSwitch();
@@ -749,9 +689,9 @@ extern "C" void menuTitleStartBattleSelect(void)
 {
     void *encounter;
 
-    titleBgmWaitCounter = 0;
-    titleBgmFadeSeconds = cZeroFloat;
-    titleFrameSeconds = cZeroFloat;
+    _menuTitleDiskCoverOpen = 0;
+    _menuTitleAutoDemoCount = 0.0f;
+    _menuTitleFrameSec = 0.0f;
     menuTitleReadWazaSelectMenu();
     encounter = fightEncountDataBiosGetPtr(14);
     fightEncountDataBiosSetDiskId(encounter, 0);
@@ -759,26 +699,26 @@ extern "C" void menuTitleStartBattleSelect(void)
     _CreateThread();
     if (GSfloorIsPop() == 0) {
         TitleSelectWork *select;
-        s32 slot = titleSelectSlot;
+        s32 slot = _menuTitleWorkPat;
 
-        titleState = TITLE_STATE_0;
-        titleSelectSlot = slot + 1;
-        if (titleSelectSlot >= 4) {
-            titleSelectSlot = 0;
+        _menuTitleStatus = TITLE_STATE_0;
+        _menuTitleWorkPat = slot + 1;
+        if (_menuTitleWorkPat >= 4) {
+            _menuTitleWorkPat = 0;
         }
-        select = (TitleSelectWork *)&titleSelectWork[0];
-        select->mRows[0][0] = cPos300Float;
-        select->mRows[1][0] = cNeg300Float;
-        select->mRows[2][0] = cZeroFloat;
-        select->mRows[3][0] = cZeroFloat;
-        select->mRows[0][1] = cPos400Float;
-        select->mRows[1][1] = cNeg400Float;
-        select->mRows[2][1] = cZeroFloat;
-        select->mRows[3][1] = cZeroFloat;
-        select->mRows[0][2] = cPos500Float;
-        select->mRows[1][2] = cNeg500Float;
-        select->mRows[2][2] = cZeroFloat;
-        select->mRows[3][2] = cZeroFloat;
+        select = &_menuTitleWork;
+        select->mRows[0][0] = 300.0f;
+        select->mRows[1][0] = -300.0f;
+        select->mRows[2][0] = 0.0f;
+        select->mRows[3][0] = 0.0f;
+        select->mRows[0][1] = 400.0f;
+        select->mRows[1][1] = -400.0f;
+        select->mRows[2][1] = 0.0f;
+        select->mRows[3][1] = 0.0f;
+        select->mRows[0][2] = 500.0f;
+        select->mRows[1][2] = -500.0f;
+        select->mRows[2][2] = 0.0f;
+        select->mRows[3][2] = 0.0f;
         select->mPages[0] = -1;
         select->mPages[1] = -1;
         select->mPages[2] = -1;
@@ -791,7 +731,7 @@ extern "C" void menuTitleStartBattleSelect(void)
 /* Start the title loader thread that prereads the fight data. */
 void _CreateThread(void)
 {
-    titlePrereadThreadId = GSthreadCreate(20, floorGetStackGroupID(), 8192, 1, 1,
+    _gsthread_ptr_fight_reg_wzx = GSthreadCreate(20, GSfloorGetCurrentFloorGroupID(), 8192, 1, 1,
         _menuTitlePreReadFightRegWzxData);
 }
 
@@ -806,15 +746,15 @@ void _menuTitlePreReadFightRegWzxData(void)
         GSthreadSwitch();
     }
     menuTitlePlayBGMWait(1);
-    GSfsysPreReadWait(roomDataGetFsysGidForLanguage(roomIDGetMapData(TITLE_PREREAD_ROOM_ID)));
+    GSfsysPreReadWait(roomDataGetFsysGidForLanguage(floorDataBiosGetPtr(TITLE_PREREAD_ROOM_ID)));
     fightRegWzxLoadAll(-1);
-    titlePrereadThreadId = 0;
+    _gsthread_ptr_fight_reg_wzx = 0;
 }
 
 /* Make sure the select menu resource group is in memory. */
 extern "C" void menuTitleReadWazaSelectMenu(void)
 {
-    if (GSresGetResourceAllGroup((void *)TITLE_WAZA_SELECT_RES) == 0) {
+    if (GSresGetResourceAllGroup(TITLE_WAZA_SELECT_RES) == 0) {
         GSfsysReadWait(TITLE_SELECT_RES);
     }
 }
@@ -822,11 +762,11 @@ extern "C" void menuTitleReadWazaSelectMenu(void)
 /* Record the mode select entry the player settled on. */
 extern "C" void menuTitleSetStartStatus(s32 entry)
 {
-    titleEntrySelected = entry;
+    _menuTitleStartStatus = entry;
 }
 
 /* Close a menu that is still open. */
-static void _menuTitleClose2(long id, unsigned long flag)
+void _menuTitleClose2(s32 id, u32 flag)
 {
     s32 closeFlags;
     s32 menuID;

@@ -1,3 +1,6 @@
+#include <winMsg.h>
+#include <pokecolo.h>
+#include <toolentry.h>
 #include <msgctrl.h>
 #include <gbaCommand.h>
 #include <menuCBBios.h>
@@ -9,7 +12,6 @@
  * The result screen of a link (GBA) battle: it shows how the battle that was
  * just played ended and, while the players still have to pick where their
  * Pokemon go, runs the selection dialogue.
- *
  */
 
 /* Selection lists handed to menuSubOpenSelect*: the message IDs of the
@@ -38,11 +40,8 @@ s32 toolentryTaisenGetBattleType(void);
 s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetControlerType(s32 index);
 void toolentryCopyHero(void);
-s32 gameGetRegion(void);
 
 void menuSetEnablePort(s32 port);
-void winMsgOpen(s32 a, s32 b, s32 c, s32 d);
-void winMsgClose(s32 id);
 s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s16 x,
                           s16 y, s32 work, s32 cursor, u8 a, u8 b);
 s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s16 x,
@@ -58,26 +57,26 @@ s32 GSinputGetSubType(s32 pad);
 
 /* Menu callback that runs the link-battle result screen the current battle
    mode asks for. */
-extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work);
+extern "C" void menuCB_BattleResult(_MENUCBWORK *work);
 
-u16 _menuCBResultGetHomePlace(void);
+u16 _menuCB_BattleResultGetHomePlace(void);
 u8 _menuCBResultCheckController1sub(void);
 void _menuCBResultCheckController1(void);
 s32 _menuCBResultCheckGBAPort(void);
 
-extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work);
-extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work);
-extern "C" s32 menuCBResultCheckHomePlace(void);
+extern "C" s32 menuCBResultMain(_MENUCBWORK *work);
+s32 _menuCB_BattleResultTonikaku(_MENUCBWORK *work);
+s32 _menuCBResultGetHomePlace(void);
 
 /* -------------------------------------------------------------------------
  * Battle result screen
  * ---------------------------------------------------------------------- */
 
-extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
+extern "C" void menuCB_BattleResult(_MENUCBWORK *work)
 {
     switch (toolentryTaisenGetBattleMode()) {
     case 1:
-        menuCBResultSelectHero(work);
+        _menuCB_BattleResultTonikaku(work);
         break;
     case 0:
     default:
@@ -91,7 +90,7 @@ extern "C" void menuCB_BattleResult(MenuCBTaisenWork *work)
  * and, while the players still have to pick where their Pokemon go, runs the
  * selection dialogue. Returns the menu to open next.
  */
-extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
+extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
 {
     s32 homePlace = -1;
     u16 battleResult = battleGetResult();
@@ -106,7 +105,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
         case 1: {
             menuSetEnablePort(1);
 
-            if (_menuCBResultGetHomePlace() == 0) {
+            if (_menuCB_BattleResultGetHomePlace() == 0) {
                 s32 gbaPort = _menuCBResultCheckGBAPort();
 
                 msgctrlSetValue(0x2F, gbaPort);
@@ -127,33 +126,33 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             return 0xA9;
         }
 
-        menuCBTaisenWork.selectResult = 0;
-        menuCBTaisenWork.confirmationComplete = 0;
+        _CB.selectResult = 0;
+        _CB.confirmationComplete = 0;
         menuSetEnablePort(1);
         winMsgOpen(2, 0x42FF, 1, 1);
 
         if (work->battleMode != 2) {
-            switch (gameGetRegion()) {
+            switch (pokecoloGetCountryCode()) {
             case 0:
-                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
+                _CB.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg2, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             case 1:
             case 2:
-                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
+                _CB.selectResult = menuSubOpenSelect_gba(
                     0, &menuCBRegionalResultChoices[0], 2, 0x3E, 0x89, 0, 2, 1, 1);
                 break;
             }
-            if (menuCBTaisenWork.selectResult == -2) {
+            if (_CB.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (menuCBTaisenWork.selectResult == -1) {
-                menuCBTaisenWork.selectResult = 2;
+            if (_CB.selectResult == -1) {
+                _CB.selectResult = 2;
             }
-            switch (gameGetRegion()) {
+            switch (pokecoloGetCountryCode()) {
             case 0:
-                switch (menuCBTaisenWork.selectResult) {
+                switch (_CB.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -167,7 +166,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
                 break;
             case 1:
             case 2:
-                switch (menuCBTaisenWork.selectResult) {
+                switch (_CB.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -180,27 +179,27 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
             }
         } else {
             /* Four players: as many choices as there are players. */
-            switch (gameGetRegion()) {
+            switch (pokecoloGetCountryCode()) {
             case 0:
-                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
+                _CB.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg3, 4, 0x3E, 0x89, 0, 4, 1, 1);
                 break;
             case 1:
             case 2:
-                menuCBTaisenWork.selectResult = menuSubOpenSelect_gba(
+                _CB.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg1, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             }
-            if (menuCBTaisenWork.selectResult == -2) {
+            if (_CB.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (menuCBTaisenWork.selectResult == -1) {
-                menuCBTaisenWork.selectResult = 3;
+            if (_CB.selectResult == -1) {
+                _CB.selectResult = 3;
             }
-            switch (gameGetRegion()) {
+            switch (pokecoloGetCountryCode()) {
             case 0:
-                switch (menuCBTaisenWork.selectResult) {
+                switch (_CB.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -218,7 +217,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
                 break;
             case 1:
             case 2:
-                switch (menuCBTaisenWork.selectResult) {
+                switch (_CB.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -255,7 +254,7 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
         if (menuID == -1 || menuID == 0xA9) {
             state = 0;
             s32 running = 1;
-            u16 port = menuCBResultCheckHomePlace();
+            u16 port = _menuCBResultGetHomePlace();
 
             do {
                 switch (state) {
@@ -301,10 +300,10 @@ extern "C" s32 menuCBResultMain(MenuCBTaisenWork *work)
 
 /* Non-zero when the Pokemon the player entered were caught by somebody else,
    so that their home is not the player the game started with. */
-u16 _menuCBResultGetHomePlace(void)
+u16 _menuCB_BattleResultGetHomePlace(void)
 {
     if (toolentryTaisenGetBattleType() == 2) {
-        return toolentryTaisenGetPokemonHomePlace(0) != 0;
+        return toolentryTaisenGetHomePlace(0) != 0;
     }
     return 0;
 }
@@ -312,18 +311,18 @@ u16 _menuCBResultGetHomePlace(void)
 /* Result flow for the battle modes that ask again before the fight: the
    players pick whether to fight with the entered hero Pokemon. Yes copies the
    hero into the battle entries and goes to the battle; no leaves the screen. */
-extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
+s32 _menuCB_BattleResultTonikaku(_MENUCBWORK *work)
 {
-    menuCBTaisenWork.selectResult = 0;
-    menuCBTaisenWork.confirmationComplete = 0;
+    _CB.selectResult = 0;
+    _CB.confirmationComplete = 0;
 
-    menuCBTaisenWork.selectResult =
+    _CB.selectResult =
         menuSubOpenSelect3(0, menuCBHeroTransferChoices, 2, 0x3E, 0x89, 0, 2, 1, 1);
-    if (menuCBTaisenWork.selectResult == -1) {
-        menuCBTaisenWork.selectResult = 1;
+    if (_CB.selectResult == -1) {
+        _CB.selectResult = 1;
     }
 
-    switch (menuCBTaisenWork.selectResult) {
+    switch (_CB.selectResult) {
     case 0:
         toolentryCopyHero();
         return 0xB1;
@@ -333,12 +332,12 @@ extern "C" s32 menuCBResultSelectHero(MenuCBTaisenWork *work)
     }
 }
 
-/* Twin of _menuCBResultGetHomePlace, used by the battle result screen while it
+/* Twin of _menuCB_BattleResultGetHomePlace, used by the battle result screen while it
    waits for the players. */
-extern "C" s32 menuCBResultCheckHomePlace(void)
+s32 _menuCBResultGetHomePlace(void)
 {
     if (toolentryTaisenGetBattleType() == 2) {
-        return toolentryTaisenGetPokemonHomePlace(0) != 0;
+        return toolentryTaisenGetHomePlace(0) != 0;
     }
     return 0;
 }
@@ -378,7 +377,7 @@ s32 _menuCBResultCheckGBAPort(void)
 
     toolentryTaisenGetBattleMode();
     for (i = 0; i < playerNum; i++) {
-        u16 home = toolentryTaisenGetPokemonHomePlace(i);
+        u16 home = toolentryTaisenGetHomePlace(i);
 
         type = toolentryTaisenGetControlerType(i);
 

@@ -139,8 +139,8 @@ void _modelIntpJObj(_HSD_JObj *firstJoint, _HSD_JObj *secondJoint, _HSD_JObj *re
 void modelIntpJObjRotate(_HSD_JObj *firstJoint, _HSD_JObj *secondJoint, _HSD_JObj *resultJoint, f32 blendFactor,
                          GSvec *part, unsigned long flags)
 {
-    Vec firstEuler;
-    Vec secondEuler;
+    GSvec firstEuler;
+    GSvec secondEuler;
     Quaternion rotation;
     Quaternion firstRotation;
     Quaternion secondRotation;
@@ -156,11 +156,11 @@ void modelIntpJObjRotate(_HSD_JObj *firstJoint, _HSD_JObj *secondJoint, _HSD_JOb
     secondEuler.y = secondRotation.y;
     secondEuler.z = secondRotation.z;
     if (part != NULL) {
-        modelCalculatePartMix((GSvec *)&firstEuler, part, flags);
-        modelCalculatePartMix((GSvec *)&secondEuler, part, flags);
+        modelCalculatePartMix(&firstEuler, part, flags);
+        modelCalculatePartMix(&secondEuler, part, flags);
     }
-    EulerToQuat(&firstEuler, &firstRotation);
-    EulerToQuat(&secondEuler, &secondRotation);
+    EulerToQuat(&firstEuler, &firstRotation.x);
+    EulerToQuat(&secondEuler, &secondRotation.x);
 
     /* Choose the nearer of the two equivalent quaternion representations. */
     squaredDifference[0] = (firstRotation.x - secondRotation.x) * (firstRotation.x - secondRotation.x);

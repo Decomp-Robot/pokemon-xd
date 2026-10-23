@@ -1,13 +1,14 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-
-#include <GSgfx.h>
-
+#include <types.h>
+#ifdef __cplusplus
 extern "C" {
-void spriteSetOffset(GSgfxLayerID layer, short x, short y);
-void spriteClearScissor(GSgfxLayerID layer);
-void spriteSetEnv(GSgfxLayerID layer);
-void spriteClearEnv(GSgfxLayerID layer);
+#endif
+void spriteClearEnv(s32 layer);
+void spriteSetEnv(s32 layerID);
+void spriteSetScissor(s32 layerID, s32 x, s32 y, s32 width, s32 height);
+void spriteClearScissor(s32 layerID);
+#ifdef __cplusplus
 }
-
+#endif
 #endif

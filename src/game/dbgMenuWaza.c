@@ -1,21 +1,22 @@
+#include <floorManager.h>
 #include <menu.h>
-#include <floor.h>
 #include <types.h>
 
-/* Waza (move) debug sub menus. */
+/* Waza (move) debug sub menus and the small accessors that go with them. */
 #pragma force_active on
 
-/* Debug work block the waza debug menus share (0x38 bytes). */
-struct DbgMenuWork {
-    u8 pad0[0x16];
+/* Waza viewer state the waza debug menus share (0x38 bytes). */
+struct WazaViewerWork {
+    u8 unk00[0x16];
     u8 mPokemonSelectDirty;  /* 0x16 */
     u8 mWazaSelectDirty;     /* 0x17 */
-    u8 pad18[0x30 - 0x18];
+    u8 unk18[0x30 - 0x18];
     s32 mDebugRunning;       /* 0x30 */
 };
 
-extern u8 dbgMenuWazaWork[];
+extern struct WazaViewerWork wazaViewerData;
 
+u8 menuIsOpen(s32 menuID);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 void GSfloorPop(void);
 void GSthreadSwitch(void);
@@ -24,7 +25,7 @@ void GSthreadSwitch(void);
 
 int dbgMenuWazaDebugStop(void)
 {
-    if (((struct DbgMenuWork *)dbgMenuWazaWork)->mDebugRunning != 0) {
+    if (wazaViewerData.mDebugRunning != 0) {
         GSfloorPop();
     }
     return 0;
@@ -32,12 +33,12 @@ int dbgMenuWazaDebugStop(void)
 
 int dbgMenuPokemonDebugSelect(void)
 {
-    struct DbgMenuWork *work;
+    struct WazaViewerWork *work;
 
     if (menuIsOpen(MENU_ID_DEBUG_POKEMON_SELECT)) {
         menuClose(MENU_ID_DEBUG_POKEMON_SELECT);
     } else {
-        work = (struct DbgMenuWork *)dbgMenuWazaWork;
+        work = &wazaViewerData;
         work->mPokemonSelectDirty = 0;
         work->mWazaSelectDirty = 0;
         menuOpenCustom(MENU_ID_DEBUG_POKEMON_SELECT, 0, 0, 0, 1, 0);
@@ -62,8 +63,8 @@ int dbgMenuWazaDebugStart(void)
     if (menuIsOpen(MENU_ID_TITLE)) {
         menuClose(MENU_ID_TITLE);
     }
-    if (((struct DbgMenuWork *)dbgMenuWazaWork)->mDebugRunning == 0) {
-        GSfloorPush(FLOOR_ID_WAZA_DEBUG);
+    if (wazaViewerData.mDebugRunning == 0) {
+        GSfloorPush(0x3E7);
         GSthreadSwitch();
     }
     return 0;
@@ -71,8 +72,7 @@ int dbgMenuWazaDebugStart(void)
 
 #pragma peephole reset
 
-
-int dbgMenuWazaMain(void)
+s32 dbgMenuWazaMain(void)
 {
     return 1;
 }

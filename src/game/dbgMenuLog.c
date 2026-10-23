@@ -1,25 +1,24 @@
 #include <menu.h>
+#include <GSmsg.h>
 #include <types.h>
 #include <winSprite.h>
 #include <menuSub.h>
 
 /* Debug log window: the message-log overlay of the debug menus. */
 
-/* Tile shade colour of the debug log window. */
-extern GXColor dbgLogTileColor;
-/* First log line displayed by the debug log window. */
-extern s32 dbgLogFirstVisibleLine;
-/* Set while the log window is being opened. */
-extern u8 dbgLogInitializeToLatest;
+/* First log line displayed by the debug log window; the flag recentres the
+ * view on the newest lines the first time the opened window is drawn. */
+extern s32 _viewStartLine;
+extern u8 _viewStartLineInit;
 
 #pragma force_active on
 
 void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
+u8 menuIsOpen(long menuID);
 void GSgfxZCompare(u8 mode, long value);
 
-s32 menuDrawFormattedText(long layerID, long x, long y, long color, const char *format, ...);
 long GSlogGetLineCount(void);
 const char *GSlogGetLine(long line);
 
@@ -27,7 +26,7 @@ const char *GSlogGetLine(long line);
 
 s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
 {
-    GXColor color = dbgLogTileColor;
+    GXColor color = { 0, 0, 0, 128 };
     struct tagWINDOW_KEY *pad = windowGetKeyInfo();
     GXColor tile;
     long i;
@@ -67,35 +66,35 @@ s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
     tile = color;
     menuSubDrawTile(window->mLayerID, 0xF, y - 5, 0x25D, height + 0x12, &tile);
 
-    if (dbgLogInitializeToLatest) {
-        dbgLogFirstVisibleLine = GSlogGetLineCount() - lines;
-        dbgLogInitializeToLatest = 0;
+    if (_viewStartLineInit) {
+        _viewStartLine = GSlogGetLineCount() - lines;
+        _viewStartLineInit = 0;
     }
 
     if (pad->mKeyRepeat & 0x1) {
-        dbgLogFirstVisibleLine--;
+        _viewStartLine--;
     }
     if (pad->mKeyRepeat & 0x2) {
-        dbgLogFirstVisibleLine++;
+        _viewStartLine++;
     }
     if (pad->mKeyRepeat & 0x8) {
-        dbgLogFirstVisibleLine += lines;
+        _viewStartLine += lines;
     }
     if (pad->mKeyRepeat & 0x4) {
-        dbgLogFirstVisibleLine -= lines;
+        _viewStartLine -= lines;
     }
 
     max = GSlogGetLineCount() - lines;
-    if (dbgLogFirstVisibleLine < 0) {
-        dbgLogFirstVisibleLine = 0;
+    if (_viewStartLine < 0) {
+        _viewStartLine = 0;
     }
-    if (dbgLogFirstVisibleLine > max) {
-        dbgLogFirstVisibleLine = max;
+    if (_viewStartLine > max) {
+        _viewStartLine = max;
     }
 
     for (i = 0; i < lines; i++) {
-        if (i + dbgLogFirstVisibleLine >= 0) {
-            menuDrawFormattedText(window->mLayerID, 0x14, y, 0xC0C0C0FF, GSlogGetLine(i + dbgLogFirstVisibleLine));
+        if (i + _viewStartLine >= 0) {
+            GSprint(window->mLayerID, 0x14, y, 0xC0C0C0FF, GSlogGetLine(i + _viewStartLine));
         }
         y += 0xD;
     }
@@ -107,8 +106,8 @@ s32 dbgMenuLogChangeDisp(void)
     if (menuIsOpen(MENU_ID_DEBUG_LOG)) {
         menuClose(MENU_ID_DEBUG_LOG);
     } else {
-        dbgLogInitializeToLatest = 1;
-        menuOpenCustom(MENU_ID_DEBUG_LOG, 0, 0, 0, 1, 0);
+        _viewStartLineInit = 1;
+        menuOpenCustom(0x22, 0, 0, 0, 1, 0);
     }
     return 0;
 }

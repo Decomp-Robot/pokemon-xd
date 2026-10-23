@@ -1,43 +1,25 @@
-#ifndef GSEFFECT_H
-#define GSEFFECT_H
+#ifndef GS_EFFECT_H
+#define GS_EFFECT_H
 
 #include <GSgfx.h>
+#include <types.h>
 
-class GSeffectBase {
+class GSeffect {
 protected:
-    u8 mActive;
-    u8 mVisible;
-    u8 mPadding02[0x02];
-
-    GSeffectBase* mNext;
-};
-
-class GSeffect : public GSeffectBase {
+    bool mActive;
+    bool mVisible;
+    u8 _02[2];
+    GSeffect* mNext;
 public:
     GSeffect();
-    virtual int _start();
+    virtual bool _start();
     virtual void _stop();
-    virtual int _update(f32 timestep);
+    virtual bool _update(f32 delta);
     virtual void _render(GSgfxLayer* layer, GSgfxLayerPass pass);
     virtual void _fastRender();
     virtual ~GSeffect();
-    void Start();
+    bool Start();
     void Stop();
-};
-
-class glowEffect : public GSeffect {
-public:
-    glowEffect();
-    virtual ~glowEffect();
-    virtual void _render(GSgfxLayer* layer, GSgfxLayerPass pass);
-
-public:
-    f32 mIntensity;
-    u8 mSpread;
-    u8 mAlphaBlend;
-    u8 mParam2;
-    u8 mRenderMode;
-    u8 mSubdivisions;
 };
 
 #endif

@@ -163,7 +163,7 @@ DSError TRKReadBuffer(TRKBuffer *buffer, void *dest, unsigned long size)
 
 DSError TRKAppendBuffer1_ui64(TRKBuffer *buffer, u64 value)
 {
-    s32 *bigEndian = &gTRKBigEndian;
+    BOOL *bigEndian = &gTRKBigEndian;
     u8 reversed[8];
     u8 *data;
     if (*bigEndian) {
@@ -210,7 +210,7 @@ DSError TRKAppendBuffer_ui8(TRKBuffer *buffer, const u8 *src, s32 count)
 
 DSError TRKAppendBuffer_ui32(TRKBuffer *buffer, const u32 *src, s32 count)
 {
-    s32 *bigEndian = &gTRKBigEndian;
+    BOOL *bigEndian = &gTRKBigEndian;
     const u32 *p = src;
     s32 err, i;
     u8 reversed[4];

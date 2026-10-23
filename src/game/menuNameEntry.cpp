@@ -1,61 +1,29 @@
-#include <menuSpriteBios.h>
-#include <textureBios.h>
-#include <menu.h>
-#include <menuSub.h>
-#include <GSsnd.h>
-#include <GSmsg.h>
-#include <msgctrl.h>
+#include <peopleInfoBios.h>
 #include <winMsg.h>
-#include <winSeq.h>
+#include <HSD_Rand.h>
+#include <flashsystem.h>
+#include <floorManager.h>
+#include <menuSub.h>
+#include <fightFloor.h>
+#include <pokemonBios.h>
+#include <pcbox.h>
+#include <dbgMenu.h>
+#include <menuTitle.h>
+#include <menuSpriteBios.h>
 #include <fade.h>
+#include <msgctrl.h>
+#include <menu.h>
+#include <GSmsg.h>
+#include <GSsnd.h>
+#include <floor.h>
 #include <GSgfx.h>
 #include <Pokemon.h>
-#include <heroStatus.h>
-#include <peopleInfoBios.h>
+#include <hero.h>
 #include <menuNameEntry.h>
 #include <winSprite.h>
 #include <window.h>
+#include <libc/math.h>
 
-
-extern "C" {
-GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void menuSubDrawCursorBackAnimeOnOffAuto(tagWINDOW_WORK *window, GSgfxLayerID layer, int p1, int p2, s16 p3, s16 p4, u8 p5, int p6);
-GSgfxVF *GSgfxVFBuildTemp(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9);
-void GSgfxRenderDrawEnd(GSgfxLayer *layer);
-Pokemon *fightFloorGetDefPokemonPtr(int p1);
-u8 pokemonGetSex(Pokemon *pokemon);
-u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
-int pokemon_SetNickname(Pokemon *pokemon, const u16 *name);
-u16 *pokemon_GetNickname(Pokemon *pokemon);
-u16 *pcboxGetPokemonName(int box, s8 slot);
-void pcboxSetPokemonBoxName(int box, s8 slot, const u16 *name);
-void dbgMenuSetOpenFlag(int flag);
-int GScharCmp(const u16 *a, const u16 *b);
-void winSeqSetMenu(long menuID, int seq);
-void menuModelSetFlag(MENU_MODEL *model, int flag);
-void menuModelAdjustCamera(MENU_MODEL *model);
-void menuModelSetSize(MENU_MODEL *model, s16 x0, s16 y0, s16 x1, s16 y1);
-void menuModelSetAngle(MENU_MODEL *model, const f32 *angle);
-void menuModelSetZoom(MENU_MODEL *model, f32 zoom);
-void menuModelSetOffset(MENU_MODEL *model, const f32 *offset);
-GStexture *menuModelRender(MENU_MODEL *model);
-void menuModelInit(MENU_MODEL *model, int p1, int p2);
-void menuModelLoad(MENU_MODEL *model, unsigned long id);
-void menuModelSetMotion(MENU_MODEL *model, int motion);
-int menuModelCheck(MENU_MODEL *model, int flag);
-void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
-void menuModelTerm(MENU_MODEL *model);
-void FlashSystemSetPlayFrameLabel(unsigned long p1, const char *start, const char *end);
-void FlashSystemSetLoopFlag(unsigned long p1, int flag);
-void FlashSystemSetNowFrameLabel(unsigned long p1, const char *label);
-void floorSetFadeScript(int p1, int script);
-void menuTitleBattleSelectFree(void);
-void GSfloorPop(void);
-void GSfloorPush(int floor);
-int floorWaitForChange(void);
-f32 HSD_Randf(void);
-double sin(double x);
-}
 
 // Default names offered for the hero.
 extern "C" const unsigned long DefKenName[3] = { 0x3B20, 0x3B21, 0x3B22 };
@@ -86,13 +54,13 @@ extern "C" const unsigned long nameEntryModelIDs[4] = { 0x16C90400, 0x16C70400, 
 
 // Background balls.
 extern "C" {
-BALL_WORK nameEntryBalls[30];
+BALL_WORK BallWork[30];
 
 // Model work the background renders.
-MENU_MODEL nameEntryModel;
+MENU_MODEL MenuModel;
 
 // The name being edited.
-NAME_ENTRY_WORK nameEntryWork;
+NAME_ENTRY_WORK NameEntryWork;
 }
 
 // Kana tables the editor steps through; slot 0 is "none".
@@ -112,16 +80,17 @@ extern "C" const ModelExtent cHumanModelSize = { 520, 300 };
 // Editing fields the screen shares with the window code through
 // NAME_ENTRY_ARG; inputName binds them to the arg pointers.
 extern "C" {
-int nameEntryTable;
-int nameEntryColumn;
-int nameEntryRow;
-f32 nameEntryTimer;
-int nameEntryCursor;
-int nameEntrySharedVal0;
-int nameEntrySharedVal1;
-int nameEntrySharedVal2;
-int nameEntrySharedVal3;
-int nameEntrySharedVal4;
+SHEET Sheet;
+s32 SheetCurX;
+s32 SheetCurY;
+f32 SheetCurAnimTime;
+s32 NameCurX;
+// Default cursor positions for the sheet and each name mode.
+s32 DefSheetCurPosX;
+s32 DefSheetCurPosY;
+s32 DefNamePokemonCurPosX;
+s32 DefNameBoxCurPosX;
+s32 DefNameTrainerCurPosX;
 }
 
 // Draw the background cursor of the name-entry screen.
@@ -130,7 +99,7 @@ int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     s16 cursor;
 
     winSpriteSetDisp(sprite, 0);
-    cursor = window->mCursorState.mSelection.mCursor;
+    cursor = window->mCursor.y;
     if (cursor >= 0) {
         menuSubDrawCursorBackAnimeOnOffAuto(window, winSpriteGetLayerID(window, sprite), 0, cursor << 5,
                                             sprite->mWidth, sprite->mHeight, window->mRgba.mColorA, 1);
@@ -147,8 +116,13 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
         return;
     }
     layer->setRenderStateAndSelect(GSgfxVFBuildTemp(0, 3, 0, 0, 1, 5, 1, 1, 4));
-    layer->texSelect(0, texture);
-    layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
+    if (layer->mPassState[0].mTextures[0] != texture || layer->mPassState[1].mTextures[0] != texture || texture->mStateDirty != 0) {
+        layer->mPassState[0].mTextures[0] = texture;
+        layer->mPassState[0].mTextureState |= 1;
+        layer->mPassState[1].mTextures[0] = texture;
+        layer->mPassState[1].mTextureState |= 1;
+    }
+    layer->mPrimitiveType = (GSgfxPrimType)0x98;
     layer->beginSurface(4);
 
     f32 zero = 0.0f;
@@ -192,11 +166,11 @@ void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layerI
     GXWGFifo.u8 = 0xFF;
     GXWGFifo.f32 = one;
     GXWGFifo.f32 = one;
-    GSgfxRenderDrawEnd(layer);
+    layer->endSurface();
 }
 
 // Mode and message display of the name-entry screen.
-int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDrawNamePokemonWaku(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
     Pokemon *pokemon;
@@ -253,8 +227,8 @@ int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x876:
         pokemon = 0;
         switch (arg->mMode) {
-        case NAME_ENTRY_MODE_PARTY_POKEMON:
-            pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)arg->mParam);
+        case 2:
+            pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, arg->mParam);
             break;
         case NAME_ENTRY_MODE_FIGHT_POKEMON:
             pokemon = fightFloorGetDefPokemonPtr(0);
@@ -290,27 +264,27 @@ int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Pick the name box style from the menu type.
-void menuNameEntryDrawNameBox(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+void menuNameEntryDrawNameTrainerCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     int mode = window->mArg->mMode;
 
-    if (mode == NAME_ENTRY_MODE_STRING_BUFFER) {
-        menuNameEntryDrawNameBoxCur(window, sprite, 10, NAME_ENTRY_MODE_STRING_BUFFER);
-    } else if (mode == NAME_ENTRY_MODE_PC_BOX) {
-        menuNameEntryDrawNameBoxCur(window, sprite, 8, NAME_ENTRY_MODE_PC_BOX);
-    } else if (mode == NAME_ENTRY_MODE_PARTY_POKEMON) {
-        menuNameEntryDrawNameBoxCur(window, sprite, 10, NAME_ENTRY_MODE_PARTY_POKEMON);
-    } else if (mode == NAME_ENTRY_MODE_FIGHT_POKEMON) {
-        menuNameEntryDrawNameBoxCur(window, sprite, 10, NAME_ENTRY_MODE_FIGHT_POKEMON);
-    } else if (mode == NAME_ENTRY_MODE_POKEMON) {
-        menuNameEntryDrawNameBoxCur(window, sprite, 10, NAME_ENTRY_MODE_POKEMON);
+    if (mode == 6) {
+        menuNameEntryDrawNameCursor(window, sprite, 10, 6);
+    } else if (mode == 3) {
+        menuNameEntryDrawNameCursor(window, sprite, 8, 3);
+    } else if (mode == 2) {
+        menuNameEntryDrawNameCursor(window, sprite, 10, 2);
+    } else if (mode == 4) {
+        menuNameEntryDrawNameCursor(window, sprite, 10, 4);
+    } else if (mode == 5) {
+        menuNameEntryDrawNameCursor(window, sprite, 10, 5);
     } else {
-        menuNameEntryDrawNameBoxCur(window, sprite, 7, NAME_ENTRY_MODE_KEN);
+        menuNameEntryDrawNameCursor(window, sprite, 7, 0);
     }
 }
 
 // Cursor blink of the name box.
-int menuNameEntryDrawNameBoxCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int count, int mode)
+int menuNameEntryDrawNameCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int count, int mode)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
     int limit = nameEntryModeData[arg->mMode].mMaxLength;
@@ -400,7 +374,7 @@ int menuNameEntryDrawNameRuleText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 }
 
 // Draw the name text of the Ken name screen (mode 0).
-int menuNameEntryDrawKenNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDrawNameTrainerText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     return menuNameEntryDrawNameText(window, sprite, 7, NAME_ENTRY_MODE_KEN);
 }
@@ -411,8 +385,8 @@ int menuNameEntryDrawNameBoxText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     return menuNameEntryDrawNameText(window, sprite, 8, NAME_ENTRY_MODE_PC_BOX);
 }
 
-// Draw the person or Pokemon name for the window's mode.
-int menuNameEntryDrawModeNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+// Draw the name text for the window's mode (modes 1, 2, 4 and 5).
+int menuNameEntryDrawNamePokemonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     int mode = window->mArg->mMode;
 
@@ -452,18 +426,18 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, in
         count = 0;
         x = 0;
         while ((chr = *chars) != 0) {
-            print1Char(winSpriteGetLayerID(window, sprite), x, 0, window->mRgba.mColorA | 0xFFFFFF00, chr);
+            putGScharL(winSpriteGetLayerID(window, sprite), x, 0, window->mRgba.mColorA | 0xFFFFFF00, chr);
             x += 0x1A;
             count++;
             chars++;
         }
         if (count < nameEntryModeData[arg->mMode].mMaxLength && window->mAccept == 0) {
-            blink = get50onChar(*arg->mTable, *arg->mColumn, *arg->mRow);
-            if (blink != 0 && getCharClass(blink) == 6) {
+            blink = getCharSheet(*arg->mTable, *arg->mColumn, *arg->mRow);
+            if (blink != 0 && getSpchar(blink) == 6) {
                 float s = sin(3.14f * *arg->mTimer * 2.0f);
                 u32 color = (u8)(128.0f * (1.0f + s)) | 0xFFFFFF00;
 
-                print1Char(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
+                putGScharL(winSpriteGetLayerID(window, sprite), count * 0x1A, 0, color, blink);
             }
         }
         sprite->mRgba.mAlpha = 0xFF;
@@ -473,7 +447,7 @@ int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, in
 
 // Show the delete/end button cursor of the position selected on the 50-on
 // table (row 6 column >6 is delete, row 7 column >6 is end).
-void menuNameEntryDispButtonCur(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
+void drawControlCursor(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
 {
     int column = *arg->mColumn;
     int row = *arg->mRow;
@@ -488,26 +462,26 @@ void menuNameEntryDispButtonCur(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite)
     }
 }
 
-// Draw the delete (B) button cursor.
+// Draw the Start button cursor.
+int menuNameEntryDrawStartCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    NAME_ENTRY_ARG *arg = window->mArg;
+
+    drawControlCursor(arg, sprite);
+    return 0;
+}
+
+// Draw the B button cursor.
 int menuNameEntryDrawBCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
-    menuNameEntryDispButtonCur(arg, sprite);
-    return 0;
-}
-
-// Draw the end button cursor.
-int menuNameEntryDrawEndCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
-{
-    NAME_ENTRY_ARG *arg = window->mArg;
-
-    menuNameEntryDispButtonCur(arg, sprite);
+    drawControlCursor(arg, sprite);
     return 0;
 }
 
 // Draw the cursor over the selected 50-on table cell.
-int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDraw50Cursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     NAME_ENTRY_ARG *arg = window->mArg;
 
@@ -525,9 +499,9 @@ int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Look up the character of the 50-on table cell.
-u16 get50onChar(int table, int column, int row)
+u16 getCharSheet(SHEET table, int column, int row)
 {
-    int id;
+    unsigned long id;
     u16 *string;
     int count;
 
@@ -538,7 +512,7 @@ u16 get50onChar(int table, int column, int row)
         return 0;
     }
     id = nameEntry50onData[table].mRow[row];
-    if ((u32)id == 0) {
+    if (id == 0) {
         return 0;
     }
     count = GSmsgGetLength(id);
@@ -566,7 +540,7 @@ int getGScharLen(u16 *string)
 }
 
 // Print one character centered on the sprite.
-void print1Char(GSgfxLayerID layer, int x, int y, u32 color, u16 chr)
+void putGScharL(GSgfxLayerID layer, int x, int y, unsigned long color, u16 chr)
 {
     u16 text[2];
     int width;
@@ -586,7 +560,7 @@ int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     int y;
     int column;
     int row;
-    int table;
+    SHEET table;
     u16 chr;
 
     row = 0;
@@ -595,10 +569,10 @@ int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     while (row < 8) {
         column = 0;
         x = -2;
-        while ((chr = get50onChar(table, column, row)) != 0) {
+        while ((chr = getCharSheet(table, column, row)) != 0) {
             GSgfxLayerID layer = winSpriteGetLayerID(window, sprite);
 
-            print1Char(layer, x, y, window->mRgba.mColorA | 0xFFFFFF00, chr);
+            putGScharL(layer, x, y, window->mRgba.mColorA | 0xFFFFFF00, chr);
             x += 0x1A;
             column++;
         }
@@ -609,7 +583,7 @@ int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 }
 
 // Draw the title of the 50-on table the hira/kata toggle switches to.
-int menuNameEntryDraw50onToggleTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryDrawXButtonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     int table = *window->mArg->mTable + 1;
 
@@ -637,8 +611,8 @@ int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     } else {
         arg = window->mArg;
         switch (arg->mMode) {
-        case NAME_ENTRY_MODE_PARTY_POKEMON: {
-            Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)arg->mParam);
+        case 2: {
+            Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, arg->mParam);
             u16 species;
 
             if (pokemonCheckValid(pokemon)) {
@@ -776,7 +750,7 @@ u8 backNameCursor(NAME_ENTRY_ARG *arg)
 }
 
 // Classify the character for the input state machine.
-int getCharClass(u16 chr)
+s32 getSpchar(u16 chr)
 {
     u16 *space = GSmsgGetStringPtr(0x3B1E);
 
@@ -787,7 +761,7 @@ int getCharClass(u16 chr)
 }
 
 // Toggle the 50-on table.
-void toggle50onTable(NAME_ENTRY_ARG *arg)
+void change50Sheet(NAME_ENTRY_ARG *arg)
 {
     int table = *arg->mTable;
 
@@ -795,11 +769,11 @@ void toggle50onTable(NAME_ENTRY_ARG *arg)
     if (table >= 2) {
         table = 0;
     }
-    *arg->mTable = table;
+    *arg->mTable = (SHEET)table;
 }
 
 // Feed one character press into the name buffer.
-int input50onCell(NAME_ENTRY_ARG *arg)
+int selectLetter(NAME_ENTRY_ARG *arg)
 {
     u16 chr;
     int col = *arg->mColumn;
@@ -818,11 +792,11 @@ int input50onCell(NAME_ENTRY_ARG *arg)
             break;
         }
     } else {
-        chr = get50onChar(*arg->mTable, col, act);
+        chr = getCharSheet(*arg->mTable, col, act);
         if (chr == 0) {
             chr = *GSmsgGetStringPtr(0x3B1D);
         }
-        charClass = getCharClass(chr);
+        charClass = getSpchar(chr);
         act = charClass;
     }
     switch (act) {
@@ -857,7 +831,7 @@ int input50onCell(NAME_ENTRY_ARG *arg)
         ret = 1;
         break;
     case 3:
-        toggle50onTable(arg);
+        change50Sheet(arg);
         sound = 0x14;
         break;
     case 0:
@@ -893,19 +867,19 @@ int input50onCell(NAME_ENTRY_ARG *arg)
 }
 
 // Drive the name editor from the pad.
-int menuNameEntryInputButton(tagWINDOW_WORK *window)
+int menuNameEntryCursor(tagWINDOW_WORK *window)
 {
     u16 repeat = windowGetKeyRepeat();
     u16 trg = windowGetKeyTrg();
     NAME_ENTRY_ARG *arg = window->mArg;
 
     if (trg & 0x40) {
-        toggle50onTable(arg);
+        change50Sheet(arg);
         GSsndPlayNow(0x14);
         return 0;
     }
     if (trg & 0x10) {
-        if (input50onCell(arg) != 0) {
+        if (selectLetter(arg) != 0) {
             window->mAccept = 1;
             return 0;
         }
@@ -922,7 +896,7 @@ int menuNameEntryInputButton(tagWINDOW_WORK *window)
         return 0;
     }
     if (trg & 0x400) {
-        toggle50onTable(arg);
+        change50Sheet(arg);
         GSsndPlayNow(0x14);
         return 0;
     }
@@ -930,8 +904,8 @@ int menuNameEntryInputButton(tagWINDOW_WORK *window)
         window->mAccept = 1;
         return 0;
     }
-    if ((u16)repeat & 0x8) {
-        int col = *arg->mColumn + 1;
+    if (repeat & 0x8) {
+        s32 col = *arg->mColumn + 1;
 
         if (*arg->mRow < 6) {
             if (col < 11) {
@@ -946,8 +920,8 @@ int menuNameEntryInputButton(tagWINDOW_WORK *window)
         }
         *arg->mColumn = col;
     }
-    if ((u16)repeat & 0x4) {
-        int col = *arg->mColumn - 1;
+    if (repeat & 0x4) {
+        s32 col = *arg->mColumn - 1;
 
         if (*arg->mRow > 5 && col > 6) {
             col = 6;
@@ -959,8 +933,8 @@ int menuNameEntryInputButton(tagWINDOW_WORK *window)
         }
         *arg->mColumn = col;
     }
-    if ((u16)repeat & 0x2) {
-        int row = *arg->mRow;
+    if (repeat & 0x2) {
+        s32 row = *arg->mRow;
 
         if (*arg->mColumn >= 11) {
             if (row == 1) {
@@ -978,8 +952,8 @@ int menuNameEntryInputButton(tagWINDOW_WORK *window)
         }
         *arg->mRow = row;
     }
-    if ((u16)repeat & 0x1) {
-        int row = *arg->mRow;
+    if (repeat & 0x1) {
+        s32 row = *arg->mRow;
 
         if (*arg->mColumn >= 11) {
             if (row == 2) {
@@ -1035,7 +1009,7 @@ int menuNameEntryCtrl(tagWINDOW_WORK *window)
     return 0;
 }
 
-void menuNameEntryInputDummy(void)
+void menuNameEntryButton(void)
 {
 }
 
@@ -1075,21 +1049,21 @@ int inputName(u16 *name, u16 *initial, int type, int param, int skip)
     arg.mChars = name;
     arg.mMode = type;
     arg.mParam = param;
-    nameEntryTable = 0;
-    arg.mTable = &nameEntryTable;
-    nameEntryColumn = 0;
-    arg.mColumn = &nameEntryColumn;
-    nameEntryRow = 0;
-    arg.mRow = &nameEntryRow;
-    nameEntryTimer = 0.0f;
-    arg.mTimer = &nameEntryTimer;
-    nameEntryCursor = 0;
-    arg.mCursor = &nameEntryCursor;
-    arg.mUnk38 = &nameEntrySharedVal0;
-    arg.mUnk3C = &nameEntrySharedVal1;
-    arg.mUnk40 = &nameEntrySharedVal2;
-    arg.mUnk44 = &nameEntrySharedVal3;
-    arg.mUnk48 = &nameEntrySharedVal4;
+    Sheet = SHEET_PRIMARY;
+    arg.mTable = &Sheet;
+    SheetCurX = 0;
+    arg.mColumn = &SheetCurX;
+    SheetCurY = 0;
+    arg.mRow = &SheetCurY;
+    SheetCurAnimTime = 0.0f;
+    arg.mTimer = &SheetCurAnimTime;
+    NameCurX = 0;
+    arg.mCursor = &NameCurX;
+    arg.mDefaultSheetColumn = &DefSheetCurPosX;
+    arg.mDefaultSheetRow = &DefSheetCurPosY;
+    arg.mDefaultPokemonNameCursor = &DefNamePokemonCurPosX;
+    arg.mDefaultBoxNameCursor = &DefNameBoxCurPosX;
+    arg.mDefaultTrainerNameCursor = &DefNameTrainerCurPosX;
     dbgMenuSetOpenFlag(0);
     argp = &arg;
     while (done == 0) {
@@ -1105,7 +1079,7 @@ int inputName(u16 *name, u16 *initial, int type, int param, int skip)
             if (accepted != 0) {
                 continue;
             }
-            nameEntryWork.mName[0] = 0;
+            NameEntryWork.mName[0] = 0;
         } else if (accepted != 0) {
             done = 1;
         }
@@ -1114,7 +1088,7 @@ int inputName(u16 *name, u16 *initial, int type, int param, int skip)
     menuClose(NAME_ENTRY_MENU_ID_INPUT);
     menuCloseSync(NAME_ENTRY_MENU_ID_INPUT, 1);
     if (accepted != 0) {
-        GScharCpy(nameEntryWork.mName, chosen);
+        GScharCpy(NameEntryWork.mName, chosen);
         return 1;
     }
     return 0;
@@ -1258,13 +1232,13 @@ int menuNameEntryBackDrawHumanModel(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         offset[2] = 0.0f;
 
         menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-        menuModelAdjustCamera(&nameEntryModel);
-        menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
-        menuModelSetFlag(&nameEntryModel, 0);
-        menuModelSetAngle(&nameEntryModel, angle);
-        menuModelSetZoom(&nameEntryModel, 1.4f);
-        menuModelSetOffset(&nameEntryModel, offset);
-        texture = menuModelRender(&nameEntryModel);
+        menuModelAdjustCamera(&MenuModel);
+        menuModelSetSize(&MenuModel, pos.mX, pos.mY, size.mX, size.mY);
+        menuModelSetFlag(&MenuModel, 0);
+        menuModelSetAngle(&MenuModel, angle);
+        menuModelSetZoom(&MenuModel, 1.4f);
+        menuModelSetOffset(&MenuModel, offset);
+        texture = menuModelRender(&MenuModel);
         if (texture != 0) {
             drawTexture(texture, sprite, winSpriteGetLayerID(window, sprite));
         }
@@ -1292,7 +1266,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         offset[0] = 0.0f;
         offset[1] = 0.0f;
         offset[2] = 0.0f;
-        switch (nameEntryModel.mSpecies) {
+        switch (MenuModel.mSpecies) {
         case 0x28:
         case 0x3E:
         case 0x47:
@@ -1325,13 +1299,13 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         }
         {
             menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-            menuModelAdjustCamera(&nameEntryModel);
-            menuModelSetSize(&nameEntryModel, pos.mX, pos.mY, size.mX, size.mY);
-            menuModelSetFlag(&nameEntryModel, 0);
-            menuModelSetAngle(&nameEntryModel, angle);
-            menuModelSetZoom(&nameEntryModel, zoom);
-            menuModelSetOffset(&nameEntryModel, offset);
-            texture = menuModelRender(&nameEntryModel);
+            menuModelAdjustCamera(&MenuModel);
+            menuModelSetSize(&MenuModel, pos.mX, pos.mY, size.mX, size.mY);
+            menuModelSetFlag(&MenuModel, 0);
+            menuModelSetAngle(&MenuModel, angle);
+            menuModelSetZoom(&MenuModel, zoom);
+            menuModelSetOffset(&MenuModel, offset);
+            texture = menuModelRender(&MenuModel);
             if (texture != 0) {
                 drawTexture(texture, sprite, winSpriteGetLayerID(window, sprite));
             }
@@ -1341,15 +1315,15 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 }
 
 // Load the ball textures for the background.
-int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+int menuNameEntryBackDrawBall(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    void *entry = menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(0x1E));
-    int count;
-    s16 texW = *(s16 *)((u8 *)entry + 4);
-    s16 texH = *(s16 *)((u8 *)entry + 6);
+    MenuSpriteValue *entry = menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(0x1E));
+    s32 count;
+    s16 texW = entry->mWidth;
+    s16 texH = entry->mHeight;
 
     for (count = 0; count < 0x1E; count++) {
-        BALL_WORK *ball = &nameEntryBalls[count];
+        BALL_WORK *ball = &BallWork[count];
 
         if (ball->mActive != 0) {
             f32 w = (f32)texW * ball->mScale;
@@ -1358,7 +1332,7 @@ int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             f32 y = ball->mY - h / 2.0f;
             u32 flags = ball->mFlags | ball->mAlpha;
 
-            windowDrawSprite2((short)(0.5f + x), (short)(0.5f + y), (short)(0.5f + w), (short)(0.5f + h),
+            windowDrawSprite2((s16)(0.5f + x), (s16)(0.5f + y), (s16)(0.5f + w), (s16)(0.5f + h),
                                     flags, window, 0x1E, 0, winSpriteGetLayerID(window, sprite));
         }
     }
@@ -1394,22 +1368,22 @@ void generateBall(void)
         return;
     }
     for (i = 0; i < 30; i++) {
-        if (nameEntryBalls[i].mActive == 0) {
+        if (BallWork[i].mActive == 0) {
             break;
         }
     }
     if (i >= 30) {
         return;
     }
-    nameEntryBalls[i].mActive = 1;
-    nameEntryBalls[i].mX = 640.0f * HSD_Randf();
-    nameEntryBalls[i].mY = 480.0f * HSD_Randf();
-    nameEntryBalls[i].mScale = 0.001f;
-    nameEntryBalls[i].mScaleMax = 1.999f * HSD_Randf() + 0.001f;
-    nameEntryBalls[i].mFlags = -0x100;
-    nameEntryBalls[i].mAlpha = 0x80;
-    nameEntryBalls[i].mTime = 0.0f;
-    nameEntryBalls[i].mTimeMax = 60.0f * HSD_Randf() + 120.0f;
+    BallWork[i].mActive = 1;
+    BallWork[i].mX = 640.0f * HSD_Randf();
+    BallWork[i].mY = 480.0f * HSD_Randf();
+    BallWork[i].mScale = 0.001f;
+    BallWork[i].mScaleMax = 1.999f * HSD_Randf() + 0.001f;
+    BallWork[i].mFlags = -0x100;
+    BallWork[i].mAlpha = 0x80;
+    BallWork[i].mTime = 0.0f;
+    BallWork[i].mTimeMax = 60.0f * HSD_Randf() + 120.0f;
 }
 
 // Step the background balls.
@@ -1419,8 +1393,8 @@ void ballMain(void)
 
     generateBall();
     for (i = 0; i < 0x1E; i++) {
-        if (nameEntryBalls[i].mActive != 0) {
-            ballMain1(&nameEntryBalls[i]);
+        if (BallWork[i].mActive != 0) {
+            ballMain1(&BallWork[i]);
         }
     }
 }
@@ -1434,7 +1408,7 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
     case WINDOW_STATE_INIT:
         if (window->mFlag == 0) {
             for (i = 0; i < 30; i++) {
-                nameEntryBalls[i].mActive = 0;
+                BallWork[i].mActive = 0;
             }
             for (i = 0; i < 600; i++) {
                 ballMain();
@@ -1457,7 +1431,7 @@ int menuNameEntryBackCtrl(tagWINDOW_WORK *window)
 }
 
 // Set up the model the name entry shows.
-void menuNameEntrySetupModel(long dataID, MENU_MODEL *model, int type, int param)
+void loadModel(long dataID, MENU_MODEL *model, int type, int param)
 {
     unsigned long ids[4];
     tagMENU_ITEM_DATA *item;
@@ -1497,8 +1471,8 @@ void menuNameEntrySetupModel(long dataID, MENU_MODEL *model, int type, int param
         menuModelSetMotion(model, motion);
         break;
     }
-    case NAME_ENTRY_MODE_PARTY_POKEMON: {
-        Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)param);
+    case 2: {
+        Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, param);
 
         if (pokemonCheckValid(pokemon)) {
             menuModelLoadPokemon(model, pokemon);
@@ -1535,10 +1509,10 @@ void menuNameEntry(void)
         int param;
     } args;
 
-    if (getName(name, nameEntryWork.mType, nameEntryWork.mParam) == 0) {
+    if (getName(name, NameEntryWork.mType, NameEntryWork.mParam) == 0) {
         name[0] = 0;
     }
-    menuNameEntrySetupModel(0x68, &nameEntryModel, nameEntryWork.mType, nameEntryWork.mParam);
+    loadModel(0x68, &MenuModel, NameEntryWork.mType, NameEntryWork.mParam);
     {
         static const char startLabel[] = "start";
         static const char endLabel[] = "end";
@@ -1547,21 +1521,21 @@ void menuNameEntry(void)
         FlashSystemSetLoopFlag(0x22063000, 0);
         FlashSystemSetNowFrameLabel(0x22063000, startLabel);
     }
-    args.type = nameEntryWork.mType;
-    args.param = nameEntryWork.mParam;
+    args.type = NameEntryWork.mType;
+    args.param = NameEntryWork.mParam;
     menuOpenCustom(NAME_ENTRY_MENU_ID_MAIN, windowGetActiveID(), 0, 0, 1, 1, &args);
-    if (nameEntryWork.mBlock == 0) {
+    if (NameEntryWork.mBlock == 0) {
         fadeSet(2, 0.5f);
         fadeCheck(1);
     }
-    if (nameEntryModeData[nameEntryWork.mType].mDefaultNameCount > 0) {
-        int loop = 1;
+    if (nameEntryModeData[NameEntryWork.mType].mDefaultNameCount > 0) {
+        s32 loop = 1;
 
         while (loop != 0) {
-            switch (selectName(nameEntryWork.mName, nameEntryModeData[nameEntryWork.mType].mDefaultNames,
-                               nameEntryModeData[nameEntryWork.mType].mDefaultNameCount)) {
+            switch (selectName(NameEntryWork.mName, nameEntryModeData[NameEntryWork.mType].mDefaultNames,
+                               nameEntryModeData[NameEntryWork.mType].mDefaultNameCount)) {
             case 1:
-                if (inputName(nameEntryWork.mName, name, nameEntryWork.mType, nameEntryWork.mParam, 0) != 0) {
+                if (inputName(NameEntryWork.mName, name, NameEntryWork.mType, NameEntryWork.mParam, 0) != 0) {
                     loop = 0;
                 }
                 break;
@@ -1574,25 +1548,25 @@ void menuNameEntry(void)
             }
         }
     } else {
-        inputName(nameEntryWork.mName, name, nameEntryWork.mType, nameEntryWork.mParam, 1);
+        inputName(NameEntryWork.mName, name, NameEntryWork.mType, NameEntryWork.mParam, 1);
     }
     fadeSet(3, 0.5f);
     fadeCheck(1);
-    menuModelTerm(&nameEntryModel);
+    menuModelTerm(&MenuModel);
     menuClose(NAME_ENTRY_MENU_ID_MAIN);
     menuCloseSync(NAME_ENTRY_MENU_ID_MAIN, 1);
-    setName(nameEntryWork.mName, nameEntryWork.mType, nameEntryWork.mParam);
-    if (GScharCmp(nameEntryWork.mName, name) == 0) {
-        nameEntryWork.mChanged = 0;
+    setName(NameEntryWork.mName, NameEntryWork.mType, NameEntryWork.mParam);
+    if (GScharCmp(NameEntryWork.mName, name) == 0) {
+        NameEntryWork.mChanged = 0;
     } else {
-        nameEntryWork.mChanged = 1;
+        NameEntryWork.mChanged = 1;
     }
-    if (nameEntryWork.mType == NAME_ENTRY_MODE_KEN) {
+    if (NameEntryWork.mType == 0) {
         menuTitleBattleSelectFree();
     }
-    if (nameEntryWork.mBlock != 0) {
+    if (NameEntryWork.mBlock != 0) {
         GSfloorPop();
-        if (nameEntryWork.mFade != 0) {
+        if (NameEntryWork.mFade != 0) {
             floorSetFadeScript(0, 0x5960008);
         } else {
             floorSetFadeScript(0, 0);
@@ -1609,20 +1583,20 @@ int setName(u16 *name, int type, int param)
     switch (type) {
     case NAME_ENTRY_MODE_KEN:
         break;
-    case NAME_ENTRY_MODE_HIZUKI:
-        heroSetStatus(0, HERO_STATUS_HIZUKI_NAME, (unsigned long)name);
+    case 1:
+        heroSetStatus(0, HERO_STATUS_HIZUKI_NAME, (u32)name);
         break;
-    case NAME_ENTRY_MODE_PARTY_POKEMON:
-        pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)param);
+    case 2:
+        pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, param);
 
         if (pokemonCheckValid(pokemon) == 0) {
             result = 0;
         } else {
-            pokemon_SetNickname(pokemon, name);
+            pokemonBiosSetNicknamePtr(pokemon, name);
         }
         break;
     case NAME_ENTRY_MODE_POKEMON:
-        pokemon_SetNickname((Pokemon *)param, name);
+        pokemonBiosSetNicknamePtr((Pokemon *)param, name);
         break;
     case NAME_ENTRY_MODE_PC_BOX:
         pcboxSetPokemonBoxName(0, (s8)param, name);
@@ -1633,7 +1607,7 @@ int setName(u16 *name, int type, int param)
         if (pokemonCheckValid(pokemon) == 0) {
             result = 0;
         } else {
-            pokemon_SetNickname(pokemon, name);
+            pokemonBiosSetNicknamePtr(pokemon, name);
         }
         break;
     case NAME_ENTRY_MODE_STRING_BUFFER:
@@ -1658,8 +1632,8 @@ int getName(u16 *name, int type, int param)
     case NAME_ENTRY_MODE_HIZUKI:
         src = GSmsgGetStringPtr(DefHizukiName[0]);
         break;
-    case NAME_ENTRY_MODE_PARTY_POKEMON: {
-        Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)param);
+    case 2: {
+        Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, param);
 
         if (pokemonCheckValid(pokemon) == 0) {
             src = 0;
@@ -1672,7 +1646,7 @@ int getName(u16 *name, int type, int param)
         src = pokemon_GetNickname((Pokemon *)param);
         break;
     case NAME_ENTRY_MODE_PC_BOX:
-        src = pcboxGetPokemonName(0, (s8)param);
+        src = pcboxGetPokemonBoxName(0, (s8)param);
         break;
     case NAME_ENTRY_MODE_FIGHT_POKEMON: {
         Pokemon *pokemon = fightFloorGetDefPokemonPtr(0);
@@ -1707,8 +1681,8 @@ int chkParam(int type, int param)
     case NAME_ENTRY_MODE_KEN:
     case NAME_ENTRY_MODE_HIZUKI:
         break;
-    case NAME_ENTRY_MODE_PARTY_POKEMON:
-        if (!pokemonCheckValid((Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, (u16)param))) {
+    case 2:
+        if (!pokemonCheckValid((Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, param))) {
             result = 0;
         }
         break;
@@ -1740,7 +1714,7 @@ int menuNameEntryCall(int type, int param)
     if (chkParam(type, param) == 0) {
         return 0;
     }
-    work = &nameEntryWork;
+    work = &NameEntryWork;
     work->mName[0] = 0;
     work->mType = type;
     work->mParam = param;
@@ -1753,7 +1727,7 @@ int menuNameEntryCall(int type, int param)
 // Copy out the name being edited.
 void menuNameEntryGetLastName(u16 *name)
 {
-    GScharCpy(name, nameEntryWork.mName);
+    GScharCpy(name, NameEntryWork.mName);
 }
 
 // Push the name-entry floor.
@@ -1764,7 +1738,7 @@ int pushNameEntryFloor(int type, int param, int fade)
     if (chkParam(type, param) == 0) {
         return 0;
     }
-    work = &nameEntryWork;
+    work = &NameEntryWork;
     work->mName[0] = 0;
     work->mType = type;
     work->mParam = param;
@@ -1780,7 +1754,7 @@ int pushNameEntryFloor(int type, int param, int fade)
 }
 
 // Link the name-entry floor.
-int floorLink(int type, int param)
+int menuNameEntryOpenNoFade(s32 type, s32 param)
 {
     return pushNameEntryFloor(type, param, 0);
 }

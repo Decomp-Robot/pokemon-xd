@@ -7,16 +7,18 @@ extern "C" void PSMTXConcat(const f32 first[3][4], const f32 second[3][4], f32 r
 
 /* Affine 3x4 transform. */
 struct GSmtx {
-    f32 m[3][4];
+    f32 m00, m01, m02, m03;
+    f32 m10, m11, m12, m13;
+    f32 m20, m21, m22, m23;
 
     GSmtx operator*(const GSmtx &other) const {
         GSmtx result;
-        PSMTXConcat(m, other.m, result.m);
+        PSMTXConcat(sdk(), other.sdk(), result.sdk());
         return result;
     }
 
-    f32 (*sdk())[4] { return m; }
-    const f32 (*sdk() const)[4] { return m; }
+    f32 (*sdk())[4] { return reinterpret_cast<f32 (*)[4]>(&m00); }
+    const f32 (*sdk() const)[4] { return reinterpret_cast<const f32 (*)[4]>(&m00); }
 };
 
 /* GS projection-matrix helpers. Both forward their arguments unchanged to the

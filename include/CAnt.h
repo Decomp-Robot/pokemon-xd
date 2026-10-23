@@ -2,37 +2,45 @@
 #define CANT_H
 
 #include <Pokemon.h>
+#include <PocketVec.h>
 #include <types.h>
 #include <PocketVec.h>
 
 // Sprite-animation state used by party and link-battle panels.
 class CAnt {
 public:
+    static void systemInit();
+    static void systemFree();
     void init();
-    void setPos(PocketVec<s16> position) { mPosition.x = position.x; mPosition.y = position.y; }
+    void initByPokemonAndSetColorAnimationInAny(Pokemon *pokemon);
     void setAnimation(long animation);
-    void use();
-    void drawAndUpdate(PocketVec<short> position);
-    void drawAndUpdate();
     static void systemUsecountReset();
     static void systemUnUseResourceRelease();
-
-    u32 mBodyResourceID;
+    void use();
+    void drawAndUpdate();
+    void drawAndUpdate(PocketVec<short>);
+    void setPosition(PocketVec<short> position) {
+        mPosition.x = position.x;
+        mPosition.y = position.y;
+    }
     void *mResource;
-    PocketVec<s16> mPosition;
+
+private:
+    u32 reserved04;
+    PocketVec<short> mPosition;
+public:
     f32 mScale;
     u8 mAlpha;
-    s32 mDrawState;
-    s16 mAnimationId;
-    s16 mFrame;
-    f32 mFrameTime;
-    s32 mFrameOffsetX;
-    s32 mFrameOffsetY;
-    s32 mFrameIndex;
-    f32 mFrameDuration;
-    s32 mDrawMode;
+private:
+    u32 reserved14;
+    s16 reserved18;
+    s16 reserved1A;
+    f32 reserved1C;
+    u32 reserved20;
+    u32 reserved24;
+    u32 reserved28;
+    f32 reserved2C;
+    u32 reserved30;
 };
-
-extern "C" void battlePokemonGetPokeBody(CAnt *ant, Pokemon *pokemon);
 
 #endif

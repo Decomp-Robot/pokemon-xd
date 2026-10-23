@@ -45,7 +45,7 @@ inline bool checkThruFace(GSvec* normal, GSvec* triangle, GSvec* position, f32 r
         return false;
     }
     GScolsy2UtilGetCpPlanePoint(&closest, normal, triangle, position);
-    if (PSVECSquareDistance(&closest, position) >= radiusSquared) {
+    if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)position) >= radiusSquared) {
         return false;
     }
     if (!GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) {
@@ -73,7 +73,7 @@ inline bool checkThruEdge(GSvec* normal, GSvec* triangle, GSvec* position, f32 r
         if (parameter < 0.0f || parameter > 1.0f) {
             continue;
         }
-        if (PSVECSquareDistance(&closest, position) < radiusSquared) {
+        if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)position) < radiusSquared) {
             return true;
         }
     }
@@ -94,7 +94,7 @@ inline bool checkThruVertex(GSvec* normal, GSvec* triangle, GSvec* position, f32
         if (!(flags & pointMask[vertex]) || !(flags & pointMask[previous])) {
             continue;
         }
-        if (PSVECSquareDistance(&triangle[vertex], position) < radiusSquared) {
+        if (PSVECSquareDistance((const Vec *)&triangle[vertex], (const Vec *)position) < radiusSquared) {
             return true;
         }
     }
@@ -115,7 +115,7 @@ s32 getMdlEventListPass(GSvec* start, GSvec* end, CCD_THRUMDL_HEAD* head,
     s32 eventCount;
 
     eventCount = 0;
-    PSVECSubtract(end, start, &travelDirection);
+    PSVECSubtract((const Vec *)end, (const Vec *)start, (Vec *)&travelDirection);
     modelCursor = (CCD_THRUMDL*)head->mModel;
     for (modelIndex = 0; modelIndex < (u32)head->mCount && eventCount < GSCOLSYS2_THRU_MAX; modelIndex++, modelCursor++) {
         CCD_THRUMDL* model = modelCursor;
@@ -131,12 +131,12 @@ s32 getMdlEventListPass(GSvec* start, GSvec* end, CCD_THRUMDL_HEAD* head,
         if (duplicateIndex < eventCount) {
             continue;
         }
-        PSMTXMultVec(rotMtx, &model->mTri.mNormal, &worldNormal);
-        if (PSVECDotProduct(&worldNormal, &travelDirection) >= 0.0f) {
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&model->mTri.mNormal, (Vec *)&worldNormal);
+        if (PSVECDotProduct((const Vec *)&worldNormal, (const Vec *)&travelDirection) >= 0.0f) {
             continue;
         }
         for (vertexIndex = 0; vertexIndex < 3; vertexIndex++) {
-            PSMTXMultVec(mtx, &model->mTri.mPoint[vertexIndex], &worldPoints[vertexIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&model->mTri.mPoint[vertexIndex], (Vec *)&worldPoints[vertexIndex]);
         }
         if (!GScolsys2UtilGetCpPlaneLine(&crossing, &parameter, &worldNormal, &worldPoints[0], start, end)) {
             crossed = false;
@@ -168,7 +168,7 @@ inline void appendStaticThruPassTrigger(GSvec* start, GSvec* end, GSvec* directi
         if (events[duplicate].mEventId == model->mEventId) break;
     }
     if (duplicate < eventCount) return;
-    if (PSVECDotProduct(&model->mTri.mNormal, direction) >= 0.0f) return;
+    if (PSVECDotProduct((const Vec *)&model->mTri.mNormal, (const Vec *)direction) >= 0.0f) return;
     GSvec* normal = &model->mTri.mNormal;
     if (!checkThruPass(start, end, normal, model->mTri.mPoint)) return;
     u16 eventId = model->mEventId;
@@ -190,7 +190,7 @@ inline s32 collectFixedThruPassEvents(GSvec* start, GSvec* end,
     GSvec travelDirection;
 
     passEventCount = 0;
-    PSVECSubtract(end, start, &travelDirection);
+    PSVECSubtract((const Vec *)end, (const Vec *)start, (Vec *)&travelDirection);
     modelCursor = (CCD_THRUMDL*)head->mModel;
     for (modelIndex = 0; modelIndex < (u32)head->mCount && passEventCount < GSCOLSYS2_THRU_MAX; modelIndex++, modelCursor++) {
         appendStaticThruPassTrigger(start, end, &travelDirection, modelCursor, out, passEventCount);
@@ -298,7 +298,7 @@ s32 getFixedMdlEventList(GSvec* start, GSvec* end, f32 radius,
                         continue;
                     }
                 }
-                if (PSVECDotProduct(&model->mTri.mNormal, end)
+                if (PSVECDotProduct((const Vec *)&model->mTri.mNormal, (const Vec *)end)
                     >= 0.0f) {
                     continue;
                 }
@@ -341,7 +341,7 @@ s32 getFixedMdlEventList(GSvec* start, GSvec* end, f32 radius,
                         continue;
                     }
                 }
-                if (PSVECDotProduct(&model->mTri.mNormal, end)
+                if (PSVECDotProduct((const Vec *)&model->mTri.mNormal, (const Vec *)end)
                     >= 0.0f) {
                     continue;
                 }
@@ -384,7 +384,7 @@ s32 getFixedMdlEventList(GSvec* start, GSvec* end, f32 radius,
                         continue;
                     }
                 }
-                if (PSVECDotProduct(&model->mTri.mNormal, end)
+                if (PSVECDotProduct((const Vec *)&model->mTri.mNormal, (const Vec *)end)
                     >= 0.0f) {
                     continue;
                 }
@@ -435,12 +435,12 @@ s32 getMdlEventList(GSvec* start, GSvec* end, f32 radius, CCD_THRUMDL_HEAD* head
                 continue;
             }
         }
-        PSMTXMultVec(rotMtx, &model->mTri.mNormal, &worldNormal);
-        if (PSVECDotProduct(&worldNormal, end) >= 0.0f) {
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&model->mTri.mNormal, (Vec *)&worldNormal);
+        if (PSVECDotProduct((const Vec *)&worldNormal, (const Vec *)end) >= 0.0f) {
             continue;
         }
         for (vertexIndex = 0; vertexIndex < 3; vertexIndex++) {
-            PSMTXMultVec(mtx, &model->mTri.mPoint[vertexIndex], &worldPoints[vertexIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&model->mTri.mPoint[vertexIndex], (Vec *)&worldPoints[vertexIndex]);
         }
         if (!checkThruFace(&worldNormal, worldPoints, start, radiusSquared)) continue;
         u16 eventId = model->mEventId;
@@ -474,12 +474,12 @@ s32 getMdlEventList(GSvec* start, GSvec* end, f32 radius, CCD_THRUMDL_HEAD* head
                 continue;
             }
         }
-        PSMTXMultVec(rotMtx, &model->mTri.mNormal, &worldNormal);
-        if (PSVECDotProduct(&worldNormal, end) >= 0.0f) {
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&model->mTri.mNormal, (Vec *)&worldNormal);
+        if (PSVECDotProduct((const Vec *)&worldNormal, (const Vec *)end) >= 0.0f) {
             continue;
         }
         for (vertexIndex = 0; vertexIndex < 3; vertexIndex++) {
-            PSMTXMultVec(mtx, &model->mTri.mPoint[vertexIndex], &worldPoints[vertexIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&model->mTri.mPoint[vertexIndex], (Vec *)&worldPoints[vertexIndex]);
         }
         if (!checkThruEdge(&worldNormal, worldPoints, start, radiusSquared, model->mFlags)) continue;
         u16 eventId = model->mEventId;
@@ -510,12 +510,12 @@ s32 getMdlEventList(GSvec* start, GSvec* end, f32 radius, CCD_THRUMDL_HEAD* head
                 continue;
             }
         }
-        PSMTXMultVec(rotMtx, &model->mTri.mNormal, &worldNormal);
-        if (PSVECDotProduct(&worldNormal, end) >= 0.0f) {
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&model->mTri.mNormal, (Vec *)&worldNormal);
+        if (PSVECDotProduct((const Vec *)&worldNormal, (const Vec *)end) >= 0.0f) {
             continue;
         }
         for (vertexIndex = 0; vertexIndex < 3; vertexIndex++) {
-            PSMTXMultVec(mtx, &model->mTri.mPoint[vertexIndex], &worldPoints[vertexIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&model->mTri.mPoint[vertexIndex], (Vec *)&worldPoints[vertexIndex]);
         }
         if (!checkThruVertex(&worldNormal, worldPoints, start, radiusSquared, model->mFlags)) continue;
         u16 eventId = model->mEventId;
@@ -587,16 +587,16 @@ extern "C" s32 GScolsys2ThruGetEventID(GSvec* start, GSvec* end, f32 radius,
     f32 progress, step, distance;
 
     if (GScolsys2GetCCDFileHead() == 0) return 0;
-    PSVECSubtract(end, start, &direction);
-    distance = PSVECMag(&direction);
+    PSVECSubtract((const Vec *)end, (const Vec *)start, (Vec *)&direction);
+    distance = PSVECMag((const Vec *)&direction);
     if (distance <= 0.0f) return 0;
     step = radius / distance;
     if (step > 1.0f) step = 1.0f;
     for (progress = 0.0f; progress < 1.0f && eventCount < GSCOLSYS2_THRU_MAX; progress += step) {
         f32 sample = progress + step;
         if (sample > 1.0f) sample = 1.0f;
-        PSVECScale(&direction, &position, sample);
-        PSVECAdd(&position, start, &position);
+        PSVECScale((const Vec *)&direction, (Vec *)&position, sample);
+        PSVECAdd((const Vec *)&position, (const Vec *)start, (Vec *)&position);
         s32 sampleCount = getEventList(&position, &direction, radius, sampleEvents);
         for (s32 sampleIndex = 0; sampleIndex < sampleCount && eventCount < GSCOLSYS2_THRU_MAX; sampleIndex++) {
             s32 duplicateIndex;

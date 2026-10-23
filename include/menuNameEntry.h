@@ -23,7 +23,16 @@ struct NameEntryTableData {
     unsigned long mUnk28;  // 0x28: unknown.
 };
 
-// Input and selection menus share the character buffer and editing state.
+enum SHEET {
+    SHEET_PRIMARY = 0,
+    SHEET_ALTERNATE = 1,
+};
+
+// Argument block the name-entry menus read through tagWINDOW_WORK+0x68. The
+// head at 0x00 is the initial name for the input menu (0x66) and the default
+// name id table for the select menu (0x65); the buffer at 0x18 is the
+// character string being edited; the fields from 0x24 on point at the .sbss
+// editing values.
 struct NAME_ENTRY_ARG {
     union {
         u16 mInitialName[12]; // 0x00: initial name (menu 0x66).
@@ -34,18 +43,18 @@ struct NAME_ENTRY_ARG {
         } mSelect;
     };
     u16 *mChars;  // 0x18: character buffer being edited.
-    int mMode;    // 0x1C: name-entry mode (mode table index).
-    int mParam;   // 0x20: party slot or Pokemon pointer, by mode.
-    int *mTable;  // 0x24: selected 50-on table (0 or 1).
-    int *mColumn; // 0x28: selected column.
-    int *mRow;    // 0x2C: selected row.
+    s32 mMode;    // 0x1C: name-entry mode (mode table index).
+    s32 mParam;   // 0x20: party slot or Pokemon pointer, by mode.
+    SHEET *mTable; // 0x24: selected 50-on table (0 or 1).
+    s32 *mColumn; // 0x28: selected column.
+    s32 *mRow;    // 0x2C: selected row.
     f32 *mTimer;  // 0x30: cursor blink timer.
-    int *mCursor; // 0x34: character position in the buffer.
-    int *mUnk38;  // 0x38
-    int *mUnk3C;  // 0x3C
-    int *mUnk40;  // 0x40
-    int *mUnk44;  // 0x44
-    int *mUnk48;  // 0x48
+    s32 *mCursor; // 0x34: character position in the buffer.
+    s32 *mDefaultSheetColumn;
+    s32 *mDefaultSheetRow;
+    s32 *mDefaultPokemonNameCursor;
+    s32 *mDefaultBoxNameCursor;
+    s32 *mDefaultTrainerNameCursor;
 };
 
 // The name the screen is editing, kept across the menu.
@@ -112,46 +121,48 @@ extern "C" {
 
 int menuNameEntryCall(int type, int param);
 int menuNameEntryOpen(int type, int param);
-int floorLink(int type, int param);
+int menuNameEntryOpenNoFade(s32 type, s32 param);
 void menuNameEntryGetLastName(u16 *name);
 void menuNameEntry(void);
 int menuNameEntryBackCtrl(tagWINDOW_WORK *window);
 int menuNameEntryCtrl(tagWINDOW_WORK *window);
 int menuNameEntryBackDrawHumanModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void menuNameEntrySetupModel(long dataID, MENU_MODEL *model, int type, int param);
 int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawBCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawStartCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDraw50Text(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawNameRuleText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawKenNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawNameTrainerText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawNameBoxText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawModeNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawEndCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDraw50onToggleTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawNamePokemonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawBCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawXButtonText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntryDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectButton(tagWINDOW_WORK *window);
 int menuNameEntrySelectCtrl(tagWINDOW_WORK *window);
 int menuNameEntrySelectDrawSelText1(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectDrawSelText2(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 int menuNameEntrySelectDrawSelText3(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryBackDrawBalls(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDispItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void menuNameEntryDrawNameBox(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawNameBoxCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int count, int mode);
-void menuNameEntryDispButtonCur(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite);
-int menuNameEntryDrawCellCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-u16 get50onChar(int table, int column, int row);
-void print1Char(GSgfxLayerID layer, int x, int y, u32 color, u16 chr);
+int menuNameEntryBackDrawBall(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDrawNamePokemonWaku(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void menuNameEntryDrawNameTrainerCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+int menuNameEntryDraw50Cursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 u16 conv50onChar(u16 chr, int table);
-int confirmName(u16 *name);
-int getCharClass(u16 chr);
-void toggle50onTable(NAME_ENTRY_ARG *arg);
-int input50onCell(NAME_ENTRY_ARG *arg);
-int menuNameEntryInputButton(tagWINDOW_WORK *window);
-void menuNameEntryInputDummy(void);
+int menuNameEntryCursor(tagWINDOW_WORK *window);
+void menuNameEntryButton(void);
 
 } // extern "C"
+
+void loadModel(long dataID, MENU_MODEL *model, int type, int param);
+void drawControlCursor(NAME_ENTRY_ARG *arg, tagSPRITE_WORK *sprite);
+u16 getCharSheet(SHEET sheet, int column, int row);
+void putGScharL(GSgfxLayerID layer, int x, int y, unsigned long color, u16 chr);
+s32 getSpchar(u16 chr);
+void change50Sheet(NAME_ENTRY_ARG *arg);
+int selectLetter(NAME_ENTRY_ARG *arg);
+
+int menuNameEntryDrawNameCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int count, int mode);
+int confirmName(u16 *name);
 
 int menuNameEntryDrawNameText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int count, int mode);
 void drawTexture(GStexture *texture, tagSPRITE_WORK *sprite, GSgfxLayerID layer);

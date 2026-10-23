@@ -158,8 +158,8 @@ struct MenuPokemonStatusWork {
 
 // Model rendered by the status menu.
 extern "C" {
-extern MenuPokemonStatusWork menuPokemonStatusWork;
-extern MENU_MODEL_STATUS menuPokemonStatusModel;
+extern MenuPokemonStatusWork _menuStatus;
+extern MENU_MODEL _menuModel;
 }
 
 // Status-menu window/menu ids the status menu opens. The head window owns the
@@ -250,7 +250,7 @@ void menuPokemonStatusDispNoOp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 u16 menuPokemonStatusGetWazaTypeIcon(u16 type);
 void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuPokemonStatusCtrlPage(tagWINDOW_WORK *window);
-void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 
 } // extern "C"
@@ -258,7 +258,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 // Helpers of the status menu.
 bool _menuPokemonStatusCheckWazaItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 long NotDarkWaza(long waza);
-u32 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot);
+u16 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot);
 u8 _menuPokemonStatusCheckDanny(Pokemon *pokemon);
 u8 _menuPokemonStatusCheckGinzaru(Pokemon *pokemon);
 u8 _menuPokemonStatusCheckOya(Pokemon *pokemon);

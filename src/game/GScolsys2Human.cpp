@@ -216,7 +216,7 @@ bool checkCollisionHeadToHead(GSCOLSYS2_HUMAN* a, GSCOLSYS2_HUMAN* b,
     return 1;
 }
 
-bool checkCollision(GSCOLSYS2_HUMAN* human, s32 self, GSvec* from, GSvec* to,
+bool checkCollision(GSCOLSYS2_HUMAN* human, int self, GSvec* from, GSvec* to,
                    GSvec* out)
 {
     GSvec resolved;
@@ -252,7 +252,7 @@ bool checkCollision(GSCOLSYS2_HUMAN* human, s32 self, GSvec* from, GSvec* to,
     return 1;
 }
 
-extern "C" s32 GScolsys2HumanCollision(s32 index, GSvec* a, GSvec* b, GSvec* out)
+extern "C" s32 GScolsys2HumanCollision(int index, GSvec* a, GSvec* b, GSvec* out)
 {
     GSvec dir;
     GSvec start;
@@ -283,7 +283,7 @@ extern "C" s32 GScolsys2HumanCollision(s32 index, GSvec* a, GSvec* b, GSvec* out
         }
     }
     if (status != 0) return status;
-    total = PSVECDistance(a, b);
+    total = PSVECDistance((const Vec *)a, (const Vec *)b);
     if (total > (0.0f)) {
         stepLen = human->mRadius / total;
         if (stepLen > 1.0f) {
@@ -292,7 +292,7 @@ extern "C" s32 GScolsys2HumanCollision(s32 index, GSvec* a, GSvec* b, GSvec* out
     } else {
         stepLen = (0.0f);
     }
-    PSVECSubtract(b, a, &dir);
+    PSVECSubtract((const Vec *)b, (const Vec *)a, (Vec *)&dir);
     limit = (1.0f);
     for (travelled = (0.0f); travelled < limit;
          travelled = travelled + stepLen) {
@@ -301,10 +301,10 @@ extern "C" s32 GScolsys2HumanCollision(s32 index, GSvec* a, GSvec* b, GSvec* out
         if (next > limit) {
             next = limit;
         }
-        PSVECScale(&dir, &start, travelled);
-        PSVECAdd(&start, a, &start);
-        PSVECScale(&dir, &at, next);
-        PSVECAdd(&at, a, &at);
+        PSVECScale((const Vec *)&dir, (Vec *)&start, travelled);
+        PSVECAdd((const Vec *)&start, (const Vec *)a, (Vec *)&start);
+        PSVECScale((const Vec *)&dir, (Vec *)&at, next);
+        PSVECAdd((const Vec *)&at, (const Vec *)a, (Vec *)&at);
         if (checkCollision(human, index, &start, &at, out)) {
             return GSCOLSYS2_COLLISION;
         }

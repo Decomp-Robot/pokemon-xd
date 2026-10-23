@@ -2,13 +2,8 @@
 #define MENU_POKEMON_H
 
 #include <types.h>
-#include <Pokemon.h>
-#include <fightTrainerPokemon.h>
-#include <menuPokemonStatus.h>
-
 #include <fightTrainer.h>
-#include <fightOutPokemon.h>
-
+#include <menuPokemonStatus.h>
 
 enum PartyConditionSprite {
     CONDITION_SPRITE_NONE = 0,
@@ -270,6 +265,7 @@ void menuPokemonButton(tagWINDOW_WORK *win);
 void menuPokemonCursor(tagWINDOW_WORK *win);
 s32 menuPokemonCtrl(tagWINDOW_WORK *win);
 s32 menuPokemonMain(void);
+
 
 #ifdef __cplusplus
 }

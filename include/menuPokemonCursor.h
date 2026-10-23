@@ -10,11 +10,12 @@
 // table entry it sits on and the model state of both records.
 class CMenuPokemonCursor {
 public:
+    static PocketVec<short> defaultPositionTbl;
+    void init();
     void draw();
     bool isCatchPokemon();
     void deletePokemon();
     void setAnimationOff();
-    void init();
     void setBeforAnt(CAnt &ant);
     void setPokemon(Pokemon *pokemon);
     void setPositionTableDummy();
@@ -22,27 +23,22 @@ public:
     void setPositionTable(PocketVec<short> *table, long index);
 
 private:
-    enum AnimationState {
-        ANIMATION_NONE = 0,
-        ANIMATION_CHANGE = 1,
-        ANIMATION_DELETE = 2,
-        ANIMATION_MOVE = 3
-    };
-    bool mDisplay;                         // 0x00
-    AnimationState mAnimationState;         // 0x04
-    float mAnimationRate;                   // 0x08
+    enum AnimationState { ANIMATION_NONE, ANIMATION_EXCHANGE, ANIMATION_REMOVE, ANIMATION_MOVE };
+    bool mDraw;
+    u8 _01[3];
+    long mAnimationState;
+    float mAnimationTime;
     long mPositionIndex;                   // 0x0C: current table index.
     long mPrevPositionIndex;               // 0x10: index before the switch.
     s16 mPositionX;                        // 0x14: snapped cursor x.
     s16 mPositionY;                        // 0x16: snapped cursor y.
     PocketVec<short> *mPositionTable;      // 0x18: position table.
-    float mFlashTime;                      // 0x1C: elapsed cursor flash time.
+    float mCursorTime;
     Pokemon mPokemon;                      // 0x20: the pokemon the cursor holds.
     CAnt mAnt;                             // 0xE4: its model.
     CAnt mBeforAnt;                        // 0x118: model kept before the switch.
-    bool mHighlight;                      // 0x14C: draw the cursor in yellow.
-
-    static PocketVec<short> defaultPositionTbl;
+    bool mHighlight;
+    u8 _14d[3];
 };
 
 #endif

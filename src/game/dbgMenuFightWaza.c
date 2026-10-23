@@ -1,37 +1,33 @@
+#include <waza.h>
 #include <menu.h>
 #include <types.h>
 #include <menuSub.h>
 #include <waza.h>
 
-/* Waza (move) debug sub menu.  The waza data block is 0x38 bytes per waza id
- * (1..0x162) and is snapshotted while the menu is open. */
-struct WazaData {
-    u32 _00[0x38 / 4];
-};
 
 long dbgMenuFightGetWazaTypeId(u8 typeID);
 
 #pragma peephole off
 
-s32 dbgMenuFightWazaEditSub(unsigned long wazaNo)
+s32 dbgMenuFightWazaEditSub(u16 wazaNo)
 {
     struct WazaData *waza;
     struct WazaData work;
     long typeID;
     long result;
 
-    if ((unsigned short)wazaNo == 0) {
+    if (wazaNo == 0) {
         return 1;
     }
-    if ((unsigned short)wazaNo >= 0x163) {
+    if (wazaNo >= 0x163) {
         return 1;
     }
 
-    waza = (struct WazaData *)wazaDataBiosGetPtr(wazaNo);
+    waza = wazaDataBiosGetPtr(wazaNo);
     work = *waza;
 
     while (1) {
-        result = menuOpenCustom(MENU_ID_DEBUG_MOVE_EDITOR, 0, 0, 0, 1, 1, (unsigned short)wazaNo);
+        result = menuOpenCustom(0x20, 0, 0, 0, 1, 1, wazaNo);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_MOVE_EDITOR, 0, 1);
             *waza = work;

@@ -8,6 +8,7 @@
 #include <menuOffScreen.h>
 #include <menuUseItem.h>
 #include <menuItemMessages.h>
+#include <menuIds.h>
 #include <winMsg.h>
 #include <PokemonData.h>
 #include <GSmsg.h>
@@ -15,6 +16,7 @@
 #include <gsFlag.h>
 #include <itemUse2Pokemon.h>
 #include <fightFloor.h>
+#include <fightEncountData.h>
 #include <gamedata.h>
 #include <Pokemon.h>
 #include <waza.h>
@@ -391,7 +393,7 @@ u32 item_crane_memo_number = 5;
 /* Function of this file with C++ linkage that is used before it is defined. */
 s32 cbForgetWazaSelect(Pokemon *pokemon, u16 wazaID, long context);
 /* Stats record of a pokemon, or null when there is no such pokemon. */
-PokeStats *getPokemonData(Pokemon *pokemon)
+PokemonSpeciesStats *getPokemonData(Pokemon *pokemon)
 {
     if (pokemon == 0) {
         return 0;
@@ -405,12 +407,12 @@ PokeStats *getPokemonData(Pokemon *pokemon)
 /* Play the cry of a pokemon, and return the sound id that was started. */
 s32 playPokemonVoice(Pokemon *pokemon)
 {
-    PokeStats *stats = getPokemonData(pokemon);
+    PokemonSpeciesStats *stats = getPokemonData(pokemon);
 
     if (stats == 0) {
         return 0;
     }
-    u16 cryID = pokemonDataBiosGetVoice(stats);
+    u32 cryID = (u16)pokemonDataBiosGetVoice(stats);
     GSsndPlayNow(cryID);
     return cryID;
 }
@@ -433,9 +435,6 @@ static bool pokemonHasDarkPoints(Pokemon *pokemon)
     return pokemonGetDp(pokemon) > 0.0f;
 }
 
-/* Item routines are called through the item table and script dispatcher. */
-#pragma force_active on
-
 /* Play the sound effect of spending an item: a recovery item gets its own
  * sound, every other item the plain item-spent one. */
 void playRecoverSE(unsigned long itemID)
@@ -457,7 +456,7 @@ void playRecoverSE(unsigned long itemID)
 
 /* Message of the battle effect log: the message of the first logged effect
  * and the two values that go with it. */
-void getLogMsgBattle(u16 *msg, s32 maxLength, ITEMUSE2POKEMON_LOG1 *log, s16 count, Pokemon *pokemon)
+void getLogMsgBattle(u16 *msg, int maxLength, ITEMUSE2POKEMON_LOG1 *log, s16 count, Pokemon *pokemon)
 {
     BATTLE_LOG_TABLE table = cBattleLogMsgs;
     s32 j;
@@ -501,7 +500,7 @@ void getLogMsgBattle(u16 *msg, s32 maxLength, ITEMUSE2POKEMON_LOG1 *log, s16 cou
 /* Message of the field effect log, the same way as the battle one. An effect
  * that belongs to a group is reported with its own message, but when an effect
  * of another group is in the log as well, MSG_MULTIPLE_EFFECTS replaces it. */
-void getLogMsgField(u16 *msg, s32 maxLength, ITEMUSE2POKEMON_LOG1 *log, s16 count, Pokemon *pokemon)
+void getLogMsgField(u16 *msg, int maxLength, ITEMUSE2POKEMON_LOG1 *log, s16 count, Pokemon *pokemon)
 {
     s32 j;
     s32 i;
@@ -593,7 +592,7 @@ void dispMsg(unsigned long msgID)
     case MSG_WAZA_MACHINE_NO:
     case MSG_POKEMON_IS_SHADOW:
     case MSG_POKEMON_REVERSE_MODE:
-        GSsndPlayNow(MENU_SOUND_MESSAGE);
+        GSsndPlayNow(MENU_SE_ERROR);
         break;
     }
     if (windowSearchID(MENU_POKEMON_LIST) == 0) {
@@ -612,14 +611,15 @@ void dispMsg(unsigned long msgID)
  * Item handlers
  * ---------------------------------------------------------------------- */
 
-extern "C" s32 menuUseItemEventUsohachiPhoto(unsigned long itemID, s32 *consumed)
+#pragma force_active on
+extern "C" int menuUseItemEventUsohachiPhoto(unsigned long itemID, int *consumed)
 {
     *consumed = 0;
     menuScriptUsohachi2();
     return ITEM_USE_EVENT;
 }
 
-extern "C" s32 menuUseItemEventMirraboradar(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemEventMirraboradar(unsigned long itemID, int *consumed)
 {
     u32 msgID = 1;
     u32 placeLevel;
@@ -660,7 +660,7 @@ ITEM_CRANE_MEMO item_crane_memo[5] = {
     {ITEM_CRANE_MEMO_FIFTH, 4, MSG_CRANE_MEMO_FIFTH},
 };
 
-extern "C" s32 menuUseItemEventCraneMemo(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemEventCraneMemo(unsigned long itemID, int *consumed)
 {
     u32 i;
 
@@ -676,13 +676,13 @@ extern "C" s32 menuUseItemEventCraneMemo(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemEventNotConsum(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemEventNotConsum(unsigned long itemID, int *consumed)
 {
     s32 i;
 
     *consumed = 0;
-    for (i = 0; i < menuPocket2ItemScript.mCount; i++) {
-        if (menuPocket2ItemScript.mEntries[i].mID == itemID) {
+    for (i = 0; i < menuPocketWork.mCount; i++) {
+        if (menuPocketWork.mEntries[i].mID == itemID) {
             return ITEM_USE_EVENT;
         }
     }
@@ -690,7 +690,7 @@ extern "C" s32 menuUseItemEventNotConsum(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemBattleNazonomi(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemBattleNazonomi(unsigned long itemID, int *consumed)
 {
     ITEM_PARAM param;
     s32 type;
@@ -717,7 +717,7 @@ extern "C" s32 menuUseItemBattleNazonomi(unsigned long itemID, s32 *consumed)
     }
 }
 
-extern "C" s32 menuUseItemBattleBall(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemBattleBall(unsigned long itemID, int *consumed)
 {
     Hero *hero;
     FIGHT_TRAINER *trainer;
@@ -757,7 +757,7 @@ extern "C" s32 menuUseItemBattleBall(unsigned long itemID, s32 *consumed)
     return ITEM_USE_APPLIED;
 }
 
-extern "C" s32 menuUseItemStatusUp(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemStatusUp(unsigned long itemID, int *consumed)
 {
     Pokemon *pokemon;
     FightPokemon *fightPokemon;
@@ -788,7 +788,7 @@ extern "C" s32 menuUseItemStatusUp(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemFieldNazonomi(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemFieldNazonomi(unsigned long itemID, int *consumed)
 {
     ITEM_PARAM param;
     s32 type;
@@ -833,7 +833,7 @@ void wazaLean(Pokemon *pokemon, u16 wazaID, u8 index)
     pokemonGetFriendFormPokemonFriendFilterId(pokemon, heldEffectID, POKEMON_FRIEND_FILTER_LEARN_MOVE);
 }
 
-s32 wazaMachineProc(Pokemon *pokemon, s32 itemID)
+s32 wazaMachineProc(Pokemon *pokemon, int itemID)
 {
     s32 i;
     u16 wazaID;
@@ -873,7 +873,7 @@ s32 wazaMachineProc(Pokemon *pokemon, s32 itemID)
     return result;
 }
 
-extern "C" s32 menuUseItemSkill(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemSkill(unsigned long itemID, int *consumed)
 {
     u16 wazaID;
     u8 hidenNo;
@@ -982,7 +982,7 @@ extern "C" u32 menuUseItemScriptCologn(u32 itemID, s32 slot)
     return 1;
 }
 
-extern "C" s32 menuUseItemCologn(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemCologn(unsigned long itemID, int *consumed)
 {
     Pokemon *pokemon;
     FightPokemon *fightPokemon;
@@ -1001,7 +1001,7 @@ extern "C" s32 menuUseItemCologn(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemEvolution(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemEvolution(unsigned long itemID, int *consumed)
 {
     Pokemon *pokemon;
     FightPokemon *fightPokemon;
@@ -1027,12 +1027,12 @@ extern "C" s32 menuUseItemEvolution(unsigned long itemID, s32 *consumed)
     menuPocket2ClosePokemonMenu(slot);
     if (slot >= 0 && result > 0) {
         evoSpecies = pokemonEvolutionCheck(pokemon, EVOLUTION_CHECK_ITEM, (u16)itemID, &addedSpecies, &evoInfo);
-        fadeSet(FADE_MODE_OUT, cEvolutionFadeSeconds);
+        fadeSet(FADE_OUT_BLACK, cEvolutionFadeSeconds);
         fadeCheck(1);
         menuOffScreenSetDisp(0);
         pokemonEvolutionAll(pokemon, evoSpecies, addedSpecies, &evoInfo, 0, 1, 0, 0);
         menuOffScreenSetDisp(1);
-        fadeSet(FADE_MODE_IN, cEvolutionFadeSeconds);
+        fadeSet(FADE_IN_BLACK, cEvolutionFadeSeconds);
         fadeCheck(1);
         *consumed = 1;
         return ITEM_USE_APPLIED;
@@ -1040,7 +1040,7 @@ extern "C" s32 menuUseItemEvolution(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemWPointUp(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemWPointUp(unsigned long itemID, int *consumed)
 {
     unsigned long nickname;
     Pokemon *pokemon;
@@ -1124,18 +1124,18 @@ s32 cbForgetWazaSelect(Pokemon *pokemon, u16 wazaID, long context)
 {
     s32 result;
 
-    fadeSet(FADE_MODE_OUT, cEvolutionFadeSeconds);
+    fadeSet(FADE_OUT_BLACK, cEvolutionFadeSeconds);
     fadeCheck(1);
     result = menuPokemonStatusOpenWazaMachine(pokemon, wazaID);
     if (result >= 4) {
         result = -1;
     }
-    fadeSet(FADE_MODE_IN, cEvolutionFadeSeconds);
+    fadeSet(FADE_IN_BLACK, cEvolutionFadeSeconds);
     fadeCheck(1);
     return (s8)result;
 }
 
-extern "C" s32 menuUseItemListLVUp(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemListLVUp(unsigned long itemID, int *consumed)
 {
     u8 learnIndex;
     Pokemon *pokemon;
@@ -1207,12 +1207,12 @@ extern "C" s32 menuUseItemListLVUp(unsigned long itemID, s32 *consumed)
     menuPocket2ClosePokemonMenu(slot);
     if (slot >= 0 && count > 0) {
         if ((u16)evoSpecies != 0) {
-            fadeSet(FADE_MODE_OUT, cEvolutionFadeSeconds);
+            fadeSet(FADE_OUT_BLACK, cEvolutionFadeSeconds);
             fadeCheck(1);
             menuOffScreenSetDisp(0);
             pokemonEvolutionAll(pokemon, evoSpecies, addedSpecies, &evoInfo, 0, 1, 1, 0);
             menuOffScreenSetDisp(1);
-            fadeSet(FADE_MODE_IN, cEvolutionFadeSeconds);
+            fadeSet(FADE_IN_BLACK, cEvolutionFadeSeconds);
             fadeCheck(1);
         }
         *consumed = 1;
@@ -1221,7 +1221,7 @@ extern "C" s32 menuUseItemListLVUp(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemAlldeathRcv(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemAlldeathRcv(unsigned long itemID, int *consumed)
 {
     Pokemon *pokemon;
     FightPokemon *fightPokemon;
@@ -1270,7 +1270,7 @@ extern "C" s32 menuUseItemAlldeathRcv(unsigned long itemID, s32 *consumed)
     return ITEM_USE_APPLIED;
 }
 
-extern "C" s32 menuUseItemPPRecovery(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemPPRecovery(unsigned long itemID, int *consumed)
 {
     unsigned long nickname;
     Pokemon *pokemon;
@@ -1325,7 +1325,7 @@ extern "C" s32 menuUseItemPPRecovery(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemRecovery(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemRecovery(unsigned long itemID, int *consumed)
 {
     unsigned long nickname;
     Pokemon *pokemon;
@@ -1373,19 +1373,19 @@ extern "C" s32 menuUseItemRecovery(unsigned long itemID, s32 *consumed)
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemNoPokecolo(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemNoPokecolo(unsigned long itemID, int *consumed)
 {
     dispMsg(MSG_ITEM_NO_POKECOLO);
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemNoEffects(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemNoEffects(unsigned long itemID, int *consumed)
 {
     dispMsg(MSG_ITEM_NO_EFFECT);
     return ITEM_USE_REFUSED;
 }
 
-extern "C" s32 menuUseItemDummy(unsigned long itemID, s32 *consumed)
+extern "C" int menuUseItemDummy(unsigned long itemID, int *consumed)
 {
     dispMsg(MSG_ITEM_NO_USE);
     return ITEM_USE_REFUSED;

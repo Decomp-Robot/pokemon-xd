@@ -21,56 +21,28 @@
 #include <fade.h>
 #include <fightFloor.h>
 #include <menuCBBios.h>
+#include <msgctrl.h>
+#include <GSthread.h>
+#include <gsFlag.h>
+#include <floor.h>
+#include <floorManager.h>
+#include <menuSub.h>
+#include <zokusei.h>
+#include <libc/memory.h>
 
 extern "C" {
-GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
-void msgctrlSetValue(s32 id, unsigned long value);
-void floorSetFadeScript(s32 p1, s32 script);
-void GSfloorPop(void);
-void GSfloorPush(s32 floor);
-s32 floorWaitForChange(void);
-void GSthreadSwitch(void);
-u8 menuFaceCheckLoading(void);
 void menuDrawReliveUpdate(void);
 void menuDrawReliveMeter(Pokemon *pokemon, s16 x, s16 y, GSgfxLayerID layer);
-void menuModelInit(MENU_MODEL *model, s32 p1, s32 p2);
-void menuModelFree(MENU_MODEL *model);
-void menuModelSetSize(MENU_MODEL *model, s16 x0, s16 y0, s16 x1, s16 y1);
-void menuModelSetAngle(MENU_MODEL *model, const f32 *angle);
-void menuModelAdjustCamera(MENU_MODEL *model);
-u8 menuModelCheck(MENU_MODEL *model, s32 flag);
-void menuModelRender(MENU_MODEL *model);
 void menuPlaySe(s32 p1, s32 p2);
-u8 menuModelSetupPokemon(MENU_MODEL *model, Pokemon *pokemon);
-void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
-void menuModelTerm(MENU_MODEL *model);
-u8 pokemonWazaCheckValid(Pokemon *pokemon, u16 slot);
-u8 pokemonWazaGetMaxPP(Pokemon *pokemon, u16 slot);
-void pokemonWazaReplace(Pokemon *pokemon, s32 prev, s32 slot);
-s32 pokemonGetLevelToExp(Pokemon *pokemon, u8 level);
-u8 pokemonGetDarkPokemonLevel(Pokemon *pokemon);
-s32 zokuseiGetPokemonSpriteID(void *stats, s32 index);
 u16 zokuseiBiosGetSpriteID(u16 type);
 u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);
-u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
-void *pokemonSeikakuDataBiosGetPtr(u8 id);
-u32 pokemonSeikakuDataGetMessageId(void *ptr);
-u8 pokemonIsDarkPokemon(Pokemon *pokemon);
-DarkPokemon *pokemonGetDarkPokemonPtr(Pokemon *pokemon);
-u8 pokemonIsShinyFromPIDAndTID(Pokemon *pokemon);
-u8 menuSubGetPokemonSexForDisp(Pokemon *pokemon);
-s32 pokemonGetBall(Pokemon *pokemon);
 u16 mballBiosGetSpriteID(u8 ball);
-void *memset(void *dst, int value, unsigned long size);
-u32 GSflagGet(s32 flag);
-u32 trainerGetTID(void *trainer);
 u32 floorGetPlaceName(u32 place);
 u8 fightKind_CheckFightKind(s32 kind);
 s32 getRibbonCount(void);
 u16 menuPokemonGetJoutaiSpriteID(Pokemon *pokemon, u8 largeIcon);
 u32 getRibbonMsgID(s32 ribbon);
 u8 exribbonGetNo(s32 ribbon);
-s32 GScharCmp(const u16 *a, const u16 *b);
 }
 
 // Menus hidden while the waza pages are up.
@@ -81,8 +53,8 @@ extern "C" const unsigned long wazaHideMenuIDs[4] = { 0x37, 0x40, 0x38, 0x41 };
 // Status-menu work and model. The work block is cleared each time a pokemon
 // status menu is opened; the model is loaded once per menu.
 extern "C" {
-MenuPokemonStatusWork menuPokemonStatusWork;
-MENU_MODEL_STATUS menuPokemonStatusModel;
+MenuPokemonStatusWork _menuStatus;
+MENU_MODEL _menuModel;
 }
 
 // Ribbon ids the grid cells hold, in the order the ribbon table lists them.
@@ -144,22 +116,22 @@ void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     if (windowSearchID(MENU_POKEMON_STATUS_MENU_HEAD) == 0)
         return;
-    if (menuPokemonStatusWork.mPokemon == 0)
+    if (_menuStatus.mPokemon == 0)
         return;
 
     color = window->mRgba.mColorA | 0xFFFFFF00;
 
     switch (sprite->mItemID) {
     case MENU_POKEMON_STATUS_ITEM_RIBBON_COUNT:
-        msgctrlSetValue(0x34, menuPokemonStatusWork.mRibbon.mCount);
+        msgctrlSetValue(0x34, _menuStatus.mRibbon.mCount);
         GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4287);
         return;
 
     case MENU_POKEMON_STATUS_ITEM_RIBBON_DESCRIPTION: {
-        if (menuPokemonStatusWork.mPage != MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
+        if (_menuStatus.mPage != MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
             return;
-        s8 grid = menuPokemonStatusWork.mGridIndex;
-        ribbon = menuPokemonStatusWork.mRibbon.mCells[grid % 9][grid / 9];
+        s8 grid = _menuStatus.mGridIndex;
+        ribbon = _menuStatus.mRibbon.mCells[grid % 9][grid / 9];
         if (ribbon < 0) {
             if ((u32)getRibbonCount() <= (u32)ribbon)
                 return;
@@ -230,17 +202,17 @@ void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         i = 0x20 - (i + 1);
         if (i > 0x18)
             i += 2;
-        if (menuPokemonStatusWork.mRibbon.mCells[i % 9][i / 9] >= 0)
+        if (_menuStatus.mRibbon.mCells[i % 9][i / 9] >= 0)
             winSpriteSetDisp(sprite, 1);
         else
             winSpriteSetDisp(sprite, 0);
         return;
 
     case 0x229: {
-        if (menuPokemonStatusWork.mGridIndex < 0)
+        if (_menuStatus.mGridIndex < 0)
             return;
-        s32 column = menuPokemonStatusWork.mGridIndex % 9;
-        s32 row = (s32)menuPokemonStatusWork.mGridIndex / 9;
+        int column = _menuStatus.mGridIndex % 9;
+        int row = (int)_menuStatus.mGridIndex / 9;
         windowDrawSprite((s16)(column * 30), (s16)(row * 52), window, 0x366, 0,
                     winSpriteGetLayerID(window, sprite));
         return;
@@ -248,7 +220,7 @@ void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     case 0x21E:
     case 0x220:
-        if (menuPokemonStatusWork.mPage == MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
+        if (_menuStatus.mPage == MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
             winSpriteSetDisp(sprite, 1);
         else
             winSpriteSetDisp(sprite, 0);
@@ -262,8 +234,8 @@ void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 // Ribbon page hook: refills the ribbon grid of the pokemon being shown.
 void menuPokemonStatusCtrlRibbon(void)
 {
-    if (menuPokemonStatusWork.mPokemon != 0)
-        _menuPokemonStatusMakeRibbon(menuPokemonStatusWork.mPokemon, &menuPokemonStatusWork.mRibbon);
+    if (_menuStatus.mPokemon != 0)
+        _menuPokemonStatusMakeRibbon(_menuStatus.mPokemon, &_menuStatus.mRibbon);
 }
 
 // Fill the ribbon grid of `work` from the ribbons `pokemon` wears. Each cell
@@ -323,7 +295,7 @@ void _menuPokemonStatusMakeRibbon(Pokemon *pokemon, RIBBON_WORK *work)
 
 // Waza data id of the waza in `slot` of `pokemon`, for the status pages that
 // ask for it by waza slot rather than by waza number.
-static inline u32 menuPokemonStatusGetWazaId(Pokemon *pokemon, u16 slot)
+static inline u16 menuPokemonStatusGetWazaId(Pokemon *pokemon, u16 slot)
 {
     return _menuPokemonStatusGetWazaDataID(pokemon, slot);
 }
@@ -334,7 +306,7 @@ static inline u32 menuPokemonStatusGetWazaId(Pokemon *pokemon, u16 slot)
 static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                                                Pokemon *pokemon, u16 slot)
 {
-    u32 waza = menuPokemonStatusGetWazaId(pokemon, slot);
+    u16 waza = menuPokemonStatusGetWazaId(pokemon, slot);
     u32 icon;
 
     switch ((s32)NotDarkWaza((u16)waza)) {
@@ -346,7 +318,7 @@ static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE
         break;
     }
     icon = menuPokemonStatusGetWazaTypeIcon((u16)wazaGetStatus(0, waza, WAZA_FIELD_TYPE, 0));
-    if (menuPokemonStatusWork.mWazaNew[slot] != 0 && slot != 0) {
+    if (_menuStatus.mWazaNew[slot] != 0 && slot != 0) {
         windowDrawSprite(7, 0x14, window, MENU_POKEMON_STATUS_TEXTURE_WAZA_NEW, 0, winSpriteGetLayerID(window, sprite));
         pokemonGetDarkPokemonPtr(pokemon)->setWazaNew(slot - 1, 1);
     }
@@ -356,14 +328,14 @@ static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE
 // Waza page of the status menu: draws the waza row of the grid and the waza
 // slot the cursor stands on. Every sprite of the waza page runs through this
 // hook, selected by the item id of the sprite.
-void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 color;
-    Pokemon *pokemon = menuPokemonStatusWork.mPokemon;
+    Pokemon *pokemon = _menuStatus.mPokemon;
     s16 x;
-    u32 waza;
+    u16 waza;
     u16 slot;
-    u32 selectedMoveID;
+    u16 selectedMoveID;
     u32 msg = 0;
     s32 i = 0;
 
@@ -377,28 +349,28 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     switch (sprite->mItemID) {
     case MENU_POKEMON_STATUS_ITEM_WAZA_CURSOR:
         winSpriteSetDisp(sprite, 0);
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
-            if (menuPokemonStatusWork.mWazaId != 0) {
-                windowDrawSprite(0, (s16)((s8)menuPokemonStatusWork.mSlotPrev * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR_PREV, 0,
+            if (_menuStatus.mWazaId != 0) {
+                windowDrawSprite(0, (s16)((s8)_menuStatus.mSlotPrev * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR_PREV, 0,
                             winSpriteGetLayerID(window, sprite));
-                windowDrawSprite(0, (s16)((s8)menuPokemonStatusWork.mWazaSlot * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
+                windowDrawSprite(0, (s16)((s8)_menuStatus.mWazaSlot * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
                             winSpriteGetLayerID(window, sprite));
             } else {
-                windowDrawSprite(0, (s16)(((s8)menuPokemonStatusWork.mSlotPrev + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR_PREV, 0,
+                windowDrawSprite(0, (s16)(((s8)_menuStatus.mSlotPrev + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR_PREV, 0,
                             winSpriteGetLayerID(window, sprite));
-                windowDrawSprite(0, (s16)(((s8)menuPokemonStatusWork.mWazaSlot + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
+                windowDrawSprite(0, (s16)(((s8)_menuStatus.mWazaSlot + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
                             winSpriteGetLayerID(window, sprite));
             }
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
-            if (menuPokemonStatusWork.mWazaId != 0)
-                windowDrawSprite(0, (s16)((s8)menuPokemonStatusWork.mWazaSlot * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
+            if (_menuStatus.mWazaId != 0)
+                windowDrawSprite(0, (s16)((s8)_menuStatus.mWazaSlot * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
                             winSpriteGetLayerID(window, sprite));
             else
-                windowDrawSprite(0, (s16)(((s8)menuPokemonStatusWork.mWazaSlot + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
+                windowDrawSprite(0, (s16)(((s8)_menuStatus.mWazaSlot + 1) * 44), window, MENU_POKEMON_STATUS_TEXTURE_WAZA_CURSOR, 0,
                             winSpriteGetLayerID(window, sprite));
             break;
         }
@@ -411,7 +383,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case MENU_POKEMON_STATUS_ITEM_WAZA_ICON_ROW0: {
         // The cell draws the type icon of the move it stands on; a move the
         // pokemon has not seen yet is flagged on the way.
-        if (menuPokemonStatusWork.mWazaId == 0) {
+        if (_menuStatus.mWazaId == 0) {
             if (sprite->mItemID == MENU_POKEMON_STATUS_ITEM_WAZA_ICON_ROW0)
                 return;
             switch (sprite->mItemID) {
@@ -443,7 +415,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x251:
     case 0x252:
     case 0x253:
-        if (menuPokemonStatusWork.mWazaId == 0) {
+        if (_menuStatus.mWazaId == 0) {
             if (sprite->mItemID == 0x253)
                 return;
             switch (sprite->mItemID) {
@@ -478,7 +450,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x256:
     case 0x257:
     case 0x258:
-        if (menuPokemonStatusWork.mWazaId == 0) {
+        if (_menuStatus.mWazaId == 0) {
             if (sprite->mItemID == 0x258)
                 return;
             switch (sprite->mItemID) {
@@ -499,7 +471,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         waza = menuPokemonStatusGetWazaId(pokemon, slot);
         x = (s16)(((s16)sprite->mWidth - (s16)(GSmsgGetMessageSize(0x3AE8) >> 16)) / 2);
         GSmsgPrint2(winSpriteGetLayerID(window, sprite), x, 0, color, 0x3AE8);
-        msg = (s32)NotDarkWaza(waza & WAZA_ID_MASK);
+        msg = (s32)NotDarkWaza(waza);
         switch (msg) {
         case 0:
             GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, color, 0x3AF5);
@@ -527,17 +499,17 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         return;
 
     case 0x24C:
-        waza = menuPokemonStatusGetWazaId(pokemon, (u16)menuPokemonStatusWork.mWazaSlot);
+        waza = menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot);
         GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color,
                     wazaGetStatus(0, waza, WAZA_FIELD_DESCRIPTION, 0));
         return;
 
     case 0x24D:
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
         case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
-            u32 accuracy = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)menuPokemonStatusWork.mWazaSlot), WAZA_FIELD_ACCURACY, 0);
+            u32 accuracy = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot), WAZA_FIELD_ACCURACY, 0);
             if (accuracy <= 1) {
                 GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF6);
             } else {
@@ -554,11 +526,11 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         return;
 
     case 0x24E:
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
         case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
-            u32 power = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)menuPokemonStatusWork.mWazaSlot), WAZA_FIELD_POWER, 0);
+            u32 power = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot), WAZA_FIELD_POWER, 0);
             if (power <= 1) {
                 GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF6);
             } else {
@@ -575,7 +547,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         return;
 
     case 0x1FD:
-        if (menuPokemonStatusWork.mWazaId == 0)
+        if (_menuStatus.mWazaId == 0)
             winSpriteSetDisp(sprite, 0);
         else
             winSpriteSetDisp(sprite, 1);
@@ -585,7 +557,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x389:
     case 0x38A:
     case 0x38B:
-        if (menuPokemonStatusWork.mWazaId == 0)
+        if (_menuStatus.mWazaId == 0)
             winSpriteSetDisp(sprite, 1);
         else
             winSpriteSetDisp(sprite, 0);
@@ -608,7 +580,7 @@ void menuPokemonStatusDispWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x1F4: i++;
     case 0x1F7: i++;
     case 0x1F8:
-        selectedMoveID = menuPokemonStatusGetWazaId(pokemon, (u16)menuPokemonStatusWork.mWazaSlot);
+        selectedMoveID = menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot);
         switch (wazaDB_GetCompatible(selectedMoveID)) {
         case 0:
         case 2:
@@ -704,15 +676,14 @@ long NotDarkWaza(long waza)
 
 // Waza data id of the waza in `slot` of `pokemon`; slot 4 is the waza the
 // pokemon would learn next, which is not part of the waza data.
-u32 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot)
+u16 _menuPokemonStatusGetWazaDataID(Pokemon *pokemon, u16 slot)
 {
-    u32 waza;
+    u16 waza;
 
     if (slot == 4) {
-        waza = menuPokemonStatusWork.mWazaId;
+        waza = _menuStatus.mWazaId;
     } else {
         waza = pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_WAZA_ID, slot);
-        waza = (u16)waza;
         if (pokemonWazaCheckValid(pokemon, slot) == 0)
             return 0;
     }
@@ -751,11 +722,11 @@ bool _menuPokemonStatusCheckWazaItem(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
     case 0x1F7:
     case 0x1F8:
     case 0x24C:
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
         case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN: {
-            s8 slot = menuPokemonStatusWork.mWazaSlot;
+            s8 slot = _menuStatus.mWazaSlot;
 
             if (slot >= 0 && slot <= 4)
                 disp = 1;
@@ -784,7 +755,7 @@ bool _menuPokemonStatusCheckWazaItem(tagWINDOW_WORK *window, tagSPRITE_WORK *spr
     case MENU_POKEMON_STATUS_ITEM_EXP_REMAINING:
     case 0x847:
     case MENU_POKEMON_STATUS_ITEM_EXP:
-        if (pokemonGetStatus(menuPokemonStatusWork.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0)
+        if (pokemonGetStatus(_menuStatus.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0)
             disp = 0;
         else
             disp = 1;
@@ -809,7 +780,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     s32 x;
     s32 digit;
     u32 div;
-    Pokemon *pokemon = menuPokemonStatusWork.mPokemon;
+    Pokemon *pokemon = _menuStatus.mPokemon;
     u32 color;
     s32 value;
     u32 placeName;
@@ -817,7 +788,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     u32 next;
     u8 level;
     u16 icon;
-    PokeStats *stats;
+    PokemonSpeciesStats *stats;
 
     if (pokemon == 0)
         return;
@@ -832,7 +803,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 
     switch (sprite->mItemID) {
     case MENU_POKEMON_STATUS_ITEM_SEALED_LABEL:
-        if (pokemonGetStatus(menuPokemonStatusWork.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0)
+        if (pokemonGetStatus(_menuStatus.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0)
             sprite->mMsgID = 0x3C11;
         else
             sprite->mMsgID = 0x3C10;
@@ -1175,7 +1146,7 @@ u8 _menuPokemonStatusCheckGinzaru(Pokemon *pokemon)
 // trainer id and name recorded on the pokemon must both match.
 u8 _menuPokemonStatusCheckOya(Pokemon *pokemon)
 {
-    FIGHT_TRAINER *trainer = menuPokemonStatusWork.mTrainer;
+    FIGHT_TRAINER *trainer = _menuStatus.mTrainer;
     Hero *hero;
     u16 *info;
     u32 tid;
@@ -1185,20 +1156,20 @@ u8 _menuPokemonStatusCheckOya(Pokemon *pokemon)
     if ((u8)(u32)gamedataGetStatus((void *)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_ATTEST, 0), 2) != 0xB)
         return 0;
 
-    if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FIGHT_TRAINER) {
+    if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FIGHT_TRAINER) {
         if (trainer == 0)
             trainer = fightFloorGetGcHeroFightTrainerPtr(0);
         if (trainer == 0)
             return 0;
-        hero = fightTrainer_GetDataPtr(trainer);
+        hero = fightTrainerBiosGetHeroPtr(trainer);
     } else if (GSflagGet(0x30D) == 0) {
         hero = (Hero *)savedataGetStatus(0, SAVE_DATA_HERO);
     } else {
-        hero = menuCBBios_GetBattleHeroPtr();
+        hero = menuCBBios_GetRegisteredHero();
     }
 
     info = heroBiosGetNamePtr(hero);
-    tid = trainerGetTID(hero);
+    tid = heroBiosGetRnd(hero);
     if (tid == (u32)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_TRAINER_ID, 0)) {
         if (GScharCmp((u16 *)info, (u16 *)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_TRAINER_NAME, 0)) == 0)
             return 1;
@@ -1210,7 +1181,7 @@ u8 _menuPokemonStatusCheckOya(Pokemon *pokemon)
 // sex symbol of the pokemon.
 void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    Pokemon *pokemon = menuPokemonStatusWork.mPokemon;
+    Pokemon *pokemon = _menuStatus.mPokemon;
     Pokemon *statusPokemon;
     tagMENU_ITEM_DATA *item;
     unsigned long messageParameter;
@@ -1220,7 +1191,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     if (pokemon == 0)
         return;
-    statusPokemon = menuPokemonStatusWork.mPokemon;
+    statusPokemon = _menuStatus.mPokemon;
     if (pokemonDataBiosGetPtr(
             (u16)pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_SPECIES, 0)) == 0)
         return;
@@ -1229,28 +1200,28 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     switch (sprite->mItemID) {
     case MENU_POKEMON_STATUS_ITEM_TAB_SELECTOR0: {
-        if (window->mCursorState.mSelection.mCursor == 0)
+        if (window->mCursor.y == 0)
             sprite->mColor = -1;
         else
             sprite->mColor = 0x808080FF;
         return;
     }
     case MENU_POKEMON_STATUS_ITEM_TAB_SELECTOR1: {
-        if (window->mCursorState.mSelection.mCursor == 1)
+        if (window->mCursor.y == 1)
             sprite->mColor = -1;
         else
             sprite->mColor = 0x808080FF;
         return;
     }
     case MENU_POKEMON_STATUS_ITEM_TAB_SELECTOR2: {
-        if (window->mCursorState.mSelection.mCursor == 2)
+        if (window->mCursor.y == 2)
             sprite->mColor = -1;
         else
             sprite->mColor = 0x808080FF;
         return;
     }
     case MENU_POKEMON_STATUS_ITEM_TAB_SELECTOR3: {
-        if (window->mCursorState.mSelection.mCursor == 3)
+        if (window->mCursor.y == 3)
             sprite->mColor = -1;
         else
             sprite->mColor = 0x808080FF;
@@ -1259,12 +1230,12 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
     case 0x81C:
         winSpriteSetDisp(sprite, 1);
-        switch (window->mCursorState.mSelection.mCursor) {
+        switch (window->mCursor.y) {
         case 2:
-            switch (menuPokemonStatusWork.mPage) {
+            switch (_menuStatus.mPage) {
             case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
             case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
-                if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE)
+                if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE)
                     sprite->mMsgID = 0x3AE4;
                 else
                     sprite->mMsgID = 0x3AE3;
@@ -1278,14 +1249,14 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 sprite->mMsgID = 0x3AE3;
                 break;
             }
-            if (menuPokemonStatusWork.mPage == MENU_POKEMON_STATUS_PAGE_WAZA_LIST &&
+            if (_menuStatus.mPage == MENU_POKEMON_STATUS_PAGE_WAZA_LIST &&
                 (pokemonIsDarkPokemon(pokemon) ||
-                 (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) == 0))
+                 (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) == 0))
                 winSpriteSetDisp(sprite, 0);
             break;
         case 3:
-            if (menuPokemonStatusWork.mRibbon.mCount != 0) {
-                if (menuPokemonStatusWork.mPage == MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
+            if (_menuStatus.mRibbon.mCount != 0) {
+                if (_menuStatus.mPage == MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
                     winSpriteSetDisp(sprite, 0);
                 else
                     sprite->mMsgID = 0x3AE6;
@@ -1303,16 +1274,16 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0x812:
     case 0x815:
         winSpriteSetDisp(sprite, 0);
-        switch (window->mCursorState.mSelection.mCursor) {
+        switch (window->mCursor.y) {
         case 2:
             winSpriteSetDisp(sprite, 1);
-            if (menuPokemonStatusWork.mPage == MENU_POKEMON_STATUS_PAGE_WAZA_LIST &&
+            if (_menuStatus.mPage == MENU_POKEMON_STATUS_PAGE_WAZA_LIST &&
                 (pokemonIsDarkPokemon(pokemon) ||
-                 (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) == 0))
+                 (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) == 0))
                 winSpriteSetDisp(sprite, 0);
             break;
         case 3:
-            if (menuPokemonStatusWork.mRibbon.mCount != 0 && menuPokemonStatusWork.mPage != MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
+            if (_menuStatus.mRibbon.mCount != 0 && _menuStatus.mPage != MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT)
                 winSpriteSetDisp(sprite, 1);
             break;
         default:
@@ -1325,17 +1296,17 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                                                      MENU_POKEMON_STATUS_ITEM_MODEL);
         f32 angle[3];
 
-        menuModelSetSize(&menuPokemonStatusModel, item->mMessageX, item->mOffsetA,
+        menuModelSetSize(&_menuModel, item->mMessageX, item->mOffsetA,
                          item->mOffsetB, item->mOffsetC);
-        if (menuModelSetupPokemon(&menuPokemonStatusModel, pokemon) != 1)
+        if (menuModelSetupPokemon(&_menuModel, pokemon) != 1)
             return;
-        if (menuModelCheck(&menuPokemonStatusModel, 0) == 0)
-            menuModelAdjustCamera(&menuPokemonStatusModel);
+        if (menuModelCheck(&_menuModel, 0) == 0)
+            menuModelAdjustCamera(&_menuModel);
         angle[0] = -0.1f;
         angle[1] = 0.3f;
         angle[2] = 0.0f;
-        menuModelSetAngle(&menuPokemonStatusModel, angle);
-        menuModelRender(&menuPokemonStatusModel);
+        menuModelSetAngle(&_menuModel, angle);
+        menuModelRender(&_menuModel);
         return;
     }
 
@@ -1463,7 +1434,7 @@ void menuPokemonStatusCtrlPage(tagWINDOW_WORK *window)
     s8 i;
 
     if (key & MENU_POKEMON_STATUS_KEY_A) {
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_SELECT:
         case MENU_POKEMON_STATUS_PAGE_TAB_SLOT1:
         case MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT:
@@ -1472,21 +1443,21 @@ void menuPokemonStatusCtrlPage(tagWINDOW_WORK *window)
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA:
-            menuPokemonStatusWork.mWazaSlot = 0;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
+            _menuStatus.mWazaSlot = 0;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
             GSsndPlayNow(0x11);
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
-            if (menuPokemonStatusWork.mPokemon == 0)
+            if (_menuStatus.mPokemon == 0)
                 break;
-            if (pokemonGetStatus(menuPokemonStatusWork.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0) {
+            if (pokemonGetStatus(_menuStatus.mPokemon, 0, POKEMON_STATUS_FIELD_WAZA_SEALED, 0) != 0) {
                 GSsndPlayNow(0x13);
                 break;
             }
-            if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) {
-                menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE;
-                menuPokemonStatusWork.mSlotPrev = menuPokemonStatusWork.mWazaSlot;
+            if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_REPLACE) {
+                _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE;
+                _menuStatus.mSlotPrev = _menuStatus.mWazaSlot;
                 GSsndPlayNow(0x11);
             } else {
                 GSsndPlayNow(0x13);
@@ -1497,42 +1468,42 @@ void menuPokemonStatusCtrlPage(tagWINDOW_WORK *window)
             s8 slot;
             s8 prev;
 
-            prev = menuPokemonStatusWork.mSlotPrev;
-            slot = menuPokemonStatusWork.mWazaSlot;
+            prev = _menuStatus.mSlotPrev;
+            slot = _menuStatus.mWazaSlot;
             if (prev == slot)
                 break;
-            if (menuPokemonStatusWork.mPokemon != 0)
-                pokemonWazaReplace(menuPokemonStatusWork.mPokemon, prev, slot);
-            menuPokemonStatusWork.mSlotPrev = -1;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
+            if (_menuStatus.mPokemon != 0)
+                pokemonWazaReplace(_menuStatus.mPokemon, prev, slot);
+            _menuStatus.mSlotPrev = -1;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
             GSsndPlayNow(0x11);
             break;
         }
 
         case MENU_POKEMON_STATUS_PAGE_RIBBON:
-            if (menuPokemonStatusWork.mRibbon.mCount <= 0)
+            if (_menuStatus.mRibbon.mCount <= 0)
                 break;
             for (i = 0; i < 0x24; i++) {
-                if (menuPokemonStatusWork.mRibbon.mCells[i % 9][i / 9] >= 0)
+                if (_menuStatus.mRibbon.mCells[i % 9][i / 9] >= 0)
                     break;
             }
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT;
-            menuPokemonStatusWork.mGridIndex = i;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT;
+            _menuStatus.mGridIndex = i;
             GSsndPlayNow(0x11);
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
-            if (!(menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_LEARN_OK))
+            if (!(_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_LEARN_OK))
                 break;
             window->mAccept = 1;
-            menuPokemonStatusWork.mResult = (s8)menuPokemonStatusWork.mWazaSlot;
+            _menuStatus.mResult = (s8)_menuStatus.mWazaSlot;
             break;
 
         default:
             break;
         }
     } else if (key & MENU_POKEMON_STATUS_KEY_B) {
-        switch (menuPokemonStatusWork.mPage) {
+        switch (_menuStatus.mPage) {
         case MENU_POKEMON_STATUS_PAGE_SELECT:
         case MENU_POKEMON_STATUS_PAGE_CANCEL:
             break;
@@ -1544,22 +1515,22 @@ void menuPokemonStatusCtrlPage(tagWINDOW_WORK *window)
         case MENU_POKEMON_STATUS_PAGE_TAB_SLOT0:
             window->mAccept = 1;
             window->mCancel = 1;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_CANCEL;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_CANCEL;
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA_LIST:
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA;
             GSsndPlayNow(0x12);
             break;
 
         case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LIST;
             GSsndPlayNow(0x12);
             break;
 
         case MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT:
-            menuPokemonStatusWork.mGridIndex = -1;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON;
+            _menuStatus.mGridIndex = -1;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON;
             GSsndPlayNow(0x12);
             break;
 
@@ -1583,16 +1554,16 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
     DarkPokemon *shadow;
     s32 waza;
 
-    numWaza = menuPokemonStatusWork.mWazaId != 0 ? 5 : 4;
+    numWaza = _menuStatus.mWazaId != 0 ? 5 : 4;
     key = windowGetKeyRepeat();
 
-    switch (menuPokemonStatusWork.mPage) {
+    switch (_menuStatus.mPage) {
     case MENU_POKEMON_STATUS_PAGE_TAB_SLOT1:
     case MENU_POKEMON_STATUS_PAGE_WAZA:
     case MENU_POKEMON_STATUS_PAGE_RIBBON:
     case MENU_POKEMON_STATUS_PAGE_TAB_SLOT0:
         key = (u16)key;
-        slot = window->mCursorState.mSelection.mCursor;
+        slot = window->mCursor.y;
         if ((u16)key & MENU_POKEMON_STATUS_KEY_RIGHT)
             slot++;
         else if ((u16)key & MENU_POKEMON_STATUS_KEY_LEFT)
@@ -1601,12 +1572,12 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             slot = 3;
         if ((s8)slot < 0)
             slot = 0;
-        window->mCursorState.mSelection.mCursor = (s8)slot;
+        window->mCursor.y = (s8)slot;
         switch ((s8)slot) {
-        case 0: menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT0; break;
-        case 1: menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT1; break;
-        case 2: menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA; break;
-        case 3: menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON; break;
+        case 0: _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT0; break;
+        case 1: _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT1; break;
+        case 2: _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA; break;
+        case 3: _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_RIBBON; break;
         }
         if ((u16)key & MENU_POKEMON_STATUS_KEY_UP)
             dir = MENU_POKEMON_CB_CURSOR_LEFT;
@@ -1614,21 +1585,21 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             dir = MENU_POKEMON_CB_CURSOR_RIGHT;
         if (dir == 0)
             break;
-        if (menuPokemonStatusWork.mCallback == 0)
+        if (_menuStatus.mCallback == 0)
             break;
-        pokemon = menuPokemonStatusWork.mCallback(menuPokemonStatusWork.mPokemon,
+        pokemon = _menuStatus.mCallback(_menuStatus.mPokemon,
                                                   (MENU_POKEMON_CB_TYPE)dir,
-                                                  menuPokemonStatusWork.mCallbackArg);
-        if (menuPokemonStatusWork.mPokemon == pokemon)
+                                                  _menuStatus.mCallbackArg);
+        if (_menuStatus.mPokemon == pokemon)
             break;
         if (pokemon != 0) {
             menuPlaySe(window->mMenuID, 1);
-            if (menuModelSetupPokemon(&menuPokemonStatusModel, pokemon) == 0)
-                menuModelLoadPokemon(&menuPokemonStatusModel, pokemon);
+            if (menuModelSetupPokemon(&_menuModel, pokemon) == 0)
+                menuModelLoadPokemon(&_menuModel, pokemon);
         }
-        menuPokemonStatusWork.mPokemon = pokemon;
+        _menuStatus.mPokemon = pokemon;
         for (i = 0; i < 4; i++) {
-            menuPokemonStatusWork.mWazaNew[i] = 0;
+            _menuStatus.mWazaNew[i] = 0;
             if (!pokemon->isDarkPokemon())
                 continue;
             shadow = pokemonGetDarkPokemonPtr(pokemon);
@@ -1661,7 +1632,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
                 break;
             }
             if (shadow->isWazaNew((u8)(i - 1)) == 0)
-                menuPokemonStatusWork.mWazaNew[i] = 1;
+                _menuStatus.mWazaNew[i] = 1;
         }
         break;
 
@@ -1669,7 +1640,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
     case MENU_POKEMON_STATUS_PAGE_WAZA_REPLACE:
     case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN: {
         waza = (u16)key;
-        slot = menuPokemonStatusWork.mWazaSlot;
+        slot = _menuStatus.mWazaSlot;
         if (waza & MENU_POKEMON_STATUS_KEY_UP)
             slot--;
         else if (waza & MENU_POKEMON_STATUS_KEY_DOWN)
@@ -1678,17 +1649,17 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             slot = (s8)(numWaza - 1);
         if ((s8)slot < 0)
             slot = 0;
-        if ((u16)_menuPokemonStatusGetWazaDataID(menuPokemonStatusWork.mPokemon, (u16)slot) == 0)
+        if ((u16)_menuPokemonStatusGetWazaDataID(_menuStatus.mPokemon, (u16)slot) == 0)
             break;
-        if ((s8)slot == (s8)menuPokemonStatusWork.mWazaSlot)
+        if ((s8)slot == (s8)_menuStatus.mWazaSlot)
             break;
         menuPlaySe(window->mMenuID, 1);
-        menuPokemonStatusWork.mWazaSlot = slot;
+        _menuStatus.mWazaSlot = slot;
         break;
     }
 
     case MENU_POKEMON_STATUS_PAGE_RIBBON_SELECT: {
-        s8 grid = menuPokemonStatusWork.mGridIndex;
+        s8 grid = _menuStatus.mGridIndex;
         s32 cursorColumn;
         s32 cursorRow;
         s32 column;
@@ -1703,7 +1674,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             while (row-- > 0) {
                 column = cursorColumn;
                 do {
-                    if (menuPokemonStatusWork.mRibbon.mCells[column][row] >= 0) {
+                    if (_menuStatus.mRibbon.mCells[column][row] >= 0) {
                         cursorRow = row;
                         cursorColumn = column;
                         row = -1;
@@ -1715,7 +1686,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             for (row = cursorRow; ++row < 4;) {
                 column = cursorColumn;
                 do {
-                    if (menuPokemonStatusWork.mRibbon.mCells[column][row] >= 0) {
+                    if (_menuStatus.mRibbon.mCells[column][row] >= 0) {
                         cursorColumn = column;
                         cursorRow = row;
                         row = 5;
@@ -1731,7 +1702,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
                 else
                     column = 0;
                 for (; column < 9; column++) {
-                    if (menuPokemonStatusWork.mRibbon.mCells[column][row] >= 0) {
+                    if (_menuStatus.mRibbon.mCells[column][row] >= 0) {
                         cursorColumn = column;
                         cursorRow = row;
                         found = 1;
@@ -1749,7 +1720,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
                 else
                     column = 8;
                 for (; column >= 0; column--) {
-                    if (menuPokemonStatusWork.mRibbon.mCells[column][row] >= 0) {
+                    if (_menuStatus.mRibbon.mCells[column][row] >= 0) {
                         cursorColumn = column;
                         cursorRow = row;
                         found = 1;
@@ -1763,7 +1734,7 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
         newGrid = (s8)(cursorColumn + cursorRow * 9);
         if (newGrid != grid) {
             menuPlaySe(window->mMenuID, 1);
-            menuPokemonStatusWork.mGridIndex = newGrid;
+            _menuStatus.mGridIndex = newGrid;
         }
         break;
     }
@@ -1780,23 +1751,23 @@ s32 menuPokemonStatusCtrl(tagWINDOW_WORK *window)
 {
     switch (window->mState) {
     case 0:
-        window->mSubMenuID = -1;
-        menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_SELECT;
-        menuPokemonStatusWork.mWazaSlot = window->mCursorState.mSelection.mCursor;
-        menuPokemonStatusWork.mSlotPrev = -1;
-        menuPokemonStatusWork.mGridIndex = -1;
-        if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_OPEN_FIRST_TAB) {
-            window->mCursorState.mSelection.mCursor = 0;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT0;
+        window->cursorTo = -1;
+        _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_SELECT;
+        _menuStatus.mWazaSlot = window->mCursor.y;
+        _menuStatus.mSlotPrev = -1;
+        _menuStatus.mGridIndex = -1;
+        if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_OPEN_FIRST_TAB) {
+            window->mCursor.y = 0;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_TAB_SLOT0;
         } else {
-            window->mCursorState.mSelection.mCursor = 2;
-            menuPokemonStatusWork.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LEARN;
+            window->mCursor.y = 2;
+            _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_WAZA_LEARN;
         }
-        _menuPokemonStatusChangeSubMenu(*(CURSOR *)&window->mCursorState.mSelection.mSubMenu);
+        _menuPokemonStatusChangeSubMenu(*(CURSOR *)&window->mCursor.x);
         break;
 
     case 2:
-        _menuPokemonStatusChangeSubMenu(*(CURSOR *)&window->mCursorState.mSelection.mSubMenu);
+        _menuPokemonStatusChangeSubMenu(*(CURSOR *)&window->mCursor.x);
         menuDrawReliveUpdate();
         break;
 
@@ -1813,10 +1784,10 @@ long _menuPokemonStatusChangeSubMenu(CURSOR cursor)
     u32 i;
     s32 id = 0;
 
-    if (menuPokemonStatusWork.mPokemon == 0)
+    if (_menuStatus.mPokemon == 0)
         return -1;
 
-    switch (cursor.mCursor) {
+    switch (cursor.y) {
     case 0: id = MENU_POKEMON_STATUS_MENU_TAB_SLOT0; break;
     case 1: id = MENU_POKEMON_STATUS_MENU_TAB_SLOT1; break;
     case 2: id = MENU_POKEMON_STATUS_MENU_WAZA; break;
@@ -1845,13 +1816,13 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
     s32 result;
 
     item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_HEAD, MENU_POKEMON_STATUS_ITEM_MODEL);
-    menuModelInit(&menuPokemonStatusModel, item->mOffsetB, item->mOffsetC);
-    menuModelFree(&menuPokemonStatusModel);
-    menuModelLoadPokemon(&menuPokemonStatusModel, pokemon);
+    menuModelInit(&_menuModel, item->mOffsetB, item->mOffsetC);
+    menuModelFree(&_menuModel);
+    menuModelLoadPokemon(&_menuModel, pokemon);
 
-    if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE) {
+    if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE) {
         fadeCheck(1);
-        if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FAST_FADE)
+        if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FAST_FADE)
             fadeSet(2, 0.25f);
         else
             fadeSet(2, 0.5f);
@@ -1863,41 +1834,41 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
     for (;;) {
         result = menuOpenCustom(MENU_POKEMON_STATUS_MENU_HEAD, 0, &cursor, 0, 1, 0);
         if (result == -1) {
-            menuPokemonStatusWork.mResult = (s32)result;
+            _menuStatus.mResult = (s32)result;
             break;
         }
-        menuPokemonStatusWork.mResult = (s8)menuPokemonStatusWork.mWazaSlot;
-        if (!(menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_LOOP))
+        _menuStatus.mResult = (s8)_menuStatus.mWazaSlot;
+        if (!(_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_WAZA_LOOP))
             break;
         {
-            u32 id;
+            u16 id;
 
-            id = _menuPokemonStatusGetWazaDataID(menuPokemonStatusWork.mPokemon,
-                                                 (u16)menuPokemonStatusWork.mWazaSlot);
+            id = _menuPokemonStatusGetWazaDataID(_menuStatus.mPokemon,
+                                                 (u16)_menuStatus.mWazaSlot);
             if (wazaGetStatus(0, id, WAZA_FIELD_HIDEN_FLAG, 0) != 0) {
                 GSsndPlayNow(0x13);
                 winMsgOpen(2, 0x3AFC, 1, 0);
                 winMsgClose(1);
-                cursor = (s8)menuPokemonStatusWork.mWazaSlot;
+                cursor = (s8)_menuStatus.mWazaSlot;
             } else {
                 break;
             }
         }
     }
 
-    if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE) {
+    if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE) {
         fadeCheck(1);
-        if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FAST_FADE)
+        if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FAST_FADE)
             fadeSet(3, 0.25f);
         else
             fadeSet(3, 0.5f);
         fadeCheck(1);
     }
     menuPokemonStatusClose();
-    menuModelTerm(&menuPokemonStatusModel);
+    menuModelTerm(&_menuModel);
     menuOffScreenSetPriority(1);
     GSthreadSwitch();
-    return menuPokemonStatusWork.mResult;
+    return _menuStatus.mResult;
 }
 
 // Open the status menu for one pokemon. Waits for the pokemon models of the
@@ -1912,17 +1883,17 @@ long _menuPokemonStatusOpen(u8 type, FIGHT_TRAINER *trainer, Pokemon *pokemon, u
     while (menuFaceCheckLoading())
         GSthreadSwitch();
 
-    memset(&menuPokemonStatusWork, 0, sizeof(menuPokemonStatusWork));
-    menuPokemonStatusWork.mFlags = type;
-    menuPokemonStatusWork.mTrainer = trainer;
-    menuPokemonStatusWork.mPokemon = pokemon;
-    menuPokemonStatusWork.mWazaId = waza;
-    menuPokemonStatusWork.mCallback = callback;
-    menuPokemonStatusWork.mCallbackArg = callbackArg;
-    menuPokemonStatusWork.mResult = -1;
+    memset(&_menuStatus, 0, sizeof(_menuStatus));
+    _menuStatus.mFlags = type;
+    _menuStatus.mTrainer = trainer;
+    _menuStatus.mPokemon = pokemon;
+    _menuStatus.mWazaId = waza;
+    _menuStatus.mCallback = callback;
+    _menuStatus.mCallbackArg = callbackArg;
+    _menuStatus.mResult = -1;
 
     for (i = 0; i < 4; i++) {
-        menuPokemonStatusWork.mWazaNew[i] = 0;
+        _menuStatus.mWazaNew[i] = 0;
         if (!pokemon->isDarkPokemon())
             continue;
         dark = pokemonGetDarkPokemonPtr(pokemon);
@@ -1958,25 +1929,25 @@ long _menuPokemonStatusOpen(u8 type, FIGHT_TRAINER *trainer, Pokemon *pokemon, u
             continue;
         if (dark->isWazaNew((u8)(i - 1)) != 0)
             continue;
-        menuPokemonStatusWork.mWazaNew[i] = 1;
+        _menuStatus.mWazaNew[i] = 1;
     }
 
     if (type & MENU_POKEMON_STATUS_FLAG_FIELD) {
         GSfloorPush(MENU_POKEMON_STATUS_FLOOR_ID);
-        if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)
+        if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)
             floorSetFadeScript(0, 0);
         floorWaitForChange();
     } else {
         menuPokemonStatusExecute(type, trainer, pokemon, waza, callback, callbackArg);
     }
-    return menuPokemonStatusWork.mResult;
+    return _menuStatus.mResult;
 }
 
 // Close the status menu: fades the screen out, closes the sub-menus and
 // gives the floor back.
 void menuPokemonStatusClose(void)
 {
-    if ((menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FIELD) && !(menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)) {
+    if ((_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FIELD) && !(_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)) {
         fadeCheck(1);
         fadeSet(3, 0.5f);
         fadeCheck(1);
@@ -1992,9 +1963,9 @@ void menuPokemonStatusClose(void)
         menuCloseCustom(MENU_POKEMON_STATUS_MENU_RIBBON, 0, 0);
     menuCloseCustom(MENU_POKEMON_STATUS_MENU_HEAD, 0, 1);
 
-    if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FIELD) {
+    if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FIELD) {
         GSfloorPop();
-        if (menuPokemonStatusWork.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)
+        if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE)
             floorSetFadeScript(0, 0);
     }
 }
@@ -2003,12 +1974,12 @@ void menuPokemonStatusClose(void)
 // is on.
 void menuPokemonStatus(void)
 {
-    menuPokemonStatusWork.mResult = menuPokemonStatusExecute(menuPokemonStatusWork.mFlags,
-                                                menuPokemonStatusWork.mTrainer,
-                                                menuPokemonStatusWork.mPokemon,
-                                                menuPokemonStatusWork.mWazaId,
-                                                menuPokemonStatusWork.mCallback,
-                                                menuPokemonStatusWork.mCallbackArg);
+    _menuStatus.mResult = menuPokemonStatusExecute(_menuStatus.mFlags,
+                                                _menuStatus.mTrainer,
+                                                _menuStatus.mPokemon,
+                                                _menuStatus.mWazaId,
+                                                _menuStatus.mCallback,
+                                                _menuStatus.mCallbackArg);
 }
 
 // Hide the menus the waza page list covers, then open it.
@@ -2054,21 +2025,23 @@ long menuPokemonStatusOpenWazaLearn(Pokemon *pokemon, u16 arg)
 }
 
 // Status menu opened from the waza machine of the fight menu.
+#pragma force_active on
 long menuPokemonStatusOpenWazaMachine(Pokemon *pokemon, u16 arg)
 {
     return _menuPokemonStatusOpen(MENU_POKEMON_STATUS_FIGHT_MENU, 0, pokemon, arg, 0, 0);
 }
+#pragma force_active reset
 
 // Status menu opened from the waza list of the fight menu.
 long menuPokemonStatusOpenWazaList(u8 slot)
 {
     Pokemon *pokemon = 0;
-    void *trainer;
+    Hero *hero;
 
     if (slot < 6) {
-        trainer = savedataGetStatus(0, 2);
-        if (trainer != 0) {
-            pokemon = heroBiosGetPokemonPtr(trainer, (u8)slot);
+        hero = (Hero *)savedataGetStatus(0, SAVE_DATA_HERO);
+        if (hero != 0) {
+            pokemon = heroBiosGetPokemonPtr(hero, (u8)slot);
             if (pokemonCheckValid(pokemon) == 0)
                 pokemon = 0;
         }

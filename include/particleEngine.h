@@ -5,6 +5,7 @@
 #include <GSgfx.h>
 
 struct _HSD_CObj;
+struct _HSD_JObj;
 
 /* The camera the GS camera module hands out. Everything the layer does with a
  * camera goes through the HSD camera object it is built on. */
@@ -13,8 +14,7 @@ struct _GScamera {
     _HSD_CObj *mCObj; // 0x08: HSD camera object the projection comes from.
 };
 
-/* Generator view used by the GS particle layer. Fields private to the ps
- * implementation are left out here. */
+/* Particle generators and loaded engine banks. */
 
 /* Generator of the engine's particle-system half (the ps* units).
  * psInitGenerator allocates a pool of 0xB8-byte generators. */
@@ -98,11 +98,39 @@ void psDispSetProjection(void *projection);
 void psDispParticles(u32 group, u32 mode, _GScamera *camera);
 
 /* --- frame/engine entry points --- */
+void psSetToken(u16 token);
+void psSetPointJObjNodup(_HSD_JObj* jobj, int id);
+
+void particleEngineSetupTexture(u32 slot, void *texture, u32 wrapS, u32 wrapT,
+                                u32 minFilter, u32 magFilter);
+void particleEngineSetupBlendMode(u32 mode);
+void particleEngineSetupTevStages(u32 textureCount, bool extended, bool modulate);
+bool particleEnginePrepareRender(_GScamera *camera);
+bool particleEnginePrepareUpdate(_GScamera *camera);
+void particleEngineSetDefaultRenderState(bool restore);
 void particleEngineInit(void);
 void particleEngineUpdate(f32 delta);
 void particleEnginePostUpdate(void);
 void particleEngineRender(GSgfxLayer *layer);
 
 }  // extern "C"
+
+struct peMemoryStats {
+    u32 emitParameterBytes;
+    u32 containerBytes;
+    u32 nodeBytes;
+    u32 renderDataBytes;
+    u32 shapeBytes;
+    u32 totalBytes;
+    u32 reserved18[3];
+};
+
+extern peMemoryStats g_particle_debug_stats;
+extern GSvec g_CameraPosition;
+extern GSvec g_CameraLookDir;
+extern GSvec g_CameraUpDir;
+extern GSvec g_CameraSideDir;
+extern GSgfxVF g_vertex_format;
+extern GSgfxVF g_ext_vertex_format;
 
 #endif

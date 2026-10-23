@@ -1,6 +1,6 @@
 #ifndef PE_BANK_DATA_H
 #define PE_BANK_DATA_H
-#include <peNode.h>
+#include <peParticle.h>
 #include <GSgfxLight.h>
 #include <HSDScene.h>
 

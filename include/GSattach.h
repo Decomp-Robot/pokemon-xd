@@ -1,7 +1,10 @@
 #ifndef GS_ATTACH_H
 #define GS_ATTACH_H
 
-// Transform components inherited from an attached part; not bit flags.
+/* Which components of the model part a generator follows while it is attached.
+ * These are enumerated combinations, not bit sets: the generator update
+ * switches on the exact value, so a combined mode has its own selector rather
+ * than being the union of the single-component ones. */
 enum GSattachMode {
     GS_ATTACH_NONE = 0,
     GS_ATTACH_POSITION = 1,
@@ -14,5 +17,6 @@ enum GSattachMode {
     GS_ATTACH_ALL = GS_ATTACH_TRANSFORM,
     GS_ATTACH_MATRIX = 8 // Model attachments only.
 };
+
 
 #endif

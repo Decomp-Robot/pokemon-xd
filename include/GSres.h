@@ -18,6 +18,7 @@ void *GSresGetResource(unsigned long group, unsigned long resourceID);
 void *GSresGetResourceAllGroup(unsigned long resourceID);
 void GSresFreeResource(unsigned long group, unsigned long resourceID);
 void GSresFreeResourceAllGroup(unsigned long resourceID);
+void GSresFreeGroup(u32 groupID);
 void GSresLockResource(u32 group, u32 res);
 void GSresUnlockResource(u32 group, u32 res);
 void *GSresAllocResourceAlign(u32 size, u32 align, u32 group, u32 res,

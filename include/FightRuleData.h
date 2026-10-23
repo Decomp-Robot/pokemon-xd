@@ -8,15 +8,9 @@ typedef struct FightRuleData FightRuleData;
 // FightRuleData -- one battle regulation record: the entry fees, time limits
 // and restriction lists a link battle enforces, plus the message shown for
 // it. The colosseum keeps a table of six of these in the save
-// (savedataGetStatus(0, 0xE)), the MenuCBTaisenWork work area
+// (savedataGetStatus(0, 0xE)), the _MENUCBWORK work area
 // mirrors it, and the read-only defaults live in rodata. One record is 0x90
-// bytes; the m1E/m52 entry lists sit at their recorded (even) offsets.
-enum HeldItemMode {
-    HELD_ITEMS_ALLOWED = 0,
-    HELD_ITEMS_FORBIDDEN = 1,
-    HELD_ITEMS_RESTRICTED = 2
-};
-
+// bytes; the title and restriction list follow the battle settings.
 struct FightRuleData {
     s16 mPokemonLevelMin; // 0x00: lowest level an entered Pokemon may have.
     s16 mPokemonLevelMax; // 0x02: highest level an entered Pokemon may have.
@@ -35,10 +29,9 @@ struct FightRuleData {
     s16 m16; // 0x16: command time limit.
     u8 mAllowLegendPokemon; // 0x18: lets legendary Pokemon be entered.
     u8 mDeoxysCamouflage; // 0x19: menuCBRule_DEOKISISUCamouflage reads it.
-    s16 mPokemonCount; // 0x1A: normal number of Pokemon to select.
-    s16 mPokemonCountMode; // 0x1C: one selects single-Pokemon entry.
-    u16 m1E[20]; // 0x1E: rule entry list (item/entry IDs), read as u16.
-    u16 m46;
+    s16 mPokemonCount; // 0x1A: normal number of Pokemon to enter.
+    s16 mPokemonCountMode; // 0x1C: zero uses mPokemonCount; one permits a single Pokemon.
+    u16 mTitle[21]; // 0x1E: custom rule title.
     u32 m48[2];
     u16 mMsgId; // 0x50: message ID of the rule set; also marks initialized slots.
     /* 0x52: the restriction positions of the rule set, one entry per list

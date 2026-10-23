@@ -17,7 +17,7 @@ inline bool checkHitFace(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos,
     GSvec closest;
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, pos) < collisionIntervalStart) return false;
     GScolsy2UtilGetCpPlanePoint(&closest, normal, triangle, pos);
-    if (PSVECSquareDistance(&closest, pos) >= radiusSquared) return false;
+    if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)pos) >= radiusSquared) return false;
     if (!GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) return false;
     *hit = closest;
     return true;
@@ -33,7 +33,7 @@ inline bool checkHitEdge(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos,
         if (next >= 3) next = 0;
         f32 parameter = GScolsys2UtilGetCpLinePoint(&closest, &triangle[edge], &triangle[next], pos);
         if (parameter < collisionIntervalStart || parameter > collisionIntervalEnd) continue;
-        if (PSVECSquareDistance(&closest, pos) < radiusSquared) {
+        if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)pos) < radiusSquared) {
             copyCollisionPoint(hit, &closest);
             return true;
         }
@@ -48,7 +48,7 @@ inline bool checkHitVertex(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* po
         s32 previous = vertex + 2;
         if (previous >= 3) previous -= 3;
         if (!(flags & pointMask[vertex]) || !(flags & pointMask[previous])) continue;
-        if (PSVECSquareDistance(&triangle[vertex], pos) < radiusSquared) {
+        if (PSVECSquareDistance((const Vec *)&triangle[vertex], (const Vec *)pos) < radiusSquared) {
             copyCollisionPoint(hit, &triangle[vertex]);
             return true;
         }
@@ -71,7 +71,7 @@ inline s32 sweepHitCollision(GSvec* a, GSvec* b, f32 radius, GSvec* out, bool ch
     if (GScolsys2GetCCDFileHead() == 0) {
         return 0;
     }
-    total = PSVECDistance(a, b);
+    total = PSVECDistance((const Vec *)a, (const Vec *)b);
     stepLen = collisionIntervalStart;
     if (total > stepLen) {
         stepLen = radius / (f32)total;
@@ -79,7 +79,7 @@ inline s32 sweepHitCollision(GSvec* a, GSvec* b, f32 radius, GSvec* out, bool ch
             stepLen = collisionIntervalEnd;
         }
     }
-    PSVECSubtract(b, a, &dir);
+    PSVECSubtract((const Vec *)b, (const Vec *)a, (Vec *)&dir);
     travelled = collisionIntervalStart;
     limit = collisionIntervalEnd;
     for (; travelled < limit; travelled = travelled + stepLen) {
@@ -88,10 +88,10 @@ inline s32 sweepHitCollision(GSvec* a, GSvec* b, f32 radius, GSvec* out, bool ch
         if (next > limit) {
             next = limit;
         }
-        PSVECScale(&dir, &step, travelled);
-        PSVECAdd(&step, a, &step);
-        PSVECScale(&dir, &at, next);
-        PSVECAdd(&at, a, &at);
+        PSVECScale((const Vec *)&dir, (Vec *)&step, travelled);
+        PSVECAdd((const Vec *)&step, (const Vec *)a, (Vec *)&step);
+        PSVECScale((const Vec *)&dir, (Vec *)&at, next);
+        PSVECAdd((const Vec *)&at, (const Vec *)a, (Vec *)&at);
         if (checkHitCollision(&step, &at, radius, out, checkMdl)) {
             return 1;
         }
@@ -262,9 +262,9 @@ bool checkHitMdl(GSvec* pos, f32 radius, CCD_HITMDL_HEAD* head, GSmtx* mtx,
     found = false;
     for (; triangleIndex < (u32)head->mCount && !found; triangleIndex++, mdl++) {
         for (s32 pointIndex = 0; pointIndex < 3; pointIndex++) {
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[pointIndex], &triangle[pointIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[pointIndex], (Vec *)&triangle[pointIndex]);
         }
-        PSMTXMultVec(rotMtx, &mdl->mTri.mNormal, &normal);
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&mdl->mTri.mNormal, (Vec *)&normal);
         found = checkHitFace(&hit, &normal, triangle, pos, radiusSquared);
     }
     if (found) {
@@ -279,9 +279,9 @@ bool checkHitMdl(GSvec* pos, f32 radius, CCD_HITMDL_HEAD* head, GSmtx* mtx,
     for (; triangleIndex < (u32)head->mCount && !found; triangleIndex++, mdl++) {
         if (!(mdl->mEdgeMask[0] & anyEdgeMask)) continue;
         for (s32 pointIndex = 0; pointIndex < 3; pointIndex++) {
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[pointIndex], &triangle[pointIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[pointIndex], (Vec *)&triangle[pointIndex]);
         }
-        PSMTXMultVec(rotMtx, &mdl->mTri.mNormal, &normal);
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&mdl->mTri.mNormal, (Vec *)&normal);
         found = checkHitEdge(&hit, &normal, triangle, pos, radiusSquared, mdl->mEdgeMask[0]);
     }
     if (found) {
@@ -296,9 +296,9 @@ bool checkHitMdl(GSvec* pos, f32 radius, CCD_HITMDL_HEAD* head, GSmtx* mtx,
     for (; triangleIndex < (u32)head->mCount && !found; triangleIndex++, mdl++) {
         if (!(mdl->mEdgeMask[0] & anyEdgeMask)) continue;
         for (s32 pointIndex = 0; pointIndex < 3; pointIndex++) {
-            PSMTXMultVec(mtx, &mdl->mTri.mPoint[pointIndex], &triangle[pointIndex]);
+            PSMTXMultVec((MtxPtr)mtx, (const Vec *)&mdl->mTri.mPoint[pointIndex], (Vec *)&triangle[pointIndex]);
         }
-        PSMTXMultVec(rotMtx, &mdl->mTri.mNormal, &normal);
+        PSMTXMultVec((MtxPtr)rotMtx, (const Vec *)&mdl->mTri.mNormal, (Vec *)&normal);
         found = checkHitVertex(&hit, &normal, triangle, pos, radiusSquared, mdl->mEdgeMask[0]);
     }
     if (found) {

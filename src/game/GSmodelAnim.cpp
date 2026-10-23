@@ -1,4 +1,6 @@
 #include <GSmodelInternal.h>
+#include <GSquat.h>
+#include <libc/math.h>
 
 
 /* Drops the root-joint animation: the removed flag is raised, and the
@@ -380,7 +382,7 @@ extern "C" u8 GSmodelHasAnimationEnded(_GSmodel *model)
     return (model->mFlags & MODEL_FLAG_ANIM_ENDED) != 0;
 }
 
-extern "C" u8 GSmodelIsAnimating(_GSmodel *model)
+extern "C" bool GSmodelIsAnimating(_GSmodel *model)
 {
     return (model->mFlags & MODEL_FLAG_ANIM_RUNNING) != 0;
 }
@@ -708,33 +710,33 @@ void modelUpdateTransform(_GSmodel *model)
     if (model->mFlags & MODEL_FLAG_TRANSFORM_UPDATED) return;
     modelUpdateCenterNull(model);
     _HSD_JObj *joint = modelGetRenderJObj(model);
-    if (model->mScale[0] < MODEL_MIN_SCALE_MAGNITUDE && model->mScale[0] > -MODEL_MIN_SCALE_MAGNITUDE)
-        model->mScale[0] = model->mScale[0] < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
-    if (model->mScale[1] < MODEL_MIN_SCALE_MAGNITUDE && model->mScale[1] > -MODEL_MIN_SCALE_MAGNITUDE)
-        model->mScale[1] = model->mScale[1] < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
-    if (model->mScale[2] < MODEL_MIN_SCALE_MAGNITUDE && model->mScale[2] > -MODEL_MIN_SCALE_MAGNITUDE)
-        model->mScale[2] = model->mScale[2] < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
+    if (model->mScale.x < MODEL_MIN_SCALE_MAGNITUDE && model->mScale.x > -MODEL_MIN_SCALE_MAGNITUDE)
+        model->mScale.x = model->mScale.x < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
+    if (model->mScale.y < MODEL_MIN_SCALE_MAGNITUDE && model->mScale.y > -MODEL_MIN_SCALE_MAGNITUDE)
+        model->mScale.y = model->mScale.y < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
+    if (model->mScale.z < MODEL_MIN_SCALE_MAGNITUDE && model->mScale.z > -MODEL_MIN_SCALE_MAGNITUDE)
+        model->mScale.z = model->mScale.z < 0.0f ? -MODEL_MIN_SCALE_MAGNITUDE : MODEL_MIN_SCALE_MAGNITUDE;
 
     if (model->mFlags & MODEL_FLAG_BLEND_ACTIVE) {
         f32 rotation[4];
-        EulerToQuat(model->mRotation, rotation);
-        HSD_JObjSetTranslation(joint, (Vec *)model->mPosition);
+        EulerToQuat(&model->mRotation, rotation);
+        HSD_JObjSetTranslation(joint, (Vec *)&model->mPosition);
         HSD_JObjSetRotation(joint, (Quaternion *)rotation);
-        HSD_JObjSetScale(joint, (Vec *)model->mScale);
+        HSD_JObjSetScale(joint, (Vec *)&model->mScale);
         _modelRecalcMatrixAll(joint);
     } else {
         if (model->mFlags & MODEL_FLAG_ROOT_JOINT_POSE) {
-            HSD_JObjGetTranslation(joint, (Vec *)model->mPosition);
-            model->mRotation[0] = HSD_JObjGetRotationX(joint);
-            model->mRotation[1] = HSD_JObjGetRotationX(joint);
-            model->mRotation[2] = HSD_JObjGetRotationX(joint);
-            HSD_JObjGetScale(joint, (Vec *)model->mScale);
+            HSD_JObjGetTranslation(joint, (Vec *)&model->mPosition);
+            model->mRotation.x = HSD_JObjGetRotationX(joint);
+            model->mRotation.y = HSD_JObjGetRotationX(joint);
+            model->mRotation.z = HSD_JObjGetRotationX(joint);
+            HSD_JObjGetScale(joint, (Vec *)&model->mScale);
         } else {
-            HSD_JObjSetTranslation(joint, (Vec *)model->mPosition);
-            HSD_JObjSetRotationX(joint, model->mRotation[0]);
-            HSD_JObjSetRotationY(joint, model->mRotation[1]);
-            HSD_JObjSetRotationZ(joint, model->mRotation[2]);
-            HSD_JObjSetScale(joint, (Vec *)model->mScale);
+            HSD_JObjSetTranslation(joint, (Vec *)&model->mPosition);
+            HSD_JObjSetRotationX(joint, model->mRotation.x);
+            HSD_JObjSetRotationY(joint, model->mRotation.y);
+            HSD_JObjSetRotationZ(joint, model->mRotation.z);
+            HSD_JObjSetScale(joint, (Vec *)&model->mScale);
         }
         if ((model->mFlags & MODEL_FLAG_NULL_JOINT) == MODEL_FLAG_NULL_JOINT)
             HSD_JObjSetupMatrix(joint->child);
@@ -789,7 +791,7 @@ void modelUpdateAttachments(_GSmodel *model)
             modelSetPos(model, &position);
             modelSetScl(model, &scale);
             break;
-        case GS_ATTACH_TRANSFORM:
+        case GS_ATTACH_ALL:
             modelSetPos(model, &position);
             modelSetRot(model, &rotation);
             modelSetScl(model, &scale);

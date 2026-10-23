@@ -19,25 +19,25 @@ typedef PocketItemUseFunc MenuItemUseFunc;
 extern "C" {
 #endif
 
-s32 menuUseItemEventUsohachiPhoto(unsigned long itemID, s32 *consumed);
-s32 menuUseItemEventMirraboradar(unsigned long itemID, s32 *consumed);
-s32 menuUseItemEventCraneMemo(unsigned long itemID, s32 *consumed);
-s32 menuUseItemEventNotConsum(unsigned long itemID, s32 *consumed);
-s32 menuUseItemBattleNazonomi(unsigned long itemID, s32 *consumed);
-s32 menuUseItemBattleBall(unsigned long itemID, s32 *consumed);
-s32 menuUseItemStatusUp(unsigned long itemID, s32 *consumed);
-s32 menuUseItemFieldNazonomi(unsigned long itemID, s32 *consumed);
-s32 menuUseItemSkill(unsigned long itemID, s32 *consumed);
-s32 menuUseItemCologn(unsigned long itemID, s32 *consumed);
-s32 menuUseItemEvolution(unsigned long itemID, s32 *consumed);
-s32 menuUseItemWPointUp(unsigned long itemID, s32 *consumed);
-s32 menuUseItemListLVUp(unsigned long itemID, s32 *consumed);
-s32 menuUseItemAlldeathRcv(unsigned long itemID, s32 *consumed);
-s32 menuUseItemPPRecovery(unsigned long itemID, s32 *consumed);
-s32 menuUseItemRecovery(unsigned long itemID, s32 *consumed);
-s32 menuUseItemNoPokecolo(unsigned long itemID, s32 *consumed);
-s32 menuUseItemNoEffects(unsigned long itemID, s32 *consumed);
-s32 menuUseItemDummy(unsigned long itemID, s32 *consumed);
+int menuUseItemEventUsohachiPhoto(unsigned long itemID, int *consumed);
+int menuUseItemEventMirraboradar(unsigned long itemID, int *consumed);
+int menuUseItemEventCraneMemo(unsigned long itemID, int *consumed);
+int menuUseItemEventNotConsum(unsigned long itemID, int *consumed);
+int menuUseItemBattleNazonomi(unsigned long itemID, int *consumed);
+int menuUseItemBattleBall(unsigned long itemID, int *consumed);
+int menuUseItemStatusUp(unsigned long itemID, int *consumed);
+int menuUseItemFieldNazonomi(unsigned long itemID, int *consumed);
+int menuUseItemSkill(unsigned long itemID, int *consumed);
+int menuUseItemCologn(unsigned long itemID, int *consumed);
+int menuUseItemEvolution(unsigned long itemID, int *consumed);
+int menuUseItemWPointUp(unsigned long itemID, int *consumed);
+int menuUseItemListLVUp(unsigned long itemID, int *consumed);
+int menuUseItemAlldeathRcv(unsigned long itemID, int *consumed);
+int menuUseItemPPRecovery(unsigned long itemID, int *consumed);
+int menuUseItemRecovery(unsigned long itemID, int *consumed);
+int menuUseItemNoPokecolo(unsigned long itemID, int *consumed);
+int menuUseItemNoEffects(unsigned long itemID, int *consumed);
+int menuUseItemDummy(unsigned long itemID, int *consumed);
 
 u32 menuUseItemScriptCologn(u32 itemID, s32 slot);
 

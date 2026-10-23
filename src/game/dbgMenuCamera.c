@@ -1,11 +1,10 @@
-#include <menu.h>
 #include <camera.h>
+#include <menu.h>
 #include <types.h>
-
-/* Debug camera menu and floor-camera reset hooks. */
 
 #pragma force_active on
 
+extern u8 menuIsOpen(s32 menuId);
 extern void menuSetPosition(s32 menuId, s32 x, s32 y);
 /* Drop the debug camera (type 6) and restore the current room's floor
  * camera defaults. */
@@ -13,8 +12,7 @@ extern void cameraResetFloorDefault(void);
 
 #pragma peephole off
 
-/* Set the target used by the debug screen capture. */
-void GSgfxCaptureSetTarget(void)
+void zz_800056a0_(void)
 {
 }
 

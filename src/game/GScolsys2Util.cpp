@@ -12,13 +12,13 @@ extern "C" bool GScolsys2UtilGetCpPlaneLine(GSvec* out, f32* t, GSvec* normal,
     f32 denom;
     f32 param;
 
-    PSVECSubtract(end, start, &dir);
+    PSVECSubtract((const Vec *)end, (const Vec *)start, (Vec *)&dir);
     if (0.0f == (denom = normal->x * dir.x + normal->y * dir.y + normal->z * dir.z)) {
         return 0;
     }
     param = (normal->x * (org->x - start->x) + normal->y * (org->y - start->y) + normal->z * (org->z - start->z)) / denom;
-    PSVECScale(&dir, &dir, param);
-    PSVECAdd(&dir, start, out);
+    PSVECScale((const Vec *)&dir, (Vec *)&dir, param);
+    PSVECAdd((const Vec *)&dir, (const Vec *)start, (Vec *)out);
     *t = param;
     return 1;
 }
@@ -35,7 +35,7 @@ extern "C" f32 GScolsys2UtilGetCpLinePoint(GSvec* out, GSvec* a, GSvec* b,
     f32 ySquared;
     f32 zSquared;
 
-    PSVECSubtract(b, a, &direction);
+    PSVECSubtract((const Vec *)b, (const Vec *)a, (Vec *)&direction);
     xSquared = direction.x * direction.x;
     ySquared = direction.y * direction.y;
     zSquared = direction.z * direction.z;
@@ -45,8 +45,8 @@ extern "C" f32 GScolsys2UtilGetCpLinePoint(GSvec* out, GSvec* a, GSvec* b,
         return 0.0f;
     } else {
         parameter = (direction.x * (p->x - a->x) + direction.y * (p->y - a->y) + direction.z * (p->z - a->z)) / lengthSquared;
-        PSVECScale(&direction, &direction, parameter);
-        PSVECAdd(&direction, a, out);
+        PSVECScale((const Vec *)&direction, (Vec *)&direction, parameter);
+        PSVECAdd((const Vec *)&direction, (const Vec *)a, (Vec *)out);
         return parameter;
     }
 }
@@ -72,11 +72,11 @@ extern "C" void GScolsy2UtilGetPointExtentionLine(GSvec* out, GSvec* start,
     GSvec dir;
     f32 mag;
 
-    PSVECSubtract(end, start, &dir);
-    mag = PSVECMag(&dir);
+    PSVECSubtract((const Vec *)end, (const Vec *)start, (Vec *)&dir);
+    mag = PSVECMag((const Vec *)&dir);
     if (0.0f != mag) {
-        PSVECScale(&dir, &dir, len / mag);
-        PSVECAdd(&dir, start, out);
+        PSVECScale((const Vec *)&dir, (Vec *)&dir, len / mag);
+        PSVECAdd((const Vec *)&dir, (const Vec *)start, (Vec *)out);
     }
 }
 
@@ -200,6 +200,6 @@ extern "C" void GScolsy2UtilGetCpPlanePoint(GSvec* cp, GSvec* normal, GSvec* tri
 {
     f32 t = normal->x * (tri->x - pos->x) + normal->y * (tri->y - pos->y) + normal->z * (tri->z - pos->z);
     f32 len2 = normal->x * normal->x + normal->y * normal->y + normal->z * normal->z;
-    PSVECScale(normal, cp, t / len2);
-    PSVECAdd(cp, pos, cp);
+    PSVECScale((const Vec *)normal, (Vec *)cp, t / len2);
+    PSVECAdd((const Vec *)cp, (const Vec *)pos, (Vec *)cp);
 }

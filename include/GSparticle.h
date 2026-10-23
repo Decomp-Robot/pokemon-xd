@@ -59,22 +59,13 @@ struct _GSparticleBank {
     _GScamera *mCamera;        // 0x10: camera the file preallocated slots use.
 };
 
-/* The generator slots of the banks that still have a bank link are updated
- * every frame; _particlePreUpdate collects their cameras here so the render
- * pass can set up a projection per camera. The array lives in .bss, the count
- * in .sbss. */
-extern _GScamera *GSparticleCameras[4];
-extern u32 GSparticleCameraCount;
-/* Loaded banks (array of GSparticleBankCount elements, allocated by
- * GSparticleInit) and the fractional engine tick carried between frames. */
-extern _GSparticleBank *GSparticleBanks;
-extern u32 GSparticleBankCount;
-extern f32 GSparticleTickFraction;
-/* Clear until _particlePreUpdate runs for the first time, when it starts the
- * fractional engine tick from zero. GSparticleFrameSkipCounter counts the
- * frames of a 50Hz display, which needs an extra engine tick every fifth
- * frame to keep the 60Hz tick rate. */
-extern s8 GSparticleTickInitialised;
+/* Cameras used by the active generators in this frame. */
+extern _GScamera *g_particle_cameras[4];
+extern u32 g_particle_cameras_count;
+/* Loaded banks, allocated by GSparticleInit. */
+extern _GSparticleBank *_particleBankStructList;
+extern u32 _particleBankStructCount;
+/* A 50Hz display needs an extra engine tick every fifth frame. */
 extern u8 GSparticleFrameSkipCounter;
 /* Set when an engine bank or a generator has been started this frame and the
  * layer command word (GSgfxLayer +0x04) still has to carry its Z draw flag;
@@ -85,19 +76,6 @@ extern u8 GSparticleZDrawPendingGenerator;
  * static initialiser fills in; this unit resets an engine bank's transform to
  * it while a generator is attached to a model part. */
 extern GSvec zeroVector;
-/* Module data of the particle layer, GSparticleModuleData.cpp: the render
- * module descriptor GSgfxRenderModuleRegister is handed and, behind it, the
- * texts GSparticleLoad logs about the files it is given. The loader reads the
- * texts through the block and GSparticleInit copies the descriptor out of it,
- * so both view it with this type. */
-typedef struct _GSparticleModuleData {
-    GSgfxRenderModule mRenderModule; // 0x00: entry of the render module list.
-    char mZDrawWarning[0x50];        // 0x1C: kept for a warning never logged.
-    char mGpt0Banner[0x5C];          // 0x6C: banner above the message below.
-    char mGpt0Unsupported[0x5C];     // 0xC8: version 0 files are unsupported.
-    char mUnknownVersion[0x20];      // 0x124: unrecognised file version.
-    char mVersionMismatch[0x44];     // 0x144: data bank version mismatch.
-} _GSparticleModuleData;
 
 /* ---- particle layer entry points (this unit) ---- */
 
@@ -119,13 +97,14 @@ void GSparticleGeneratorSetCamera(_GSparticleGen *gen, _GScamera *camera);
 void GSparticleBankSetCamera(_GSparticleBank *bank, _GScamera *camera);
 void GSparticleSetBankVisibility(_GSparticleBank *bank, bool visible);
 void GSparticleSetGeneratorVisibility(_GSparticleGen *gen, bool visible);
-void GSparticleSetVelocityRotationInLocal(_GSparticleGen *gen, bool enable);
+void GSparticleSetGeneratorZDraw(_GSparticleGen *gen, bool enable);
+void GSparticleSetRandomVelocityScaling(_GSparticleGen *gen, bool enable);
 void GSparticleSetNodeScaling(_GSparticleGen *gen, bool enable);
-void GSparticleSetParticleTexScaling(_GSparticleGen *gen, bool enable);
-void GSparticleSetLocalVelocityRotation(_GSparticleGen *gen, bool enable);
-void GSparticleSetOffsetRotationInLocal(_GSparticleGen *gen, bool enable,
+void GSparticleSetParticleTextureScaling(_GSparticleGen *gen, bool enable);
+void GSparticleSetVelocityRotationInLocal(_GSparticleGen *gen, bool enable);
+void GSparticleSetTornadoScaling(_GSparticleGen *gen, bool enable,
                                         bool mode);
-void GSparticleSetLocalOffsetRotation(_GSparticleGen *gen, bool enable,
+void GSparticleSetOffsetRotationInLocal(_GSparticleGen *gen, bool enable,
                                       bool mode);
 void GSparticleActivateBank(_GSparticleBank *bank);
 void GSparticleDisactivateBank(_GSparticleBank *bank);

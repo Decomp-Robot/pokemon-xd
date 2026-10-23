@@ -14,10 +14,14 @@ typedef struct _HSD_ShapeAnimJoint _HSD_ShapeAnimJoint;
 typedef struct _HSD_JObj _HSD_JObj;
 typedef struct _HSD_Joint _HSD_Joint;
 
+typedef void (*HSD_JObjParticleCallback)(int type, int flags, int group,
+                                         _HSD_JObj *jobj);
+typedef void (*HSD_JObjParticleTargetCallback)(_HSD_JObj *jobj, int id);
+
 struct _HSD_JObj {
     u8 _00[0x08];
     _HSD_JObj *next;     // 0x08: next sibling in the joint list.
-    u8 _0C[0x04];
+    _HSD_JObj *mParent;  // 0x0C: parent joint.
     _HSD_JObj *child;    // 0x10: first child joint.
     u32 flags;     // 0x14: transform flags (see the HSD_JOBJ_FLAG_* below).
     _HSD_DObj *mDrawable; // 0x18: drawable chain for ordinary joints.
@@ -50,6 +54,9 @@ void HSD_JObjClearFlags(_HSD_JObj *jobj, u32 flags);
 void HSD_JObjSetFlags(_HSD_JObj *jobj, u32 flags);
 void HSD_JObjSetMtxDirtySub(_HSD_JObj *jobj);
 void HSD_JObjSetupMatrixSub(_HSD_JObj *jobj);
+void HSD_JObjSetSPtclCallback(HSD_JObjParticleCallback callback);
+void HSD_JObjSetDPtclCallback(HSD_JObjParticleCallback callback);
+void HSD_JObjSetPtclTargetCallback(HSD_JObjParticleTargetCallback callback);
 
 /* Tests the dirty flag for an automatically computed transform. */
 #line 603 "jobj.h"

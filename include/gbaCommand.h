@@ -2,9 +2,9 @@
 #define GBA_COMMAND_H
 
 #include <types.h>
+#include <hero.h>
 
-// Per-channel SI probe error counters (sbss 0x804EA768), one byte per
-// channel.
+// Per-channel SI probe error counters.
 extern u8 SIProbeErrorCnt[4];
 
 // Command the key layer runs on a channel: gbaKeyState holds it and
@@ -21,6 +21,21 @@ extern "C" {
 #endif
 
 void gba_SIProbe_ErrorCntClear(s32 chan);
+u32 gba_SIProbe(long chan);
+void gbaCommandChangePokemonEnd(long channel);
+long gbaCommandChangePokemonIsPrepared(long channel);
+long gbaCommandChangePokemon(long channel, struct Pokemon *pokemon, u32 wazaTarget, long partner);
+u16 gbaCommandGetGBAChangePokemon(u32 key);
+u8 gbaCommandGetWazaTarget(u32 key);
+u8 gbaCommandGetWazaDataId(u32 key);
+u32 gbaCommandGetAction(u32 key);
+long gbaCommandRequestAction(u32 channel, void *target, u32 slot, long flag);
+long gbaCommandEntryPokemon(u32 packed, u8 *slots);
+long gbaCommandEntryResult(long channel, u32 *result);
+void gbaCommandEntryRequest(long channel, u32 trainer, u32 kind, u32 partner);
+void gbaCommandSendWazaText(long channel, Hero *hero);
+u16 gbaCommandKeyPressed(long channel);
+long gbaCommandKeyRead(long channel);
 
 // Makes the channel run the given key command and clears the state the
 // previous one left; returns the command that was running before.

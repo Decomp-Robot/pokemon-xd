@@ -1,12 +1,13 @@
 #ifndef MENU_MODEL_H
 #define MENU_MODEL_H
 
+#include <GSmathTypes.h>
 #include <types.h>
 #include <GSvec.h>
+#include <GStexture.h>
 
-// Work block of one rendered menu model. Only the species of the loaded model
-// and its transform are read back; the remaining layout stays sized padding.
-// nameEntryModel (menuNameEntry.cpp) fixes this one at 0xEC bytes.
+struct Pokemon;
+
 struct MENU_MODEL {
     MENU_MODEL() {}
 
@@ -15,14 +16,28 @@ struct MENU_MODEL {
     u8 _26[0x1A];
     GSvec mAngle;
     GSvec mOffset;
-    u8 _58[0x94];
+    u8 _58[0x30];
+    GSvec mCameraRotation;
+    u8 _94[0x58];
 };
 
-// The status screen's model block (menuPokemonStatusModel) is four bytes
-// longer than the name entry one; nothing in the project reads the tail, so it
-// stays sized padding.
-struct MENU_MODEL_STATUS : MENU_MODEL {
-    u8 _EC[4];
-};
+
+extern "C" {
+void menuModelInit(MENU_MODEL *model, int modelKind, int cameraKind);
+void menuModelFree(MENU_MODEL *model);
+void menuModelSetSize(MENU_MODEL *model, s16 x0, s16 y0, s16 x1, s16 y1);
+void menuModelSetAngle(MENU_MODEL *model, const f32 *angle);
+void menuModelAdjustCamera(MENU_MODEL *model);
+u8 menuModelCheck(MENU_MODEL *model, u8 wait);
+GStexture *menuModelRender(MENU_MODEL *model);
+u8 menuModelSetupPokemon(MENU_MODEL *model, Pokemon *pokemon);
+void menuModelSetMotion(MENU_MODEL *model, int motion);
+void menuModelSetFlag(MENU_MODEL *model, s32 flag);
+void menuModelSetZoom(MENU_MODEL *model, f32 zoom);
+void menuModelSetOffset(MENU_MODEL *model, const f32 *offset);
+void menuModelLoad(MENU_MODEL *model, u32 resourceID);
+void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
+void menuModelTerm(MENU_MODEL *model);
+}
 
 #endif

@@ -2,7 +2,6 @@
 #define MENU_INFO_WINDOW_H
 
 #include <types.h>
-
 class CMetaMenu;
 
 struct InfoWindowMsgCtrl {
@@ -12,23 +11,23 @@ struct InfoWindowMsgCtrl {
 
 class CInfoWindow {
 public:
-    void exec(CMetaMenu& menu, unsigned long messageID, bool closeOnEnd);
+    void init(long menuID, unsigned long itemID);
+    void initTutorialTalk();
+    void open(unsigned long messageID, bool animated);
+    void close();
+    bool isMsgEnd();
+    void exec(CMetaMenu &menu, unsigned long messageID, bool closeOnEnd);
     void draw();
     void setMsgCtrlValue(unsigned long id, unsigned long value);
-    bool isMsgEnd();
-    void open(unsigned long messageID, bool animate);
-    void close();
-    void initTutorialTalk();
-    void init(long windowID, unsigned long itemID);
 
 private:
-    long mWindowID;
+    long mMenuID;
     unsigned long mItemID;
-    bool mDisplay;
-    bool mAnimateMessage;
+    bool mOpen;
+    bool mAnimated;
     unsigned long mMessageID;
     InfoWindowMsgCtrl mMsgCtrls[4];
-    u16 mKeyTrigger;
+    unsigned short mKeyTrigger;
 };
 
 #endif

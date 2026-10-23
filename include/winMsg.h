@@ -1,43 +1,41 @@
-#ifndef WIN_MSG_H
-#define WIN_MSG_H
-
-#include <winSprite.h>
+#ifndef WINMSG_H
+#define WINMSG_H
+struct tagWINDOW_WORK;
+struct tagSPRITE_WORK;
 #include <types.h>
-
-/* The six values the level-up screen shows, in the order it shows them. The
- * first byte is the flag winMsgOpenLevelUpFiledStatus takes. */
-struct MENU_LVUP_STATUS {
-    u8 mFlag;       // 0x00: set before the window is opened.
-    u8 _01;         // 0x01: padding.
-    s16 mHp;        // 0x02
-    s16 mAttack;    // 0x04
-    s16 mDefense;   // 0x06
-    s16 mSpeed;     // 0x08
-    s16 mSpAttack;  // 0x0A
-    s16 mSpDefense; // 0x0C
-};
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+s32 winMsgDraw(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
+void winMsgOpen(s32 mode, u32 messageID, s32 windowID, s32 wait);
+void winMsgClose(s32 wait);
+void winMsgOpenFight(s32 status, s32 speaker, s32 wait);
+void winMsgCloseFight(s32 wait);
+u8 winMsgCloseCheckFight(void);
+#ifdef __cplusplus
+}
+#endif
+struct MENU_LVUP_STATUS {
+    u8 mFlag;
+    u8 _01;
+    s16 mHp;
+    s16 mAttack;
+    s16 mDefense;
+    s16 mSpeed;
+    s16 mSpAttack;
+    s16 mSpDefense;
+};
+#ifdef __cplusplus
+extern "C" {
+#endif
 s32 winMsgCheck(void);
-long winMsgDraw(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite);
-void winMsgOpen(signed char mode, unsigned int messageID, bool wait, bool instantText);
-void winMsgOpenWithSE(signed char mode, unsigned int messageID, bool wait, bool instantText, unsigned char soundID);
-void winMsgClose(bool wait);
-void winMsgCloseFight(bool wait);
-void winMsgCloseField(bool wait);
-void winMsgOpenLevelUpFiledStatus(MENU_LVUP_STATUS *status, bool wait);
-void winMsgOpenLevelUpStatus(MENU_LVUP_STATUS *status, bool wait);
+#ifdef __cplusplus
+void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, bool wait);
 void winMsgCloseLevelUpStatus(bool wait);
 #else
-void winMsgOpen(signed char mode, unsigned int messageID, unsigned char wait, unsigned char instantText);
-void winMsgOpenWithSE(signed char mode, unsigned int messageID, unsigned char wait, unsigned char instantText, unsigned char soundID);
-void winMsgClose(unsigned char wait);
-void winMsgCloseFight(unsigned char wait);
-void winMsgCloseField(unsigned char wait);
-void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, unsigned char wait);
-void winMsgOpenLevelUpStatus(struct MENU_LVUP_STATUS *status, unsigned char wait);
-void winMsgCloseLevelUpStatus(unsigned char wait);
+void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, u8 wait);
+void winMsgCloseLevelUpStatus(u8 wait);
 #endif
 #ifdef __cplusplus
 }

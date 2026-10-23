@@ -6,9 +6,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+s32 pokecoloGetCountryCode(void);
 s32 pokecoloGetRomVersion(void);
-unsigned long pokecoloGetPlayTimeUnsigned(void);
-void pokecoloSetPlayTime(f64 playtime);
+unsigned long pokecoloGetPlayTimeValue(void);
+void pokecoloSetPlayTime(f64 playTime);
 #ifdef __cplusplus
 }
 #endif

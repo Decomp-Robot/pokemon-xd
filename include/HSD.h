@@ -11,6 +11,8 @@
 #include <hsd/jobj.h>
 #include <hsd/aobj.h>
 
+extern "C" void QuatSlerp(const Quaternion *first, const Quaternion *second, Quaternion *out, f32 blend);
+
 #define HSD_POBJ_TYPE_MASK 0x3000
 #define HSD_POBJ_SHAPE_ANIM 0x1000
 

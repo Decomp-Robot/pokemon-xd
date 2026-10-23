@@ -12,10 +12,10 @@ enum {
 #ifdef __cplusplus
 extern "C" {
 #endif
-// Sets the camera type and returns the previous type.
-u8 cameraSetType(u8 cameraType);
-void cameraPlayAnime(s32 resourceGroup, unsigned long resourceId,
-                 f32 startFrame, s32 loop);
+
+u8 cameraSetType(u8 type);
+void cameraPlayAnime(u32 groupID, u32 resourceID, f32 frame, u8 loop);
+
 #ifdef __cplusplus
 }
 #endif

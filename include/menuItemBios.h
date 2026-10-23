@@ -3,23 +3,21 @@
 
 #include <types.h>
 
-typedef struct MENU_ITEM_dd_ MENU_ITEM_dd_;
+// Entries of a menu-item table; chained through mNextID.
 typedef struct MENU_ITEM_dd_ tagMENU_ITEM_DATA;
-
-// Menu item geometry, sprite, and the link to the next item.
 struct MENU_ITEM_dd_ {
-    u8 mShownFlag : 1;
-    u8 mChainEndFlag : 1;
-    u8 mFlags : 6;
-    u8 mItemConfiguration[3];
+    u8 mShownFlag : 1;    // byte 0 bit 7: the row is shown in the menu.
+    u8 mChainEndFlag : 1; // byte 0 bit 6: last row of the item chain.
+    u8 mFlags : 6;        // byte 0 bits 0-5: unknown.
+    u8 _01[3];
     s16 mSpriteID;
-    union { s16 mX; s16 mMessageX; };
-    union { s16 mY; s16 mOffsetA; };
-    union { s16 mWidth; s16 mOffsetB; };
-    union { s16 mHeight; s16 mOffsetC; };
-    u8 mItemCallbacks[0x0a];
-    s16 mNextID;
-    u8 mItemLinkState[2];
+    s16 mMessageX; // 0x06: x origin the row's centered message is placed from.
+    s16 mOffsetA;  // 0x08: row offset, a y offset for the item cursor.
+    s16 mOffsetB;  // 0x0A: row offset, the x position of the row values.
+    s16 mOffsetC;  // 0x0C: row offset measured for the menu columns.
+    u8 _0E[0x0A];  // 0x0E-0x17: unknown here.
+    s16 mNextID;   // 0x18: next row of the chain, read while bit6 is clear.
+    u8 _1A[0x02];  // 0x1A-0x1B: unknown here.
 };
 
 #ifdef __cplusplus
@@ -31,6 +29,7 @@ extern "C" {
 // chain through mNextID until mChainEndFlag.
 tagMENU_ITEM_DATA *menuItemBiosGetPtr(long dataID, long itemID);
 // Select state of `itemID` the PDA frame menus toggle.
+u8 menuItemBiosGetSelectFlag(s32 dataID, s32 itemID);
 void menuItemBiosSetSelectFlag(s32 dataID, s32 itemID, s32 flag);
 void menuItemSetPosition(s32 menuId, s16 itemId, s16 x, s16 y);
 

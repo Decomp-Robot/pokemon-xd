@@ -1,78 +1,75 @@
+#include <peParticle.h>
 #include <peNodeMath.h>
 
 extern "C" f32 (*GSgfxMatrixGetPtr(u32))[4];
 
-static inline const peEmitterRenderParameters &RenderParameters(peEmitterNode *node) {
-    return *(const peEmitterRenderParameters *)node->mEmitterState;
-}
-
-void peNodeTransformsConcat(peSRT *result, peSRT *parent, peSRT *local,
+void peNodeTransformsConcat(peNodeTransform *result, peNodeTransform *parent, peNodeTransform *local,
                              bool cameraRotation)
 {
-    result->mPosition = Product(local->mPosition, parent->mScale);
-    Rotate(result->mPosition, parent->mRotation);
-    result->mPosition += parent->mPosition;
+    result->position = Product(local->position, parent->scale);
+    Rotate(result->position, parent->rotation);
+    result->position += parent->position;
     if (cameraRotation) {
-        C_QUATMtx(SDKQuaternion(result->mRotation), GSgfxMatrixGetPtr(PE_CAMERA_INVERSE_MATRIX));
+        C_QUATMtx(SDKQuaternion(result->rotation), GSgfxMatrixGetPtr(PE_CAMERA_INVERSE_MATRIX));
     } else {
-        *(peQuaternion *)result->mRotation = Multiply(parent->mRotation, local->mRotation);
+        *(peQuaternion *)result->rotation = Multiply(parent->rotation, local->rotation);
     }
-    result->mScale = Product(local->mScale, parent->mScale);
+    result->scale = Product(local->scale, parent->scale);
 }
 
 bool peNode::Update(peEmitterNode *parent, f32 delta)
 {
     _peEmitter *emitter;
     bool moving;
-    GSvec displacement, acceleration;
-    moving = Magnitude(mAccelerationScale) > 0.00001f;
-    mRemainingLife -= delta;
-    if (mRemainingLife <= 0.0f) return false;
+    GSvec displacement, force;
+    moving = Magnitude(forceResponse) > 0.00001f;
+    remainingLife -= delta;
+    if (remainingLife <= 0.0f) return false;
     if (!parent) return true;
-    emitter = parent->mEmitter;
+    emitter = parent->emitter;
     if (moving) {
-        acceleration = RenderParameters(parent).mAcceleration;
-        if (!(emitter->mFlags & PE_EMITTER_LOCAL_ACCELERATION)) {
-            peQuaternion inverse = QuaternionInverse(mTransform->mRotation);
-            Rotate(acceleration, &inverse.x);
+        force = parent->force;
+        if (!(emitter->flags & PE_EMITTER_LOCAL_FORCE)) {
+            peQuaternion inverse = QuaternionInverse(transform->rotation);
+            Rotate(force, &inverse.x);
         }
-        if (emitter->mFlags & PE_EMITTER_ATTRACT_POINT) {
-            displacement = acceleration - mPosition;
+        if (emitter->flags & PE_EMITTER_ATTRACT_POINT) {
+            displacement = force - position;
             f32 length = PSVECMag(SDKVector(&displacement));
             if (length > 0.00001f) {
                 f32 strength = emitter->mAttraction;
-                displacement *= delta * (strength * mAccelerationScale) / length;
+                displacement *= delta * (strength * forceResponse) / length;
             }
         } else {
-            displacement = acceleration * (mAccelerationScale * delta);
+            displacement = force * (forceResponse * delta);
         }
-        mVelocity += displacement;
+        velocity += displacement;
         f32 drag = emitter->mDrag;
         if (drag)
-            mVelocity *= 1.0f - drag;
+            velocity *= 1.0f - drag;
     }
-    displacement = mVelocity * delta;
-    mPosition += displacement;
-    if (moving && (emitter->mFlags & PE_EMITTER_COLLIDE_GROUND)) {
-        displacement = Product(mPosition, mTransform->mScale);
-        Rotate(displacement, mTransform->mRotation);
-        displacement += mTransform->mPosition;
+    displacement = velocity * delta;
+    position += displacement;
+    if (moving && (emitter->flags & PE_EMITTER_COLLIDE_GROUND)) {
+        displacement = Product(position, transform->scale);
+        Rotate(displacement, transform->rotation);
+        displacement += transform->position;
         if (displacement.y < 0.0f) {
             peQuaternion positionInverse, velocityInverse;
             if (displacement.y < 0.0f) {
                 displacement.y = 0.0f;
-                displacement -= mTransform->mPosition;
-                positionInverse = QuaternionInverse(mTransform->mRotation);
+                displacement -= transform->position;
+                positionInverse = QuaternionInverse(transform->rotation);
                 Rotate(displacement, &positionInverse.x);
-                RemoveScale(displacement, mTransform->mScale);
-                mPosition = displacement;
-                displacement = Product(mVelocity, mTransform->mScale);
-                Rotate(displacement, mTransform->mRotation);
+                RemoveScale(displacement, transform->scale);
+                position = displacement;
+                displacement = Product(velocity, transform->scale);
+                Rotate(displacement, transform->rotation);
                 displacement.y *= emitter->mBounce;
-                velocityInverse = QuaternionInverse(mTransform->mRotation);
+                velocityInverse = QuaternionInverse(transform->rotation);
                 Rotate(displacement, &velocityInverse.x);
-                RemoveScale(displacement, mTransform->mScale);
-                mVelocity = displacement;
+                RemoveScale(displacement, transform->scale);
+                velocity = displacement;
             }
         }
     }
@@ -81,13 +78,13 @@ bool peNode::Update(peEmitterNode *parent, f32 delta)
 
 void peNode::Start(peEmitterNode *parent, _EmitParams *params)
 {
-    mLife = mRemainingLife = params->mLife;
-    mAccelerationScale = params->mAccelerationScale;
-    mPosition = params->mPosition;
-    mVelocity = params->mVelocity;
-    if (parent && (parent->mEmitter->mFlags & PE_EMITTER_SAVE_TRANSFORM)) {
-        mTransform->mPosition = params->mTransform.mPosition;
-        *(peQuaternion *)mTransform->mRotation = *(peQuaternion *)params->mTransform.mRotation;
-        mTransform->mScale = params->mTransform.mScale;
+    life = remainingLife = params->life;
+    forceResponse = params->forceResponse;
+    position = params->position;
+    velocity = params->velocity;
+    if (parent && (parent->emitter->flags & PE_EMITTER_LOCAL_VELOCITY)) {
+        transform->position = params->transform.position;
+        *(peQuaternion *)transform->rotation = *(peQuaternion *)params->transform.rotation;
+        transform->scale = params->transform.scale;
     }
 }

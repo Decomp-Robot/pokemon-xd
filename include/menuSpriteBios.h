@@ -3,21 +3,27 @@
 
 #include <types.h>
 
-// A sprite's texture rectangle and resource for one language.
-struct MenuSpriteImage {
-    short mX, mY, mWidth, mHeight;
-    unsigned long mResourceID;
+struct MenuSpriteValue {
+    s16 mX;
+    s16 mY;
+    s16 mWidth;
+    s16 mHeight;
+    u32 mDrawValue;
 };
 
-// The BIOS chooses a language image from the sprite's table entry.
-struct MenuSpriteData;
+struct MenuSpriteData {
+    u8 _00[8];
+    struct MenuSpriteValue mValue[5];
+    s16 mNextID;
+    u8 _46[2];
+};
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct MenuSpriteData* menuSpriteBiosGetPtr(unsigned long spriteID);
-struct MenuSpriteImage* menuSpriteBiosGetValPtr(struct MenuSpriteData* spriteData);
+struct MenuSpriteData *menuSpriteBiosGetPtr(u32 spriteID);
+struct MenuSpriteValue *menuSpriteBiosGetValPtr(struct MenuSpriteData *data);
 
 #ifdef __cplusplus
 }

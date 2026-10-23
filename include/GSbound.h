@@ -1,10 +1,6 @@
-#ifndef GS_BOUND_H
-#define GS_BOUND_H
-
-#include <types.h>
-#include <GSvec.h>
-
-/* Model-space bound accumulator. */
+#ifndef GSBOUND_H
+#define GSBOUND_H
+#include <GSmathTypes.h>
 struct GSbound {
     u16 mFlags;
     u16 mDataType;
@@ -12,13 +8,17 @@ struct GSbound {
     u8 mShapeAndAnimationState[0x18];
 };
 
+#ifdef __cplusplus
 extern "C" {
-void GSboundGetSize(void *bound, GSvec *size, GSmtx *transform, bool localAxes);
-bool GSboundHasAnimData(void *bound);
-void GSboundSetAnimIndex(void *bound, u32 index);
-void GSboundSetAnimFrame(void *bound, f32 frame);
-void GSboundReset(void *bound);
-void GSboundAddPoint(void *bound, f32 x, f32 y, f32 z);
+#endif
+bool GSboundHasAnimData(GSbound *bound);
+void GSboundSetAnimIndex(GSbound *bound, u32 index);
+void GSboundSetAnimFrame(GSbound *bound, f32 frame);
+void GSboundReset(GSbound *bound);
+void GSboundAddPoint(GSbound *bound, f32 x, f32 y, f32 z);
+void GSboundAlwaysInView(GSbound *bound, bool enabled);
+void GSboundGetSize(GSbound *bound, GSvec *size, GSmtx *transform, bool localAxes);
+#ifdef __cplusplus
 }
-
+#endif
 #endif

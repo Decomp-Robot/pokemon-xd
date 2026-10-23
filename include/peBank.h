@@ -1,9 +1,9 @@
 #ifndef PE_BANK_H
 #define PE_BANK_H
 
-#include <types.h>
+#include <GSgfx.h>
 #include <GSbound.h>
-#include <peNodeBase.h>
+#include <peEmitter.h>
 
 struct _GScamera;
 struct _peEmitter;
@@ -11,28 +11,6 @@ struct _particleData;
 class peContainer;
 class peNode;
 
-
-class peEmitterNode : public peNode {
-public:
-    peEmitterNode() {
-        mTransform = 0;
-        mNext = 0;
-        mPrevious = 0;
-        mEmitter = 0;
-        mChildren = 0;
-    }
-    void Init(_peEmitter *emitter);
-    void Release();
-    void Start(peEmitterNode *parent, _peEmitter *emitter, _EmitParams *params);
-    bool Update(peEmitterNode *parent, _peEmitter *emitter, f32 delta);
-    void Stop(_peEmitter *emitter);
-    void Render(_peEmitter *emitter);
-    void SetLastLoop();
-
-    u8 mEmitterState[0xCC];
-    _peEmitter *mEmitter;      // 0xFC
-    peContainer *mChildren; // 0x100
-};
 
 enum ParticleDataKind {
     PE_DATA_EMITTER = 0,
@@ -44,6 +22,16 @@ enum ParticleDataKind {
     PE_DATA_PARTICLE_STRIP = 6,
 };
 
+class _EmitParams {
+public:
+    _EmitParams() { life = 0.0f; forceResponse = 0.0f; }
+    f32 life;
+    f32 forceResponse;
+    GSvec position;
+    GSvec velocity;
+    peNodeTransform transform;
+};
+
 struct _particleData {
     u32 mFlags;
     ParticleDataKind mKind;
@@ -52,39 +40,6 @@ struct _particleData {
         void *mData;
     };
     _particleData *mNext;
-};
-
-struct peSpline;
-struct peColorSpline;
-struct _pePositionFunction;
-
-struct _peEmitter {
-    u32 mFlags;
-    u32 mChildCount;
-    f32 mLife;
-    f32 mParticleCount;
-    f32 mParticleCountRandom;
-    peSpline *mParticleCountSpline;
-    u8 mEmissionParameters[0x04];
-    f32 mEmitInterval;
-    u8 mParticleParameters[0x80];
-    f32 mDrag;                 // 0xA0
-    f32 mBounce;               // 0xA4
-    f32 mAttraction;           // 0xA8
-    GSvec mAccelerationParameters;
-    peSpline *mAccelerationSplines[3];
-    GSvec mPositionParameters;
-    peSpline *mPositionSplines[3];
-    GSvec mRotationParameters;
-    peSpline *mRotationSplines[3];
-    GSvec mRotationVelocityParameters;
-    GSvec mRotationVelocityRandom;
-    peSpline *mRotationVelocitySplines[3];
-    GSvec mScaleParameters;
-    peSpline *mScaleSplines[3];
-    peColorSpline *mColorSpline;
-    peSpline *mAlphaSpline;
-    _particleData *mChildren;  // 0x138
 };
 
 struct _gpdHeader {
@@ -133,20 +88,13 @@ enum peBankFlags {
     PE_BANK_DRAW_BOUND = 0x20,
 };
 
-enum peEmitterFlags {
-    PE_EMITTER_LOOP = 0x01,
-    PE_EMITTER_USE_BOUND = 0x20000,
-};
-
 struct _peBank {
     _peBank() {}
 
     _gpdHeader *mFile;         // 0x000
     peEmitterNode mRoot;      // 0x004
     _particleData *mData;      // 0x108
-    GSvec mPosition;           // 0x10C
-    f32 mRotation[4];          // 0x118
-    GSvec mScale;              // 0x128
+    peNodeTransform transform; // 0x10C
     u32 mFlags;                // 0x134
     u32 mRenderedLayers;       // 0x138
     u16 mRenderToken;          // 0x13C
@@ -154,16 +102,6 @@ struct _peBank {
     GSbound mBound;            // 0x140
     _GScamera *mCamera;        // 0x160
     _peBank *mNext;            // 0x164
-};
-
-struct peMemoryUsage {
-    u32 mEmitParams;
-    u32 mBankData;
-    u32 mNodes;
-    u32 mRenderData;
-    u32 mShapes;
-    u32 mTotal;
-    u32 mReserved[3];
 };
 
 extern "C" {
@@ -185,15 +123,15 @@ void _peFreeInternalBankData(_particleData *data);
 bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
                         _particleData *data, const char *base);
 
-extern _peBank *peCurrentBank;
-extern GSbound *peCurrentBound;
-extern u16 peCurrentRenderToken;
-extern _EmitParams *peEmitParams;
-extern u16 peEmitParamsCount;
-extern _peBank *peEmitParamsOwner;
-extern _peBank *peBanks;
-extern peMemoryUsage g_particle_debug_stats;
-extern GSgfxLayer *peCurrentLayer;
-extern GSgfxLayerPass peCurrentPass;
+extern _peBank *g_currentBank;
+extern GSbound *g_currentBound;
+extern u16 g_bank_token;
+extern _EmitParams *g_emitParams;
+extern u16 g_maxEmitParams;
+extern _peBank *g_emitParamsBank;
+extern _peBank *g_particleBanks;
+extern GSmtx *g_CameraMatrix;
+extern GSgfxLayer *g_current_layer;
+extern GSgfxLayerPass g_render_pass;
 
 #endif

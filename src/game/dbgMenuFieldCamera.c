@@ -1,21 +1,24 @@
-#include <floorRoom.h>
+#include <floorManager.h>
+#include <menu.h>
 #include <types.h>
 #include <menu.h>
 
 /* Field camera editor menu: opens the editor when the current room has its own
  * camera floor, and resets the editor cursor. */
 
-/* Field camera editor work, reset when the room changes. */
-extern s32 dbgFieldCameraRoomStateWord1;
-extern s32 dbgFieldCameraRoomStateWord2;
-extern s32 dbgFieldCameraRoomStateWord3;
-/* Reset before opening the field camera editor. */
-extern u8 dbgFieldCameraOpenState;
+/* Cursor of the editor window, reset when the room changes, and the flag the
+ * editor initialises itself from. */
+extern s32 gSelected_row;
+extern s32 gSelected_column;
+extern s32 gSelectedMenu_column;
+extern u8 gSelectedInit;
 
-/* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
 
+u8 menuIsOpen(s32 menuID);
 void menuSetPosition(long menuID, long x, long y);
+u32 floorFieldCameraEditorGetFloorID(void);
+void floorInitFieldCameraEditor(u32 roomID);
 
 #pragma peephole off
 
@@ -23,17 +26,17 @@ s32 dbgMenuFieldCameraChangeDisp(void)
 {
     u32 roomID;
 
-    if (!menuIsOpen(MENU_ID_FIELD_CAMERA_EDITOR)) {
-        roomID = roomGetCurrentRoomID();
+    if (!menuIsOpen(0x23)) {
+        roomID = GSfloorGetCurrent();
         if (roomID != floorFieldCameraEditorGetFloorID()) {
             floorInitFieldCameraEditor(roomID);
-            dbgFieldCameraRoomStateWord1 = 0;
-            dbgFieldCameraRoomStateWord2 = 0;
-            dbgFieldCameraRoomStateWord3 = 0;
+            gSelected_row = 0;
+            gSelected_column = 0;
+            gSelectedMenu_column = 0;
         }
-        dbgFieldCameraOpenState = 0;
-        menuOpenCustom(MENU_ID_FIELD_CAMERA_EDITOR, 0, 0, 0, 1, 0);
-        menuSetPosition(MENU_ID_FIELD_CAMERA_EDITOR, 0xC, 0xA);
+        gSelectedInit = 0;
+        menuOpenCustom(0x23, 0, 0, 0, 1, 0);
+        menuSetPosition(0x23, 0xC, 0xA);
     }
     return 0;
 }

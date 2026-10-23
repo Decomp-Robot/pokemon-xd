@@ -43,7 +43,7 @@ extern void __timesdec(Dec *result, const Dec *a, const Dec *b);
 #define CLASS_NORMAL  4
 #define CLASS_SUBNORM 5
 
-extern float floatInfinity[];
+extern float __float_huge[];
 /* Largest finite double, the clamp taken when a decimal rounds to infinity. */
 extern double doubleMaxFinite[];
 
@@ -265,7 +265,7 @@ double __dec2num(const Dec *d) {
         return copysign(0.0,
                         (signed char)d->sign == 0 ? 1.0 : -1.0);
     case 'I':
-        return copysign(floatInfinity[0],
+        return copysign(__float_huge[0],
                         (signed char)d->sign == 0 ? 1.0 : -1.0);
     case 'N': {
         bits.u = 0x7FF0000000000000ULL;

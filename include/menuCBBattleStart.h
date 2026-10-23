@@ -3,11 +3,12 @@
 
 #include <menuModel.h>
 #include <types.h>
+#include <menuModel.h>
 
-/* One trainer face the battle-start screen shows: `resource` is the loaded resource
-   handle, `resID` the resource that was asked for. */
+/* One trainer face the battle-start screen shows: `resource` is the loaded resource,
+   `resID` the resource that was asked for. */
 typedef struct MenuCBBattleFace {
-    /* 0x00 */ union { void* resource; u32 group; };
+    /* 0x00 */ void* resource;
     /* 0x04 */ u32 resID;
 } MenuCBBattleFace;
 
@@ -22,14 +23,23 @@ typedef struct MenuCBBattleWork {
     /* 0x030 */ s32 faceNum;
     /* 0x034 */ u8 readDone;
     /* 0x035 */ u8 _035[0x038 - 0x035];
-    /* 0x038 */ MENU_MODEL trainerModel;
+    /* 0x038 */ MENU_MODEL model;
     /* 0x124 */ u32 soundID;
     /* 0x128 */ u8 _128[0x12C - 0x128];
     /* 0x12C */ u16 trainerName[12];
     /* 0x144 */ s32 trainerClassNameID;
 } MenuCBBattleWork;
 
-extern MenuCBBattleWork menuCBBattleStartWork;
+extern MenuCBBattleWork _menuCBBattleStartWork;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+s32 menuCBBattleStartGetStatus(void);
+u8 menuCB_BattleStartSoundCheck(void);
+#ifdef __cplusplus
+}
+#endif
 
 /* Battle types the link battles run in, as toolentryTaisenGetBattleType
    reports them. _menuCBBattleStartSetIndex dispatches 0 to the double-battle

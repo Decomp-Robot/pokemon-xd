@@ -26,14 +26,13 @@
 /* Parameter id of the memory callbacks in the renderer's init parameters. */
 #define HSD_INIT_MEMORY_CALLBACKS 2
 
-GSmemPoolAllocator* gSysdolPool8;
-GSmemPoolAllocator* gSysdolPool12;
-GSmemPoolAllocator* gSysdolPool20;
-GSmemPoolAllocator* gSysdolPool28;
-GSmemPoolAllocator* gSysdolPool48;
+GSmemPoolAllocator* _Sysdol8Allocator;
+GSmemPoolAllocator* _Sysdol12Allocator;
+GSmemPoolAllocator* _Sysdol20Allocator;
+GSmemPoolAllocator* _Sysdol28Allocator;
+GSmemPoolAllocator* _Sysdol48Allocator;
 
 extern "C" void HSD_SetInitParameter(s32 type, ...);
-extern "C" GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size);
 
 BOOL _memCheckOwnCallback(void* ptr) {
     return TRUE;
@@ -50,14 +49,14 @@ void _memFreeCallback(void* ptr) {
     if (!ptr) {
         return;
     }
-    if (gSysdolPool12->isRegistration(ptr)) {
-        gSysdolPool12->freeCell(ptr);
-    } else if (gSysdolPool20->isRegistration(ptr)) {
-        gSysdolPool20->freeCell(ptr);
-    } else if (gSysdolPool28->isRegistration(ptr)) {
-        gSysdolPool28->freeCell(ptr);
-    } else if (gSysdolPool48->isRegistration(ptr)) {
-        gSysdolPool48->freeCell(ptr);
+    if (_Sysdol12Allocator->isRegistration(ptr)) {
+        _Sysdol12Allocator->freeCell(ptr);
+    } else if (_Sysdol20Allocator->isRegistration(ptr)) {
+        _Sysdol20Allocator->freeCell(ptr);
+    } else if (_Sysdol28Allocator->isRegistration(ptr)) {
+        _Sysdol28Allocator->freeCell(ptr);
+    } else if (_Sysdol48Allocator->isRegistration(ptr)) {
+        _Sysdol48Allocator->freeCell(ptr);
     } else {
         GSmemFree(ptr);
     }
@@ -80,7 +79,7 @@ void* _memAllocCallback(u32 size, u32 align, u32 flag) {
             }
         }
     }
-    return GSmemAllocNoClr(size);
+    return GSmemAlloc(size);
 }
 
 extern "C" GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size) {
@@ -89,30 +88,30 @@ extern "C" GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size) {
     pool = NULL;
     switch (size) {
     case SYS_ALLOC_SIZE_8:
-        pool = gSysdolPool8;
+        pool = _Sysdol8Allocator;
         break;
     case SYS_ALLOC_SIZE_12:
-        pool = gSysdolPool12;
+        pool = _Sysdol12Allocator;
         break;
     case SYS_ALLOC_SIZE_20:
-        pool = gSysdolPool20;
+        pool = _Sysdol20Allocator;
         break;
     case SYS_ALLOC_SIZE_28:
-        pool = gSysdolPool28;
+        pool = _Sysdol28Allocator;
         break;
     case SYS_ALLOC_SIZE_48:
-        pool = gSysdolPool48;
+        pool = _Sysdol48Allocator;
         break;
     }
     return pool;
 }
 
 extern "C" void GSmemInitSysdolAllocator(void) {
-    gSysdolPool8 = GSmemCreatePool(SYS_ALLOC_CELLS_8, SYS_ALLOC_SIZE_8);
-    gSysdolPool12 = GSmemCreatePool(SYS_ALLOC_CELLS_12, SYS_ALLOC_SIZE_12);
-    gSysdolPool20 = GSmemCreatePool(SYS_ALLOC_CELLS_20, SYS_ALLOC_SIZE_20);
-    gSysdolPool28 = GSmemCreatePool(SYS_ALLOC_CELLS_28, SYS_ALLOC_SIZE_28);
-    gSysdolPool48 = GSmemCreatePool(SYS_ALLOC_CELLS_48, SYS_ALLOC_SIZE_48);
+    _Sysdol8Allocator = GSmemCreatePool(SYS_ALLOC_CELLS_8, SYS_ALLOC_SIZE_8);
+    _Sysdol12Allocator = GSmemCreatePool(SYS_ALLOC_CELLS_12, SYS_ALLOC_SIZE_12);
+    _Sysdol20Allocator = GSmemCreatePool(SYS_ALLOC_CELLS_20, SYS_ALLOC_SIZE_20);
+    _Sysdol28Allocator = GSmemCreatePool(SYS_ALLOC_CELLS_28, SYS_ALLOC_SIZE_28);
+    _Sysdol48Allocator = GSmemCreatePool(SYS_ALLOC_CELLS_48, SYS_ALLOC_SIZE_48);
 
     HSD_SetInitParameter(HSD_INIT_MEMORY_CALLBACKS, _memAllocCallback, _memFreeCallback,
                          _memGetRemainCallback, _memClearCallback, _memCheckOwnCallback, 0);

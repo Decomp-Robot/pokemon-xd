@@ -5,6 +5,7 @@
 #include <fightTrainer.h>
 #include <types.h>
 #include <menuSpriteBios.h>
+#include <menuCBCommon.h>
 #include <winSprite.h>
 
 /* -------------------------------------------------------------------------
@@ -37,55 +38,6 @@ typedef struct MenuCBStack {
     s32 mCount;
 } MenuCBStack;
 
-/* Per-player work of the Pokemon entry screen: mPos holds the on-screen
-   position of every party slot (six x values followed by six y values),
-   the remaining members are the state the GBA exchange is driven with. */
-typedef struct MenuCBPokemonEntryPlayer {
-    /* 0x00 */ f32 mPos[12];
-} MenuCBPokemonEntryPlayer;
-
-/* Face record of one party slot: mLoaded marks a slot the face texture was
-   built for, mFaceID is the face the Game Boy reported for it. One record is
-   0x0C bytes; the table starts at work offset 0x30. */
-typedef struct MenuCBPokemonEntryFaceWork {
-    /* 0x00 */ u8 mLoaded;
-    /* 0x01 */ u8 _01;
-    /* 0x02 */ u16 mFaceID;
-    /* 0x04 */ s32 mX;
-    /* 0x08 */ u8 _08[4];
-} MenuCBPokemonEntryFaceWork;
-
-typedef struct MenuCBPokemonEntryWork {
-    /* 0x000 */ s32 mState;
-    /* 0x004 */ bool mEntryFlag[4]; // per SI port: the player handed its party over.
-    /* 0x008 */ s8 mVersusId[4]; // versus battle the port plays, -1 if none
-    /* 0x00C */ s32 mTimer;
-    /* 0x010 */ u8 _010[0x02C - 0x010];
-    /* 0x02C */ s32 mCursor; // entry cursor; the face texture work counts the
-                              // slots it has loaded in it.
-    /* 0x030 */ MenuCBPokemonEntryFaceWork mFaceWork[4][6];
-    /* 0x150 */ s32 mPlayerNum; // players the entry screen is laid out for.
-    /* 0x154 */ s32 mScroll;
-    /* 0x158 */ u8 mReadFlag; // set once the face textures are all loaded.
-    /* 0x159 */ u8 _159[0x160 - 0x159];
-    /* 0x160 */ MenuCBPokemonEntryPlayer mPlayer[4];
-    /* 0x220 */ f32 mBaseX;
-    /* 0x224 */ s32 mBaseIndex;
-    /* 0x228 */ u8 _228[0x22C - 0x228];
-    /* 0x22C */ u8 mDisconnected; // set while a player waits for its GBA
-    /* 0x22D */ u8 _22D[0x230 - 0x22D];
-    /* 0x230 */ s32 mDisconnectedPort;
-} MenuCBPokemonEntryWork;
-
-/* One SI port as the input layer hands it to the menu callbacks.  The
-   menus only ever move the value around, so it stays a scalar. */
-enum GSinputDevice {
-    /* 0 */ INPUT_DEVICE_0,
-    /* 1 */ INPUT_DEVICE_1,
-    /* 2 */ INPUT_DEVICE_2,
-    /* 3 */ INPUT_DEVICE_3,
-};
-
-extern "C" void menuCBSpriteSetImage(tagSPRITE_WORK* sprite, MenuSpriteData* spriteData);
+#include <menuCBPokemonEntry.h>
 
 #endif

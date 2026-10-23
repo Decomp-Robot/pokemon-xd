@@ -1,21 +1,20 @@
+#include <winMsg.h>
+#include <darkPokemon.h>
 #include <gamedata.h>
 #include <menu.h>
+#include <memcard.h>
+#include <winSprite.h>
 #include <fade.h>
-#include <libc/memory.h>
-#include <gsFlag.h>
+#include <msgctrl.h>
+#include <savedata.h>
+#include <hero.h>
+#include <floor.h>
+#include <GSflag.h>
+#include <pokecolo.h>
+#include <string.h>
 #include "menuSaveLoad.h"
 #include "floorRoom.h"
 #include "menuSub.h"
-#include "pokecolo.h"
-#include "darkPokemon.h"
-#include "heroStatus.h"
-#include "hero.h"
-#include "ProgressionData.h"
-#include "savedata.h"
-#include "memcard.h"
-#include "msgctrl.h"
-
-enum { SAVE_AVAILABILITY_FLAG = 0x3DE };
 
 // Save/report flow. menuReport builds the report object the save-load window
 // works on, runs the save flow on it and destroys it again. menuSaveLoadHook
@@ -25,24 +24,19 @@ enum { SAVE_AVAILABILITY_FLAG = 0x3DE };
 // Report object of the running save flow; 0 when no report is open.
 extern menuSaveload *menuSaveLoadReport;
 
-// Optional playtime override for a report-less save.
-extern unsigned long menuSaveLoadPlaytimeOverride;
+// Play-time override used when no save report is open.
+extern unsigned long menuSaveLoadSaveTarget;
+
+// Save data used to check whether the scooter has been unlocked.
+#include <gameSetup.h>
+
+struct Pokemon;
 
 extern "C" {
 s32 memcardTaskCall(s32 task, s32 flag, s32 arg);
-void winMsgOpen(s32 p1, s32 msgID, s32 p2, s32 p3);
-void winMsgClose(s32 p1);
-void winSeqSetMenu(long menuID, s32 seq);
 }
 
-// Entry points of this object: the save-flow driver ("run the save flow on
-// this report"), the memory-card write behind it, and the save availability
-// check.
-extern "C" {
-void menuSaveLoadSave(menuSaveload *report);
-s32 menuSaveLoadWrite(menuSaveload *report);
-s32 menuSaveLoadCanSave(void);
-}
+extern "C" s32 menuSaveLoadCanSave(void);
 
 void _SaveParameterSet(void);
 
@@ -75,7 +69,7 @@ extern "C" void menuSaveLoadCtrl(tagWINDOW_WORK *window)
 extern "C" void menuReport(void)
 {
     menuSaveLoadReport = new menuSaveload;
-    menuSaveLoadSave(menuSaveLoadReport);
+    menuSaveLoadReport->Main();
     delete menuSaveLoadReport;
     menuSaveLoadReport = 0;
 }
@@ -88,7 +82,7 @@ extern "C" s32 menuSaveLoadHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     u8 show;
     s16 item;
 
-    if (GSflagGet(0x3C4) < worldMapScooterUnlockData[10].mRequiredProgress) {
+    if (GSflagGet(0x3C4) < worldMapScooterUnlockData[GAME_SETUP_ENTRY_REPORT_POKEMON].progressValue) {
         show = 0;
     } else {
         show = 1;
@@ -118,7 +112,7 @@ extern "C" s32 menuSaveLoadHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case 0:
     case 4:
     case 8:
-        if (darkPokemonGetMeetNum() != 0) {
+        if (darkPokemonGetReliveNum() != 0) {
             winSpriteSetDisp(sprite, 1);
         } else {
             winSpriteSetDisp(sprite, 0);
@@ -128,69 +122,64 @@ extern "C" s32 menuSaveLoadHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     return 0;
 }
 
-// Release the save report.
 menuSaveload::~menuSaveload()
 {
 }
 
-// No saved playtime until the save prompt opens.
 menuSaveload::menuSaveload()
 {
-    mPlaytime = 0;
+    mPlayTime = 0;
 }
 
 // Run the save flow on the report: ask whether to save, write the save block
 // and close the report menu again.
-extern "C" void menuSaveLoadSave(menuSaveload *report)
+void menuSaveload::Main()
 {
     u8 ok = menuSaveLoadCanSave();
     if (ok != 0) {
         menuOpen(0x64, 0);
         winMsgOpen(2, 0x3BF2, 1, 1);
         if (menuSubOpenYesNo(0, 0x1C2, 0xC0, 0) == 0) {
-            u8 saved = menuSaveLoadWrite(report);
-            if (saved != 0) {
-                u32 savedMap = floorGetPreviousMap();
-                gamedatasaveSetStatus(0, SAVE_METADATA_MAP, savedMap);
+            if (ComfirmOverwriting()) {
+                s32 floorID = floorGetNextFloorID();
+                gamedatasaveSetStatus(0, 5, floorID);
                 memcardTaskCall(4, 2, 0);
             }
         }
         winMsgClose(1);
-        report->_menuClose(0x64);
+        _menuClose(0x64);
     } else {
         winMsgOpen(2, 0x3BE9, 1, 1);
         winMsgClose(1);
     }
 }
 
-// Write the current save block to the memory card slot and restore it, so the
-// report can ask whether the write went through. Returns whether the player
-// kept the save.
-extern "C" s32 menuSaveLoadWrite(menuSaveload *report)
+// Check for an existing save, then restore the live save data and play time.
+bool menuSaveload::ComfirmOverwriting()
 {
     s32 kept = 1;
     void *buffer = memcardMemAllocForSavedata();
 
-    memcpy(buffer, savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
+    memcpy(buffer, savedataGetStatus(0, 0), 0x27FD0);
     if (memcardTaskCall(3, 2, 0) == 3) {
-        if (gamedatasaveGetStatus(0, SAVE_METADATA_SAVE_COUNT) != 0) {
-            unsigned long backupTrainerId = heroGetStatus((Hero *)savedataGetStatus(buffer, TRAINER_DATA_HERO), HERO_STATUS_TRAINER_ID, 0);
-            if (backupTrainerId == heroGetStatus(0, HERO_STATUS_TRAINER_ID, 0) || gamedatasaveGetStatus(buffer, SAVE_METADATA_SAVE_COUNT) == 0) {
-                report->mPlaytime = pokecoloGetPlayTimeUnsigned();
-                report->SaveParameterSet();
+        if (gamedatasaveGetStatus(0, 4) != 0) {
+            u32 savedTrainerRnd = heroGetStatus((Hero *)savedataGetStatus(buffer, 2), HERO_STATUS_TRAINER_RND, 0);
+            if (savedTrainerRnd == heroGetStatus(0, HERO_STATUS_TRAINER_RND, 0) || gamedatasaveGetStatus(buffer, 4) == 0) {
+                mPlayTime = pokecoloGetPlayTimeValue();
+                SaveParameterSet();
                 winMsgOpen(2, 0x3BF3, 1, 1);
                 if (menuSubOpenYesNo(0, 0x1C2, 0xC0, 1) != 0) {
                     kept = 0;
                 } else {
                     kept = 1;
                 }
-                report->mPlaytime = pokecoloGetPlayTimeUnsigned() - report->mPlaytime;
+                mPlayTime = pokecoloGetPlayTimeValue() - mPlayTime;
             }
         }
     }
-    memcpy(savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), buffer, 0x27FD0);
-    pokecoloSetPlayTime((f64)(report->mPlaytime + pokecoloGetPlayTimeUnsigned()));
-    report->mPlaytime = 0;
+    memcpy(savedataGetStatus(0, 0), buffer, 0x27FD0);
+    pokecoloSetPlayTime((f64)(mPlayTime + pokecoloGetPlayTimeValue()));
+    mPlayTime = 0;
     memcardMemFreeForSavedata(buffer);
     return kept != 0;
 }
@@ -198,36 +187,36 @@ extern "C" s32 menuSaveLoadWrite(menuSaveload *report)
 // Fill the message printer values for a report-less save write.
 void _SaveParameterSet(void)
 {
-    unsigned long playtime = pokecoloGetPlayTimeUnsigned();
+    unsigned long playTime = pokecoloGetPlayTimeValue();
 
-    if (menuSaveLoadPlaytimeOverride != 0) {
-        playtime = menuSaveLoadPlaytimeOverride;
+    if (menuSaveLoadSaveTarget != 0) {
+        playTime = menuSaveLoadSaveTarget;
     }
-    msgctrlSetValue(MSG_VALUE_REPORT_PLAYTIME, playtime);
-    msgctrlSetValue(MSG_VALUE_REPORT_SNAGGED_POKEMON_COUNT, darkPokemonGetSnaggedCount());
-    msgctrlSetValue(MSG_VALUE_REPORT_MET_POKEMON_COUNT, darkPokemonGetMeetNum());
+    msgctrlSetValue(0x4C, playTime);
+    msgctrlSetValue(0x34, darkPokemonGetSnatchSuccessNum());
+    msgctrlSetValue(0x35, darkPokemonGetReliveNum());
 }
 
 // Fill the message printer values for the report's save write.
 void menuSaveload::SaveParameterSet()
 {
-    unsigned long playtime = pokecoloGetPlayTimeUnsigned();
+    unsigned long playTime = pokecoloGetPlayTimeValue();
 
-    if (mPlaytime != 0) {
-        playtime = mPlaytime;
+    if (mPlayTime != 0) {
+        playTime = mPlayTime;
     }
-    msgctrlSetValue(MSG_VALUE_REPORT_PLAYTIME, playtime);
-    msgctrlSetValue(MSG_VALUE_REPORT_SNAGGED_POKEMON_COUNT, darkPokemonGetSnaggedCount());
-    msgctrlSetValue(MSG_VALUE_REPORT_MET_POKEMON_COUNT, darkPokemonGetMeetNum());
+    msgctrlSetValue(0x4C, playTime);
+    msgctrlSetValue(0x34, darkPokemonGetSnatchSuccessNum());
+    msgctrlSetValue(0x35, darkPokemonGetReliveNum());
 }
 
-// Execution mode gates the report save-availability flag.
+// Saving is disabled for this ROM version and until the save flag is set.
 extern "C" s32 menuSaveLoadCanSave(void)
 {
     if (pokecoloGetRomVersion() == 1) {
         return 0;
     }
-    return flagGetBooleanValue(SAVE_AVAILABILITY_FLAG);
+    return GSflagTest(0x3DE);
 }
 
 // Window step control of the report menu: step 0 loads the save message,

@@ -64,7 +64,7 @@ void TRKGetInput(void)
 
 MessageBufferID TRKTestForPacket(void)
 {
-    int bufID;
+    MessageBufferID bufID;
     TRKBuffer *buf;
     MessageBufferID result;
     u8 packetBuf[kMessageHeaderSize];

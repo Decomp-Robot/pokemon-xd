@@ -138,10 +138,11 @@ u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
 // Read a scalar field, or one indexed element of a field, from a Pokemon record.
-s32 pokemonGetStatus(void *record, s32 speciesId, u16 field, u16 elementIndex);
+s32 pokemonGetStatus(void *record, u16 speciesId, u16 field, u16 elementIndex);
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
+DarkPokemon *pokemonGetDarkPokemonPtr(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);
 u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
@@ -161,6 +162,7 @@ void pokemonGetFriendFormPokemonFriendFilterId(Pokemon *pokemon, u16 heldEffectI
 // Removes and returns the held item when apply is zero; otherwise equips itemID.
 u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 apply);
 
+void pokemonAllKaihuku(Pokemon *pokemon);
 void pokemonInit(Pokemon *pokemon);
 void pokemonCreate(Pokemon *pokemon, u16 species, int level, void *attest);
 void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);
@@ -176,6 +178,25 @@ u16 pokemonGetOboeWazaDataId(Pokemon *pokemon, u8 level, u8 *outIndex);
 u8 pokemonGetSex(Pokemon *pokemon);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
+s32 pokemon_GetSeikaku(Pokemon *pokemon);
+s32 pokemonAdjustValueBySeikaku(s32 nature, s32 fieldID, s32 value);
+u32 pokemonCreateRndFit(Pokemon *pokemon, s8 sex, s8 nature, s8 rare, u32 trainerRnd);
+void *pokemonCreateSequence(struct FightPokemon *pokemon);
+void pokemonSetSequenceStatus(Pokemon *pokemon, void *sequence);
+
+u8 pokemonWazaCheckValid(Pokemon *pokemon, u16 slot);
+
+u8 pokemonWazaGetMaxPP(Pokemon *pokemon, u16 slot);
+
+void pokemonWazaReplace(Pokemon *pokemon, s32 prev, s32 slot);
+
+s32 pokemonGetLevelToExp(Pokemon *pokemon, u8 level);
+
+u8 pokemonGetDarkPokemonLevel(Pokemon *pokemon);
+
+u8 pokemonIsShinyFromPIDAndTID(Pokemon *pokemon);
+
+s32 pokemonGetBall(Pokemon *pokemon);
 #ifdef __cplusplus
 }
 #endif

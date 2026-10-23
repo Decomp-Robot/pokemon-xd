@@ -1,30 +1,26 @@
+#include <particleEngine.h>
+#include <peParticle.h>
 #include <peBankData.h>
 #include <HSDArchive.h>
 #include <dolphin/os/OSFastCast.h>
 
 extern "C" {
-void *memset(void *destination, int value, unsigned long size);
 u32 GSmemGetSize(void *allocation);
 void GSboundCreate(GSbound *bound, void *vertices);
 void GSboundFree(GSbound *bound);
-void GSboundAlwaysInView(GSbound *bound, s32 alwaysInView);
 s32 GSboundIsInViewFast(GSbound *bound);
 bool GSgfxTokenCleared(u16 token);
 void GSgfxTokenWaitForClear(u16 token);
-u8 GSgfxVideoGetVsyncRate();
 u16 shapeGenerateIndex();
 bool shapeLoad(u16 shape, void *data);
 u32 shapeGetUsedMemorySize(u16 shape);
 void shapeRelease(u16 shape);
 f32 HSD_Randf();
-bool particleEnginePrepareRender(_GScamera *camera);
-bool particleEnginePrepareUpdate(_GScamera *camera);
 }
 void GSboundDraw(GSbound *bound, GSgfxLayer *layer);
 
 extern "C" GStexture *GStextureLoad(void *data);
-
-extern GSmtx *peViewMatrix;
+extern "C" void GStextureFree(GStexture *texture);
 
 enum peBankStorage {
     PE_BANK_RENDER_PASS_SHIFT = 16,
@@ -33,23 +29,23 @@ enum peBankStorage {
     PE_BANK_PARTICLE_LIMIT = 1000,
 };
 
-_peBank *peCurrentBank;
-GSbound *peCurrentBound;
-u16 peCurrentRenderToken;
-_EmitParams *peEmitParams;
-u16 peEmitParamsCount;
-_peBank *peEmitParamsOwner;
+_peBank *g_currentBank;
+GSbound *g_currentBound;
+u16 g_bank_token;
+_EmitParams *g_emitParams;
+u16 g_maxEmitParams;
+_peBank *g_emitParamsBank;
 
 extern "C" bool peBankIsInfinite(_peBank *bank) {
     if (bank == 0) return false;
     if (!(bank->mFlags & PE_BANK_ACTIVE)) return false;
-    return bank->mRoot.mEmitter->mFlags & PE_EMITTER_LOOP;
+    return bank->mRoot.emitter->flags & PE_EMITTER_LOOP;
 }
 
 extern "C" f32 peBankGetLife(_peBank *bank) {
     if (bank == 0) return 0.0f;
     if (!(bank->mFlags & PE_BANK_ACTIVE)) return 0.0f;
-    return bank->mRoot.mRemainingLife;
+    return bank->mRoot.remainingLife;
 }
 
 extern "C" void peBankStopLoop(_peBank *bank) {
@@ -59,8 +55,8 @@ extern "C" void peBankStopLoop(_peBank *bank) {
 extern "C" void peBankStop(_peBank *bank) {
     if (bank == 0) return;
     if (!(bank->mFlags & PE_BANK_ACTIVE)) return;
-    peCurrentBank = bank;
-    peCurrentBound = bank->mFlags & PE_BANK_HAS_BOUND ? &bank->mBound : 0;
+    g_currentBank = bank;
+    g_currentBound = bank->mFlags & PE_BANK_HAS_BOUND ? &bank->mBound : 0;
     bank->mRoot.Stop(bank->mData->mEmitter);
     bank->mFlags = 0;
 }
@@ -75,23 +71,23 @@ extern "C" void peBankRender(_peBank *bank) {
     if (!(bank->mFlags & PE_BANK_ACTIVE)) return;
     if (!(bank->mFlags & PE_BANK_VISIBLE)) return;
     if (!(bank->mFlags & PE_BANK_IN_VIEW)) return;
-    layerMask = 1 << peGetLayerID(peCurrentLayer);
-    if (peCurrentPass == GSGFX_LAYER_PASS_XLU) layerMask <<= PE_BANK_RENDER_PASS_SHIFT;
+    layerMask = 1 << peGetLayerID(g_current_layer);
+    if (g_render_pass == GSGFX_LAYER_PASS_XLU) layerMask <<= PE_BANK_RENDER_PASS_SHIFT;
     if (bank->mRenderedLayers & layerMask) return;
-    peCurrentBank = bank;
-    peCurrentBound = bank->mFlags & PE_BANK_HAS_BOUND ? &bank->mBound : 0;
+    g_currentBank = bank;
+    g_currentBound = bank->mFlags & PE_BANK_HAS_BOUND ? &bank->mBound : 0;
     if (!particleEnginePrepareRender(bank->mCamera)) return;
     bank->mRenderedLayers |= layerMask;
-    peCurrentLayer->mMatrixStack->push(peViewMatrix);
-    peCurrentRenderToken = 0;
+    g_current_layer->mMatrixStack->push(g_CameraMatrix);
+    g_bank_token = 0;
     bank->mRoot.Render(bank->mData->mEmitter);
-    if (peCurrentRenderToken) bank->mRenderToken = peCurrentRenderToken;
+    if (g_bank_token) bank->mRenderToken = g_bank_token;
     if ((bank->mFlags & PE_BANK_HAS_BOUND) &&
-        (bank->mFlags & PE_BANK_DRAW_BOUND) && peCurrentLayer->mLayerID == PE_BANK_BOUND_DRAW_LAYER &&
-        peCurrentPass == GSGFX_LAYER_PASS_XLU) {
-        GSboundDraw(&bank->mBound, peCurrentLayer);
+        (bank->mFlags & PE_BANK_DRAW_BOUND) && g_current_layer->mLayerID == PE_BANK_BOUND_DRAW_LAYER &&
+        g_render_pass == GSGFX_LAYER_PASS_XLU) {
+        GSboundDraw(&bank->mBound, g_current_layer);
     }
-    peCurrentLayer->mMatrixStack->pop();
+    g_current_layer->mMatrixStack->pop();
 }
 
 extern "C" void peBankUpdate(_peBank *bank, f32 delta) {
@@ -100,18 +96,18 @@ extern "C" void peBankUpdate(_peBank *bank, f32 delta) {
     if (bank->mFlags & PE_BANK_PAUSED) return;
     if (bank->mRenderToken && GSgfxTokenCleared(bank->mRenderToken)) bank->mRenderToken = 0;
     if (!particleEnginePrepareUpdate(bank->mCamera)) return;
-    peCurrentBank = bank;
+    g_currentBank = bank;
     if (bank->mFlags & PE_BANK_HAS_BOUND) {
-        peCurrentBound = &bank->mBound;
-        GSboundReset(peCurrentBound);
-        GSboundAlwaysInView(peCurrentBound, 0);
+        g_currentBound = &bank->mBound;
+        GSboundReset(g_currentBound);
+        GSboundAlwaysInView(g_currentBound, 0);
     } else {
-        peCurrentBound = 0;
+        g_currentBound = 0;
     }
     if ((f32)bank->mRoot.Update(0, bank->mData->mEmitter, delta) <= 0.0f) {
         bank->mRoot.Stop(bank->mData->mEmitter);
         bank->mFlags = 0;
-    } else if (!peCurrentBound || GSboundIsInViewFast(peCurrentBound)) {
+    } else if (!g_currentBound || GSboundIsInViewFast(g_currentBound)) {
         bank->mFlags |= PE_BANK_IN_VIEW;
     } else {
         bank->mFlags &= ~PE_BANK_IN_VIEW;
@@ -121,17 +117,17 @@ extern "C" void peBankUpdate(_peBank *bank, f32 delta) {
 extern "C" bool peBankStart(_peBank *bank) {
     static _EmitParams params;
     if (bank == 0) return false;
-    params.mLife = 1.0f;
+    params.life = 1.0f;
     peBankStop(bank);
-    peCurrentBank = bank;
-    peCurrentBound = 0;
+    g_currentBank = bank;
+    g_currentBound = 0;
     _peEmitter *emitter = bank->mData->mEmitter;
     bank->mFlags = PE_BANK_ACTIVE | PE_BANK_VISIBLE;
-    if (emitter->mFlags & PE_EMITTER_USE_BOUND) {
+    if (emitter->flags & PE_EMITTER_USE_BOUND) {
         bank->mFlags |= PE_BANK_HAS_BOUND;
-        peCurrentBound = &bank->mBound;
-        GSboundReset(peCurrentBound);
-        GSboundAlwaysInView(peCurrentBound, 0);
+        g_currentBound = &bank->mBound;
+        GSboundReset(g_currentBound);
+        GSboundAlwaysInView(g_currentBound, 0);
     }
     bank->mRoot.Start(0, bank->mData->mEmitter, &params);
     bank->mRenderToken = 0;
@@ -148,40 +144,40 @@ extern "C" void peBankFree(_peBank *bank) {
     bank->mRoot.Release();
     bank->mFile->mBankCount--;
     GSboundFree(&bank->mBound);
-    if (bank && peEmitParamsCount && bank == peEmitParamsOwner) {
-        g_particle_debug_stats.mTotal -= g_particle_debug_stats.mEmitParams;
-        g_particle_debug_stats.mEmitParams = 0;
-        delete[] peEmitParams;
-        peEmitParams = 0;
-        peEmitParamsOwner = 0;
-        peEmitParamsCount = 0;
-        for (_peBank *item = peBanks; item; item = item->mNext) {
+    if (bank && g_maxEmitParams && bank == g_emitParamsBank) {
+        g_particle_debug_stats.totalBytes -= g_particle_debug_stats.emitParameterBytes;
+        g_particle_debug_stats.emitParameterBytes = 0;
+        delete[] g_emitParams;
+        g_emitParams = 0;
+        g_emitParamsBank = 0;
+        g_maxEmitParams = 0;
+        for (_peBank *item = g_particleBanks; item; item = item->mNext) {
             if (item == bank) continue;
             u16 maximum = item->mMaxParticles;
-            if (maximum > peEmitParamsCount) {
-                peEmitParamsCount = (maximum + PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1) & ~(PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1);
-                peEmitParamsOwner = item;
+            if (maximum > g_maxEmitParams) {
+                g_maxEmitParams = (maximum + PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1) & ~(PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1);
+                g_emitParamsBank = item;
             }
         }
-        if (peEmitParamsCount) {
-            peEmitParams = new _EmitParams[peEmitParamsCount];
-            g_particle_debug_stats.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
-            g_particle_debug_stats.mTotal += peEmitParamsCount * sizeof(_EmitParams);
+        if (g_maxEmitParams) {
+            g_emitParams = new _EmitParams[g_maxEmitParams];
+            g_particle_debug_stats.emitParameterBytes += g_maxEmitParams * sizeof(_EmitParams);
+            g_particle_debug_stats.totalBytes += g_maxEmitParams * sizeof(_EmitParams);
         }
     }
     _peBank *previous = 0;
-    _peBank *item = peBanks;
+    _peBank *item = g_particleBanks;
     while (item) {
         if (item == bank) break;
         previous = item;
         item = item->mNext;
     }
     if (previous) previous->mNext = item->mNext;
-    else peBanks = item->mNext;
+    else g_particleBanks = item->mNext;
     item->mNext = 0;
     u32 size = GSmemGetSize(bank);
-    g_particle_debug_stats.mBankData -= size;
-    g_particle_debug_stats.mTotal -= size;
+    g_particle_debug_stats.containerBytes -= size;
+    g_particle_debug_stats.totalBytes -= size;
     if (bank) delete bank;
 }
 
@@ -193,8 +189,8 @@ extern "C" _peBank *peBankCreate(void *fileData) {
     _peBank *bank = new _peBank;
     if (bank == 0) return 0;
     u32 size = GSmemGetSize(bank);
-    g_particle_debug_stats.mBankData += size;
-    g_particle_debug_stats.mTotal += size;
+    g_particle_debug_stats.containerBytes += size;
+    g_particle_debug_stats.totalBytes += size;
     GSboundCreate(&bank->mBound, 0);
     char *bankData = (char *)(file + 1);
     bankData += file->mResourceCount * sizeof(_gpdResourceItem);
@@ -203,42 +199,42 @@ extern "C" _peBank *peBankCreate(void *fileData) {
     file->mBankCount++;
     memset(&bank->mRoot, 0, sizeof(peEmitterNode));
     bank->mData = data;
-    bank->mPosition.x = 0.0f;
-    bank->mPosition.y = 0.0f;
-    bank->mPosition.z = 0.0f;
-    bank->mRotation[0] = 0.0f;
-    bank->mRotation[1] = 0.0f;
-    bank->mRotation[2] = 0.0f;
-    bank->mRotation[3] = 1.0f;
-    bank->mScale.x = 1.0f;
-    bank->mScale.y = 1.0f;
-    bank->mScale.z = 1.0f;
+    bank->transform.position.x = 0.0f;
+    bank->transform.position.y = 0.0f;
+    bank->transform.position.z = 0.0f;
+    bank->transform.rotation[0] = 0.0f;
+    bank->transform.rotation[1] = 0.0f;
+    bank->transform.rotation[2] = 0.0f;
+    bank->transform.rotation[3] = 1.0f;
+    bank->transform.scale.x = 1.0f;
+    bank->transform.scale.y = 1.0f;
+    bank->transform.scale.z = 1.0f;
     bank->mFlags = 0;
     bank->mRenderedLayers = 0;
     bank->mRenderToken = 0;
     bank->mCamera = 0;
-    _peBank *item = peBanks;
+    _peBank *item = g_particleBanks;
     if (item) {
         while (item->mNext) item = item->mNext;
         item->mNext = bank;
-    } else peBanks = bank;
+    } else g_particleBanks = bank;
     bank->mNext = 0;
-    peCurrentBank = bank;
-    bank->mRoot.mTransform = (peSRT *)&bank->mPosition;
+    g_currentBank = bank;
+    bank->mRoot.transform = &bank->transform;
     bank->mRoot.Init(data->mEmitter);
     bank->mMaxParticles = _peBankCalculateMaxParticles(data, 4.0f / GSgfxVideoGetVsyncRate());
-    if (bank && bank->mMaxParticles > peEmitParamsCount) {
-        if (peEmitParams) {
-            g_particle_debug_stats.mTotal -= g_particle_debug_stats.mEmitParams;
-            g_particle_debug_stats.mEmitParams = 0;
-            delete[] peEmitParams;
+    if (bank && bank->mMaxParticles > g_maxEmitParams) {
+        if (g_emitParams) {
+            g_particle_debug_stats.totalBytes -= g_particle_debug_stats.emitParameterBytes;
+            g_particle_debug_stats.emitParameterBytes = 0;
+            delete[] g_emitParams;
         }
         u16 maximum = bank->mMaxParticles;
-        peEmitParamsCount = ((maximum + PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1) / PE_BANK_EMIT_PARAM_BLOCK_SIZE) * PE_BANK_EMIT_PARAM_BLOCK_SIZE;
-        peEmitParamsOwner = bank;
-        peEmitParams = new _EmitParams[peEmitParamsCount];
-        g_particle_debug_stats.mEmitParams += peEmitParamsCount * sizeof(_EmitParams);
-        g_particle_debug_stats.mTotal += peEmitParamsCount * sizeof(_EmitParams);
+        g_maxEmitParams = ((maximum + PE_BANK_EMIT_PARAM_BLOCK_SIZE - 1) / PE_BANK_EMIT_PARAM_BLOCK_SIZE) * PE_BANK_EMIT_PARAM_BLOCK_SIZE;
+        g_emitParamsBank = bank;
+        g_emitParams = new _EmitParams[g_maxEmitParams];
+        g_particle_debug_stats.emitParameterBytes += g_maxEmitParams * sizeof(_EmitParams);
+        g_particle_debug_stats.totalBytes += g_maxEmitParams * sizeof(_EmitParams);
     }
     return bank;
 }
@@ -270,8 +266,8 @@ extern "C" void peBankFreeFile(void *fileData) {
             case GPD_RESOURCE_SHAPE:
                 shape = resource->mShapeHandle - 1;
                 size = shapeGetUsedMemorySize(shape);
-                g_particle_debug_stats.mShapes -= size;
-                g_particle_debug_stats.mTotal -= size;
+                g_particle_debug_stats.shapeBytes -= size;
+                g_particle_debug_stats.totalBytes -= size;
                 shapeRelease(shape);
                 break;
             case GPD_RESOURCE_TEXTURE_LIST:
@@ -365,14 +361,14 @@ releaseLights:
     {
         _peLight *light = (_peLight *)contents;
         if (light->mDiffuseLight) {
-            g_particle_debug_stats.mBankData -= sizeof(GSgfxLight);
-            g_particle_debug_stats.mTotal -= sizeof(GSgfxLight);
+            g_particle_debug_stats.containerBytes -= sizeof(GSgfxLight);
+            g_particle_debug_stats.totalBytes -= sizeof(GSgfxLight);
             delete light->mDiffuseLight;
             light->mDiffuseLight = 0;
         }
         if (light->mSpecularLight) {
-            g_particle_debug_stats.mBankData -= sizeof(GSgfxLight);
-            g_particle_debug_stats.mTotal -= sizeof(GSgfxLight);
+            g_particle_debug_stats.containerBytes -= sizeof(GSgfxLight);
+            g_particle_debug_stats.totalBytes -= sizeof(GSgfxLight);
             delete light->mSpecularLight;
             light->mSpecularLight = 0;
         }
@@ -441,8 +437,8 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             if (shape) {
                 if (shapeLoad(shape - 1, resource->mData)) {
                     u32 size = shapeGetUsedMemorySize(shape - 1);
-                    g_particle_debug_stats.mShapes += size;
-                    g_particle_debug_stats.mTotal += size;
+                    g_particle_debug_stats.shapeBytes += size;
+                    g_particle_debug_stats.totalBytes += size;
                     resource->mLoadFlags |= GPD_RESOURCE_LOADED;
                 } else shape = 0;
             }
@@ -470,9 +466,9 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             emitter->mParticleCountSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mParticleCountSpline, base);
             emitter->mColorSpline = (peColorSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mColorSpline, base);
             emitter->mAlphaSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mAlphaSpline, base);
-            emitter->mAccelerationSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mAccelerationSplines[0], base);
-            emitter->mAccelerationSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mAccelerationSplines[1], base);
-            emitter->mAccelerationSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mAccelerationSplines[2], base);
+            emitter->mForceSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mForceSplines[0], base);
+            emitter->mForceSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mForceSplines[1], base);
+            emitter->mForceSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mForceSplines[2], base);
             emitter->mPositionSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mPositionSplines[0], base);
             emitter->mPositionSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mPositionSplines[1], base);
             emitter->mPositionSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(emitter->mPositionSplines[2], base);
@@ -658,15 +654,15 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             if (light->mFlags & PE_LIGHT_DIFFUSE) {
                 GSgfxLight *diffuse = new GSgfxLight;
                 if (diffuse) {
-                    g_particle_debug_stats.mBankData += sizeof(GSgfxLight);
-                    g_particle_debug_stats.mTotal += sizeof(GSgfxLight);
+                    g_particle_debug_stats.containerBytes += sizeof(GSgfxLight);
+                    g_particle_debug_stats.totalBytes += sizeof(GSgfxLight);
                     diffuse->MakeDiff(&light->mColor, &zeroVector, false);
                     light->mDiffuseLight = diffuse;
                     if (light->mFlags & PE_LIGHT_SPECULAR) {
                         GSgfxLight *specular = new GSgfxLight;
                         if (specular) {
-                            g_particle_debug_stats.mBankData += sizeof(GSgfxLight);
-                            g_particle_debug_stats.mTotal += sizeof(GSgfxLight);
+                            g_particle_debug_stats.containerBytes += sizeof(GSgfxLight);
+                            g_particle_debug_stats.totalBytes += sizeof(GSgfxLight);
                             specular->MakeSpec(&light->mColor, &zAxisVector, light->mShininess, 0);
                             light->mSpecularLight = specular;
                         } else light->mFlags &= ~PE_LIGHT_SPECULAR;

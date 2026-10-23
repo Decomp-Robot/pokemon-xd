@@ -1,4 +1,5 @@
-#include <peParticleContainer.h>
+#include <particleEngine.h>
+#include <peParticle.h>
 #include <dolphin/os/OSFastCast.h>
 
 extern GSgfxVF g_vertex_format;
@@ -6,11 +7,6 @@ extern GSgfxVF g_ext_vertex_format;
 
 extern "C" {
 void DCFlushRange(void *data, u32 size);
-void peSetLayerVisibility(GSgfxLayerID layer, bool visible);
-void particleEngineSetupBlendMode(u32 mode);
-void particleEngineSetupTevStages(u32 textureCount, bool extended, bool modulate);
-void particleEngineSetupTexture(u32 slot, GStexture *texture, u32 wrapS, u32 wrapT,
-                                u32 minFilter, u32 magFilter);
 }
 
 enum peVertexArrayAttribute {
@@ -24,14 +20,14 @@ enum peVertexArrayAttribute {
 
 inline bool peParticleContainer::RenderForLayer()
 {
-    if (!mStarted)
+    if (!started)
         return false;
-    if (!mNodeCount)
+    if (!nodeCount)
         return false;
-    if (peCurrentPass != GSGFX_LAYER_PASS_XLU)
+    if (g_render_pass != GSGFX_LAYER_PASS_XLU)
         return false;
     u32 flags = mParticle->mFlags;
-    switch (peCurrentLayer->mLayerID) {
+    switch (g_current_layer->mLayerID) {
     case 0:
         if (flags & PE_PARTICLE_LAYER_0)
             return true;
@@ -92,15 +88,15 @@ inline void peParticleNode::SetDisplayIndex(GSgfxDL *displayList, u16 displayInd
 
 void peParticleContainer::DepthSort()
 {
-    if (mStarted && (mParticle->mFlags & PE_PARTICLE_DEPTH_SORT) &&
-        mNodeCount >= 2 && mSortedNodes) {
+    if (started && (mParticle->mFlags & PE_PARTICLE_DEPTH_SORT) &&
+        nodeCount >= 2 && mSortedNodes) {
         peParticleNode *node;
         int index;
         int position;
         bool changed;
         int previous;
         changed = false;
-        for (index = 1; index < mMaxNodes; ++index) {
+        for (index = 1; index < capacity; ++index) {
             node = mSortedNodes[index];
             if (!node->mActive)
                 continue;
@@ -124,32 +120,32 @@ void peParticleContainer::DepthSort()
         displayList = &mDisplayLists[mBufferIndex];
         extended = (flags & PE_PARTICLE_DUAL_COLOR) != 0;
         u16 renderFloats = PE_PARTICLE_RENDER_WORDS + (extended != 0);
-        for (index = 0; index < mMaxNodes; ++index) {
+        for (index = 0; index < capacity; ++index) {
             peParticleNode *node = mSortedNodes[index];
             if (!node->mActive || node->mDisplayIndex == (u16)index)
                 continue;
             node->SetDisplayIndex(displayList, index, renderFloats, extended);
         }
         displayList->Invalidate();
-        mChanged = true;
+        this->changed = true;
     }
 }
 
 void peParticleContainer::Stop()
 {
-    if (!mStarted)
+    if (!started)
         return;
     PreUpdate();
-    mStarted = false;
+    started = false;
     u32 flags = mParticle->mFlags;
     if (flags & PE_PARTICLE_LAYER_1)
-        peSetLayerVisibility((GSgfxLayerID)1, false);
+        SetLayerVisibility((GSgfxLayerID)1, false);
     if (flags & PE_PARTICLE_LAYER_3)
-        peSetLayerVisibility((GSgfxLayerID)3, false);
+        SetLayerVisibility((GSgfxLayerID)3, false);
     if (flags & PE_PARTICLE_LAYER_5)
-        peSetLayerVisibility((GSgfxLayerID)5, false);
-    for (peParticleNode *node = (peParticleNode *)mNodes; node;
-         node = (peParticleNode *)node->mNext)
+        SetLayerVisibility((GSgfxLayerID)5, false);
+    for (peParticleNode *node = (peParticleNode *)nodes; node;
+         node = (peParticleNode *)node->next)
         node->Stop(mParticle, &mDisplayLists[mBufferIndex]);
     RemoveAll();
     StopSwap();
@@ -157,7 +153,7 @@ void peParticleContainer::Stop()
 
 void peParticleContainer::Render()
 {
-    if (!mStarted)
+    if (!started)
         return;
     if (!RenderForLayer())
         return;
@@ -165,9 +161,9 @@ void peParticleContainer::Render()
     u32 flags = mParticle->mFlags;
     bool extended = (flags & PE_PARTICLE_DUAL_COLOR) != 0;
     if (flags & PE_PARTICLE_CULL_BACK)
-        ((GSgfxLayer *)peCurrentLayer)->cullMode(GSGFX_CULL_BACK);
+        g_current_layer->cullMode(GSGFX_CULL_BACK);
     else
-        ((GSgfxLayer *)peCurrentLayer)->cullMode(GSGFX_CULL_NONE);
+        g_current_layer->cullMode(GSGFX_CULL_NONE);
     particleEngineSetupBlendMode(flags & PE_PARTICLE_BLEND_MASK);
     char *renderData = mRenderData[mBufferIndex];
     GSgfxVF *format = mDisplayLists[mBufferIndex].VertexFormat();
@@ -184,10 +180,10 @@ void peParticleContainer::Render()
     if (flags & PE_PARTICLE_TEXTURE_ANIMATION) {
         particleEngineSetupTevStages(0, extended,
                                     (flags & PE_PARTICLE_TEV_MASK) == PE_PARTICLE_TEV_MASK);
-        peCurrentLayer->mPrimitiveType = GSGFX_QUADS;
-        ((GSgfxLayer *)peCurrentLayer)->mVertexFormat = format;
-        for (peParticleNode *node = (peParticleNode *)mNodes; node;
-             node = (peParticleNode *)node->mNext)
+        g_current_layer->mPrimitiveType = GSGFX_QUADS;
+        g_current_layer->mVertexFormat = format;
+        for (peParticleNode *node = (peParticleNode *)nodes; node;
+             node = (peParticleNode *)node->next)
             node->Render(mParticle, &mDisplayLists[mBufferIndex], mRenderData[mBufferIndex]);
     } else {
         particleEngineSetupTevStages(0, extended, false);
@@ -200,20 +196,20 @@ void peParticleContainer::Render()
         particleEngineSetupTexture(0, texture, wrapS, wrapT,
                                    flags & PE_PARTICLE_MIN_LINEAR ? PE_TEXTURE_LINEAR : PE_TEXTURE_NEAREST,
                                    magFilter);
-        ((GSgfxLayer *)peCurrentLayer)->dlDraw(&mDisplayLists[mBufferIndex]);
+        g_current_layer->dlDraw(&mDisplayLists[mBufferIndex]);
     }
     MarkForSwap();
 }
 
 void peParticleContainer::Update(f32 delta)
 {
-    if (!mStarted)
+    if (!started)
         return;
-    peParticleNode *node = (peParticleNode *)mNodes;
+    peParticleNode *node = (peParticleNode *)nodes;
     peParticleNode *next;
     for (; node; node = next) {
-        next = (peParticleNode *)node->mNext;
-        if (!node->Update(mParent, mParticle, mRenderData[mBufferIndex], delta)) {
+        next = (peParticleNode *)node->next;
+        if (!node->Update(emitter, mParticle, mRenderData[mBufferIndex], delta)) {
             node->Stop(mParticle, &mDisplayLists[mBufferIndex]);
             RemoveNode(node);
         }
@@ -223,16 +219,16 @@ void peParticleContainer::Update(f32 delta)
 
 u16 peParticleContainer::Emit(u16 count)
 {
-    if (!mStarted)
+    if (!started)
         return 0;
     u16 remaining = CreateNodes(count);
-    _EmitParams *params = peEmitParams;
+    _EmitParams *params = g_emitParams;
     peParticleNode *next;
     u16 emitted = remaining;
-    peParticleNode *node = (peParticleNode *)mNodes;
+    peParticleNode *node = (peParticleNode *)nodes;
     for (; remaining; --remaining, ++params) {
-        next = (peParticleNode *)node->mNext;
-        node->Start(mParent, mParticle, &mDisplayLists[mBufferIndex], params);
+        next = (peParticleNode *)node->next;
+        node->Start(emitter, mParticle, &mDisplayLists[mBufferIndex], params);
         node = next;
     }
     return emitted;
@@ -240,25 +236,25 @@ u16 peParticleContainer::Emit(u16 count)
 
 void peParticleContainer::Start()
 {
-    if (mStarted)
+    if (started)
         return;
-    mStarted = true;
+    started = true;
     u32 flags = mParticle->mFlags;
     InitSwap();
     if (flags & PE_PARTICLE_LAYER_1)
-        peSetLayerVisibility((GSgfxLayerID)1, true);
+        SetLayerVisibility((GSgfxLayerID)1, true);
     if (flags & PE_PARTICLE_LAYER_3)
-        peSetLayerVisibility((GSgfxLayerID)3, true);
+        SetLayerVisibility((GSgfxLayerID)3, true);
     if (flags & PE_PARTICLE_LAYER_5)
-        peSetLayerVisibility((GSgfxLayerID)5, true);
+        SetLayerVisibility((GSgfxLayerID)5, true);
 }
 
 peParticleContainer::~peParticleContainer()
 {
     if (mSortedNodes)
         delete[] mSortedNodes;
-    g_particle_debug_stats.mBankData -= sizeof(*this);
-    g_particle_debug_stats.mTotal -= sizeof(*this);
+    g_particle_debug_stats.containerBytes -= sizeof(*this);
+    g_particle_debug_stats.totalBytes -= sizeof(*this);
 }
 
 peParticleContainer::peParticleContainer(peEmitterNode *parent, _peParticle *particle,
@@ -301,16 +297,16 @@ peParticleContainer::peParticleContainer(peEmitterNode *parent, _peParticle *par
     DCFlushRange(texCoords, sizeof(mTexCoords));
     if (mParticle->mFlags & PE_PARTICLE_DEPTH_SORT)
         mSortedNodes = new peParticleNode *[maxNodes];
-    peParticleNode *node = (peParticleNode *)mFreeNodes;
+    peParticleNode *node = (peParticleNode *)freeNodes;
     u16 index = 0;
-    for (; node; node = (peParticleNode *)node->mNext, ++index) {
+    for (; node; node = (peParticleNode *)node->next, ++index) {
         node->mRenderIndex = index;
         node->mDisplayIndex = index;
         if (mSortedNodes)
             mSortedNodes[index] = node;
     }
-    g_particle_debug_stats.mBankData += sizeof(*this);
-    g_particle_debug_stats.mTotal += sizeof(*this);
+    g_particle_debug_stats.containerBytes += sizeof(*this);
+    g_particle_debug_stats.totalBytes += sizeof(*this);
 }
 
 #include <peNodeMath.h>
@@ -322,41 +318,18 @@ void EulerToQuat(const GSvec *, f32 *);
 f32 HSD_Randf();
 double fmod(double, double);
 double atan2(double, double);
-void GSgfxRenderDrawEnd(GSgfxLayer *);
-void particleEngineSetupTexture(u32, GStexture *, u32, u32, u32, u32);
 }
 
 extern GSvec xAxisVector, yAxisVector, zAxisVector;
 extern GSvec g_CameraPosition, g_CameraLookDir, g_CameraUpDir, g_CameraSideDir;
-struct peColor {
-    u8 r, g, b, a;
-    peColor &operator=(const u32 &packed) {
-        const u8 *components = (const u8 *)&packed;
-        r = components[0]; g = components[1];
-        b = components[2]; a = components[3];
-        return *this;
-    }
-};
-extern "C" void peColorSplineGetValue(peColor *, peColorSpline *, f32);
 
 static inline f32 Unsigned8ToFloat(u8 value) { f32 result; OSu8tof32(&value, &result); return result; }
 static inline f32 Unsigned16ToFloat(u16 value) { f32 result; OSu16tof32(&value, &result); return result; }
 static inline u8 FloatToUnsigned8(f32 value) { u8 result; OSf32tou8(&value, &result); return result; }
 static inline u16 FloatToUnsigned16(f32 value) { u16 result; OSf32tou16(&value, &result); return result; }
 
-static inline const peEmitterRenderParameters &RenderParameters(peEmitterNode *node) {
-    return *(const peEmitterRenderParameters *)node->mEmitterState;
-}
-static inline void SetLayerKonstColor(GSgfxLayer *layer, peColor color, u32 slot)
-{
-    layer->mKonstColors[slot] = *(u32 *)&color;
-    layer->mTevKonstColorsDirtyA |= 1 << slot;
-    layer->mDirtyStateA |= PE_PASS_KONST_COLORS_CHANGED;
-    layer->mTevKonstColorsDirtyB |= 1 << slot;
-    layer->mDirtyStateB |= PE_PASS_KONST_COLORS_CHANGED;
-}
-static inline void SetBlendColor(peColor color, u32 slot) {
-    SetLayerKonstColor(peCurrentLayer, color, slot);
+static inline void SetBlendColor(GScolor color, u8 slot) {
+    g_current_layer->tunitKColor(slot, color);
 }
 static inline peTextureFilter MinimumFilter(u32 flags)
 {
@@ -395,30 +368,34 @@ void peParticleNode::Render(_peParticle *particle, GSgfxDL *displayList,
         if (interpolate) frames = count - 1.0f;
         f32 phase;
         if (flags & PE_PARTICLE_TEXTURE_TIME_SECONDS)
-            phase = frames * (mLife - mRemainingLife) / particle->mTextureAnimationRate;
+            phase = frames * (life - remainingLife) / particle->mTextureAnimationRate;
         else
-            phase = particle->mTextureAnimationRate * (frames * (1.0f - mRemainingLife / mLife));
+            phase = particle->mTextureAnimationRate * (frames * (1.0f - remainingLife / life));
         frame = fmod(phase + Unsigned16ToFloat(textureIndex), frames);
         textureIndex = FloatToUnsigned16(frame) % (u16)textures->mCount;
         if (interpolate) {
             f32 textureFraction = frame;
             textureFraction -= Unsigned16ToFloat(textureIndex);
             fraction = 255.0f * textureFraction;
-            peColor blend;
-            blend.r = blend.g = blend.b = blend.a = FloatToUnsigned8(fraction);
+            GScolor blend;
+            blend.channels.r = blend.channels.g = blend.channels.b = blend.channels.a = FloatToUnsigned8(fraction);
             SetBlendColor(blend, 0);
             if (extended) {
                 peParticleDualColorRenderData *data = (peParticleDualColorRenderData *)renderData;
                 data += mRenderIndex;
                 u32 packed = data->mSecondColor;
-                blend = packed;
+                const u8 *components = (const u8 *)&packed;
+                blend.channels.r = components[0];
+                blend.channels.g = components[1];
+                blend.channels.b = components[2];
+                blend.channels.a = components[3];
                 SetBlendColor(blend, 1);
             }
             SetupTexture(1, textures->mTextures[textureIndex + 1], flags);
         }
     }
     SetupTexture(0, textures->mTextures[textureIndex], flags);
-    peCurrentLayer->beginSurface(PE_PARTICLE_CORNERS);
+    g_current_layer->beginSurface(PE_PARTICLE_CORNERS);
     u16 *indices = (u16 *)displayList->VertexData(mDisplayIndex * PE_PARTICLE_CORNERS);
     u16 corners = PE_PARTICLE_CORNERS;
     register volatile PPCWGPipe *fifo = &GXWGFifo;
@@ -428,7 +405,7 @@ void peParticleNode::Render(_peParticle *particle, GSgfxDL *displayList,
         if (extended) fifo->u16 = *indices++;
         fifo->u16 = *indices++;
     }
-    GSgfxRenderDrawEnd(peCurrentLayer);
+    g_current_layer->endSurface();
 }
 
 void peParticleNode::Start(peEmitterNode *parent, _peParticle *particle,
@@ -479,18 +456,18 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
 {
     u32 flags = particle->mFlags;
     bool extended = (flags & PE_PARTICLE_DUAL_COLOR) != 0;
-    GSvec normal, vertical, horizontal, pivot, corner, position;
+    GSvec normal, vertical, horizontal, pivot, corner, worldPosition;
     peQuaternion rotation, orientation;
     GSvec euler;
     peQuaternion inverse, verticalInverse;
     GSvec offset, viewOffset;
     f32 angle;
-    position = Product(mPosition, mTransform->mScale);
-    Rotate(position, mTransform->mRotation);
-    position += mTransform->mPosition;
+    worldPosition = Product(position, transform->scale);
+    Rotate(worldPosition, transform->rotation);
+    worldPosition += transform->position;
     if (flags & PE_PARTICLE_BILLBOARD) {
         if (flags & PE_PARTICLE_CAMERA_FACING) {
-            horizontal = g_CameraPosition - position;
+            horizontal = g_CameraPosition - worldPosition;
             PSVECNormalize(SDKVector(&horizontal), SDKVector(&horizontal));
             normal = Cross(horizontal, g_CameraUpDir);
             PSVECNormalize(SDKVector(&normal), SDKVector(&normal));
@@ -515,9 +492,9 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
         PSQUATMultiply(SDKQuaternion(&orientation.x), SDKQuaternion(&rotation.x), SDKQuaternion(&orientation.x));
         normal = Rotated(xAxisVector, &orientation.x);
         vertical = Rotated(yAxisVector, &orientation.x);
-        if (parent->mEmitter->mFlags & PE_EMITTER_ALIGN_VELOCITY) {
-            GSvec velocity = mVelocity;
-            f32 vx = velocity.x, vz = velocity.z, vy = velocity.y;
+        if (parent->emitter->flags & PE_EMITTER_ALIGN_TO_VELOCITY) {
+            GSvec localVelocity = velocity;
+            f32 vx = localVelocity.x, vz = localVelocity.z, vy = localVelocity.y;
             euler.x = atan2(-vy, sqrtf(vx * vx + vz * vz));
             euler.y = atan2(vx, vz);
             euler.z = 0.0f;
@@ -525,8 +502,8 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
             Rotate(normal, &rotation.x);
             Rotate(vertical, &rotation.x);
         }
-        Rotate(normal, mTransform->mRotation);
-        Rotate(vertical, mTransform->mRotation);
+        Rotate(normal, transform->rotation);
+        Rotate(vertical, transform->rotation);
         angle = 0.0f;
     }
     horizontal = Cross(vertical, normal);
@@ -540,15 +517,15 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
         Rotate(vertical, &rotation.x);
         Rotate(normal, &rotation.x);
     }
-    inverse = Inverse(mTransform->mRotation);
+    inverse = Inverse(transform->rotation);
     corner = Rotated(normal, &inverse.x);
-    ApplyScale(corner, mTransform->mScale);
-    Rotate(corner, mTransform->mRotation);
+    ApplyScale(corner, transform->scale);
+    Rotate(corner, transform->rotation);
     normal *= PSVECDotProduct(SDKVector(&normal), SDKVector(&corner));
-    verticalInverse = Inverse(mTransform->mRotation);
+    verticalInverse = Inverse(transform->rotation);
     corner = Rotated(vertical, &verticalInverse.x);
-    ApplyScale(corner, mTransform->mScale);
-    Rotate(corner, mTransform->mRotation);
+    ApplyScale(corner, transform->scale);
+    Rotate(corner, transform->rotation);
     vertical *= PSVECDotProduct(SDKVector(&vertical), SDKVector(&corner));
     normal *= mWidth * SplineValue(particle->mWidthSpline, time);
     vertical *= mHeight * SplineValue(particle->mHeightSpline, time);
@@ -568,37 +545,37 @@ void peParticleNode::UpdateRenderData(peEmitterNode *parent, _peParticle *partic
         data = &((peParticleDualColorRenderData *)renderData)[mRenderIndex];
     else
         data = &((peParticleRenderData *)renderData)[mRenderIndex];
-    mDepth = Dot(g_CameraLookDir, position - g_CameraPosition);
+    mDepth = Dot(g_CameraLookDir, worldPosition - g_CameraPosition);
     corner = -normal;
     corner -= vertical;
     if (offsetPivot) corner += pivot;
-    corner += position;
+    corner += worldPosition;
     data->mCorners[0] = corner;
-    if (peCurrentBound) GSboundAddPoint(peCurrentBound, corner.x, corner.y, corner.z);
+    if (g_currentBound) GSboundAddPoint(g_currentBound, corner.x, corner.y, corner.z);
     corner = normal - vertical;
     if (offsetPivot) corner += pivot;
-    corner += position;
+    corner += worldPosition;
     data->mCorners[1] = corner;
-    if (peCurrentBound) GSboundAddPoint(peCurrentBound, corner.x, corner.y, corner.z);
+    if (g_currentBound) GSboundAddPoint(g_currentBound, corner.x, corner.y, corner.z);
     corner = normal + vertical;
     if (offsetPivot) corner += pivot;
-    corner += position;
+    corner += worldPosition;
     data->mCorners[2] = corner;
-    if (peCurrentBound) GSboundAddPoint(peCurrentBound, corner.x, corner.y, corner.z);
+    if (g_currentBound) GSboundAddPoint(g_currentBound, corner.x, corner.y, corner.z);
     corner = vertical - normal;
     if (offsetPivot) corner += pivot;
-    corner += position;
+    corner += worldPosition;
     data->mCorners[3] = corner;
-    if (peCurrentBound) GSboundAddPoint(peCurrentBound, corner.x, corner.y, corner.z);
-    peColor color;
+    if (g_currentBound) GSboundAddPoint(g_currentBound, corner.x, corner.y, corner.z);
+    GScolor color;
     peColorSplineGetValue(&color, particle->mColorSpline, time);
-    color.r = FloatToUnsigned8(RenderParameters(parent).mRed * Unsigned8ToFloat(color.r));
-    color.g = FloatToUnsigned8(RenderParameters(parent).mGreen * Unsigned8ToFloat(color.g));
-    color.b = FloatToUnsigned8(RenderParameters(parent).mBlue * Unsigned8ToFloat(color.b));
-    color.a = FloatToUnsigned8((255.0f * RenderParameters(parent).mAlpha) * SplineValue(particle->mAlphaSpline, time));
-    data->mColor = *(u32 *)&color;
+    color.channels.r = FloatToUnsigned8(parent->colorScale[0] * Unsigned8ToFloat(color.channels.r));
+    color.channels.g = FloatToUnsigned8(parent->colorScale[1] * Unsigned8ToFloat(color.channels.g));
+    color.channels.b = FloatToUnsigned8(parent->colorScale[2] * Unsigned8ToFloat(color.channels.b));
+    color.channels.a = FloatToUnsigned8((255.0f * parent->colorScale[3]) * SplineValue(particle->mAlphaSpline, time));
+    data->mColor = color.rgba;
     if (extended) {
         peColorSplineGetValue(&color, particle->mSecondColorSpline, time);
-        ((peParticleDualColorRenderData *)data)->mSecondColor = *(u32 *)&color;
+        ((peParticleDualColorRenderData *)data)->mSecondColor = color.rgba;
     }
 }

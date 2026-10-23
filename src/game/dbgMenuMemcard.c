@@ -1,17 +1,23 @@
 #include <GSdvd.h>
+#include <winMsg.h>
+#include <pokecolo.h>
+#include <memcard.h>
+#include <savedata.h>
+#include <GSmem.h>
+#include <string.h>
 #include <types.h>
 #include <memcard.h>
 #include <savedata.h>
 
 /* Save data handed to the memcard task; allocated and freed per use. */
-extern u8 *bk_savedataPtr;
+u8 *bk_savedataPtr;
 /* Scratch buffer the DVD save is read into when the debug type is off. */
 extern u8 *memcard_dvd_buf;
 /* Scratch buffer the debug save is built in. */
-extern u8 *memcard_save_buf;
+u8 *dbgMenuSaveData;
 
 /* Save-file names of the ten memcard debug slots. */
-const char *memcard_file_name_table[10] = {
+const char *saveFileName[10] = {
     "HDSaveData1.DSV1",
     "HDSaveData2.DSV1",
     "HDSaveData3.DSV1",
@@ -24,32 +30,40 @@ const char *memcard_file_name_table[10] = {
     "HDSaveData_5.DSV2",
 };
 
-void *GSmemAllocAlignedDefaultHeap(u32 size, u16 align);
-void GSmemFree(void *ptr);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 u8 _memcard_debug_type_check(s32 type);
 void memcard_debug_Load(u8 *buf);
 void memcard_debug_Load2(void);
 void memcard_debug_Save(u8 *buf);
-s32 gameGetRegion(void);
 void gamedataSetStatus(void *gamedata, s32 index, s32 status);
 void __assert(const char *file, s32 line, const char *cond);
-void *memcpy(void *dest, const void *src, u32 count);
-void winMsgOpen(s32 a, s32 b, s32 c, s32 d);
-void winMsgClose(s32 id);
 
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
 
+u8 _memcard_debug_type_check(s32 type) {
+	switch (type) {
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		return 1;
+	default:
+		return 0;
+	}
+}
+
+
 #pragma peephole off
 
-s32 dbgMenuMemcardLoadFile(s32 menuID, s32 type)
+s32 dbgMenuMemcardDebugLoad(s32 menuID, s32 type)
 {
-    void *file;
+    GSdvdFile *file;
     void *gamedata;
 
-    if (GSdvdOpenTest(memcard_file_name_table[type]) != 0) {
-        file = GSdvdOpen(memcard_file_name_table[type]);
+    if (GSdvdOpenTest(saveFileName[type]) != 0) {
+        file = GSdvdOpen(saveFileName[type]);
         if (file == 0) {
             return 0;
         }
@@ -57,19 +71,19 @@ s32 dbgMenuMemcardLoadFile(s32 menuID, s32 type)
         return 0;
     }
     if (_memcard_debug_type_check(type)) {
-        memcard_save_buf = (u8 *)GSmemAllocAlignedDefaultHeap(0x28000, 0x20);
-        GSdvdRead(file, memcard_save_buf, 0x28000, 0);
+        dbgMenuSaveData = (u8 *)GSmemAllocAlign(0x28000, 0x20);
+        GSdvdRead(file, dbgMenuSaveData, 0x28000, 0);
         GSdvdClose(file);
-        memcard_debug_Load(memcard_save_buf + 8);
-        GSmemFree(memcard_save_buf);
-        memcard_save_buf = 0;
+        memcard_debug_Load(dbgMenuSaveData + 8);
+        GSmemFree(dbgMenuSaveData);
+        dbgMenuSaveData = 0;
     } else {
         GSdvdRead(file, memcard_dvd_buf, 0x27FC0, 0);
         GSdvdClose(file);
         memcard_debug_Load2();
     }
-    gamedata = savedataGetStatus(0, TRAINER_DATA_GAME_DATA);
-    switch (gameGetRegion()) {
+    gamedata = savedataGetStatus(0, 1);
+    switch (pokecoloGetCountryCode()) {
     case 0:
         gamedataSetStatus(gamedata, 2, 0xB);
         gamedataSetStatus(gamedata, 3, 3);
@@ -92,43 +106,43 @@ s32 dbgMenuMemcardLoadFile(s32 menuID, s32 type)
     return 0;
 }
 
-s32 dbgMenuMemcardSaveFile(s32 menuID, s32 type)
+s32 dbgMenuMemcardDebugSave(s32 menuID, s32 type)
 {
-    void *file;
+    GSdvdFile *file;
 
     if (_memcard_debug_type_check(type)) {
-        memcard_save_buf = (u8 *)GSmemAllocAlignedDefaultHeap(0x28000, 0x20);
-        memcard_debug_Save(memcard_save_buf + 8);
-        if (GSdvdOpenTest(memcard_file_name_table[type])) {
-            file = GSdvdOpen(memcard_file_name_table[type]);
+        dbgMenuSaveData = (u8 *)GSmemAllocAlign(0x28000, 0x20);
+        memcard_debug_Save(dbgMenuSaveData + 8);
+        if (GSdvdOpenTest(saveFileName[type])) {
+            file = GSdvdOpen(saveFileName[type]);
         } else {
-            file = GSdvdCreate(memcard_file_name_table[type]);
+            file = GSdvdCreate(saveFileName[type]);
         }
         if (file != 0) {
-            GSdvdWrite(file, memcard_save_buf, 0x28000, 0);
+            GSdvdWrite(file, dbgMenuSaveData, 0x28000, 0);
             GSdvdClose(file);
         }
-        GSmemFree(memcard_save_buf);
-        memcard_save_buf = 0;
+        GSmemFree(dbgMenuSaveData);
+        dbgMenuSaveData = 0;
     } else {
         bk_savedataPtr = (u8 *)memcardMemAllocForSavedata();
         if (bk_savedataPtr == 0) {
             /* CP932 message: "out of memory". */
             __assert("dbgMenuMemcard.c", 501, "bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab\"");
         }
-        memcpy(bk_savedataPtr, savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), 0x27FD0);
+        memcpy(bk_savedataPtr, savedataGetStatus(0, 0), 0x27FD0);
         if (memcardTaskCall(2, 2, 0) == 3) {
-            if (GSdvdOpenTest(memcard_file_name_table[type])) {
-                file = GSdvdOpen(memcard_file_name_table[type]);
+            if (GSdvdOpenTest(saveFileName[type])) {
+                file = GSdvdOpen(saveFileName[type]);
             } else {
-                file = GSdvdCreate(memcard_file_name_table[type]);
+                file = GSdvdCreate(saveFileName[type]);
             }
             if (file != 0) {
                 GSdvdWrite(file, memcard_dvd_buf, 0x27FC0, 0);
                 GSdvdClose(file);
             }
         }
-        memcpy(savedataGetStatus(0, TRAINER_DATA_SAVE_BLOCK), bk_savedataPtr, 0x27FD0);
+        memcpy(savedataGetStatus(0, 0), bk_savedataPtr, 0x27FD0);
         bk_savedataPtr = (u8 *)memcardMemFreeForSavedata(bk_savedataPtr);
         if (bk_savedataPtr != 0) {
             /* CP932 message: "free failed". */

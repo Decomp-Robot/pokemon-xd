@@ -2,6 +2,7 @@
 #define GSCOLSYS2_INTERNAL_H
 
 #include <GScolsys2.h>
+#include <dolphin/mtx.h>
 
 /* Current floor and debug drawing resources. */
 struct GScolsys2State {
@@ -16,14 +17,6 @@ extern GScolsys2State gsColSysState;
 
 extern "C" {
 CCD_FILEHEAD* GScolsys2GetCCDFileHead(void);
-void PSMTXMultVec(GSmtx* mtx, GSvec* src, GSvec* dst);
-f32 PSVECDotProduct(GSvec* a, GSvec* b);
-f32 PSVECSquareDistance(GSvec* a, GSvec* b);
-f32 PSVECDistance(GSvec* a, GSvec* b);
-f32 PSVECMag(GSvec* a);
-void PSVECSubtract(GSvec* a, GSvec* b, GSvec* out);
-void PSVECAdd(GSvec* a, GSvec* b, GSvec* out);
-void PSVECScale(GSvec* a, GSvec* out, f32 scale);
 
 void GSgfxDLBeginSurface(u16 surface);
 void GSgfxBeginSurface(void* list);

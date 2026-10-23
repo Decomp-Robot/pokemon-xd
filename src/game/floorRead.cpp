@@ -7,6 +7,7 @@
 #include <GSfsys.h>
 #include <GSlight.h>
 #include <floorPostCall.h>
+#include <floor.h>
 #include <ant.h>
 
 // Floor/map resource loading. Format-specific pre/post callbacks allocate
@@ -58,7 +59,6 @@ extern "C" void GStextureFree(void *texture);
 extern "C" void FlashSystemInit(u32 res, void *resource);
 
 // The stage archive the fight runs in.
-extern "C" u32 getCurrentMapGroupId(void);
 extern "C" void GSthreadSwitch(void);
 
 // Set while the reader of this module is loading a resource, so that a second
@@ -102,7 +102,7 @@ extern "C" void floorDelayPostFunc(void)
 extern "C" void *floorReadResourceID(u32 group, u32 res)
 {
     if (group == 0) {
-        group = getCurrentMapGroupId();
+        group = floorGetCurrentGroupID();
     }
     // A resource that is already in memory needs no read; only a missing one
     // goes through the wait below.

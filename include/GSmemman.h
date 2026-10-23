@@ -9,10 +9,11 @@
  * instances.
  */
 
-#ifndef GSEMMAN_H
-#define GSEMMAN_H
+#ifndef GSMEMMAN_H
+#define GSMEMMAN_H
 
 #include <dolphin/types.h>
+#include <GSmem.h>
 
 #define ALIGNMENT 32
 #define MINOBJSIZE 64U
@@ -39,7 +40,7 @@
 #define POOL_MAX 32
 
 /* Called by GSmemVisitHeapAllocated for every allocated cell of a heap. */
-typedef void (*GSmemCellVisitor)(void* ptr, u32 size, u32 arg, u32 arg2);
+typedef void (*GSmemCellVisitor)(void* ptr, u32 size, void* context, void* context2);
 
 class GSmemHeapDesc;
 
@@ -49,7 +50,7 @@ public:
     GSmemCell* next;   /* 0x04 */
     s32 size;          /* 0x08 */
     u32 area;          /* 0x0c: address of the block this cell describes */
-    u16 id;            /* 0x10: id handed out when the block was allocated */
+    u16 layer;         /* 0x10: layer active when the block was allocated */
 
     void* get_area(GSmemHeapDesc* hd);
     void init(int size);
@@ -92,6 +93,7 @@ public:
     u8* end;            /* 0x14 */
     void* freeCellList; /* 0x18 */
 
+    void dump();
     u8 isRegistration(void* ptr);
     u32 getFreeCell() const;
     void freeCell(void* ptr);
@@ -110,26 +112,29 @@ extern u8 lbl_804EAA90;
 extern u8 lbl_804EAA91;
 
 /* Sysdol pools, one per allocation size class. */
-extern GSmemPoolAllocator* gSysdolPool8;
-extern GSmemPoolAllocator* gSysdolPool12;
-extern GSmemPoolAllocator* gSysdolPool20;
-extern GSmemPoolAllocator* gSysdolPool28;
-extern GSmemPoolAllocator* gSysdolPool48;
+extern GSmemPoolAllocator* _Sysdol8Allocator;
+extern GSmemPoolAllocator* _Sysdol12Allocator;
+extern GSmemPoolAllocator* _Sysdol20Allocator;
+extern GSmemPoolAllocator* _Sysdol28Allocator;
+extern GSmemPoolAllocator* _Sysdol48Allocator;
 
 /* Table of pool allocators; GSmemCreatePool fills the first free entry. */
-extern GSmemPoolAllocator gPoolTable[POOL_MAX];
+extern GSmemPoolAllocator _poolArea[POOL_MAX];
 
-/* Entry points of the other members of this library that the heap code calls:
- * GSmemman.o holds the GSmem* wrappers, the rest of poolAlloc.o holds the
- * GSmemPoolAllocator methods. */
+/* GSmem allocation and fixed-size pool entry points. */
 extern "C" {
 u32 GSmemGetLargestFree(void);
-u16 GSmemGetCellId(void);
-void* GSmemAlloc(u32 size);
-void* GSmemAllocNoClr(u32 size);
-void GSmemFree(void* ptr);
+u16 GSmemGetCurrentLayer(void);
+s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, void* context, void* context2);
+u32 GSmemGetFreePool(GSmemPoolAllocator* pool);
+void GSmemDumpPool(GSmemPoolAllocator* pool);
+u8 GSmemIsRegistrationPool(GSmemPoolAllocator* pool, void* ptr);
+void GSmemFreePool(GSmemPoolAllocator* pool, void* ptr);
+void* GSmemAllocPool(GSmemPoolAllocator* pool);
 GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize);
-void GSmemDumpPoolInfo(GSmemPoolAllocator* pool);
+void GSmemInitPool(void);
+GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size);
+void GSmemInitSysdolAllocator(void);
 }
 
 BOOL _memCheckOwnCallback(void* ptr);

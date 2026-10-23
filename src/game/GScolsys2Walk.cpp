@@ -104,14 +104,13 @@ inline s32 collectFixedWalkHeights(GSvec* pos, CCD_WALKMDL_HEAD* head, GSCOLSYS2
     s32 foundCount;
 
     foundCount = 0;
-    struct GridCell { s32 x, z; };
-    GridCell cellPosition;
-    cellPosition.x = (s32)((pos->x - head->mOriginX) / head->mCellSizeX);
-    if (cellPosition.x < 0 || cellPosition.x >= head->mCountX) return 0;
-    cellPosition.z = (s32)((pos->z - head->mOriginZ) / head->mCellSizeZ);
-    if (cellPosition.z < 0 || cellPosition.z >= head->mCountZ) return 0;
+    s32 cellZ, cellX;
+    cellX = (s32)((pos->x - head->mOriginX) / head->mCellSizeX);
+    if (cellX < 0 || cellX >= head->mCountX) return 0;
+    cellZ = (s32)((pos->z - head->mOriginZ) / head->mCellSizeZ);
+    if (cellZ < 0 || cellZ >= head->mCountZ) return 0;
     cell = head->mCellStart;
-    cell += 2 * (cellPosition.x + cellPosition.z * head->mCountX);
+    cell += 2 * (cellX + cellZ * head->mCountX);
     entry = head->mCellList;
     entry += cell[0];
     for (triangleIndex = foundCount; triangleIndex < (u32)cell[1] && foundCount < GSCOLSYS2_WALK_MAX; triangleIndex++, entry++) {
@@ -155,9 +154,9 @@ inline s32 collectMovingWalkHeights(GSvec* pos, CCD_WALKMDL_HEAD* head, GSCOLSYS
                 GSvec normal;
                 GSvec closest;
                 for (s32 vertexIndex = 0; vertexIndex < 3; vertexIndex++) {
-                    PSMTXMultVec(transform, &model->mTri.mPoint[vertexIndex], &triangle[vertexIndex]);
+                    PSMTXMultVec((MtxPtr)transform, (const Vec *)&model->mTri.mPoint[vertexIndex], (Vec *)&triangle[vertexIndex]);
                 }
-                PSMTXMultVec(rotation, &model->mTri.mNormal, &normal);
+                PSMTXMultVec((MtxPtr)rotation, (const Vec *)&model->mTri.mNormal, (Vec *)&normal);
                 if (!getCpPolyVec(&closest, pos, triangle, &normal)) continue;
                 s32 duplicate;
                 for (duplicate = 0; duplicate < foundCount; duplicate++) {

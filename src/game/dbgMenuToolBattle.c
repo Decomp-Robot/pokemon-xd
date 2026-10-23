@@ -9,29 +9,29 @@
 
 extern void menuCBDebug_SkipAGBConnection(u8 skip);
 
-/* Item-run counters. */
-static volatile s32 dbgMenuGBAResetCouponCount;
-static volatile s32 dbgMenuGBAClearFlag;
-static volatile s32 dbgMenuGBAClearCouponCount;
-static volatile s32 dbgMenuGBACouponCount;
+/* Coupon debug menu state. */
+static volatile s32 dbgMenuGBAClearCouponFlag_on;
+static volatile s32 dbgMenuGBASetClearFlag_on;
+static volatile s32 dbgMenuGBAResetCoupon_on;
+static volatile s32 dbgMenuGBAAddCoupon_value;
 
-s32 dbgMenuGBAResetCoupon(void)
+s32 dbgMenuGBAClearCouponFlag(void)
 {
-    dbgMenuGBAResetCouponCount++;
-    dbgMenuGBAClearFlag = 0;
+    dbgMenuGBAClearCouponFlag_on++;
+    dbgMenuGBASetClearFlag_on = 0;
     return 0;
 }
 
 s32 dbgMenuGBASetClearFlag(void)
 {
-    dbgMenuGBAClearFlag++;
+    dbgMenuGBASetClearFlag_on++;
     return 0;
 }
 
-s32 dbgMenuGBAClearCoupon(void)
+s32 dbgMenuGBAResetCoupon(void)
 {
-    dbgMenuGBAClearCouponCount++;
-    dbgMenuGBACouponCount = 0;
+    dbgMenuGBAResetCoupon_on++;
+    dbgMenuGBAAddCoupon_value = 0;
     return 0;
 }
 
@@ -41,7 +41,7 @@ s32 dbgMenuGBAAddCoupon(void)
 
     menuClose(2);
     if (coupon >= 0) {
-        dbgMenuGBACouponCount += coupon;
+        dbgMenuGBAAddCoupon_value += coupon;
     }
     return 0;
 }
@@ -50,11 +50,6 @@ s32 dbgToolBattleDebugSetAGBConnectionMode(s32 menuID, s32 connectionMode)
 {
     menuCBDebug_SkipAGBConnection(connectionMode == 0);
     return 0;
-}
-
-/* Debug item that does nothing. */
-void dbgToolBattleNoOp(void)
-{
 }
 
 #pragma peephole reset
