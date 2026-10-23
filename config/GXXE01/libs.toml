@@ -1,6 +1,6 @@
 [[lib]]
 name = "main"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "game"
 progress_category = "game"
 
@@ -10,10 +10,10 @@ completed = false
 
 [[lib]]
 name = "base"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/base/PPCArch.c"
@@ -136,10 +136,10 @@ completed = true
 
 [[lib]]
 name = "db"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/db/db.c"
@@ -147,7 +147,7 @@ completed = false
 
 [[lib]]
 name = "perf"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__", "-i src/ext/dolphin_sdk/perf"]
@@ -162,10 +162,10 @@ completed = false
 
 [[lib]]
 name = "hio"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/hio/hio.c"
@@ -173,10 +173,10 @@ completed = false
 
 [[lib]]
 name = "sp"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/sp/sp.c"
@@ -184,7 +184,7 @@ completed = false
 
 [[lib]]
 name = "gx"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/gx", "-D__GEKKO__", "-DDEBUG"]
@@ -268,7 +268,7 @@ completed = true
 
 [[lib]]
 name = "mtx"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__", "-fp_contract off"]
@@ -303,10 +303,10 @@ completed = false
 
 [[lib]]
 name = "gd"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDFile.c"
@@ -342,7 +342,7 @@ completed = false
 
 [[lib]]
 name = "ai"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/gx", "-D__GEKKO__"]
@@ -353,7 +353,7 @@ completed = false
 
 [[lib]]
 name = "ar"
-mw_version = "GC/2.6"
+mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/ar", "-D__GEKKO__"]
@@ -486,7 +486,7 @@ name = "exi"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/exi/EXIAd16.c"
@@ -556,7 +556,7 @@ name = "si"
 mw_version = "GC/1.2.5n"
 cflags_preset = "sdk"
 progress_category = "sdk"
-cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
 
 [[lib.object]]
 name = "ext/dolphin_sdk/si/SIBios.c"
@@ -712,3 +712,13 @@ cflags = [
     "-D__GEKKO__",
     "-lang=c",
 ]
+[[lib]]
+name = "pad"
+mw_version = "GC/1.2.5n"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/si", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/pad/Pad.c"
+completed = true

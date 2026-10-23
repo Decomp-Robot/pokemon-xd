@@ -258,6 +258,32 @@ ext/dolphin_sdk/dvd/fstload.c:
 	.sdata      start:0x804E8178 end:0x804E8188
 	.sbss       start:0x804EAC40 end:0x804EAC4C
 
+ext/dolphin_sdk/pad/Pad.c:
+	.text       start:0x800BA75C end:0x800BA900
+	.text       start:0x800BA900 end:0x800BA9C4
+	.text       start:0x800BA9C4 end:0x800BAA90
+	.text       start:0x800BAA90 end:0x800BAB68
+	.text       start:0x800BAB68 end:0x800BAE94
+	.text       start:0x800BAE94 end:0x800BAFD4
+	.text       start:0x800BAFD4 end:0x800BB0E4
+	.text       start:0x800BB0E4 end:0x800BB1F8
+	.text       start:0x800BB1F8 end:0x800BB348
+	.text       start:0x800BB348 end:0x800BB648
+	.text       start:0x800BB648 end:0x800BB714
+	.text       start:0x800BB714 end:0x800BB774
+	.text       start:0x800BB774 end:0x800BB8E8
+	.text       start:0x800BB8E8 end:0x800BBA5C
+	.text       start:0x800BBA5C end:0x800BBECC
+	.text       start:0x800BBECC end:0x800BBF40
+	.text       start:0x800BBF40 end:0x800BBFFC
+	.text       start:0x800BBFFC end:0x800BC05C
+	.text       start:0x800BC05C end:0x800BC0B0
+	.text       start:0x800BC0B0 end:0x800BC12C
+	.data       start:0x803D29A8 end:0x803D2A00
+	.bss        start:0x8043E7F0 end:0x8043E840
+	.sdata      start:0x804E8198 end:0x804E81B8
+	.sbss       start:0x804EACB8 end:0x804EACE4
+
 ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC12C end:0x800BC170
 	.text       start:0x800BC170 end:0x800BC1F8
