@@ -1242,6 +1242,276 @@ completed = true
 extra_cflags = ["-inline noauto"]
 
 [[lib]]
+name = "TRK_MINNOW_DOLPHIN"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+
+[[lib.object]]
+name = "TRK/targimpl.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/targsupp.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/mpc_7xx_603e.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/dolphin_trk.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/main_TRK.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/targcont.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/target_options.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/dolphin_trk_glue.c"
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-sdata 0",
+    "-sdata2 0",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib]]
 name = "menuCBBios"
 mw_version = "GC/2.6"
 cflags_preset = "game"

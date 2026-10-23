@@ -1208,14 +1208,41 @@ TRK/serpoll.c:
 	.text       start:0x800D4708 end:0x800D49C0
 	.rodata     start:0x802EC248 end:0x802EC3D8
 
-game/GSparticleModuleData.cpp:
-	.rodata     start:0x802F3590 end:0x802F3718
-
 TRK/usr_put.c:
 	.text       start:0x800D49C0 end:0x800D4A4C
 
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
+
+TRK/targimpl.c:
+	.text       start:0x800D7DD0 end:0x800D8074
+
+TRK/targsupp.c:
+	.text       start:0x800D8080 end:0x800D80A0
+
+TRK/mpc_7xx_603e.c:
+	.text       start:0x800D80A0 end:0x800D8410
+
+TRK/dolphin_trk.c:
+	.text       start:0x800D8410 end:0x800D8A4C
+
+TRK/main_TRK.c:
+	.text       start:0x800D8A4C end:0x800D8AA4
+	.rodata     start:0x802EC740 end:0x802EC74B
+	.bss        start:0x80441950 end:0x80441954
+
+TRK/dolphin_trk_glue.c:
+	.text       start:0x800D8AA4 end:0x800D8FFC
+	.rodata     start:0x802EC750 end:0x802EC854
+
+game/GSparticleModuleData.cpp:
+	.rodata     start:0x802F3590 end:0x802F3718
+
+TRK/targcont.c:
+	.text       start:0x800D8FFC end:0x800D9030
+
+TRK/target_options.c:
+	.text       start:0x800D9030 end:0x800D904C
 
 __fini_cpp_exceptions.cpp:
 	.text       start:0x800DA88C end:0x800DA8C0
