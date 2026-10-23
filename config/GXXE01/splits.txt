@@ -875,6 +875,9 @@ ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c:
 	.text       start:0x800E702C end:0x800E7030
 	.text       start:0x800E7030 end:0x800E7038
 
+ext/dolphin_sdk/amcnotstub/amcnotstub.c:
+	.text       start:0x800E7038 end:0x800E7038
+
 ext/dolphin_sdk/exi/EXIBios.c:
 	.text       start:0x800E7AC0 end:0x800E7BB4
 	.text       start:0x800E7BB4 end:0x800E7E10

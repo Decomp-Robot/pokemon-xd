@@ -991,3 +991,14 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/amcstubs/AmcExi2Stubs.c"
 completed = true
+
+[[lib]]
+name = "amcnotstub"
+mw_version = "GC/2.6"
+cflags_preset = "sdk"
+progress_category = "sdk"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-D__GEKKO__"]
+
+[[lib.object]]
+name = "ext/dolphin_sdk/amcnotstub/amcnotstub.c"
+completed = true
