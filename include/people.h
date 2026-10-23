@@ -8,10 +8,10 @@ extern "C" {
 #endif
 
 void peopleSetTresureSearchDistance(u16 treasureId, float distance);
-
 void peopleTalkMessageBgmMask(bool);
 void peopleTalkMessageBgmSetFadeSpeed(float, float);
 void peopleTalkMessageBgmSetVolumeRate(float);
+s32 peopleReadObject(s32 slot, s32 kind, s32 objID);
 #ifdef __cplusplus
 }
 #endif

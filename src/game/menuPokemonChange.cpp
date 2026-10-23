@@ -439,7 +439,7 @@ PokemonExchangeState _getPokemonState(Pokemon* pokemon, enumPlayerIndex player)
 {
     if (!pokemon)
         return POKEMON_INVALID;
-    if (pokemon_GetFuseiFlag(pokemon))
+    if (pokemonBiosGetFuseiFlag(pokemon))
         return POKEMON_CORRUPT;
     if (!pokemonCheckValid(pokemon))
         return POKEMON_INVALID;

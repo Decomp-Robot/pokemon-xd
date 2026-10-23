@@ -3217,3 +3217,53 @@ cflags = [
     "-use_lmw_stmw on",
     "-lang=c++",
 ]
+# Original hero.a modules: movement, gift encounters and Hero members.
+[[lib]]
+name = "hero"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/app/hero/heroMove.cpp"
+source = "game/app/hero/heroMove.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/hero/heroPokemonGet.cpp"
+source = "game/app/hero/heroPokemonGet.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/hero/heroMemberFunctions.cpp"
+source = "game/app/hero/heroMemberFunctions.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+

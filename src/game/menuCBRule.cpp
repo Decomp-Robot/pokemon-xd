@@ -25,32 +25,18 @@ extern const FightRuleData oreRule;
 enum { MAX_TOTAL_EFFORT = 510, MAX_STAT_EFFORT = 255 };
 
 /* Count and flat species-ID list for the legendary Pokemon restriction. */
-extern u32 *gLegendPokemonCount;
-extern u16 *gLegendPokemonList;
+extern u32 *legendPokemonData_number;
+extern u16 *legendPokemonData;
 
 extern "C" {
 extern FightRuleData *menuCBBios_CurrentRule(void);
-extern u8 menuCBRulesetGetDirty(void);
 extern u16 pokemonBiosGetItemDataId(Pokemon *pokemon);
 extern u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
-extern u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
-extern u16 battlePokemonStatusGetAttack(Pokemon *pokemon);
-extern u16 battlePokemonStatusGetDef(Pokemon *pokemon);
-extern u16 battlePokemonStatusGetSpAtk(Pokemon *pokemon);
-extern u16 battlePokemonStatusGetSpDef(Pokemon *pokemon);
 extern u8 pokemonIsDarkPokemon(Pokemon *pokemon);
-extern u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 extern bool pokemonCheckValid(Pokemon *pokemon);
-extern void pokemonBiosCopy(Pokemon *dst, Pokemon *src);
+extern void pokemonBiosCopy(Pokemon *dst, const Pokemon *src);
 extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
 extern void pokemonResetBasisStatus(Pokemon *pokemon);
-extern u16 pokemonGetMaxHpEffort(Pokemon *pokemon);
-extern u16 pokemonGetPhyAtkEffort(Pokemon *pokemon);
-extern u16 pokemonGetPhyDefEffort(Pokemon *pokemon);
-extern u16 pokemonGetSpeAtkEffort(Pokemon *pokemon);
-extern u16 pokemonGetSpeDefEffort(Pokemon *pokemon);
-extern u16 pokemonGetSpeedEffort(Pokemon *pokemon);
-extern u16 pokemonGetNimbleness(Pokemon *pokemon);
 extern bool menuCBRule_CheckValidItem(u16 itemID);
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
 extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
@@ -79,8 +65,8 @@ extern "C" u8 menuCBRule_CheckLegendPokemon(Pokemon *pokemon, FightRuleData *rul
     }
 
     species = pokemonBiosGetPokemonDataId(pokemon);
-    count = *gLegendPokemonCount;
-    list = gLegendPokemonList;
+    count = *legendPokemonData_number;
+    list = legendPokemonData;
 
     for (i = 0; i < count; i++) {
         if (list[i] == species) {
@@ -102,19 +88,19 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry)
         pokemonBiosGetItemDataId(pokemon);
         menuCBEntrySlotFlagsClear(entry, i);
 
-        menuCBTaisenWork.entryFlags[entry][i].levelBelowMinimum =
+        _CB.entryFlags[entry][i].levelBelowMinimum =
             !menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_LEVEL_MIN);
-        menuCBTaisenWork.entryFlags[entry][i].levelAboveMaximum =
+        _CB.entryFlags[entry][i].levelAboveMaximum =
             !menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_LEVEL_MAX);
 
         if (!menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_ITEM)) {
             switch (rule->mHeldItemMode) {
             case HELD_ITEMS_FORBIDDEN:
-                menuCBTaisenWork.entryFlags[entry][i].heldItemForbidden = 1;
+                _CB.entryFlags[entry][i].heldItemForbidden = 1;
                 break;
 
             case HELD_ITEMS_RESTRICTED:
-                menuCBTaisenWork.entryFlags[entry][i].heldItemRestricted = 1;
+                _CB.entryFlags[entry][i].heldItemRestricted = 1;
                 break;
 
             case HELD_ITEMS_ALLOWED:
@@ -125,21 +111,21 @@ extern "C" void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry)
             }
         }
 
-        menuCBTaisenWork.entryFlags[entry][i].illegalPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL);
-        menuCBTaisenWork.entryFlags[entry][i].shadowPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_SHADOW);
-        menuCBTaisenWork.entryFlags[entry][i].eggOrInvalidPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_TAMAGO);
-        menuCBTaisenWork.entryFlags[entry][i].invalidHeldItem = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_HELD_ITEM);
-        menuCBTaisenWork.entryFlags[entry][i].invalidMove = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL_MOVE);
-        menuCBTaisenWork.entryFlags[entry][i].invalidPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_VALID);
-        menuCBTaisenWork.entryFlags[entry][i].partyLevelSumExceeded =
+        _CB.entryFlags[entry][i].illegalPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL);
+        _CB.entryFlags[entry][i].shadowPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_SHADOW);
+        _CB.entryFlags[entry][i].eggOrInvalidPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_TAMAGO);
+        _CB.entryFlags[entry][i].invalidHeldItem = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_HELD_ITEM);
+        _CB.entryFlags[entry][i].invalidMove = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL_MOVE);
+        _CB.entryFlags[entry][i].invalidPokemon = !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_VALID);
+        _CB.entryFlags[entry][i].partyLevelSumExceeded =
             !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_LEVEL_SUM);
-        menuCBTaisenWork.entryFlags[entry][i].duplicateSpecies =
+        _CB.entryFlags[entry][i].duplicateSpecies =
             !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_SPECIES);
-        menuCBTaisenWork.entryFlags[entry][i].duplicateHeldItem =
+        _CB.entryFlags[entry][i].duplicateHeldItem =
             !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
-        menuCBTaisenWork.entryFlags[entry][i].insufficientPokemon =
+        _CB.entryFlags[entry][i].insufficientPokemon =
             !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_POKEMON_NUM);
-        menuCBTaisenWork.entryFlags[entry][i].legendPokemon =
+        _CB.entryFlags[entry][i].legendPokemon =
             !menuCBRule_CheckLegendPokemon(pokemon, rule);
     }
 }
@@ -189,7 +175,7 @@ extern "C" u8 menuCBRule_CheckTrainerErrorAll(Hero *hero)
 
     // There are no trainer-record checks in this version.
     for (i = 0; i < 0; i++) {
-        if (!menuCBRule_HasTrainerError(hero, i)) {
+        if (!menuCBRule_CheckTrainerError(hero, i)) {
             return 0;
         }
     }
@@ -198,7 +184,7 @@ extern "C" u8 menuCBRule_CheckTrainerErrorAll(Hero *hero)
 }
 
 /* A trainer record carries no regulation of its own. */
-extern "C" u8 menuCBRule_HasTrainerError(Hero *hero, s32 index)
+extern "C" u8 menuCBRule_CheckTrainerError(Hero *hero, s32 index)
 {
     return 0;
 }
@@ -243,32 +229,32 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
         pokemonBiosCopy(&basis, pokemon);
         pokemonResetBasisStatus(&basis);
 
-        if (battlePokemonStatusGetMaxHp(&basis) < battlePokemonStatusGetMaxHp(pokemon) ||
-            battlePokemonStatusGetAttack(&basis) < battlePokemonStatusGetAttack(pokemon) ||
-            battlePokemonStatusGetDef(&basis) < battlePokemonStatusGetDef(pokemon) ||
-            battlePokemonStatusGetSpAtk(&basis) < battlePokemonStatusGetSpAtk(pokemon) ||
-            battlePokemonStatusGetSpDef(&basis) < battlePokemonStatusGetSpDef(pokemon) ||
-            pokemonGetNimbleness(&basis) < pokemonGetNimbleness(pokemon)) {
+        if (pokemonBiosGetMaxHp(&basis) < pokemonBiosGetMaxHp(pokemon) ||
+            pokemonBiosGetPhyAtk(&basis) < pokemonBiosGetPhyAtk(pokemon) ||
+            pokemonBiosGetPhyDef(&basis) < pokemonBiosGetPhyDef(pokemon) ||
+            pokemonBiosGetSpeAtk(&basis) < pokemonBiosGetSpeAtk(pokemon) ||
+            pokemonBiosGetSpeDef(&basis) < pokemonBiosGetSpeDef(pokemon) ||
+            pokemonBiosGetNimbleness(&basis) < pokemonBiosGetNimbleness(pokemon)) {
             return 0;
         }
 
-        total = pokemonGetMaxHpEffort(pokemon);
-        total += pokemonGetPhyAtkEffort(pokemon);
-        total += pokemonGetPhyDefEffort(pokemon);
-        total += pokemonGetSpeAtkEffort(pokemon);
-        total += pokemonGetSpeDefEffort(pokemon);
-        total += pokemonGetSpeedEffort(pokemon);
+        total = pokemonBiosGetMaxHpEffort(pokemon);
+        total += pokemonBiosGetPhyAtkEffort(pokemon);
+        total += pokemonBiosGetPhyDefEffort(pokemon);
+        total += pokemonBiosGetSpeAtkEffort(pokemon);
+        total += pokemonBiosGetSpeDefEffort(pokemon);
+        total += pokemonBiosGetNimblenessEffort(pokemon);
 
         if (total > MAX_TOTAL_EFFORT) {
             return 0;
         }
 
-        if (pokemonGetMaxHpEffort(pokemon) > MAX_STAT_EFFORT ||
-            pokemonGetPhyAtkEffort(pokemon) > MAX_STAT_EFFORT ||
-            pokemonGetPhyDefEffort(pokemon) > MAX_STAT_EFFORT ||
-            pokemonGetSpeAtkEffort(pokemon) > MAX_STAT_EFFORT ||
-            pokemonGetSpeDefEffort(pokemon) > MAX_STAT_EFFORT ||
-            pokemonGetSpeedEffort(pokemon) > MAX_STAT_EFFORT) {
+        if (pokemonBiosGetMaxHpEffort(pokemon) > MAX_STAT_EFFORT ||
+            pokemonBiosGetPhyAtkEffort(pokemon) > MAX_STAT_EFFORT ||
+            pokemonBiosGetPhyDefEffort(pokemon) > MAX_STAT_EFFORT ||
+            pokemonBiosGetSpeAtkEffort(pokemon) > MAX_STAT_EFFORT ||
+            pokemonBiosGetSpeDefEffort(pokemon) > MAX_STAT_EFFORT ||
+            pokemonBiosGetNimblenessEffort(pokemon) > MAX_STAT_EFFORT) {
             return 0;
         }
 
@@ -278,7 +264,7 @@ extern "C" bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind)
         return !pokemonIsDarkPokemon(pokemon);
 
     case POKEMON_CONDITION_TAMAGO:
-        return !pokemon_GetTamagoFlag(pokemon);
+        return !pokemonBiosGetTamagoFlag(pokemon);
 
     case POKEMON_CONDITION_HELD_ITEM:
         return menuCBRule_CheckValidItem(pokemonBiosGetItemDataId(pokemon));
@@ -575,7 +561,7 @@ u8 _menuCBRule_IsTamagoPokemon(Pokemon *pokemon)
     } else {
         result = 0;
 
-        if (pokemon_GetTamagoFlag(pokemon) || !pokemonCheckValid(pokemon)) {
+        if (pokemonBiosGetTamagoFlag(pokemon) || !pokemonCheckValid(pokemon)) {
             result = 1;
         }
     }
@@ -586,7 +572,7 @@ u8 _menuCBRule_IsTamagoPokemon(Pokemon *pokemon)
 /* The fixed rule set the ore colosseum plays, while its rules are clean. */
 extern "C" FightRuleData *menuCB_OreRule(void)
 {
-    if (menuCBRulesetGetDirty()) {
+    if (menuCBBios_CurrentlyWorkingToolBattle()) {
         return 0;
     }
 

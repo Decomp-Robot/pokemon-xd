@@ -10,6 +10,8 @@ typedef struct ItemSlot {
 extern "C" {
 #endif
 u8 itemCheckValid(ItemSlot *slot);
+void itemSortAryByPriority(void *ary, u16 num, long kind);
+u16 itemGetQuantityInAry(const void *ary, u16 num, u16 itemID, u16 max);
 #ifdef __cplusplus
 }
 #endif

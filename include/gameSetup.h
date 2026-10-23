@@ -18,6 +18,6 @@ enum GameSetupEntryID {
     GAME_SETUP_ENTRY_SCOOTER_UNLOCK = 68, // progress the special scooters need
 };
 
-extern GameSetupEntry *worldMapScooterUnlockData;
+extern GameSetupEntry *flag_etc;
 
 #endif

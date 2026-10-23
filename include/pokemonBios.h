@@ -10,10 +10,10 @@ typedef struct PokemonTokuseiData PokemonTokuseiData;
 extern "C" {
 #endif
 void pokemonBiosSetFriend(Pokemon* pokemon, unsigned short level);
-void pokemonBiosCopy(Pokemon* dst, Pokemon* src);
+void pokemonBiosCopy(Pokemon* dst, const Pokemon* src);
 
 u16 pokemonBiosGetInitDp(Pokemon *pokemon);
-u8 pokemon_GetFuseiFlag(Pokemon *pokemon);
+u8 pokemonBiosGetFuseiFlag(Pokemon *pokemon);
 u16 pokemonBiosGetFightTrainerPokemonDataId(Pokemon *pokemon);
 u8 pokemonBiosGetPokerus(Pokemon *pokemon);
 u8 pokemonBiosGetMailId(Pokemon *pokemon);
@@ -31,7 +31,17 @@ PokemonTokuseiData *pokemonTokuseiDataBiosGetPtr(u16 dataID);
 u32 pokemonTokuseiDataBiosGetName(PokemonTokuseiData *data);
 u16 pokemonBiosGetHp(Pokemon *pokemon);
 u16 pokemonBiosGetMaxHp(Pokemon *pokemon);
-void pokemonBiosSetPhyAtk(Pokemon *pokemon, u16 value);
+u16 pokemonBiosGetPhyAtk(Pokemon *pokemon);
+u16 pokemonBiosGetPhyDef(Pokemon *pokemon);
+u16 pokemonBiosGetSpeAtk(Pokemon *pokemon);
+u16 pokemonBiosGetSpeDef(Pokemon *pokemon);
+u16 pokemonBiosGetNimbleness(Pokemon *pokemon);
+u16 pokemonBiosGetMaxHpEffort(Pokemon *pokemon);
+u16 pokemonBiosGetPhyAtkEffort(Pokemon *pokemon);
+u16 pokemonBiosGetPhyDefEffort(Pokemon *pokemon);
+u16 pokemonBiosGetSpeAtkEffort(Pokemon *pokemon);
+u16 pokemonBiosGetSpeDefEffort(Pokemon *pokemon);
+u16 pokemonBiosGetNimblenessEffort(Pokemon *pokemon);void pokemonBiosSetPhyAtk(Pokemon *pokemon, u16 value);
 void pokemonBiosSetPhyDef(Pokemon *pokemon, u16 value);
 void pokemonBiosSetSpeAtk(Pokemon *pokemon, u16 value);
 void pokemonBiosSetSpeDef(Pokemon *pokemon, u16 value);

@@ -19,8 +19,10 @@
 #include <GSres.h>
 #include <GSmath.h>
 #include <WorldMap.h>
+#include <heroMove.h>
 #include <time.h>
 #include <roomData.h>
+#include <gameSetup.h>
 
 extern u8 worldMapMenuOpen;
 
@@ -48,14 +50,10 @@ extern WorldMap* pWorldmap;
 extern WorldMapAnimeRecord* worldMapAnimeTables[2];
 extern WorldMapScooterData _mapScooterData[7];
 
-struct WorldMapUnlockEntry { u8 _00[8]; u32 mValue; u8 _0C[20]; };
-struct WorldMapUnlockData { WorldMapUnlockEntry mEntries[69]; };
-extern WorldMapUnlockData* worldMapScooterUnlockData;
 
 extern "C" void menuButtonNormal(tagWINDOW_WORK* window);
 extern "C" void menuScriptSetOpenWorldMapFlag(long a);
 extern "C" u8 menuScriptGetOpenWorldMapFlag();
-extern "C" void heroMovePoolCounter(long a, long b);
 
 extern "C" void GSthreadSwitch();
 
@@ -115,8 +113,8 @@ extern u8 worldMapTargetDebugEnabled;
 
 extern "C" unsigned short menuScriptOpenWorldMapGetMapNumber();
 
-extern u32* worldMapCamDataCnt;
-extern WorldMapCamData* worldMapCamDataTable;
+extern u32* worldmap_cameradata_number;
+extern WorldMapCamData* worldmap_cameradata;
 
 extern f32 _waittime;
 extern "C" double sin(double angle);
@@ -128,8 +126,8 @@ extern u8 worldMapLabelsVisible;
 
 struct WorldMapInfoData { s32 mUnlockIndex; u32 mMessages[18]; };
 struct WorldMapInfoList { s32 mCount; };
-extern WorldMapInfoData* worldMapInfoData;
-extern WorldMapInfoList* worldMapInfoList;
+extern WorldMapInfoData* worldmapXD_msgdata;
+extern WorldMapInfoList* worldmapXD_msgdata_number;
 
 extern "C" void cameraUpdate();
 extern "C" void cameraSetPosition(GSvec* position);
@@ -628,7 +626,7 @@ s32 WorldMap::getScooterType()
         u32 unlocked;
         u8 follower;
 
-        if (GSflagGet(worldMapScooterUnlockFlag) < worldMapScooterUnlockData->mEntries[68].mValue) {
+        if (GSflagGet(worldMapScooterUnlockFlag) < flag_etc[GAME_SETUP_ENTRY_SCOOTER_UNLOCK].progressValue) {
             unlocked = 0;
         } else {
             unlocked = 1;
@@ -755,7 +753,7 @@ void WorldMap::MainSub()
     menuCloseSync(worldMapMenuID, 1);
     if (sel != old) {
         mModelWork->mMapChanged = 1;
-        heroMovePoolCounter(2, 0x28);
+        heroMovePoolCounter(FOOT_STEP_COUNTER_TRAVEL, 0x28);
         moveDemo(old, sel);
     }
     if (sel != old) {
@@ -1304,7 +1302,7 @@ u32 WorldMap::GetInfoMsgID(long index)
 {
     s32 icon = _cursor_index[index];
     if (mModelWork->mScriptFlag) return SearchData(icon)->mNpcMsgID;
-    return worldMapInfoData[GetInfoLevel()].mMessages[icon];
+    return worldmapXD_msgdata[GetInfoLevel()].mMessages[icon];
 }
 
 _GSmodel* WorldMap::GetModelPointer(long index)
@@ -1314,11 +1312,11 @@ _GSmodel* WorldMap::GetModelPointer(long index)
 
 s32 WorldMap::GetInfoLevel()
 {
-    WorldMapInfoData* data = worldMapInfoData;
+    WorldMapInfoData* data = worldmapXD_msgdata;
     s32 count = 0;
-    for (s16 i = 0; i < worldMapInfoList->mCount; data++, i++) {
+    for (s16 i = 0; i < worldmapXD_msgdata_number->mCount; data++, i++) {
         if (data->mUnlockIndex != 0) {
-            u32 unlockValue = worldMapScooterUnlockData->mEntries[data->mUnlockIndex].mValue;
+            u32 unlockValue = flag_etc[data->mUnlockIndex].progressValue;
             if (GSflagGet(worldMapScooterUnlockFlag) >= unlockValue) count++;
         }
     }
@@ -1488,10 +1486,10 @@ void WorldMap::GetCameraData(long index, GSvec* pos, f32* distance, f32* height,
     f32 y;
     f32 z;
 
-    if ((u32)index >= *worldMapCamDataCnt) {
+    if ((u32)index >= *worldmap_cameradata_number) {
         return;
     }
-    entry = &worldMapCamDataTable[index];
+    entry = &worldmap_cameradata[index];
     z = entry->pos.z;
     y = entry->pos.y;
     x = entry->pos.x;

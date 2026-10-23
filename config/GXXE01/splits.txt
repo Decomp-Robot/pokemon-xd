@@ -1527,6 +1527,18 @@ game/GSAPI/GSparticle/peShape.cpp:
 game/app/joutai/joutai.cpp:
 	.text       start:0x8013C2D4 end:0x8013CD98
 
+game/app/hero/heroMove.cpp:
+	.text       start:0x8015215C end:0x8015224C
+	.ctors      start:0x802E9FD0 end:0x802E9FD4
+	.bss        start:0x804479F0 end:0x80448050
+
+game/app/hero/heroPokemonGet.cpp:
+	.text       start:0x8015224C end:0x801528C4
+
+game/app/hero/heroMemberFunctions.cpp:
+	.text       start:0x801528C4 end:0x80153138
+	.sdata2     start:0x804EDC60 end:0x804EDC64
+
 ext/musyx_sdk/runtime/seq.c:
 	.text       start:0x80161308 end:0x80161370
 	.text       start:0x80161370 end:0x80161E3C

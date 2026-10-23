@@ -22,10 +22,10 @@
 // values the report is showing.
 
 // Report object of the running save flow; 0 when no report is open.
-extern menuSaveload *menuSaveLoadReport;
+extern menuSaveload *_saveload;
 
 // Play-time override used when no save report is open.
-extern unsigned long menuSaveLoadSaveTarget;
+extern unsigned long _PrevPlayTime;
 
 // Save data used to check whether the scooter has been unlocked.
 #include <gameSetup.h>
@@ -44,8 +44,8 @@ void _SaveParameterSet(void);
 // once it exists; without it the window runs its own fade-in steps.
 extern "C" void menuSaveLoadCtrl(tagWINDOW_WORK *window)
 {
-    if (menuSaveLoadReport != 0) {
-        menuSaveLoadReport->Ctrl(window);
+    if (_saveload != 0) {
+        _saveload->Ctrl(window);
     } else {
         s8 state = (s8)window->mState;
         switch (state) {
@@ -68,10 +68,10 @@ extern "C" void menuSaveLoadCtrl(tagWINDOW_WORK *window)
 // Run the save flow once on a fresh report object and release it.
 extern "C" void menuReport(void)
 {
-    menuSaveLoadReport = new menuSaveload;
-    menuSaveLoadReport->Main();
-    delete menuSaveLoadReport;
-    menuSaveLoadReport = 0;
+    _saveload = new menuSaveload;
+    _saveload->Main();
+    delete _saveload;
+    _saveload = 0;
 }
 
 // Sprite hook of the save report. The pokemon sprites only show once enough
@@ -82,7 +82,7 @@ extern "C" s32 menuSaveLoadHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     u8 show;
     s16 item;
 
-    if (GSflagGet(0x3C4) < worldMapScooterUnlockData[GAME_SETUP_ENTRY_REPORT_POKEMON].progressValue) {
+    if (GSflagGet(0x3C4) < flag_etc[GAME_SETUP_ENTRY_REPORT_POKEMON].progressValue) {
         show = 0;
     } else {
         show = 1;
@@ -103,8 +103,8 @@ extern "C" s32 menuSaveLoadHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         } else {
             winSpriteSetDisp(sprite, 1);
         }
-        if (menuSaveLoadReport != 0) {
-            menuSaveLoadReport->SaveParameterSet();
+        if (_saveload != 0) {
+            _saveload->SaveParameterSet();
         } else {
             _SaveParameterSet();
         }
@@ -189,8 +189,8 @@ void _SaveParameterSet(void)
 {
     unsigned long playTime = pokecoloGetPlayTimeValue();
 
-    if (menuSaveLoadSaveTarget != 0) {
-        playTime = menuSaveLoadSaveTarget;
+    if (_PrevPlayTime != 0) {
+        playTime = _PrevPlayTime;
     }
     msgctrlSetValue(0x4C, playTime);
     msgctrlSetValue(0x34, darkPokemonGetSnatchSuccessNum());

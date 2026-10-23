@@ -2,6 +2,7 @@
 #define POKEMON_H
 
 #include <types.h>
+#include <gamedata.h>
 #include <darkPokemon.h>
 
 // Pokemon -- party/battle pokemon record.
@@ -10,11 +11,62 @@ typedef struct PokemonData PokemonData;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
     u16 mItemDataId; // 0x02: held item data ID.
-    u32 _04[0x08]; // 0x04-0x23: unknown.
+    u16 mHp; // 0x04: current HP.
+    u16 mFriendLevel; // 0x06: friendship.
+    u16 mCatchFloorId; // 0x08: floor where the Pokemon was caught.
+    u8 _0A[4];
+    u8 mCatchLevel; // 0x0E: level when caught.
+    u8 mCatchBallId; // 0x0F: ball used to catch it.
+    u8 mCatchTrainerSex; // 0x10: sex of the catching trainer.
+    u8 mLevel; // 0x11: current level.
+    u8 _12[2];
+    u8 mPcBoxMark; // 0x14
+    u8 _15;
+    u8 mCondition; // 0x16
+    u8 mConditionCount; // 0x17
+    u8 mConditionTurn; // 0x18
+    u8 mConditionTurnNow; // 0x19
+    u8 _1A[6];
+    u32 mExp; // 0x20: total experience.
     unsigned long mCatchTrainerRnd; // 0x24: catch trainer random identity value.
-    u8 _28[0xC4 - 0x28]; // 0x28-0xC3: unknown.
+    unsigned long mPersonality; // 0x28: personality value.
+    u8 _2C[8];
+    GamedataAttest mAttest; // 0x34: origin/version attestation.
+    u16 mTrainerName[11]; // 0x38: trainer name copy buffer.
+    u16 mNickname[11]; // 0x4E: nickname copy buffer.
+    u16 mOriginalNickname[11]; // 0x64: original nickname copy buffer.
+    u8 _7A[2];
+    u32 mRibbonData; // 0x7C
+    u32 mWaza[4]; // 0x80: four move records.
+    u16 mHpStat; // 0x90
+    u16 mAttackStat; // 0x92
+    u16 mDefenseStat; // 0x94
+    u16 mSpecialAttackStat; // 0x96
+    u16 mSpecialDefenseStat; // 0x98
+    u16 mSpeedStat; // 0x9A
+    u16 mHpEffort; // 0x9C
+    u16 mAttackEffort; // 0x9E
+    u16 mDefenseEffort; // 0xA0
+    u16 mSpecialAttackEffort; // 0xA2
+    u16 mSpecialDefenseEffort; // 0xA4
+    u16 mSpeedEffort; // 0xA6
+    u8 _A8[0x12];
+    u16 mDarkPokemonDataId; // 0xBA
+    u8 _BC[8];
 
 #ifdef __cplusplus
+    bool isHatena() const;
+    bool isFuseiFlag() const;
+    GamedataAttest *getAttest();
+    void setFriendLevel(u16 level);
+    void setExp(unsigned long exp);
+    void setNicknamePtr(u16 *name);
+    void setCatchTrainerNamePtr(u16 *name);
+    void setCatchFloorId(u16 catchFloorId);
+    void setCatchLevel(u8 catchLevel);
+    void setCatchBallId(u8 catchBallId);
+    void setCatchTrainerSex(unsigned char sex);
+    void clear();
     bool checkValid() const;
     void setDarkPoint(float point);
     u16 getPokemonDataId() const;
@@ -62,11 +114,13 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_TRAINER_NAME = 0x76, // name of that trainer.
     POKEMON_STATUS_FIELD_NICKNAME = 0x77, // name the pokemon is given.
     POKEMON_STATUS_FIELD_SPECIES = 0x6E, // species of the pokemon.
+    POKEMON_STATUS_FIELD_PID = 0x6F, // personality value used to fit the pokemon's data.
     POKEMON_STATUS_FIELD_ATTEST = 0x70, // attest record; gamedataGetStatus(record, 2) selects the origin text.
     POKEMON_STATUS_FIELD_MET_PLACE = 0x71, // place the pokemon was caught in.
     POKEMON_STATUS_FIELD_MET_LEVEL = 0x72, // level the pokemon was caught at.
     POKEMON_STATUS_FIELD_LEVEL = 0x7A, // level the pokemon is on.
     POKEMON_STATUS_FIELD_EXP = 0x79, // total experience of the pokemon.
+    POKEMON_STATUS_FIELD_FRIEND_LEVEL = 0x99, // friendship level of the pokemon.
     POKEMON_STATUS_FIELD_HP = 0x83, // current HP.
     POKEMON_STATUS_FIELD_HP_MAX = 0x87, // maximum HP.
     POKEMON_STATUS_FIELD_ATTACK = 0x88, // battle stats shown on the summary page.
@@ -147,11 +201,9 @@ bool pokemonCheckValid(Pokemon *pokemon);
 #else
 u8 pokemonCheckValid(Pokemon *pokemon);
 #endif
-u8 pokemon_GetTamagoFlag(Pokemon *pokemon);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
 u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
-u16 battlePokemonStatusGetMaxHp(Pokemon *pokemon);
 // The field ID may select party data or deployed fight-record data.
 s32 pokemonGetStatus(void *record, u16 speciesId, s32 field, u16 elementIndex);
 void pokemonSetStatus(void *record, unsigned short pokemonDataID, int fieldID, int index, unsigned long value);
@@ -163,7 +215,7 @@ f32 pokemonGetDp(Pokemon *pokemon);
 u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
 void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u32 filterID);
-void pokemonWazaCreate(Pokemon *pokemon, u32 index, u16 wazaID);
+void pokemonWazaCreate(Pokemon *pokemon, u16 slot, u16 wazaID);
 s8 pokemonSearchWazaDataId(Pokemon *pokemon, u16 wazaID);
 void pokemonReplace(Pokemon *dst, Pokemon *src);
 u8 pokemonIsShadowPokemon(Pokemon *pokemon);
@@ -178,6 +230,10 @@ void pokemonGetFriendFormPokemonFriendFilterId(Pokemon *pokemon, u16 heldEffectI
 u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 apply);
 
 void pokemonAllKaihuku(Pokemon *pokemon);
+void pokemonResetBasisStatus(Pokemon *pokemon);
+void pokemonSetCatchStatus(Pokemon *pokemon, u16 catchFloorId, u8 catchLevel, u8 catchBallId,
+                          u8 sexDataId, unsigned int trainerId, const u16 *name);
+void pokemonBiosCopy(Pokemon *pokemon, const Pokemon *src);
 void pokemonInit(Pokemon *pokemon);
 void pokemonCreate(Pokemon *pokemon, u16 species, int level, void *attest);
 void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);
@@ -209,7 +265,7 @@ s32 pokemonGetLevelToExp(Pokemon *pokemon, u8 level);
 
 u8 pokemonGetDarkPokemonLevel(Pokemon *pokemon);
 
-u8 pokemonIsShinyFromPIDAndTID(Pokemon *pokemon);
+u8 pokemonCheckRare2(Pokemon *pokemon);
 
 void pokemonPlayVoice(Pokemon *pokemon);
 void pokemonWazaForget(Pokemon *pokemon, int slot);

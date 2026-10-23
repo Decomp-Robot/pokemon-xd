@@ -5,6 +5,13 @@
 
 typedef struct FightRuleData FightRuleData;
 
+/* Held-item policy values stored in FightRuleData::mHeldItemMode. */
+enum HeldItemMode {
+    HELD_ITEMS_ALLOWED = 0,
+    HELD_ITEMS_FORBIDDEN = 1,
+    HELD_ITEMS_RESTRICTED = 2,
+};
+
 // FightRuleData -- one battle regulation record: the entry fees, time limits
 // and restriction lists a link battle enforces, plus the message shown for
 // it. The colosseum keeps a table of six of these in the save

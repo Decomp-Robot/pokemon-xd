@@ -54,7 +54,7 @@ u8 menuCBRule_CheckPokemonErrorAll(Pokemon *pokemon);
 u8 menuCBRule_CheckPokemonRegulationAll(Pokemon *pokemon, FightRuleData *rule);
 u8 menuCBRule_CheckTrainerRegulationAll(Hero *hero, FightRuleData *rule);
 u8 menuCBRule_CheckRegulationAll(Hero *hero, FightRuleData *rule);
-u8 menuCBRule_HasTrainerError(Hero *hero, s32 index);
+u8 menuCBRule_CheckTrainerError(Hero *hero, s32 index);
 u8 menuCBRule_CheckTrainerErrorAll(Hero *hero);
 u8 menuCBRule_CheckErrorAll(Hero *hero);
 s32 menuCBRule_CheckHero(Hero *hero);

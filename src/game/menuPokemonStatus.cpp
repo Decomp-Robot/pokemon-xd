@@ -1390,7 +1390,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 pokemonGetStatus(0, (u16)pokemonGetStatus(statusPokemon, 0, POKEMON_STATUS_FIELD_SPECIES, 0), 1, 0));
         } else {
             messageParameter = (unsigned long)pokemonGetStatus(statusPokemon, 0, POKEMON_STATUS_FIELD_NICKNAME, 0);
-            if (pokemonIsShinyFromPIDAndTID(pokemon))
+            if (pokemonCheckRare2(pokemon))
                 color = window->mRgba.mColorA | 0xFFDC0000;
         }
         msgctrlSetValue(0x37, (unsigned long)messageParameter);

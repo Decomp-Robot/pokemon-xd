@@ -3,6 +3,13 @@
 
 #include <types.h>
 
+typedef struct GamedataAttest {
+    u8 versionId;
+    u8 generationId;
+    u8 areaId;
+    u8 langareaId;
+} GamedataAttest;
+
 enum GAMEDATA_STATUS_FIELD { GAMEDATA_STATUS_ATTEST = 1, GAMEDATA_STATUS_ORIGIN = 2 };
 enum GAMEDATASAVE_FIELD {
     GAMEDATASAVE_FIELD_WORLD_MAP_FLOOR = 5,
@@ -23,6 +30,9 @@ unsigned long gamedatasaveGetStatus(void *save, int field);
 void gamedatasaveSetStatus(void *save, int field, unsigned long value);
 void gamedatasaveSetDataByIndex(void *save, s32 field, u32 value);
 void *gamedataGetStatus(void *gamedata, int field);
+void gamedataAttestCreate(GamedataAttest *attest, u8 versionId, u8 generationId, u8 areaId, u8 langareaId);
+u8 gamedataAttestCheckValid(GamedataAttest *attest);
+u8 gamedataAttestBiosGetLangareaId(GamedataAttest *attest);
 #ifdef __cplusplus
 }
 #endif
