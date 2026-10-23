@@ -13,7 +13,7 @@ extern u8 lbl_804EA6A4;
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
 
-u8 zz_010ee28_(long menuID);
+u8 menuIsOpen(s32 menuID);
 long menuOpenCustom(long menuID, long a, long b, long c, long d, long e, ...);
 void menuSetPosition(long menuID, long x, long y);
 u32 zz_get_current_room_ID(void);
@@ -26,7 +26,7 @@ s32 dbgMenuFieldCameraChangeDisp(void)
 {
     u32 roomID;
 
-    if (!zz_010ee28_(0x23)) {
+    if (!menuIsOpen(0x23)) {
         roomID = zz_get_current_room_ID();
         if (roomID != floorFieldCameraEditorGetFloorID()) {
             zz_0124aec_(roomID);

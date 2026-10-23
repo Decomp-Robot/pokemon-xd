@@ -3,7 +3,7 @@
 /* Debug menus that open the party-info window and the people editor. */
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
-u8 zz_010ee28_(s32 menuID);
+u8 menuIsOpen(s32 menuID);
 void menuClose(s32 menuID);
 void menuOpenCustom(s32 menuID, s32 a, s32 b, s32 c, s32 d, s32 e, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
@@ -20,7 +20,7 @@ void zz_0123e50_(void);
 
 s32 dbgMenuDispChangePartyInfo(void)
 {
-    if (zz_010ee28_(0xC)) {
+    if (menuIsOpen(0xC)) {
         menuClose(0xC);
     } else {
         menuOpenCustom(0xC, 0, 0, 0, 1, 0);
@@ -33,7 +33,7 @@ s32 dbgMenuPeopleOpenEdit(void)
 {
     zz_roomID_get_map_data(zz_get_current_room_ID());
 
-    if (zz_010ee28_(0xA)) {
+    if (menuIsOpen(0xA)) {
         if (floorFieldCameraDataExist()) {
             floorFieldCameraEnable();
         }

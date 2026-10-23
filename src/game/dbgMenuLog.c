@@ -17,7 +17,7 @@ extern u8 lbl_804EA694;
 void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
-u8 zz_010ee28_(long menuID);
+u8 menuIsOpen(s32 menuID);
 void menuClose(long menuID);
 long menuOpenCustom(long menuID, long a, long b, long c, long d, long e, ...);
 void GSgfxZCompare(u8 mode, long value);
@@ -107,7 +107,7 @@ s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
 
 s32 dbgMenuLogChangeDisp(void)
 {
-    if (zz_010ee28_(0x22)) {
+    if (menuIsOpen(0x22)) {
         menuClose(0x22);
     } else {
         lbl_804EA694 = 1;

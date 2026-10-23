@@ -15,7 +15,7 @@ struct DbgMenuWork {
 
 extern u8 lbl_804A1500[];
 
-u8 zz_010ee28_(s32 menuID);
+u8 menuIsOpen(s32 menuID);
 void menuClose(s32 menuID);
 s32 menuOpenCustom(s32 menuID, ...);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
@@ -45,7 +45,7 @@ int dbgMenuPokemonDebugSelect(void)
 {
     struct DbgMenuWork *work;
 
-    if (zz_010ee28_(0x26)) {
+    if (menuIsOpen(0x26)) {
         menuClose(0x26);
     } else {
         work = (struct DbgMenuWork *)lbl_804A1500;
@@ -59,7 +59,7 @@ int dbgMenuPokemonDebugSelect(void)
 
 int dbgMenuWazaDebugSelect(void)
 {
-    if (zz_010ee28_(0x15)) {
+    if (menuIsOpen(0x15)) {
         menuClose(0x15);
     } else {
         menuOpenCustom(0x15, 0, 0, 0, 1, 0);
@@ -70,7 +70,7 @@ int dbgMenuWazaDebugSelect(void)
 
 int dbgMenuWazaDebugStart(void)
 {
-    if (zz_010ee28_(0x11)) {
+    if (menuIsOpen(0x11)) {
         menuClose(0x11);
     }
     if (((struct DbgMenuWork *)lbl_804A1500)->mDebugRunning == 0) {

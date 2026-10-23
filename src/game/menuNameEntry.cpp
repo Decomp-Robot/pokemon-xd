@@ -70,7 +70,7 @@ f32 HSD_Randf(void);
 void *zz_texture_id_get_data_table(s32 id);
 void *zz_texture_table_get_entry_for_language(void *table);
 void zz_texture_load_texture_r9_id(s32 x, s32 y, s32 w, s32 h, u32 flags, tagWINDOW_WORK *window, s32 tex, s32 mode, GSgfxLayerID layer);
-u8 zz_010ee28_(s32 id);
+u8 menuIsOpen(s32 id);
 void menuSetDisp(s32 id, s32 on);
 double sin(double x);
 }
@@ -1821,13 +1821,13 @@ int menuNameEntryOpen(s32 type, s32 param)
     ids[2] = nameEntryHideMenuIDs[2];
     ids[3] = nameEntryHideMenuIDs[3];
     for (i = 0; i < 4; i++) {
-        if (zz_010ee28_(ids[i])) {
+        if (menuIsOpen(ids[i])) {
             menuSetDisp(ids[i], 0);
         }
     }
     result = pushNameEntryFloor(type, param, 1);
     for (i = 0; i < 4; i++) {
-        if (zz_010ee28_(ids[i])) {
+        if (menuIsOpen(ids[i])) {
             menuSetDisp(ids[i], 1);
         }
     }
