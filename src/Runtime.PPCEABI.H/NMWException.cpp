@@ -1,9 +1,19 @@
 #include "new.h"
 
+/* new[] blocks carry the element size and count in front of the elements so
+ * that delete[] can rebuild the element stride; the elements start sixteen
+ * bytes into the block. */
 enum { kArrayHeaderSize = 16 };
 
-typedef void (*ConstructorDestructor)(void *, int);
+struct ArrayHeader {
+    unsigned long element_size;
+    unsigned long element_count;
+};
 
+typedef void (*ConstructorDestructor)(void *element, int construct);
+
+/* Guards a partially constructed array: if construction is abandoned, the
+ * elements completed so far are destroyed newest first. */
 class __partial_array_destructor {
 public:
     __partial_array_destructor(void *buffer, unsigned long size, unsigned long count,
@@ -34,10 +44,12 @@ extern "C" void *__construct_new_array(void *block, ConstructorDestructor constr
                                        unsigned long count) {
     char *element;
     char *result;
+    ArrayHeader *header;
     result = (char *)block;
     if (result) {
-        ((unsigned long *)result)[0] = size;
-        ((unsigned long *)result)[1] = count;
+        header = (ArrayHeader *)result;
+        header->element_size = size;
+        header->element_count = count;
         result = (char *)result + kArrayHeaderSize;
         if (constructor) {
             __partial_array_destructor guard(result, size, count, destructor);
@@ -66,11 +78,13 @@ extern "C" void __destroy_new_array(void *array, ConstructorDestructor destructo
     if (array) {
         if (destructor) {
             unsigned long i;
+            ArrayHeader *header;
             unsigned long count;
             unsigned long size;
             char *element;
-            size = ((unsigned long *)((char *)array - kArrayHeaderSize))[0];
-            count = ((unsigned long *)((char *)array - kArrayHeaderSize))[1];
+            header = (ArrayHeader *)((char *)array - kArrayHeaderSize);
+            size = header->element_size;
+            count = header->element_count;
             element = (char *)array + size * count;
             for (i = 0; i < count; ++i) {
                 element -= size;
