@@ -311,3 +311,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "ext/dolphin_sdk/gd/GDFile.c"
 completed = false
+
+[[lib.object]]
+name = "ext/dolphin_sdk/gd/GDGeometry.c"
+completed = false
