@@ -233,6 +233,9 @@ ext/dolphin_sdk/ax/DSPCode.c:
 ext/dolphin_sdk/axart/axart.c:
 	.text       start:0x800B3D94 end:0x800B3D94
 
+ext/dolphin_sdk/axart/axart3d.c:
+	.text       start:0x800B3D94 end:0x800B3D94
+
 ext/dolphin_sdk/os/__start.c:
 	.init       start:0x80003100 end:0x80003400
 	.sbss       start:0x804EAB70 end:0x804EAB78
