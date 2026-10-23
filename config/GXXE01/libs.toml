@@ -996,6 +996,10 @@ completed = true
 name = "ext/dolphin_sdk/mcc/mcc.c"
 completed = true
 
+[[lib.object]]
+name = "ext/dolphin_sdk/mcc/tty.c"
+completed = true
+
 [[lib]]
 name = "amcstubs"
 mw_version = "GC/2.6"

@@ -26,11 +26,13 @@ static int ttyWaiting(int timeout, volatile int* flag);
 static int ttyWrite(u32 offset, void* data, s32 size);
 static int ttyFlush(u32 msgID, BOOL waitResult);
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ttyIsInitialized(void) {
     BOOL bResult = gChID != 0;
     return bResult;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ShowChannelInfo(MCC_CHANNEL chID) {
     MCC_Info info;
 
@@ -45,6 +47,7 @@ static void ShowChannelInfo(MCC_CHANNEL chID) {
              (info.isLocked == TRUE)                    ? "LOCKED" : "UNKNOWN");
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ttyMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
     u32 notify;
     u32 size;
@@ -87,6 +90,7 @@ static void ttyMccChannelEvent(MCC_CHANNEL chID, u32 event, u32 value) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int TTYInit(MCC_EXI exiChannel, MCC_CHANNEL chID) {
     if (ttyIsInitialized()) {
         return 0;
@@ -103,6 +107,7 @@ int TTYInit(MCC_EXI exiChannel, MCC_CHANNEL chID) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 void TTYExit(void) {
     if (ttyIsInitialized()) {
         MCCSetChannelEventMask(gChID, gOldEvent);
@@ -112,6 +117,7 @@ void TTYExit(void) {
     }
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int TTYQuery(void) {
     u32 tick;
 
@@ -127,6 +133,7 @@ int TTYQuery(void) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int TTYPrintf(const char* format, ...) {
     if (ttyIsInitialized() && format != NULL) {
         MCC_Hdr* hdr;
@@ -197,6 +204,7 @@ int TTYPrintf(const char* format, ...) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 int TTYFlush(void) {
     if (!ttyIsInitialized()) {
         return 0;
@@ -205,6 +213,7 @@ int TTYFlush(void) {
     return ttyFlush(gPrintfID, TRUE);
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static void ttyClearProperty(MCC_CHANNEL chID) {
     gChID = chID;
     gQuery = 0;
@@ -214,6 +223,7 @@ static void ttyClearProperty(MCC_CHANNEL chID) {
     gBufTail = 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ttyWaiting(int timeout, volatile int* flag) {
     u32 tickStart;
     u32 tickDist;
@@ -231,6 +241,7 @@ static int ttyWaiting(int timeout, volatile int* flag) {
     return 1;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ttyWrite(u32 offset, void* data, s32 size) {
     if (MCCWrite(gChID, offset, data, size, 0)) {
         return 1;
@@ -238,6 +249,7 @@ static int ttyWrite(u32 offset, void* data, s32 size) {
     return 0;
 }
 
+// UNUSED: the game never calls this; dead-stripped at link.
 static int ttyFlush(u32 msgID, BOOL waitResult) {
     u32 notify;
 
