@@ -6,6 +6,10 @@
 #include <musyx/musyx.h>
 #include <GSsnd.h>
 
+#ifndef SND_EMITTER_DISTANCEFILTER
+#define SND_EMITTER_DISTANCEFILTER 0x00000080
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
