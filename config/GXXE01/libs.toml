@@ -3,6 +3,10 @@ name = "main"
 mw_version = "GC/2.6"
 cflags_preset = "game"
 progress_category = "game"
+# The game code is full of stmw/lmw register saves (only the third-party
+# sound library uses _savegpr_/_restgpr_ helpers), so the original game
+# library was built with the paired register saves enabled.
+cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
 name = "orig/GXXE01/sys/main.dol"
@@ -69,6 +73,7 @@ cflags = [
     "-DBUILD_VERSION=0",
     "-DVERSION_GXXE01",
     "-opt nopeephole",
+    "-use_lmw_stmw on",
     "-lang=c++",
 ]
 

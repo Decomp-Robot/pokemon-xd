@@ -4,7 +4,7 @@
  * The assignment order matches the original codegen. */
 WorldMap::WorldMap()
 {
-    _00 = 0;
+    mOffscreenTexture = 0;
     mModelWork = 0;
     mDemoEffect = 0;
 }
