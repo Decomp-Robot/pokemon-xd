@@ -1227,6 +1227,10 @@ ext/dolphin_sdk/si/SISamplingRate.c:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+game/particleEngine.cpp:
+	.text       start:0x8013A678 end:0x8013A67C
+	.ctors      start:0x802E9FCC end:0x802E9FD0
+
 ext/musyx_sdk/runtime/seq.c:
 	.text       start:0x80161308 end:0x80161370
 	.text       start:0x80161370 end:0x80161E3C
