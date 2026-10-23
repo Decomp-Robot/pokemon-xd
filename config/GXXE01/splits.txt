@@ -170,7 +170,7 @@ game/menuPocket2.cpp:
 	.text       start:0x80026718 end:0x80026898
 
 game/gbaExchange.cpp:
-	.text       start:0x80027E44 end:0x80027E6C
+	.text       start:0x80027E44 end:0x80027E84
 
 game/gbaCommand.cpp:
 	.text       start:0x80027E84 end:0x80027EB8
