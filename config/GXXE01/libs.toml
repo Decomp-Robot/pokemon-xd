@@ -138,10 +138,6 @@ name = "decomp/menuWorldMap.cpp"
 completed = true
 
 [[lib.object]]
-name = "decomp/WorldMapIsBlending.cpp"
-completed = true
-
-[[lib.object]]
 name = "decomp/WorldMap.cpp"
 completed = true
 

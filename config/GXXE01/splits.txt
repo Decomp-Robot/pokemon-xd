@@ -116,11 +116,8 @@ game/menuPocketToolData.s:
 game/WorldMapDebug.cpp:
 	.text       start:0x80012604 end:0x800126A0
 
-decomp/WorldMapIsBlending.cpp:
-	.text       start:0x800127F4 end:0x80012818
-
 game/WorldMapCamera.cpp:
-	.text       start:0x80012818 end:0x800128C8
+	.text       start:0x800127F4 end:0x800128C8
 
 decomp/WorldMapIcon.cpp:
 	.text       start:0x80012FA8 end:0x80012FD8

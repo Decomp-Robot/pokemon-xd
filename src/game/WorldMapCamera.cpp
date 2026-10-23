@@ -3,6 +3,18 @@
 extern const f32 worldMapFloatZero;
 extern const f32 worldMapFloatOne;
 
+/* WorldMap::IsBlending -- report whether the camera blend driven by
+ * ControlCamera has reached full fade-in. MainSub spins on this until the
+ * camera has settled on the requested target. */
+bool WorldMap::IsBlending()
+{
+    bool blending = false;
+    if (mCamWork->blend >= worldMapFloatOne) {
+        blending = true;
+    }
+    return blending;
+}
+
 /* WorldMap::SetCameraNextWork -- stage the pending camera target. */
 void WorldMap::SetCameraNextWork(GSvec* pos, f32 distance, f32 rotY, f32 rotX, f32 fov)
 {
