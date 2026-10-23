@@ -13,21 +13,6 @@ Sections:
 	.sdata2     type:rodata align:16
 	.sbss2      type:bss align:16
 
-src/decomp/GSgfxCaptureSetTarget.c:
-	.text       start:0x800056A0 end:0x800056A4
-
-src/decomp/fightTrainerAiWazaHitNull.c:
-	.text       start:0x800065C8 end:0x800065D0
-
-src/decomp/zz_000c298_.c:
-	.text       start:0x8000C298 end:0x8000C29C
-
-src/decomp/zz_000e748_.c:
-	.text       start:0x8000E748 end:0x8000E74C
-
-src/decomp/zz_000e880_.c:
-	.text       start:0x8000E880 end:0x8000E884
-
 ext/dolphin_sdk/os/OSAlloc.c:
 	.text       start:0x800A7F18 end:0x800A7F34
 
