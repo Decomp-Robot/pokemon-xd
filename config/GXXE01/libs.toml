@@ -1460,7 +1460,7 @@ name = "game/pokemonRelive.cpp"
 completed = true
 
 [[lib.object]]
-name = "game/fight.cpp"
+name = "game/app/fight/fight.cpp"
 completed = true
 cflags = [
     "-W error",

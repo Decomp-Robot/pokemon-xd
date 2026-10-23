@@ -2164,6 +2164,11 @@ game/app/fight/fightFloor.cpp:
 game/app/fight/fightFloorBios.cpp:
 	.text       start:0x801F5B38 end:0x801F5E18
 
+game/app/fight/fight.cpp:
+	.text       start:0x8020D854 end:0x8020D858
+	.ctors      start:0x802E9FE0 end:0x802E9FE4
+	.bss        start:0x804B0048 end:0x804B0078
+
 game/app/fight/fightSeq/fightSeqWazaseq.cpp:
 	.text       start:0x80222A68 end:0x8022364C
 
