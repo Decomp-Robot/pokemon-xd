@@ -125,6 +125,10 @@ name = "game/menuPokemonCursor.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/menuInfoWindow.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocketTool.cpp"
 completed = true
 cflags = [
