@@ -36,6 +36,10 @@ completed = true
 name = "decomp/menuMetaMenu.cpp"
 completed = true
 
+[[lib.object]]
+name = "decomp/TRKMemory.c"
+completed = true
+
 [[lib]]
 name = "dbgMenu"
 mw_version = "GC/1.2.5n"
