@@ -14,7 +14,7 @@ completed = true
 
 [[lib.object]]
 name = "decomp/dbgMenuGetGsinputMsgId.c"
-completed = true
+completed = false
 
 [[lib.object]]
 name = "decomp/pokemonindex.cpp"
