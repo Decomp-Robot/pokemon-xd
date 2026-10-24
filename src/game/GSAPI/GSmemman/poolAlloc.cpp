@@ -1,5 +1,5 @@
 /*
- * Fixed-size memory pools.
+ * Fixed-size memory-pool descriptors and allocator operations.
  */
 
 #include <dolphin/os.h>
