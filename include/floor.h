@@ -22,6 +22,8 @@ void floorSetFadeScript(s32 scriptID, s32 fadeID);
 RoomData* floorDataBiosGetPtr(s32 floorID);
 void GSfloorPop(void);
 void floorWaitForChange(void);
+void floorUnblockMainScript(void);
+void floorBlockMainScript(void);
 u8 GSfloorIsPop(void);
 void floorExecScriptInteger(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
 void floorExecScriptIntegerThread(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
