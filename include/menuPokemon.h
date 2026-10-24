@@ -9,20 +9,20 @@
 enum PartyConditionSprite {
     CONDITION_SPRITE_NONE = 0,
     CONDITION_SPRITE_FAINTED = 126,
-    CONDITION_SPRITE_POISON = 0x83,
-    CONDITION_SPRITE_BURN = 0x80,
-    CONDITION_SPRITE_FREEZE = 0x81,
-    CONDITION_SPRITE_PARALYSIS = 0x82,
-    CONDITION_SPRITE_SLEEP = 0x85,
+    CONDITION_SPRITE_POISON = 131,
+    CONDITION_SPRITE_PARALYSIS = 128,
+    CONDITION_SPRITE_BURN = 129,
+    CONDITION_SPRITE_FREEZE = 130,
+    CONDITION_SPRITE_SLEEP = 133,
 };
 
 enum PartyConditionIcon {
     CONDITION_ICON_NONE = 0,
     CONDITION_ICON_FAINTED = 322,
     CONDITION_ICON_POISON = 326,
-    CONDITION_ICON_BURN = 323,
-    CONDITION_ICON_FREEZE = 324,
-    CONDITION_ICON_PARALYSIS = 325,
+    CONDITION_ICON_PARALYSIS = 323,
+    CONDITION_ICON_BURN = 324,
+    CONDITION_ICON_FREEZE = 325,
     CONDITION_ICON_SLEEP = 328,
 };
 
@@ -97,32 +97,32 @@ enum MenuPokemonFadeState {
 
 // Menu ids the party menu opens (menu data table entries).
 enum MenuPokemonMenuId {
-    MENU_ID_WAZA_LIGHT     = 0x12, // move-panel light window closed with the menu
+    MENU_ID_WAZA_LIGHT     = 18, // move-panel light window closed with the menu
     MENU_ID_PARTY_RESERVE_FOURTH = 70,
     MENU_ID_PARTY_RESERVE_THIRD = 71,
     MENU_ID_PARTY_RESERVE_SECOND = 72,
     MENU_ID_PARTY_RESERVE_FIRST = 73,
     MENU_ID_PARTY_SECOND_PRIMARY = 74,
     MENU_ID_PARTY_RESERVE_FIFTH = 77,
-    MENU_ID_PARTY_PRIMARY  = 0x4B, // first primary party panel
-    MENU_ID_PARTY_LIST     = 0x4C, // the party list window
-    MENU_ID_PARTY_FIELD_A  = 0x4F, // party field menu, first hero variant
-    MENU_ID_PARTY_FIGHT_A  = 0x50, // party fight menu, first variant
-    MENU_ID_PARTY_FIGHT_B  = 0x51, // party fight menu, second variant
-    MENU_ID_PARTY_FIELD_B  = 0x5A, // party field menu, second hero variant
-    MENU_ID_PARTY_HELD_ITEM      = 0x5D, // held-item commands
+    MENU_ID_PARTY_PRIMARY  = 75, // first primary party panel
+    MENU_ID_PARTY_LIST     = 76, // the party list window
+    MENU_ID_PARTY_FIELD_A  = 79, // party field menu, first hero variant
+    MENU_ID_PARTY_FIGHT_A  = 80, // party fight menu, first variant
+    MENU_ID_PARTY_FIGHT_B  = 81, // party fight menu, second variant
+    MENU_ID_PARTY_FIELD_B  = 90, // party field menu, second hero variant
+    MENU_ID_PARTY_HELD_ITEM      = 93, // held-item commands
 };
 
 
 // Command item IDs for the two field-menu layouts.
 enum MenuPokemonFieldCommand {
-    PARTY_COMMAND_STATUS_A = 0x16F,
-    PARTY_COMMAND_STATUS_B = 0x1AD,
-    PARTY_COMMAND_REARRANGE_A = 0x171,
-    PARTY_COMMAND_REARRANGE_B = 0x1AF,
-    PARTY_COMMAND_ITEM = 0x173,
-    PARTY_COMMAND_CANCEL_A = 0x175,
-    PARTY_COMMAND_CANCEL_B = 0x1B1,
+    PARTY_COMMAND_STATUS_A = 367,
+    PARTY_COMMAND_STATUS_B = 429,
+    PARTY_COMMAND_REARRANGE_A = 369,
+    PARTY_COMMAND_REARRANGE_B = 431,
+    PARTY_COMMAND_ITEM = 371,
+    PARTY_COMMAND_CANCEL_A = 373,
+    PARTY_COMMAND_CANCEL_B = 433,
 };
 
 enum MenuPokemonHeldItemCommand {
@@ -145,19 +145,19 @@ enum MenuPokemonListTarget {
 
 // Panel show/hide sequences for the two party panel columns.
 enum MenuPokemonPanelTarget {
-    PARTY_PANEL_TARGET_RIGHT_SHOW = 0x98,
-    PARTY_PANEL_TARGET_RIGHT_HIDE   = 0x9C,
-    PARTY_PANEL_TARGET_LEFT_SHOW  = 0xA0,
-    PARTY_PANEL_TARGET_LEFT_HIDE    = 0xA4,
+    PARTY_PANEL_TARGET_RIGHT_SHOW = 152,
+    PARTY_PANEL_TARGET_RIGHT_HIDE   = 156,
+    PARTY_PANEL_TARGET_LEFT_SHOW  = 160,
+    PARTY_PANEL_TARGET_LEFT_HIDE    = 164,
     PARTY_PANEL_TARGET_SPLIT_X      = 250,
 };
 
 // Floor pushed while the party menu owns the screen.
-enum { FLOOR_ID_PARTY_MENU = 0x3A5 };
+enum { FLOOR_ID_PARTY_MENU = 933 };
 
 // Party-menu work block, shared by menuPokemonInitWork and the party-menu
 // flow.
-enum { MENU_POKEMON_LIST = 0x4C };
+enum { MENU_POKEMON_LIST = 76 };
 
 // Party-menu work cleared when the menu opens.
 struct MenuPokemonWork {
@@ -170,7 +170,7 @@ struct MenuPokemonWork {
     s8 mCursorIndex;      // 0x06: pokemon the menu currently points at.
     s8 mNextIndex;        // 0x07: requested cursor for the next open.
     s8 mRearrangeSourceSlot;         // 0x08: source party slot while rearranging.
-    u8 _09[0x03];         // 0x09-0x0B: unknown.
+    u8 _09[3];              // 0x09-0x0B: unknown.
     s32 mPartySource;     // 0x0C: pokemon list _menuPokemonGetPokemonPtr reads.
     FIGHT_TRAINER *mTrainer; // 0x10: battle party trainer.
     u8 mBagPocket;            // 0x14: bag pocket of the selected item.
@@ -178,11 +178,11 @@ struct MenuPokemonWork {
     u16 mItemId;          // 0x16: item the menu was opened with.
     u8 mSubMenu;          // 0x18: sub-menu step the action handlers report.
     u8 mFightFlag;        // 0x19: selects the fight menu variant.
-    u8 _1A[0x02];         // 0x1A-0x1B: unknown.
+    u8 _1A[2];              // 0x1A-0x1B: unknown.
     FightOutPokemon *mOutgoingPokemon; // 0x1C: deployed Pokemon being replaced.
     s32 mResult;          // 0x20: result the party menu closed with.
     u8 mSelecting;        // 0x24: set while the move-select sub menu runs.
-    u8 _25[0x03];         // 0x25-0x27: unknown.
+    u8 _25[3];              // 0x25-0x27: unknown.
 };
 
 // One party panel record the panel windows carry as their parameter. Filled by
@@ -206,7 +206,7 @@ struct MENU_POKEMON_STATUS {
     u8 mSex;              // 0x28: gender mark id.
     u8 mBallType;         // 0x29: 0 normal, 1 shadow, 2 hyper shadow.
     u16 mHeldItem;        // 0x2A: held item id.
-    u8 _2C[0x04];         // 0x2C-0x2F: unknown.
+    u8 _2C[4];              // 0x2C-0x2F: unknown.
 };
 
 // The six party panel records, indexed by party slot.
@@ -238,7 +238,7 @@ enum MenuPokemonBallType {
 extern "C" {
 #endif
 
-extern MenuPokemonWork menuPokemonWork;
+extern MenuPokemonWork _menuPokemon;
 extern MENU_INFO menu_info[2][6];
 
 // faceSelection is forwarded to the Pokemon face selector.

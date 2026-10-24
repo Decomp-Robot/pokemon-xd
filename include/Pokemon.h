@@ -50,7 +50,7 @@ struct Pokemon {
     u16 mSpecialAttackEffort; // 0xA2
     u16 mSpecialDefenseEffort; // 0xA4
     u16 mSpeedEffort; // 0xA6
-    u8 _A8[0x12];
+    u8 _A8[18];
     u16 mDarkPokemonDataId; // 0xBA
     u8 _BC[8];
 
@@ -91,50 +91,50 @@ enum POKEMON_FRIEND_FILTER_ID {
 
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
-    POKEMON_STATUS_FIELD_HELD_ITEM = 0x82,
-    POKEMON_STATUS_FIELD_DARK_POINTS = 0xC5,
-    POKEMON_STATUS_FIELD_REVERSE_MODE = 0xC8,
-    POKEMON_STATUS_FIELD_CHAMP_RIBBON = 0xA3,
-    POKEMON_STATUS_FIELD_WINNING_RIBBON = 0xA4,
-    POKEMON_STATUS_FIELD_VICTORY_RIBBON = 0xA5,
-    POKEMON_STATUS_FIELD_BROMIDE_RIBBON = 0xA6,
-    POKEMON_STATUS_FIELD_GANBA_RIBBON = 0xA7,
-    POKEMON_STATUS_FIELD_MARINE_RIBBON = 0xA8,
-    POKEMON_STATUS_FIELD_LAND_RIBBON = 0xA9,
-    POKEMON_STATUS_FIELD_SKY_RIBBON = 0xAA,
-    POKEMON_STATUS_FIELD_COUNTRY_RIBBON = 0xAB,
-    POKEMON_STATUS_FIELD_NATIONAL_RIBBON = 0xAC,
-    POKEMON_STATUS_FIELD_EARTH_RIBBON = 0xAD,
-    POKEMON_STATUS_FIELD_WORLD_RIBBON = 0xAE,
-    POKEMON_STATUS_FIELD_STYLE_MEDAL = 0xB0,
-    POKEMON_STATUS_FIELD_BEAUTIFUL_MEDAL = 0xB1,
-    POKEMON_STATUS_FIELD_CUTE_MEDAL = 0xB2,
-    POKEMON_STATUS_FIELD_CLEVER_MEDAL = 0xB3,
-    POKEMON_STATUS_FIELD_STRONG_MEDAL = 0xB4,
-    POKEMON_STATUS_FIELD_WAZA_PP = 0x80, // current PP of the given waza slot.
-    POKEMON_STATUS_FIELD_WAZA_ID = 0x7F, // waza id of the given waza slot.
-    POKEMON_STATUS_FIELD_TRAINER_ID = 0x75, // id of the trainer that met the pokemon.
-    POKEMON_STATUS_FIELD_TRAINER_NAME = 0x76, // name of that trainer.
-    POKEMON_STATUS_FIELD_NICKNAME = 0x77, // name the pokemon is given.
-    POKEMON_STATUS_FIELD_SPECIES = 0x6E, // species of the pokemon.
-    POKEMON_STATUS_FIELD_PID = 0x6F, // personality value used to fit the pokemon's data.
-    POKEMON_STATUS_FIELD_ATTEST = 0x70, // attest record; gamedataGetStatus(record, 2) selects the origin text.
-    POKEMON_STATUS_FIELD_MET_PLACE = 0x71, // place the pokemon was caught in.
-    POKEMON_STATUS_FIELD_MET_LEVEL = 0x72, // level the pokemon was caught at.
-    POKEMON_STATUS_FIELD_LEVEL = 0x7A, // level the pokemon is on.
-    POKEMON_STATUS_FIELD_EXP = 0x79, // total experience of the pokemon.
-    POKEMON_STATUS_FIELD_FRIEND_LEVEL = 0x99, // friendship level of the pokemon.
-    POKEMON_STATUS_FIELD_HP = 0x83, // current HP.
-    POKEMON_STATUS_FIELD_HP_MAX = 0x87, // maximum HP.
-    POKEMON_STATUS_FIELD_ATTACK = 0x88, // battle stats shown on the summary page.
-    POKEMON_STATUS_FIELD_DEFENSE = 0x89, // physical defense.
-    POKEMON_STATUS_FIELD_SP_ATTACK = 0x8A, // special attack.
-    POKEMON_STATUS_FIELD_SP_DEFENSE = 0x8B, // special defense.
-    POKEMON_STATUS_FIELD_SPEED = 0x8C, // nimbleness/speed.
-    POKEMON_STATUS_FIELD_POKERUS = 0xB5, // pokerus of the pokemon.
-    POKEMON_STATUS_FIELD_MARKINGS = 0xBB, // markings the pokemon wears.
-    POKEMON_STATUS_FIELD_NATURE = 0xBF, // nature index, into the nature table.
-    POKEMON_STATUS_FIELD_WAZA_SEALED = 0xC2, // non-zero while the waza pages stay closed.
+    POKEMON_STATUS_FIELD_HELD_ITEM = 130,
+    POKEMON_STATUS_FIELD_DARK_POINTS = 197,
+    POKEMON_STATUS_FIELD_REVERSE_MODE = 200,
+    POKEMON_STATUS_FIELD_CHAMP_RIBBON = 163,
+    POKEMON_STATUS_FIELD_WINNING_RIBBON = 164,
+    POKEMON_STATUS_FIELD_VICTORY_RIBBON = 165,
+    POKEMON_STATUS_FIELD_BROMIDE_RIBBON = 166,
+    POKEMON_STATUS_FIELD_GANBA_RIBBON = 167,
+    POKEMON_STATUS_FIELD_MARINE_RIBBON = 168,
+    POKEMON_STATUS_FIELD_LAND_RIBBON = 169,
+    POKEMON_STATUS_FIELD_SKY_RIBBON = 170,
+    POKEMON_STATUS_FIELD_COUNTRY_RIBBON = 171,
+    POKEMON_STATUS_FIELD_NATIONAL_RIBBON = 172,
+    POKEMON_STATUS_FIELD_EARTH_RIBBON = 173,
+    POKEMON_STATUS_FIELD_WORLD_RIBBON = 174,
+    POKEMON_STATUS_FIELD_STYLE_MEDAL = 176,
+    POKEMON_STATUS_FIELD_BEAUTIFUL_MEDAL = 177,
+    POKEMON_STATUS_FIELD_CUTE_MEDAL = 178,
+    POKEMON_STATUS_FIELD_CLEVER_MEDAL = 179,
+    POKEMON_STATUS_FIELD_STRONG_MEDAL = 180,
+    POKEMON_STATUS_FIELD_WAZA_PP = 128, // current PP of the given waza slot.
+    POKEMON_STATUS_FIELD_WAZA_ID = 127, // waza id of the given waza slot.
+    POKEMON_STATUS_FIELD_TRAINER_ID = 117, // id of the trainer that met the pokemon.
+    POKEMON_STATUS_FIELD_TRAINER_NAME = 118, // name of that trainer.
+    POKEMON_STATUS_FIELD_NICKNAME = 119, // name the pokemon is given.
+    POKEMON_STATUS_FIELD_SPECIES = 110, // species of the pokemon.
+    POKEMON_STATUS_FIELD_PID = 111, // personality value used to fit the pokemon's data.
+    POKEMON_STATUS_FIELD_ATTEST = 112, // attest record; gamedataGetStatus(record, 2) selects the origin text.
+    POKEMON_STATUS_FIELD_MET_PLACE = 113, // place the pokemon was caught in.
+    POKEMON_STATUS_FIELD_MET_LEVEL = 114, // level the pokemon was caught at.
+    POKEMON_STATUS_FIELD_LEVEL = 122, // level the pokemon is on.
+    POKEMON_STATUS_FIELD_EXP = 121, // total experience of the pokemon.
+    POKEMON_STATUS_FIELD_FRIEND_LEVEL = 153, // friendship level of the pokemon.
+    POKEMON_STATUS_FIELD_HP = 131, // current HP.
+    POKEMON_STATUS_FIELD_HP_MAX = 135, // maximum HP.
+    POKEMON_STATUS_FIELD_ATTACK = 136, // battle stats shown on the summary page.
+    POKEMON_STATUS_FIELD_DEFENSE = 137, // physical defense.
+    POKEMON_STATUS_FIELD_SP_ATTACK = 138, // special attack.
+    POKEMON_STATUS_FIELD_SP_DEFENSE = 139, // special defense.
+    POKEMON_STATUS_FIELD_SPEED = 140, // nimbleness/speed.
+    POKEMON_STATUS_FIELD_POKERUS = 181, // pokerus of the pokemon.
+    POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
+    POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.
+    POKEMON_STATUS_FIELD_WAZA_SEALED = 194, // non-zero while the waza pages stay closed.
 };
 
 // Marking bits of Pokemon field POKEMON_STATUS_FIELD_MARKINGS (0xBB). Slot N
@@ -153,7 +153,7 @@ enum POKEMON_POKERUS {
     POKEMON_POKERUS_ACTIVE_MASK = 0xF, // active pokerus infection in the low nibble.
 };
 
-enum { POKEMON_STATUS_CONDITION = 0x7C, POKEMON_STATUS_HP = 0x83 };
+enum { POKEMON_STATUS_CONDITION = 124, POKEMON_STATUS_HP = 131 };
 
 #ifdef __cplusplus
 extern "C" {
@@ -168,19 +168,19 @@ void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
    species halfword (zero for an empty slot); POKEMON_STATUS_MOVE reads the
    move ID of the slot the fourth argument selects. */
 enum PokemonStatusQuery {
-    POKEMON_STATUS_SPECIES = 0x6E,
-    POKEMON_STATUS_MOVE = 0x7F,
-    POKEMON_QUERY_LEVEL = 0x7A,
-    POKEMON_QUERY_SPECIES = 0x6E,
-    POKEMON_QUERY_MOVE_PP = 0x80,
-    POKEMON_QUERY_ATTACK = 0x88,
-    POKEMON_QUERY_DEFENSE = 0x89,
-    POKEMON_QUERY_SPECIAL_ATTACK = 0x8A,
-    POKEMON_QUERY_SPECIAL_DEFENSE = 0x8B,
-    POKEMON_QUERY_SPEED = 0x8C,
-    POKEMON_QUERY_IS_FAINTED = 0x7B,
-    POKEMON_QUERY_MOVE_ID = 0x7F,
-    POKEMON_QUERY_PARTY_RECORD = 0xCC
+    POKEMON_STATUS_SPECIES = 110,
+    POKEMON_STATUS_MOVE = 127,
+    POKEMON_QUERY_LEVEL = 122,
+    POKEMON_QUERY_SPECIES = 110,
+    POKEMON_QUERY_MOVE_PP = 128,
+    POKEMON_QUERY_ATTACK = 136,
+    POKEMON_QUERY_DEFENSE = 137,
+    POKEMON_QUERY_SPECIAL_ATTACK = 138,
+    POKEMON_QUERY_SPECIAL_DEFENSE = 139,
+    POKEMON_QUERY_SPEED = 140,
+    POKEMON_QUERY_IS_FAINTED = 123,
+    POKEMON_QUERY_MOVE_ID = 127,
+    POKEMON_QUERY_PARTY_RECORD = 204
 };
 
 enum PokemonSex {
@@ -193,9 +193,9 @@ enum PokemonAilment {
     POKEMON_CONDITION_NONE = 0,
     POKEMON_CONDITION_POISON = 3,
     POKEMON_CONDITION_BAD_POISON = 4,
-    POKEMON_CONDITION_BURN = 5,
-    POKEMON_CONDITION_FREEZE = 6,
-    POKEMON_CONDITION_PARALYSIS = 7,
+    POKEMON_CONDITION_PARALYSIS = 5,
+    POKEMON_CONDITION_BURN = 6,
+    POKEMON_CONDITION_FREEZE = 7,
     POKEMON_CONDITION_SLEEP = 8,
 };
 
