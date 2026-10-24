@@ -135,6 +135,12 @@ GSmemPoolAllocator* GSmemCreatePool(u32 cellCount, u32 cellSize);
 void GSmemInitPool(void);
 GSmemPoolAllocator* GSmemGetSysdolAllocator(u32 size);
 void GSmemInitSysdolAllocator(void);
+s32 OSSetAllocMethodHeap(s32 heap, s32 method);
+s32 OSGetHeapType(s32 heap);
+s32 OSGetHeapFreeSize(s32 heap, u32* totalSize, u32* largestSize);
+s32 OSGetHeapSize(s32 heap);
+s32 OSCreateExternalHeap(void* start, void* end, GSmemCell* cells, s32 cellCount);
+s32 OSShrinkHeap(s32 heap, void* ptr, u32 size);
 }
 
 BOOL _memCheckOwnCallback(void* ptr);

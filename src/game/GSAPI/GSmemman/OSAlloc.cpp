@@ -9,8 +9,7 @@
 
 #include <GSmemman.h>
 
-/* Heap consistency checks report the failing condition and the line recorded
- * for it. */
+/* Keep each failed heap invariant and its source line in the diagnostic. */
 #define ASSERTREPORT(line, cond) \
     if (!(cond)) { \
         OSReport("OSCheckHeap: Failed " #cond " in %d", line); \
@@ -310,7 +309,6 @@ extern "C" s32 OSShrinkHeap(s32 heap, void* ptr, u32 size) {
     s32 cellSize;
     s32 savedSize;
     u32 area;
-    u32 areaEnd;
     s32 rest;
 
     if (!size) {
@@ -347,8 +345,7 @@ extern "C" s32 OSShrinkHeap(s32 heap, void* ptr, u32 size) {
         area = cell->area;
         cell->size = size;
         newCell = (GSmemCell*)(area + size);
-        areaEnd = cell->area + cell->size;
-        newArea = areaEnd;
+        newArea = cell->area_after();
         newCell->area = newArea;
     }
     newCell->init(rest);
@@ -587,10 +584,8 @@ void GSmemCell::clear() {
 
 GSmemCell* GSmemHeapDesc::searchAllocCell(void* ptr) {
     GSmemCell* cell;
-    GSmemCell* head;
 
-    head = allocated;
-    for (cell = head; cell != NULL; cell = cell->next) {
+    for (cell = allocated; cell != NULL; cell = cell->next_cell()) {
         if (cell->get_area(this) == ptr) {
             return cell;
         }
@@ -612,17 +607,10 @@ void GSmemHeapDesc::addfreeCellList(GSmemCell* cell) {
 
 GSmemCell* GSmemHeapDesc::createNewCell() {
     GSmemCell* cell;
-    GSmemCell* head;
-    GSmemCell* old;
-    GSmemCell* next;
 
     cell = newCellList;
     if (cell) {
-        head = newCellList;
-        old = head;
-        next = old->next;
-        newCellList = next;
-        head = next;
+        newCellList = newCellList->next_cell();
         if (newCellList) {
             newCellList->prev = NULL;
         }
