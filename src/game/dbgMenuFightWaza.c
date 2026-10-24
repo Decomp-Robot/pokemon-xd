@@ -2,7 +2,6 @@
 #include <menu.h>
 #include <types.h>
 #include <menuSub.h>
-#include <waza.h>
 
 
 long dbgMenuFightGetWazaTypeId(u8 typeID);
@@ -27,7 +26,7 @@ s32 dbgMenuFightWazaEditSub(u16 wazaNo)
     work = *waza;
 
     while (1) {
-        result = menuOpenCustom(0x20, 0, 0, 0, 1, 1, wazaNo);
+        result = menuOpenCustom(MENU_ID_DEBUG_MOVE_EDITOR, 0, 0, 0, 1, 1, wazaNo);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_MOVE_EDITOR, 0, 1);
             *waza = work;
@@ -60,14 +59,14 @@ s32 dbgMenuFightWazaEditSub(u16 wazaNo)
                 wazaSetStatus(0, wazaNo, WAZA_STATUS_TYPE, 2, typeID);
             }
             break;
-        case 0x8C:
-            typeID = menuSubOpenYesNo(0x7F, -1, -1, wazaGetStatus(0, wazaNo, 0x1B, 0) == 0);
-            if (typeID == 0) {
-                wazaSetStatus(0, wazaNo, 0x1B, 0, 1);
+        case MENU_ITEM_DEBUG_MOVE_RISK_FLAG:
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, wazaGetStatus(0, wazaNo, WAZA_STATUS_RISK_FLAG, 0) == 0);
+            if (result == 0) {
+                wazaSetStatus(0, wazaNo, WAZA_STATUS_RISK_FLAG, 0, 1);
                 break;
             }
-            if (typeID == 1) {
-                wazaSetStatus(0, wazaNo, 0x1B, 0, 0);
+            if (result == 1) {
+                wazaSetStatus(0, wazaNo, WAZA_STATUS_RISK_FLAG, 0, 0);
             }
             break;
         }

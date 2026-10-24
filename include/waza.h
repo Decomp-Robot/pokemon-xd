@@ -65,7 +65,10 @@ enum {
     ZOKUSEI_DATA_ID_ELECTRIC = 13
 };
 
-enum { WAZA_STATUS_TYPE = 0x1A };
+enum {
+    WAZA_STATUS_TYPE = 0x1A,
+    WAZA_STATUS_RISK_FLAG = 0x1B
+};
 
 struct WazaData {
     u32 _00[0x20 / 4];
