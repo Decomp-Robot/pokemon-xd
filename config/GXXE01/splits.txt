@@ -1371,6 +1371,7 @@ libc/FILE_POS.c:
 
 libc/mbstring.c:
 	.text       start:0x800DF228 end:0x800DF340
+	.sdata2     start:0x804ECD50 end:0x804ECD58
 
 libc/mem.c:
 	.text       start:0x800DF340 end:0x800DF4B0

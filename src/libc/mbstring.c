@@ -1,22 +1,11 @@
-/*
- * Lead byte of a UTF-8 sequence of one to three bytes, indexed by the
- * length of the sequence.  The library holds the four bytes in small
- * data; wcstombs copies the whole word into a local.
- */
-typedef union {
-    unsigned long all;
-    unsigned char byte[4];
-} Utf8LeadBytes;
-extern Utf8LeadBytes utf8LeadBytes;
-
-extern char *strncpy(char *dst, const char *src, unsigned long n);
+#include <stdlib.h>
+#include <string.h>
 
 static inline int encodeUtf8Character(unsigned char *buf, unsigned short c) {
     unsigned char *p;
     int len;
-    Utf8LeadBytes lead;
+    unsigned char lead[4] = {0, 0, 0xC0, 0xE0};
 
-    lead.all = utf8LeadBytes.all;
     if ((unsigned int)c < 0x80) {
         len = 1;
     } else if ((unsigned int)c < 0x800) {
@@ -33,19 +22,19 @@ static inline int encodeUtf8Character(unsigned char *buf, unsigned short c) {
         *--p = (unsigned char)(0x80 | (c & 0x3F));
         c >>= 6;
     case 1:
-        *--p = (unsigned char)(c | lead.byte[len]);
+        *--p = (unsigned char)(c | lead[len]);
         break;
     }
     return len;
 }
 
-unsigned long wcstombs(char *dst, const unsigned short *src, unsigned long n) {
+size_t wcstombs(char *dst, const wchar_t *src, size_t n) {
     int len;
     int done = 0;
-    const unsigned short *cur;
+    const wchar_t *cur;
     unsigned char buf[4];
 
-    if (dst == ((void *)0) || src == ((void *)0)) {
+    if (dst == NULL || src == NULL) {
         return 0;
     }
     cur = src;
@@ -58,8 +47,8 @@ unsigned long wcstombs(char *dst, const unsigned short *src, unsigned long n) {
         if (done + len > n) {
             break;
         }
-        strncpy(dst + done, (const char *)buf, (unsigned long)len);
-        done += (unsigned long)len;
+        strncpy(dst + done, (const char *)buf, (size_t)len);
+        done += (size_t)len;
     }
     return done;
 }
