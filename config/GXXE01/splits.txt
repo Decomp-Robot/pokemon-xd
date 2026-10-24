@@ -676,6 +676,9 @@ ext/dolphin_sdk/ai/ai.c:
 	.text       start:0x800BC728 end:0x800BC7D4
 	.text       start:0x800BC7D4 end:0x800BC82C
 	.text       start:0x800BC82C end:0x800BCA10
+	.data       start:0x803D2A00 end:0x803D2A48
+	.sdata      start:0x804E81B8 end:0x804E81C0
+	.sbss       start:0x804EACE8 end:0x804EAD28
 
 ext/dolphin_sdk/ar/ar.c:
 	.text       start:0x800BCA10 end:0x800BCA54

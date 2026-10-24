@@ -7,10 +7,9 @@
 #include "musyx/voice.h"
 
 typedef struct FILTERInfo {
-  // total size: 0x6
-  u8 on;     // offset 0x0, size 0x1
-  u16 coefA; // offset 0x2, size 0x2
-  u16 coefB; // offset 0x4, size 0x2
+  u8 on;
+  u16 coefA;
+  u16 coefB;
 } FILTERInfo;
 
 typedef struct DSPvoice {
@@ -78,45 +77,42 @@ typedef struct DSPvoice {
 } DSPvoice;
 
 typedef struct DSPhostDPop {
-  // total size: 0x24
-  s32 l;  // offset 0x0, size 0x4
-  s32 r;  // offset 0x4, size 0x4
-  s32 s;  // offset 0x8, size 0x4
-  s32 lA; // offset 0xC, size 0x4
-  s32 rA; // offset 0x10, size 0x4
-  s32 sA; // offset 0x14, size 0x4
-  s32 lB; // offset 0x18, size 0x4
-  s32 rB; // offset 0x1C, size 0x4
-  s32 sB; // offset 0x20, size 0x4
+  s32 l;
+  s32 r;
+  s32 s;
+  s32 lA;
+  s32 rA;
+  s32 sA;
+  s32 lB;
+  s32 rB;
+  s32 sB;
 } DSPhostDPop;
 
 typedef struct DSPinput {
-  // total size: 0xC
-  u8 studio;              // offset 0x0, size 0x1
-  u16 vol;                // offset 0x2, size 0x2
-  u16 volA;               // offset 0x4, size 0x2
-  u16 volB;               // offset 0x6, size 0x2
-  SND_STUDIO_INPUT* desc; // offset 0x8, size 0x4
+  u8 studio;
+  u16 vol;
+  u16 volA;
+  u16 volB;
+  SND_STUDIO_INPUT* desc;
 } DSPinput;
 
 typedef struct DSPstudioinfo {
-  // total size: 0xBC
-  _SPB* spb;                    // offset 0x0, size 0x4
-  DSPhostDPop hostDPopSum;      // offset 0x4, size 0x24
-  s32* main[2];                 // offset 0x28, size 0x8
-  s32* auxA[3];                 // offset 0x30, size 0xC
-  s32* auxB[3];                 // offset 0x3C, size 0xC
-  DSPvoice* voiceRoot;          // offset 0x48, size 0x4
-  DSPvoice* alienVoiceRoot;     // offset 0x4C, size 0x4
-  u8 state;                     // offset 0x50, size 0x1
-  u8 isMaster;                  // offset 0x51, size 0x1
-  u8 numInputs;                 // offset 0x52, size 0x1
-  SND_STUDIO_TYPE type;         // offset 0x54, size 0x4
-  DSPinput in[7];               // offset 0x58, size 0x54
-  SND_AUX_CALLBACK auxAHandler; // offset 0xAC, size 0x4
-  SND_AUX_CALLBACK auxBHandler; // offset 0xB0, size 0x4
-  void* auxAUser;               // offset 0xB4, size 0x4
-  void* auxBUser;               // offset 0xB8, size 0x4
+  _SPB* spb;
+  DSPhostDPop hostDPopSum;
+  s32* main[2];
+  s32* auxA[3];
+  s32* auxB[3];
+  DSPvoice* voiceRoot;
+  DSPvoice* alienVoiceRoot;
+  u8 state;
+  u8 isMaster;
+  u8 numInputs;
+  SND_STUDIO_TYPE type;
+  DSPinput in[7];
+  SND_AUX_CALLBACK auxAHandler;
+  SND_AUX_CALLBACK auxBHandler;
+  void* auxAUser;
+  void* auxBUser;
 } DSPstudioinfo;
 
 extern DSPstudioinfo dspStudio[8];

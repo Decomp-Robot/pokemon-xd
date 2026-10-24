@@ -10,57 +10,51 @@ extern "C" {
 // TODO: 32bit assumptions
 
 typedef struct SAMPLE_INFO {
-  // total size: 0x20
-  u32 info;        // offset 0x0, size 0x4
-  void* addr;      // offset 0x4, size 0x4
-  void* extraData; // offset 0x8, size 0x4
-  u32 offset;      // offset 0xC, size 0x4
-  u32 length;      // offset 0x10, size 0x4
-  u32 loop;        // offset 0x14, size 0x4
-  u32 loopLength;  // offset 0x18, size 0x4
-  u8 compType;     // offset 0x1C, size 0x1
+  u32 info;
+  void* addr;
+  void* extraData;
+  u32 offset;
+  u32 length;
+  u32 loop;
+  u32 loopLength;
+  u8 compType;
 } SAMPLE_INFO;
 
 typedef struct GROUP_DATA {
-  // total size: 0x28
-  u32 nextOff;   // offset 0x0, size 0x4
-  u16 id;        // offset 0x4, size 0x2
-  u16 type;      // offset 0x6, size 0x2
-  u32 macroOff;  // offset 0x8, size 0x4
-  u32 sampleOff; // offset 0xC, size 0x4
-  u32 curveOff;  // offset 0x10, size 0x4
-  u32 keymapOff; // offset 0x14, size 0x4
-  u32 layerOff;  // offset 0x18, size 0x4
+  u32 nextOff;
+  u16 id;
+  u16 type;
+  u32 macroOff;
+  u32 sampleOff;
+  u32 curveOff;
+  u32 keymapOff;
+  u32 layerOff;
   union {
     struct fx {
-      // total size: 0x4
-      u32 tableOff; // offset 0x0, size 0x4
+      u32 tableOff;
     } fx;
     struct song {
-      // total size: 0xC
-      u32 normpageOff;  // offset 0x0, size 0x4
-      u32 drumpageOff;  // offset 0x4, size 0x4
-      u32 midiSetupOff; // offset 0x8, size 0x4
+      u32 normpageOff;
+      u32 drumpageOff;
+      u32 midiSetupOff;
     } song;
-  } data; // offset 0x1C, size 0xC
+  } data;
 } GROUP_DATA;
 
 typedef struct SAMPLE_HEADER {
-  // total size: 0x10
-  u32 info;       // offset 0x0, size 0x4
-  u32 length;     // offset 0x4, size 0x4
-  u32 loopOffset; // offset 0x8, size 0x4
-  u32 loopLength; // offset 0xC, size 0x4
+  u32 info;
+  u32 length;
+  u32 loopOffset;
+  u32 loopLength;
 } SAMPLE_HEADER;
 
 typedef struct SDIR_DATA {
-  // total size: 0x20
-  u16 id;               // offset 0x0, size 0x2
-  u16 ref_cnt;          // offset 0x2, size 0x2
-  u32 offset;           // offset 0x4, size 0x4
-  void* addr;           // offset 0x8, size 0x4
-  SAMPLE_HEADER header; // offset 0xC, size 0x10
-  u32 extraData;        // offset 0x1C, size 0x4
+  u16 id;
+  u16 ref_cnt;
+  u32 offset;
+  void* addr;
+  SAMPLE_HEADER header;
+  u32 extraData;
 } SDIR_DATA;
 
 /*! A direct copy of the above structure to allow us to load in legacy data
@@ -79,134 +73,119 @@ typedef struct SDIR_DATA_INTER {
 } SDIR_DATA_INTER;
 
 typedef struct SDIR_TAB {
-  // total size: 0xC
-  SDIR_DATA* data; // offset 0x0, size 0x4
-  void* base;      // offset 0x4, size 0x4
-  u16 numSmp;      // offset 0x8, size 0x2
-  u16 res;         // offset 0xA, size 0x2
+  SDIR_DATA* data;
+  void* base;
+  u16 numSmp;
+  u16 res;
 } SDIR_TAB;
 
 typedef struct DATA_TAB {
-  // total size: 0x8
-  void* data;   // offset 0x0, size 0x4
-  u16 id;       // offset 0x4, size 0x2
-  u16 refCount; // offset 0x6, size 0x2
+  void* data;
+  u16 id;
+  u16 refCount;
 } DATA_TAB;
 
 typedef struct LAYER_TAB {
-  // total size: 0xC
-  void* data;   // offset 0x0, size 0x4
-  u16 id;       // offset 0x4, size 0x2
-  u16 num;      // offset 0x6, size 0x2
-  u16 refCount; // offset 0x8, size 0x2
-  u16 reserved; // offset 0xA, size 0x2
+  void* data;
+  u16 id;
+  u16 num;
+  u16 refCount;
+  u16 reserved;
 } LAYER_TAB;
 
 typedef struct MAC_MAINTAB {
-  // total size: 0x4
-  u16 num;         // offset 0x0, size 0x2
-  u16 subTabIndex; // offset 0x2, size 0x2
+  u16 num;
+  u16 subTabIndex;
 } MAC_MAINTAB;
 
 typedef struct MAC_SUBTAB {
-  // total size: 0x8
-  void* data;   // offset 0x0, size 0x4
-  u16 id;       // offset 0x4, size 0x2
-  u16 refCount; // offset 0x6, size 0x2
+  void* data;
+  u16 id;
+  u16 refCount;
 } MAC_SUBTAB;
 
 typedef struct GSTACK {
-  // total size: 0xC
-  GROUP_DATA* gAddr;   // offset 0x0, size 0x4
-  SDIR_DATA* sdirAddr; // offset 0x4, size 0x4
-  void* prjAddr;       // offset 0x8, size 0x4
+  GROUP_DATA* gAddr;
+  SDIR_DATA* sdirAddr;
+  void* prjAddr;
 } GSTACK;
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
 typedef struct GSTACK_INST {
-  // total size: 0x618
-  struct GSTACK_INST* next; // offset 0x0, size 0x4
-  unsigned long id;         // offset 0x4, size 0x4
-  signed short sp;          // offset 0x8, size 0x2
-  struct GSTACK gs[128];    // offset 0xC, size 0x600
-  struct ARAMInfo aramInfo; // offset 0x60C, size 0xC
+  struct GSTACK_INST* next;
+  unsigned long id;
+  signed short sp;
+  struct GSTACK gs[128];
+  struct ARAMInfo aramInfo;
 } GSTACK_INST;
 #endif
 
 typedef struct LAYER {
-  // total size: 0xC
-  u16 id;         // offset 0x0, size 0x2
-  u8 keyLow;      // offset 0x2, size 0x1
-  u8 keyHigh;     // offset 0x3, size 0x1
-  s8 transpose;   // offset 0x4, size 0x1
-  u8 volume;      // offset 0x5, size 0x1
-  s16 prioOffset; // offset 0x6, size 0x2
-  u8 panning;     // offset 0x8, size 0x1
-  u8 reserved[3]; // offset 0x9, size 0x3
+  u16 id;
+  u8 keyLow;
+  u8 keyHigh;
+  s8 transpose;
+  u8 volume;
+  s16 prioOffset;
+  u8 panning;
+  u8 reserved[3];
 } LAYER;
 
 typedef struct KEYMAP {
-  // total size: 0x8
-  u16 id;         // offset 0x0, size 0x2
-  s8 transpose;   // offset 0x2, size 0x1
-  u8 panning;     // offset 0x3, size 0x1
-  s16 prioOffset; // offset 0x4, size 0x2
-  u8 reserved[2]; // offset 0x6, size 0x2
+  u16 id;
+  s8 transpose;
+  u8 panning;
+  s16 prioOffset;
+  u8 reserved[2];
 } KEYMAP;
 
 typedef struct MEM_DATA {
-  // total size: 0x408
-  u32 nextOff;  // offset 0x0, size 0x4
-  u16 id;       // offset 0x4, size 0x2
-  u16 reserved; // offset 0x6, size 0x2
+  u32 nextOff;
+  u16 id;
+  u16 reserved;
   union {
     struct {
-      // total size: 0x10
-      u32 num;        // offset 0x0, size 0x4
-      LAYER entry[1]; // offset 0x4, size 0xC
+      u32 num;
+      LAYER entry[1];
     } layer;
     KEYMAP map[128];
     u8 tab[1];
     MSTEP cmd[1][2];
-  } data; // offset 0x8, size 0x400
+  } data;
 } MEM_DATA;
 
 typedef struct POOL_DATA {
-  // total size: 0x10
-  u32 macroOff;  // offset 0x0, size 0x4
-  u32 curveOff;  // offset 0x4, size 0x4
-  u32 keymapOff; // offset 0x8, size 0x4
-  u32 layerOff;  // offset 0xC, size 0x4
+  u32 macroOff;
+  u32 curveOff;
+  u32 keymapOff;
+  u32 layerOff;
 } POOL_DATA;
 
 typedef struct FX_TAB {
-  // total size: 0xA
-  u16 id;       // offset 0x0, size 0x2
-  u16 macro;    // offset 0x2, size 0x2
-  u8 maxVoices; // offset 0x4, size 0x1
-  u8 priority;  // offset 0x5, size 0x1
-  u8 volume;    // offset 0x6, size 0x1
-  u8 panning;   // offset 0x7, size 0x1
-  u8 key;       // offset 0x8, size 0x1
-  u8 vGroup;    // offset 0x9, size 0x1
+  u16 id;
+  u16 macro;
+  u8 maxVoices;
+  u8 priority;
+  u8 volume;
+  u8 panning;
+  u8 key;
+  u8 vGroup;
 } FX_TAB;
 
 typedef struct FX_DATA {
-  // total size: 0xE
-  u16 num;       // offset 0x0, size 0x2
-  u16 reserverd; // offset 0x2, size 0x2
-  FX_TAB fx[1];  // offset 0x4, size 0xA
+  u16 num;
+  u16 reserverd;
+  FX_TAB fx[1];
 } FX_DATA;
 
 typedef struct FX_GROUP {
-  // total size: 0x8
-  u16 gid;   // offset 0x0, size 0x2
-  u16 fxNum; // offset 0x2, size 0x2
+  u16 gid;
+  u16 fxNum;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
-  u16 refCount; // offset 0x4, size 0x2
-  u16 reserved; // offset 0x6, size 0x2
+  u16 refCount;
+  u16 reserved;
 #endif
-  FX_TAB* fxTab; // offset 0x4, size 0x4
+  FX_TAB* fxTab;
 } FX_GROUP;
 
 void dataInit(u32, u32);

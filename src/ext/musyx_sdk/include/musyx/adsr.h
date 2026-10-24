@@ -3,25 +3,22 @@
 
 #include "musyx/musyx.h"
 typedef struct ADSR_INFO {
-  // total size: 0x14
   union ai_data {
     struct {
-      // total size: 0x14
-      s32 atime;  // offset 0x0, size 0x4
-      s32 dtime;  // offset 0x4, size 0x4
-      u16 slevel; // offset 0x8, size 0x2
-      u16 rtime;  // offset 0xA, size 0x2
-      s32 ascale; // offset 0xC, size 0x4
-      s32 dscale; // offset 0x10, size 0x4
+      s32 atime;
+      s32 dtime;
+      u16 slevel;
+      u16 rtime;
+      s32 ascale;
+      s32 dscale;
     } dls;
     struct {
-      // total size: 0x8
-      u16 atime;  // offset 0x0, size 0x2
-      u16 dtime;  // offset 0x2, size 0x2
-      u16 slevel; // offset 0x4, size 0x2
-      u16 rtime;  // offset 0x6, size 0x2
+      u16 atime;
+      u16 dtime;
+      u16 slevel;
+      u16 rtime;
     } linear;
-  } data; // offset 0x0, size 0x14
+  } data;
 } ADSR_INFO;
 
 typedef struct ADSR_VARS {

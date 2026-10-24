@@ -520,8 +520,8 @@ void VIInit(void) {
     __VIRegs[26] = value;
     PreCB = NULL;
     PostCB = NULL;
-    __OSSetInterruptHandler(0x18, __VIRetraceHandler);
-    __OSUnmaskInterrupts(0x80);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_VI, __VIRetraceHandler);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_VI);
 }
 
 void VIWaitForRetrace(void) {
@@ -859,14 +859,14 @@ void VIConfigure(const GXRenderModeObj* rm) {
         regDspCfg = (((u32)(regDspCfg)) & ~0x00000004) | (((u32)(1)) << 2);
         regClksel = (((u32)(regClksel)) & ~0x00000001) | (((u32)(1)) << 0);
     } else {
-        OLD_SET_REG_FIELD(2052, regDspCfg, 1, 2, HorVer.nonInter & 1);
+        MASKED_SET_REG_FIELD(2052, regDspCfg, 1, 2, HorVer.nonInter & 1);
         regClksel = (((u32)(regClksel)) & ~0x00000001);
     }
 
-    OLD_SET_REG_FIELD(2056, regDspCfg, 1, 3, HorVer.threeD);
+    MASKED_SET_REG_FIELD(2056, regDspCfg, 1, 3, HorVer.threeD);
 
     if ((HorVer.tv == VI_PAL) || (HorVer.tv == VI_MPAL) || (HorVer.tv == 3)) {
-        OLD_SET_REG_FIELD(2060, regDspCfg, 2, 8, HorVer.tv);
+        MASKED_SET_REG_FIELD(2060, regDspCfg, 2, 8, HorVer.tv);
     } else {
         regDspCfg = (((u32)(regDspCfg)) & ~0x00000300);
     }
@@ -1199,8 +1199,8 @@ void __VISetLatchMode(u32 mode) {
     u32 reg;
 
     reg = __VIRegs[1];
-    OLD_SET_REG_FIELD(2834, reg, 2, 4, mode);
-    OLD_SET_REG_FIELD(2835, reg, 2, 6, mode);
+    MASKED_SET_REG_FIELD(2834, reg, 2, 4, mode);
+    MASKED_SET_REG_FIELD(2835, reg, 2, 6, mode);
     __VIRegs[1] = reg;
 }
 

@@ -1,8 +1,16 @@
 #ifndef _MSL_MATH_H_
 #define _MSL_MATH_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 double fmod(double x, double y);
 double floor(double x);
+
+#ifdef __cplusplus
+}
+#endif
 
 static inline float fmodf(float x, float y)
 {

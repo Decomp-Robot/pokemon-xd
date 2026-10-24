@@ -175,15 +175,14 @@ do { \
 
 #define GET_REG_FIELD(reg, size, shift) ((int)((reg) >> (shift)) & ((1 << (size)) - 1))
 
-// TODO: reconcile reg macro differences
-// this one is needed to match non GX libs
-#define OLD_SET_REG_FIELD(line, reg, size, shift, val) \
+// Update a register field with a masked read/modify/write.
+#define MASKED_SET_REG_FIELD(line, reg, size, shift, val) \
 do { \
     ASSERTMSGLINE(line, ((u32)(val) & ~((1 << (size)) - 1)) == 0, "GX Internal: Register field out of range"); \
     (reg) = ((u32)(reg) & ~(((1 << (size)) - 1) << (shift))) | ((u32)(val) << (shift)); \
 } while (0)
 
-// above doesn't seem to work with GX, only can get it to work with this
+// Insert a register field using the PowerPC rotate-and-mask intrinsic.
 #define SET_REG_FIELD(line, reg, size, shift, val) \
 do { \
     ASSERTMSGLINE(line, ((u32)(val) & ~((1 << (size)) - 1)) == 0, "GX Internal: Register field out of range"); \
@@ -351,7 +350,7 @@ static inline u32 __GXReadCPCounterU32(u32 regAddrL, u32 regAddrH) {
         ctrH0 = GX_GET_CP_REG(regAddrH);
     } while (ctrH0 != ctrH1);
 
-    return (ctrH0 << 0x10) | ctrL;
+    return (ctrH0 << 16) | ctrL;
 }
 
 static inline u32 __GXReadMEMCounterU32(u32 regAddrL, u32 regAddrH) {
@@ -367,7 +366,7 @@ static inline u32 __GXReadMEMCounterU32(u32 regAddrL, u32 regAddrH) {
         ctrH0 = GX_GET_MEM_REG(regAddrH);
     } while (ctrH0 != ctrH1);
 
-    return (ctrH0 << 0x10) | ctrL;
+    return (ctrH0 << 16) | ctrL;
 }
 
 static inline u32 __GXReadPECounterU32(u32 regAddrL, u32 regAddrH) {
@@ -383,7 +382,7 @@ static inline u32 __GXReadPECounterU32(u32 regAddrL, u32 regAddrH) {
         ctrH0 = GX_GET_PE_REG(regAddrH);
     } while (ctrH0 != ctrH1);
 
-    return (ctrH0 << 0x10) | ctrL;
+    return (ctrH0 << 16) | ctrL;
 }
 
 /* GXSave */

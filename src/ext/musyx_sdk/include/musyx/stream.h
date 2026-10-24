@@ -10,13 +10,12 @@ extern "C" {
 typedef u32 (*SND_STREAM_UPDATE_CALLBACK)(void* buffer1, u32 len1, void* buffer2, u32 len2,
                                           u32 user);
 typedef struct SNDADPCMinfo {
-  // total size: 0x28
-  u16 numCoef;       // offset 0x0, size 0x2
-  u8 initialPS;      // offset 0x2, size 0x1
-  u8 loopPS;         // offset 0x3, size 0x1
-  s16 loopY0;        // offset 0x4, size 0x2
-  s16 loopY1;        // offset 0x6, size 0x2
-  s16 coefTab[8][2]; // offset 0x8, size 0x20
+  u16 numCoef;
+  u8 initialPS;
+  u8 loopPS;
+  s16 loopY0;
+  s16 loopY1;
+  s16 coefTab[8][2];
 } SNDADPCMinfo;
 
 typedef struct STREAM_INFO {
@@ -55,9 +54,9 @@ typedef struct STREAM_INFO {
 
   u8 studio;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
-  u8 lpfEnable; // offset 0x61, size 0x1
-  u16 lpfA0;    // offset 0x62, size 0x2
-  u16 lpfB0;    // offset 0x64, size 0x2
+  u8 lpfEnable;
+  u16 lpfA0;
+  u16 lpfB0;
 #endif
   /* These were moved to near the start of the structure in later versions */
 #if MUSY_VERSION <= MUSY_VERSION_CHECK(1, 5, 4)
@@ -68,9 +67,8 @@ typedef struct STREAM_INFO {
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
 struct streamDefaults {
-  // total size: 0x8
-  unsigned char lpfEnable; // offset 0x0, size 0x1
-  unsigned long lpfFrq;    // offset 0x4, size 0x4
+  unsigned char lpfEnable;
+  unsigned long lpfFrq;
 };
 #endif
 

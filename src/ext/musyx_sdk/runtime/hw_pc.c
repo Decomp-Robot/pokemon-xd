@@ -23,9 +23,9 @@ static volatile u32 salLogicIsWaiting = 0;
 static volatile u32 salDspIsDone = 0;
 void* salAIBufferBase = NULL;
 static u8 salAIBufferIndex = 0;
-static SND_SOME_CALLBACK userCallback = NULL;
+static SAL_AUDIO_CALLBACK userCallback = NULL;
 
-#define DMA_BUFFER_LEN 0x280
+#define DMA_BUFFER_LEN 640
 
 #ifdef _WIN32
 HANDLE globalMutex;
@@ -72,7 +72,7 @@ void dspResumeCallback() {
   }
 }
 
-bool salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
+bool salInitAi(SAL_AUDIO_CALLBACK callback, u32 unk, u32* outFreq) {
   if ((salAIBufferBase = salMalloc(DMA_BUFFER_LEN * 4)) != NULL) {
     memset(salAIBufferBase, 0, DMA_BUFFER_LEN * 4);
     // DCFlushRange(salAIBufferBase, DMA_BUFFER_LEN * 4);
@@ -82,8 +82,8 @@ bool salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
     salLogicActive = FALSE;
     userCallback = callback;
     // AIRegisterDMACallback(salCallback);
-    // AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 0x280), 0x280);
-    synthInfo.numSamples = 0x20;
+    // AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 640), 640);
+    synthInfo.numSamples = 32;
     *outFreq = 32000;
     MUSY_DEBUG("MusyX AI interface initialized.\n");
     return TRUE;

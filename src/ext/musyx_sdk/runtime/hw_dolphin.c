@@ -15,7 +15,7 @@ static DSPTaskInfo dsp_task ATTRIBUTE_ALIGN(8);
 static u16 dram_image[4096] ATTRIBUTE_ALIGN(32);
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
-static SND_SOME_CALLBACK userCallback;
+static SAL_AUDIO_CALLBACK userCallback;
 u8 salAIBufferIndex;
 static void* salAIBufferBase;
 static volatile u32 salDspIsDone;
@@ -36,10 +36,10 @@ static volatile u32 salLogicIsWaiting = 0;
 static volatile u32 salDspIsDone = 0;
 static void* salAIBufferBase = NULL;
 u8 salAIBufferIndex = 0;
-static SND_SOME_CALLBACK userCallback = NULL;
+static SAL_AUDIO_CALLBACK userCallback = NULL;
 #endif
 
-#define DMA_BUFFER_LEN 0x280
+#define DMA_BUFFER_LEN 640
 
 u32 salGetStartDelay();
 
@@ -93,7 +93,7 @@ static void dspDoneCallback() { OSWakeupThread(&salWaitForDSPThreadQueue); }
 #define SAL_MALLOC salMallocPhysical
 #endif
 
-u32 salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
+u32 salInitAi(SAL_AUDIO_CALLBACK callback, u32 unk, u32* outFreq) {
   if ((salAIBufferBase = SAL_MALLOC(DMA_BUFFER_LEN * 4)) != NULL) {
     memset(salAIBufferBase, 0, DMA_BUFFER_LEN * 4);
     DCFlushRange(salAIBufferBase, DMA_BUFFER_LEN * 4);
@@ -103,8 +103,8 @@ u32 salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
     salLogicActive = FALSE;
     userCallback = callback;
     AIRegisterDMACallback(salCallback);
-    AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 0x280), 0x280);
-    synthInfo.numSamples = 0x20;
+    AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 640), 640);
+    synthInfo.numSamples = 32;
     *outFreq = 32000;
     MUSY_DEBUG("MusyX AI interface initialized.\n");
     return TRUE;
@@ -134,7 +134,7 @@ u32 salInitDsp() {
   dsp_task.iram_length = dspSlaveLength;
   dsp_task.iram_addr = 0;
   dsp_task.dram_mmem_addr = (u16*)dram_image;
-  dsp_task.dram_length = 0x2000;
+  dsp_task.dram_length = 8192;
   dsp_task.dram_addr = 0;
   dsp_task.dsp_init_vector = 0x10;
   dsp_task.dsp_resume_vector = 0x30;

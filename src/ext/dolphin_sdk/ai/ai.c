@@ -5,6 +5,20 @@
 
 #include "__gx.h"
 
+#define AI_REG_CONTROL 0
+#define AI_REG_VOLUME 1
+#define AI_REG_SAMPLE_COUNTER 2
+#define AI_REG_STREAM_TRIGGER 3
+
+#define AI_CONTROL_STREAM_INTERRUPT 0x0008
+#define AI_CONTROL_STREAM_PLAY 0x0001
+#define AI_CONTROL_SAMPLE_COUNT_RESET 0x0020
+#define AI_CONTROL_DSP_RATE_32KHZ 0x0040
+#define AI_CONTROL_DSP_RATE_MASK AI_CONTROL_DSP_RATE_32KHZ
+#define DSP_STATUS_AI_INTERRUPT   0x0008
+#define DSP_STATUS_ARAM_INTERRUPT 0x0020
+#define DSP_STATUS_DSP_INTERRUPT 0x0080
+
 #ifdef DEBUG
 const char* __AIVersion = "<< Dolphin SDK - AI\tdebug build: Apr  5 2004 03:56:18 (0x2301) >>";
 #else
@@ -22,20 +36,6 @@ static OSTime bound_48KHz;
 static OSTime min_wait;
 static OSTime max_wait;
 static OSTime buffer;
-
-typedef struct {
-    OSTime t_start;
-    OSTime t1;
-    OSTime t2;
-    OSTime t3;
-    OSTime t4;
-    OSTime t_end;
-} STRUCT_TIMELOG;
-STRUCT_TIMELOG profile;
-
-OSTime __ai_src_time_start;
-OSTime __ai_src_time_end;
-
 
 static void __AI_set_stream_sample_rate(u32 rate);
 static void __AIDHandler(__OSInterrupt interrupt, OSContext* context);
@@ -58,34 +58,29 @@ void AIInitDMA(u32 start_addr, u32 length) {
     BOOL old;
 
     old = OSDisableInterrupts();
-    __DSPRegs[24] = (__DSPRegs[24] & 0xFFFFFC00) | (start_addr >> 16);
-    __DSPRegs[25] = (__DSPRegs[25] & 0xFFFF001F) | (start_addr & 0xFFFF);
+    __DSPRegs[DSP_DMA_START_HI] = (__DSPRegs[DSP_DMA_START_HI] & 0xFFFFFC00) | (start_addr >> 16);
+    __DSPRegs[DSP_DMA_START_LO] = (__DSPRegs[DSP_DMA_START_LO] & 0xFFFF001F) | (start_addr & 0xFFFF);
     ASSERTMSGLINE(316, (length & 0x1F) == 0, "AIStartDMA: length must be multiple of 32 bytes");
-    __DSPRegs[27] = (__DSPRegs[27] & 0xFFFF8000) | ((length >> 5) & 0xFFFF);
+    __DSPRegs[DSP_DMA_CONTROL_LEN] = (__DSPRegs[DSP_DMA_CONTROL_LEN] & 0xFFFF8000) | ((length >> 5) & 0xFFFF);
     OSRestoreInterrupts(old);
 }
 
 
 void AIStartDMA(void) {
-    __DSPRegs[27] = __DSPRegs[27] | 0x8000;
+    __DSPRegs[DSP_DMA_CONTROL_LEN] = __DSPRegs[DSP_DMA_CONTROL_LEN] | DSP_DMA_START_FLAG;
 }
 
 void AIStopDMA(void) {
-    __DSPRegs[27] = __DSPRegs[27] & ~0x8000;
+    __DSPRegs[DSP_DMA_CONTROL_LEN] = __DSPRegs[DSP_DMA_CONTROL_LEN] & ~DSP_DMA_START_FLAG;
 }
-
-
-
-
-
 
 
 void AIResetStreamSampleCount(void) {
-    __AIRegs[0] = (__AIRegs[0] & ~0x20) | 0x20;
+    __AIRegs[AI_REG_CONTROL] = (__AIRegs[AI_REG_CONTROL] & ~AI_CONTROL_SAMPLE_COUNT_RESET) | AI_CONTROL_SAMPLE_COUNT_RESET;
 }
 
 void AISetStreamTrigger(u32 trigger) {
-    __AIRegs[3] = trigger;
+    __AIRegs[AI_REG_STREAM_TRIGGER] = trigger;
 }
 
 
@@ -95,26 +90,26 @@ void AISetStreamPlayState(u32 state) {
     u8 vol_right;
 
     if (state != AIGetStreamPlayState()) {
-        if (AIGetStreamSampleRate() == 0 && state == AI_STREAM_START) {
+        if (AIGetStreamSampleRate() == AI_SAMPLERATE_32KHZ && state == AI_STREAM_START) {
             vol_left = AIGetStreamVolRight();
             vol_right = AIGetStreamVolLeft();
             AISetStreamVolRight(0);
             AISetStreamVolLeft(0);
             old = OSDisableInterrupts();
             __AI_SRC_INIT();
-            OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 5, 1);
-            OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 0, AI_STREAM_START);
+            MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 5, 1);
+            MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 0, AI_STREAM_START);
             OSRestoreInterrupts(old);
             AISetStreamVolLeft(vol_left);
             AISetStreamVolRight(vol_right);
             return;
         }
-        OLD_SET_REG_FIELD(653, __AIRegs[0], 1, 0, state);
+        MASKED_SET_REG_FIELD(653, __AIRegs[AI_REG_CONTROL], 1, 0, state);
     }
 }
 
 u32 AIGetStreamPlayState(void) {
-    return __AIRegs[0] & 1;
+    return __AIRegs[AI_REG_CONTROL] & AI_CONTROL_STREAM_PLAY;
 }
 
 void AISetDSPSampleRate(u32 rate) {
@@ -125,7 +120,7 @@ void AISetDSPSampleRate(u32 rate) {
     u8 vol_right;
 
     if (rate != AIGetDSPSampleRate()) {
-        __AIRegs[0] = (__AIRegs[0] & 0xFFFFFFBF);
+        __AIRegs[AI_REG_CONTROL] &= ~AI_CONTROL_DSP_RATE_MASK;
         if (rate == AI_SAMPLERATE_32KHZ) {
             vol_left = AIGetStreamVolLeft();
             vol_right = AIGetStreamVolRight();
@@ -135,10 +130,10 @@ void AISetDSPSampleRate(u32 rate) {
             AISetStreamVolRight(0U);
             old = OSDisableInterrupts();
             __AI_SRC_INIT();
-            OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 5, 1);
-            OLD_SET_REG_FIELD(743, __AIRegs[0], 1, 1, afr_state);
-            OLD_SET_REG_FIELD(744, __AIRegs[0], 1, 0, play_state);
-            __AIRegs[0] |= 0x40;
+            MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 5, 1);
+            MASKED_SET_REG_FIELD(743, __AIRegs[AI_REG_CONTROL], 1, 1, afr_state);
+            MASKED_SET_REG_FIELD(744, __AIRegs[AI_REG_CONTROL], 1, 0, play_state);
+            __AIRegs[AI_REG_CONTROL] |= AI_CONTROL_DSP_RATE_32KHZ;
             OSRestoreInterrupts(old);
             AISetStreamVolLeft(vol_left);
             AISetStreamVolRight(vol_right);
@@ -147,9 +142,8 @@ void AISetDSPSampleRate(u32 rate) {
 }
 
 u32 AIGetDSPSampleRate(void) {
-    return GET_REG_FIELD(__AIRegs[0], 1, 6) ^ 1;
+    return GET_REG_FIELD(__AIRegs[AI_REG_CONTROL], 1, 6) ^ 1;
 }
-
 
 
 static void __AI_set_stream_sample_rate(u32 rate) {
@@ -165,13 +159,13 @@ static void __AI_set_stream_sample_rate(u32 rate) {
         vol_right = AIGetStreamVolRight();
         AISetStreamVolRight(0);
         AISetStreamVolLeft(0);
-        dsp_src_state = __AIRegs[0] & 0x40;
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 6, 0);
+        dsp_src_state = __AIRegs[AI_REG_CONTROL] & AI_CONTROL_DSP_RATE_MASK;
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 6, 0);
         old = OSDisableInterrupts();
         __AI_SRC_INIT();
-        __AIRegs[0] |= dsp_src_state;
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 5, 1);
-        OLD_SET_REG_FIELD(887, __AIRegs[0], 1, 1, rate);
+        __AIRegs[AI_REG_CONTROL] |= dsp_src_state;
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 5, 1);
+        MASKED_SET_REG_FIELD(887, __AIRegs[AI_REG_CONTROL], 1, 1, rate);
         OSRestoreInterrupts(old);
         AISetStreamPlayState(play_state);
         AISetStreamVolLeft(vol_left);
@@ -180,24 +174,24 @@ static void __AI_set_stream_sample_rate(u32 rate) {
 }
 
 u32 AIGetStreamSampleRate(void) {
-    return GET_REG_FIELD(__AIRegs[0], 1, 1);
+    return GET_REG_FIELD(__AIRegs[AI_REG_CONTROL], 1, 1);
 }
 
 void AISetStreamVolLeft(u8 vol) {
-    OLD_SET_REG_FIELD(945, __AIRegs[1], 8, 0, vol);
+    MASKED_SET_REG_FIELD(945, __AIRegs[AI_REG_VOLUME], 8, 0, vol);
 }
 
 u8 AIGetStreamVolLeft(void) {
-    return GET_REG_FIELD(__AIRegs[1], 8, 0);
+    return GET_REG_FIELD(__AIRegs[AI_REG_VOLUME], 8, 0);
 }
 
 void AISetStreamVolRight(u8 vol) {
-    OLD_SET_REG_FIELD(986, __AIRegs[1], 8, 8, vol);
+    MASKED_SET_REG_FIELD(986, __AIRegs[AI_REG_VOLUME], 8, 8, vol);
 }
 
 u8 AIGetStreamVolRight(void)
 {
-    return (__AIRegs[1] & (0xFF << 8)) >> 8;
+    return (__AIRegs[AI_REG_VOLUME] & (0xFF << 8)) >> 8;
 }
 
 void AIInit(u8* stack) {
@@ -224,23 +218,22 @@ void AIInit(u8* stack) {
         if (stack) {
             ASSERTMSGLINE(1107, ((u32)stack & 7) == 0, "AIInit: stack must be 8-byte aligned");
         }
-        __OSSetInterruptHandler(5, __AIDHandler);
-        __OSUnmaskInterrupts(0x04000000);
-        __OSSetInterruptHandler(8, __AISHandler);
-        __OSUnmaskInterrupts(0x800000);
+        __OSSetInterruptHandler(__OS_INTERRUPT_DSP_AI, __AIDHandler);
+        __OSUnmaskInterrupts(OS_INTERRUPTMASK_DSP_AI);
+        __OSSetInterruptHandler(__OS_INTERRUPT_AI_AI, __AISHandler);
+        __OSUnmaskInterrupts(OS_INTERRUPTMASK_AI_AI);
         __AI_init_flag = TRUE;
     }
 }
 
-
 static void __AISHandler(__OSInterrupt interrupt, OSContext* context) {
     OSContext exceptionContext;
 
-    __AIRegs[0] |= 8;
+    __AIRegs[AI_REG_CONTROL] |= AI_CONTROL_STREAM_INTERRUPT;
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
     if (__AIS_Callback) {
-        __AIS_Callback(__AIRegs[2]);
+        __AIS_Callback(__AIRegs[AI_REG_SAMPLE_COUNTER]);
     }
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(context);
@@ -250,9 +243,9 @@ static void __AIDHandler(__OSInterrupt interrupt, OSContext* context) {
     OSContext exceptionContext;
     u16 tmp;
 
-    tmp = __DSPRegs[5];
-    tmp = (tmp & ~0xA0) | 8;
-    __DSPRegs[5] = tmp;
+    tmp = __DSPRegs[DSP_CONTROL_STATUS];
+    tmp = (tmp & ~(DSP_STATUS_ARAM_INTERRUPT | DSP_STATUS_DSP_INTERRUPT)) | DSP_STATUS_AI_INTERRUPT;
+    __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
     if (__AID_Callback && !__AID_Active) {
@@ -294,7 +287,7 @@ static asm void __AICallbackStackSwitch(register void* cb) {
     blr
 }
 
-void __AI_SRC_INIT(void) {
+static void __AI_SRC_INIT(void) {
     OSTime rising_32khz = 0;
     OSTime rising_48khz = 0;
     OSTime diff = 0;
@@ -311,27 +304,23 @@ void __AI_SRC_INIT(void) {
     Init_Cnt = 0;
     temp = 0;
 
-#if DEBUG
-    profile.t_start = OSGetTime();
-#endif
-
     while (!done) {
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 5, 1);
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 1, 0);
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 0, AI_STREAM_START);
-        temp0 = __AIRegs[2];
-        while (temp0 == __AIRegs[2]) {
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 5, 1);
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 1, AI_SAMPLERATE_32KHZ);
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 0, AI_STREAM_START);
+        temp0 = __AIRegs[AI_REG_SAMPLE_COUNTER];
+        while (temp0 == __AIRegs[AI_REG_SAMPLE_COUNTER]) {
         }
         rising_32khz = OSGetTime();
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 1, 1);
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 0, AI_STREAM_START);
-        temp1 = __AIRegs[2];
-        while (temp1 == __AIRegs[2]) {
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 1, AI_SAMPLERATE_48KHZ);
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 0, AI_STREAM_START);
+        temp1 = __AIRegs[AI_REG_SAMPLE_COUNTER];
+        while (temp1 == __AIRegs[AI_REG_SAMPLE_COUNTER]) {
         }
         rising_48khz = OSGetTime();
         diff = rising_48khz - rising_32khz;
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 1, 0);
-        OLD_SET_REG_FIELD(0, __AIRegs[0], 1, 0, AI_STREAM_STOP);
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 1, AI_SAMPLERATE_32KHZ);
+        MASKED_SET_REG_FIELD(0, __AIRegs[AI_REG_CONTROL], 1, 0, AI_STREAM_STOP);
         if (diff < bound_32KHz - buffer) {
             temp = min_wait;
             done = 1;
@@ -348,8 +337,5 @@ void __AI_SRC_INIT(void) {
     }
     while (rising_48khz + temp > OSGetTime()) {
     }
-#if DEBUG
-    profile.t_end = OSGetTime();
-#endif
 }
 

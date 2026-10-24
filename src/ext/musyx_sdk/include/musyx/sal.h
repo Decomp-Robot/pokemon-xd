@@ -3,7 +3,7 @@
 
 #include "musyx/dspvoice.h"
 #include "musyx/musyx.h"
-typedef void (*SND_SOME_CALLBACK)();
+typedef void (*SAL_AUDIO_CALLBACK)();
 
 #ifndef MAX
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
@@ -12,42 +12,39 @@ typedef void (*SND_SOME_CALLBACK)();
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #endif
 #define CLAMP(value, min, max) ((value) > (max) ? (max) : (value) < (min) ? (min) : (value))
-// TODO matching hack
 #define CLAMP_INV(value, min, max) ((value) < (min) ? (min) : (value) > (max) ? (max) : (value))
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 typedef struct SAL_VOLINFO {
-  // total size: 0x24
-  f32 volL;     // offset 0x0, size 0x4
-  f32 volR;     // offset 0x4, size 0x4
-  f32 volS;     // offset 0x8, size 0x4
-  f32 volAuxAL; // offset 0xC, size 0x4
-  f32 volAuxAR; // offset 0x10, size 0x4
-  f32 volAuxAS; // offset 0x14, size 0x4
-  f32 volAuxBL; // offset 0x18, size 0x4
-  f32 volAuxBR; // offset 0x1C, size 0x4
-  f32 volAuxBS; // offset 0x20, size 0x4
+  f32 volL;
+  f32 volR;
+  f32 volS;
+  f32 volAuxAL;
+  f32 volAuxAR;
+  f32 volAuxAS;
+  f32 volAuxBL;
+  f32 volAuxBR;
+  f32 volAuxBS;
 } SAL_VOLINFO;
 
 typedef struct SAL_PANINFO {
-  // total size: 0x30
-  u32 pan_i;   // offset 0x0, size 0x4
-  u32 pan_im;  // offset 0x4, size 0x4
-  u32 span_i;  // offset 0x8, size 0x4
-  u32 span_im; // offset 0xC, size 0x4
-  u32 rpan_i;  // offset 0x10, size 0x4
-  u32 rpan_im; // offset 0x14, size 0x4
-  f32 pan_f;   // offset 0x18, size 0x4
-  f32 pan_fm;  // offset 0x1C, size 0x4
-  f32 span_f;  // offset 0x20, size 0x4
-  f32 span_fm; // offset 0x24, size 0x4
-  f32 rpan_f;  // offset 0x28, size 0x4
-  f32 rpan_fm; // offset 0x2C, size 0x4
+  u32 pan_i;
+  u32 pan_im;
+  u32 span_i;
+  u32 span_im;
+  u32 rpan_i;
+  u32 rpan_im;
+  f32 pan_f;
+  f32 pan_fm;
+  f32 span_f;
+  f32 span_fm;
+  f32 rpan_f;
+  f32 rpan_fm;
 } SAL_PANINFO;
 
-bool salInitAi(SND_SOME_CALLBACK, u32, u32*);
+bool salInitAi(SAL_AUDIO_CALLBACK, u32, u32*);
 bool salInitDsp(u32);
 bool salInitDspCtrl(u8 numVoices, u8 numStudios, u32 defaultStudioDPL2);
 bool salExitDsp();
