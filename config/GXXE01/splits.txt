@@ -2194,6 +2194,13 @@ game/app/fight/fight.cpp:
 	.ctors      start:0x802E9FE0 end:0x802E9FE4
 	.bss        start:0x804B0048 end:0x804B0078
 
+game/app/fight/fightSeq/fightSeqWSWaza.cpp:
+	.text       start:0x8020D858 end:0x8020FD6C
+
+game/app/fight/fightSeq/fightSeqBasis.cpp:
+	.text       start:0x8020FD6C end:0x802108AC
+	.data       start:0x80418248 end:0x80418290
+
 game/app/fight/fightSeq/fightSeqWazaseq.cpp:
 	.text       start:0x80222A68 end:0x8022364C
 

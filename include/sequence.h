@@ -16,4 +16,13 @@ void Sequence_SetVisibility(struct NullSequence *sequence, u8 visible);
 #ifdef __cplusplus
 }
 #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void Sequence_SetStatus(struct NullSequence *sequence, u8 status);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

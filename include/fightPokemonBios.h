@@ -10,6 +10,8 @@ extern "C" {
 
 u16 fightOutPokemonBiosGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);
 
+void fightOutPokemonBiosCopy(FightOutPokemon *dst, const FightOutPokemon *src);
+
 #ifdef __cplusplus
 }
 #endif

@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-void *fightTargetDataBiosGetPtr(u32 target);
-void *fightTargetDataBiosGetBuff(void *targetData);
-u32 fightTargetGetTragetPtrToRelativeHostSideFightTargetId(FightOutPokemon *pokemon, u8 fightType);
+void *fightTargetDataBiosGetPtr(u16 target);
+s32 fightTargetDataBiosGetBuff(void *targetData);
+u16 fightTargetGetTragetPtrToRelativeHostSideFightTargetId(void *target, u16 fightType);
 void *fightTargetGetPtrAsNowFightType(u16 kind, void *target);
 
 #ifdef __cplusplus

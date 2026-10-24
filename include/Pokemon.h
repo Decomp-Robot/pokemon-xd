@@ -91,6 +91,9 @@ enum POKEMON_FRIEND_FILTER_ID {
 
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
+    POKEMON_STATUS_FIELD_HELD_ITEM = 0x82,
+    POKEMON_STATUS_FIELD_DARK_POINTS = 0xC5,
+    POKEMON_STATUS_FIELD_REVERSE_MODE = 0xC8,
     POKEMON_STATUS_FIELD_CHAMP_RIBBON = 0xA3,
     POKEMON_STATUS_FIELD_WINNING_RIBBON = 0xA4,
     POKEMON_STATUS_FIELD_VICTORY_RIBBON = 0xA5,
@@ -159,7 +162,7 @@ u16 pokemon_GetHp(Pokemon *pokemon);
 u16 pokemon_GetMaxHp(Pokemon *pokemon);
 void pokemon_SetHp(Pokemon *pokemon, u16 hp);
 void pokemonInitJoutai(Pokemon *pokemon);
-void pokemonInitJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
+void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 
 /* pokemonGetStatus query IDs. POKEMON_STATUS_SPECIES reads the record's
    species halfword (zero for an empty slot); POKEMON_STATUS_MOVE reads the
@@ -212,8 +215,8 @@ void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);
-u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
-void pokemonInitJoutaiDataId(Pokemon *pokemon, u32 joutaiID);
+u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
+void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u32 filterID);
 void pokemonWazaCreate(Pokemon *pokemon, u16 slot, u16 wazaID);
 s8 pokemonSearchWazaDataId(Pokemon *pokemon, u16 wazaID);
@@ -273,6 +276,8 @@ int pokemonGetWazaCount(Pokemon *pokemon);
 s8 pokemonSetWazaStatus(Pokemon *pokemon, u16 wazaID, u8 replace);
 void pokemonWazaCopy(Pokemon *pokemon, u16 destination, u16 source);
 u16 *pokemon_GetName(Pokemon *pokemon);
+u8 pokemonGetDarkPokemonCallKakuritu(Pokemon *pokemon);
+
 #ifdef __cplusplus
 }
 #endif

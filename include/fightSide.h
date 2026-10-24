@@ -7,12 +7,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-u8 fightSideCheckWriteJoutaiDataId(void *side, u32 status);
-void fightSideWriteJoutaiDataId(void *side, u32 status, u32 value);
+u8 fightSideCheckWriteJoutaiDataId(void *side, u16 status);
+void fightSideWriteJoutaiDataId(void *side, u16 status, u16 targetId);
 
 typedef struct FIGHT_SIDE FIGHT_SIDE;
 
 FIGHT_TRAINER *fightSideGetValidFightTrainerPtr(FIGHT_SIDE *side, u16 index);
+
+void fightSideInitJoutaiDataId(FIGHT_SIDE *side, u16 id);
 
 #ifdef __cplusplus
 }

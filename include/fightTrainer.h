@@ -47,6 +47,11 @@ u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 extern u32 *fight_trainer_pokemon_part_data_number;
 extern u32 *fight_trainer_ai_value_addsub_data_number;
 
+Hero *fightTrainer_GetHeroPtr(FIGHT_TRAINER *trainer);
+u16 *fightTrainerGetPrefixNamePtr(FIGHT_TRAINER *trainer);
+u16 *fightTrainerGetNamePtr(FIGHT_TRAINER *trainer);
+void fightTrainerCallEffect(FIGHT_TRAINER *trainer, u8 operation);
+
 #ifdef __cplusplus
 }
 #endif

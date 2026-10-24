@@ -22,6 +22,17 @@ enum WAZA_SHADOW {
 };
 
 enum {
+    WAZA_DATA_ID_SURF = 0x39,
+    WAZA_DATA_ID_STRUGGLE = 0xA5,
+    WAZA_DATA_ID_SAFEGUARD = 0xDB,
+    WAZA_DATA_ID_BATON_PASS = 0xE2,
+    WAZA_DATA_ID_FOCUS_PUNCH = 0x108,
+    WAZA_DATA_ID_MUDDY_WATER = 0x14A
+};
+static const u16 WAZA_DATA_ID_NONE = 0;
+static const u16 WAZA_DATA_ID_INVALID = 0xFFFF;
+
+enum {
     WAZA_STATUS_NAME_MESSAGE_ID = WAZA_FIELD_NAME,
     WAZA_STATUS_TYPE_ID = WAZA_FIELD_TYPE
 };
@@ -46,6 +57,13 @@ enum WAZA_COMPATIBILITY {
 };
 
 enum { WAZA_ID_MASK = 0xFFFF };
+enum {
+    ZOKUSEI_DATA_ID_MYSTERY = 9,
+    ZOKUSEI_DATA_ID_FLYING = 2,
+    ZOKUSEI_DATA_ID_STEEL = 8,
+    ZOKUSEI_DATA_ID_FIRE = 10,
+    ZOKUSEI_DATA_ID_ELECTRIC = 13
+};
 
 enum { WAZA_STATUS_TYPE = 0x1A };
 
@@ -73,6 +91,11 @@ void fightWaza_SetDamage(FIGHT_WAZA *waza, s32 damage);
 u16 wazaDB_GetSeqId(u16 move);
 u8 wazaDB_GetOujanosirusi(u16 move);
 s32 wazaDB_GetName(u16 move);
+u8 wazaCheckDarkWaza(u16 move);
+u8 wazaDB_GetRangeId(u16 move);
+u8 wazaDB_GetOumugaesi(u16 wazaDataId);
+u8 wazaDB_GetZokuseiDataId(u16 move);
+
 #ifdef __cplusplus
 }
 #endif

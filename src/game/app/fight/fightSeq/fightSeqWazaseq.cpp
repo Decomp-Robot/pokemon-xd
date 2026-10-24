@@ -58,13 +58,13 @@ extern "C" void WS_GUARD_SUCCESS_CHECK(void)
     u16 threshold = fightSeqGuardOddsTbl[count];
     if (threshold > random && eligible != 0) {
         if (sequenceId == WAZA_SEQ_PROTECT) {
-            if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_GUARD) == 2) {
+            if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_GUARD) == JOUTAI_WRITE_ACCEPT) {
                 fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_GUARD, 0);
             }
             fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 0;
         }
         if (sequenceId == WAZA_SEQ_ENDURE) {
-            if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ENDURE) == 2) {
+            if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ENDURE) == JOUTAI_WRITE_ACCEPT) {
                 fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ENDURE, 0);
             }
             fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 1;
@@ -255,7 +255,7 @@ extern "C" void WS_REFLEC(void)
     FightOutPokemon *attacker = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ATTACKER, 0);
     void *side = fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ATTACKER_SIDE, attacker);
     u16 validCount = fightFloorGetValidFightOutPokemonCount(0, 1, attacker, 1);
-    if (fightSideCheckWriteJoutaiDataId(side, JOUTAI_REFLECT) != 2) {
+    if (fightSideCheckWriteJoutaiDataId(side, JOUTAI_REFLECT) != JOUTAI_WRITE_ACCEPT) {
         fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 0;
     } else {
@@ -278,10 +278,10 @@ extern "C" void WS_YADORIGI(void)
     FightOutPokemon *attacker = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ATTACKER, 0);
     FIGHT_WAZA *waza = fightOutPokemon_GetFightWazaPtr(attacker);
     u8 fightType = (u8)fightFloor_GetFightType(0);
-    u32 sourceId = fightTargetGetTragetPtrToRelativeHostSideFightTargetId(attacker, fightType);
+    u16 sourceId = fightTargetGetTragetPtrToRelativeHostSideFightTargetId(attacker, fightType);
     defender = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_DEFENDER, 0);
     if (fightWazaIsHit(waza) == 0 ||
-        fightOutPokemonCheckWriteJoutaiDataId(defender, JOUTAI_LEECH_SEED) != 2) {
+        fightOutPokemonCheckWriteJoutaiDataId(defender, JOUTAI_LEECH_SEED) != JOUTAI_WRITE_ACCEPT) {
         fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 1;
         fightSeq_NextWazaSeq(1);

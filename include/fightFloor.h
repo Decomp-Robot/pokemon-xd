@@ -126,7 +126,9 @@ void fightFloorSetTimeOutAllFightResult(void *floor);
 s32 fightFloor_GetStockPokemonNum(FIGHT_FLOOR *floor);
 u32 fightFloor_GetFightKind(void *floor);
 u8 fightFloorIsLastActionFightOutPokemon(FIGHT_FLOOR *floor);
-u32 fightFloor_GetFightType(FIGHT_FLOOR *floor);
+u8 fightFloor_GetFightType(FIGHT_FLOOR *floor);
+u8 fightFloorIsNowEncountTuusinTaisen(FIGHT_FLOOR *floor);
+void fightFloorInitFightOutPokemonPtrAryFightWazaJoutai(FIGHT_FLOOR *floor);
 void fightFloor_SetDefPokemonAndAtkFightWazaTargetId(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
@@ -135,11 +137,27 @@ void fightFloor_SetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemo
 void fightFloor_SetAppointItemDataId(FIGHT_FLOOR *floor, u16 item);
 FIGHT_TRAINER *fightFloorGetFightOutPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 u8 fightFloorLoopValidFightOutPokemon(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
-void fightFloor_SetAttackPokemonFightWazaJoutaiDataId(FIGHT_FLOOR *floor, u32 status);
+void fightFloor_SetAttackPokemonFightWazaJoutaiDataId(FIGHT_FLOOR *floor, u16 status);
 u16 fightFloor_GetFightSideFightOutPokemonSideMax(FIGHT_FLOOR *floor);
 u16 fightFloorGetValidFightOutPokemonCount(FIGHT_FLOOR *floor, u32 side, FightOutPokemon *pokemon, u32 validOnly);
 FightOutPokemon *fightFloor_GetFightOutPokemonFromDefaultSortData(u8 index);
 FightOutPokemon *fightFloorGetFightOutPokemonPtrAryPokemonTokuseiDataIdFirst(FIGHT_FLOOR *floor, u32 ability, u32 iterationMode, u32 relationship, FightOutPokemon *referencePokemon);
+
+FightOutPokemon *fightFloor_GetAttackPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetDefensePokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetIrekaePokemonPtr(FIGHT_FLOOR *floor);
+u8 fightFloorGetNowTenkouDataId(FIGHT_FLOOR *floor, s32 checkWeatherSuppressingAbilities);
+u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightOutPokemon **pokemonArray, u8 allies, u8 deployedOnly);
+u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
+void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
+u8 fightFloor_GetFightKindDoCriticalAttackFlag(FIGHT_FLOOR *floor);
+void fightFloor_SetFisstAttackRnd(FIGHT_FLOOR *floor, u16 value);
+u16 fightFloor_GetEncountDataId(FIGHT_FLOOR *floor);
+void fightFloor_SetAttackMsgId(FIGHT_FLOOR *floor, s32 messageId);
+void fightFloor_SetCriticakMsgId(FIGHT_FLOOR *floor, s32 messageId);
+void fightFloor_SetWazakoukaMsgId(FIGHT_FLOOR *floor, s32 messageId);
+FIGHT_SIDE *fightFloorGetValidFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
+void fightFloorReplaceFightOutPokemonAttackToDefense(FIGHT_FLOOR *floor);
 
 #ifdef __cplusplus
 }

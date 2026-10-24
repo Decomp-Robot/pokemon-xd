@@ -27,8 +27,8 @@ struct ItemData {
     u8 mReservedFlags;
     u16 mPrice; // 0x06: price the item is sold for.
     u8 _08[0x08]; // 0x08-0x0F: unknown.
-    u32 mDescriptionMsgID; // 0x10: message id describing the item.
-    u32 mNameMsgID; // 0x14: message id of the item name.
+    u32 mNameMsgID; // 0x10: message id of the item name.
+    u32 mDescriptionMsgID; // 0x14: message id describing the item.
     u32 mMachineNo; // 0x18: machine number in the low byte.
     PocketItemUseFunc mFieldUseFunc; // 0x1C: routine the item runs in the field.
     PocketItemUseFunc mBattleUseFunc; // 0x20: routine the item runs in battle.
@@ -58,6 +58,9 @@ u8 itemDataBiosCheckImportable(ItemData *data);
 
 u8 itemDataCheckValid(u16 itemID);
 u8 itemDataBiosGetItemEffectParam(ItemData *data);
+u8 itemDB_GetKind(u16 itemID);
+u32 itemDB_GetName(u16 itemID);
+
 #ifdef __cplusplus
 }
 #endif

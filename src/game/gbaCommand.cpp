@@ -429,13 +429,13 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
         packet.entry[i].hp = _swap16(pokemonBiosGetHp(pokemon));
         cond = gbaPokemonConditonFromGC(pokemon);
         packet.entry[i].condition = cond;
-        packet.entry[i].itemFlag = fightPokemonGetItemDataId(fightPokemon) != 0;
+        packet.entry[i].itemFlag = fightPokemonGetSoubiItemDataId(fightPokemon) != 0;
         mailId = pokemonBiosGetMailId(pokemon);
         packet.entry[i].mailFlag = mailId != 0xFFu;
         packet.entry[i].pokerusDays = (pokerus & 0xF) != 0;
         packet.entry[i].pokerusStrain = (pokerus & 0xF0) != 0;
         packet.entry[i].condHigh = cond >> 8;
-        packet.entry[i].item = _swap16(fightPokemonGetItemDataId(fightPokemon));
+        packet.entry[i].item = _swap16(fightPokemonGetSoubiItemDataId(fightPokemon));
         for (j = 0; j < 4; j++) {
             u16 waza = pokemonBiosGetPokemonWazaDataId(pokemon, j);
             packet.entry[i].waza[j] = _swap16(waza);

@@ -9,17 +9,38 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+enum {
+    TOKUSEI_DATA_ID_SHADOW_TAG = 0x17,
+    TOKUSEI_DATA_ID_LEVITATE = 0x1A,
+    TOKUSEI_DATA_ID_MAGNET_PULL = 0x2A,
+    TOKUSEI_DATA_ID_RUN_AWAY = 0x32,
+    TOKUSEI_DATA_ID_ARENA_TRAP = 0x47,
+    TOKUSEI_DATA_ID_BATTLE_ARMOR = 4,
+    TOKUSEI_DATA_ID_SHELL_ARMOR = 0x4B
+};
+
+enum PokemonDataID {
+    POKEMON_DATA_ID_FARFETCHD = 0x53,
+    POKEMON_DATA_ID_CHANSEY = 0x71,
+    POKEMON_DATA_ID_LUGIA = 0xF9
+};
 u32 pokemonDB_GetName(u16);
 bool pokemonDB_GetTeachWaza(u16, u16);
 
 FightPokemon *fightOutPokemon_GetMotoFightPokemonPtr(FightOutPokemon *pokemon);
 FIGHT_WAZA *fightOutPokemon_GetFightWazaPtr(FightOutPokemon *pokemon);
+void *fightOutPokemon_GetFightItemPtr(FightOutPokemon *pokemon);
+void *fightOutPokemon_GetFightActionBuffPtr(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetUseWazaDataId(FightOutPokemon *pokemon);
 s16 fightOutPokemon_GetMyselfDamageAtkValue(FightOutPokemon *pokemon);
 s16 fightOutPokemon_GetMyselfDamageSpeValue(FightOutPokemon *pokemon);
 s32 fightOutPokemon_GetKaigaraDamageValue(FightOutPokemon *pokemon);
 void fightOutPokemon_SetKaigaraDamageValue(FightOutPokemon *pokemon, s32 damage);
 u16 fightOutPokemon_GetFightoutTurnCount(FightOutPokemon *pokemon);
+void fightOutPokemon_SetFightoutTurnCount(FightOutPokemon *pokemon, u16 count);
+u8 fightOutPokemon_GetNamakeFlag(FightOutPokemon *pokemon);
+u16 fightOutPokemon_GetMotoWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetOumuWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetOumuWazaAllyDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetNoPressureFlag(FightOutPokemon *pokemon, u32 flag);
@@ -30,6 +51,10 @@ void fightOutPokemon_SetSuccessCnt(FightOutPokemon *pokemon, u8 count);
 u16 pokemon_GetPokemonWazaDataId(Pokemon *pokemon, u16 slot);
 u8 pokemon_GetPokemonWazaPp(Pokemon *pokemon, u16 slot);
 void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
+u32 pokemon_GetTokuseiFlag(void *pokemonData);
+u8 pokemonDB_GetTokuseiDataId(u16 species, u16 index);
+Pokemon *fightPokemon_GetPokemonBuffPtr(FightPokemon *pokemon);
+
 #ifdef __cplusplus
 }
 #endif

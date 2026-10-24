@@ -121,9 +121,6 @@ enum {
 };
 
 enum {
-    FIGHT_MSG_STATUS_NAME = 13,
-    SEQ_WORK_STAT_ACTION = 0x1601E,
-    SEQ_WORK_STAT_MESSAGE = 0x160A4,
     SEQ_WORK_STAT_MESSAGE_MODE = 0x160A5,
     TOKUSEI_SYNCHRONIZE = 28,
     SEQ_SYNCHRONIZE_PENDING = 0x4000,
@@ -204,8 +201,8 @@ extern "C" u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *a
     u8 result = 0;
     u8 attackerSex = fightOutPokemonGetSex(attacker);
     u8 defenderSex = fightOutPokemonGetSex(defender);
-    u32 defenderTarget = fightTargetGetTragetPtrToRelativeHostSideFightTargetId(defender,
-        fightFloor_GetFightType(0));
+    u32 fightType = fightFloor_GetFightType(0);
+    u16 defenderTarget = fightTargetGetTragetPtrToRelativeHostSideFightTargetId(defender, fightType);
 
     switch (defenderAbility) {
     case TOKUSEI_COLOR_CHANGE:
@@ -270,7 +267,7 @@ extern "C" u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *a
             contact && (physicalDamage || specialDamage) &&
             fightOutPokemonCheckFightOut(defender) == 1 && (u16)HSD_Rand() % 3 == 0 &&
             attackerAbility != TOKUSEI_OBLIVIOUS && attackerSex != defenderSex &&
-            fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_INFATUATION) == 2 &&
+            fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_INFATUATION) == JOUTAI_WRITE_ACCEPT &&
             attackerSex != POKEMON_SEX_NONE && defenderSex != POKEMON_SEX_NONE) {
             fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_INFATUATION, defenderTarget);
             fightSeq_CallWazaSeq(seqTokuseiCuteCharm);
@@ -622,7 +619,7 @@ extern "C" u8 fightSeqSoubiItemCheckTurn(FightOutPokemon *pokemon, u8 mode)
     case SOUBI_CRITICAL:
         if ((mode == 0 || mode == 2) &&
             fightOutPokemonIsNokoriHpFollowing(pokemon, (u16)parameter) &&
-            fightOutPokemonCheckWriteJoutaiDataId(pokemon, JOUTAI_FOCUS_ENERGY) == 2) {
+            fightOutPokemonCheckWriteJoutaiDataId(pokemon, JOUTAI_FOCUS_ENERGY) == JOUTAI_WRITE_ACCEPT) {
             fightOutPokemonWriteJoutaiDataId(pokemon, JOUTAI_FOCUS_ENERGY, 0);
             sequence = seqSoubiFocusEnergy;
             category = ITEM_CHECK_VOLATILE_STATUS;
