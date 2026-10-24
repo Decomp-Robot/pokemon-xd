@@ -2,10 +2,9 @@
 #include <hero.h>
 #include <pokemonRelive.h>
 
-/* Debug menu that forces the hero's active pokemon to relive (purify) and
- * re-arms the relive parameters. */
+/* Sets a party Pokemon's Dark Points to zero and starts the relive flow. */
 
-/* Not called directly by other code; marked so the linker keeps them. */
+/* Not called directly by other code; marked so the linker keeps it. */
 #pragma force_active on
 
 #pragma peephole off
@@ -17,8 +16,9 @@ s32 dbgMenuRelive(void)
     if (!pokemonIsDarkPokemon(pokemon)) {
         return 0;
     }
+    /* Zero Dark Points makes the Pokemon eligible for the relive flow. */
     pokemonSetDp(pokemon, 0.0f);
-    preReliveSetParameter(0, 0, 1);
+    preReliveSetParameter(PRE_RELIVE_MODE_START_PURIFICATION, 0, 1);
     return 0;
 }
 

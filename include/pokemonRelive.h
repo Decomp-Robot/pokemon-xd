@@ -2,16 +2,17 @@
 #define POKEMON_RELIVE_H
 
 #include <types.h>
+#include <bool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef __cplusplus
+enum PreReliveMode {
+    PRE_RELIVE_MODE_START_PURIFICATION = 0,
+};
+
 void preReliveSetParameter(int mode, int parameter, bool wait);
-#else
-void preReliveSetParameter(int mode, int parameter, int wait);
-#endif
 
 void reliveMain(void);
 void preReliveDisplayHokoraParticle(void);
