@@ -4,6 +4,7 @@
 #include <types.h>
 #include <GSgfx.h>
 #include <particleEngine.h>
+#include <GSAPI/GSsysdolphin_baselib/particle/particle.h>
 #include <GSpart.h>
 #include <GSattach.h>
 
@@ -53,7 +54,7 @@ struct _GSparticleBank {
     u8 mHasSlots;       // 0x02: the file preallocates its generator slots.
     u8 mGeneratorCount; // 0x03: number of generator slots.
     u8 mDisactivated;   // 0x04: bank switched off by GSparticleDisactivateBank.
-    u8 _05[0x03];
+    u8 _05[3];
     void *mFileData;           // 0x08: packed particle file (peBankCreate arg).
     _GSparticleGen *mGenerators; // 0x0C: slot array, stride 0x3C.
     _GScamera *mCamera;        // 0x10: camera the file preallocated slots use.

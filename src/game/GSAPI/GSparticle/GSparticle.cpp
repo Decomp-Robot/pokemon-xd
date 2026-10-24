@@ -14,8 +14,6 @@
 
 /* ---- other units the layer calls ---- */
 
-extern "C" _GScamera *psGeneratorGetCamera(_psGenerator *generator);
-
 /* Frame services of the GS engine: the CPU profile entries a hook opens and
  * closes, the video frame rate and the render module list. */
 extern "C" {
@@ -587,7 +585,7 @@ extern "C" void GSparticleDestroyGenerator(_GSparticleGen *gen, bool killFamily)
          * already spawned. */
         if (killFamily == 1) {
             psKillFamily(((_GSparticleGenWork *)gen->mLink)->mGenerator->mFamilyID,
-                         ((_GSparticleGenWork *)gen->mLink)->mGenerator->mKillParam);
+                         ((_GSparticleGenWork *)gen->mLink)->mGenerator->mListGroup);
         }
         psKillGenerator(((_GSparticleGenWork *)gen->mLink)->mGenerator);
         if (gen->mLink != 0) {
@@ -851,14 +849,14 @@ void GSparticleAttachGeneratorToGSpart(_GSparticleGen *gen, GSpart *part, GSatta
 
 /* Id the particle render module is registered with: the render module list is
  * kept sorted by it, so the modules of a frame run in id order. */
-enum { GS_PARTICLE_RENDER_MODULE_ID = 0x40 };
-/* Record budget the application-SRT pool of the engine is created with. */
-enum { GS_PARTICLE_SRT_POOL_SIZE = 0x74 };
+enum { GS_PARTICLE_RENDER_MODULE_ID = 64 };
+/* Byte size of each application-SRT record allocated by the engine. */
+enum { GS_PARTICLE_SRT_RECORD_SIZE = 116 };
 
 /* Slot budgets a loaded file works with: the emitter-bank format preallocates
  * one engine bank per slot, a generator file spreads over a bank of its own. */
-enum { GS_PARTICLE_BANK_SLOT_COUNT = 0x10 };
-enum { GS_PARTICLE_FILE_SLOT_COUNT = 0x40 };
+enum { GS_PARTICLE_BANK_SLOT_COUNT = 16 };
+enum { GS_PARTICLE_FILE_SLOT_COUNT = 64 };
 
 /* Signs of the packed particle files the loader accepts. */
 enum GSparticleFileMagic {
@@ -870,12 +868,12 @@ enum GSparticleFileMagic {
 enum { GS_PARTICLE_FILE_VERSION = 0x00030002 };
 /* Version of the particle data bank the engine is built against; every file
  * has to carry it in its data bank header. */
-enum { GS_PARTICLE_DATA_VERSION = 0x43 };
+enum { GS_PARTICLE_DATA_VERSION = 67 };
 /* Cache line the particle data block is flushed in before the engine reads
  * it. */
-enum { GS_PARTICLE_CACHE_LINE_SIZE = 0x20 };
+enum { GS_PARTICLE_CACHE_LINE_SIZE = 32 };
 /* Bank ids are handed out of this range; the marker means every id is taken. */
-enum { GS_PARTICLE_BANK_ID_MAX = 0x40 };
+enum { GS_PARTICLE_BANK_ID_MAX = 64 };
 enum { GS_PARTICLE_BANK_ID_NONE = 0xFF };
 
 /* Header of an emitter bank file: the signature followed by the version pair
@@ -985,7 +983,7 @@ extern "C" _GSparticleGen *GSparticleCreateGenerator(_GSparticleBank *bank,
     } else {
         /* Every other file drives an engine generator of its own per slot. */
         _GSparticleGenWork *genWork;
-        u32 bankFlag;
+        u32 listGroup;
 
         slotIndex = _particleFindFreeSlot(bank);
         if (slotIndex < 0) {
@@ -998,10 +996,10 @@ extern "C" _GSparticleGen *GSparticleCreateGenerator(_GSparticleBank *bank,
         genWork = (_GSparticleGenWork *)GSmemAlloc(sizeof(_GSparticleGenWork));
         if (genWork == 0) return 0;
 
-        /* An engine generator id below 8 selects the shared bank file. */
-        bankFlag = 0;
-        if (bankGenerator == 1) bankFlag = 1;
-        genWork->mGenerator = psCreateGeneratorID(bankFlag, bank->mBankID, index);
+        /* The group selects which particle list owns this generator. */
+        listGroup = 0;
+        if (bankGenerator == 1) listGroup = 1;
+        genWork->mGenerator = psCreateGeneratorID(listGroup, bank->mBankID, index);
         if (genWork->mGenerator == 0) {
             GSmemFree(genWork);
             return 0;
@@ -1167,7 +1165,7 @@ extern "C" void GSparticleInit(u32 bankCount)
     psSetToken(0);
     psInitParticle(0);
     psInitGenerator(0);
-    psInitAppSRT(0, GS_PARTICLE_SRT_POOL_SIZE);
+    psInitAppSRT(0, GS_PARTICLE_SRT_RECORD_SIZE);
 
     HSD_JObjSetSPtclCallback(_particleJObjCallback);
     HSD_JObjSetDPtclCallback(_particleJObjCallback);
