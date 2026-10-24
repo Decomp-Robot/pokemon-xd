@@ -3,6 +3,21 @@
 
 #include "__os.h"
 
+#define SI_BUFFER_REG_BASE 32
+#define SI_POLL_REG_IDX (0x30 / 4)
+#define SI_WIRELESS_FIX_DEVICE_COMMAND 0x4E000000u
+#define SI_POLL_CHANNEL_ENABLE_MASK 0xF0u
+#define SI_TRANSFER_ERROR_REGISTER_MASK 0x0F000000
+#define SI_POLL_CHANNEL_ENABLE_MSB 0x80000000u
+#define SI_POLL_CHANNEL_ENABLE_BIT(chan) (0x80 >> (chan))
+#define SI_POLL_X_FIELD_MASK (0x3FF << 16)
+#define SI_POLL_XY_FIELD_CLEAR_MASK 0xFC0000FF
+#define SI_POLL_XY_AND_CHANNEL_FIELD_MASK 0x03FFFFF0
+#define SI_TRANSFER_ERROR_MASK 0xF
+#define SI_DEVICE_IDENTITY_MASK 0xFFFF0000u
+#define SI_KEYBOARD_IDENTITY_MASK 0xFFE00000u
+#define SI_TRANSFER_ERROR_CHANNEL_MASK(chan) (SI_TRANSFER_ERROR_REGISTER_MASK >> ((chan) * 8))
+
 #define ROUND(n, a) (((u32)(n) + (a)-1) & ~((a)-1))
 
 #ifdef DEBUG
@@ -71,12 +86,12 @@ static u32 CompleteTransfer(void) {
         input = Si.input;
         rLen = Si.inputBytes / sizeof(u32);
         for (i = 0; i < rLen; i++) {
-            *((u32*)input)++ = __SIRegs[i+0x20];
+            *((u32*)input)++ = __SIRegs[i + SI_BUFFER_REG_BASE];
         }
         
         rLen = Si.inputBytes & 3;
         if (rLen != 0) {
-            temp = __SIRegs[i + 32];
+            temp = __SIRegs[i + SI_BUFFER_REG_BASE];
             for (i = 0; i < rLen; i++) {
                 *(input++) = temp >> ((3 - i) * 8);
             }
@@ -84,13 +99,13 @@ static u32 CompleteTransfer(void) {
 
         if (__SIRegs[SI_COMCSR_IDX] & SI_COMCSR_COMERR_MASK) {
             sr >>= (3 - Si.chan) * 8;
-            sr &= 0xF;
-            if ((sr & 8) != 0 && (Type[Si.chan] & 0x80) == 0) {
-                Type[Si.chan] = 8;
+            sr &= SI_TRANSFER_ERROR_MASK;
+            if ((sr & SI_ERROR_NO_RESPONSE) != 0 && (Type[Si.chan] & SI_ERROR_BUSY) == 0) {
+                Type[Si.chan] = SI_ERROR_NO_RESPONSE;
             }
 
             if (sr == 0) {
-                sr = 4;
+                sr = SI_ERROR_COLLISION;
             }
         } else {
             TypeTime[Si.chan] = __OSGetSystemTime();
@@ -150,7 +165,7 @@ static void SIInterruptHandler(__OSInterrupt interrupt, OSContext* context) {
         }
 
         sr = __SIRegs[SI_STATUS_IDX];
-        sr &= 0x0F000000 >> (chan << 3);
+        sr &= SI_TRANSFER_ERROR_CHANNEL_MASK(chan);
         __SIRegs[SI_STATUS_IDX] = sr;
 
         if (Type[chan] == SI_ERROR_BUSY && !SIIsChanBusy(chan)) {
@@ -162,7 +177,7 @@ static void SIInterruptHandler(__OSInterrupt interrupt, OSContext* context) {
 
     if ((reg & (SI_COMCSR_RDSTINT_MASK | SI_COMCSR_RDSTINTMSK_MASK)) == (SI_COMCSR_RDSTINT_MASK | SI_COMCSR_RDSTINTMSK_MASK)) {
         vcount = 1 + VIGetCurrentLine();
-        x = (Si.poll & (0x3FF << 16)) >> 16;
+        x = (Si.poll & SI_POLL_X_FIELD_MASK) >> 16;
 
         for (i = 0; i < 4; i++) {
             if (SIGetResponseRaw(i)) {
@@ -171,7 +186,7 @@ static void SIInterruptHandler(__OSInterrupt interrupt, OSContext* context) {
         }
 
         for (i = 0; i < 4; i++) {
-            if ((Si.poll & (0x80000000 >> (24 + i))) != 0) {
+            if ((Si.poll & (SI_POLL_CHANNEL_ENABLE_MSB >> (24 + i))) != 0) {
                 if (InputBufferVcount[i] == 0 || ((x >> 1) + InputBufferVcount[i]) < vcount) {
                     return;
                 }
@@ -280,8 +295,8 @@ void SIInit(void) {
     do {} while(__SIRegs[SI_COMCSR_IDX] & SI_COMCSR_TSTART_MASK);
 
     __SIRegs[SI_COMCSR_IDX] = SI_COMCSR_TCINT_MASK;
-    __OSSetInterruptHandler(0x14, SIInterruptHandler);
-    __OSUnmaskInterrupts(0x800);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_SI, SIInterruptHandler);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_SI);
 
     SIGetType(0);
     SIGetType(1);
@@ -324,7 +339,7 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
 
     ASSERTLINE(641, (__SIRegs[SI_COMCSR_IDX] & (SI_COMCSR_TSTART_MASK | SI_COMCSR_TCINT_MASK)) == 0);
     sr = __SIRegs[SI_STATUS_IDX];
-    sr &= (0x0F000000 >> (chan* 8));
+    sr &= SI_TRANSFER_ERROR_CHANNEL_MASK(chan);
     __SIRegs[SI_STATUS_IDX] = sr;
     
     Si.chan = chan;
@@ -334,14 +349,14 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
 
     rLen = ROUND(outputBytes, 4) / 4;
     for (i = 0; i < rLen; i++) {
-        __SIRegs[i + 0x20] = ((u32*)output)[i];
+        __SIRegs[i + SI_BUFFER_REG_BASE] = ((u32*)output)[i];
     }
     
     comcsr.val = __SIRegs[SI_COMCSR_IDX];
     comcsr.f.tcint = 1;
     comcsr.f.tcintmsk = callback ? 1 : 0;
-    comcsr.f.outlngth = outputBytes == 0x80 ? 0 : outputBytes;
-    comcsr.f.inlngth = inputBytes == 0x80 ? 0 : inputBytes;
+    comcsr.f.outlngth = outputBytes == 128 ? 0 : outputBytes;
+    comcsr.f.inlngth = inputBytes == 128 ? 0 : inputBytes;
     comcsr.f.channel = chan;
     comcsr.f.tstart = 1;
 
@@ -349,8 +364,6 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
     OSRestoreInterrupts(enabled);
     return 1;
 }
-
-// UNUSED: dead-stripped from the DOL (game never calls it)
 
 u32 SIGetStatus(s32 chan) {
     BOOL enabled;
@@ -362,9 +375,9 @@ u32 SIGetStatus(s32 chan) {
     chanShift = (3 - chan) * 8;
     sr >>= chanShift;
 
-    if ((sr & 8) != 0) {
+    if ((sr & SI_ERROR_NO_RESPONSE) != 0) {
         if ((Type[chan] & SI_ERROR_BUSY) == 0) {
-            Type[chan] = 8;
+            Type[chan] = SI_ERROR_NO_RESPONSE;
         }
     }
 
@@ -377,8 +390,7 @@ void SISetCommand(s32 chan, u32 command) {
     __SIRegs[chan* 3] = command;
 }
 
-// UNUSED: dead-stripped from the DOL (game never calls it)
-static u32 SIGetCommand(s32 chan) {
+u32 SIGetCommand(s32 chan) {
     ASSERTMSGLINE(770, (chan >= 0) && (chan < 4), "SIGetCommand(): invalid channel.");
     return __SIRegs[chan* 3];
 }
@@ -395,13 +407,13 @@ u32 SISetXY(u32 x, u32 y) {
     ASSERTMSGLINE(804, x <= 1023, "SISetXY(): x is out of range (8 <= x <= 1023).");
     ASSERTMSGLINE(805, y <= 255, "SISetXY(): y is out of range (0 <= y <= 255).");
 
-    poll = x << 0x10;
+    poll = x << 16;
     poll |= y << 8;
     enabled = OSDisableInterrupts();
-    Si.poll &= 0xFC0000FF;
+    Si.poll &= SI_POLL_XY_FIELD_CLEAR_MASK;
     Si.poll |= poll;
     poll = Si.poll;
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_REG_IDX] = poll;
     OSRestoreInterrupts(enabled);
     return poll;
 }
@@ -417,16 +429,16 @@ u32 SIEnablePolling(u32 poll) {
     
     enabled = OSDisableInterrupts();
     poll = poll >> 24;
-    en = poll & 0xF0;
+    en = poll & SI_POLL_CHANNEL_ENABLE_MASK;
     ASSERTLINE(865, en);
-    poll &= ((en >> 4) | 0x03FFFFF0);
-    poll &= 0xFC0000FF;
+    poll &= ((en >> 4) | SI_POLL_XY_AND_CHANNEL_FIELD_MASK);
+    poll &= SI_POLL_XY_FIELD_CLEAR_MASK;
     
     Si.poll &= ~(en >> 4);
     Si.poll |= poll;
     poll = Si.poll;
     SITransferCommands();
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_REG_IDX] = poll;
     OSRestoreInterrupts(enabled);
     return poll;
 }
@@ -441,10 +453,10 @@ u32 SIDisablePolling(u32 poll) {
 
     enabled = OSDisableInterrupts();
     poll = poll >> 24;
-    poll &= 0xF0;
+    poll &= SI_POLL_CHANNEL_ENABLE_MASK;
     ASSERTLINE(921, poll);
     poll = Si.poll & ~poll;
-    __SIRegs[0x30 / 4] = poll;
+    __SIRegs[SI_POLL_REG_IDX] = poll;
     Si.poll = poll;
     OSRestoreInterrupts(enabled);
     return poll;
@@ -454,7 +466,7 @@ static BOOL SIGetResponseRaw(s32 chan) {
     u32 sr;
 
     sr = SIGetStatus(chan);
-    if (sr & 0x20) {
+    if (sr & SI_ERROR_RDST) {
         InputBuffer[chan][0] = __SIRegs[1 + chan * 3];
         InputBuffer[chan][1] = __SIRegs[2 + chan * 3];
         InputBufferValid[chan] = TRUE;
@@ -573,7 +585,7 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context) {
     fix = __PADFixBits & chanBit;
     __PADFixBits &= ~chanBit;
 
-    if ((error & 0xF) != 0 || (type & 0x18000000) != 0x08000000 || (type & 0x80000000) == 0 || (type & 0x04000000) != 0) {
+    if ((error & SI_TRANSFER_ERROR_MASK) != 0 || (type & SI_TYPE_MASK) != SI_TYPE_DOLPHIN || (type & SI_GC_WIRELESS) == 0 || (type & SI_WIRELESS_IR) != 0) {
         OSSetWirelessID(chan, 0);
         CallTypeAndStatusCallback(chan, Type[chan]);
     } else {
@@ -581,33 +593,33 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context) {
 
         id = OSGetWirelessID(chan) << 8;
         
-        if (fix != 0 && (id & 0x100000) != 0) {
-            cmdFixDevice[chan] = 0x4E000000 | (id & 0xCFFF00) | 0x100000;
+        if (fix != 0 && (id & SI_WIRELESS_FIX_ID) != 0) {
+            cmdFixDevice[chan] = SI_WIRELESS_FIX_DEVICE_COMMAND | (id & SI_WIRELESS_TYPE_ID) | SI_WIRELESS_FIX_ID;
             Type[chan] = SI_ERROR_BUSY;
             SITransfer(chan, &cmdFixDevice[chan], 3, &Type[chan], 3, &GetTypeCallback, 0);
             return;
         }
 
-        if ((type & 0x00100000) != 0) {
-            if ((id & 0xCFFF00) != (type & 0xCFFF00)) {
-                if ((id & 0x100000) == 0) {
-                    id = type & 0xCFFF00;
-                    id |= 0x100000;
+        if ((type & SI_WIRELESS_FIX_ID) != 0) {
+            if ((id & SI_WIRELESS_TYPE_ID) != (type & SI_WIRELESS_TYPE_ID)) {
+                if ((id & SI_WIRELESS_FIX_ID) == 0) {
+                    id = type & SI_WIRELESS_TYPE_ID;
+                    id |= SI_WIRELESS_FIX_ID;
                     OSSetWirelessID(chan, id >> 8);
                 }
 
-                cmdFixDevice[chan] = 0x4E000000 | id;
+                cmdFixDevice[chan] = SI_WIRELESS_FIX_DEVICE_COMMAND | id;
                 Type[chan] = SI_ERROR_BUSY;
                 SITransfer(chan, &cmdFixDevice[chan], 3, &Type[chan], 3, &GetTypeCallback, 0);
                 return;
             }
         } else {
-            if ((type & 0x40000000) != 0) {
-                id = type & 0xCFFF00;
-                id |= 0x100000;
+            if ((type & SI_WIRELESS_RECEIVED) != 0) {
+                id = type & SI_WIRELESS_TYPE_ID;
+                id |= SI_WIRELESS_FIX_ID;
                 OSSetWirelessID(chan, id >> 8);
 
-                cmdFixDevice[chan] = 0x4E000000 | id;
+                cmdFixDevice[chan] = SI_WIRELESS_FIX_DEVICE_COMMAND | id;
                 Type[chan] = SI_ERROR_BUSY;
                 SITransfer(chan, &cmdFixDevice[chan], 3, &Type[chan], 3, &GetTypeCallback, 0);
                 return;
@@ -630,8 +642,8 @@ u32 SIGetType(s32 chan) {
     ASSERTLINE(1243, 0 <= chan && chan < SI_MAX_CHAN);
     type = Type[chan];
     diff = __OSGetSystemTime() - TypeTime[chan];
-    if ((Si.poll & (0x80 >> chan)) != 0) {
-        if (type != 8) {
+    if ((Si.poll & SI_POLL_CHANNEL_ENABLE_BIT(chan)) != 0) {
+        if (type != SI_ERROR_NO_RESPONSE) {
             TypeTime[chan] = __OSGetSystemTime();
             OSRestoreInterrupts(enabled);
             return type;
@@ -639,7 +651,7 @@ u32 SIGetType(s32 chan) {
 
         type = Type[chan] = SI_ERROR_BUSY;
     } else {
-        if (diff <= OSMillisecondsToTicks(50) && type != 8) {
+        if (diff <= OSMillisecondsToTicks(50) && type != SI_ERROR_NO_RESPONSE) {
             OSRestoreInterrupts(enabled);
             return type;
         }
@@ -706,13 +718,13 @@ u32 SIDecodeType(u32 type) {
     }
 
     if ((type & SI_TYPE_MASK) == SI_TYPE_N64) {
-        switch (type & 0xFFFF0000) {
+        switch (type & SI_DEVICE_IDENTITY_MASK) {
         case SI_N64_MIC:
         case SI_N64_KEYBOARD:
         case SI_GBA:
         case SI_N64_MOUSE:
         case SI_N64_CONTROLLER:
-            return type & 0xFFFF0000;
+            return type & SI_DEVICE_IDENTITY_MASK;
         default:
             return SI_ERROR_UNKNOWN;
         }
@@ -722,13 +734,13 @@ u32 SIDecodeType(u32 type) {
         return SI_ERROR_UNKNOWN;
     }
 
-    switch (type & 0xFFFF0000) {
+    switch (type & SI_DEVICE_IDENTITY_MASK) {
     case SI_GC_STEERING:
     case SI_GC_CONTROLLER:
-        return type & 0xFFFF0000;
+        return type & SI_DEVICE_IDENTITY_MASK;
     }
 
-    if ((type & 0xFFE00000) == SI_GC_KEYBOARD) {
+    if ((type & SI_KEYBOARD_IDENTITY_MASK) == SI_GC_KEYBOARD) {
         return SI_GC_KEYBOARD;
     }
 
@@ -753,35 +765,34 @@ u32 SIProbe(s32 chan) {
     return SIDecodeType(SIGetType(chan));
 }
 
-// UNUSED: dead-stripped from the DOL (game never calls it). Its string table
-// must remain resident as the single contiguous block lbl_803D4E30 in .data.
-char lbl_803D4E30[0xB0] = {
-    "No response\0"
-    "N64 controller\0\0"
-    "N64 microphone\0\0"
-    "N64 keyboard\0\0\0\0"
-    "N64 mouse\0\0\0"
-    "GameBoy Advance\0"
-    "Standard controller\0"
-    "Wireless receiver\0\0\0"
-    "WaveBird controller\0"
-    "Keyboard\0\0\0\0"
-    "Steering\0\0\0"
-};
-
-static char* SIGetTypeString(u32 type) {
+char* SIGetTypeString(u32 type) {
     switch (SIDecodeType(type)) {
-    case SI_ERROR_NO_RESPONSE: return &lbl_803D4E30[0];
-    case SI_N64_CONTROLLER:    return &lbl_803D4E30[12];
-    case SI_N64_MIC:           return &lbl_803D4E30[28];
-    case SI_N64_KEYBOARD:      return &lbl_803D4E30[45];
-    case SI_N64_MOUSE:         return &lbl_803D4E30[61];
-    case SI_GBA:               return &lbl_803D4E30[73];
-    case SI_GC_CONTROLLER:     return &lbl_803D4E30[89];
-    case SI_GC_RECEIVER:       return &lbl_803D4E30[108];
-    case SI_GC_WAVEBIRD:       return &lbl_803D4E30[127];
-    case SI_GC_KEYBOARD:       return &lbl_803D4E30[146];
-    case SI_GC_STEERING:       return &lbl_803D4E30[158];
-    default:                   return &lbl_803D4E30[0];
+    case SI_ERROR_NO_RESPONSE:
+        return "No response";
+    case SI_ERROR_BUSY:
+        return "Busy";
+    case SI_N64_CONTROLLER:
+        return "N64 controller";
+    case SI_N64_MIC:
+        return "N64 microphone";
+    case SI_N64_KEYBOARD:
+        return "N64 keyboard";
+    case SI_N64_MOUSE:
+        return "N64 mouse";
+    case SI_GBA:
+        return "GameBoy Advance";
+    case SI_GC_CONTROLLER:
+        return "Standard controller";
+    case SI_GC_RECEIVER:
+        return "Wireless receiver";
+    case SI_GC_WAVEBIRD:
+        return "WaveBird controller";
+    case SI_GC_KEYBOARD:
+        return "Keyboard";
+    case SI_GC_STEERING:
+        return "Steering";
+    case SI_ERROR_UNKNOWN:
+    default:
+        return "Unknown";
     }
 }

@@ -113,6 +113,7 @@ u32 SISync(void);
 u32 SIGetStatus(s32 chan);
 void SISetCommand(s32 chan, u32 command);
 u32 SIGetCommand(s32 chan);
+char* SIGetTypeString(u32 type);
 void SITransferCommands(void);
 u32 SISetXY(u32 x, u32 y);
 u32 SIEnablePolling(u32 poll);
@@ -123,7 +124,6 @@ u32 SIGetType(s32 chan);
 u32 SIGetTypeAsync(s32 chan, SITypeCallback callback);
 u32 SIDecodeType(u32 type);
 u32 SIProbe(s32 chan);
-char* SIGetTypeString(u32 type);
 
 extern u32 __PADFixBits;
 
