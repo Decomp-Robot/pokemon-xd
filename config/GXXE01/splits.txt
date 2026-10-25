@@ -1525,6 +1525,9 @@ game/GSAPI/GScamera/GScamera.cpp:
 game/GSmtx.cpp:
 	.text       start:0x800EF9F8 end:0x800EFA18
 
+game/GSmathInit.cpp:
+	.text       start:0x800EFA58 end:0x800EFAC0
+
 game/GSbezier.cpp:
 	.text       start:0x800EFAC0 end:0x800EFBE8
 	.sdata2     start:0x804ED3A0 end:0x804ED3B0

@@ -16,6 +16,11 @@ name = "game/GSmtx.cpp"
 completed = true
 mw_version = "GC/1.3"
 [[lib.object]]
+name = "game/GSmathInit.cpp"
+completed = true
+mw_version = "GC/1.3.2"
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+[[lib.object]]
 name = "game/GSbezier.cpp"
 completed = true
 mw_version = "GC/1.3"
