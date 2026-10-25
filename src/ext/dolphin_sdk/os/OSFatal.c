@@ -14,6 +14,15 @@ typedef struct OSFatalParam {
 static OSFatalParam FatalParam;
 static OSContext FatalContext;
 
+enum {
+    VI_PROGRESSIVE_CLOCK_SEL = 1
+};
+
+enum {
+    EXI_CHANNEL_ZERO_CONTROL_REGISTER = 3,
+    EXI_CONTROL_TRANSFER_START = 1,
+};
+
 // prototypes
 static void Halt();
 
@@ -33,7 +42,7 @@ static void ScreenClear(void* xfb, u16 xfbW, u16 xfbH, GXColor yuv) {
     }
 }
 
-void ScreenReport(void* xfb, u16 xfbW, u16 xfbH, GXColor yuv, s32 x, s32 y, s32 leading, const char* string) {
+static void ScreenReport(void* xfb, u16 xfbW, u16 xfbH, GXColor yuv, s32 x, s32 y, s32 leading, const char* string) {
     u8* ptr;
     s32 width;
     u32 i;
@@ -45,31 +54,31 @@ void ScreenReport(void* xfb, u16 xfbW, u16 xfbH, GXColor yuv, s32 x, s32 y, s32 
     u32 pixel;
     s32 col;
 
-loop_1:
+next_line:
     if (xfbH - 24 >= y) {
         ptr = (u8*)xfb + ((x + (y * xfbW)) * 2);
         col = x;
 
-        while ((s8)*string != 0) {
-            if ((s8)*string == '\n') {
+        while (*string != 0) {
+            if (*string == '\n') {
                 string++;
                 y += leading;
-                goto loop_1;
+                goto next_line;
             }
 
             if (xfbW - 48 < col) {
                 y += leading;
-                goto loop_1;
+                goto next_line;
             }
 
             for (i = 0; i < 24; i++) {
                 j = (i & 7) + ((i >> 3) * 24);
-                image[j + 0 ] = 0;
-                image[j + 8 ] = 0;
+                image[j + 0] = 0;
+                image[j + 8] = 0;
                 image[j + 16] = 0;
             }
 
-            string = OSGetFontTexel((char*)string, image, 0, 6, &width);
+            string = OSGetFontTexel(string, image, 0, 6, &width);
 
             for (i = 0; i < 24; i++) {
                 j = (i & 7) + ((i >> 3) * 24);
@@ -79,7 +88,7 @@ loop_1:
 
                     Y = (image[l] >> ((7 - (k & 7)) * 4)) & 0xF;
                     if (Y != 0) {
-                        Y = (((yuv.r * (Y * 0xEF)) / 255) / 15) + 0x10;
+                        Y = (((yuv.r * (Y * 239)) / 255) / 15) + 16;
                         pixel = k + (i * xfbW);
                         ptr[pixel * 2] = Y;
 
@@ -100,7 +109,7 @@ loop_1:
     }
 }
 
-void ConfigureVideo(u16 xfbW, u16 xfbH) {
+static void ConfigureVideo(u16 xfbW, u16 xfbH) {
     GXRenderModeObj mode;
     mode.fbWidth = xfbW;
     mode.efbHeight = 480;
@@ -110,27 +119,27 @@ void ConfigureVideo(u16 xfbW, u16 xfbH) {
     mode.viHeight = xfbH;
 
     switch (VIGetTvFormat()) {
-    case 2:
-    case 0:
-        if (__VIRegs[54] & 1) {
-            mode.viTVmode = 2;
+    case VI_MPAL:
+    case VI_NTSC:
+        if (__VIRegs[VI_CLOCK_SEL] & VI_PROGRESSIVE_CLOCK_SEL) {
+            mode.viTVmode = VI_TVMODE_NTSC_PROG;
             mode.viYOrigin = 0;
-            mode.xFBmode = 0;
+            mode.xFBmode = VI_XFBMODE_SF;
         } else {
-            mode.viTVmode = 0;
+            mode.viTVmode = VI_TVMODE_NTSC_INT;
             mode.viYOrigin = 0;
-            mode.xFBmode = 1;
+            mode.xFBmode = VI_XFBMODE_DF;
         }
         break;
-    case 5:
-        mode.viTVmode = 20;
+    case VI_EURGB60:
+        mode.viTVmode = VI_TVMODE_EURGB60_INT;
         mode.viYOrigin = 0;
-        mode.xFBmode = 1;
+        mode.xFBmode = VI_XFBMODE_DF;
         break;
-    case 1:
-        mode.viTVmode = 4;
+    case VI_PAL:
+        mode.viTVmode = VI_TVMODE_PAL_INT;
         mode.viYOrigin = 47;
-        mode.xFBmode = 1;
+        mode.xFBmode = VI_XFBMODE_DF;
         break;
     }
 
@@ -144,9 +153,9 @@ static GXColor RGB2YUV(GXColor rgb) {
     f32 Cr;
     GXColor yuv;
 
-    Y  = 0.5f + (16.0f + ((0.098f * (f32) rgb.b) + ((0.257f * (f32) rgb.r) + (0.504f * (f32) rgb.g))));
-    Cb = 0.5f + (128.0f + ((0.439f * (f32) rgb.b) + ((-0.148f * (f32) rgb.r) - (0.291f * (f32) rgb.g))));
-    Cr = 0.5f + (128.0f + (((0.439f * (f32) rgb.r) - (0.368f * (f32) rgb.g)) - (0.071f * (f32) rgb.b)));
+    Y = 0.257f * rgb.r + 0.504f * rgb.g + 0.098f * rgb.b + 16.0f + 0.5f;
+    Cb = -0.148f * rgb.r - 0.291f * rgb.g + 0.439f * rgb.b + 128.0f + 0.5f;
+    Cr = 0.439f * rgb.r - 0.368f * rgb.g - 0.071f * rgb.b + 128.0f + 0.5f;
 
     yuv.r = (Y > 235.0f) ? 235.0f : (Y < 16.0f) ? 16.0f : Y;
     yuv.g = (Cb > 240.0f) ? 240.0f : (Cb < 16.0f) ? 16.0f : Cb;
@@ -170,10 +179,10 @@ void OSFatal(GXColor fg, GXColor bg, const char* msg) {
     AISetStreamVolLeft(0);
     AISetStreamVolRight(0);
     VIInit();
-    __OSUnmaskInterrupts(0x80);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_VI);
     VISetBlack(TRUE);
     VIFlush();
-    GXSetDrawDoneCallback(NULL);
+    VISetPreRetraceCallback(NULL);
     VISetPostRetraceCallback(NULL);
     OSEnableInterrupts();
 
@@ -195,9 +204,10 @@ void OSFatal(GXColor fg, GXColor bg, const char* msg) {
     }
     EXIUnlock(0);
 
-    do {} while ((__EXIRegs[3] & 1) == 1);
+    do {} while ((__EXIRegs[EXI_CHANNEL_ZERO_CONTROL_REGISTER] & EXI_CONTROL_TRANSFER_START) ==
+                 EXI_CONTROL_TRANSFER_START);
 
-    __OSSetExceptionHandler(8, &OSDefaultExceptionHandler);
+    __OSSetExceptionHandler(__OS_EXCEPTION_DECREMENTER, &OSDefaultExceptionHandler);
     GXAbortFrame();
     OSSetArenaLo((void*)0x81400000);
     OSSetArenaHi(bootInfo->FSTLocation);
@@ -220,10 +230,10 @@ static void Halt() {
     len = strlen(fp->msg) + 1;
     fp->msg = memmove(OSAllocFromArenaLo(len, DOLPHIN_ALIGNMENT), fp->msg, len);
 
-    fontData = OSAllocFromArenaLo(0xA1004, DOLPHIN_ALIGNMENT);
+    fontData = OSAllocFromArenaLo(659460, DOLPHIN_ALIGNMENT);
     OSLoadFont(fontData, OSGetArenaLo());
     
-    xfb = OSAllocFromArenaLo(0x96000, DOLPHIN_ALIGNMENT);
+    xfb = OSAllocFromArenaLo(614400, DOLPHIN_ALIGNMENT);
     ScreenClear(xfb, 640, 480, RGB2YUV(fp->bg));
     VISetNextFrameBuffer(xfb);
     ConfigureVideo(640, 480);
@@ -233,7 +243,7 @@ static void Halt() {
     do {} while ((s32)(VIGetRetraceCount() - count) < 2);
 
     ScreenReport(xfb, 640, 480, RGB2YUV(fp->fg), 48, 100, fontData->leading, fp->msg);
-    DCFlushRange(xfb, 0x96000);
+    DCFlushRange(xfb, 614400);
     VISetBlack(FALSE);
     VIFlush();
 
