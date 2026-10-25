@@ -7,6 +7,31 @@
 extern "C" {
 #endif
 
+// Deferred register updates
+#define GX_DIRTY_SU_TEX   0x01
+#define GX_DIRTY_BP       0x02
+#define GX_DIRTY_GEN_MODE 0x04
+#define GX_DIRTY_VCD      0x08
+#define GX_DIRTY_VAT      0x10
+
+// Command processor register IDs
+#define CP_REG_PERFSEL_ID     0x20
+#define CP_REG_MTXIDXA_ID     0x30
+#define CP_REG_MTXIDXB_ID     0x40
+#define CP_REG_VCD_LO_ID      0x50
+#define CP_REG_VCD_HI_ID      0x60
+#define CP_REG_VAT_GRP0_ID    0x70
+#define CP_REG_VAT_GRP1_ID    0x80
+#define CP_REG_VAT_GRP2_ID    0x90
+#define CP_REG_ARRAYBASE_ID   0xA0
+#define CP_REG_ARRAYSTRIDE_ID 0xB0
+
+// Transform unit register offsets used with GX_WRITE_XF_REG
+#define XF_REG_INVERTEXSPEC   0x08
+#define XF_REG_NUMTEX         0x3F
+#define XF_REG_TEX0           0x40
+#define XF_REG_DUALTEX0       0x50
+
 // FIFO WRITE
 
 #define GX_WRITE_U8(ub)     \
@@ -81,7 +106,7 @@ do { \
 
 #define GX_WRITE_XF_REG(addr, value) \
 do { \
-    GX_WRITE_U8(0x10); \
+    GX_WRITE_U8(GX_LOAD_XF_REG); \
     GX_WRITE_U32(0x1000 + (addr)); \
     GX_WRITE_U32(value); \
     VERIF_XF_REG(addr, value); \
@@ -115,60 +140,58 @@ do { \
 
 #define GX_WRITE_RAS_REG(value) \
 do { \
-    GX_WRITE_U8(0x61); \
+    GX_WRITE_U8(GX_LOAD_BP_REG); \
     GX_WRITE_U32(value); \
     VERIF_RAS_REG(value); \
 } while (0)
 
 #ifdef DEBUG
-#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+#define GX_WRITE_CP_ARRAY_BASE(command, reg, value, addr) \
 do { \
     long regAddr; \
-    GX_WRITE_U8(a); \
-    GX_WRITE_U8(b); \
-    GX_WRITE_U32(c); \
+    GX_WRITE_U8(command); \
+    GX_WRITE_U8(reg); \
+    GX_WRITE_U32(value); \
     regAddr = addr; \
     if (regAddr >= 0 && regAddr < 4) { \
-        __GXData->indexBase[regAddr] = c; \
+        __GXData->indexBase[regAddr] = value; \
     } \
 } while (0)
 #else
-#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+#define GX_WRITE_CP_ARRAY_BASE(command, reg, value, addr) \
 do { \
-    GX_WRITE_U8(a); \
-    GX_WRITE_U8(b); \
-    GX_WRITE_U32(c); \
+    GX_WRITE_U8(command); \
+    GX_WRITE_U8(reg); \
+    GX_WRITE_U32(value); \
 } while (0)
 #endif
 
 #ifdef DEBUG
-#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+#define GX_WRITE_CP_ARRAY_STRIDE(command, reg, value, addr) \
 do { \
     long regAddr; \
-    GX_WRITE_U8(a); \
-    GX_WRITE_U8(b); \
-    GX_WRITE_U32(c); \
+    GX_WRITE_U8(command); \
+    GX_WRITE_U8(reg); \
+    GX_WRITE_U32(value); \
     regAddr = addr; \
     if (regAddr >= 0 && regAddr < 4) { \
-        __GXData->indexStride[regAddr] = c; \
+        __GXData->indexStride[regAddr] = value; \
     } \
 } while (0)
 #else
-#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+#define GX_WRITE_CP_ARRAY_STRIDE(command, reg, value, addr) \
 do { \
-    GX_WRITE_U8(a); \
-    GX_WRITE_U8(b); \
-    GX_WRITE_U32(c); \
+    GX_WRITE_U8(command); \
+    GX_WRITE_U8(reg); \
+    GX_WRITE_U32(value); \
 } while (0)
 #endif
 
-#define GX_WRITE_SOME_REG4(a, b, c, addr) \
+#define GX_WRITE_CP_REG(command, reg, value) \
 do { \
-    long regAddr; \
-    GX_WRITE_U8(a); \
-    GX_WRITE_U8(b); \
-    GX_WRITE_U32(c); \
-    regAddr = addr; \
+    GX_WRITE_U8(command); \
+    GX_WRITE_U8(reg); \
+    GX_WRITE_U32(value); \
 } while (0)
 
 // REG MACROS

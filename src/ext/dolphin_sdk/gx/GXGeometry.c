@@ -7,22 +7,22 @@
 void __GXSetDirtyState(void) {
     u32 dState = __GXData->dirtyState;
 
-    if (dState & 1) {
+    if (dState & GX_DIRTY_SU_TEX) {
         __GXSetSUTexRegs();
     }
-    if (dState & 2) {
+    if (dState & GX_DIRTY_BP) {
         __GXUpdateBPMask();
     }
-    if (dState & 4) {
+    if (dState & GX_DIRTY_GEN_MODE) {
         __GXSetGenMode();
     }
-    if (dState & 8) {
+    if (dState & GX_DIRTY_VCD) {
         __GXSetVCD();
     }
-    if (dState & 0x10) {
+    if (dState & GX_DIRTY_VAT) {
         __GXSetVAT();
     }
-    if (dState & 0x18) {
+    if (dState & (GX_DIRTY_VCD | GX_DIRTY_VAT)) {
         __GXCalculateVLim();
     }
 
@@ -55,7 +55,7 @@ void __GXSendFlushPrim(void) {
     u32 i;
     u32 numD = __GXData->vNum * __GXData->vLim;
 
-    GX_WRITE_U8(0x98);
+    GX_WRITE_U8(GX_DRAW_TRIANGLE_STRIP);
     GX_WRITE_U16(__GXData->vNum);
     for (i = 0; i < numD; i += 4) {
         GX_WRITE_U32(0);
@@ -106,7 +106,7 @@ void GXSetCullMode(GXCullMode mode) {
 #endif
 
     SET_REG_FIELD(570, __GXData->genMode, 2, 14, hwMode);
-    __GXData->dirtyState |= 4;
+    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
 }
 
 void GXSetCoPlanar(GXBool enable) {

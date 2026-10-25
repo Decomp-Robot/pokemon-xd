@@ -18,7 +18,7 @@ void GXSetMisc(GXMiscToken token, u32 val) {
         __GXData->bpSentNot = 1;
 
         if (__GXData->vNum != 0) {
-            __GXData->dirtyState |= 8;
+            __GXData->dirtyState |= GX_DIRTY_VCD;
         }
         break;
     case GX_MT_DL_SAVE_CONTEXT:
@@ -315,11 +315,11 @@ static void GXFinishInterruptHandler(__OSInterrupt interrupt, OSContext* context
 
 void __GXPEInit(void) {
     u32 reg;
-    __OSSetInterruptHandler(0x12, GXTokenInterruptHandler);
-    __OSSetInterruptHandler(0x13, GXFinishInterruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_PE_TOKEN, GXTokenInterruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_PE_FINISH, GXFinishInterruptHandler);
     OSInitThreadQueue(&FinishQueue);
-    __OSUnmaskInterrupts(0x2000);
-    __OSUnmaskInterrupts(0x1000);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_PE_TOKEN);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_PE_FINISH);
     reg = GX_GET_PE_REG(5);
     SET_REG_FIELD(0, reg, 1, 2, 1);
     SET_REG_FIELD(0, reg, 1, 3, 1);

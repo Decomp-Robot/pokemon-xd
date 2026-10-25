@@ -60,7 +60,7 @@ static void Copy6Floats(const register f32 src[6], register volatile f32* dest) 
 
 void __GXSetProjection(void) {
     u32 reg = 0x00061020;
-    GX_WRITE_U8(0x10);
+    GX_WRITE_U8(GX_LOAD_XF_REG);
     GX_WRITE_U32(reg);
 #if DEBUG
     GX_WRITE_XF_REG_F(32, __GXData->projMtx[0]);
@@ -238,7 +238,7 @@ void GXLoadPosMtxImm(const Mtx mtx, u32 id) {
     addr = id * 4;
     reg = addr | 0xB0000;
 
-    GX_WRITE_U8(0x10);
+    GX_WRITE_U8(GX_LOAD_XF_REG);
     GX_WRITE_U32(reg);
 #if DEBUG
     GX_WRITE_MTX_ELEM(addr + 0, mtx[0][0]);
@@ -267,7 +267,7 @@ void GXLoadNrmMtxImm(const Mtx mtx, u32 id) {
     addr = id * 3 + 0x400;
     reg = addr | 0x80000;
 
-    GX_WRITE_U8(0x10);
+    GX_WRITE_U8(GX_LOAD_XF_REG);
     GX_WRITE_U32(reg);
 #if DEBUG
     GX_WRITE_MTX_ELEM(addr + 0, mtx[0][0]);
@@ -306,7 +306,7 @@ void GXLoadTexMtxImm(const f32 mtx[][4], u32 id, GXTexMtxType type) {
     count = (type == GX_MTX2x4) ? 8 : 12;
     reg = addr | ((count - 1) << 16);
 
-    GX_WRITE_U8(0x10);
+    GX_WRITE_U8(GX_LOAD_XF_REG);
     GX_WRITE_U32(reg);
 #if DEBUG
     GX_WRITE_MTX_ELEM(addr + 0, mtx[0][0]);
@@ -355,7 +355,7 @@ void __GXSetViewport(void) {
     oz = zmax + __GXData->zOffset;
 
     reg = 0x5101A;
-    GX_WRITE_U8(0x10);
+    GX_WRITE_U8(GX_LOAD_XF_REG);
     GX_WRITE_U32(reg);
     GX_WRITE_XF_REG_F(26, sx);
     GX_WRITE_XF_REG_F(27, sy);
@@ -404,7 +404,7 @@ void GXGetViewportv(f32* vp) {
 
 #define GX_WRITE_XF_REG_F_(addr, value) \
 do { \
-    GX_WRITE_U8(0x10); \
+    GX_WRITE_U8(GX_LOAD_XF_REG); \
     GX_WRITE_U32(0x1000 + (addr)); \
     { \
         f32 xfData = (value); \
@@ -468,10 +468,10 @@ void GXSetClipMode(GXClipMode mode) {
 
 void __GXSetMatrixIndex(GXAttr matIdxAttr) {
     if (matIdxAttr < GX_VA_TEX4MTXIDX) {
-        GX_WRITE_SOME_REG4(8, 0x30, __GXData->matIdxA, -12);
+        GX_WRITE_CP_REG(GX_LOAD_CP_REG, CP_REG_MTXIDXA_ID, __GXData->matIdxA);
         GX_WRITE_XF_REG(24, __GXData->matIdxA);
     } else {
-        GX_WRITE_SOME_REG4(8, 0x40, __GXData->matIdxB, -12);
+        GX_WRITE_CP_REG(GX_LOAD_CP_REG, CP_REG_MTXIDXB_ID, __GXData->matIdxB);
         GX_WRITE_XF_REG(25, __GXData->matIdxB);
     }
     __GXData->bpSentNot = 1;

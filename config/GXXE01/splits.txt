@@ -1045,6 +1045,8 @@ ext/dolphin_sdk/gx/GXAttr.c:
 	.text       start:0x800C91B0 end:0x800C91C0
 	.text       start:0x800C91C0 end:0x800C9440
 	.text       start:0x800C9440 end:0x800C947C
+	.data       start:0x803D30E0 end:0x803D3354
+	.sdata      start:0x804E81F8 end:0x804E8208
 
 ext/dolphin_sdk/gx/GXMisc.c:
 	.text       start:0x800C947C end:0x800C9510

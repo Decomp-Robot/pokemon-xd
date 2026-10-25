@@ -83,11 +83,6 @@ static struct {
     {193, 0, 0, 1, 0, 0, 7, 7, 7, 0, 0, 0},  // passclr
 };
 
-#define SOME_SET_REG_MACRO(reg, size, shift, val)                                                   \
-	do {                                                                                            \
-		(reg) = (u32)__rlwimi((u32)(reg), (val), (shift), (32 - (shift) - (size)), (31 - (shift))); \
-	} while (0);
-
 void GXSetTevOp(GXTevStageID id, GXTevMode mode) {
     u32* ctmp;
     u32* atmp;
@@ -293,9 +288,9 @@ void GXSetTevKColorSel(GXTevStageID stage, GXTevKColorSel sel) {
 
     Kreg = &__GXData->tevKsel[stage >> 1];
     if (stage & 1) {
-        SET_REG_FIELD(0x36E, *Kreg, 5, 14, sel);
+        SET_REG_FIELD(878, *Kreg, 5, 14, sel);
     } else {
-        SET_REG_FIELD(0x370, *Kreg, 5, 4, sel);
+        SET_REG_FIELD(880, *Kreg, 5, 4, sel);
     }
 
     GX_WRITE_RAS_REG(*Kreg);
@@ -335,19 +330,13 @@ void GXSetTevSwapMode(GXTevStageID stage, GXTevSwapSel ras_sel, GXTevSwapSel tex
 
 void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green, GXTevColorChan blue, GXTevColorChan alpha) {
     u32* Kreg;
-#if !DEBUG
-    // not a real variable, but needed to match release
-    int index = table * 2;
-#endif
+    int index;
 
     CHECK_GXBEGIN(978, "GXSetTevSwapModeTable");
     ASSERTMSGLINE(979, table < GX_MAX_TEVSWAP, "GXSetTevSwapModeTable: Invalid Swap Selection Index");
 
-#if DEBUG
-    Kreg = &__GXData->tevKsel[table * 2];
-#else
+    index = table * 2;
     Kreg = &__GXData->tevKsel[index];
-#endif
     SET_REG_FIELD(982, *Kreg, 2, 0, red);
     SET_REG_FIELD(983, *Kreg, 2, 2, green);
 
@@ -454,7 +443,7 @@ void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXCha
 
     GX_WRITE_RAS_REG(*ptref);
     __GXData->bpSentNot = 0;
-    __GXData->dirtyState |= 1;
+    __GXData->dirtyState |= GX_DIRTY_SU_TEX;
 }
 
 void GXSetNumTevStages(u8 nStages) {
@@ -462,5 +451,5 @@ void GXSetNumTevStages(u8 nStages) {
 
     ASSERTMSGLINE(1189, nStages != 0 && nStages <= 16, "GXSetNumTevStages: Exceed max number of tex stages");
     SET_REG_FIELD(1190, __GXData->genMode, 4, 10, nStages - 1);
-    __GXData->dirtyState |= 4;
+    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
 }

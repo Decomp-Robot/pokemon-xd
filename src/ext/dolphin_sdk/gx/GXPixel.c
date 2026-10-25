@@ -260,7 +260,7 @@ void GXSetPixelFmt(GXPixelFmt pix_fmt, GXZFmt16 z_fmt) {
         else
             aa = 0;
         SET_REG_FIELD(527, __GXData->genMode, 1, 9, aa);
-        __GXData->dirtyState |= 4;
+        __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
     }
 
     if (p2f[pix_fmt] == 4) {
