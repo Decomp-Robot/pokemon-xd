@@ -10,20 +10,20 @@ extern "C" {
 typedef void (*ARQCallback)(u32 pointerToARQRequest);
 
 struct ARQRequest {
-    /* 0x00 */ struct ARQRequest *next;
-    /* 0x04 */ u32 owner;
-    /* 0x08 */ u32 type;
-    /* 0x0C */ u32 priority;
-    /* 0x10 */ u32 source;
-    /* 0x14 */ u32 dest;
-    /* 0x18 */ u32 length;
-    /* 0x1C */ ARQCallback callback;
+    struct ARQRequest *next;
+    u32 owner;
+    u32 type;
+    u32 priority;
+    u32 source;
+    u32 dest;
+    u32 length;
+    ARQCallback callback;
 };
 
 #define ARQ_DMA_ALIGNMENT 32
 
-#define ARAM_DIR_MRAM_TO_ARAM 0x00
-#define ARAM_DIR_ARAM_TO_MRAM 0x01
+#define ARAM_DIR_MRAM_TO_ARAM 0
+#define ARAM_DIR_ARAM_TO_MRAM 1
 
 #define ARStartDMARead(mmem, aram, len) \
     ARStartDMA(ARAM_DIR_ARAM_TO_MRAM, mmem, aram, len)

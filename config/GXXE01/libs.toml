@@ -2882,7 +2882,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/ar/arq.c"
-completed = false
+completed = true
 
 [[lib]]
 name = "dsp"

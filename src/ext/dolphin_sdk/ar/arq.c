@@ -22,7 +22,7 @@ static BOOL __ARQ_init_flag;
 
 static void __ARQPopTaskQueueHi(void) {
     if (__ARQRequestQueueHi) {
-        if (__ARQRequestQueueHi->type == 0) {
+        if (__ARQRequestQueueHi->type == ARQ_TYPE_MRAM_TO_ARAM) {
             ARStartDMA(__ARQRequestQueueHi->type, __ARQRequestQueueHi->source, __ARQRequestQueueHi->dest, __ARQRequestQueueHi->length);
         } else {
             ARStartDMA(__ARQRequestQueueHi->type, __ARQRequestQueueHi->dest, __ARQRequestQueueHi->source, __ARQRequestQueueHi->length);
@@ -41,13 +41,13 @@ void __ARQServiceQueueLo(void) {
 
     if (__ARQRequestPendingLo) {
         if (__ARQRequestPendingLo->length <= __ARQChunkSize) {
-            if (__ARQRequestPendingLo->type == 0) {
+            if (__ARQRequestPendingLo->type == ARQ_TYPE_MRAM_TO_ARAM) {
                 ARStartDMA(__ARQRequestPendingLo->type, __ARQRequestPendingLo->source, __ARQRequestPendingLo->dest, __ARQRequestPendingLo->length);
             } else {
                 ARStartDMA(__ARQRequestPendingLo->type, __ARQRequestPendingLo->dest, __ARQRequestPendingLo->source, __ARQRequestPendingLo->length);
             }
             __ARQCallbackLo = __ARQRequestPendingLo->callback;
-        } else if (__ARQRequestPendingLo->type == 0) {
+        } else if (__ARQRequestPendingLo->type == ARQ_TYPE_MRAM_TO_ARAM) {
             ARStartDMA(__ARQRequestPendingLo->type, __ARQRequestPendingLo->source, __ARQRequestPendingLo->dest, __ARQChunkSize);
         } else {
             ARStartDMA(__ARQRequestPendingLo->type, __ARQRequestPendingLo->dest, __ARQRequestPendingLo->source, __ARQChunkSize);
@@ -84,7 +84,7 @@ void ARQInit(void) {
         OSRegisterVersion(__ARQVersion);
 
         __ARQRequestQueueHi = __ARQRequestQueueLo = NULL;
-        __ARQChunkSize = 0x1000;
+        __ARQChunkSize = 4096;
         ARRegisterDMACallback(__ARQInterruptServiceRoutine);
         __ARQRequestPendingHi = NULL;
         __ARQRequestPendingLo = NULL;
@@ -147,9 +147,9 @@ void ARQPostRequest(ARQRequest* request, u32 owner, u32 type, u32 priority, u32 
 void ARQSetChunkSize(u32 size) {
     u32 i;
 
-    i = size & 0x1F;
+    i = size & (ARQ_DMA_ALIGNMENT - 1);
     if (i) {
-        __ARQChunkSize = size + (0x20 - i);
+        __ARQChunkSize = size + (ARQ_DMA_ALIGNMENT - i);
         return;
     }
     __ARQChunkSize = size;
