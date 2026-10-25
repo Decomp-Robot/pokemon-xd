@@ -101,6 +101,10 @@ name = "game/dbgMenuCamera.c"
 completed = true
 
 [[lib.object]]
+name = "game/relglobal.c"
+completed = true
+
+[[lib.object]]
 name = "game/dbgMenuFight.cpp"
 completed = true
 
