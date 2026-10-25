@@ -1,31 +1,20 @@
+#include <GSthread.h>
+#include <app/wazaSequence/wazaViewer.h>
+#include <floor.h>
 #include <floorManager.h>
 #include <menu.h>
 #include <types.h>
 
-/* Waza (move) debug sub menus and the small accessors that go with them. */
+/* Waza (move) debug menu controls. */
 #pragma force_active on
 
-/* Waza viewer state the waza debug menus share (0x38 bytes). */
-struct WazaViewerWork {
-    u8 unk00[0x16];
-    u8 mPokemonSelectDirty;  /* 0x16 */
-    u8 mWazaSelectDirty;     /* 0x17 */
-    u8 unk18[0x30 - 0x18];
-    s32 mDebugRunning;       /* 0x30 */
-};
-
-extern struct WazaViewerWork wazaViewerData;
-
-u8 menuIsCheck(s32 menuID);
-void menuSetPosition(s32 menuID, s32 x, s32 y);
-void GSfloorPop(void);
-void GSthreadSwitch(void);
+enum { FLOOR_ID_WAZA_VIEWER_DEBUG = 999 };
 
 #pragma peephole off
 
 int dbgMenuWazaDebugStop(void)
 {
-    if (wazaViewerData.mDebugRunning != 0) {
+    if (wazaViewerData.debugRunning != 0) {
         GSfloorPop();
     }
     return 0;
@@ -39,10 +28,10 @@ int dbgMenuPokemonDebugSelect(void)
         menuClose(MENU_ID_DEBUG_POKEMON_SELECT);
     } else {
         work = &wazaViewerData;
-        work->mPokemonSelectDirty = 0;
-        work->mWazaSelectDirty = 0;
+        work->pokemonSelectionState = 0;
+        work->moveSelectionState = 0;
         menuOpenCustom(MENU_ID_DEBUG_POKEMON_SELECT, 0, 0, 0, 1, 0);
-        menuSetPosition(MENU_ID_DEBUG_POKEMON_SELECT, 0xC, 0xA);
+        menuSetPosition(MENU_ID_DEBUG_POKEMON_SELECT, 12, 10);
     }
     return 0;
 }
@@ -53,7 +42,7 @@ int dbgMenuWazaDebugSelect(void)
         menuClose(MENU_ID_DEBUG_MOVE_SELECT);
     } else {
         menuOpenCustom(MENU_ID_DEBUG_MOVE_SELECT, 0, 0, 0, 1, 0);
-        menuSetPosition(MENU_ID_DEBUG_MOVE_SELECT, 0xC, 0xA);
+        menuSetPosition(MENU_ID_DEBUG_MOVE_SELECT, 12, 10);
     }
     return 0;
 }
@@ -63,8 +52,8 @@ int dbgMenuWazaDebugStart(void)
     if (menuIsCheck(MENU_ID_TITLE)) {
         menuClose(MENU_ID_TITLE);
     }
-    if (wazaViewerData.mDebugRunning == 0) {
-        GSfloorPush(0x3E7);
+    if (wazaViewerData.debugRunning == 0) {
+        GSfloorPush(FLOOR_ID_WAZA_VIEWER_DEBUG);
         GSthreadSwitch();
     }
     return 0;
