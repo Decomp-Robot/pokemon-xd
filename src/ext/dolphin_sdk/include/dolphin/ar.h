@@ -39,7 +39,9 @@ typedef struct ARQRequest ARQRequest;
 #define ARQ_PRIORITY_HIGH 1
 
 // AR
-ARQCallback ARRegisterDMACallback(ARQCallback callback);
+typedef void (*ARCallback)(void);
+
+ARCallback ARRegisterDMACallback(ARCallback callback);
 u32 ARGetDMAStatus(void);
 void ARStartDMA(u32 type, u32 mainmem_addr, u32 aram_addr, u32 length);
 u32 ARAlloc(u32 length);
@@ -51,6 +53,13 @@ void ARSetSize(void);
 u32 ARGetBaseAddress(void);
 u32 ARGetSize(void);
 u32 ARGetInternalSize(void);
+
+enum {
+    AR_CLEAR_INTERNAL_ALL = 0,
+    AR_CLEAR_INTERNAL_USER = 1,
+    AR_CLEAR_EXPANSION = 2
+};
+
 void ARClear(u32 flag);
 
 // ARQ

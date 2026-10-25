@@ -695,6 +695,9 @@ ext/dolphin_sdk/ar/ar.c:
 	.text       start:0x800BCCCC end:0x800BCCEC
 	.text       start:0x800BCCEC end:0x800BCCFC
 	.text       start:0x800BCCFC end:0x800BE4F0
+	.data       start:0x803D2A48 end:0x803D2A90
+	.sdata      start:0x804E81C0 end:0x804E81C8
+	.sbss       start:0x804EAD28 end:0x804EAD48
 
 ext/dolphin_sdk/ar/arq.c:
 	.text       start:0x800BE4F0 end:0x800BE5F0
