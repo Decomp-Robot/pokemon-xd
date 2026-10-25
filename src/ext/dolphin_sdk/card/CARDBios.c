@@ -253,13 +253,13 @@ static void SetupTimeoutAlarm(CARDControl* card) {
     case 0xF3:
         break;
     case 0xF4:
-        if (card->pageSize > 0x80) {
-            OSSetAlarm(&card->alarm, OSSecondsToTicks((OSTime)2) * (card->cBlock / 0x40),
+        if (card->pageSize > 128) {
+            OSSetAlarm(&card->alarm, OSSecondsToTicks((OSTime)2) * (card->cBlock / 64),
                        TimeoutHandler);
             break;
         }
     case 0xF1:
-        OSSetAlarm(&card->alarm, OSSecondsToTicks((OSTime)2) * (card->sectorSize / 0x2000),
+        OSSetAlarm(&card->alarm, OSSecondsToTicks((OSTime)2) * (card->sectorSize / 8192),
                    TimeoutHandler);
         break;
     }
@@ -447,7 +447,7 @@ s32 __CARDWritePage(s32 chan, CARDCallback callback) {
     ASSERTLINE(906, card->addr < (u32) card->size * 1024 * 1024 / 8);
     card->cmd[0] = 0xF2;
 
-    if (card->pageSize > 0x80) {
+    if (card->pageSize > 128) {
         card->cmd[1] = AD1(card->addr) | 0x80;
     } else {
         card->cmd[1] = AD1(card->addr);
@@ -520,7 +520,7 @@ s32 __CARDEraseSector(s32 chan, u32 addr, CARDCallback callback) {
     ASSERTLINE(1012, addr % card->sectorSize == 0);
     ASSERTLINE(1013, addr < (u32) card->size * 1024 * 1024 / 8);
 
-    if (card->pageSize > 0x80) {
+    if (card->pageSize > 128) {
         if (callback) {
             callback(chan, 0);
         }

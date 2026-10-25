@@ -910,6 +910,10 @@ ext/dolphin_sdk/card/CARDBios.c:
 	.text       start:0x800C05E4 end:0x800C0734
 	.text       start:0x800C0734 end:0x800C0784
 	.text       start:0x800C0784 end:0x800C07A0
+	.data       start:0x803D2C98 end:0x803D2CF0
+	.bss        start:0x8043E840 end:0x8043EA80
+	.sdata      start:0x804E81D8 end:0x804E81DC
+	.sbss       start:0x804EAD90 end:0x804EAD94
 
 ext/dolphin_sdk/card/CARDUnlock.c:
 	.text       start:0x800C07A0 end:0x800C090C

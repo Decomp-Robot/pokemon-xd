@@ -2920,7 +2920,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDBios.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/card/CARDBlock.c"
