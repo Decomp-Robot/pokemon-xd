@@ -4,6 +4,10 @@
 
 #include "__card.h"
 
+#define CARD_READ_ARRAY_COMMAND 0x52
+#define CARD_DSP_PARAM_TRANSFER_MESSAGE 0xFF000000
+#define CARD_UNLOCKED_STATUS 0x40
+
 static u8 CardData[352] ATTRIBUTE_ALIGN(DOLPHIN_ALIGNMENT) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x21, 0x02, 0xFF, 0x00, 0x21, 0x13, 0x06, 0x12, 0x03, 0x12, 0x04,
@@ -39,8 +43,8 @@ static void InitCallback(void* _task);
 static void DoneCallback(void* _task);
 
 static int CARDRand(void) {
-    next = (next * 0x41C64E6D) + 0x3039;
-    return (next / 0x10000) & 0x7FFF;
+    next = (next * 1103515245) + 12345;
+    return (next / 65536) & 0x7FFF;
 }
 
 static void CARDSrand(unsigned int seed) {
@@ -118,7 +122,7 @@ static s32 ReadArrayUnlock(s32 chan, u32 data, void* rbuf, s32 rlen, int mode) {
 
     data &= 0xfffff000;
     memset(cmd, 0, 5);
-    cmd[0] = 0x52;
+    cmd[0] = CARD_READ_ARRAY_COMMAND;
     if (mode == 0) {
         cmd[1] = SEC_AD1(data);
         cmd[2] = SEC_AD2(data);
@@ -130,9 +134,9 @@ static s32 ReadArrayUnlock(s32 chan, u32 data, void* rbuf, s32 rlen, int mode) {
     }
 
     err = FALSE;
-    err |= !EXIImmEx(chan, cmd, 5, 1);
-    err |= !EXIImmEx(chan, (u8* )card->workArea + (u32)sizeof(CARDID), card->latency, 1);
-    err |= !EXIImmEx(chan, rbuf, rlen, 0);
+    err |= !EXIImmEx(chan, cmd, 5, EXI_WRITE);
+    err |= !EXIImmEx(chan, (u8* )card->workArea + (u32)sizeof(CARDID), card->latency, EXI_WRITE);
+    err |= !EXIImmEx(chan, rbuf, rlen, EXI_READ);
     err |= !EXIDeselect(chan);
 
     return err ? CARD_RESULT_NOCARD : CARD_RESULT_READY;
@@ -289,7 +293,7 @@ s32 __CARDUnlock(s32 chan, u8 flashID[12]) {
 
     task->priority = 255;
     task->iram_mmem_addr = (u16*)OSCachedToPhysical(CardData);
-    task->iram_length = 0x160;
+    task->iram_length = 352;
     task->iram_addr = 0;
     task->dsp_init_vector = 0x10;
     task->init_cb = InitCallback;
@@ -323,7 +327,7 @@ static void InitCallback(void* _task) {
     
     param = (CARDDecParam*)card->workArea;
 
-    DSPSendMailToDSP(0xff000000);
+    DSPSendMailToDSP(CARD_DSP_PARAM_TRANSFER_MESSAGE);
     while (DSPCheckMailToDSP())
         ;
 
@@ -339,7 +343,7 @@ static void DoneCallback(void* _task) {
     s32 rlen;
     u32 rshift;
 
-    u8 unk;
+    u8 status;
     u32 wk, wk1;
     u32 Ans2;
 
@@ -389,14 +393,14 @@ static void DoneCallback(void* _task) {
         return;
     }
 
-    result = __CARDReadStatus(chan, &unk);
+    result = __CARDReadStatus(chan, &status);
     if (!EXIProbe(chan)) {
         EXIUnlock(chan);
         __CARDMountCallback(chan, CARD_RESULT_NOCARD);
         return;
     }
 
-    if (result == CARD_RESULT_READY && !(unk & 0x40)) {
+    if (result == CARD_RESULT_READY && !(status & CARD_UNLOCKED_STATUS)) {
         EXIUnlock(chan);
         result = CARD_RESULT_IOERROR;
     }
