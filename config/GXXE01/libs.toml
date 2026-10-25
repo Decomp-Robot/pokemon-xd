@@ -2701,7 +2701,38 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/gx/GXInit.c"
-completed = false
+completed = true
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-opt nopeephole",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-DNDEBUG=1",
+    "-W error",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i src/ext/dolphin_sdk/gx",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=2",
+    "-lang=c",
+]
 
 
 [[lib.object]]

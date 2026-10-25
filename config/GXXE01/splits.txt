@@ -1009,6 +1009,11 @@ ext/dolphin_sdk/gx/GXInit.c:
 	.text       start:0x800C63F0 end:0x800C6594
 	.text       start:0x800C6594 end:0x800C6B94
 	.text       start:0x800C6B94 end:0x800C74CC
+	.data       start:0x803D2EA0 end:0x803D30DC
+	.bss        start:0x8043EA80 end:0x8043F0B0
+	.sdata      start:0x804E81F0 end:0x804E81F4
+	.sbss       start:0x804EAD98 end:0x804EADC0
+	.sdata2     start:0x804ECB70 end:0x804ECB98
 
 ext/dolphin_sdk/gx/GXFifo.c:
 	.text       start:0x800C74CC end:0x800C7600
