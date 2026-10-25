@@ -114,6 +114,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-str reuse,readonly", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/dbgMenuGSgfx.c"
+completed = true
+extra_cflags = ["-opt nopeephole", "-pragma \"force_active on\""]
+
+[[lib.object]]
 name = "game/dbgMenuMemcard.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-inline noauto"]

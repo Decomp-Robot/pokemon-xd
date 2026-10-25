@@ -34,6 +34,9 @@ game/dbgMenuFlag.c:
 	.sdata      start:0x804E7E38 end:0x804E7E3C
 	.sdata2     start:0x804EBDC8 end:0x804EBDD4
 
+game/dbgMenuGSgfx.c:
+	.text       start:0x8000B344 end:0x8000B3F8
+
 game/dbgMenuMemcard.c:
 	.text       start:0x8000B620 end:0x8000BAE4
 	.rodata     start:0x802EA0B8 end:0x802EA1E0
