@@ -435,6 +435,7 @@ ext/dolphin_sdk/os/OSReset.c:
 ext/dolphin_sdk/os/OSResetSW.c:
 	.text       start:0x800AFE78 end:0x800AFF6C
 	.text       start:0x800AFF6C end:0x800B0204
+	.sbss       start:0x804EAB40 end:0x804EAB60
 
 ext/dolphin_sdk/os/OSRtc.c:
 	.text       start:0x800B0204 end:0x800B0264

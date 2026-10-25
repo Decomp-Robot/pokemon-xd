@@ -76,6 +76,8 @@ u8 __gUnknown800030E3 AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 #define OS_CORE_CLOCK  __OSCoreClock
 #define OS_TIMER_CLOCK (OS_BUS_CLOCK/4)
 
+#define OS_SYSTEM_RESET_DELAY_MINUTES_MASK 0x1F
+
 #define OSTicksToSeconds(ticks)      ((ticks)   / (OS_TIMER_CLOCK))
 #define OSTicksToMilliseconds(ticks) ((ticks)   / (OS_TIMER_CLOCK/1000))
 #define OSTicksToMicroseconds(ticks) ((ticks) * 8 / (OS_TIMER_CLOCK/125000))

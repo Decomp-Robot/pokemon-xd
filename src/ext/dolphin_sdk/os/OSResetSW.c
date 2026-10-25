@@ -14,10 +14,10 @@ void __OSResetSWInterruptHandler(s16 exception, OSContext* context) {
 
     HoldDown = __OSGetSystemTime();
     while (__OSGetSystemTime() - HoldDown < OSMicrosecondsToTicks(100) &&
-           !(__PIRegs[0] & 0x00010000)) {
+           !(__PIRegs[0] & PI_STATUS_RESET_SWITCH_RELEASED)) {
         ;
     }
-    if (!(__PIRegs[0] & 0x00010000)) {
+    if (!(__PIRegs[0] & PI_STATUS_RESET_SWITCH_RELEASED)) {
         LastState = Down = TRUE;
         __OSMaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
         if (ResetCallback) {
@@ -26,7 +26,7 @@ void __OSResetSWInterruptHandler(s16 exception, OSContext* context) {
             callback();
         }
     }
-    __PIRegs[0] = 2;
+    __PIRegs[0] = PI_INTERRUPT_RESET_SWITCH;
 }
 
 BOOL OSGetResetButtonState(void) {
@@ -41,7 +41,7 @@ BOOL OSGetResetButtonState(void) {
     ASSERTLINE(160, HoldDown == 0 || HoldDown < now);
 
     reg = __PIRegs[0];
-    if (!(reg & 0x00010000)) {
+    if (!(reg & PI_STATUS_RESET_SWITCH_RELEASED)) {
         if (!Down) {
             Down = TRUE;
             state = HoldUp ? TRUE : FALSE;
@@ -68,8 +68,8 @@ BOOL OSGetResetButtonState(void) {
 
     LastState = state;
 
-    if (__gUnknown800030E3 & 0x1F) {
-        OSTime fire = (__gUnknown800030E3 & 0x1F) * 60;
+    if (__gUnknown800030E3 & OS_SYSTEM_RESET_DELAY_MINUTES_MASK) {
+        OSTime fire = (__gUnknown800030E3 & OS_SYSTEM_RESET_DELAY_MINUTES_MASK) * 60;
         fire = __OSStartTime + OSSecondsToTicks(fire);
         if (fire < now) {
             now -= fire;

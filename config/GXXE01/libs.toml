@@ -2443,7 +2443,7 @@ completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSResetSW.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSRtc.c"
