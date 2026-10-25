@@ -12,8 +12,8 @@ extern "C" long menuMetaDefaults[];
 #pragma pack(push, 4)
 class CMetaMenu {
 protected:
-    enum { InitialKeyStateBytes = 0x1a };
     enum AlphaFadeState { FADE_OPAQUE, FADE_OUT, FADE_TRANSPARENT, FADE_IN };
+    enum WindowInfoSlot { WINDOW_INFO_DECIDE_SE = 1 };
     long mAlphaFadeFrames;
     long mAlphaFadeState;
     long mWindowInfo[5];
@@ -46,7 +46,7 @@ protected:
         mTutorialInput = false;
         mTutorialKeysValid = false;
         mTutorialKeys = 0;
-        memset(&mKeyInfo, 0, InitialKeyStateBytes);
+        memset(&mKeyInfo, 0, sizeof(mKeyInfo));
         mKeyRepeatFrames = 0;
         mPreviousKeyOn = 0;
     }

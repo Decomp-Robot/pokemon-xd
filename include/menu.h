@@ -42,6 +42,7 @@ void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, u32 color,
 
 s32 menuOpen(s32 menuID, s32 mode);
 u16 windowGetKeyTrg(void);
+enum { MENU_OPEN_FLAG_NO_ACTIVATE = 4 };
 s32 menuOpenCustom(s32 menuID, s32 parentID, void *result, u32 flags,
                    bool wait,
                    s32 argCount, ...);

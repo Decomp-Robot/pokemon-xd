@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+enum { GS_PRIM_VERTEX_ORDER_PERIMETER_QUADS = 1 };
 void GSprimSetQuadVertexOrder(s32 order);
 void GSprimDraw2DQuad(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height);
 void GSprimDraw2DQuad4V(GSvec2 *vertices, GSgfxColAu8 color);

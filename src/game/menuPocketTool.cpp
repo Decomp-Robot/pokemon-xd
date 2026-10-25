@@ -412,13 +412,13 @@ void menuPtSpriteDrawAndRollScale(unsigned short spriteID, unsigned long rgba, f
         xy[i].x += x;
         xy[i].y += y;
     }
-    GSprimSetQuadVertexOrder(1);
+    GSprimSetQuadVertexOrder(GS_PRIM_VERTEX_ORDER_PERIMETER_QUADS);
     GSprimDraw2DTexQuad4V(xy, st, texture, color);
 }
 
 void menuPtMenuLoad(long menuID)
 {
-    menuOpenCustom(menuID, windowGetActiveID(), 0, 4, 0, 0);
+    menuOpenCustom(menuID, windowGetActiveID(), 0, MENU_OPEN_FLAG_NO_ACTIVATE, 0, 0);
 }
 
 void menuPtWindowWorkDrawPrime(tagWINDOW_WORK *window)
@@ -601,9 +601,9 @@ long CMetaMenu::actionMenu(unsigned long *messages, int count, long x, long y, l
         _selectItemQuantity = count;
         _pThis = this;
         saved = *data;
-        data->mCursorMode = 4;
+        data->mCursorMode = MENU_DATA_MODE_CALLBACK;
         data->mCursorFunction = _tutorialWindowCursorFunc;
-        data->mButtonMode = 4;
+        data->mButtonMode = MENU_DATA_MODE_CALLBACK;
         data->mButtonFunction = _tutorialWindowButtonFunc;
     }
     long result = menuSubOpenSelect(0, messages, count, x, y, cursor);
@@ -619,7 +619,7 @@ void CMetaMenu::aButtonWait()
         switch (getKeyInfo()->mKeyTrg) {
         case MENU_KEY_A:
             finished = true;
-            menuPtPlaySe(mWindowInfo[1]);
+            menuPtPlaySe(mWindowInfo[WINDOW_INFO_DECIDE_SE]);
             break;
         }
         updateAll();
@@ -700,7 +700,7 @@ void CMetaMenu::alphaFadeDraw()
 {
     static GSvec2 xy[4] = {{0, 0}, {640, 0}, {640, 480}, {0, 480}};
     GSgfxColAu8 color = {0, 0, 0, 255};
-    GSprimSetQuadVertexOrder(1);
+    GSprimSetQuadVertexOrder(GS_PRIM_VERTEX_ORDER_PERIMETER_QUADS);
     color.a = 255 - getAlphaFadeAlpha();
     if (color.a != 0) GSprimDraw2DQuad4V(xy, color);
 }
@@ -708,7 +708,7 @@ void CMetaMenu::alphaFadeDraw()
 void CMetaMenu::systemFadeOutKeepAfterFloorPush()
 {
     GSthreadSwitch();
-    fadeSet(3, 0.0f);
+    fadeSet(FADE_OUT_BLACK, 0.0f);
 }
 
 void CMetaMenu::systemFadeInKick() { fadeSetToBlackInIfBlack(0.5f); }
@@ -738,9 +738,9 @@ void CMetaMenu::drawHook()
 {
     GSgfxLayerSetActive(GSGFX_LAYER_MENU);
     GSgfxLayerID layer = floorGetMenuLayerID();
-    spriteSetOffset(7, 0, 0);
-    spriteClearScissor(7);
-    spriteSetEnv(7);
+    spriteSetOffset(GSGFX_LAYER_MENU, 0, 0);
+    spriteClearScissor(GSGFX_LAYER_MENU);
+    spriteSetEnv(GSGFX_LAYER_MENU);
     spriteSetOffset(layer, 0, 0);
     spriteClearScissor(layer);
     spriteSetEnv(layer);
@@ -748,9 +748,9 @@ void CMetaMenu::drawHook()
     mAnimationTime += timeGetLastFrameTime();
     alphaFadeUpdate();
     tutorialManageUpdate();
-    spriteSetOffset(7, 0, 0);
-    spriteClearScissor(7);
-    spriteClearEnv(7);
+    spriteSetOffset(GSGFX_LAYER_MENU, 0, 0);
+    spriteClearScissor(GSGFX_LAYER_MENU);
+    spriteClearEnv(GSGFX_LAYER_MENU);
     spriteSetOffset(layer, 0, 0);
     spriteClearScissor(layer);
     spriteClearEnv(layer);
@@ -863,7 +863,7 @@ void CInfoWindow::draw()
             spriteSetOffset(layer, (short)(window->mScrollX + sprite->mX), (short)(window->mScrollY + sprite->mY));
             spriteClearScissor(layer);
             spriteSetEnv(layer);
-            GSmsgMain(layer, mMessageID, mKeyTrigger, !(window->_00 & 4));
+            GSmsgMain(layer, mMessageID, mKeyTrigger, !(window->mStateFlags & WINDOW_RUN_UPDATE));
             spriteSetOffset(layer, 0, 0);
             spriteClearScissor(layer);
             spriteSetEnv(layer);
@@ -1032,8 +1032,8 @@ void CMenuGlobalState::init()
 u16 pokemonindex(int index)
 {
 	index++;
-	if (index > 0xfb) {
-		index += 0x19;
+	if (index > 251) {
+		index += 25;
 	}
 	return index;
 }
@@ -1057,7 +1057,7 @@ void makePocketDeubugMakeDarkPokemonReset() { _darkPokemonIndex = 12; }
 
 void menuPocketDebugMakePokemonByID(Pokemon &pokemon, unsigned short species, bool dark, float rate)
 {
-    pokemonCreate(&pokemon, species, 25, gamedataGetStatus(0, 1));
+    pokemonCreate(&pokemon, species, 25, gamedataGetStatus(0, GAMEDATA_STATUS_ATTEST));
     if (dark) {
         for (long tries = 0; tries < 10; ++tries) {
             if (++_darkPokemonIndex >= darkPokemonList_number) _darkPokemonIndex = 1;
@@ -1070,7 +1070,7 @@ void menuPocketDebugMakePokemonByID(Pokemon &pokemon, unsigned short species, bo
 void menuPocketDebugMakeDarkPokemonByID(Pokemon &pokemon, unsigned short darkID, float rate)
 {
     unsigned short species = darkPokemonGetDarkPokemon(darkID)->getPokemonID();
-    pokemonCreate(&pokemon, species, 25, gamedataGetStatus(0, 1));
+    pokemonCreate(&pokemon, species, 25, gamedataGetStatus(0, GAMEDATA_STATUS_ATTEST));
     menuPocketSetDarkPokemon(pokemon, rate, darkID);
     pokemonBiosGetInitDp(&pokemon);
 }
