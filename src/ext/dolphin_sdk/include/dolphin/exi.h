@@ -46,6 +46,8 @@ extern "C" {
 
 #define EXI_IS_VIEWER 0x05070000
 
+#define EXI_STATE_ATTACHED 8
+
 #define EXI_READ  0
 #define EXI_WRITE 1
 

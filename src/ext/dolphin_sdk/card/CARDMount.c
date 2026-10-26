@@ -12,6 +12,24 @@ static u32 LatencyTable[8] = {
     4, 8, 16, 32, 64, 128, 256, 512,
 };
 
+#define CARD_UNLOCKED_STATUS 0x40
+
+#define CARD_MOUNT_STEP_IDENTIFY 0
+#define CARD_MOUNT_STEP_UNLOCKED 1
+#define CARD_MOUNT_STEP_READ_BASE 2
+
+#define CARD_ID_SECTOR_SIZE_INDEX_MASK 0x00003800
+#define CARD_ID_SECTOR_SIZE_INDEX_SHIFT 11
+#define CARD_ID_LATENCY_INDEX_MASK 0x00000700
+#define CARD_ID_LATENCY_INDEX_SHIFT 8
+#define CARD_ID_SIZE_MASK 0x000000FC
+#define CARD_ID_DEVICE_TYPE_MASK 0xFFFF0000
+#define CARD_VENDOR_ID_UNSET 0xFFFF
+#define CARD_VENDOR_ID_FAST_MODE 236
+#define CARD_ID_NET_CARD 0x80000004
+#define CARD_ACCESS_DISABLED 0x80
+#define CARD_ID_INVALID_LOW_BITS_MASK 3
+
 // prototypes
 static s32 DoMount(s32 chan);
 static void DoUnmount(s32 chan, s32 result);
@@ -19,15 +37,15 @@ static void DoUnmount(s32 chan, s32 result);
 static BOOL IsCard(u32 id) {
     u32 size;
     s32 sectorSize;
-    if (id & (0xFFFF0000) && (id != 0x80000004 || __CARDVendorID == 0xFFFF)) {
+    if (id & CARD_ID_DEVICE_TYPE_MASK && (id != CARD_ID_NET_CARD || __CARDVendorID == CARD_VENDOR_ID_UNSET)) {
         return FALSE;
     }
 
-    if ((id & 3) != 0) {
+    if ((id & CARD_ID_INVALID_LOW_BITS_MASK) != 0) {
         return FALSE;
     }
 
-    size = id & 0xfc;
+    size = id & CARD_ID_SIZE_MASK;
     switch (size) {
     case 4:
     case 8:
@@ -41,7 +59,7 @@ static BOOL IsCard(u32 id) {
         break;
     }
 
-    sectorSize = SectorSizeTable[(id & 0x00003800) >> 11];
+    sectorSize = SectorSizeTable[(id & CARD_ID_SECTOR_SIZE_INDEX_MASK) >> CARD_ID_SECTOR_SIZE_INDEX_SHIFT];
     if (sectorSize == 0) {
         return FALSE;
     }
@@ -63,7 +81,7 @@ s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
     if (chan < 0 || 2 <= chan)
         return CARD_RESULT_FATAL_ERROR;
 
-    if (__gUnknown800030E3 & 0x80) {
+    if (__gUnknown800030E3 & CARD_ACCESS_DISABLED) {
         return CARD_RESULT_NOCARD;
     }
 
@@ -76,7 +94,7 @@ s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
     else if (probe == 0)
         result = CARD_RESULT_BUSY;
     else if (card->attached) {
-        if (card->mountStep < 1)
+        if (card->mountStep < CARD_MOUNT_STEP_UNLOCKED)
             result = CARD_RESULT_BUSY;
         else {
             if (memSize)
@@ -88,16 +106,16 @@ s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
             result = CARD_RESULT_READY;
         }
     }
-    else if ((EXIGetState(chan) & 8))
+    else if ((EXIGetState(chan) & EXI_STATE_ATTACHED))
         result = CARD_RESULT_WRONGDEVICE;
     else if (!EXIGetID(chan, 0, &id))
         result = CARD_RESULT_BUSY;
     else if (IsCard(id)) {
         if (memSize)
-            *memSize = (s32)(id & 0xfc);
+            *memSize = (s32)(id & CARD_ID_SIZE_MASK);
         
         if (sectorSize)
-            *sectorSize = SectorSizeTable[(id & 0x00003800) >> 11];
+            *sectorSize = SectorSizeTable[(id & CARD_ID_SECTOR_SIZE_INDEX_MASK) >> CARD_ID_SECTOR_SIZE_INDEX_SHIFT];
         result = CARD_RESULT_READY;
     } else {
         result = CARD_RESULT_WRONGDEVICE;
@@ -120,7 +138,7 @@ static s32 DoMount(s32 chan) {
     ASSERTLINE(399, 0 <= chan && chan < 2);
 
     card = &__CARDBlock[chan];
-    if (card->mountStep == 0) {
+    if (card->mountStep == CARD_MOUNT_STEP_IDENTIFY) {
         if (EXIGetID(chan, 0, &id) == 0) {
             result = CARD_RESULT_NOCARD;
         } else if (IsCard(id)) {
@@ -133,22 +151,22 @@ static s32 DoMount(s32 chan) {
             goto error;
 
         card->cid = id;
-        card->size = (u16)(id & 0xFC);
+        card->size = (u16)(id & CARD_ID_SIZE_MASK);
         ASSERTLINE(424, card->size);
         
-        card->sectorSize = SectorSizeTable[(id & 0x00003800) >> 11];
+        card->sectorSize = SectorSizeTable[(id & CARD_ID_SECTOR_SIZE_INDEX_MASK) >> CARD_ID_SECTOR_SIZE_INDEX_SHIFT];
         ASSERTLINE(426, card->sectorSize);
 
         card->cBlock = (u16)((card->size * 1024 * 1024 / 8) / card->sectorSize);
         ASSERTLINE(428, 8 <= card->cBlock);
 
-        card->latency = LatencyTable[(id & 0x00000700) >> 8];
+        card->latency = LatencyTable[(id & CARD_ID_LATENCY_INDEX_MASK) >> CARD_ID_LATENCY_INDEX_SHIFT];
 
         result = __CARDReadVendorID(chan, &card->vendorID);
         if (result < 0)
             goto error;
 
-        if (CARDGetFastMode() && (card->vendorID >> 8) == 0xEC) {
+        if (CARDGetFastMode() && (card->vendorID >> 8) == CARD_VENDOR_ID_FAST_MODE) {
             card->pageSize = 512;
         } else {
             card->pageSize = 128;
@@ -167,7 +185,7 @@ static s32 DoMount(s32 chan) {
             goto error;
         }
 
-        if (!(status & 0x40)) {
+        if (!(status & CARD_UNLOCKED_STATUS)) {
             result = __CARDUnlock(chan, card->id);
             if (result < 0)
                 goto error;
@@ -183,7 +201,7 @@ static s32 DoMount(s32 chan) {
 
             return result;
         } else {
-            card->mountStep = 1;
+            card->mountStep = CARD_MOUNT_STEP_UNLOCKED;
 
             checkSum = 0;
             sram = __OSLockSramEx();
@@ -198,21 +216,21 @@ static s32 DoMount(s32 chan) {
         }
     }
 
-    if (card->mountStep == 1) {
-        if (card->cid == 0x80000004) {
+    if (card->mountStep == CARD_MOUNT_STEP_UNLOCKED) {
+        if (card->cid == CARD_ID_NET_CARD) {
             u16 vendorID;
 
             sram = __OSLockSramEx();
             vendorID = *(u16*)sram->flashID[chan];
             __OSUnlockSramEx(FALSE);
 
-            if (__CARDVendorID == 0xFFFF || vendorID != __CARDVendorID) {
+            if (__CARDVendorID == CARD_VENDOR_ID_UNSET || vendorID != __CARDVendorID) {
                 result = CARD_RESULT_WRONGDEVICE;
                 goto error;
             }
         }
 
-        card->mountStep = 2;
+        card->mountStep = CARD_MOUNT_STEP_READ_BASE;
 
         result = __CARDEnableInterrupt(chan, TRUE);
         if (result < 0)
@@ -223,7 +241,7 @@ static s32 DoMount(s32 chan) {
         DCInvalidateRange(card->workArea, CARD_WORKAREA_SIZE);
     }
 
-    step = card->mountStep - 2;
+    step = card->mountStep - CARD_MOUNT_STEP_READ_BASE;
     result = __CARDRead(chan, (u32)card->sectorSize * step, CARD_SYSTEM_BLOCK_SIZE,
                         (u8 *)card->workArea + (CARD_SYSTEM_BLOCK_SIZE * step), __CARDMountCallback);
     if (result < 0)
@@ -286,7 +304,7 @@ s32 CARDMountAsync(s32 chan, void* workArea, CARDCallback detachCallback, CARDCa
     if (chan < 0 || 2 <= chan)
         return CARD_RESULT_FATAL_ERROR;
 
-    if (__gUnknown800030E3 & 0x80) {
+    if (__gUnknown800030E3 & CARD_ACCESS_DISABLED) {
         return CARD_RESULT_NOCARD;
     }
 
@@ -298,7 +316,7 @@ s32 CARDMountAsync(s32 chan, void* workArea, CARDCallback detachCallback, CARDCa
         return CARD_RESULT_BUSY;
     }
 
-    if (!card->attached && (EXIGetState(chan) & 0x08)) {
+    if (!card->attached && (EXIGetState(chan) & EXI_STATE_ATTACHED)) {
         OSRestoreInterrupts(enabled);
         return CARD_RESULT_WRONGDEVICE;
     }
@@ -315,7 +333,7 @@ s32 CARDMountAsync(s32 chan, void* workArea, CARDCallback detachCallback, CARDCa
         return CARD_RESULT_NOCARD;
     }
 
-    card->mountStep = 0;
+    card->mountStep = CARD_MOUNT_STEP_IDENTIFY;
     card->attached = TRUE;
     EXISetExiCallback(chan, 0);
     OSCancelAlarm(&card->alarm);
@@ -347,7 +365,7 @@ static void DoUnmount(s32 chan, s32 result) {
         OSCancelAlarm(&card->alarm);
         card->attached = FALSE;
         card->result = result;
-        card->mountStep = 0;
+        card->mountStep = CARD_MOUNT_STEP_IDENTIFY;
     }
     OSRestoreInterrupts(enabled);
 }
