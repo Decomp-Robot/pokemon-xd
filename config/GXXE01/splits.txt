@@ -2237,6 +2237,9 @@ game/app/fight/fightFloorBios.cpp:
 game/app/fight/fightActionFlow.cpp:
 	.text       start:0x80208CA8 end:0x80208DA4
 
+game/app/fight/fightKoukaBios.cpp:
+	.text       start:0x8020C17C end:0x8020C1F0
+
 game/app/fight/fightJoukenBios.cpp:
 	.text       start:0x8020C590 end:0x8020C88C
 
