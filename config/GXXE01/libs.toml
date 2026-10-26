@@ -1005,6 +1005,7 @@ name = "game/gbaExchange.cpp"
 completed = true
 cflags = [
     "-W error",
+    "-use_lmw_stmw on",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
