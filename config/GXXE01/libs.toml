@@ -3979,6 +3979,12 @@ cflags_extra = ["-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/GSAPI/GSscript/tvariant.cpp"
 completed = true
+
+[[lib.object]]
+name = "game/GSAPI/GSscript/chank.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "joutai"
 mw_version = "GC/2.6"

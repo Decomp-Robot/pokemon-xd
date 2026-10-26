@@ -2278,6 +2278,14 @@ game/app/memo/memo.c:
 game/app/evolution/evolution.cpp:
 	.text       start:0x80234E58 end:0x80234F78
 
+game/GSAPI/GSscript/chank.cpp:
+	.text       start:0x802424B4 end:0x802426B4
+
+game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
+	.text       start:0x8025C940 end:0x8025CA38
+	.sdata      start:0x804E8610 end:0x804E8618
+	.sdata2     start:0x804EF190 end:0x804EF1A0
+
 game/app/people/peoplePartAnimation.cpp:
 	.text       start:0x802A1644 end:0x802A1A74
 	.sdata2     start:0x804EF908 end:0x804EF928
