@@ -4262,3 +4262,14 @@ cflags_extra = ["-O4,s", "-inline auto,deferred", "-use_lmw_stmw on", "-i src/ex
 [[lib.object]]
 name = "game/app/memo/memo.c"
 completed = true
+
+[[lib]]
+name = "flashmenu"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-inline auto,deferred", "-opt nopeephole", "-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/flashmenu/flashcalc.cpp"
+completed = true

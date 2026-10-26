@@ -2286,6 +2286,9 @@ game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.sdata      start:0x804E8610 end:0x804E8618
 	.sdata2     start:0x804EF190 end:0x804EF1A0
 
+game/app/flashmenu/flashcalc.cpp:
+	.text       start:0x80272704 end:0x8027290C
+
 game/app/people/peoplePartAnimation.cpp:
 	.text       start:0x802A1644 end:0x802A1A74
 	.sdata2     start:0x804EF908 end:0x804EF928
