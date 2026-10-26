@@ -9,18 +9,18 @@ struct FIGHT_ACTION {
 #ifdef __cplusplus
     FIGHT_ACTION() {}
 #endif
-    u16 mKind; // 0x00
+    u16 mKind;
     u8 _02[6];
-    struct FIGHT_ACTION_DATA_dd_ *mActionData; // 0x08
-    void *mBufferData; // 0x0C
+    struct FIGHT_ACTION_DATA_dd_ *mActionData;
+    void *mBufferData;
     u8 _10[4];
-    void *mActorTarget; // 0x14
-    u8 _18[0x18];
+    void *mActorTarget;
+    u8 _18[24];
 };
 
 enum FightActionKind {
-    FIGHT_ACTION_KIND_FOCUS_PUNCH_PREPARE = 0x0C,
-    FIGHT_ACTION_KIND_FIGHT_OUT_POKEMON_WAZA = 0x13
+    FIGHT_ACTION_KIND_FOCUS_PUNCH_PREPARE = 12,
+    FIGHT_ACTION_KIND_FIGHT_OUT_POKEMON_WAZA = 19
 };
 
 #ifdef __cplusplus
@@ -31,6 +31,7 @@ u8 fightActionCreate(FIGHT_ACTION *action, struct FIGHT_ACTION_DATA_dd_ *data, v
 u8 fightActionFlowFifo(FIGHT_ACTION *action);
 u8 fightActionCheckValid(void *action);
 void fightActionBiosSetBuffDataPtr(FIGHT_ACTION *action, void *arg);
+void *fightActionBiosGetBuffDataPtr(FIGHT_ACTION *action);
 struct FIGHT_ACTION_DATA_dd_ *fightActionBiosGetFightActionDataPtr(FIGHT_ACTION *action);
 #ifdef __cplusplus
 }

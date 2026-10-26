@@ -2226,6 +2226,9 @@ game/app/fight/fightFloor.cpp:
 game/app/fight/fightFloorBios.cpp:
 	.text       start:0x801F5B38 end:0x801F5E18
 
+game/app/fight/fightActionFlow.cpp:
+	.text       start:0x80208CA8 end:0x80208DA4
+
 game/app/fight/fight.cpp:
 	.text       start:0x8020D854 end:0x8020D858
 	.ctors      start:0x802E9FE0 end:0x802E9FE4

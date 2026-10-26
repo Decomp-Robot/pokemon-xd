@@ -36,23 +36,23 @@ typedef struct FIGHT_FLOOR FIGHT_FLOOR;
 
 struct FIGHT_FLOOR {
     _JOUTAI mJoutai;
-    u16 mTurnCount; // 0x10
+    u16 mTurnCount;
     u16 mEncountDataId;
-    FIGHT_SIDE mSideAry[FIGHT_FLOOR_SIDE_COUNT]; // 0x14
-    FightOutPokemon *mAttackPokemon; // 0xDDF4
+    FIGHT_SIDE mSideAry[FIGHT_FLOOR_SIDE_COUNT];
+    FightOutPokemon *mAttackPokemon;
     FightOutPokemon *mDefensePokemon;
     FightOutPokemon *mEscapePokemon;
     FightOutPokemon *mIrekaePokemon;
     FightOutPokemon *mKizetuPokemon;
     FightOutPokemon *mTuikakoukaPokemon;
     FightOutPokemon *mTokuseiPokemon;
-    FightOutPokemon *mItemPokemon; // 0xDE10
+    FightOutPokemon *mItemPokemon;
     FightOutPokemon *mAppointPokemon;
     FIGHT_TRAINER *mAppointTrainer;
     FIGHT_WAZA *mAppointWaza;
     FIGHT_SIDE *mAppointSide;
     void *mAppointItem;
-    u32 mAttackMsgId; // 0xDE28
+    u32 mAttackMsgId;
     u32 mCriticalMsgId;
     u32 mWazakoukaMsgId;
     u32 mAppointMsgId;
@@ -60,11 +60,11 @@ struct FIGHT_FLOOR {
     u16 mAppointWazaDataId;
     u16 mAppointItemDataId;
     u16 mAppointTokuseiDataId;
-    s16 mFightPokemonEntryCnt; // 0xDE40
+    s16 mFightPokemonEntryCnt;
     u16 mReserved;
-    FightOutPokemon *mFightOutPokemonPtrAry[FIGHT_OUT_POKEMON_COUNT]; // 0xDE44
-    u16 mFirstAttackRnd; // 0xDE64
-    u8 mUnknownTail[0xE318 - 0xDE66];
+    FightOutPokemon *mFightOutPokemonPtrAry[FIGHT_OUT_POKEMON_COUNT];
+    u16 mFirstAttackRnd;
+    u8 mUnknownTail[1202];
 };
 
 typedef struct FIGHT_FLOOR_DATA FIGHT_FLOOR_DATA;
@@ -154,6 +154,7 @@ u8 fightFloor_GetFightKindDoCriticalAttackFlag(FIGHT_FLOOR *floor);
 void fightFloor_SetFisstAttackRnd(FIGHT_FLOOR *floor, u16 value);
 u16 fightFloor_GetEncountDataId(FIGHT_FLOOR *floor);
 void fightFloor_SetAttackMsgId(FIGHT_FLOOR *floor, s32 messageId);
+void fightFloor_SetAppointMsgPtr(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetCriticakMsgId(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetWazakoukaMsgId(FIGHT_FLOOR *floor, s32 messageId);
 FIGHT_SIDE *fightFloorGetValidFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
