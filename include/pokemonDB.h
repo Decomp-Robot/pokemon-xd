@@ -5,32 +5,33 @@
 #include <Pokemon.h>
 #include <fightPokemon.h>
 #include <fightWaza.h>
+#include <itemFightItem.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 enum {
-    TOKUSEI_DATA_ID_SHADOW_TAG = 0x17,
-    TOKUSEI_DATA_ID_LEVITATE = 0x1A,
-    TOKUSEI_DATA_ID_MAGNET_PULL = 0x2A,
-    TOKUSEI_DATA_ID_RUN_AWAY = 0x32,
-    TOKUSEI_DATA_ID_ARENA_TRAP = 0x47,
+    TOKUSEI_DATA_ID_SHADOW_TAG = 23,
+    TOKUSEI_DATA_ID_LEVITATE = 26,
+    TOKUSEI_DATA_ID_MAGNET_PULL = 42,
+    TOKUSEI_DATA_ID_RUN_AWAY = 50,
+    TOKUSEI_DATA_ID_ARENA_TRAP = 71,
     TOKUSEI_DATA_ID_BATTLE_ARMOR = 4,
-    TOKUSEI_DATA_ID_SHELL_ARMOR = 0x4B
+    TOKUSEI_DATA_ID_SHELL_ARMOR = 75
 };
 
 enum PokemonDataID {
-    POKEMON_DATA_ID_FARFETCHD = 0x53,
-    POKEMON_DATA_ID_CHANSEY = 0x71,
-    POKEMON_DATA_ID_LUGIA = 0xF9
+    POKEMON_DATA_ID_FARFETCHD = 83,
+    POKEMON_DATA_ID_CHANSEY = 113,
+    POKEMON_DATA_ID_LUGIA = 249
 };
 u32 pokemonDB_GetName(u16);
 bool pokemonDB_GetTeachWaza(u16, u16);
 
 FightPokemon *fightOutPokemon_GetMotoFightPokemonPtr(FightOutPokemon *pokemon);
 FIGHT_WAZA *fightOutPokemon_GetFightWazaPtr(FightOutPokemon *pokemon);
-void *fightOutPokemon_GetFightItemPtr(FightOutPokemon *pokemon);
+FIGHT_ITEM *fightOutPokemon_GetFightItemPtr(FightOutPokemon *pokemon);
 void *fightOutPokemon_GetFightActionBuffPtr(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetUseWazaDataId(FightOutPokemon *pokemon);
 s16 fightOutPokemon_GetMyselfDamageAtkValue(FightOutPokemon *pokemon);

@@ -33,7 +33,7 @@ enum FightSeqItemType {
     FIGHT_SEQ_ITEM_TYPE_STAT_UP = 5,
     FIGHT_SEQ_ITEM_TYPE_GUARD = 6
 };
-enum { FIGHT_BATTLE_TYPE_ESCAPE = 0x0C };
+enum { FIGHT_BATTLE_TYPE_ESCAPE = 12 };
 
 /*
  * fightSeqWSWaza.cpp
@@ -77,28 +77,28 @@ enum FightSeqItemEffectSelector {
     FIGHT_SEQ_ITEM_EFFECT_STAT_CHANGE = 4
 };
 enum FightStatMessageResource {
-    FIGHT_STAT_TEXT_ONE_STAGE = 0x4F9C,
-    FIGHT_STAT_TEXT_LOWER_MULTIPLE = 0x4F11,
-    FIGHT_STAT_TEXT_RAISE_MULTIPLE = 0x4F0F,
-    FIGHT_STAT_TEXT_LOWER_DIRECTION = 0x4F12,
-    FIGHT_STAT_TEXT_RAISE_DIRECTION = 0x4F10
+    FIGHT_STAT_TEXT_ONE_STAGE = 20380,
+    FIGHT_STAT_TEXT_LOWER_MULTIPLE = 20241,
+    FIGHT_STAT_TEXT_RAISE_MULTIPLE = 20239,
+    FIGHT_STAT_TEXT_LOWER_DIRECTION = 20242,
+    FIGHT_STAT_TEXT_RAISE_DIRECTION = 20240
 };
 
 enum FightSeqItemDataId {
-    ITEM_DATA_ID_FULL_RESTORE = 0x13,
-    ITEM_DATA_ID_POKE_DOLL = 0x50,
-    ITEM_DATA_ID_FLUFFY_TAIL = 0x51
+    ITEM_DATA_ID_FULL_RESTORE = 19,
+    ITEM_DATA_ID_POKE_DOLL = 80,
+    ITEM_DATA_ID_FLUFFY_TAIL = 81
 };
-enum FightSeqMoveResultId { JOUTAI_MOVE_RESULT_FIRST = 0x3F, JOUTAI_MOVE_RESULT_LAST = 0x47 };
+enum FightSeqMoveResultId { JOUTAI_MOVE_RESULT_FIRST = 63, JOUTAI_MOVE_RESULT_LAST = 71 };
 enum FightSeqCallMessageId {
-    FIGHT_CALL_MSG_CAME_TO_SENSES = 0x4FD2,
-    FIGHT_CALL_MSG_EAGER_RESPONSE = 0x4FD3,
-    FIGHT_CALL_MSG_IGNORING_ORDERS = 0x4FD4,
-    FIGHT_CALL_MSG_TRAINER_CALLS_POKEMON = 0x4FD0,
-    FIGHT_CALL_MSG_CALLED_POKEMON_NAME = 0x4FD1,
-    FIGHT_CALL_MSG_STAT_RAISE = 0x4F13,
-    FIGHT_CALL_MSG_STAT_LIMIT = 0x4F18,
-    FIGHT_CALL_MSG_ACCURACY = 0x4F79
+    FIGHT_CALL_MSG_CAME_TO_SENSES = 20434,
+    FIGHT_CALL_MSG_EAGER_RESPONSE = 20435,
+    FIGHT_CALL_MSG_IGNORING_ORDERS = 20436,
+    FIGHT_CALL_MSG_TRAINER_CALLS_POKEMON = 20432,
+    FIGHT_CALL_MSG_CALLED_POKEMON_NAME = 20433,
+    FIGHT_CALL_MSG_STAT_RAISE = 20243,
+    FIGHT_CALL_MSG_STAT_LIMIT = 20248,
+    FIGHT_CALL_MSG_ACCURACY = 20345
 };
 enum { POKEMON_RELIVE_FILTER_CALL = 2 };
 
@@ -232,8 +232,8 @@ extern "C" void fightSeqTurnCheck(void)
     if (fightGetFightResultId() == 0) {
         turn = fightFloor_GetTurnCount(0);
         turn++;
-        if (turn > 0xFF) {
-            turn = 0xFF;
+        if (turn > 255) {
+            turn = 255;
         }
         fightFloor_SetTurnCount(0, turn);
         fightFloor_SetFisstAttackRnd(0, (u16)HSD_Rand());
@@ -446,7 +446,7 @@ extern "C" void fightSeqCallExec(void)
     fightMsgctrlSetValue(FIGHT_MSG_SLOT_TRAINER_NAME, (u32)fightTrainerGetNamePtr(trainer));
     fightMainAllCamera(1, 0);
     fightMenuOpenMsg(FIGHT_CALL_MSG_TRAINER_CALLS_POKEMON);
-    fightMainWaitFrame(0x40);
+    fightMainWaitFrame(64);
     fightMenuCloseMsg();
     fightTrainerCallEffect(trainer, FIGHT_SEQUENCE_OPERATION_START);
     fightMenuFightOutPokemonOpenStatusMenu(attacker, fightType, 1);
@@ -631,7 +631,7 @@ extern "C" void fightSeqItemExec(FIGHT_ACTION *action, u16 itemID)
     FightOutPokemon *target = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_DEFENDER, 0);
     FIGHT_TRAINER *trainer = fightFloorGetFightOutPokemonPtrToFightTrainerPtr(0, user);
     Hero *itemOwner = fightTrainer_GetHeroPtr(trainer);
-    void *fightItem = fightOutPokemon_GetFightItemPtr(user);
+    FIGHT_ITEM *fightItem = fightOutPokemon_GetFightItemPtr(user);
     u8 *info;
     ITEM_PARAM *param;
     s32 count;
@@ -1070,7 +1070,7 @@ extern "C" void DamageCalcHikaePokemon(FightPokemon *fightPokemon)
         damage *= 2;
     }
     if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_HELPING_HAND) == 1) {
-        damage = damage * 0xf / 10;
+        damage = damage * 15 / 10;
     }
     fightWaza_SetDamage(waza, damage);
 }

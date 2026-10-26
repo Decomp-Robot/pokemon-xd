@@ -1680,6 +1680,9 @@ game/app/hero/heroMemberFunctions.cpp:
 	.text       start:0x801528C4 end:0x80153138
 	.sdata2     start:0x804EDC60 end:0x804EDC64
 
+game/app/item/itemFightItem.cpp:
+	.text       start:0x80161268 end:0x80161308
+
 ext/musyx_sdk/runtime/seq.c:
 	.text       start:0x80161308 end:0x80161370
 	.text       start:0x80161370 end:0x80161E3C

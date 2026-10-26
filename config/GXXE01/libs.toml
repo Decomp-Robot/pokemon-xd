@@ -4289,3 +4289,14 @@ cflags_extra = ["-inline auto,deferred", "-opt nopeephole", "-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/app/flashmenu/flashcalc.cpp"
 completed = true
+
+[[lib]]
+name = "item"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/item/itemFightItem.cpp"
+completed = true
