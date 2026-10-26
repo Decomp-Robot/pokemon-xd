@@ -281,6 +281,11 @@ game/menuCB_Sub1.cpp:
 	.sbss       start:0x804EA9D0 end:0x804EA9D8
 	.sdata2     start:0x804EC718 end:0x804EC764
 
+game/menuLogoDemo.cpp:
+	.text       start:0x80087658 end:0x8008772C
+	.bss        start:0x80438390 end:0x804396A8
+	.sbss       start:0x804EA9D8 end:0x804EA9E0
+
 game/menuPokemonChange.cpp:
 	.text       start:0x80098B44 end:0x8009D4E8
 	.ctors      start:0x802E9FA4 end:0x802E9FA8
