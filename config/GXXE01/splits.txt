@@ -557,6 +557,7 @@ ext/dolphin_sdk/mtx/vec.c:
 	.text       start:0x800B36FC end:0x800B3724
 	.text       start:0x800B3724 end:0x800B37D0
 	.text       start:0x800B37D0 end:0x800B3824
+	.sdata2     start:0x804ECB20 end:0x804ECB40
 
 ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3824 end:0x800B3880

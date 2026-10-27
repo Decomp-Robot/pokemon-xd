@@ -2880,7 +2880,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/vec.c"
-completed = false
+completed = true
 
 [[lib]]
 name = "gd"
