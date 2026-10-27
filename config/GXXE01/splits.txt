@@ -2207,6 +2207,9 @@ game/GSAPI/GSfsys/fsysCache.c:
 	.bss        start:0x80475940 end:0x80478140
 	.sbss       start:0x804EB600 end:0x804EB638
 
+game/GSAPI/GSfsys/GSfsys2.c:
+	.text       start:0x8019DD18 end:0x8019E1F0
+
 game/app/fade/fade_effect.cpp:
 	.text       start:0x801B711C end:0x801B715C
 	.ctors      start:0x802E9FD8 end:0x802E9FDC

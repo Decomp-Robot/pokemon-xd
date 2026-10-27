@@ -90,7 +90,7 @@ struct FsysFile {
     FsysHeader* header; /* resource table */
     u32 selectedIndex; /* table index the current request was filed with */
     u32 expandIndex; /* table index the expander has reached */
-    u8 loadStep; /* load phase the read path advances */
+    u8 cancelRequest; /* set while the task runs to ask for it to be cancelled */
     u8 keepCache; /* request to retain the cache entry */
     u8 present; /* nonzero once the header callback has run */
     u8 pad2F;
@@ -157,8 +157,10 @@ struct FsysResHeader {
 
 /* How the file is read.  Streaming files go through the ARAM cache with
  * high ARQ priority and own their caches at teardown; other files may still
- * read through cached data. */
+ * read through cached data.  A pre-read fills the cache ahead of use and
+ * releases it unless the caller asks to keep it. */
 #define FSYS_FILE_TYPE_NORMAL 1
+#define FSYS_FILE_TYPE_PREREAD 2
 #define FSYS_FILE_TYPE_STREAM 4
 
 /*! Set when data is read out of the cache into main memory. */

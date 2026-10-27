@@ -4087,6 +4087,11 @@ name = "game/GSAPI/GSfsys/fsysCache.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
 
+[[lib.object]]
+name = "game/GSAPI/GSfsys/GSfsys2.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
+
 [[lib]]
 name = "evolution"
 mw_version = "GC/2.6"
