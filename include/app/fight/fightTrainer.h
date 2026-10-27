@@ -11,6 +11,7 @@ typedef struct FightPokemon FightPokemon;
 #ifdef __cplusplus
 extern "C" {
 #endif
+u8 fightTrainerBiosGetControllerId(void *trainer);
 
 // Pokemon the trainer has out in the given slot, and the Pokemon record it
 // keeps in the given slot; null when the slot holds none.

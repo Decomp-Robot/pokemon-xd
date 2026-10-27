@@ -55,7 +55,6 @@ extern const GBA_DeokisisuParam _GBA_DeokisisuParamTable[];
 
 extern "C" {
 s32 menuGBACGetRomVer(s32 index);
-u8 menuCBRule_DEOKISISUCamouflage(void);
 void menuCBBattleStartTrainerFaceFree(void);
 void GSthreadSwitch(void);
 }

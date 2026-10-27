@@ -202,6 +202,7 @@ void menuCBBios_LockContext(void);
 
 const FightRuleData *menuCBRule_GetDefaultRuleData(s32 index);
 u16 menuCBRule_RegulationItemID(s32 index);
+u8 menuCBRule_DEOKISISUCamouflage(void);
 void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *pokemon, s32 index);
 void menuCBRule_GetTaikaiFieldFirstDraw(Hero *hero);
 void menuCBRule_ErrorFlagSetItemGetTiming(Hero *hero, Pokemon *pokemon, s32 slot);

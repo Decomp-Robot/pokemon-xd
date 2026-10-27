@@ -3,6 +3,7 @@
 #include <hero.h>
 #include <heroBios.h>
 #include <Pokemon.h>
+#include <exribbon.h>
 // Pokemon status menu (summary / waza / ribbon pages).
 #include <GSgfx.h>
 #include <menuItemBios.h>
@@ -42,7 +43,6 @@ u32 floorGetPlaceName(u32 place);
 u8 fightKind_CheckFightKind(s32 kind);
 s32 getRibbonCount(void);
 u32 getRibbonMsgID(s32 ribbon);
-u8 exribbonGetNo(s32 ribbon);
 }
 
 // Menus hidden while the waza pages are up.

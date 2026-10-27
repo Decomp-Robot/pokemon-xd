@@ -255,6 +255,7 @@ u16 pokemonGetOboeWazaDataId(Pokemon *pokemon, u8 level, u8 *outIndex);
 // ten characters; the name entry mode, the message layer and the link
 // exchange each copy them into their own name buffers.
 u8 pokemonGetSex(Pokemon *pokemon);
+u8 pokemonGetDeoxysSel(u8 controllerId);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
 s32 pokemon_GetSeikaku(Pokemon *pokemon);

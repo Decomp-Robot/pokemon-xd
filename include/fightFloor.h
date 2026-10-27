@@ -10,6 +10,12 @@
 
 typedef struct FIGHT_WAZA FIGHT_WAZA;
 
+enum FightFloorSwitchResult {
+    FIGHT_FLOOR_SWITCH_ALLOWED = 0,
+    FIGHT_FLOOR_SWITCH_BLOCKED_BY_STATUS = 1,
+    FIGHT_FLOOR_SWITCH_BLOCKED_BY_ABILITY = 2
+};
+
 enum {
     FIGHT_FLOOR_SIDE_COUNT = 2,
     FIGHT_SIDE_TRAINER_COUNT = 2,
@@ -126,6 +132,8 @@ void fightFloorSetTimeOutAllFightResult(void *floor);
 s32 fightFloor_GetStockPokemonNum(FIGHT_FLOOR *floor);
 u32 fightFloor_GetFightKind(void *floor);
 u8 fightFloorIsLastActionFightOutPokemon(FIGHT_FLOOR *floor);
+u8 fightFloorIsUseFightTimerCommand(FIGHT_FLOOR *floor);
+u8 fightFloorCheckFightActionFightOutPokemonIrekaeSelect(void *battleData, FightOutPokemon *fightOutPokemon, FightOutPokemon **out);
 u8 fightFloor_GetFightType(FIGHT_FLOOR *floor);
 u8 fightFloorIsNowEncountTuusinTaisen(FIGHT_FLOOR *floor);
 void fightFloorInitFightOutPokemonPtrAryFightWazaJoutai(FIGHT_FLOOR *floor);

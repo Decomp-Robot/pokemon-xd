@@ -11,6 +11,7 @@ void *fightTargetDataBiosGetPtr(u16 target);
 s32 fightTargetDataBiosGetBuff(void *targetData);
 u16 fightTargetGetTragetPtrToRelativeHostSideFightTargetId(void *target, u16 fightType);
 void *fightTargetGetPtrAsNowFightType(u16 kind, void *target);
+void *fightTargetGetPtr(u16 kind, void *target, u16 fightType);
 
 #ifdef __cplusplus
 }

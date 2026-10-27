@@ -23,7 +23,7 @@ void pokemonBiosSetTokuseiFlag(Pokemon *pokemon, bool flag);
 #else
 void pokemonBiosSetTokuseiFlag(Pokemon *pokemon, u8 flag);
 #endif
-s32 pokemonBiosGetAttest(Pokemon *pokemon);
+GamedataAttest *pokemonBiosGetAttest(Pokemon *pokemon);
 u32 pokemonBiosGetRnd(Pokemon *pokemon);
 u32 pokemonBiosGetCatchTrainerRnd(Pokemon *pokemon);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
