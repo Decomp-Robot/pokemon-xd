@@ -20,9 +20,11 @@
 
 #define EXI_0LENGTH_EXILENGTH_MASK 0x03FFFFE0
 
-extern const char lbl_803D4CB8[];
-
-const char * __EXIVersion = lbl_803D4CB8;
+#if DEBUG
+const char * __EXIVersion = "<< Dolphin SDK - EXI\tdebug build: Apr  5 2004 03:55:29 (0x2301) >>";
+#else
+const char * __EXIVersion = "<< Dolphin SDK - EXI\trelease build: Apr  5 2004 04:14:14 (0x2301) >>";
+#endif
 
 static EXIControl Ecb[3];
 static u32 IDSerialPort1;
@@ -396,8 +398,6 @@ int EXIDetach(s32 chan) {
     return 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
-
 int EXISelect(s32 chan, u32 dev, u32 freq) {
     EXIControl* exi;
     u32 cpr;
@@ -736,7 +736,6 @@ s32 EXIGetID(s32 chan, u32 dev, u32* id) {
     return 1;
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 s32 EXIGetType(s32 chan, u32 dev, u32* type) {
     u32 _type;
     s32 probe;
@@ -780,7 +779,6 @@ s32 EXIGetType(s32 chan, u32 dev, u32* type) {
     }
 }
 
-// UNUSED: the game never calls this; dead-stripped at link.
 char* EXIGetTypeString(u32 type) {
     switch (type) {
     case EXI_MEMORY_CARD_59:
