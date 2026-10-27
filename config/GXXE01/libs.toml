@@ -2514,7 +2514,7 @@ cflags = [
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSFont.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSInterrupt.c"

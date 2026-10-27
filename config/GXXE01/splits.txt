@@ -408,6 +408,10 @@ ext/dolphin_sdk/os/OSFont.c:
 	.text       start:0x800ADE60 end:0x800ADFA0
 	.text       start:0x800ADFA0 end:0x800AE0DC
 	.text       start:0x800AE0DC end:0x800AE37C
+	.data       start:0x803D11D8 end:0x803D1CE2
+	.sdata      start:0x804E8130 end:0x804E8132
+	.sbss       start:0x804EAB00 end:0x804EAB10
+	.sdata2     start:0x804ECAE0 end:0x804ECAE8
 
 ext/dolphin_sdk/os/OSInterrupt.c:
 	.text       start:0x800AE37C end:0x800AEBE8
