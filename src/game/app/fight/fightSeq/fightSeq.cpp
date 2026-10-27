@@ -922,6 +922,10 @@ extern "C" void fightSeqSoubiItemCheckWazaHitAfterAll(void)
 }
 
 
+// Cursor into the waza sequence script the battle is currently running.
+u8 *_wazaSeqAdrs;
+
+
 extern "C" u8 *fightSeq_GetWazaSeq(void)
 {
     return _wazaSeqAdrs;
