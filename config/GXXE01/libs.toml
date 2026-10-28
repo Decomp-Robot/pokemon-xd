@@ -161,6 +161,16 @@ name = "game/dbgMenuFight.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/dbgMenuPokemon.c"
+completed = true
+extra_cflags = ["-O2,p", "-opt nopeephole"]
+
+[[lib.object]]
+name = "game/dbgMenuPokemonEffort.c"
+completed = true
+extra_cflags = ["-O2,p", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/dbgMenuFlag.c"
 completed = true
 extra_cflags = ["-opt nopeephole", "-str reuse,readonly", "-i src/ext/dolphin_sdk/include/libc"]

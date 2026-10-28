@@ -131,6 +131,12 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_SP_ATTACK = 138, // special attack.
     POKEMON_STATUS_FIELD_SP_DEFENSE = 139, // special defense.
     POKEMON_STATUS_FIELD_SPEED = 140, // nimbleness/speed.
+    POKEMON_STATUS_FIELD_HP_EFFORT = 141, // effort values the pokemon earned for its stats.
+    POKEMON_STATUS_FIELD_ATTACK_EFFORT = 142,
+    POKEMON_STATUS_FIELD_DEFENSE_EFFORT = 143,
+    POKEMON_STATUS_FIELD_SP_ATTACK_EFFORT = 144,
+    POKEMON_STATUS_FIELD_SP_DEFENSE_EFFORT = 145,
+    POKEMON_STATUS_FIELD_SPEED_EFFORT = 146,
     POKEMON_STATUS_FIELD_POKERUS = 181, // pokerus of the pokemon.
     POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
     POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.

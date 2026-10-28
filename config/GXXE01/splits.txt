@@ -34,6 +34,12 @@ game/dbgMenuFlag.c:
 	.sdata      start:0x804E7E38 end:0x804E7E3C
 	.sdata2     start:0x804EBDC8 end:0x804EBDD4
 
+game/dbgMenuPokemon.c:
+	.text       start:0x80008998 end:0x80008BA8
+
+game/dbgMenuPokemonEffort.c:
+	.text       start:0x8000ACBC end:0x8000AD7C
+
 game/dbgMenuGSgfx.c:
 	.text       start:0x8000B344 end:0x8000B3F8
 
