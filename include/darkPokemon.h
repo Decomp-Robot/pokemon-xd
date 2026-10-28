@@ -10,7 +10,12 @@ enum darkPokemonStatus {
     DARK_POKEMON_SNATCHED = 3,
     DARK_POKEMON_STATUS_RELIVED = 4
 };
-enum darkPokemonWhere { DARK_POKEMON_WHERE_NONE = 0, DARK_POKEMON_WHERE_PARTY = 1, DARK_POKEMON_EXCHANGED = 5 };
+enum darkPokemonWhere {
+    DARK_POKEMON_WHERE_NONE = 0,
+    DARK_POKEMON_WHERE_PARTY = 1,
+    DARK_POKEMON_WHERE_SODATEYA = 4,
+    DARK_POKEMON_EXCHANGED = 5
+};
 enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HERO = 1 };
 class DarkPokemon {
 public:

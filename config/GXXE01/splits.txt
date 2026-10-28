@@ -2246,6 +2246,9 @@ game/app/script/appScript.cpp:
 	.data       start:0x8040B9C0 end:0x8040BCCC
 	.sdata2     start:0x804EE6B8 end:0x804EE700
 
+game/app/sodateya/sodateya.cpp:
+	.text       start:0x801ECBB0 end:0x801ED098
+
 game/app/fight/fightFloor.cpp:
 	.text       start:0x801F5AAC end:0x801F5B38
 	.ctors      start:0x802E9FDC end:0x802E9FE0

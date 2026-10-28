@@ -4345,6 +4345,16 @@ name = "game/app/memo/memo.c"
 completed = true
 
 [[lib]]
+name = "sodateya"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-O4,s", "-use_lmw_stmw on", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+[[lib.object]]
+name = "game/app/sodateya/sodateya.cpp"
+completed = true
+
+[[lib]]
 name = "flashmenu"
 mw_version = "GC/2.6"
 cflags_preset = "game"
