@@ -794,6 +794,7 @@ struct GSgfxRenderModule {
 };
 
 #define GSGFX_RENDER_MODULE_SIGNATURE 0xB29A48E1
+void GSgfxRenderModuleRegister(u8 priority, GSgfxRenderModule *module, void *argument);
 extern "C" {
 s32 GSgfxGPUSetMode(s32 mode);
 void GSgfxRender(void);

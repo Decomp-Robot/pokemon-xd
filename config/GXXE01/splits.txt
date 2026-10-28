@@ -2373,6 +2373,11 @@ game/app/people/peopleTalk.cpp:
 game/app/people/peopleWalkList.cpp:
 	.text       start:0x802A3820 end:0x802A3B40
 
+game/GSAPI/GSgfx/renderModule.cpp:
+	.text       start:0x802B70C8 end:0x802B7464
+	.bss        start:0x804E71A8 end:0x804E72EC
+	.sbss       start:0x804EBD68 end:0x804EBD70
+
 src/init.c:
 	.init       start:0x80003458 end:0x80003488
 
