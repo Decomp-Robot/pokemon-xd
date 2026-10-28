@@ -124,6 +124,8 @@ game/menuPocketBattleDisk.cpp:
 
 game/main.cpp:
 	.text       start:0x8000F5E8 end:0x8000F820
+	.bss        start:0x80424080 end:0x80428080
+	.sbss       start:0x804EA6E0 end:0x804EA6E8
 
 game/sysvars.cpp:
 	.text       start:0x8000F820 end:0x8000F9B4

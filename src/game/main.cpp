@@ -63,9 +63,13 @@ void GSdvdSetReportServer(void *, u32, u32);
 void GSdvdSetGCClient(void *, void *, void *, u32);
 s32 gameRuntimeMain(s32, char **);
 extern StartupSettings startupSettings;
-extern char aiStackMem[];
-extern u32 aramMemArray[2];
 }
+
+/* Stack the AI DMA callbacks run on. */
+u8 aiStackMem[0x4000];
+
+/* ARAM allocation stack indices ARInit manages. */
+u32 aramMemArray[2];
 void GSgfxInit(_GSgfxInitParms *);
 
 int main(int argc, char **argv)
@@ -123,7 +127,7 @@ int main(int argc, char **argv)
     }
     ARInit(aramMemArray, 2);
     ARQInit();
-    AIInit((u8 *)aiStackMem + 0x3FF8);
+    AIInit(aiStackMem + sizeof(aiStackMem) - 8);
     ARQSetChunkSize(0x8000);
     GSlogInit(0x8000, 2);
     GSscratchInit(0);
