@@ -65,6 +65,12 @@ mw_version = "GC/1.3"
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSvec.cpp"
+completed = true
+mw_version = "GC/2.6"
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "orig/GXXE01/sys/main.dol"
 completed = false
 
