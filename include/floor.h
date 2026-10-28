@@ -5,12 +5,20 @@
 #include <GSthread.h>
 #include <roomData.h>
 #include <floorManager.h>
+
+// Alignment of the resource allocations the reader makes for the archives of a
+// stage; the length of an archive is rounded up to it.
+#define FLOOR_READ_ALIGN 0x20
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 void floorMapSetDisp(long on);
+u32 floorReadMakeFogResID(u32 resource);
+u32 floorReadMakeCameraResID(u32 resource);
 u32 floorReadMakeModelResID(u32 resource);
 u32 floorReadMakeLightResID(u32 resource);
+u32 floorReadMakeObjResID(u32 resource);
 void floorSetLightInfo(u32 resource, long count);
 
 GSgfxLayerID floorGetMenuLayerID(void);

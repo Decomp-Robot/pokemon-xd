@@ -1,12 +1,9 @@
-// SDK header for the alarm and thread types the loader of the stage archives
-// runs on.
-#include <dolphin/os.h>
-
 #include <types.h>
 #include <GSres.h>
 #include <GStexture.h>
 #include <GSfsys.h>
 #include <GSlight.h>
+#include <GSthread.h>
 #include <scene.h>
 #include <floorPostCall.h>
 #include <floor.h>
@@ -17,47 +14,36 @@
 // The floor-script update loop runs callbacks collected in _postFuncManager.
 // Reads wait for any other thread loading the same archive.
 
-// Alignment every archive of a stage is loaded with, and the unit its length
-// is rounded up to.
-#define FLOOR_READ_ALIGN 0x20
-
 // The pending-callback manager of the floor subsystem.
 extern FloorPostCallManager _postFuncManager;
 
-// Camera and ant helpers of the stage modules the reader hands resources to;
-// both are C++ functions of the game.
+// The camera of a stage is registered with the camera system and the lights of
+// its scene are given back to the light system; both live in this module.
 void _registerCamera(unsigned long group, unsigned long res, _HSD_SceneDesc *scene);
 bool _unloadLight(void *light, unsigned long group, unsigned long res);
 
 extern "C" {
 
-// Light and filesystem subsystems the reader hands resources over to.
-extern "C" void floorAddResource(u32 group, u32 res);
-
+// The floor manager keeps the resources of a stage that are in memory, so the
+// resource a read produced is added to its list.
+void floorAddResource(u32 group, u32 res);
 
 // Name the public data of a stage archive carries its scene description under;
 // the camera and the light registration both look their part up in it.
 extern char floorSceneDataName[];
-extern "C" u32 floorReadMakeCameraResID(u32 res);
-extern "C" u32 floorReadMakeLightResID(u32 res);
 
-// Archive formats a stage reads in: the DECK data of the stage floor, a
-// texture of its ANT Pokemon and a GSW file.
-extern "C" void deckRegister(u32 group, u32 res);
-extern "C" void deckUnRegister(u32 group, u32 res);
-extern "C" void FlashSystemInit(u32 res, void *resource);
+// The DECK data of a stage floor and the flash file system of the game take
+// what the reader read in, and give it back when the stage is left.
+void deckRegister(u32 group, u32 res);
+void deckUnRegister(u32 group, u32 res);
+void FlashSystemInit(u32 res, void *resource);
 
-// The stage archive the fight runs in.
-extern "C" void GSthreadSwitch(void);
-
-// Set while the reader of this module is loading a resource, so that a second
-// thread asking for the same stage waits for the read to run out.
-extern "C" void floorDelayPostFunc(void);
+void floorDelayPostFunc(void);
 
 }
 
-// The callback the IDEX read of floorReadResourceID hands over; it is named
-// before the read that passes it.
+// The callback the IDEX read of a stage archive hands over once the read is
+// done.
 void _fsysLoadCallbak(long requestType, void *context, long callbackArgument);
 
 // The busy flag of the reader, set while a resource of the stage archive is
@@ -276,4 +262,17 @@ extern "C" void *floorReadEncodeRelPostFunc(u32 group, u32 res, u32 size)
     resource = GSresGetResource(group, res);
     GSfsysOSLinkPostFunc(group, res, size);
     return resource;
+}
+
+extern "C" void *floorReadEncodeRelPreFunc(u32 group, u32 res, u32 size)
+{
+    void *buffer;
+
+    buffer = GSresAllocResourceAlign((size + (FLOOR_READ_ALIGN - 1)) & ~(FLOOR_READ_ALIGN - 1),
+                                     FLOOR_READ_ALIGN, group, res, 0);
+    if (buffer == 0) {
+        return 0;
+    }
+    GSresLockResource(group, res);
+    return buffer;
 }

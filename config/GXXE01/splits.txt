@@ -189,7 +189,19 @@ game/agbCommunication.cpp:
 	.data       start:0x803226E0 end:0x80322704
 
 game/floorRead.cpp:
-	.text       start:0x8002D8C0 end:0x8002DE58
+	.text       start:0x8002D8C0 end:0x8002DED4
+
+game/floorReadBgm.cpp:
+	.text       start:0x8002DFD8 end:0x8002E000
+
+game/floorReadTexCol.cpp:
+	.text       start:0x8002E4D4 end:0x8002E64C
+
+game/floorReadNormal.cpp:
+	.text       start:0x8002EDC8 end:0x8002EE00
+
+game/floorReadResource.cpp:
+	.text       start:0x8002F16C end:0x8002F1F0
 
 game/menuTop.cpp:
 	.text       start:0x8002F308 end:0x80030330
