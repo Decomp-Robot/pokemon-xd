@@ -53,6 +53,11 @@ u8 menuSubOpenNumberInputID(u32 value, u32 *out, u16 *(*getName)(u32));
 void menuSubDrawTile(s32 layerID, s32 x, s32 y, s32 width, s32 height, GXColor *color);
 // Framed window the list screens draw their rows in.
 void menuSubDrawSimpleWindow(long layerID, long x, long y, long width, long height);
+// Message window a list screen prints its text in: the frame is drawn around
+// the sprite at x/y, alpha is the window transparency and mode selects the
+// frame style.
+void menuSubDrawMsgWindow2(s32 layer, s32 x, s32 y, s16 width, s16 height,
+                           u8 alpha, s32 mode);
 // Scroll marker the list screens draw above and below the rows.
 void menuSubDrawTriangle(long layerID, long x1, long y1, long x2, long y2,
                          long x3, long y3);

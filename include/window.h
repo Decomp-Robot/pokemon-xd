@@ -20,6 +20,14 @@ struct WINDOW_SYS_WORK {
 extern WINDOW_SYS_WORK winSysWork;
 extern WINDOW_SYS_WORK winSysWork2;
 
+// Work area the free-form menu windows keep their own state in. It follows the
+// window object, so the accessor below returns a pointer into the window.
+struct WINDOW_FREE_WORK {
+    u32 mMessageID;          // message the window's text printer is running.
+    u8 mUnknown04[4];
+    u32 mKeyTrigger;         // key trigger handed to the text printer.
+};
+
 enum WindowKeyMask {
     WINDOW_KEY_ACCEPT = 0x10,
     WINDOW_KEY_CANCEL = 0x20
@@ -48,6 +56,8 @@ s32 windowGetActiveID();
 s32 windowGetValue(long windowID);
 u16 windowGetKeyOn();
 void windowCloseMain(tagWINDOW_WORK *window);
+// Free work area of a window, or NULL when the window has none.
+struct WINDOW_FREE_WORK *windowGetFreeWork(tagWINDOW_WORK *window);
 #ifdef __cplusplus
 }
 #endif

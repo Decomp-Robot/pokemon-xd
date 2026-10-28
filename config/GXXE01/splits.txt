@@ -353,6 +353,9 @@ game/menuUseItem.cpp:
 	.sdata      start:0x804E80D0 end:0x804E80D8
 	.sdata2     start:0x804ECA58 end:0x804ECA78
 
+game/menuMewWaza.cpp:
+	.text       start:0x800A6138 end:0x800A63DC
+
 game/GSAPI/GSmemman/OSAlloc.cpp:
 	.text       start:0x800A7CDC end:0x800A8E7C
 	.rodata     start:0x802EBD60 end:0x802EC1A8

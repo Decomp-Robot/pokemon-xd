@@ -1219,6 +1219,11 @@ completed = true
 extra_cflags = ["-inline noauto", "-opt nopeephole", "-lang=c++", "-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/menuMewWaza.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
+
+[[lib.object]]
 name = "game/menuUseItem.cpp"
 completed = true
 cflags = [
