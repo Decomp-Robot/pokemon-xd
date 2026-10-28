@@ -9,6 +9,10 @@
 struct GSresID {
     unsigned long groupId;
     unsigned long resourceId;
+#ifdef __cplusplus
+    void set(unsigned long group, unsigned long resource);
+    void clear();
+#endif
 };
 
 // Release callback of an entry of the resource system: resFreeResource hands
@@ -22,6 +26,12 @@ typedef bool (*GSresFreeFunc)(void *resource, unsigned long group,
 extern "C" {
 #endif
 
+void GSresInit(u32 entryCount);
+void GSresIsUniqueID(u32 group, u32 resourceID, u8 unique);
+void GSresDumpGroup(u32 group);
+void GSresDumpAll(void);
+void GSresChangeResourceAdress(void *address, u32 group, u32 resourceID, GSresFreeFunc freeFunc);
+void *GSresAllocResource(u32 size, u32 group, u32 resourceID, GSresFreeFunc freeFunc);
 void *GSresGetResource(unsigned long group, unsigned long resourceID);
 void *GSresGetResourceAllGroup(unsigned long resourceID);
 void GSresFreeResource(unsigned long group, unsigned long resourceID);
@@ -29,7 +39,7 @@ void GSresFreeResourceAllGroup(unsigned long resourceID);
 void GSresFreeGroup(u32 groupID);
 void GSresLockResource(u32 group, u32 res);
 void GSresUnlockResource(u32 group, u32 res);
-void *GSresAllocResourceAlign(u32 size, u32 align, u32 group, u32 res,
+void *GSresAllocResourceAlign(u32 size, u16 align, u32 group, u32 res,
                               GSresFreeFunc freeFunc);
 void GSresRegisterResource(void *resource, u32 group, u32 res,
                            GSresFreeFunc freeFunc);

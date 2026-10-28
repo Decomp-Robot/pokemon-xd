@@ -1637,6 +1637,11 @@ game/GSmodelAnim.cpp:
 	.data       start:0x803D5058 end:0x803D5080
 	.sdata2     start:0x804ED408 end:0x804ED468
 
+game/GSAPI/GSres/GSres.cpp:
+	.text       start:0x80105840 end:0x80105FEC
+	.rodata     start:0x802ED2A0 end:0x802ED348
+	.sbss       start:0x804EB008 end:0x804EB010
+
 game/GScolsys2.c:
 	.text       start:0x8011867C end:0x801186C4
 
