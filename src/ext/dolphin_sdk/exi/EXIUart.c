@@ -7,10 +7,6 @@ static u32 Dev;
 static u32 Enabled;
 static u32 BarnacleEnabled;
 
-// prototypes
-int InitializeUART(void);
-int ReadUARTN(void);
-int WriteUARTN(void *buf, u32 len);
 void __OSEnableBarnacle(s32 chan, u32 dev);
 
 BOOL ProbeBarnacle(s32 chan, u32 dev, u32* revision) {
@@ -92,7 +88,9 @@ void __OSEnableBarnacle(s32 chan, u32 dev) {
     }
 }
 
-int InitializeUART(void) {
+// The barnacle UART runs at its own fixed rate, so the requested baud rate is
+// not used to set up the port.
+int InitializeUART(u32 baudRate) {
     if (BarnacleEnabled == 0xA5FF005A) {
         return 0;
     }

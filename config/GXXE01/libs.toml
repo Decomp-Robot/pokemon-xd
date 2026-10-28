@@ -3958,6 +3958,10 @@ completed = true
 name = "libc/errno.c"
 completed = true
 [[lib.object]]
+name = "libc/uart_console_io_gcn.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+[[lib.object]]
 name = "libc/file_io.c"
 completed = true
 [[lib.object]]

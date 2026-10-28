@@ -98,6 +98,12 @@ int EXISelectSD(s32 chan, u32 dev, u32 freq);
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
 char* EXIGetTypeString(u32 type);
 
+/* Serial console port on the EXI bus.  The console library opens the port on
+   its first write and sends every later console block through it. */
+int InitializeUART(u32 baudRate);
+int ReadUARTN(void);
+int WriteUARTN(void* buf, u32 length);
+
 #ifdef __cplusplus
 }
 #endif
