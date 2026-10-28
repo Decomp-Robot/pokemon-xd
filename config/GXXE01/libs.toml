@@ -4040,6 +4040,11 @@ progress_category = "game"
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/random.c"
 completed = true
 
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/spline.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "GSScript.a"
 mw_version = "GC/2.6"
