@@ -9,6 +9,15 @@
 typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
 
+// An opponent a deployed Pokemon has fought: the opponent itself, the move the
+// opponent last used, the hp it entered the fight with and the damage it took.
+struct FightOutPokemonEnemy {
+    FightOutPokemon *mTargetFightOutPokemon;
+    u16 mOumuWazaDataId;
+    u16 mInitHp;
+    u16 mDamage;
+};
+
 struct FightOutPokemon {
     FightPokemon *mOriginalPokemon;
     FightPokemon *mCurrentPokemon;
@@ -16,7 +25,8 @@ struct FightOutPokemon {
     struct FIGHT_WAZA mFightWaza;
     u8 _6F4[0xAC];
     FIGHT_ITEM mFightItem;
-    u8 _7AC[0xE8];
+    u8 _7AC[0xB8];
+    struct FightOutPokemonEnemy mEnemyAry[4];
 };
 
 #endif

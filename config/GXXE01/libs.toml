@@ -1695,6 +1695,10 @@ name = "game/app/pokemon/pokemonBios.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/pokemon/fightPokemonBios.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fight.cpp"
 completed = true
 cflags = [
