@@ -6,6 +6,13 @@
 typedef struct PokemonData PokemonData;
 typedef PokemonData PokemonSpeciesStats;
 
+struct PokemonData {
+    u8 _00[36];
+    s32 mMitaFlagId; // id of the zukan seen flag.
+    s32 mTukamaetaFlagId; // id of the zukan caught flag.
+    u8 _2C[248];
+};
+
 // Tutor selection, progression gate, and learned-state flag.
 typedef struct PokemonTutorMove {
     u16 mMoveId;
