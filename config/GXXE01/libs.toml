@@ -1224,6 +1224,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
 
 [[lib.object]]
+name = "game/menuTitleOption.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-lang=c++"]
+
+[[lib.object]]
 name = "game/menuUseItem.cpp"
 completed = true
 cflags = [
