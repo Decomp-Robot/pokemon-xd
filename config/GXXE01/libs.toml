@@ -4598,6 +4598,16 @@ name = "game/app/memo/memo.c"
 completed = true
 
 [[lib]]
+name = "recovery"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-O4,s", "-use_lmw_stmw on"]
+[[lib.object]]
+name = "game/app/recovery/recovery.cpp"
+completed = true
+
+[[lib]]
 name = "sodateya"
 mw_version = "GC/2.6"
 cflags_preset = "game"

@@ -2296,6 +2296,9 @@ game/app/script/appScript.cpp:
 	.data       start:0x8040B9C0 end:0x8040BCCC
 	.sdata2     start:0x804EE6B8 end:0x804EE700
 
+game/app/recovery/recovery.cpp:
+	.text       start:0x801CF348 end:0x801CF404
+
 game/app/sodateya/sodateya.cpp:
 	.text       start:0x801ECBB0 end:0x801ED098
 
