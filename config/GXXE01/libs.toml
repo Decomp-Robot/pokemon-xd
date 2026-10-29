@@ -4419,6 +4419,17 @@ name = "game/GSAPI/GSflag/GSflagBitLength.c"
 completed = true
 
 [[lib]]
+name = "GSlensFlare"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSlensFlare/GSlensFlare.cpp"
+completed = true
+
+[[lib]]
 name = "battleGrid"
 mw_version = "GC/2.6"
 cflags_preset = "game"
