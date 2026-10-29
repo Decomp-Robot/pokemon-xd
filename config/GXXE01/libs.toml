@@ -4678,6 +4678,9 @@ cflags_extra = ["-O4,s", "-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/app/recovery/recovery.cpp"
 completed = true
+[[lib.object]]
+name = "game/app/recovery/recoveryEvent.cpp"
+completed = true
 
 [[lib]]
 name = "sodateya"

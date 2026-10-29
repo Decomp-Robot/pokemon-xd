@@ -2316,6 +2316,9 @@ game/app/script/appScript.cpp:
 game/app/recovery/recovery.cpp:
 	.text       start:0x801CF348 end:0x801CF404
 
+game/app/recovery/recoveryEvent.cpp:
+	.text       start:0x801CF738 end:0x801CF7A4
+
 game/app/sodateya/sodateya.cpp:
 	.text       start:0x801ECBB0 end:0x801ED098
 

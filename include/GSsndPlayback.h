@@ -9,7 +9,7 @@ void GSsndSetMasterVolume(unsigned char volume, unsigned short time, unsigned ch
 unsigned long GSsndPlayNow(long soundID);
 void GSsndStopNow(unsigned long soundID);
 unsigned long GSsndPlay(long soundID, long time, long mode);
-unsigned long GSsndPlayVolume(long soundID, long time, long volume, long mode);
+unsigned long GSsndPlayVolume(long soundID, long time, unsigned char volume, long mode);
 unsigned long GSsndStop(long soundID, long time, long mode);
 unsigned long GSsndClose(long soundID);
 unsigned long GSsndContinue(unsigned long soundID, long time, long mode);

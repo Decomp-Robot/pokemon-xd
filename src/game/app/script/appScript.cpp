@@ -129,7 +129,7 @@ static inline Pokemon* GetPokemon(GSscript::tigaVariant* value)
 }
 
 
-extern "C" void appScriptPlayME_Thread(u8, int, int, int);
+extern "C" void appScriptPlayME_Thread(u8, int, int, u8);
 extern "C" int appScriptCommonCall(int);
 int motorFun(u8, u8, unsigned long, u8, bool);
 void _appScriptModelSetVisibility(GSmodel*, void*);
@@ -1112,7 +1112,6 @@ int AppScript::cmpCol(int cmd, GSscript::tigaVariant* args, GSscript::tigaVarian
 
 int AppScript::cmpSound(int cmd, GSscript::tigaVariant* args, GSscript::tigaVariant* result)
 {
-    const long SoundVolumeMask = 0xff;
     enum { OpenPlay = 16, OpenPlayEnvironment, Stop, StopEnvironment,
            CreateEmitter, CreateListener, SetVolume, ScriptOpenPlayME,
            SetOriginalVolume, OpenPlayFade, OpenPlayEnvironmentFade,
@@ -1121,11 +1120,11 @@ int AppScript::cmpSound(int cmd, GSscript::tigaVariant* args, GSscript::tigaVari
     switch (cmd) {
     case OpenPlay:
         result->setInteger((u8)soundOpenPlay(args[1].getInteger(), args[2].getInteger(),
-                                             (args[3].getInteger() & SoundVolumeMask)));
+                                             args[3].getInteger()));
         break;
     case OpenPlayEnvironment:
         result->setInteger((u8)soundOpenPlayEnv(args[1].getInteger(), args[2].getInteger(),
-                                                (args[3].getInteger() & SoundVolumeMask)));
+                                                args[3].getInteger()));
         break;
     case Stop:
         result->setInteger((u8)soundStop(args[1].getInteger(), args[2].getInteger()));
@@ -1153,11 +1152,11 @@ int AppScript::cmpSound(int cmd, GSscript::tigaVariant* args, GSscript::tigaVari
         break;
     case OpenPlayFade:
         result->setInteger((u8)soundOpenPlayFadeOutIn(args[1].getInteger(), args[2].getInteger(),
-                                                      args[3].getInteger(), (args[4].getInteger() & SoundVolumeMask)));
+                                                      args[3].getInteger(), args[4].getInteger()));
         break;
     case OpenPlayEnvironmentFade:
         result->setInteger((u8)soundOpenPlayEnvFadeOutIn(args[1].getInteger(), args[2].getInteger(),
-                                                         args[3].getInteger(), (args[4].getInteger() & SoundVolumeMask)));
+                                                         args[3].getInteger(), args[4].getInteger()));
         break;
     case GetBGMId:
         result->setInteger(soundGetBGMID());
@@ -1176,7 +1175,7 @@ int AppScript::cmpSound(int cmd, GSscript::tigaVariant* args, GSscript::tigaVari
         break;
     case PlayME:
         result->setInteger((u8)soundPlayME(args[1].getInteger(), args[2].getInteger(),
-                                           (args[3].getInteger() & SoundVolumeMask)));
+                                           args[3].getInteger()));
         break;
     case PlayMEThread: {
         GSthread* thread = floorCreateThread(ScriptThreadPriority, 0, ScriptThreadFlags,
@@ -1521,7 +1520,7 @@ extern "C" int appScriptCommonCall(int scriptId)
     return common->runParamsWait(scriptId, 0, 0, 0);
 }
 
-extern "C" void appScriptPlayME_Thread(u8 open, int soundId, int time, int volume)
+extern "C" void appScriptPlayME_Thread(u8 open, int soundId, int time, u8 volume)
 {
     if (open)
         soundOpenPlayME(soundId, time, volume);

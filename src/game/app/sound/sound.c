@@ -52,7 +52,7 @@ u32 soundGetBGMID(void)
     return soundPlayID;
 }
 
-s32 soundPlayME(s32 sndID, s32 time, s32 volume)
+s32 soundPlayME(s32 sndID, s32 time, u8 volume)
 {
     if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
@@ -109,7 +109,7 @@ void soundOpenWave(s32 waveID)
                      wave->projectResID, wave->sampDirResID);
 }
 
-s32 soundOpenPlayME(s32 sndID, s32 time, s32 volume)
+s32 soundOpenPlayME(s32 sndID, s32 time, u8 volume)
 {
     s32 bgmID = soundPauseBGMEX(SND_FAST_FADE_MS, 1);
     s32 ret = soundPlayME(sndID, time, volume);
@@ -197,7 +197,7 @@ s32 soundStop(s32 sndID, s32 fadeTime)
     }
 }
 
-s32 soundOpenPlayEnvFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
+s32 soundOpenPlayEnvFadeOutIn(s32 sndID, s32 fadeTime, s32 time, u8 volume)
 {
     if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
@@ -206,7 +206,7 @@ s32 soundOpenPlayEnvFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
     return _soundOpenPlay(sndID, time, volume, 0);
 }
 
-s32 soundOpenPlayFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
+s32 soundOpenPlayFadeOutIn(s32 sndID, s32 fadeTime, s32 time, u8 volume)
 {
     if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;
@@ -215,17 +215,17 @@ s32 soundOpenPlayFadeOutIn(s32 sndID, s32 fadeTime, s32 time, s32 volume)
     return _soundOpenPlay(sndID, time, volume, 1);
 }
 
-s32 soundOpenPlayEnv(s32 sndID, s32 time, s32 volume)
+s32 soundOpenPlayEnv(s32 sndID, s32 time, u8 volume)
 {
     return _soundOpenPlay(sndID, time, volume, 0);
 }
 
-s32 soundOpenPlay(s32 sndID, s32 time, s32 volume)
+s32 soundOpenPlay(s32 sndID, s32 time, u8 volume)
 {
     return _soundOpenPlay(sndID, time, volume, 1);
 }
 
-s32 _soundOpenPlay(s32 sndID, s32 time, s32 volume, s32 isBGM)
+s32 _soundOpenPlay(s32 sndID, s32 time, u8 volume, s32 isBGM)
 {
     if (sndID == 0 || (u32)sndID >= *snd_data_number) {
         return 0;

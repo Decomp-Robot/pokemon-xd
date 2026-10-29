@@ -62,7 +62,7 @@ u32 _sndClose(u32 soundID, u8 stop);
 u32 _sndStopSTREAM(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndStopSE(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndStopBGM(GSsndSEEntry *entry, u32 time, u32 mode);
-u32 _sndPlay(u32 soundID, u32 time, u32 volume, u32 mode);
+u32 _sndPlay(u32 soundID, u32 time, u8 volume, u32 mode);
 void _sndStreamCtrl(GSsndStream *stream, u8 mode);
 u32 _sndStreamNibble_HeaderON2OFF(u32 nibbleCount);
 

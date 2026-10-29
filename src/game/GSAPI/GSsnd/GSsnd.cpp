@@ -587,7 +587,7 @@ unsigned long GSsndPlayNow(long soundID)
     return _sndPlay(soundID, 0, GSSND_MAX_VOLUME, 0);
 }
 
-unsigned long GSsndPlayVolume(long soundID, long time, long volume, long mode)
+unsigned long GSsndPlayVolume(long soundID, long time, unsigned char volume, long mode)
 {
     return _sndPlay(soundID, time, volume, mode);
 }
