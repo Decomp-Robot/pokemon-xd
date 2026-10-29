@@ -4652,3 +4652,14 @@ cflags = [
     "-use_lmw_stmw on",
     "-lang=c++",
 ]
+
+[[lib]]
+name = "GSinput"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc", "-O0,p", "-inline noauto", "-opt peephole", "-schedule on", "-use_lmw_stmw on", "-str reuse,readonly"]
+
+[[lib.object]]
+name = "game/GSAPI/GSinput/GSinput.cpp"
+completed = true

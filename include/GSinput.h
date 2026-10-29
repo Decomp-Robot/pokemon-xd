@@ -33,4 +33,25 @@ void GSinputMotorStart(u32 chan, u8 mode, u8 strength, u32 duration, u8 decay);
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void GSinputInit(void);
+s32 GSinputOpen(s32 port);
+s32 GSinputRead(GSinputDevice device);
+void GSinputReadStart(void);
+void GSinputReadEnd(void);
+u8 GSinputIsConnected(s32 device);
+s32 GSinputGetSubType(s32 device);
+void GSinputClearButtonData(GSinputDevice device, u32 buttons);
+u32 GSinputButtonsRepeat(GSinputDevice device);
+void GSinputSetClamping(GSinputDevice device, s32 clamping);
+void GSinputSetSmoothingFunc(GSinputDevice device, s32 func);
+void GSinputSetSmoothingRate(GSinputDevice device, u8 rate);
+void GSinputResetRightSmoothing(GSinputDevice device, s8 x, s8 y);
+void GSinputResetLeftSmoothing(GSinputDevice device, s8 x, s8 y);
+#ifdef __cplusplus
+}
+#endif
 #endif
