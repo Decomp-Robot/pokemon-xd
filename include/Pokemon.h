@@ -166,6 +166,7 @@ extern "C" {
 #endif
 u16 pokemon_GetHp(Pokemon *pokemon);
 u16 pokemon_GetMaxHp(Pokemon *pokemon);
+u16 pokemon_GetFriend(Pokemon *pokemon);
 void pokemon_SetHp(Pokemon *pokemon, u16 hp);
 void pokemonInitJoutai(Pokemon *pokemon);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
