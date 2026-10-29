@@ -9,6 +9,12 @@ struct GSivec2 {
     s16 y;
 };
 
+#ifdef __cplusplus
+struct GSvec;
+#else
+typedef struct GSvec GSvec;
+#endif
+
 /* 3D point / direction / plane vector. The GS geometry library takes and
  * returns these by pointer everywhere. */
 struct GSvec {

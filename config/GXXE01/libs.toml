@@ -9,6 +9,9 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/GSAPI/GSspline/GSspline.c"
+completed = true
+[[lib.object]]
 name = "game/GSAPI/GScamera/GScameraData.cpp"
 completed = true
 [[lib.object]]

@@ -2249,6 +2249,10 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.sdata      start:0x804E8468 end:0x804E846C
 	.sdata2     start:0x804EDF48 end:0x804EDF60
 
+game/GSAPI/GSspline/GSspline.c:
+	.text       start:0x801964F4 end:0x80196A14
+	.rodata     start:0x802F40F0 end:0x802F4478
+
 game/app/camera/camera.cpp:
 	.text       start:0x80196A14 end:0x8019B01C
 	.ctors      start:0x802E9FD4 end:0x802E9FD8
