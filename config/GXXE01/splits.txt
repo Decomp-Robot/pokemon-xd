@@ -327,6 +327,9 @@ game/menuLogoDemo.cpp:
 	.bss        start:0x80438390 end:0x804396A8
 	.sbss       start:0x804EA9D8 end:0x804EA9E0
 
+game/menuHologram.cpp:
+	.text       start:0x80087B14 end:0x80087BF0
+
 game/menuBingo.cpp:
 	.text       start:0x8008A160 end:0x8008A180
 

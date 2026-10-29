@@ -1703,6 +1703,11 @@ completed = true
 extra_cflags = ["-inline deferred,noauto", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/menuHologram.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-lang=c++"]
+
+[[lib.object]]
 name = "game/menuWorldMapMoveDemo.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole", "-lang=c++"]
