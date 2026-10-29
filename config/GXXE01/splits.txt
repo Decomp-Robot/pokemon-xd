@@ -275,6 +275,9 @@ game/menuCB_PokemonEntry.cpp:
 game/menuCB_Rule.cpp:
 	.text       start:0x8004B7B4 end:0x8004CD00
 
+game/menuPocketCologne.cpp:
+	.text       start:0x80063640 end:0x800636AC
+
 game/menuPdaMemoWaveXD.cpp:
 	.text       start:0x80065A1C end:0x80065B20
 
