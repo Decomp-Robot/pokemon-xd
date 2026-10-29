@@ -2354,6 +2354,9 @@ game/app/fight/fightKoukaBios.cpp:
 game/app/fight/fightJoukenBios.cpp:
 	.text       start:0x8020C590 end:0x8020C88C
 
+game/app/fight/fightAbicnt.cpp:
+	.text       start:0x8020C88C end:0x8020C9B0
+
 game/app/fight/fight.cpp:
 	.text       start:0x8020D854 end:0x8020D858
 	.ctors      start:0x802E9FE0 end:0x802E9FE4

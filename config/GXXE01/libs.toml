@@ -138,6 +138,18 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/fight/fightAbicnt.cpp"
+completed = true
+cflags = [
+    "-W error", "-nodefaults", "-proc gekko", "-align powerpc", "-enum int",
+    "-fp hardware", "-Cpp_exceptions off", "-O4,s", "-inline auto",
+    "-pragma \"cats off\"", "-pragma \"warn_notinlined off\"", "-maxerrors 1",
+    "-nosyspath", "-RTTI off", "-fp_contract on", "-str reuse", "-multibyte",
+    "-i include", "-i build/$VERSION/include", "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION", "-DNDEBUG=1", "-use_lmw_stmw on"
+]
+
+[[lib.object]]
 name = "game/app/fight/fightFloor.cpp"
 completed = true
 cflags = [
