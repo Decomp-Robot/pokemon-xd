@@ -4248,6 +4248,11 @@ name = "game/GSAPI/GSsysdolphin_baselib/baselib/spline.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/util.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
 [[lib]]
 name = "GSScript.a"
 mw_version = "GC/2.6"

@@ -2422,6 +2422,11 @@ game/GSAPI/GSsysdolphin_baselib/baselib/spline.c:
 	.text       start:0x802601F8 end:0x80260E38
 	.sdata2     start:0x804EF258 end:0x804EF2A4
 
+game/GSAPI/GSsysdolphin_baselib/baselib/util.c:
+	.text       start:0x8026CA60 end:0x8026CC2C
+	.data       start:0x80419AA8 end:0x80419AD0
+	.sdata2     start:0x804EF378 end:0x804EF388
+
 game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x80272704 end:0x8027290C
 
