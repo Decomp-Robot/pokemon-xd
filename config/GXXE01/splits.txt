@@ -2378,6 +2378,9 @@ game/app/fight/fightAction.cpp:
 game/app/fight/fightActionFlow.cpp:
 	.text       start:0x80208CA8 end:0x80208DA4
 
+game/app/fight/fightActionDisp.cpp:
+	.text       start:0x8020BF78 end:0x8020C018
+
 game/app/fight/fightKouka.cpp:
 	.text       start:0x8020C018 end:0x8020C17C
 
