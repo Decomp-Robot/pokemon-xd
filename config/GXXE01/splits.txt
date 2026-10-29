@@ -2326,6 +2326,9 @@ game/app/pokemon/fightPokemonBios.cpp:
 game/app/pokemon/fightPokemonEnemy.cpp:
 	.text       start:0x802080C4 end:0x80208288
 
+game/app/fight/fightActionBios.cpp:
+	.text       start:0x80208288 end:0x802084D8
+
 game/app/fight/fightAction.cpp:
 	.text       start:0x802084D8 end:0x80208C54
 	.bss        start:0x804AFA48 end:0x804B0048

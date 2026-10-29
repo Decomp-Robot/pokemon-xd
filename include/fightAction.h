@@ -27,7 +27,7 @@ struct FIGHT_ACTION_DATA_dd_ {
 };
 
 struct FIGHT_KIND_DATA {
-    s8 mPri;
+    u8 mPri;
     FIGHT_ACTION_FUNC mFlowFunc;
     FIGHT_ACTION_FUNC mDispFunc;
 };
@@ -71,7 +71,9 @@ void fightActionBiosSetDispBuff(FIGHT_ACTION *action, u16 id, void *ptr);
 void fightActionBiosCopy(FIGHT_ACTION *dst, FIGHT_ACTION *src);
 u16 fightActionBiosGetKind(FIGHT_ACTION *action);
 u32 fightActionBiosGetBuff(FIGHT_ACTION *action);
+u32 fightActionBiosGetBuffDataId(FIGHT_ACTION *action);
 void *fightActionBiosGetBuffDataPtr(FIGHT_ACTION *action);
+void *fightActionBiosGetActorFightTargetPtr(FIGHT_ACTION *action);
 FIGHT_ACTION_DATA_dd_ *fightActionBiosGetFightActionDataPtr(FIGHT_ACTION *action);
 
 FIGHT_KIND_DATA *fightActionKindDataBiosGetPtr(u16 kind);
