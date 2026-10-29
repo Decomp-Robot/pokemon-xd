@@ -178,6 +178,9 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/fight/fightTarget.cpp"
+completed = true
+[[lib.object]]
 name = "game/app/fight/fightFloor.cpp"
 completed = true
 cflags = [
