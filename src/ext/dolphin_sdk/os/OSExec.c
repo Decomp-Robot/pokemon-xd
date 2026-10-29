@@ -18,13 +18,13 @@ static int PackArgs(void* addr, s32 argc, char** argv) {
     u32 i;
 
     bootInfo2 = (char*)addr;
-    memset(bootInfo2, 0, 0x2000);
+    memset(bootInfo2, 0, 8192);
 
     if (argc == 0) {
         *(u32*)(bootInfo2 + 8) = 0;
     } else {
         numArgs = argc;
-        ptr = bootInfo2 + 0x2000;
+        ptr = bootInfo2 + 8192;
         while (--argc >= 0) {
             ptr -= strlen(argv[argc]) + 1;
             strcpy(ptr, argv[argc]);
@@ -42,7 +42,7 @@ static int PackArgs(void* addr, s32 argc, char** argv) {
         ptr -= 4;
         *(u32*)ptr = numArgs;
 
-        ASSERTMSGLINE(LINE(129, 138, 140), ptr - bootInfo2 >= 0x1000U, "OSExec: Argument list is too long");
+        ASSERTMSGLINE(LINE(129, 138, 140), ptr - bootInfo2 >= 4096U, "OSExec: Argument list is too long");
 
         *(u32*)(bootInfo2 + 8) = (ptr - bootInfo2);
     }
@@ -52,28 +52,16 @@ static int PackArgs(void* addr, s32 argc, char** argv) {
 
 #ifdef __GEKKO__
 static asm void Run(register void* entryPoint) {
-    nofralloc
-
-    mflr r0
-    stw r0, 4(r1)
-    stwu r1, -0x18(r1)
-    stw r31, 0x14(r1)
-    mr r31, entryPoint
+    fralloc
     bl ICFlashInvalidate
     sync
-    isync 
-    mtlr r31
-    blr
-
-    lwz r0, 0x1c(r1)
-    lwz r31, 0x14(r1)
-    addi r1, r1, 0x18
-    mtlr r0
+    isync
+    mtlr entryPoint
     blr
 }
 #endif
 
-static void StartDol(const OSExecParams* params, void* entry) {
+static inline void StartDol(const OSExecParams* params, void* entry) {
     OSExecParams* paramsWork = OSAllocFromArenaLo(sizeof(OSExecParams), 1);
 
     __OSSetExecParams(params, paramsWork);
@@ -91,7 +79,7 @@ static void ReadDisc(void* addr, s32 length, s32 offset) {
 
     DVDReadAbsAsyncPrio(&block, addr, length, offset, NULL, 0);
 
-#if SDK_REVISION < 1    
+#if SDK_REVISION < 1
     start = OSGetTime();
 #endif
 
@@ -107,11 +95,11 @@ static void ReadDisc(void* addr, s32 length, s32 offset) {
     }
 }
 
-static void Callback(s32, DVDCommandBlock*) {
+static void Callback(s32 result, DVDCommandBlock* block) {
     Prepared = TRUE;
 }
 
-static int IsStreamEnabled() {
+static inline int IsStreamEnabled() {
     if (DVDGetCurrentDiskID()->streaming) {
         return TRUE;
     }
@@ -127,12 +115,12 @@ void __OSGetExecParams(OSExecParams* params) {
     }
 }
 
-void __OSSetExecParams(const OSExecParams* params, OSExecParams* addr) {
+inline void __OSSetExecParams(const OSExecParams* params, OSExecParams* addr) {
     memcpy(addr, params, sizeof(OSExecParams));
     __OSExecParams = addr;
 }
 
-static void StopStreaming() {
+static inline void StopStreaming() {
     DVDCommandBlock block;
 #if SDK_REVISION < 1
     OSTime start;
@@ -173,8 +161,8 @@ static int GetApploaderPosition(void) {
     }
 
     if (__OSAppLoaderOffset != 0) {
-        tgcHeader = OSAllocFromArenaLo(0x40, DOLPHIN_ALIGNMENT);
-        ReadDisc(tgcHeader, 0x40, __OSAppLoaderOffset);
+        tgcHeader = OSAllocFromArenaLo(64, DOLPHIN_ALIGNMENT);
+        ReadDisc(tgcHeader, 64, __OSAppLoaderOffset);
         apploaderOffsetInTGC = tgcHeader[14];
         ASSERTMSGLINE(LINE(370, 376, 378), apploaderOffsetInTGC != 0, "OSExec() or OSResetSystem(): Wrong apploader offset. Maybe converted by an\nolder version of gcm2tgc. Use gcm2tgc v.1.20 or later.");
 
@@ -193,19 +181,19 @@ typedef struct {
     u32 reserved2;
 } AppLoaderStruct;
 
-static AppLoaderStruct* LoadApploader() {
+static inline AppLoaderStruct* LoadApploader() {
     AppLoaderStruct* header;
 
     header = (AppLoaderStruct*)OSAllocFromArenaLo(sizeof(AppLoaderStruct), DOLPHIN_ALIGNMENT);
     ReadDisc(header, sizeof(AppLoaderStruct), GetApploaderPosition());
     ASSERTMSGLINE(LINE(401, 407, 409), header->rebootSize != 0, "OSResetSystem(): old apploader");
 
-    ReadDisc((void*)0x81200000, OSRoundUp32B(header->size), GetApploaderPosition() + 0x20);
+    ReadDisc((void*)0x81200000, OSRoundUp32B(header->size), GetApploaderPosition() + 32);
     ICInvalidateRange((void*)0x81200000, OSRoundUp32B(header->size));
     return header;
 }
 
-static void* LoadDol(const OSExecParams* params, AppLoaderCallback getInterface) {
+static inline void* LoadDol(const OSExecParams* params, AppLoaderCallback getInterface) {
     appInitCallback appInit;
     appGetNextCallback appGetNext;
     appGetEntryCallback appGetEntry;
@@ -227,7 +215,7 @@ static void* LoadDol(const OSExecParams* params, AppLoaderCallback getInterface)
     return appGetEntry();
 }
 
-static BOOL IsNewApploader(AppLoaderStruct* header) {
+static inline BOOL IsNewApploader(AppLoaderStruct* header) {
     return strncmp(header->date, "2004/02/01", 10) > 0 ? TRUE : FALSE;
 }
 
@@ -249,7 +237,7 @@ void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* 
     params->argsUseDefault = argsUseDefault;
 
     if (!argsUseDefault) {
-        params->argsAddr = OSAllocFromArenaLo(0x2000, 1);
+        params->argsAddr = OSAllocFromArenaLo(8192, 1);
         PackArgs(params->argsAddr, argc, argv);
     }
 
@@ -261,7 +249,7 @@ void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* 
 
     __DVDPrepareResetAsync(Callback);
     __OSMaskInterrupts(0xFFFFFFE0);
-    __OSUnmaskInterrupts(0x400);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_DI);
     OSEnableInterrupts();
 
 #if SDK_REVISION < 1
@@ -284,7 +272,7 @@ void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* 
     header = LoadApploader();
     if (IsNewApploader(header)) {
         if (doloffset == 0xFFFFFFFF) {
-            doloffset = (GetApploaderPosition() + 0x20) + header->size;
+            doloffset = (GetApploaderPosition() + 32) + header->size;
         }
 
         params->bootDol = doloffset;
@@ -295,7 +283,7 @@ void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* 
         BOOT_REGION_END = (u32)regionEnd;
         g_unk_800030E2 = 1;
 
-        ReadDisc((void*)0x81300000, OSRoundUp32B(header->rebootSize), (GetApploaderPosition() + 0x20) + header->size);
+        ReadDisc((void*)0x81300000, OSRoundUp32B(header->rebootSize), (GetApploaderPosition() + 32) + header->size);
         ICInvalidateRange((void*)0x81300000, OSRoundUp32B(header->rebootSize));
         OSDisableInterrupts();
         ICFlashInvalidate();

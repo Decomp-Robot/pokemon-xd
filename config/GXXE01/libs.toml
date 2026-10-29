@@ -2652,7 +2652,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSExec.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/os/OSFatal.c"
