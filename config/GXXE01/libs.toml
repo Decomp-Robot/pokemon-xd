@@ -4702,6 +4702,16 @@ name = "game/app/recovery/recoveryEvent.cpp"
 completed = true
 
 [[lib]]
+name = "wazaSequence"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+[[lib.object]]
+name = "game/app/wazaSequence/nullSequence.cpp"
+completed = true
+
+[[lib]]
 name = "sodateya"
 mw_version = "GC/2.6"
 cflags_preset = "game"
