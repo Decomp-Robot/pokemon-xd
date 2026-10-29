@@ -1732,6 +1732,11 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/tableRes/tableResBios.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/app/fight/fight.cpp"
 completed = true
 cflags = [

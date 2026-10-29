@@ -2358,6 +2358,11 @@ game/app/fight/fightSeq/fightWazaWzx.cpp:
 game/app/fight/fightTrainerAi2.cpp:
 	.text       start:0x8022C6F4 end:0x8022C7F0
 
+game/app/tableRes/tableResBios.cpp:
+	.text       start:0x80232774 end:0x802327CC
+	.rodata     start:0x802F9270 end:0x802F9298
+	.data       start:0x80418790 end:0x804187A6
+
 game/pokemonRelive.cpp:
 	.text       start:0x80233B1C end:0x80233B20
 	.ctors      start:0x802E9FE4 end:0x802E9FE8
