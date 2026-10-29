@@ -2472,6 +2472,12 @@ game/app/fight/fightMenu.cpp:
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 
+game/GSAPI/GSsysdolphin_baselib/baselib/fog.c:
+	.text       start:0x8024BDC4 end:0x8024C088
+	.rodata     start:0x802F9AA0 end:0x802F9AC0
+	.sdata2     start:0x804EEEE8 end:0x804EEF10
+	.sbss2      start:0x804EFD30 end:0x804EFD34
+
 game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.text       start:0x8025C940 end:0x8025CA38
 	.sdata      start:0x804E8610 end:0x804E8618
