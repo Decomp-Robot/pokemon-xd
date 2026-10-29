@@ -2300,6 +2300,9 @@ game/app/fight/fightSideDB.cpp:
 game/app/pokemon/fightPokemonBios.cpp:
 	.text       start:0x802075C8 end:0x8020769C
 
+game/app/pokemon/fightPokemonEnemy.cpp:
+	.text       start:0x802080C4 end:0x80208288
+
 game/app/fight/fightActionFlow.cpp:
 	.text       start:0x80208CA8 end:0x80208DA4
 
