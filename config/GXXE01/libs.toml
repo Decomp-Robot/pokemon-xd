@@ -4572,3 +4572,40 @@ cflags_extra = ["-use_lmw_stmw on", "-str reuse,readonly", "-inline noauto", "-i
 [[lib.object]]
 name = "game/GSAPI/GSres/GSres.cpp"
 completed = true
+
+[[lib]]
+name = "fightAi2"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/app/fight/fightTrainerAi2.cpp"
+completed = true
+extra_cflags = ["-W error"]
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4",
+    "-inline noauto,deferred",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
