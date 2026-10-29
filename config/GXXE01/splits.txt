@@ -2291,6 +2291,10 @@ game/GSAPI/GSflag/GSflag.c:
 game/GSAPI/GSflag/GSflagBitLength.c:
 	.text       start:0x801A05E4 end:0x801A05F0
 
+game/app/battleGrid/battleCamera.cpp:
+	.text       start:0x801A594C end:0x801A5978
+	.sbss       start:0x804EB690 end:0x804EB698
+
 game/app/fade/fade_effect.cpp:
 	.text       start:0x801B711C end:0x801B715C
 	.ctors      start:0x802E9FD8 end:0x802E9FDC
