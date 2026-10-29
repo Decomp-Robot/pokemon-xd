@@ -1240,6 +1240,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-lang=c++"]
 
 [[lib.object]]
+name = "game/menuMoveDemo.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-lang=c++"]
+
+[[lib.object]]
 name = "game/menuUseItem.cpp"
 completed = true
 cflags = [

@@ -356,6 +356,10 @@ game/menuUseItem.cpp:
 game/menuMewWaza.cpp:
 	.text       start:0x800A6138 end:0x800A63DC
 
+game/menuMoveDemo.cpp:
+	.text       start:0x800A6C94 end:0x800A6D54
+	.sbss       start:0x804EAA68 end:0x804EAA70
+
 game/menuTitleOption.cpp:
 	.text       start:0x800A7518 end:0x800A75A0
 

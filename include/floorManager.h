@@ -11,6 +11,7 @@ u8 GSfloorIsPop(void);
 u8 GSfloorIsFloorPushed(void);
 void GSfloorPush(u32 floorID);
 void GSfloorChange(u32 floorID);
+void floorChange(u32 floorID);
 void floorWaitForChange(void);
 #ifdef __cplusplus
 }
