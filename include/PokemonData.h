@@ -13,6 +13,9 @@ struct PokemonData {
     u8 _2C[248];
 };
 
+// Voice id reported for a species that has no voice data to play.
+#define POKEMON_VOICE_ID_INVALID 0xFFFF
+
 // Tutor selection, progression gate, and learned-state flag.
 typedef struct PokemonTutorMove {
     u16 mMoveId;
@@ -27,6 +30,7 @@ extern "C" {
 extern const PokemonTutorMove *pokemonTutorMoveTable;
 PokemonSpeciesStats *pokemonDataBiosGetPtr(u16 species);
 s32 pokemonDataBiosGetVoice(PokemonSpeciesStats *stats);
+s8 *pokemonNakigoeDataBiosGetDataAddress(PokemonSpeciesStats *stats);
 u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
 u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);

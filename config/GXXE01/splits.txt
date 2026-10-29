@@ -275,6 +275,12 @@ game/menuCB_PokemonEntry.cpp:
 game/menuCB_Rule.cpp:
 	.text       start:0x8004B7B4 end:0x8004CD00
 
+game/menuPdaMemoWaveXD.cpp:
+	.text       start:0x80065A1C end:0x80065B20
+
+game/menuPdaMemoWaveXDWaveData.cpp:
+	.text       start:0x80066594 end:0x800665F4
+
 game/dbgMenuSub.cpp:
 	.text       start:0x80066C90 end:0x80066D30
 
