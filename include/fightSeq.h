@@ -20,6 +20,12 @@ typedef void (*FightSeqWazaFunc)(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOu
 extern "C" {
 #endif
 
+struct ModelSequence;
+
+// Sequence the battle floor event plays its scene with.
+struct ModelSequence *fightEvtGetSequence(void);
+void fightEvtSetSequence(struct ModelSequence *sequence);
+
 enum {
     SOUBI_ESCAPE_OK = 37,
     SOUBI_SCOPE_LENS = 41,

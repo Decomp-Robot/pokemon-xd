@@ -7,6 +7,7 @@
 enum FightTrainerQuery {
     FIGHT_TRAINER_QUERY_DIALOGUE = 8,
     FIGHT_TRAINER_QUERY_HERO = 0x44,
+    FIGHT_TRAINER_QUERY_SEQUENCE = 76,
 };
 
 #endif

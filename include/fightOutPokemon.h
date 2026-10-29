@@ -8,6 +8,7 @@
 // Deployed Pokemon record owned by the battle module.
 typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
+struct NullSequence;
 
 // An opponent a deployed Pokemon has fought: the opponent itself, the move the
 // opponent last used, the hp it entered the fight with and the damage it took.
@@ -25,7 +26,8 @@ struct FightOutPokemon {
     struct FIGHT_WAZA mFightWaza;
     u8 _6F4[0xAC];
     FIGHT_ITEM mFightItem;
-    u8 _7AC[0xB8];
+    struct NullSequence *mSequence;  // 0x7AC: sequence that drives the battle model.
+    u8 _7B0[0xB4];
     struct FightOutPokemonEnemy mEnemyAry[4];
 };
 

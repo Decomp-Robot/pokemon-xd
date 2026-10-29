@@ -134,6 +134,26 @@ struct _GSmodel {
 
 typedef void (*GSmodelParseCb)(_HSD_PObj *, GSmtx *, GSmtx *, GSmtx *, void *);
 
+// Model state captured so that a sequence can be put back the way it was when it
+// was taken down.
+struct GSmodelState {
+    u32 mFlags;                 // 0x00: state bits restored on top of the live ones.
+    GSvec mPosition;            // 0x04
+    GSvec mRotation;            // 0x10
+    GSvec mScale;               // 0x1C
+    u32 mAnimIndex;             // 0x28
+    u32 mTexAnimIndex;          // 0x2C
+    f32 mAnimFrame;             // 0x30
+    f32 mAnimRate;              // 0x34
+    f32 mTexAnimFrame;          // 0x38
+    f32 mTexAnimRate;           // 0x3C
+    u32 mAnimType;              // 0x40
+    u32 mTexAnimType;           // 0x44
+    GSvec mNullPosition;        // 0x48: offset of the null the model was posed with.
+    GSvec mNullRotation;        // 0x54
+    GSvec mNullScale;           // 0x60
+};
+
 #ifdef __cplusplus
 extern "C" {
 _GSmodel* GSmodelLoad(_HSD_SceneModelSet* modelSet, u32 flags);
@@ -164,6 +184,10 @@ s32 GSmodelIsNullAnimation(_GSmodel *model, s32 index);
 void GSmodelTraverseAnimJoint(void *jobj, void (*cb)(_HSD_AnimJoint *, void **, int), f32 *arg);
 GSvec *GSmodelGetPositionPtr(_GSmodel *model);
 void GSmodelGetPosition(_GSmodel *model, GSvec *position);
+void GSmodelPushState(_GSmodel *model, GSmodelState *state);
+void GSmodelPopState(_GSmodel *model, GSmodelState *state);
+void GSmodelGetScale(_GSmodel *model, GSvec *scale);
+bool GSmodelGetVisibility(_GSmodel *model);
 GSvec *GSmodelGetRotationPtr(_GSmodel *model);
 void GSmodelGetRotation(_GSmodel *model, GSvec *rotation);
 void GSmodelSetRotation(_GSmodel *model, GSvec *rotation);

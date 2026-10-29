@@ -2417,6 +2417,9 @@ game/app/memo/memo.c:
 game/app/evolution/evolution.cpp:
 	.text       start:0x80234E58 end:0x80234F78
 
+game/app/fight/fightGSfloor.cpp:
+	.text       start:0x80236240 end:0x80236A04
+
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 

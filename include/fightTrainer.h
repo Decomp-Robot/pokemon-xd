@@ -19,14 +19,18 @@ struct FIGHT_TRAINER {
     u16 mDataId;
     u16 mReserved;
     Hero mHero;
-    u8 mWork[0x2DC8];
+    u8 mWork[0x2BC8];
+    struct NullSequence *mSequence;  // 0x3544: sequence that drives the trainer model.
+    u8 _3548[0x1FC];
 };
 #else
 struct FIGHT_TRAINER {
     u16 mDataId;
     u16 mReserved;
     Hero mHero;
-    u8 mWork[0x2DC8];
+    u8 mWork[0x2BC8];
+    struct NullSequence *mSequence;  // 0x3544: sequence that drives the trainer model.
+    u8 _3548[0x1FC];
 };
 #endif
 

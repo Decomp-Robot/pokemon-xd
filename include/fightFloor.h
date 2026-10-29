@@ -167,6 +167,9 @@ void fightFloor_SetCriticakMsgId(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetWazakoukaMsgId(FIGHT_FLOOR *floor, s32 messageId);
 FIGHT_SIDE *fightFloorGetValidFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
 void fightFloorReplaceFightOutPokemonAttackToDefense(FIGHT_FLOOR *floor);
+u8 fightFloorIsNowEncountSnatchOnly(FIGHT_FLOOR *floor);
+u8 fightFloorLoopValidFightTrainer(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
+void fightFloorSetShadow(void);
 
 #ifdef __cplusplus
 }

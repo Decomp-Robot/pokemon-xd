@@ -12,7 +12,7 @@ extern "C" {
 struct _GSmodel *Sequence_GetGSmodel(u32 modelID);
 s32 Sequence_GetModelSize(u32 modelID);
 void Sequence_Free(struct NullSequence *sequence);
-void Sequence_SetVisibility(struct NullSequence *sequence, u8 visible);
+void Sequence_SetVisibility(struct NullSequence *sequence, bool visible);
 #ifdef __cplusplus
 }
 #endif
