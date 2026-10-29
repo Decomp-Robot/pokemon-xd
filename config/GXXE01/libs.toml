@@ -4303,6 +4303,21 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
 
 [[lib]]
+name = "GSflag"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSflag/GSflag.c"
+completed = true
+
+[[lib.object]]
+name = "game/GSAPI/GSflag/GSflagBitLength.c"
+completed = true
+
+[[lib]]
 name = "evolution"
 mw_version = "GC/2.6"
 cflags_preset = "game"

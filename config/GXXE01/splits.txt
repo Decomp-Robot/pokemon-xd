@@ -2278,6 +2278,12 @@ game/GSAPI/GSfsys/fsysCache.c:
 game/GSAPI/GSfsys/GSfsys2.c:
 	.text       start:0x8019DD18 end:0x8019E1F0
 
+game/GSAPI/GSflag/GSflag.c:
+	.text       start:0x801A02F0 end:0x801A0364
+
+game/GSAPI/GSflag/GSflagBitLength.c:
+	.text       start:0x801A05E4 end:0x801A05F0
+
 game/app/fade/fade_effect.cpp:
 	.text       start:0x801B711C end:0x801B715C
 	.ctors      start:0x802E9FD8 end:0x802E9FDC
