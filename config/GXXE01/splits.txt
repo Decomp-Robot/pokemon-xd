@@ -2442,6 +2442,9 @@ game/app/evolution/evolution.cpp:
 game/app/fight/fightGSfloor.cpp:
 	.text       start:0x80236240 end:0x80236A04
 
+game/app/fight/fightMenu.cpp:
+	.text       start:0x80239314 end:0x802394E4
+
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 

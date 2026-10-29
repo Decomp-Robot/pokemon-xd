@@ -19,6 +19,9 @@ u32 fightMenuGetFightOutPokemonPtrToStatusMenuId(FightOutPokemon *pokemon, u16 f
 void fightMenuFightOutPokemonRenewStatusMenu(FightOutPokemon *pokemon,
     u16 fightType, u8 update);
 void fightMenuFightTrainerRenewStatusMenu(FIGHT_TRAINER *trainer, u16 fightType);
+void fightMenuFightTrainerOpenStatusMenu(FIGHT_TRAINER *trainer, u16 fightType);
+void fightMenuFightTrainerCloseStatusMenu(FIGHT_TRAINER *trainer, u16 fightType, bool waitForClose);
+u32 fightMenuGetFightTrainerPtrToStatusMenuId(FIGHT_TRAINER *trainer, u16 fightType);
 
 void fightMenuFightOutPokemonOpenStatusMenu(FightOutPokemon *pokemon, u16 fightType, bool showDarkStatus);
 void fightMenuFightOutPokemonCloseStatusMenuAnotherMine(u32 statusMenuId, FightOutPokemon *pokemon, u16 fightType, u8 waitForClose, s32 lookupMode);

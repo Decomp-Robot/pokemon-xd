@@ -34,6 +34,8 @@ typedef struct FIGHT_SIDE_DATA {
 
 FIGHT_SIDE_DATA *fightSideDataBiosGetPtr(u16 dataId);
 
+u32 fightSideGetStatus(FIGHT_SIDE *side, u16 dataId, u16 selector, u16 index);
+
 #ifdef __cplusplus
 }
 #endif

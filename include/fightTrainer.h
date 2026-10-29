@@ -56,6 +56,7 @@ u16 *fightTrainerGetPrefixNamePtr(FIGHT_TRAINER *trainer);
 u16 *fightTrainerGetNamePtr(FIGHT_TRAINER *trainer);
 void fightTrainerCallEffect(FIGHT_TRAINER *trainer, u8 operation);
 u8 fightTrainerIsAllyFightTargetPtr(FIGHT_TRAINER *trainer, FightOutPokemon *target, u16 fightType);
+void fightTrainerToMenuBallStatus(FIGHT_TRAINER *trainer, u8 *ballStatus);
 
 #ifdef __cplusplus
 }
