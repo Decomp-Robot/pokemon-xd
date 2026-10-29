@@ -1831,6 +1831,14 @@ completed = true
 extra_cflags = ["-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/app/charName/charNameBios.cpp"
+completed = true
+# This translation unit keeps the unfused 'clrlwi' + 'slwi' address arithmetic
+# of the original, so the peephole pass that merges the pair into 'rlwinm' was
+# not in effect for it.
+extra_cflags = ["-str reuse,readonly", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/app/fight/fight.cpp"
 completed = true
 cflags = [

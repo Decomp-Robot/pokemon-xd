@@ -2466,6 +2466,11 @@ game/app/memo/memo.c:
 game/app/evolution/evolution.cpp:
 	.text       start:0x80234E58 end:0x80234F78
 
+game/app/charName/charNameBios.cpp:
+	.text       start:0x80236114 end:0x80236240
+	.rodata     start:0x802F92D8 end:0x802F9300
+	.data       start:0x804187B8 end:0x804187D0
+
 game/app/fight/fightGSfloor.cpp:
 	.text       start:0x80236240 end:0x80236A04
 
