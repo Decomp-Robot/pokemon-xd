@@ -2249,6 +2249,13 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.sdata      start:0x804E8468 end:0x804E846C
 	.sdata2     start:0x804EDF48 end:0x804EDF60
 
+game/GSAPI/GSfilter/GSfilter.cpp:
+	.text       start:0x8018838C end:0x80188B50
+	.rodata     start:0x802F3E88 end:0x802F3EA4
+	.bss        start:0x80474960 end:0x80474DBC
+	.sbss       start:0x804EB540 end:0x804EB548
+	.sdata2     start:0x804EDFB0 end:0x804EDFC4
+
 game/GSAPI/GSspline/GSspline.c:
 	.text       start:0x801964F4 end:0x80196A14
 	.rodata     start:0x802F40F0 end:0x802F4478
