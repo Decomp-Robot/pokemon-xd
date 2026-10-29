@@ -202,6 +202,7 @@ u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
 void heroSetStatus(Hero* hero, u16 statusID, u32 value);
 u16* heroBiosGetNamePtr(Hero* hero);
 Pokemon* heroBiosGetPokemonPtr(Hero* hero, u16 slot);
+void heroSetFollowerWithID(u8 followerID, u8 modelLevel);
 
 #ifdef __cplusplus
 s16 heroGetPokemon(Hero *hero, const Pokemon *pokemon, bool allowStorageFallback);

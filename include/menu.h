@@ -28,6 +28,8 @@ void menuDataBiosSetXY(s32 id, s16 x, s16 y);
 void menuDataBiosGetXY(s32 id, s16 *x, s16 *y);
 u8 menuDataBiosGetDispMax(s32 id);
 void menuFaceDispSub(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite, u16 faceID);
+u16 menuFaceGetID2(struct Pokemon *pokemon, u8 deoxysSel);
+void menuFaceLoad_Tool(struct Pokemon *pokemon, struct Pokemon *(*callback)(void *), void *context);
 
 void windowCloseMain(struct tagWINDOW_WORK *window);
 #ifdef __cplusplus

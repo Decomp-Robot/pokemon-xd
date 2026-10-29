@@ -12,16 +12,28 @@ typedef struct MenuCBPokemonEntryPlayer {
     /* 0x00 */ f32 mPos[12];
 } MenuCBPokemonEntryPlayer;
 
+/* Face record of one party slot: mLoaded marks a slot the face texture was
+   built for, mFaceID is the face the Game Boy reported for it. */
+typedef struct MenuCBPokemonEntryFaceWork {
+    /* 0x00 */ u8 mLoaded;
+    /* 0x01 */ u8 _01;
+    /* 0x02 */ u16 mFaceID;
+    /* 0x04 */ s32 mUnknown04;
+    /* 0x08 */ u8 _08[4];
+} MenuCBPokemonEntryFaceWork;
+
 typedef struct MenuCBPokemonEntryWork {
     /* 0x000 */ s32 mState;
-    /* 0x004 */ u8 _004[0x008 - 0x004];
+    /* 0x004 */ bool mEntryFlag[4]; // per SI port: the player handed its party over
     /* 0x008 */ s8 mVersusId[4]; // versus battle the port plays, -1 if none
     /* 0x00C */ s32 mTimer;
     /* 0x010 */ u8 _010[0x02C - 0x010];
-    /* 0x02C */ s32 mCursor;
-    /* 0x030 */ u8 _030[0x154 - 0x030];
+    /* 0x02C */ s32 mCursor; // entry cursor; the face texture work counts the slots it has loaded here
+    /* 0x030 */ MenuCBPokemonEntryFaceWork mFaceWork[4][6];
+    /* 0x150 */ s32 mPlayerNum; // players the entry screen is laid out for
     /* 0x154 */ s32 mScroll;
-    /* 0x158 */ u8 _158[0x160 - 0x158];
+    /* 0x158 */ u8 mReadFlag; // set once the face textures are all loaded
+    /* 0x159 */ u8 _159[0x160 - 0x159];
     /* 0x160 */ MenuCBPokemonEntryPlayer mPlayer[4];
     /* 0x220 */ f32 mBaseX;
     /* 0x224 */ s32 mBaseIndex;

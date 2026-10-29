@@ -15,6 +15,8 @@ void GSlightSetType(GSlight*, int);
 void GSlightSetPosition(GSlight*, GSvec*);
 void GSlightSetColor(GSlight*, GXColor);
 void GSlightGetPosition(GSlight*, GSvec*);
+u8 lightIsDebugMode(void);
+void lightSetDebugMode(u8 enable);
 #ifdef __cplusplus
 }
 #endif

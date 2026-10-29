@@ -1,12 +1,12 @@
-#include <heroBios.h>
 /*
- * menuCBRule.cpp
+ * menuCB_Rule.cpp
  *
  * The colosseum regulations of the link (GBA) battles: the checks a rule set
  * runs over an entered party and over a single Pokemon, and the per-slot
  * condition records the entry screens report the failures of.
  */
 
+#include <heroBios.h>
 #include <FightRuleData.h>
 #include <menuCBBios.h>
 #include <menuCBRule.h>
@@ -29,14 +29,7 @@ extern u32 *legendPokemonData_number;
 extern u16 *legendPokemonData;
 
 extern "C" {
-extern FightRuleData *menuCBBios_CurrentRule(void);
-extern u16 pokemonBiosGetItemDataId(Pokemon *pokemon);
-extern u16 pokemonBiosGetPokemonDataId(Pokemon *pokemon);
-extern u8 pokemonIsDarkPokemon(Pokemon *pokemon);
-extern bool pokemonCheckValid(Pokemon *pokemon);
-extern void pokemonBiosCopy(Pokemon *dst, const Pokemon *src);
 extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
-extern void pokemonResetBasisStatus(Pokemon *pokemon);
 extern bool menuCBRule_CheckValidItem(u16 itemID);
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
 extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
@@ -47,6 +40,79 @@ extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
  * ---------------------------------------------------------------------- */
 
 u8 _menuCBRule_IsTamagoPokemon(Pokemon *pokemon);
+
+/* -------------------------------------------------------------------------
+ * Entry condition reports
+ * ---------------------------------------------------------------------- */
+
+/* Refreshes the entry-count flag of every slot from the rule set. */
+extern "C" void menuCBRule_GetTaikaiFieldFirstDraw(Hero *hero)
+{
+    FightRuleData *rule = menuCBBios_CurrentRule();
+    u32 i;
+
+    for (i = 0; i < 6; i++) {
+        _CB.entryFlags[0][i].insufficientPokemon =
+            !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_POKEMON_NUM);
+    }
+}
+
+/* Refreshes the held-item flags of one entry slot from the rule set. */
+extern "C" void menuCBRule_ErrorFlagSetItemGetTiming(Hero *hero, Pokemon *pokemon, s32 slot)
+{
+    FightRuleData *rule = menuCBBios_CurrentRule();
+
+    pokemonBiosGetItemDataId(pokemon);
+
+    if (!menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_ITEM)) {
+        switch (rule->mHeldItemMode) {
+        case HELD_ITEMS_FORBIDDEN:
+            _CB.entryFlags[0][slot].heldItemForbidden = 1;
+            break;
+
+        case HELD_ITEMS_RESTRICTED:
+            _CB.entryFlags[0][slot].heldItemRestricted = 1;
+            break;
+
+        case HELD_ITEMS_ALLOWED:
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    _CB.entryFlags[0][slot].invalidHeldItem =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_HELD_ITEM);
+    _CB.entryFlags[0][slot].duplicateHeldItem =
+        !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_ITEM);
+}
+
+/* Refreshes the species, level and validity flags of one entry slot. */
+extern "C" void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *pokemon, s32 slot)
+{
+    FightRuleData *rule = menuCBBios_CurrentRule();
+
+    _CB.entryFlags[0][slot].levelBelowMinimum =
+        !menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_LEVEL_MIN);
+    _CB.entryFlags[0][slot].levelAboveMaximum =
+        !menuCBRule_CheckPokemonRegulation(pokemon, rule, REGULATION_POKEMON_LEVEL_MAX);
+    _CB.entryFlags[0][slot].illegalPokemon =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL);
+    _CB.entryFlags[0][slot].shadowPokemon =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_SHADOW);
+    _CB.entryFlags[0][slot].eggOrInvalidPokemon =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_TAMAGO);
+    _CB.entryFlags[0][slot].invalidPokemon =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_VALID);
+    _CB.entryFlags[0][slot].invalidMove =
+        !menuCBRule_CheckPokemonKind(pokemon, POKEMON_CONDITION_ILLEGAL_MOVE);
+    _CB.entryFlags[0][slot].partyLevelSumExceeded =
+        !menuCBRule_CheckTrainerRegulation(hero, rule, REGULATION_TRAINER_LEVEL_SUM);
+    _CB.entryFlags[0][slot].legendPokemon = !menuCBRule_CheckLegendPokemon(pokemon, rule);
+    _CB.entryFlags[0][slot].duplicateSpecies =
+        !menuCBRule_CheckTrainerRegulationAt(hero, pokemon, rule, REGULATION_TRAINER_SAME_SPECIES);
+}
 
 /* -------------------------------------------------------------------------
  * Rule set checks

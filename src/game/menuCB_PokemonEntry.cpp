@@ -529,3 +529,196 @@ void _menuCBPokemonEntryWorkInit(void)
     _menuCBPokemonEntryWork();
     _menuCBPokemonEntryDispPosition();
 }
+
+/* -------------------------------------------------------------------------
+ * Face texture work of the entry screen
+ * ---------------------------------------------------------------------- */
+
+/* Face ID the loader keeps for the slot it loaded last. */
+extern u16 uToolPokemon_faceId;
+
+/* The face texture work walks four parties of six slots each. */
+enum { FACE_WORK_PLAYER_NUM = 4, FACE_WORK_SLOT_NUM = 6 };
+
+Pokemon *_menuCBPokemonEntryLoadCallBack(void *arg);
+MenuCBPokemonEntryFaceWork *_menuCBPokemonEntryGetFaceBase(long player, long slot);
+
+extern "C" void menuCBPokemonEntryTexWorkInit(void)
+{
+    MenuCBPokemonEntryFaceWork *faceRow;
+    s32 player;
+    s32 slot;
+
+    _menuCBPokemonWork.mCursor = 0;
+    _menuCBPokemonWork.mReadFlag = 0;
+
+    for (player = 0; player < FACE_WORK_PLAYER_NUM; player++) {
+        faceRow = &_menuCBPokemonWork.mFaceWork[player][0];
+
+        for (slot = 0; slot < FACE_WORK_SLOT_NUM; slot++) {
+            MenuCBPokemonEntryFaceWork *face = &faceRow[slot];
+
+            face->mLoaded = 0;
+            face->mUnknown04 = 0;
+        }
+    }
+}
+
+extern "C" u32 menuCBPokemonEntryGetReadFlag(void)
+{
+    return _menuCBPokemonWork.mReadFlag;
+}
+
+void _menuCBPokemonEntrySetEntryFlag(long port, bool flag)
+{
+    _menuCBPokemonWork.mEntryFlag[port] = flag;
+}
+
+u8 _menuCBPokemonEntryGetEntryFlag(long port)
+{
+    return _menuCBPokemonWork.mEntryFlag[port];
+}
+
+/* The 2D entry screen draws its party rows lower down than the others. */
+void _menuCBPokemonEntryDispPosition(void)
+{
+    s32 battleType = toolentryTaisenGetBattleType();
+
+    switch (battleType) {
+    case BATTLE_TYPE_DOUBLE:
+    case BATTLE_TYPE_SINGLE:
+        _menuCBPokemonWork.mScroll = 310;
+        break;
+
+    case BATTLE_TYPE_MULTI:
+        _menuCBPokemonWork.mScroll = 0;
+        break;
+
+    default:
+        _menuCBPokemonWork.mScroll = 0;
+        break;
+    }
+}
+
+/* Whether every player of the battle has handed its party over. */
+u8 _menuCBPokemonEntryAllPlayer(void)
+{
+    s32 playerNum = 1;
+    s32 versus = toolentryTaisenGetBattleVersus();
+    s32 battleType = toolentryTaisenGetBattleType();
+    s32 port;
+
+    switch (battleType) {
+    case BATTLE_TYPE_DOUBLE:
+    case BATTLE_TYPE_SINGLE:
+        if (versus == 4) {
+            playerNum = 2;
+            _menuCBPokemonWork.mPlayerNum = 4;
+        } else {
+            playerNum = 2;
+            _menuCBPokemonWork.mPlayerNum = versus;
+        }
+        break;
+
+    case BATTLE_TYPE_MULTI:
+        _menuCBPokemonWork.mPlayerNum = 4;
+        playerNum = 4;
+        break;
+
+    default:
+        break;
+    }
+
+    for (port = 0; port < playerNum; port++) {
+        if (!_menuCBPokemonEntryGetEntryFlag(port)) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+extern "C" void menuCBPokemonEntryLoadTex(void)
+{
+    menuFaceLoad_Tool(0, _menuCBPokemonEntryLoadCallBack, 0);
+}
+
+/* Returns the Pokemon whose face it loaded last, 0 once the walk is over. */
+Pokemon *_menuCBPokemonEntryLoadCallBack(void *arg)
+{
+    Pokemon *pokemon;
+    s32 slot;
+    s32 player;
+    s32 keepLoading = 1;
+
+    toolentryTaisenGetEntryPlayerNum();
+    toolentryTaisenGetBattleType();
+
+    pokemon = (Pokemon *)arg;
+
+    if (arg != 0) {
+        *(u8 *)arg = 1;
+    }
+
+    do {
+        MenuCBPokemonEntryFaceWork *face;
+        u16 faceID;
+
+        if (_menuCBPokemonWork.mCursor == FACE_WORK_PLAYER_NUM * FACE_WORK_SLOT_NUM) {
+            _menuCBPokemonWork.mReadFlag = 1;
+            keepLoading = 0;
+            pokemon = 0;
+        } else {
+            player = _menuCBPokemonWork.mCursor / FACE_WORK_SLOT_NUM;
+            slot = _menuCBPokemonWork.mCursor % FACE_WORK_SLOT_NUM;
+
+            if (menuCBBattleStartGetStatus() == 0) {
+                pokemon = toolentryTaisenGetPokemonPtr(player, slot);
+            } else if (toolentryTaisenGetEntryPokemonNum(player) <= slot) {
+                pokemon = 0;
+            } else {
+                pokemon = toolentryTaisenGetEntryPokemonPtr(player, slot);
+            }
+
+            face = _menuCBPokemonEntryGetFaceBase(player, slot);
+            faceID = menuFaceGetID2(pokemon, _menuCB_pokemonGetDeoxysSel(player, 1));
+
+            if (faceID != 0 && pokemonGetStatus(pokemon, 0, POKEMON_STATUS_SPECIES, 0) != 0) {
+                face->mLoaded = true;
+                face->mFaceID = faceID;
+                uToolPokemon_faceId = faceID;
+                keepLoading = 0;
+                _menuCBPokemonWork.mCursor = _menuCBPokemonWork.mCursor + 1;
+            } else {
+                face->mLoaded = false;
+                _menuCBPokemonWork.mCursor = _menuCBPokemonWork.mCursor + 1;
+            }
+        }
+    } while (keepLoading);
+
+    return pokemon;
+}
+
+MenuCBPokemonEntryFaceWork *_menuCBPokemonEntryGetFaceBase(long player, long slot)
+{
+    return &_menuCBPokemonWork.mFaceWork[player][slot];
+}
+
+extern "C" void menuCBPokemonEntryPokemonFaceFree(void)
+{
+    menuCBPokemonEntryTexWorkInit();
+}
+
+extern "C" u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window,
+                                                tagSPRITE_WORK *sprite,
+                                                s32 player, s32 slot)
+{
+    MenuCBPokemonEntryFaceWork *face = _menuCBPokemonEntryGetFaceBase(player, slot);
+
+    if (face->mLoaded) {
+        menuFaceDispSub(window, sprite, face->mFaceID);
+        return 1;
+    }
+
+    return 0;
+}

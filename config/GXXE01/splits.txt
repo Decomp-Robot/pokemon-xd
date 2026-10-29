@@ -268,9 +268,21 @@ game/menuCB_Debug.cpp:
 	.sdata      start:0x804E7F50 end:0x804E7F58
 
 game/menuCB_PokemonEntry.cpp:
-	.text       start:0x8004A0A8 end:0x8004B338
+	.text       start:0x8004A0A8 end:0x8004B7B4
 	.bss        start:0x804351E0 end:0x80435418
 	.sdata2     start:0x804EC3B8 end:0x804EC3C8
+
+game/menuCB_Rule.cpp:
+	.text       start:0x8004B7B4 end:0x8004CD00
+
+game/dbgMenuSub.cpp:
+	.text       start:0x80066C90 end:0x80066D30
+
+game/dbgMenuSubHero.cpp:
+	.text       start:0x80067594 end:0x80067624
+
+game/dbgMenuSubPartner.cpp:
+	.text       start:0x80067670 end:0x80067764
 
 game/menuPcBoxNew.cpp:
 	.text       start:0x80068264 end:0x80069300
