@@ -78,6 +78,11 @@ mw_version = "GC/2.6"
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSquat.cpp"
+completed = true
+mw_version = "GC/2.6"
+
+[[lib.object]]
 name = "orig/GXXE01/sys/main.dol"
 completed = false
 

@@ -1634,6 +1634,12 @@ game/GSAPI/GScamera/GScamera.cpp:
 game/GSmtx.cpp:
 	.text       start:0x800EF9F8 end:0x800EFA18
 
+game/GSquat.cpp:
+	.text       start:0x800EFA38 end:0x800EFA58
+	.ctors      start:0x802E9FB4 end:0x802E9FB8
+	.bss        start:0x80442E20 end:0x80442E30
+	.sdata2     start:0x804ED398 end:0x804ED3A0
+
 game/GSmathInit.cpp:
 	.text       start:0x800EFA58 end:0x800EFAC0
 
