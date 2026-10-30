@@ -85,6 +85,7 @@ game/dbgMenuLog.c:
 
 game/dbgMenuFieldCamera.c:
 	.text       start:0x8000E154 end:0x8000E1F4
+	.sbss       start:0x804EA698 end:0x804EA6A4
 
 game/dbgMenuItemCreate.c:
 	.text       start:0x8000E1F4 end:0x8000E53C
