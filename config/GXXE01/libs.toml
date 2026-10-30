@@ -4386,6 +4386,9 @@ completed = true
 name = "libc/k_cos.c"
 completed = true
 [[lib.object]]
+name = "libc/k_rem_pio2.c"
+completed = true
+[[lib.object]]
 name = "libc/k_sin.c"
 completed = true
 [[lib.object]]
