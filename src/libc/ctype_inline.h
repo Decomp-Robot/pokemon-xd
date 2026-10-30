@@ -7,6 +7,11 @@
 extern "C" {
 #endif
 
+inline int isspace(int c) { return (unsigned char)__ctype_map[(unsigned char)c] & 0x06; }
+inline int isdigit(int c) { return (unsigned char)__ctype_map[(unsigned char)c] & 0x10; }
+inline int isalpha(int c) { return (unsigned char)__ctype_map[(unsigned char)c] & 0xC0; }
+inline int toupper(int c) { return (c == -1 ? -1 : ((unsigned char *)__upper_map)[(unsigned char)c]); }
+
 /* Lower-case a character through the lower-case map. */
 inline int __tolower(int c) {
     if (c == -1) {

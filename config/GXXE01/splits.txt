@@ -1497,6 +1497,10 @@ libc/scanf.c:
 libc/string.c:
 	.text       start:0x800E1A8C end:0x800E1D68
 
+libc/strtoul.c:
+	.text       start:0x800E2E00 end:0x800E3238
+	.data       start:0x803D4C70 end:0x803D4CB4
+
 libc/wchar_io.c:
 	.text       start:0x800E3238 end:0x800E32C0
 
