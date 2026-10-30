@@ -1233,6 +1233,9 @@ ext/dolphin_sdk/gx/GXTexture.c:
 	.text       start:0x800CBCE4 end:0x800CBD84
 	.text       start:0x800CBD84 end:0x800CBF00
 	.text       start:0x800CBF00 end:0x800CC254
+	.data       start:0x803D3AC0 end:0x803D3CE4
+	.sdata      start:0x804E8208 end:0x804E8248
+	.sdata2     start:0x804ECBF0 end:0x804ECC18
 
 ext/dolphin_sdk/gx/GXBump.c:
 	.text       start:0x800CC254 end:0x800CC2C0
