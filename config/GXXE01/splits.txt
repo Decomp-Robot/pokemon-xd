@@ -1341,6 +1341,11 @@ ext/dolphin_sdk/perf/perf.c:
 	.text       start:0x800D0BB0 end:0x800D1138
 	.text       start:0x800D1138 end:0x800D11C4
 	.text       start:0x800D11C4 end:0x800D1258
+	.data       start:0x803D4180 end:0x803D428C
+	.bss        start:0x8043F910 end:0x8043F938
+	.sdata      start:0x804E8248 end:0x804E8258
+	.sbss       start:0x804EAE00 end:0x804EAE30
+	.sdata2     start:0x804ECCC8 end:0x804ECCD0
 
 ext/dolphin_sdk/perf/perfdraw.c:
 	.text       start:0x800D1258 end:0x800D1350

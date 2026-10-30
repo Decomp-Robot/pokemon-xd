@@ -1,7 +1,6 @@
 #include <dolphin.h>
 #include <dolphin/gx.h>
 #include <dolphin/perf.h>
-#include "fake_tgmath.h"
 
 #include "__perf.h"
 #include "../gx/__gx.h"
@@ -39,7 +38,9 @@ static void PERFTokenCallback(u16 token);
 u32 PERFInit(u32 numSamples, u32 numFramesHistory, u32 numTypes, PERFAllocator allocator, PERFDeallocator deallocator, void (*initDraw)());
 void PERFStartFrame(void);
 void PERFEndFrame(void);
+void PERFEventStart(u8 id);
 __declspec(weak) s32 PERFGetNewSample(void);
+void PERFEventEnd(u8 id);
 static void PERFStartAutoSample(void);
 static void PERFEndAutoSample(void);
 static void PERFTimerCallback(OSAlarm* alarm, OSContext* context);
@@ -265,6 +266,90 @@ void PERFEndFrame(void) {
         magic = 0;
     }
 
+    OSRestoreInterrupts(enabled);
+}
+
+void PERFEventStart(u8 id) {
+    BOOL enabled;
+    s32 sample;
+
+    enabled = OSDisableInterrupts();
+
+    sample = PERFEvents[id].currSample;
+    if (sample < 0) {
+        sample = PERFGetNewSample();
+        PERFEvents[id].currSample = sample;
+        PERFFrames[PERFCurrFrame].samples[sample].id = id;
+        PERFFrames[PERFCurrFrame].samples[sample].interrupted = 0;
+
+        switch(PERFEvents[id].type) {
+        case PERF_GP_EVENT:
+            PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[0] = 0;
+            PERFFrames[PERFCurrFrame].samples[sample].instructions[0] = 0;
+            PERFFrames[PERFCurrFrame].samples[sample].gpTimeStampStart = 0;
+            PERFFrames[PERFCurrFrame].samples[sample].gpTimeStampEnd = 0;
+            GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x2000);
+            break;
+        case PERF_CPU_GP_EVENT:
+            PERFFrames[PERFCurrFrame].samples[sample].gpTimeStampStart = 0;
+            PERFFrames[PERFCurrFrame].samples[sample].gpTimeStampEnd = 0;
+            PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[0] = PPCMfpmc3();
+            PERFFrames[PERFCurrFrame].samples[sample].instructions[0] = PPCMfpmc1();
+            GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x2000);
+            // fallthrough
+        case PERF_CPU_EVENT:
+            PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[2] = PPCMfpmc3();
+            PERFFrames[PERFCurrFrame].samples[sample].instructions[2] = PPCMfpmc1();
+            PERFFrames[PERFCurrFrame].samples[sample].origcpuStart = PERFFrames[PERFCurrFrame].samples[sample].cpuTimeStampStart = PPCMfpmc4();
+            PERFFrames[PERFCurrFrame].samples[sample].cpuTimeStampEnd = 0;
+            break;
+        default:
+            OSReport("PERF : Unknown event type for ID %d - possibly out of memory\n", id);
+            break;
+        }
+    } else {
+        OSReport("PERF : event is still open for CPU!\n");
+    }
+
+    OSRestoreInterrupts(enabled);
+}
+
+#if DEBUG
+__declspec(weak) s32 PERFGetNewSample(void) {
+    if (PERFCurrSample >= (PERFNumSamples - 1)) {
+        PERFCurrSample = PERFNumSamples - 1;
+        return PERFCurrSample;
+    }
+    return PERFCurrSample++;
+}
+#endif
+
+void PERFEventEnd(u8 id) {
+    BOOL enabled;
+    s32 sample;
+
+    enabled = OSDisableInterrupts();
+    sample = PERFEvents[id].currSample;
+    if (sample < 0) {
+        OSReport("PERF : ending an event that never started!\n");
+        OSRestoreInterrupts(enabled);
+        return;
+    }
+
+    switch(PERFEvents[id].type) {
+    case PERF_GP_EVENT:
+        GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x1000);
+        break;
+    case PERF_CPU_GP_EVENT:
+        GXSetDrawSync(((u16)sample + 0x10000) + (((u16)magic << 8) & 0xFF00) - 0x1000);
+    case PERF_CPU_EVENT:
+        PERFFrames[PERFCurrFrame].samples[sample].cpuTimeStampEnd = PPCMfpmc4();
+        PERFFrames[PERFCurrFrame].samples[sample].cacheMisses[3] = PPCMfpmc3();
+        PERFFrames[PERFCurrFrame].samples[sample].instructions[3] = PPCMfpmc1();
+        break;
+    }
+
+    PERFEvents[id].currSample = -1;
     OSRestoreInterrupts(enabled);
 }
 

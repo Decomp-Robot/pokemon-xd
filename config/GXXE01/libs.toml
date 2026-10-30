@@ -2954,7 +2954,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 
 [[lib.object]]
 name = "ext/dolphin_sdk/perf/perf.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/perf/perfdraw.c"
