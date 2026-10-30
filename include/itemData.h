@@ -2,6 +2,7 @@
 #define ITEM_DATA_H
 
 #include <types.h>
+#include <bool.h>
 
 enum ItemID { ITEM_COLOGNE_CASE = 0x200, ITEM_BATTLE_DISK_CASE = 0x215 };
 
@@ -56,7 +57,7 @@ u8 itemDataBiosGetUseful(ItemData *data);
 u8 itemDataBiosCheckExportable(ItemData *data);
 u8 itemDataBiosCheckImportable(ItemData *data);
 
-u8 itemDataCheckValid(u16 itemID);
+bool itemDataCheckValid(u16 itemID);
 u8 itemDataBiosGetItemEffectParam(ItemData *data);
 u8 itemDB_GetKind(u16 itemID);
 u32 itemDB_GetName(u16 itemID);

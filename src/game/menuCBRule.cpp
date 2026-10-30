@@ -1,13 +1,15 @@
 /*
- * menuCB_Rule.cpp
+ * menuCBRule.cpp
  *
  * The colosseum regulations of the link (GBA) battles: the checks a rule set
- * runs over an entered party and over a single Pokemon, and the per-slot
- * condition records the entry screens report the failures of.
+ * runs over an entered party and over a single Pokemon, the per-slot
+ * condition records the entry screens report the failures of, and the policy
+ * and time limits the battle screens read back from the rule set.
  */
 
 #include <heroBios.h>
 #include <FightRuleData.h>
+#include <itemData.h>
 #include <menuCBBios.h>
 #include <menuCBRule.h>
 #include <Pokemon.h>
@@ -30,7 +32,6 @@ extern u16 *legendPokemonData;
 
 extern "C" {
 extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
-extern bool menuCBRule_CheckValidItem(u16 itemID);
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
 extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 }
@@ -655,4 +656,77 @@ extern "C" u8 menuCBRule_IsBlankPokemon(Pokemon *pokemon)
     }
 
     return result;
+}
+
+/* -------------------------------------------------------------------------
+ * Current rule queries
+ * ---------------------------------------------------------------------- */
+
+/* Whether the rule set allows the SonicBoom skill. */
+extern "C" u8 menuCBRule_EnableSkill_SonicBoom(void)
+{
+    return menuCBBios_CurrentRule()->mEnableSkillSonicBoom;
+}
+
+/* Whether the rule set allows the Michidure skill. */
+extern "C" u8 menuCBRule_EnableSkill_Michidure(void)
+{
+    return menuCBBios_CurrentRule()->mEnableSkillMichidure;
+}
+
+/* Whether the rule set forbids a Pokemon from taking its own life. */
+extern "C" u8 menuCBRule_ProhibitionSuicide(void)
+{
+    return menuCBBios_CurrentRule()->mProhibitionSuicide;
+}
+
+/* Whether the rule set allows the SkillSwap skill. */
+extern "C" u8 menuCBRule_EnableSkillSwap(void)
+{
+    return menuCBBios_CurrentRule()->mEnableSkillSwap;
+}
+
+/* Whether the rule set lets a skill reach an already-iced Pokemon. */
+extern "C" u8 menuCBRule_EnableSbToIceed(void)
+{
+    return menuCBBios_CurrentRule()->mEnableSbToIceed;
+}
+
+/* Whether the rule set lets a skill put a Pokemon to sleep. */
+extern "C" u8 menuCBRule_EnableSbToSleep(void)
+{
+    return menuCBBios_CurrentRule()->mEnableSbToSleep;
+}
+
+/* Whether the rule set allows the camouflage of the Deoxys forms. */
+extern "C" u8 menuCBRule_DEOKISISUCamouflage(void)
+{
+    return menuCBBios_CurrentRule()->mDeoxysCamouflage;
+}
+
+/* The command time limit of the rule set. */
+extern "C" s32 menuCBRule_GetCommandTimeLimit(void)
+{
+    return menuCBBios_CurrentRule()->m16;
+}
+
+/* The battle time limit of the rule set, in seconds. The record keeps it in
+   minutes. */
+extern "C" s32 menuCBRule_GetBattleTimeLimit(void)
+{
+    return menuCBBios_CurrentRule()->m14 * 60;
+}
+
+/* Whether a link battle may carry `itemID` as a held item. An empty slot is
+   always accepted and item 175 is always refused. */
+extern "C" bool menuCBRule_CheckValidItem(u16 itemID)
+{
+    switch (itemID) {
+    case 0:
+        return true;
+    case 175:
+        return false;
+    }
+
+    return itemDataCheckValid(itemID);
 }

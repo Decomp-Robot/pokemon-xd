@@ -63,6 +63,17 @@ u8 menuCBRule_CheckTrainerErrorAll(Hero *hero);
 u8 menuCBRule_CheckErrorAll(Hero *hero);
 s32 menuCBRule_CheckHero(Hero *hero);
 
+u8 menuCBRule_EnableSkill_SonicBoom(void);
+u8 menuCBRule_EnableSkill_Michidure(void);
+u8 menuCBRule_ProhibitionSuicide(void);
+u8 menuCBRule_EnableSkillSwap(void);
+u8 menuCBRule_EnableSbToIceed(void);
+u8 menuCBRule_EnableSbToSleep(void);
+u8 menuCBRule_DEOKISISUCamouflage(void);
+s32 menuCBRule_GetCommandTimeLimit(void);
+s32 menuCBRule_GetBattleTimeLimit(void);
+bool menuCBRule_CheckValidItem(u16 itemID);
+
 bool menuCBRule_CheckPokemonKind(Pokemon *pokemon, s32 kind);
 bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleData *rule, s32 kind);
 bool menuCBRule_CheckTrainerRegulation(Hero *hero, FightRuleData *rule, s32 kind);

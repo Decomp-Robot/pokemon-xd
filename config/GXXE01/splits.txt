@@ -272,8 +272,8 @@ game/menuCB_PokemonEntry.cpp:
 	.bss        start:0x804351E0 end:0x80435418
 	.sdata2     start:0x804EC3B8 end:0x804EC3C8
 
-game/menuCB_Rule.cpp:
-	.text       start:0x8004B7B4 end:0x8004CD00
+game/menuCBRule.cpp:
+	.text       start:0x8004B7B4 end:0x8004CE94
 
 game/menuPocketCologne.cpp:
 	.text       start:0x80063640 end:0x800636AC

@@ -159,7 +159,6 @@ void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *src, s32 index);
 Pokemon *toolentryTaisenGetPokemonPtr(s32 bank, u32 index);
 u16 menuCBRule_RegulationItemID(s32 index);
-u8 itemDataCheckValid(u16 itemID);
 void pokemonAllKaihuku(Pokemon *pokemon);
 
 }

@@ -708,11 +708,11 @@ cflags = [
 completed = true
 
 [[lib.object]]
-name = "game/menuCB_Rule.cpp"
+name = "game/menuCBRule.cpp"
 completed = true
-# The colosseum rule sets: the checks a rule set runs over an entered party and
-# over a single Pokemon, the per-slot condition records the entry screens
-# report, and the entry-flag refreshes. Shares the entry screen's flags.
+# The colosseum regulations of the link battles: the checks a rule set runs
+# over an entered party and over a single Pokemon, and the policy and time
+# limits the battle screens read back from the rule set.
 cflags = [
     "-W error",
     "-nodefaults",
