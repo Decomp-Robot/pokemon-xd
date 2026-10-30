@@ -1321,9 +1321,6 @@ extern "C" __declspec(export) void menuBattleDiskExit()
     fightFreeResource(kBattleDiskResourceGroup,kBattleDiskPreviewResource);
 }
 
-#include <time.h>
-#include <floor.h>
-
 enum BattleDiskScreenID {
     kMenuDiskList = 0xE7,
     kMenuDiskChoice = 0xE8,
