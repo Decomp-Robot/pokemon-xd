@@ -1206,6 +1206,8 @@ ext/dolphin_sdk/gx/GXLight.c:
 	.text       start:0x800CB074 end:0x800CB15C
 	.text       start:0x800CB15C end:0x800CB198
 	.text       start:0x800CB198 end:0x800CB248
+	.data       start:0x803D3AA0 end:0x803D3ABC
+	.sdata2     start:0x804ECBA8 end:0x804ECBF0
 
 ext/dolphin_sdk/gx/GXTexture.c:
 	.text       start:0x800CB248 end:0x800CB3A4
