@@ -1,5 +1,7 @@
 /* PowerPC EABI compiler support. */
 
+#pragma force_active on
+
 const double __constants[3] = { 0.0, 4294967296.0, 2147483648.0 };
 
 void _savefpr_14(void);
@@ -509,7 +511,10 @@ next_bit:
     mr r4, r8
     mr r3, r7
     blr
-    blr
+}
+
+void zz_800da4ec_(void)
+{
 }
 
 asm long long __mod2i(long long dividend, long long divisor)
