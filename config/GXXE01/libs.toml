@@ -4383,6 +4383,10 @@ completed = true
 name = "libc/s_ldexp.c"
 completed = true
 [[lib.object]]
+name = "libc/e_rem_pio2.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include"]
+[[lib.object]]
 name = "libc/k_cos.c"
 completed = true
 [[lib.object]]

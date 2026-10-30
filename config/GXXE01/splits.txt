@@ -1525,6 +1525,11 @@ libc/e_fmod.c:
 	.text       start:0x800E3CB8 end:0x800E3FF4
 	.rodata     start:0x802ECC38 end:0x802ECC48
 
+libc/e_rem_pio2.c:
+	.text       start:0x800E4AA0 end:0x800E4E40
+	.rodata     start:0x802ECC78 end:0x802ECE00
+	.sdata2     start:0x804ED0E8 end:0x804ED140
+
 libc/k_cos.c:
 	.text       start:0x800E4E40 end:0x800E4F34
 	.sdata2     start:0x804ED140 end:0x804ED188
