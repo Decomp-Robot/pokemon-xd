@@ -4345,6 +4345,9 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 name = "libc/s_copysign.c"
 completed = true
 [[lib.object]]
+name = "libc/s_ldexp.c"
+completed = true
+[[lib.object]]
 name = "libc/k_cos.c"
 completed = true
 [[lib.object]]

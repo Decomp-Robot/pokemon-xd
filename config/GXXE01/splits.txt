@@ -1531,6 +1531,10 @@ libc/k_sin.c:
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 
+libc/s_ldexp.c:
+	.text       start:0x800E6668 end:0x800E682C
+	.sdata2     start:0x804ED290 end:0x804ED2B8
+
 libc/s_modf.c:
 	.text       start:0x800E682C end:0x800E6928
 
