@@ -2533,6 +2533,11 @@ game/app/fight/fightGSfloor.cpp:
 game/app/fight/fightMenu.cpp:
 	.text       start:0x80239314 end:0x802394E4
 
+game/app/fight/fightTimer/fightTimer.cpp:
+	.text       start:0x80239504 end:0x802399D4
+	.bss        start:0x804B0F60 end:0x804B0F80
+	.sdata2     start:0x804EEC50 end:0x804EEC70
+
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 
