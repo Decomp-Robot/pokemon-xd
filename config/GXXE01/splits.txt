@@ -1514,6 +1514,10 @@ libc/e_fmod.c:
 	.text       start:0x800E3CB8 end:0x800E3FF4
 	.rodata     start:0x802ECC38 end:0x802ECC48
 
+libc/k_sin.c:
+	.text       start:0x800E5D88 end:0x800E5E28
+	.sdata2     start:0x804ED1C8 end:0x804ED200
+
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 
