@@ -2393,6 +2393,9 @@ game/app/sodateya/sodateya.cpp:
 game/GSAPI/GSlensFlare/GSlensFlare.cpp:
 	.text       start:0x801ED628 end:0x801ED774
 
+game/app/fight/fightKind.cpp:
+	.text       start:0x801EF688 end:0x801EFA74
+
 game/app/fight/fightTarget.cpp:
 	.text       start:0x801EFC3C end:0x801EFCAC
 
