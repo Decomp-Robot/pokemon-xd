@@ -3201,7 +3201,7 @@ completed = false
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/quat.c"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "ext/dolphin_sdk/mtx/vec.c"

@@ -629,6 +629,8 @@ ext/dolphin_sdk/mtx/quat.c:
 	.text       start:0x800B3964 end:0x800B3BBC
 	.text       start:0x800B3BBC end:0x800B3C20
 	.text       start:0x800B3C20 end:0x800B3D94
+	.rodata     start:0x802EC1A8 end:0x802EC1B8
+	.sdata2     start:0x804ECB40 end:0x804ECB68
 
 ext/dolphin_sdk/dvd/dvdlow.c:
 	.text       start:0x800B3D94 end:0x800B4C10
