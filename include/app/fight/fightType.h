@@ -13,7 +13,7 @@ extern "C" {
 // enters with and the number of Pokemon it has out at once.
 u8 fightTypeDataBiosGetEntryPokemonNum(void *fightTypeData);
 u8 fightTypeDataBiosGetFightoutPokemonNum(void *fightTypeData);
-void *fightTypeDataBiosGetPtr(u16 type);
+void *fightTypeDataBiosGetPtr(long type);
 u8 fightTypeDataBiosGetTrainerNum(void *fightTypeData);
 
 #ifdef __cplusplus
