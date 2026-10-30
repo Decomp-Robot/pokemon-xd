@@ -20,6 +20,15 @@
 #include <relivehall.h>
 #include <CMenuGlobalState.h>
 
+// The PC box menu: the Pokemon storage screen opened from the PC. The four
+// entry callbacks reach it as the plain box, through the Relive Hall, the
+// hologram or the Relive Hall tutorial, and each runs CmenuPcBox::main.
+//
+// The main loop drives the box and item menus and hands over to the Pokemon
+// list, the bag, the item drawer, the Relive Hall and the hologram, and
+// restores the sound setup it saved on entry. The tutorial entry backs up
+// the save data, builds the party the tutorial expects and recovers it.
+
 namespace {
 
 enum PcBoxState {
