@@ -214,6 +214,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/waza/fightWazaBios.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fightFloor.cpp"
 completed = true
 cflags = [
