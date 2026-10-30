@@ -2629,6 +2629,11 @@ name = "game/menuCB_Debug.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-opt nopeephole", "-use_lmw_stmw on"]
 
+# Data-only translation unit: the link-battle regulation item count.
+[[lib.object]]
+name = "game/menuCB_ItemList.cpp"
+completed = true
+
 [[lib.object]]
 name = "game/menuCB_PokemonEntry.cpp"
 completed = true

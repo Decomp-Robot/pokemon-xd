@@ -2,10 +2,9 @@
 #include <savedata.h>
 #include <GSmsg.h>
 #include <menuCB.h>
+#include <menuCBItemList.h>
 #include <fightTrainer.h>
 #include <string.h>
-
-extern u32 menuCBRule_RegulationItemNum;
 
 extern "C" {
 void heroBiosCopy(Hero *dst, Hero *src);
@@ -463,7 +462,7 @@ void menuCB_RULE_INIT(_TOOL_SAVEDATA *rules)
         rules->mRule[3].mPokemonCount = 4;
         rules->mRule[4].mPokemonCount = 4;
         rules->mRule[5].mPokemonCount = 4;
-        for (i = 0; i < menuCBRule_RegulationItemNum; i++) {
+        for (i = 0; i < itemtoolbattle_number; i++) {
             if (menuCBRule_RegulationItemID(i) == 0xBF) {
                 rules->mRule[1].m52[i] = 1;
                 rules->mRule[2].m52[i] = 1;
@@ -551,7 +550,7 @@ void menuCBBios_InitContextAtFirst(_MENUCBWORK *w, _TOOL_SAVEDATA *set)
     w->mRulesetData[3].mPokemonCount = 4;
     w->mRulesetData[4].mPokemonCount = 4;
     w->mRulesetData[5].mPokemonCount = 4;
-    for (i = 0; i < menuCBRule_RegulationItemNum; i++) {
+    for (i = 0; i < itemtoolbattle_number; i++) {
         if (menuCBRule_RegulationItemID(i) == 0xBF) {
             w->mRulesetData[1].m52[i] = 1;
             w->mRulesetData[2].m52[i] = 1;

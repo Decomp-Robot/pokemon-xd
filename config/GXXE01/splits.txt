@@ -268,6 +268,9 @@ game/menuCB_Debug.cpp:
 	.text       start:0x8004A090 end:0x8004A0A8
 	.sdata      start:0x804E7F50 end:0x804E7F58
 
+game/menuCB_ItemList.cpp:
+	.sdata      start:0x804E7F58 end:0x804E7F60
+
 game/menuCB_PokemonEntry.cpp:
 	.text       start:0x8004A0A8 end:0x8004B7B4
 	.bss        start:0x804351E0 end:0x80435418
