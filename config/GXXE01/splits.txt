@@ -1551,6 +1551,11 @@ libc/k_tan.c:
 	.rodata     start:0x802ECE50 end:0x802ECEB8
 	.sdata2     start:0x804ED200 end:0x804ED238
 
+libc/s_atan.c:
+	.text       start:0x800E603C end:0x800E6254
+	.rodata     start:0x802ECEB8 end:0x802ECF50
+	.sdata2     start:0x804ED238 end:0x804ED260
+
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 

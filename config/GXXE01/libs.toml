@@ -4424,6 +4424,10 @@ name = "libc/k_tan.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include"]
 [[lib.object]]
+name = "libc/s_atan.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include"]
+[[lib.object]]
 name = "libc/k_rem_pio2.c"
 completed = true
 [[lib.object]]
