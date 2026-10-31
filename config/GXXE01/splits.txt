@@ -1575,6 +1575,10 @@ libc/s_ldexp.c:
 libc/s_modf.c:
 	.text       start:0x800E682C end:0x800E6928
 
+libc/s_sin.c:
+	.text       start:0x800E6928 end:0x800E6A00
+	.sdata2     start:0x804ED2B8 end:0x804ED2C0
+
 libc/s_tan.c:
 	.text       start:0x800E6A00 end:0x800E6A78
 	.sdata2     start:0x804ED2C0 end:0x804ED2C8
