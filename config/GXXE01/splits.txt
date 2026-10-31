@@ -1564,6 +1564,10 @@ libc/s_atan.c:
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 
+libc/s_cos.c:
+	.text       start:0x800E63C0 end:0x800E6494
+	.sdata2     start:0x804ED270 end:0x804ED278
+
 libc/s_floor.c:
 	.text       start:0x800E6494 end:0x800E65DC
 	.sdata2     start:0x804ED278 end:0x804ED288
