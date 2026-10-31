@@ -4591,10 +4591,12 @@ cflags_extra = ["-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/GSAPI/GSflag/GSflag.c"
 completed = true
+extra_cflags = ["-str reuse,readonly", "-inline noauto"]
 
 [[lib.object]]
-name = "game/GSAPI/GSflag/GSflagBitLength.c"
+name = "game/GSAPI/GSflag/GSflagStorage.c"
 completed = true
+extra_cflags = ["-str reuse,readonly", "-inline noauto"]
 
 [[lib]]
 name = "GSlensFlare"

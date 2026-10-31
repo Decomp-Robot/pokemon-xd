@@ -2405,8 +2405,10 @@ game/GSAPI/GSfsys/GSfsys2.c:
 game/GSAPI/GSflag/GSflag.c:
 	.text       start:0x801A02F0 end:0x801A0364
 
-game/GSAPI/GSflag/GSflagBitLength.c:
-	.text       start:0x801A05E4 end:0x801A05F0
+game/GSAPI/GSflag/GSflagStorage.c:
+	.text       start:0x801A0364 end:0x801A0904
+	.rodata     start:0x802F47E0 end:0x802F4A50
+	.data       start:0x8040B4A0 end:0x8040B528
 
 game/app/battleGrid/battleCamera.cpp:
 	.text       start:0x801A594C end:0x801A5978
