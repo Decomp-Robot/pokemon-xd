@@ -13,11 +13,6 @@ extern "C" void GSprimDraw2DTexQuad(f32 x, f32 y, f32 x1, f32 y1, GStexture *tex
 extern "C" void GSthreadExecuteGroup(unsigned long group);
 extern "C" void GSgfxRenderPause(void);
 extern "C" void GSgfxRenderUnpause(void);
-extern "C" {
-void GSgappBlock(s32 hdl);
-void GSgappUnblock(s32 hdl);
-void GSgappSetName(s32 app, const char *name);
-}
 
 // Transport state of the overlay, reported by GSvtrGetState.
 enum {

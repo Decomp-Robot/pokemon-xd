@@ -1773,6 +1773,10 @@ game/GSAPI/GSres/GSres.cpp:
 	.rodata     start:0x802ED2A0 end:0x802ED348
 	.sbss       start:0x804EB008 end:0x804EB010
 
+game/GSAPI/GSgapp/GSgapp.cpp:
+	.text       start:0x8010BD24 end:0x8010C320
+	.sbss       start:0x804EB028 end:0x804EB050
+
 game/GScolsys2.c:
 	.text       start:0x8011867C end:0x801186C4
 

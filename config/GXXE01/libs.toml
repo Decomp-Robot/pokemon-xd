@@ -5039,3 +5039,14 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i 
 [[lib.object]]
 name = "game/GSAPI/GSinput/GSinput.cpp"
 completed = true
+
+[[lib]]
+name = "GSgapp"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc", "-O4,p", "-inline auto", "-opt peephole", "-schedule on", "-use_lmw_stmw on", "-str reuse,readonly"]
+
+[[lib.object]]
+name = "game/GSAPI/GSgapp/GSgapp.cpp"
+completed = true
