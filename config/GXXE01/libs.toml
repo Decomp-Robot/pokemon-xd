@@ -4343,6 +4343,10 @@ name = "libc/w_fmod.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 [[lib.object]]
+name = "libc/w_log.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
+[[lib.object]]
 name = "libc/extras.c"
 completed = true
 [[lib.object]]

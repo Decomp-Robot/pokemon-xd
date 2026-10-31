@@ -1590,6 +1590,9 @@ libc/s_tan.c:
 libc/w_fmod.c:
 	.text       start:0x800E6AF8 end:0x800E6B18
 
+libc/w_log.c:
+	.text       start:0x800E6B18 end:0x800E6B38
+
 libc/extras.c:
 	.text       start:0x800E6F7C end:0x800E7008
 
