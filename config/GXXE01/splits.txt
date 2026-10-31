@@ -2441,6 +2441,12 @@ game/app/recovery/recoveryEvent.cpp:
 game/app/wazaSequence/nullSequence.cpp:
 	.text       start:0x801DA000 end:0x801DA0B0
 
+game/GSAPI/GSvtr/GSvtr.cpp:
+	.text       start:0x801E01A8 end:0x801E07B8
+	.bss        start:0x804A1578 end:0x804A1588
+	.sbss       start:0x804EB730 end:0x804EB750
+	.sdata2     start:0x804EE930 end:0x804EE984
+
 game/app/sodateya/sodateya.cpp:
 	.text       start:0x801ECBB0 end:0x801ED098
 

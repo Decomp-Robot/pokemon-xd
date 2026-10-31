@@ -4610,6 +4610,17 @@ name = "game/GSAPI/GSlensFlare/GSlensFlare.cpp"
 completed = true
 
 [[lib]]
+name = "GSvtr"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on", "-str reuse,readonly", "-inline auto,deferred"]
+
+[[lib.object]]
+name = "game/GSAPI/GSvtr/GSvtr.cpp"
+completed = true
+
+[[lib]]
 name = "battleGrid"
 mw_version = "GC/2.6"
 cflags_preset = "game"
