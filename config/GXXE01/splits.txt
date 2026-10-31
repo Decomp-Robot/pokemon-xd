@@ -1546,6 +1546,11 @@ libc/k_sin.c:
 	.text       start:0x800E5D88 end:0x800E5E28
 	.sdata2     start:0x804ED1C8 end:0x804ED200
 
+libc/k_tan.c:
+	.text       start:0x800E5E28 end:0x800E603C
+	.rodata     start:0x802ECE50 end:0x802ECEB8
+	.sdata2     start:0x804ED200 end:0x804ED238
+
 libc/s_copysign.c:
 	.text       start:0x800E6398 end:0x800E63C0
 
