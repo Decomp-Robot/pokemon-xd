@@ -4439,6 +4439,10 @@ completed = true
 [[lib.object]]
 name = "libc/s_modf.c"
 completed = true
+
+[[lib.object]]
+name = "libc/s_tan.c"
+completed = true
 [[lib.object]]
 name = "libc/scanf.c"
 completed = true
