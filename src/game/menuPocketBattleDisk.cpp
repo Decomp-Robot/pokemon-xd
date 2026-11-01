@@ -34,7 +34,7 @@ struct MenuPocketBattleDiskWork {
     s32 mItemCount;          // list item count.
     GSivec2 mCursor;         // x: first visible row; y: cursor row.
     f32 mScroll;             // scroll offset.
-    u8 mHold;                // hold flag; when nonzero the scroll is ignored.
+    u8 mHold;                // Nonzero while the cursor stays in place as the list scrolls.
     u8 _15[3];
     f32 mRollProgress;       // roll animation progress.
     u8 mActive;              // whether list scrolling is active.
@@ -88,14 +88,14 @@ extern "C" s32 menuPocketBattleDiskDrawBallCursor(tagWINDOW_WORK *window, tagSPR
 }
 
 // getCursorPositionY -- cursor Y for the battle-disk list.
-// The row index advances in 30-dot steps; while the list is held the
-// fractional scroll offset is ignored, otherwise it is added.
+// The row index advances in 30-dot steps. During list scrolling the cursor
+// stays in place; otherwise it follows the scroll offset.
 s32 getCursorPositionY(void)
 {
     s32 y = (s16)(Data.mCursor.y * 30);
 
     if (Data.mHold == 0) {
-        y += (s16)(s32)Data.mScroll;
+        y += (s16)Data.mScroll;
     }
     return y;
 }
