@@ -28,11 +28,6 @@ struct WINDOW_FREE_WORK {
     u32 mKeyTrigger;         // key trigger handed to the text printer.
 };
 
-enum WindowKeyMask {
-    WINDOW_KEY_ACCEPT = 0x10,
-    WINDOW_KEY_CANCEL = 0x20
-};
-
 #ifdef __cplusplus
 extern "C" {
 #endif

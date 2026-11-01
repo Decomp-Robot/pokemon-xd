@@ -10,12 +10,18 @@ struct GSfloor_dd_ {
     u8 unknownData[0x3c];
 };
 
+// Usable from C as well as C++.
+typedef struct GSfloor_dd_ GSfloor_dd_;
 
 struct FloorListHeader {
     u32 floorCount;
 };
+typedef struct FloorListHeader FloorListHeader;
 
 extern GSfloor_dd_* floordata;
 extern FloorListHeader* floordata_number;
+
+/* Count of entries in the item data index table. */
+extern u32 *item_data_index_number;
 
 #endif

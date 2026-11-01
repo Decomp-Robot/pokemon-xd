@@ -2,44 +2,43 @@
 #include <menu.h>
 #include <types.h>
 #include <itemDataBios.h>
+#include <relglobal.h>
 #include <winSprite.h>
 
 /* Debug "create item" menu: picks an item id and an amount and hands them to
  * the hero's item list. */
 
-extern s32 initFlag;
-extern s32 ItemID;
-extern s32 Num;
-extern s32 *item_data_index_number;
-
+/* Item id and amount selected in the menu. */
+s32 ItemID;
+s32 Num;
 
 #pragma peephole off
 #pragma dont_inline on
 
-/* Amount cursor: 1..999 in steps of 1 or 10. */
+/* Amount cursor: 0..999 in steps of 1 or 10. */
 void nbItemCtrl(void)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & 0x8) {
+    if (key->mKeyRepeat & WINDOW_KEY_RIGHT) {
         Num++;
         if (Num > 999) {
             Num = 999;
         }
     }
-    if (key->mKeyRepeat & 0x400) {
+    if (key->mKeyRepeat & WINDOW_KEY_TRIGGER_R) {
         Num += 10;
         if (Num > 999) {
             Num = 999;
         }
     }
-    if (key->mKeyRepeat & 0x4) {
+    if (key->mKeyRepeat & WINDOW_KEY_LEFT) {
         Num--;
         if (Num < 0) {
             Num = 0;
         }
     }
-    if (key->mKeyRepeat & 0x200) {
+    if (key->mKeyRepeat & WINDOW_KEY_TRIGGER_L) {
         Num -= 10;
         if (Num < 0) {
             Num = 0;
@@ -51,23 +50,23 @@ void itemNameCtrl(void)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & 0x8) {
-        if (++ItemID >= *item_data_index_number) {
+    if (key->mKeyRepeat & WINDOW_KEY_RIGHT) {
+        if (++ItemID >= (s32)*item_data_index_number) {
             ItemID = *item_data_index_number - 1;
         }
     }
-    if (key->mKeyRepeat & 0x400) {
-        if ((ItemID += 10) >= *item_data_index_number) {
+    if (key->mKeyRepeat & WINDOW_KEY_TRIGGER_R) {
+        if ((ItemID += 10) >= (s32)*item_data_index_number) {
             ItemID = *item_data_index_number - 1;
         }
     }
-    if (key->mKeyRepeat & 0x4) {
+    if (key->mKeyRepeat & WINDOW_KEY_LEFT) {
         ItemID--;
         if (ItemID < 0) {
             ItemID = 0;
         }
     }
-    if (key->mKeyRepeat & 0x200) {
+    if (key->mKeyRepeat & WINDOW_KEY_TRIGGER_L) {
         ItemID -= 10;
         if (ItemID < 0) {
             ItemID = 0;
@@ -79,12 +78,12 @@ s32 menuDbgItemCreateCursor(struct tagWINDOW_WORK *window)
 {
     struct tagWINDOW_KEY *key = windowGetKeyInfo();
 
-    if (key->mKeyRepeat & 0x1) {
+    if (key->mKeyRepeat & WINDOW_KEY_UP) {
         if (--window->mCursor.y < 0) {
             window->mCursor.y = 0;
         }
     }
-    if (key->mKeyRepeat & 0x2) {
+    if (key->mKeyRepeat & WINDOW_KEY_DOWN) {
         if (++window->mCursor.y > 1) {
             window->mCursor.y = 1;
         }
@@ -102,6 +101,7 @@ s32 menuDbgItemCreateCursor(struct tagWINDOW_WORK *window)
 
 void menuDbgItemCreate(void)
 {
+    static s32 initFlag; /* First run only: start the id at 1. */
     s32 ret;
 
     if (initFlag == 0) {
