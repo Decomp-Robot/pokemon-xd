@@ -263,19 +263,19 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
 
 /* Message id of the game-cube input device number the debug fight menu
  * writes into its status line. */
-s32 dbgMenuGetGsinputMsgId(s32 id)
+s32 dbgMenuGetGsinputMsgId(s32 deviceId)
 {
     s32 msg;
 
-    if (id == 0) {
+    if (deviceId == 0) {
         msg = 0xED04;
-    } else if (id == 1) {
+    } else if (deviceId == 1) {
         msg = 0xED05;
-    } else if (id == 2) {
+    } else if (deviceId == 2) {
         msg = 0xED06;
-    } else if (id == 3) {
+    } else if (deviceId == 3) {
         msg = 0xED07;
-    } else if (id == 4) {
+    } else if (deviceId == 4) {
         msg = 0xED08;
     } else {
         msg = 0xED04;
