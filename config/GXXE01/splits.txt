@@ -2508,6 +2508,10 @@ game/app/fight/fightKouka.cpp:
 game/app/fight/fightKoukaBios.cpp:
 	.text       start:0x8020C17C end:0x8020C1F0
 
+game/app/fight/fightJouken.cpp:
+	.text       start:0x8020C1F0 end:0x8020C590
+	.data       start:0x80413760 end:0x8041377C
+
 game/app/fight/fightJoukenBios.cpp:
 	.text       start:0x8020C590 end:0x8020C88C
 
