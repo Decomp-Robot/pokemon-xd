@@ -34,6 +34,10 @@ game/dbgMenuFlag.c:
 	.sdata      start:0x804E7E38 end:0x804E7E3C
 	.sdata2     start:0x804EBDC8 end:0x804EBDD4
 
+game/dbgMenuFlagEtc.c:
+	.text       start:0x800084F0 end:0x80008998
+	.rodata     start:0x802EA040 end:0x802EA070
+
 game/dbgMenuPokemon.c:
 	.text       start:0x80008998 end:0x80008BA8
 

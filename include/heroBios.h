@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 
+void heroBiosSetPokedoru(Hero *hero, s32 pokedoru);
 u16 *heroBiosGetNamePtr(Hero *hero);
 u32 heroBiosGetRnd(Hero *hero);
 Pokemon *heroBiosGetPokemonPtr(Hero *hero, u16 slot);

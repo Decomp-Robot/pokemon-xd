@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void floorChangePos(u32 floorID, s16 rotY, f32 x, f32 y, f32 z);
 void floorMapSetDisp(long on);
 u32 floorReadMakeFogResID(u32 resource);
 u32 floorReadMakeCameraResID(u32 resource);

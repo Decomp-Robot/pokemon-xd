@@ -41,6 +41,7 @@ extern "C" {
 #include <light.h>
 #include <wazaDB.h>
 #include <pokecolo.h>
+#include <appScriptCall.h>
 
 static inline char* GetString(GSscript::tigaVariant*, char*);
 
@@ -130,7 +131,6 @@ static inline Pokemon* GetPokemon(GSscript::tigaVariant* value)
 
 
 extern "C" void appScriptPlayME_Thread(u8, int, int, u8);
-extern "C" int appScriptCommonCall(int);
 int motorFun(u8, u8, unsigned long, u8, bool);
 void _appScriptModelSetVisibility(GSmodel*, void*);
 static const f32 appScriptDegreesToRadians = 0.017453292f;
