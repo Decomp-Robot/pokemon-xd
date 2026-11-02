@@ -88,6 +88,7 @@ struct FIGHT_FLOOR_DATA {
 
 extern u32 encount_floor_id;
 extern u32 *fight_floor_data_number;
+extern FIGHT_FLOOR_DATA *fight_floor_data;
 
 #ifdef __cplusplus
 extern "C" {
@@ -112,6 +113,38 @@ void fightFloorBiosSetFightOutPokemonPtrAry(FIGHT_FLOOR *floor, u16 slot, FightO
 FightOutPokemon *fightFloorBiosGetFightOutPokemonPtrAry(FIGHT_FLOOR *floor, u16 slot);
 void fightFloorBiosSetFightPokemonEntryCnt(FIGHT_FLOOR *floor, s16 count);
 s16 fightFloorBiosGetFightPokemonEntryCnt(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointTokuseiDataId(FIGHT_FLOOR *floor, u16 dataId);
+u16 fightFloorBiosGetAppointTokuseiDataId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointItemDataId(FIGHT_FLOOR *floor, u16 dataId);
+u16 fightFloorBiosGetAppointItemDataId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointWazaDataId(FIGHT_FLOOR *floor, u16 dataId);
+u16 fightFloorBiosGetAppointWazaDataId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointPokemonDataId(FIGHT_FLOOR *floor, u16 dataId);
+u16 fightFloorBiosGetAppointPokemonDataId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetWazakoukaMsgId(FIGHT_FLOOR *floor, u32 msgId);
+u32 fightFloorBiosGetWazakoukaMsgId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetCriticalMsgId(FIGHT_FLOOR *floor, u32 msgId);
+u32 fightFloorBiosGetCriticalMsgId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAttackMsgId(FIGHT_FLOOR *floor, u32 msgId);
+u32 fightFloorBiosGetAttackMsgId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointMsgId(FIGHT_FLOOR *floor, u32 msgId);
+u32 fightFloorBiosGetAppointMsgId(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointItemPtr(FIGHT_FLOOR *floor, void *item);
+void *fightFloorBiosGetAppointItemPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointSidePtr(FIGHT_FLOOR *floor, FIGHT_SIDE *side);
+FIGHT_SIDE *fightFloorBiosGetAppointSidePtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointWazaPtr(FIGHT_FLOOR *floor, FIGHT_WAZA *waza);
+FIGHT_WAZA *fightFloorBiosGetAppointWazaPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointTrainerPtr(FIGHT_FLOOR *floor, FIGHT_TRAINER *trainer);
+FIGHT_TRAINER *fightFloorBiosGetAppointTrainerPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetAppointPokemonPtr(FIGHT_FLOOR *floor);
+void fightFloorBiosSetIrekaePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloorBiosSetEscapePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloorBiosSetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloorBiosSetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloorBiosSetEncountDataId(FIGHT_FLOOR *floor, u16 dataId);
+void fightFloorBiosSetTurnCount(FIGHT_FLOOR *floor, u16 count);
 void fightFloorDataBiosSetName(FIGHT_FLOOR_DATA *data, u32 name);
 u32 fightFloorDataBiosGetName(FIGHT_FLOOR_DATA *data);
 void fightFloorDataBiosSetEnvSndId(FIGHT_FLOOR_DATA *data, u32 dataId);
@@ -124,6 +157,9 @@ u32 fightFloorDataBiosGetEnvSndId(FIGHT_FLOOR_DATA *data);
 u32 fightFloorDataBiosGetBgmSndId(FIGHT_FLOOR_DATA *data);
 u32 fightFloorDataBiosGetSyoukaiWzxDataId(FIGHT_FLOOR_DATA *data);
 u8 fightFloorDataBiosGetTikeiDataId(FIGHT_FLOOR_DATA *data);
+u16 fightFloorDataBiosGetFightSideDataId(FIGHT_FLOOR_DATA *data, u8 side);
+u16 fightFloorDataBiosGetFloorDataId(FIGHT_FLOOR_DATA *data);
+FIGHT_FLOOR_DATA *fightFloorDataBiosGetPtr(u16 index);
 FIGHT_TRAINER *fightFloorGetGcHeroFightTrainerPtr(FIGHT_FLOOR *floor);
 FIGHT_TRAINER *fightFloorGetFightPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightPokemon *pokemon);
 void *fightFloorBiosGetFightFloorPtr(void);

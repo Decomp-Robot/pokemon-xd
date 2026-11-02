@@ -244,3 +244,286 @@ extern "C" u8 fightFloorDataBiosGetTikeiDataId(FIGHT_FLOOR_DATA *data)
     }
     return data->mTikeiDataId;
 }
+
+extern "C" u16 fightFloorDataBiosGetFightSideDataId(FIGHT_FLOOR_DATA *data, u8 side)
+{
+    if (data == 0) {
+        return 0;
+    }
+    if (side >= FIGHT_FLOOR_SIDE_COUNT) {
+        return 0;
+    }
+    return data->mFightSideDataId[side];
+}
+
+extern "C" u16 fightFloorDataBiosGetFloorDataId(FIGHT_FLOOR_DATA *data)
+{
+    if (data == 0) {
+        return 0;
+    }
+    return data->mFloorDataId;
+}
+
+extern "C" FIGHT_FLOOR_DATA *fightFloorDataBiosGetPtr(u16 index)
+{
+    if (index >= *fight_floor_data_number) {
+        return 0;
+    }
+    return &fight_floor_data[index];
+}
+
+extern "C" void fightFloorBiosSetAppointTokuseiDataId(FIGHT_FLOOR *floor, u16 dataId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointTokuseiDataId = dataId;
+}
+
+extern "C" void fightFloorBiosSetAppointItemDataId(FIGHT_FLOOR *floor, u16 dataId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointItemDataId = dataId;
+}
+
+extern "C" void fightFloorBiosSetAppointWazaDataId(FIGHT_FLOOR *floor, u16 dataId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointWazaDataId = dataId;
+}
+
+extern "C" void fightFloorBiosSetAppointPokemonDataId(FIGHT_FLOOR *floor, u16 dataId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointPokemonDataId = dataId;
+}
+
+extern "C" void fightFloorBiosSetWazakoukaMsgId(FIGHT_FLOOR *floor, u32 msgId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mWazakoukaMsgId = msgId;
+}
+
+extern "C" void fightFloorBiosSetCriticalMsgId(FIGHT_FLOOR *floor, u32 msgId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mCriticalMsgId = msgId;
+}
+
+extern "C" void fightFloorBiosSetAttackMsgId(FIGHT_FLOOR *floor, u32 msgId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAttackMsgId = msgId;
+}
+
+extern "C" void fightFloorBiosSetAppointMsgId(FIGHT_FLOOR *floor, u32 msgId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointMsgId = msgId;
+}
+
+extern "C" void fightFloorBiosSetAppointItemPtr(FIGHT_FLOOR *floor, void *item)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointItem = item;
+}
+
+extern "C" void fightFloorBiosSetAppointSidePtr(FIGHT_FLOOR *floor, FIGHT_SIDE *side)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointSide = side;
+}
+
+extern "C" void fightFloorBiosSetAppointWazaPtr(FIGHT_FLOOR *floor, FIGHT_WAZA *waza)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointWaza = waza;
+}
+
+extern "C" void fightFloorBiosSetAppointTrainerPtr(FIGHT_FLOOR *floor, FIGHT_TRAINER *trainer)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointTrainer = trainer;
+}
+
+extern "C" void fightFloorBiosSetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAppointPokemon = pokemon;
+}
+
+extern "C" void fightFloorBiosSetIrekaePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mIrekaePokemon = pokemon;
+}
+
+extern "C" void fightFloorBiosSetEscapePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mEscapePokemon = pokemon;
+}
+
+extern "C" void fightFloorBiosSetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mDefensePokemon = pokemon;
+}
+
+extern "C" void fightFloorBiosSetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mAttackPokemon = pokemon;
+}
+
+extern "C" void fightFloorBiosSetEncountDataId(FIGHT_FLOOR *floor, u16 dataId)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mEncountDataId = dataId;
+}
+
+extern "C" void fightFloorBiosSetTurnCount(FIGHT_FLOOR *floor, u16 count)
+{
+    if (floor == 0) {
+        return;
+    }
+    floor->mTurnCount = count;
+}
+
+extern "C" u16 fightFloorBiosGetAppointTokuseiDataId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointTokuseiDataId;
+}
+
+extern "C" u16 fightFloorBiosGetAppointItemDataId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointItemDataId;
+}
+
+extern "C" u16 fightFloorBiosGetAppointWazaDataId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointWazaDataId;
+}
+
+extern "C" u16 fightFloorBiosGetAppointPokemonDataId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointPokemonDataId;
+}
+
+extern "C" u32 fightFloorBiosGetWazakoukaMsgId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mWazakoukaMsgId;
+}
+
+extern "C" u32 fightFloorBiosGetCriticalMsgId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mCriticalMsgId;
+}
+
+extern "C" u32 fightFloorBiosGetAttackMsgId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAttackMsgId;
+}
+
+extern "C" u32 fightFloorBiosGetAppointMsgId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointMsgId;
+}
+
+extern "C" void *fightFloorBiosGetAppointItemPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointItem;
+}
+
+extern "C" FIGHT_SIDE *fightFloorBiosGetAppointSidePtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointSide;
+}
+
+extern "C" FIGHT_WAZA *fightFloorBiosGetAppointWazaPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointWaza;
+}
+
+extern "C" FIGHT_TRAINER *fightFloorBiosGetAppointTrainerPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointTrainer;
+}
+
+extern "C" FightOutPokemon *fightFloorBiosGetAppointPokemonPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAppointPokemon;
+}
