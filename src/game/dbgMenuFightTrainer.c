@@ -1,29 +1,20 @@
+#include <dbgMenuFight.h>
 #include <fightTrainer.h>
+#include <fightTrainerStatus.h>
 #include <menu.h>
-#include <types.h>
+#include <menuIds.h>
 #include <menuSub.h>
+#include <types.h>
 
-/* Fight-debug sub menus of the trainer AI data editor.  The additional-data
- * sub menus work on the trainer AI table: 0x2D7 records of 0x14 bytes, which
- * each sub menu snapshots into _old_fight_trainer_ai_value_addsub_data and
- * restores when the user cancels the menu.  The pokemon-part and AI-data sub
- * menus work the same way on a single record of the part or AI data block. */
+/* Trainer data editors of the fight debug menu.  The AI additional-value sub
+ * menus work on the whole additional-value table and keep a copy of it in
+ * _old_fight_trainer_ai_value_addsub_data so the table can be restored when
+ * the user cancels; the pokemon-part and AI-data editors do the same for the
+ * one record they edit. */
 
-typedef struct {
-    u32 lo;
-    u32 hi;
-} DbgSubDataPair;
+#define FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX 727
 
-typedef struct {
-    DbgSubDataPair pair0;
-    DbgSubDataPair pair1;
-    u32 last;
-} DbgFightTrainerAiSubData;
-
-extern DbgFightTrainerAiSubData _old_fight_trainer_ai_value_addsub_data[0x2D7];
-
-DbgFightTrainerAiSubData *fightTrainerAiValueAddsubDataBiosGetPtr(u16 index);
-void dbgMenuFightTrainerDataStatusInputDigit(u16 id, u16 field, u16 sub, s32 max, s32 min);
+extern FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA _old_fight_trainer_ai_value_addsub_data[FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX];
 
 #pragma peephole off
 
@@ -32,7 +23,7 @@ s32 dbgMenuFightTrainerAiAddsubDataComboEditSub(void)
     u16 i;
     s32 result;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -40,8 +31,8 @@ s32 dbgMenuFightTrainerAiAddsubDataComboEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -64,7 +55,7 @@ s32 dbgMenuFightTrainerAiAddsubDataItemEditSub(void)
     u16 i;
     s32 result;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -72,8 +63,8 @@ s32 dbgMenuFightTrainerAiAddsubDataItemEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -96,7 +87,7 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
     u16 i;
     s32 result;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -104,8 +95,8 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -118,57 +109,57 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
             menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR) - 0xE7) {
-        case 0:
-            dbgMenuFightTrainerDataStatusInputDigit(0x38, 0x3E, 0, 0xC8, -0xC8);
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR)) {
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_56:
+            dbgMenuFightTrainerDataStatusInputDigit(56, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 1:
-            dbgMenuFightTrainerDataStatusInputDigit(0x39, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_57:
+            dbgMenuFightTrainerDataStatusInputDigit(57, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 2:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3A, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_58:
+            dbgMenuFightTrainerDataStatusInputDigit(58, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 3:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3B, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_59:
+            dbgMenuFightTrainerDataStatusInputDigit(59, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 4:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3C, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_60:
+            dbgMenuFightTrainerDataStatusInputDigit(60, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 5:
-            dbgMenuFightTrainerDataStatusInputDigit(0x40, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_64:
+            dbgMenuFightTrainerDataStatusInputDigit(64, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 6:
-            dbgMenuFightTrainerDataStatusInputDigit(0x44, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_68:
+            dbgMenuFightTrainerDataStatusInputDigit(68, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 7:
-            dbgMenuFightTrainerDataStatusInputDigit(0x45, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_69:
+            dbgMenuFightTrainerDataStatusInputDigit(69, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 8:
-            dbgMenuFightTrainerDataStatusInputDigit(0x47, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_71:
+            dbgMenuFightTrainerDataStatusInputDigit(71, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 9:
-            dbgMenuFightTrainerDataStatusInputDigit(0x48, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_72:
+            dbgMenuFightTrainerDataStatusInputDigit(72, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 10:
-            dbgMenuFightTrainerDataStatusInputDigit(0x46, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_70:
+            dbgMenuFightTrainerDataStatusInputDigit(70, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 11:
-            dbgMenuFightTrainerDataStatusInputDigit(0x41, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_65:
+            dbgMenuFightTrainerDataStatusInputDigit(65, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 12:
-            dbgMenuFightTrainerDataStatusInputDigit(0x42, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_66:
+            dbgMenuFightTrainerDataStatusInputDigit(66, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 13:
-            dbgMenuFightTrainerDataStatusInputDigit(0x43, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_67:
+            dbgMenuFightTrainerDataStatusInputDigit(67, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 14:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3D, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_61:
+            dbgMenuFightTrainerDataStatusInputDigit(61, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 15:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3E, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_62:
+            dbgMenuFightTrainerDataStatusInputDigit(62, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 16:
-            dbgMenuFightTrainerDataStatusInputDigit(0x3F, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_MOVE_USE_ADDSUB_63:
+            dbgMenuFightTrainerDataStatusInputDigit(63, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
         }
     }
@@ -181,7 +172,7 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaDefpokemonEditSub(void)
     u16 i;
     s32 result;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -189,8 +180,8 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaDefpokemonEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -203,7 +194,9 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaDefpokemonEditSub(void)
             menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR);
+        /* The move-target editor has no entries that can be edited here. */
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR)) {
+        }
     }
     menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 1);
     return 1;
@@ -214,7 +207,7 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeDasuEditSub(void)
     s32 result;
     u16 i;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -222,8 +215,8 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeDasuEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -237,53 +230,53 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeDasuEditSub(void)
             break;
         }
         switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_SWITCH_IN_EDITOR)) {
-        case 0xCD:
-            dbgMenuFightTrainerDataStatusInputDigit(0x1D, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_29:
+            dbgMenuFightTrainerDataStatusInputDigit(29, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xCE:
-            dbgMenuFightTrainerDataStatusInputDigit(0x1E, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_30:
+            dbgMenuFightTrainerDataStatusInputDigit(30, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xCF:
-            dbgMenuFightTrainerDataStatusInputDigit(0x1F, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_31:
+            dbgMenuFightTrainerDataStatusInputDigit(31, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD0:
-            dbgMenuFightTrainerDataStatusInputDigit(0x21, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_33:
+            dbgMenuFightTrainerDataStatusInputDigit(33, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD1:
-            dbgMenuFightTrainerDataStatusInputDigit(0x22, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_34:
+            dbgMenuFightTrainerDataStatusInputDigit(34, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD2:
-            dbgMenuFightTrainerDataStatusInputDigit(0x23, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_35:
+            dbgMenuFightTrainerDataStatusInputDigit(35, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD3:
-            dbgMenuFightTrainerDataStatusInputDigit(0x24, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_36:
+            dbgMenuFightTrainerDataStatusInputDigit(36, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD4:
-            dbgMenuFightTrainerDataStatusInputDigit(0x25, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_37:
+            dbgMenuFightTrainerDataStatusInputDigit(37, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD5:
-            dbgMenuFightTrainerDataStatusInputDigit(0x26, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_38:
+            dbgMenuFightTrainerDataStatusInputDigit(38, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD6:
-            dbgMenuFightTrainerDataStatusInputDigit(0x27, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_39:
+            dbgMenuFightTrainerDataStatusInputDigit(39, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD7:
-            dbgMenuFightTrainerDataStatusInputDigit(0x20, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_32:
+            dbgMenuFightTrainerDataStatusInputDigit(32, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD8:
-            dbgMenuFightTrainerDataStatusInputDigit(0x30, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_48:
+            dbgMenuFightTrainerDataStatusInputDigit(48, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xD9:
-            dbgMenuFightTrainerDataStatusInputDigit(0x28, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_40:
+            dbgMenuFightTrainerDataStatusInputDigit(40, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xDA:
-            dbgMenuFightTrainerDataStatusInputDigit(0x29, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_41:
+            dbgMenuFightTrainerDataStatusInputDigit(41, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xDB:
-            dbgMenuFightTrainerDataStatusInputDigit(0x2A, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_42:
+            dbgMenuFightTrainerDataStatusInputDigit(42, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xDC:
-            dbgMenuFightTrainerDataStatusInputDigit(0x2B, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_IN_ADDSUB_43:
+            dbgMenuFightTrainerDataStatusInputDigit(43, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
         }
     }
@@ -297,7 +290,7 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
     s32 result;
     u16 i;
 
-    for (i = 0; i < 0x2D7; i++) {
+    for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
@@ -305,8 +298,8 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR, 0, 1);
-            for (i = 0; i < 0x2D7; i++) {
-                DbgFightTrainerAiSubData *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
+            for (i = 0; i < FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA_MAX; i++) {
+                FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *subData = fightTrainerAiValueAddsubDataBiosGetPtr(i);
                 *subData = _old_fight_trainer_ai_value_addsub_data[i];
             }
             return -1;
@@ -320,80 +313,80 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
             break;
         }
         switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_SWITCH_OUT_EDITOR)) {
-        case 0xB3:
-            dbgMenuFightTrainerDataStatusInputDigit(0x01, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_1:
+            dbgMenuFightTrainerDataStatusInputDigit(1, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB4:
-            dbgMenuFightTrainerDataStatusInputDigit(0x02, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_2:
+            dbgMenuFightTrainerDataStatusInputDigit(2, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB5:
-            dbgMenuFightTrainerDataStatusInputDigit(0x03, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_3:
+            dbgMenuFightTrainerDataStatusInputDigit(3, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB6:
-            dbgMenuFightTrainerDataStatusInputDigit(0x04, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_4:
+            dbgMenuFightTrainerDataStatusInputDigit(4, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB7:
-            dbgMenuFightTrainerDataStatusInputDigit(0x05, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_5:
+            dbgMenuFightTrainerDataStatusInputDigit(5, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB8:
-            dbgMenuFightTrainerDataStatusInputDigit(0x06, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_6:
+            dbgMenuFightTrainerDataStatusInputDigit(6, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xB9:
-            dbgMenuFightTrainerDataStatusInputDigit(0x07, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_7:
+            dbgMenuFightTrainerDataStatusInputDigit(7, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBA:
-            dbgMenuFightTrainerDataStatusInputDigit(0x08, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_8:
+            dbgMenuFightTrainerDataStatusInputDigit(8, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBB:
-            dbgMenuFightTrainerDataStatusInputDigit(0x19, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_25:
+            dbgMenuFightTrainerDataStatusInputDigit(25, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBC:
-            dbgMenuFightTrainerDataStatusInputDigit(0x09, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_9:
+            dbgMenuFightTrainerDataStatusInputDigit(9, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBD:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0A, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_10:
+            dbgMenuFightTrainerDataStatusInputDigit(10, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBE:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0B, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_11:
+            dbgMenuFightTrainerDataStatusInputDigit(11, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xBF:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0C, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_12:
+            dbgMenuFightTrainerDataStatusInputDigit(12, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC0:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0D, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_13:
+            dbgMenuFightTrainerDataStatusInputDigit(13, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC1:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0E, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_14:
+            dbgMenuFightTrainerDataStatusInputDigit(14, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC2:
-            dbgMenuFightTrainerDataStatusInputDigit(0x0F, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_15:
+            dbgMenuFightTrainerDataStatusInputDigit(15, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC3:
-            dbgMenuFightTrainerDataStatusInputDigit(0x10, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_16:
+            dbgMenuFightTrainerDataStatusInputDigit(16, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC4:
-            dbgMenuFightTrainerDataStatusInputDigit(0x11, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_17:
+            dbgMenuFightTrainerDataStatusInputDigit(17, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC5:
-            dbgMenuFightTrainerDataStatusInputDigit(0x12, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_18:
+            dbgMenuFightTrainerDataStatusInputDigit(18, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC6:
-            dbgMenuFightTrainerDataStatusInputDigit(0x13, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_19:
+            dbgMenuFightTrainerDataStatusInputDigit(19, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC7:
-            dbgMenuFightTrainerDataStatusInputDigit(0x14, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_20:
+            dbgMenuFightTrainerDataStatusInputDigit(20, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC8:
-            dbgMenuFightTrainerDataStatusInputDigit(0x15, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_21:
+            dbgMenuFightTrainerDataStatusInputDigit(21, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xC9:
-            dbgMenuFightTrainerDataStatusInputDigit(0x16, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_22:
+            dbgMenuFightTrainerDataStatusInputDigit(22, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xCA:
-            dbgMenuFightTrainerDataStatusInputDigit(0x17, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_23:
+            dbgMenuFightTrainerDataStatusInputDigit(23, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
-        case 0xCB:
-            dbgMenuFightTrainerDataStatusInputDigit(0x18, 0x3E, 0, 0xC8, -0xC8);
+        case MENU_ITEM_DEBUG_TRAINER_AI_SWITCH_OUT_ADDSUB_24:
+            dbgMenuFightTrainerDataStatusInputDigit(24, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
             break;
         }
     }
@@ -402,58 +395,26 @@ s32 dbgMenuFightTrainerAiAddsubDataIrekaeModosuEditSub(void)
     return 1;
 }
 
-
-/* Single-record editors: the pokemon part sub menu and the AI data sub menu.
- * Each snapshots its record into a local array while the menu is open and
- * writes it back when the user accepts the menu. */
-
-typedef struct FightTrainerPokemonPartData {
-    u32 unk00;
-    u32 unk04;
-    u32 unk08;
-    u32 unk0C;
-    u32 unk10;
-    u32 unk14;
-} FightTrainerPokemonPartData;
-
-typedef struct FightTrainerAiData {
-    u32 unk00;
-    u32 unk04;
-    u32 unk08;
-    u32 unk0C;
-    u32 unk10;
-    u32 unk14;
-    u32 unk18;
-    u32 unk1C;
-} FightTrainerAiData;
-
-void *fightTrainerPokemonPartDataBiosGetPtr(u16 index);
-void *fightTrainerAiDataBiosGetPtr(u16 index);
-s32 dbgMenuFightGetZokuseiDataId(u16 id);
-s32 dbgMenuFightGetWazaTypeId(u8 id);
-void dbgMenuFightTrainerDataStatusInputFlag(u16 id, u16 field);
-
-#pragma peephole off
+/* Single-record editors: the pokemon-part editor and the AI-data editor.  Each
+ * keeps a copy of its record while the menu is open and writes the copy back
+ * if the user cancels. */
 
 s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
 {
-    FightTrainerPokemonPartData* data;
-    u32 savedData[6];
-    u16 id;
+    FIGHT_TRAINER_POKEMON_PART_DATA *data;
+    FIGHT_TRAINER_POKEMON_PART_DATA savedData;
     s32 result;
-    s32 i;
 
     if (index == 0) {
         return 1;
     }
-    data = (FightTrainerPokemonPartData*)fightTrainerPokemonPartDataBiosGetPtr(index);
-    id = index;
-    for (i = 0; i < 6; i++) savedData[i] = ((u32*)data)[i];
+    data = fightTrainerPokemonPartDataBiosGetPtr(index);
+    savedData = *data;
     for (;;) {
-        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 0, 0, 1, 1, id);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 0, 0, 1, 1, index);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 1);
-            for (i = 0; i < 6; i++) ((u32*)data)[i] = savedData[i];
+            *data = savedData;
             return -1;
         }
         if (result == -2) {
@@ -465,38 +426,49 @@ s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
             break;
         }
         switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR)) {
-        case 0xFC:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 1, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_1:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 1, 100, 0);
             break;
-        case 0xFD:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 2, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_2:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 2, 100, 0);
             break;
-        case 0xFE:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 3, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_3:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 3, 100, 0);
             break;
-        case 0xFF:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 4, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_4:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 4, 100, 0);
             break;
-        case 0x100:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 5, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_5:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 5, 100, 0);
             break;
-        case 0x101:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 6, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_6:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 6, 100, 0);
             break;
-        case 0x102:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 7, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_7:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 7, 100, 0);
             break;
-        case 0x103:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 8, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_8:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 8, 100, 0);
             break;
-        case 0x104:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 9, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_9:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 9, 100, 0);
             break;
-        case 0x105:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 10, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_10:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 10, 100, 0);
             break;
-        case 0x108:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0xC, 13, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_POKEMON_PART_WAZA_TYPE_REVISE_13:
+            dbgMenuFightTrainerDataStatusInputDigit(
+                index, FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE, 13, 100, 0);
             break;
         }
     }
@@ -506,24 +478,21 @@ s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
 
 s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
 {
-    FightTrainerAiData* data;
-    u32 savedData[8];
-    u16 id;
+    FIGHT_TRAINER_AI_DATA *data;
+    FIGHT_TRAINER_AI_DATA savedData;
     s32 result;
     s32 value;
-    s32 i;
 
     if (index == 0) {
         return 1;
     }
-    data = (FightTrainerAiData*)fightTrainerAiDataBiosGetPtr(index);
-    id = index;
-    for (i = 0; i < 8; i++) savedData[i] = ((u32*)data)[i];
+    data = fightTrainerAiDataBiosGetPtr(index);
+    savedData = *data;
     for (;;) {
-        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 0, 0, 1, 1, id);
+        result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 0, 0, 1, 1, index);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 1);
-            for (i = 0; i < 8; i++) ((u32*)data)[i] = savedData[i];
+            *data = savedData;
             return -1;
         }
         if (result == -2) {
@@ -535,119 +504,123 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
             break;
         }
         switch (menuGetCursorItemID(MENU_ID_DEBUG_TRAINER_AI_EDITOR)) {
-        case 0x8E:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x25, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_COMBO_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_COMBO_VALUE, 0, 100, 0);
             break;
-        case 0x8F:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x26, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_IREKAE_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_IREKAE_VALUE, 0, 100, 0);
             break;
-        case 0x90:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x27, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ITEM_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_ITEM_VALUE, 0, 100, 0);
             break;
-        case 0x91:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x2C, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_NOKORI_HP_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_NOKORI_HP_VALUE, 0, 100, 0);
             break;
-        case 0x92:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x37, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_NOKORI_PP_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_WAZA_NOKORI_PP_VALUE, 0, 100, 0);
             break;
-        case 0x93:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x1F);
+        case MENU_ITEM_DEBUG_TRAINER_AI_POKEMON_SELECT_RANDOM_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_RANDOM_FLAG);
             break;
-        case 0x94:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x20);
+        case MENU_ITEM_DEBUG_TRAINER_AI_POKEMON_SELECT_WEAK_POINT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_WEAK_POINT_FLAG);
             break;
-        case 0x95:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x23);
+        case MENU_ITEM_DEBUG_TRAINER_AI_KEY_PLAYER_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_KEY_PLAYER_FLAG);
             break;
-        case 0x96:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x24);
+        case MENU_ITEM_DEBUG_TRAINER_AI_POKEMON_JOUTAI_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_POKEMON_JOUTAI_FLAG);
             break;
-        case 0x97:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x28);
+        case MENU_ITEM_DEBUG_TRAINER_AI_PARAM_EXPECT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_PARAM_EXPECT_FLAG);
             break;
-        case 0x98:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x29);
+        case MENU_ITEM_DEBUG_TRAINER_AI_PARAM_STORE_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_PARAM_STORE_FLAG);
             break;
-        case 0x99:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x2A);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ZOKUSEI_CHECK_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_CHECK_FLAG);
             break;
-        case 0x9A:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x2B);
+        case MENU_ITEM_DEBUG_TRAINER_AI_TOKUSEI_CHECK_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_TOKUSEI_CHECK_FLAG);
             break;
-        case 0x9B:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x2D);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_DAMAGE_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_WAZA_DAMAGE_FLAG);
             break;
-        case 0x9C:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x30);
+        case MENU_ITEM_DEBUG_TRAINER_AI_DEFENSE_POKEMON_RND_SELECT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_DEFENSE_POKEMON_RND_SELECT_FLAG);
             break;
-        case 0x9D:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x31);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_RND_SELECT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_WAZA_RND_SELECT_FLAG);
             break;
-        case 0x9E:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x32);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_INIT_VALUE_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_WAZA_INIT_VALUE_FLAG);
             break;
-        case 0x9F:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x33);
+        case MENU_ITEM_DEBUG_TRAINER_AI_PART_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_PART_FLAG);
             break;
-        case 0xA0:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x34);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_HIT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_WAZA_HIT_FLAG);
             break;
-        case 0xA1:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x36);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_RISK_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_WAZA_RISK_FLAG);
             break;
-        case 0xA2:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x35, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_AVG_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_WAZA_AVG_VALUE, 0, 100, 0);
             break;
-        case 0xA3:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x2E, 0, 0x54, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ABICNT_MAX_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_ABICNT_MAX_VALUE, 0, 84, 0);
             break;
-        case 0xA4:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x2F, 0, 0x54, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ABICNT_MIN_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_ABICNT_MIN_VALUE, 0, 84, 0);
             break;
-        case 0xA6:
-            value = dbgMenuFightGetZokuseiDataId((u16)fightTrainerGetStatus(0, index, 0x39, 0));
+        case MENU_ITEM_DEBUG_TRAINER_AI_ZOKUSEI_REVISE_0_DATA_ID:
+            value = dbgMenuFightGetZokuseiDataId(
+                (u16)fightTrainerGetStatus(0, index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_ZOKUSEI_DATA_ID, 0));
             if (value >= 0) {
-                fightTrainerSetStatus(0, index, 0x39, 0, value);
+                fightTrainerSetStatus(0, index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_ZOKUSEI_DATA_ID, 0, value);
             }
             break;
-        case 0xA7:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x3A, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ZOKUSEI_REVISE_0_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_VALUE, 0, 100, 0);
             break;
-        case 0xA8:
-            value = dbgMenuFightGetZokuseiDataId((u16)fightTrainerGetStatus(0, index, 0x39, 1));
+        case MENU_ITEM_DEBUG_TRAINER_AI_ZOKUSEI_REVISE_1_DATA_ID:
+            value = dbgMenuFightGetZokuseiDataId(
+                (u16)fightTrainerGetStatus(0, index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_ZOKUSEI_DATA_ID, 1));
             if (value >= 0) {
-                fightTrainerSetStatus(0, index, 0x39, 1, value);
+                fightTrainerSetStatus(0, index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_ZOKUSEI_DATA_ID, 1, value);
             }
             break;
-        case 0xA9:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x3A, 1, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_ZOKUSEI_REVISE_1_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_VALUE, 1, 100, 0);
             break;
-        case 0xAB:
-            value = dbgMenuFightGetWazaTypeId((u8)fightTrainerGetStatus(0, index, 0x3B, 0));
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_TYPE_REVISE_0_TYPE_DATA_ID:
+            value = dbgMenuFightGetWazaTypeId(
+                (u8)fightTrainerGetStatus(0, index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_TYPE_DATA_ID, 0));
             if (value >= 0) {
-                fightTrainerSetStatus(0, index, 0x3B, 0, value);
+                fightTrainerSetStatus(0, index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_TYPE_DATA_ID, 0, value);
             }
             break;
-        case 0xAC:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x3C, 0, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_TYPE_REVISE_0_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_VALUE, 0, 100, 0);
             break;
-        case 0xAD:
-            value = dbgMenuFightGetWazaTypeId((u8)fightTrainerGetStatus(0, index, 0x3B, 1));
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_TYPE_REVISE_1_TYPE_DATA_ID:
+            value = dbgMenuFightGetWazaTypeId(
+                (u8)fightTrainerGetStatus(0, index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_TYPE_DATA_ID, 1));
             if (value >= 0) {
-                fightTrainerSetStatus(0, index, 0x3B, 1, value);
+                fightTrainerSetStatus(0, index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_TYPE_DATA_ID, 1, value);
             }
             break;
-        case 0xAE:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x3C, 1, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_WAZA_TYPE_REVISE_1_VALUE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_VALUE, 1, 100, 0);
             break;
-        case 0xAF:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x21);
+        case MENU_ITEM_DEBUG_TRAINER_AI_POKEMON_DATA_ORDER_OUT_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_POKEMON_DATA_ORDER_OUT_FLAG);
             break;
-        case 0xB0:
-            dbgMenuFightTrainerDataStatusInputFlag(index, 0x22);
+        case MENU_ITEM_DEBUG_TRAINER_AI_POKEMON_DATA_ORDER_ACE_BOSS_FLAG:
+            dbgMenuFightTrainerDataStatusInputFlag(index, FIGHT_TRAINER_QUERY_AI_POKEMON_DATA_ORDER_ACE_BOSS_FLAG);
             break;
-        case 0xB1:
-            dbgMenuFightTrainerDataStatusInputDigit(index, 0x38, 1, 100, 0);
+        case MENU_ITEM_DEBUG_TRAINER_AI_LAST_VALUE_REVISE:
+            dbgMenuFightTrainerDataStatusInputDigit(index, FIGHT_TRAINER_QUERY_AI_LAST_VALUE_REVISE, 1, 100, 0);
             break;
         }
     }
@@ -675,7 +648,7 @@ void dbgMenuFightTrainerDataStatusInputFlag(u16 id, u16 field)
 {
     s8 answer;
 
-    answer = menuSubOpenYesNo(0x7F, -1, -1, fightTrainerGetStatus(0, id, field, 0) == 0);
+    answer = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, fightTrainerGetStatus(0, id, field, 0) == 0);
     if (answer == 0) {
         fightTrainerSetStatus(0, id, field, 0, 1);
     } else if (answer == 1) {
@@ -683,5 +656,3 @@ void dbgMenuFightTrainerDataStatusInputFlag(u16 id, u16 field)
     }
 }
 
-
-#pragma peephole reset
