@@ -11,9 +11,6 @@
 // Move a value toward zero by the specified step.
 void menuPocketToolFloatToZero(f32 &value, f32 step);
 
-// Play a sound effect from the pocket tool menu.
-void menuPtPlaySe(unsigned long seID);
-
 // Angle helpers the pocket menus share. The refresh helpers wrap a value
 // into a fixed range and the subtraction helpers wrap the difference of two
 // values, so callers can normalise a heading before comparing or drawing it.
@@ -68,8 +65,7 @@ void menuPtSaveSound(MenuPtWorkSound *sound);
 void menuPtRestoreSound(MenuPtWorkSound *sound);
 void menuPtPlayBgm(unsigned long bgmID);
 void menuPtPlaySe(unsigned long seID);
-void menuPocketSetDarkPokemon(Pokemon &pokemon, float dp, unsigned short darkID);
-void menuPocketToolFloatToZero(f32 &value, f32 speed);
+void menuPocketSetDarkPokemon(Pokemon &pokemon, float rate, unsigned short darkID);
 
 u16 pokemonindex(int index);
 void setBitTable(unsigned long *table, long index, bool flag);
@@ -104,7 +100,6 @@ void menuPocketDebugMakeDarkPokemonByID(Pokemon &pokemon, unsigned short darkID,
 void menuPocketDebugMakePokemonByID(Pokemon &pokemon, unsigned short species, bool dark, float rate);
 void makePocketDeubugMakeDarkPokemonReset();
 void menuPocketDebugMakePokemonBySN(Pokemon &pokemon, unsigned short serial, bool dark, float rate);
-float xyxy2distance(const PocketVec<short> &point, const PocketVec<short> &center);
 void menuPtSpriteDrawAndRollScale(unsigned short spriteID, unsigned long rgba, float x, float y, float roll, float scale);
 void _tutorialWindowCursorFunc(tagWINDOW_WORK *window);
 void _tutorialWindowButtonFunc(tagWINDOW_WORK *window);

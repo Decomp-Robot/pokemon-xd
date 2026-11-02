@@ -28,15 +28,15 @@ private:
     u8 _01[3];
     long mAnimationState;
     float mAnimationTime;
-    long mPositionIndex;                   // 0x0C: current table index.
-    long mPrevPositionIndex;               // 0x10: index before the switch.
-    s16 mPositionX;                        // 0x14: snapped cursor x.
-    s16 mPositionY;                        // 0x16: snapped cursor y.
-    PocketVec<short> *mPositionTable;      // 0x18: position table.
+    long mPositionIndex;                   // current table index
+    long mPrevPositionIndex;               // index before the switch
+    s16 mPositionX;                        // snapped cursor x
+    s16 mPositionY;                        // snapped cursor y
+    PocketVec<short> *mPositionTable;
     float mCursorTime;
-    Pokemon mPokemon;                      // 0x20: the pokemon the cursor holds.
-    CAnt mAnt;                             // 0xE4: its model.
-    CAnt mBeforAnt;                        // 0x118: model kept before the switch.
+    Pokemon mPokemon;                      // the pokemon the cursor holds
+    CAnt mAnt;                             // its model
+    CAnt mBeforAnt;                        // model kept before the switch
     bool mHighlight;
     u8 _14d[3];
 };
