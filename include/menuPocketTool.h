@@ -52,7 +52,7 @@ f32 dirSubOne(f32 dir1, f32 dir2);
 // Wrap the difference of two directions into [-PI, PI).
 f32 dirSubHalf(f32 dir1, f32 dir2);
 
-void menuPtSpriteDrawColor(unsigned short textureID, long x, long y, unsigned long color);
+void menuPtSpriteDrawColor(unsigned short spriteID, long x, long y, unsigned long color);
 
 struct MenuPtWorkSound {
     unsigned long mBgmID;
