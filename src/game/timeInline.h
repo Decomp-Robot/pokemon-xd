@@ -3,16 +3,14 @@
 
 #include <time.h>
 #include <pause.h>
+#include <GSgfx.h>
 
 extern "C" {
-f32 GSgfxVideoGetLastRenderTime(void);
-u8 GSgfxVideoGetVsyncRate(void);
-
+// Length of the last rendered frame in seconds. Reports 0 while the game is
+// paused so that animations and timers do not advance.
 inline f32 timeGetLastFrameSec(void)
 {
-    u32 paused = pauseIsPause();
-
-    if (paused != 0) {
+    if (pauseIsPause()) {
         return 0.0f;
     }
     return GSgfxVideoGetLastRenderTime() / (f32)GSgfxVideoGetVsyncRate();
