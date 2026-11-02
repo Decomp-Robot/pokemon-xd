@@ -6,12 +6,14 @@
 /* Field camera editor menu: opens the editor when the current room has its own
  * camera floor, and resets the editor cursor. */
 
+/* Cleared every time the editor is opened so its screens re-initialise. */
+u8 gSelectedInit;
+
 /* Cursor of the field camera editor window; it survives reopenings and is
  * reset only when the editor switches to another floor's camera data. */
 s32 gSelectedMenu_column;
 s32 gSelected_column;
 s32 gSelected_row;
-extern u8 gSelectedInit;
 
 #pragma force_active on
 
