@@ -8,7 +8,8 @@
 // picks which value of the trainer, of one of its pokemon or of its AI data is
 // read or written, and the sub index picks the element of that value.
 enum FightTrainerQuery {
-    FIGHT_TRAINER_QUERY_DIALOGUE = 8,
+    FIGHT_TRAINER_QUERY_AI_DATA_ID = 2,         /* AI data ID the trainer data entry names. */
+    FIGHT_TRAINER_QUERY_DIALOGUE = 8,           /* dialogue scene of the given kind. */
     FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE = 12,
     FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_RANDOM_FLAG = 31,
     FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_WEAK_POINT_FLAG = 32,
@@ -40,7 +41,8 @@ enum FightTrainerQuery {
     FIGHT_TRAINER_QUERY_AI_ZOKUSEI_REVISE_VALUE = 58,
     FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_TYPE_DATA_ID = 59,
     FIGHT_TRAINER_QUERY_AI_WAZA_TYPE_REVISE_VALUE = 60,
-    FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE = 62,
+    FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE = 62,  /* amount an AI value add/subtract entry applies. */
+    FIGHT_TRAINER_QUERY_DATA_ID = 67,          /* trainer data entry a trainer record plays. */
     FIGHT_TRAINER_QUERY_HERO = 68,
     FIGHT_TRAINER_QUERY_SEQUENCE = 76,
 };

@@ -3,6 +3,33 @@
 
 #include <types.h>
 
+/* One trainer entry of an encounter record: the deck its side fights with, the
+ * trainer data it plays and the controller its player holds. */
+typedef struct {
+    u16 mDeckGrpId;
+    u16 mTrainerDataId;
+    u32 mGSInputDevice;
+} FightEncountTrainerInfo;
+
+/* One record of the encounter data table: the fight it sets up and the four
+ * trainers that take part in it. */
+typedef struct {
+    u8 mFightKind;
+    u8 mTrainer;
+    u8 mPokemon;
+    u8 mEntry;
+    u8 mZenmetuFlag;
+    u8 mUnknown05;
+    u16 mFightFloorDataId;
+    u16 mDiskId; /* 0 uses the trainer entry's own deck group, nonzero the battle disk's */
+    u16 mUnknown0A;
+    u32 mFightName;
+    u32 mBgmSndId;
+    u32 mWipeId;
+    u32 mSyoukaiWzxDataId;
+    FightEncountTrainerInfo mTrainerInfo[4];
+} FightEncountRecord;
+
 #ifdef __cplusplus
 extern "C" {
 #endif

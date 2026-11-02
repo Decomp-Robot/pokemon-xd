@@ -10,6 +10,11 @@
 
 typedef struct FIGHT_WAZA FIGHT_WAZA;
 
+/* Statuses fightFloorGetStatus reports for a floor record. */
+enum FightFloorStatus {
+    FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
+};
+
 enum FightFloorSwitchResult {
     FIGHT_FLOOR_SWITCH_ALLOWED = 0,
     FIGHT_FLOOR_SWITCH_BLOCKED_BY_STATUS = 1,

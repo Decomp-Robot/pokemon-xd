@@ -36,6 +36,9 @@ enum {
 enum {
     FIGHT_TARGET_ID_OWN_SIDE = 2,
     FIGHT_TARGET_ID_OPPOSING_SIDE = 3,
+    /* sides 0 and 1 of the floor, selected independently of the attacker */
+    FIGHT_TARGET_ID_HOST_SIDE = 4,
+    FIGHT_TARGET_ID_HOST_ENEMY_SIDE = 5,
     FIGHT_TARGET_ID_OTHER_POKEMON_ON_SIDE = 14,
     FIGHT_TARGET_ID_ATTACKER = 17,
     FIGHT_TARGET_ID_DEFENDER = 18,

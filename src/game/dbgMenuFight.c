@@ -2,6 +2,7 @@
 #include <dbgMenu.h>
 #include <dbgMenuPokemon.h>
 #include <fight.h>
+#include <FightResult.h>
 #include <fightEncount.h>
 #include <fightEncountBios.h>
 #include <fightFloor.h>
@@ -13,12 +14,14 @@
 #include <fightSide.h>
 #include <fightTarget.h>
 #include <fightTrainer.h>
+#include <fightTrainerStatus.h>
 #include <Pokemon.h>
 #include <pokemonBios.h>
 #include <battleGrid.h>
 #include <deck.h>
 #include <sequence.h>
 #include <menu.h>
+#include <menuIds.h>
 #include <menuFace.h>
 #include <menuSub.h>
 #include <msgctrl.h>
@@ -65,17 +68,9 @@ u8 _dbgMenuFightDebugMenuOpenFlag;
 u8 _dbgMenuFightAllFightTrainerOperateFlag;
 u8 _dbgMenuFightMsgKeyWaitFlag;
 
-
-
-/* Head of the encounter record; the editor puts it back when the cancel
- * button closes the window. */
-typedef struct {
-    u32 mField[15];
-} EncountBackup;
-
-/* Menu entry ids of the encounter editor (window 0x25). */
+/* Menu entry ids of the encounter editor. */
 enum {
-    ENCOUNT_EDIT_ITEM_KIND = 0x10A,
+    ENCOUNT_EDIT_ITEM_KIND = 266,
     ENCOUNT_EDIT_ITEM_TRAINERS_PER_SIDE,
     ENCOUNT_EDIT_ITEM_STYLE,
     ENCOUNT_EDIT_ITEM_POKEMON_PER_PLAYER,
@@ -112,7 +107,7 @@ s32 dbgMenuFightFightTrainerSerihuTestToujou(void)
 /* Play one dialogue scene and wait for the message to be read. */
 s32 _dbgMenuFightFightTrainerSerihuTestSub(u16 trainerDataId, u8 kind)
 {
-    u32 status = fightTrainerGetStatus(0, trainerDataId, 8, kind);
+    u32 status = fightTrainerGetStatus(0, trainerDataId, FIGHT_TRAINER_QUERY_DIALOGUE, kind);
 
     if (status == 0) {
         return -1;
@@ -134,12 +129,12 @@ s32 dbgMenuFightFightTrainerSerihuTest(void)
     return 1;
 }
 
-/* Encounter data editor: opens window 0x25 on the given encounter record,
+/* Encounter data editor: opens the encounter editor on the given record,
  * edits one field per menu entry and puts the record back when it is
  * cancelled. */
 s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
 {
-    EncountBackup backup;
+    FightEncountRecord backup;
     u8* data;
     s32 result;
     s32 id;
@@ -151,24 +146,24 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
         return 1;
     }
     data = fightEncountDataBiosGetPtr(encountNo);
-    backup = *(EncountBackup*)data;
+    backup = *(FightEncountRecord*)data;
 
     for (;;) {
-        result = menuOpenCustom(0x25, 0, 0, 0, 1, 1, encountNo);
+        result = menuOpenCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 0, 0, 1, 1, encountNo);
         if (result == -1) {
-            menuCloseCustom(0x25, 0, 1);
-            *(EncountBackup*)data = backup;
+            menuCloseCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 1);
+            *(FightEncountRecord*)data = backup;
             return -1;
         }
         if (result == -2) {
-            if (menuOpen(0x55, 1) != 0) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1) != 0) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        switch (menuGetCursorItemID(0x25)) {
+        switch (menuGetCursorItemID(MENU_ID_DEBUG_ENCOUNTER_EDITOR)) {
         case ENCOUNT_EDIT_ITEM_KIND:
             id = dbgMenuFightGetFightKindDataId(fightEncountDataBiosGetFightKind(data));
             if (id < 0) {
@@ -257,7 +252,7 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             continue;
         }
     }
-    menuCloseCustom(0x25, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 1);
     return 1;
 }
 
@@ -283,20 +278,25 @@ s32 dbgMenuGetGsinputMsgId(s32 deviceId)
     return msg;
 }
 
-
+/* Game-cube pad bits the debug windows react to. */
+enum {
+    FIGHT_PAD_A = 0x100,
+    FIGHT_PAD_B = 0x200,
+    FIGHT_PAD_START = 0x1000
+};
 
 void dbmMenuFightButtonNormal(tagWINDOW_WORK *window)
 {
     if (window != 0) {
-        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & 0x100) {
+        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & FIGHT_PAD_A) {
             window->mAccept = 1;
             window->mCursorIndex = menuGetCursorItemID(window->mMenuID);
         }
-        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & 0x1000) {
+        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & FIGHT_PAD_START) {
             window->mAccept = 1;
             window->mCursorIndex = -2;
         }
-        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & 0x200) {
+        if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1)) & FIGHT_PAD_B) {
             window->mAccept = 1;
             window->mCancel = 1;
             window->mCursorIndex = -1;
@@ -313,13 +313,13 @@ s32 dbgMenuFightStopTimeOut(void)
 s32 dbgMenuFightStopHostLose(void)
 {
     if (fightIsFight() == 0) return -1;
-    _dbgMenuFightStopSub(3);
+    _dbgMenuFightStopSub(kFightResultOtherSideVictory);
     return 0;
 }
 s32 dbgMenuFightStopHostWin(void)
 {
     if (fightIsFight() == 0) return -1;
-    _dbgMenuFightStopSub(2);
+    _dbgMenuFightStopSub(kFightResultHostVictory);
     return 0;
 }
 void _dbgMenuFightStopSub(u16 result)
@@ -385,13 +385,13 @@ s32 _dbgMenuFightFightPokemonSelectSub(FightPokemon *fightPokemon)
     u8 statusChanged = 0;
     u8 abilityChanged = 0;
     u8 itemChanged = 0;
-    fightType = fightFloorGetStatus(0, 0, 0x14, 0);
+    fightType = fightFloorGetStatus(0, 0, FIGHT_FLOOR_STATUS_FIGHT_TYPE, 0);
     pokemon = fightPokemonGetPokemonPtr(fightPokemon);
     if (pokemon == 0) return -1;
     trainer = fightFloorGetFightPokemonPtrToFightTrainerPtr(0, fightPokemon);
     if (trainer == 0) return -1;
     level = figthPokemonGetLevel(fightPokemon);
-    if (fightTrainerCheckCanIrekaeFightPokemon(trainer, fightPokemon) == 2) {
+    if (fightTrainerCheckCanIrekaeFightPokemon(trainer, fightPokemon) == FIGHT_TRAINER_IREKAE_FIGHT_OUT) {
         outPokemon = fightTrainerGetFightPokemonPtrToFightOutPokemonPtr(trainer, fightPokemon);
         if (fightOutPokemonIsUseHensinBuff(outPokemon) == 1) return -1;
         if (outPokemon != 0) {
@@ -401,32 +401,32 @@ s32 _dbgMenuFightFightPokemonSelectSub(FightPokemon *fightPokemon)
         }
         result = dbgMenuPokemonEditSub(pokemon, 1, &appearanceChanged, &statusChanged, &abilityChanged, &itemChanged);
         if (result == 1) {
-            species = pokemonGetStatus(pokemon, 0, 0x6e, 0);
+            species = pokemonGetStatus(pokemon, 0, POKEMON_STATUS_SPECIES, 0);
             if (outPokemon != 0) {
-                oldSequence = (void *)pokemonGetStatus(outPokemon, 0, 0xee, 0);
+                oldSequence = (void *)pokemonGetStatus(outPokemon, 0, POKEMON_QUERY_FIGHT_SEQUENCE, 0);
                 if (oldSequence != 0) {
                     menuFaceLoad(pokemon, 0, 0);
                     while (menuFaceSearchEnable(menuFaceGetID(pokemon)) == 0) GSthreadSwitch();
                     newSequence = pokemonCreateSequence(fightPokemon);
                     battleGridReplacePokemon(oldSequence, newSequence);
                     battleGridUpdate();
-                    pokemonSetStatus(outPokemon, 0, 0xee, 0, (u32)newSequence);
+                    pokemonSetStatus(outPokemon, 0, POKEMON_QUERY_FIGHT_SEQUENCE, 0, (u32)newSequence);
                     Sequence_Free(oldSequence);
                     Sequence_SetVisibility(newSequence, 1);
-                    fightOutPokemonInitJoutaiDataId(outPokemon, 0x14);
+                    fightOutPokemonInitJoutaiDataId(outPokemon, JOUTAI_SUBSTITUTE);
                 }
-                fightMenuFightOutPokemonRenewStatusMenu(outPokemon, fightFloorGetStatus(0, 0, 0x14, 0), 1);
-                pokemonSetSequenceStatus(pokemon, (void *)pokemonGetStatus(outPokemon, 0, 0xee, 0));
+                fightMenuFightOutPokemonRenewStatusMenu(outPokemon, fightFloorGetStatus(0, 0, FIGHT_FLOOR_STATUS_FIGHT_TYPE, 0), 1);
+                pokemonSetSequenceStatus(pokemon, (void *)pokemonGetStatus(outPokemon, 0, POKEMON_QUERY_FIGHT_SEQUENCE, 0));
                 fightOutPokemonSetTokuseiDataId(outPokemon, pokemonGetTokuseiDataId(pokemon));
                 for (i = 0; i < 2; i++) {
-                    fightOutPokemonSetZokuseiDataId(outPokemon, i, pokemonGetStatus(0, species, 0x16, i));
+                    fightOutPokemonSetZokuseiDataId(outPokemon, i, pokemonGetStatus(0, species, POKEMON_QUERY_SPECIES_TYPE, i));
                 }
             }
         }
     } else {
         result = dbgMenuPokemonEditSub(pokemon, 1, 0, 0, 0, 0);
     }
-    if (figthPokemonGetLevel(fightPokemon) > level) pokemonSetStatus(fightPokemon, 0, 0xd0, 0, 1);
+    if (figthPokemonGetLevel(fightPokemon) > level) pokemonSetStatus(fightPokemon, 0, POKEMON_STATUS_FIELD_LEVEL_UP_FLAG, 0, 1);
     fightMenuFightTrainerRenewStatusMenu(trainer, fightType);
     return result;
 }
@@ -442,8 +442,8 @@ s32 dbgMenuFightFightTrainerPokemonPartDataEdit(void)
 }
 s32 dbgMenuFightFightTrainerAiDataEdit(void)
 {
-    u16 trainerID = fightTrainerGetStatus(_target_fight_trainer_ptr, 0, 0x43, 0);
-    u16 aiID = fightTrainerGetStatus(0, trainerID, 2, 0);
+    u16 trainerID = fightTrainerGetStatus(_target_fight_trainer_ptr, 0, FIGHT_TRAINER_QUERY_DATA_ID, 0);
+    u16 aiID = fightTrainerGetStatus(0, trainerID, FIGHT_TRAINER_QUERY_AI_DATA_ID, 0);
     if (fightIsFight() == 0) return -1;
     return dbgMenuFightTrainerAiDataEditSub(aiID);
 }
@@ -485,7 +485,7 @@ s32 dbgMenuFightFightTrainerAiAddsubDataEdit(void)
         s32 id = dbgMenuFightGetFightTrainerAiAddsubValueDataId(_dbgmenu_fight_trainer_ai_addsub_data_id, 1);
         if (id < 0) return 1;
         _dbgmenu_fight_trainer_ai_addsub_data_id = id;
-        dbgMenuFightTrainerDataStatusInputDigit((u16)id, 0x3e, 0, 200, -200);
+        dbgMenuFightTrainerDataStatusInputDigit((u16)id, FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0, 200, -200);
     }
 }
 s32 dbgMenuFightFightTrainerSelect1(void)
@@ -505,14 +505,14 @@ s32 dbgMenuFightFightTrainerSelect0(void)
 s32 dbgMenuFightFightSideSelectHostEnemy(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_side_ptr = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(5, 0);
+    _target_fight_side_ptr = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_HOST_ENEMY_SIDE, 0);
     if (_target_fight_side_ptr == 0) return -1;
     return 1;
 }
 s32 dbgMenuFightFightSideSelectHost(void)
 {
     if (fightIsFight() == 0) return -1;
-    _target_fight_side_ptr = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(4, 0);
+    _target_fight_side_ptr = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_HOST_SIDE, 0);
     if (_target_fight_side_ptr == 0) return -1;
     return 1;
 }
@@ -531,6 +531,21 @@ s32 dbgMenuFightWazaEdit(void)
         dbgMenuFightWazaEditSub((u16)id);
     }
 }
+/* Menu entry ids of the fight flag editor. */
+enum {
+    FIGHT_FLAG_EDIT_ITEM_TUIKAKOUKA = 114,
+    FIGHT_FLAG_EDIT_ITEM_SOUBIKOUKA = 116,
+    FIGHT_FLAG_EDIT_ITEM_MSG_SPEED = 118,
+    FIGHT_FLAG_EDIT_ITEM_MSG_KEY_WAIT = 120,
+    FIGHT_FLAG_EDIT_ITEM_EFFECT_ANIME = 122,
+    FIGHT_FLAG_EDIT_ITEM_ALL_TRAINER_OPERATE = 124,
+    FIGHT_FLAG_EDIT_ITEM_DEBUG_MENU_OPEN = 126,
+    FIGHT_FLAG_EDIT_ITEM_AI_FLOW_DISPLAY = 128,
+    FIGHT_FLAG_EDIT_ITEM_YUBIWO_HURU_WAZA = 130,
+    FIGHT_FLAG_EDIT_ITEM_AI_LAST_VALUE_REVISE = 132,
+    FIGHT_FLAG_EDIT_ITEM_POKE_ST_MENU_OPEN = 134
+};
+
 s32 dbgMenuFightFlagEdit(void)
 {
     u8 msgSpeed;
@@ -558,9 +573,9 @@ s32 dbgMenuFightFlagEdit(void)
     aiLastValue = dbgMenuFightGetFightTrainerAiLastValueReviseFlag();
     dbgMenuFightGetFightPokeStMenuOpenFlag();
     for (;;) {
-        result = menuOpenCustom(0xe, 0, 0, 0, 1, 0, 0);
+        result = menuOpenCustom(MENU_ID_DEBUG_FIGHT_FLAGS, 0, 0, 0, 1, 0, 0);
         if (result == -1) {
-            menuCloseCustom(0xe, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_FIGHT_FLAGS, 0, 1);
             dbgMenuFightSetMsgSpeed(msgSpeed);
             dbgMenuFightSetTuikakoukaFlag(tuikakouka);
             dbgMenuFightSetMsgKeyWaitFlag(msgKeyWait);
@@ -574,16 +589,16 @@ s32 dbgMenuFightFlagEdit(void)
             return -1;
         }
         else if (result == -2) {
-            if (menuOpen(0x55, 1)) {
-                menuCloseCustom(0x55, 0, 1);
+            if (menuOpen(MENU_ID_DEBUG_EDIT_CONFIRMATION, 1)) {
+                menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
                 continue;
             }
-            menuCloseCustom(0x55, 0, 1);
+            menuCloseCustom(MENU_ID_DEBUG_EDIT_CONFIRMATION, 0, 1);
             break;
         }
-        else if (result == 0x72) {
+        else if (result == FIGHT_FLAG_EDIT_ITEM_TUIKAKOUKA) {
             result = dbgMenuFightGetTuikakoukaFlag();
-            result = menuSubOpenYesNo(0x7f, -1, -1, result == 0);
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, result == 0);
             if (result == 0) {
                 dbgMenuFightSetTuikakoukaFlag(1);
                 continue;
@@ -591,7 +606,7 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetTuikakoukaFlag(0);
             continue;
         }
-        else if (result == 0x76) {
+        else if (result == FIGHT_FLAG_EDIT_ITEM_MSG_SPEED) {
             if (menuSubOpenNumberInput(dbgMenuFightGetMsgSpeed(), &input, 1, 50, 50, 0) == 0) {
                 menuSubCloseNumberInput();
                 continue;
@@ -600,8 +615,8 @@ s32 dbgMenuFightFlagEdit(void)
             menuSubCloseNumberInput();
             continue;
         }
-        else if (result == 0x78) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetMsgKeyWaitFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_MSG_KEY_WAIT) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetMsgKeyWaitFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetMsgKeyWaitFlag(1);
                 continue;
@@ -609,8 +624,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetMsgKeyWaitFlag(0);
             continue;
         }
-        else if (result == 0x7a) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, fightSeqGetEffectAminFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_EFFECT_ANIME) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, fightSeqGetEffectAminFlag() == 0);
             if (result == 0) {
                 fightSeqSetEffectAminFlag(1);
                 continue;
@@ -618,8 +633,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) fightSeqSetEffectAminFlag(0);
             continue;
         }
-        else if (result == 0x7c) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetAllFightTrainerOperateFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_ALL_TRAINER_OPERATE) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetAllFightTrainerOperateFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetAllFightTrainerOperateFlag(1);
                 continue;
@@ -627,8 +642,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetAllFightTrainerOperateFlag(0);
             continue;
         }
-        else if (result == 0x7e) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetFightDebugMenuOpenFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_DEBUG_MENU_OPEN) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetFightDebugMenuOpenFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetFightDebugMenuOpenFlag(1);
                 continue;
@@ -636,8 +651,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetFightDebugMenuOpenFlag(0);
             continue;
         }
-        else if (result == 0x80) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetFightTrainerAiFlowDispFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_AI_FLOW_DISPLAY) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetFightTrainerAiFlowDispFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetFightTrainerAiFlowDispFlag(1);
                 continue;
@@ -645,8 +660,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetFightTrainerAiFlowDispFlag(0);
             continue;
         }
-        else if (result == 0x74) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetSoubikoukaFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_SOUBIKOUKA) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetSoubikoukaFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetSoubikoukaFlag(1);
                 continue;
@@ -654,7 +669,7 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetSoubikoukaFlag(0);
             continue;
         }
-        else if (result == 0x82) {
+        else if (result == FIGHT_FLAG_EDIT_ITEM_YUBIWO_HURU_WAZA) {
             if (fightIsFight() == 0) continue;
             result = dbgMenuFightGetYubiwohuruWazaDataId();
             for (;;) {
@@ -667,8 +682,8 @@ s32 dbgMenuFightFlagEdit(void)
             }
             continue;
         }
-        else if (result == 0x84) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetFightTrainerAiLastValueReviseFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_AI_LAST_VALUE_REVISE) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetFightTrainerAiLastValueReviseFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetFightTrainerAiLastValueReviseFlag(1);
                 continue;
@@ -676,8 +691,8 @@ s32 dbgMenuFightFlagEdit(void)
             if (result == 1) dbgMenuFightSetFightTrainerAiLastValueReviseFlag(0);
             continue;
         }
-        else if (result == 0x86) {
-            result = menuSubOpenYesNo(0x7f, -1, -1, dbgMenuFightGetFightPokeStMenuOpenFlag() == 0);
+        else if (result == FIGHT_FLAG_EDIT_ITEM_POKE_ST_MENU_OPEN) {
+            result = menuSubOpenYesNo(MENU_SUB_YES_NO_DEBUG_DIALOG, -1, -1, dbgMenuFightGetFightPokeStMenuOpenFlag() == 0);
             if (result == 0) {
                 dbgMenuFightSetFightPokeStMenuOpenFlag(1);
                 continue;
@@ -686,7 +701,7 @@ s32 dbgMenuFightFlagEdit(void)
             continue;
         }
     }
-    menuCloseCustom(0xe, 0, 1);
+    menuCloseCustom(MENU_ID_DEBUG_FIGHT_FLAGS, 0, 1);
     return 1;
 }
 s32 dbgMenuFightStop(void)
@@ -706,18 +721,18 @@ s32 dbgMenuFightEncountSelect(void)
     u32 loadedDeck;
     u32 resourceLoaded = 0;
     u16 encounter;
-    _readEncountDataName = (u32 *)GSmemAlloc(0x1200);
-    _readEncountDataID = (u16 *)GSmemAlloc(0x600);
+    _readEncountDataName = (u32 *)GSmemAlloc(4608);
+    _readEncountDataID = (u16 *)GSmemAlloc(1536);
     for (;;) {
         result = dbgMenuFightGetFightDeckDataId(_dbgmenu_fight_deck_data_id);
         if (result < 0) break;
         _dbgmenu_fight_deck_data_id = result;
         if (fightIsFight() == 0) {
             fightFreeResourceDeclArchive();
-            GSfsysFreeCache(0x842);
-            fightFreeResource(0xa, 0x184d3400);
-            fightReadResource(0x842, 0x184d3400);
-            resourceLoaded = fightReadResource(0x842, getDeckResourceID((u8)result));
+            GSfsysFreeCache(DECK_RESOURCE_GROUP);
+            fightFreeResource(COMMON_RESOURCE_GROUP, DECK_RESOURCE_DARK_POKEMON);
+            fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_DARK_POKEMON);
+            resourceLoaded = fightReadResource(DECK_RESOURCE_GROUP, getDeckResourceID((u8)result));
             if (resourceLoaded == 1) loadedDeck = result;
             _readEncountDataCnt = 0;
             for (i = 0; i < *fight_encount_data_number; i++) {
@@ -756,18 +771,20 @@ s32 dbgMenuFightEncountSelect(void)
             dbgMenuFightEncount(_readEncountDataID[result - 1]);
             GSmemFree(_readEncountDataName);
             GSmemFree(_readEncountDataID);
-            if (resourceLoaded == 1) fightFreeResource(0x842, getDeckResourceID((u8)loadedDeck));
+            if (resourceLoaded == 1)
+                fightFreeResource(DECK_RESOURCE_GROUP, getDeckResourceID((u8)loadedDeck));
             return 0;
         }
     }
-    if (resourceLoaded == 1) fightFreeResource(0x842, getDeckResourceID((u8)loadedDeck));
+    if (resourceLoaded == 1)
+        fightFreeResource(DECK_RESOURCE_GROUP, getDeckResourceID((u8)loadedDeck));
     GSmemFree(_readEncountDataName);
     GSmemFree(_readEncountDataID);
     return -1;
 }
 s32 dbgMenuFightEncount(u16 encount)
 {
-    GSthread *thread = GSthreadCreate(1, GSfloorGetCurrentFloorGroupID(), 0x4000, 1, 1, (GSthreadEntry)fightEncount);
+    GSthread *thread = GSthreadCreate(1, GSfloorGetCurrentFloorGroupID(), 16384, 1, 1, (GSthreadEntry)fightEncount);
     if (thread != 0) {
         GSthreadSetArgs(thread, 1, encount);
         GSthreadSetName(thread, "fightEnc(Debug)");

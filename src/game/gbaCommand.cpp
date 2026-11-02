@@ -63,9 +63,6 @@ static const u8 CONTROLLER_ID_SECOND = 2;
 // Battle status used while a Pokemon is transformed; transformed Deoxys is
 // reported in its base form.
 #define JOUTAI_DATA_ID_TRANSFORM 16
-// Status of the battle floor that carries the fight type of the running
-// encounter, which the fight type data of the turn is looked up by.
-#define FIGHT_FLOOR_STATUS_FIGHT_TYPE 20
 // Ban kind fightOutPokemonCheckCanOutOkWazaBanme reports for a waza that bans
 // the Pokemon with a waza: the out value then carries that waza.
 #define WAZA_BAN_KIND_FORCED_WAZA 5

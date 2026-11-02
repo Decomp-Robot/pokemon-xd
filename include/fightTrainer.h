@@ -8,6 +8,15 @@ typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
 typedef struct FIGHT_TRAINER FIGHT_TRAINER;
 
+/* What fightTrainerCheckCanIrekaeFightPokemon makes of swapping a fight Pokemon
+   out; the fight packet carries the same codes to the GBA, one per slot. */
+enum FightTrainerIrekaeState {
+    FIGHT_TRAINER_IREKAE_SWAPPABLE = 0,    /* may be swapped out. */
+    FIGHT_TRAINER_IREKAE_CANNOT_FIGHT = 1, /* cannot take part in the fight. */
+    FIGHT_TRAINER_IREKAE_FIGHT_OUT = 2,    /* out on the field right now. */
+    FIGHT_TRAINER_IREKAE_REFUSED = 3,      /* the reserve check turns the swap down. */
+};
+
 // Battle-side trainer record: the data IDs the trainer plays, the hero record
 // the battle is fought with, and the party and action work that follows it.
 #ifdef __cplusplus

@@ -141,6 +141,7 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
     POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.
     POKEMON_STATUS_FIELD_WAZA_SEALED = 194, // non-zero while the waza pages stay closed.
+    POKEMON_STATUS_FIELD_LEVEL_UP_FLAG = 208, // fight record: set once the pokemon has gained a level.
 };
 
 // Marking bits of Pokemon field POKEMON_STATUS_FIELD_MARKINGS (0xBB). Slot N
@@ -179,6 +180,9 @@ enum PokemonStatusQuery {
     POKEMON_STATUS_MOVE = 127,
     POKEMON_QUERY_LEVEL = 122,
     POKEMON_QUERY_SPECIES = 110,
+    /* type data ID of the type slot the fourth argument selects; the second
+       argument names the species when no record is given. */
+    POKEMON_QUERY_SPECIES_TYPE = 22,
     POKEMON_QUERY_MOVE_PP = 128,
     POKEMON_QUERY_ATTACK = 136,
     POKEMON_QUERY_DEFENSE = 137,
