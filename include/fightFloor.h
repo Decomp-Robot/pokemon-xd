@@ -20,7 +20,8 @@ enum {
     FIGHT_FLOOR_SIDE_COUNT = 2,
     FIGHT_SIDE_TRAINER_COUNT = 2,
     FIGHT_SIDE_JOUTAI_COUNT = 6,
-    FIGHT_OUT_POKEMON_COUNT = 8
+    FIGHT_OUT_POKEMON_COUNT = 8,
+    FIGHT_FLOOR_JOUTAI_COUNT = 1
 };
 
 typedef struct FIGHT_SIDE FIGHT_SIDE;
@@ -41,7 +42,7 @@ struct FIGHT_SIDE {
 typedef struct FIGHT_FLOOR FIGHT_FLOOR;
 
 struct FIGHT_FLOOR {
-    _JOUTAI mJoutai;
+    _JOUTAI mJoutaiAry[FIGHT_FLOOR_JOUTAI_COUNT];
     u16 mTurnCount;
     u16 mEncountDataId;
     FIGHT_SIDE mSideAry[FIGHT_FLOOR_SIDE_COUNT];
@@ -160,6 +161,12 @@ u8 fightFloorDataBiosGetTikeiDataId(FIGHT_FLOOR_DATA *data);
 u16 fightFloorDataBiosGetFightSideDataId(FIGHT_FLOOR_DATA *data, u8 side);
 u16 fightFloorDataBiosGetFloorDataId(FIGHT_FLOOR_DATA *data);
 FIGHT_FLOOR_DATA *fightFloorDataBiosGetPtr(u16 index);
+u32 fightFloorDB_GetEnvSndId(u16 floorDataId);
+u32 fightFloorDB_GetBgmSndId(u16 floorDataId);
+u32 fightFloorDB_GetSyoukaiWzxDataId(u16 floorDataId);
+u8 fightFloorDB_GetTikeiDataId(u16 floorDataId);
+u16 fightFloorDB_GetFightSideDataId(u16 floorDataId, u8 side);
+u16 fightFloorDB_GetFloorDataId(u16 floorDataId);
 FIGHT_TRAINER *fightFloorGetGcHeroFightTrainerPtr(FIGHT_FLOOR *floor);
 FIGHT_TRAINER *fightFloorGetFightPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightPokemon *pokemon);
 void *fightFloorBiosGetFightFloorPtr(void);
@@ -190,6 +197,16 @@ FightOutPokemon *fightFloorGetFightOutPokemonPtrAryPokemonTokuseiDataIdFirst(FIG
 FightOutPokemon *fightFloor_GetAttackPokemonPtr(FIGHT_FLOOR *floor);
 FightOutPokemon *fightFloor_GetDefensePokemonPtr(FIGHT_FLOOR *floor);
 FightOutPokemon *fightFloor_GetIrekaePokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetEscapePokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetKizetuPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetTuikakoukaPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetTokuseiPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetItemPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloor_GetAppointPokemonPtr(FIGHT_FLOOR *floor);
+FIGHT_TRAINER *fightFloor_GetAppointTrainerPtr(FIGHT_FLOOR *floor);
+FIGHT_WAZA *fightFloor_GetAppointWazaPtr(FIGHT_FLOOR *floor);
+FIGHT_SIDE *fightFloor_GetAppointSidePtr(FIGHT_FLOOR *floor);
+void *fightFloor_GetAppointItemPtr(FIGHT_FLOOR *floor);
 u8 fightFloorGetNowTenkouDataId(FIGHT_FLOOR *floor, s32 checkWeatherSuppressingAbilities);
 u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightOutPokemon **pokemonArray, u8 allies, u8 deployedOnly);
 u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
@@ -197,6 +214,9 @@ void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
 u8 fightFloor_GetFightKindDoCriticalAttackFlag(FIGHT_FLOOR *floor);
 void fightFloor_SetFisstAttackRnd(FIGHT_FLOOR *floor, u16 value);
 u16 fightFloor_GetEncountDataId(FIGHT_FLOOR *floor);
+u8 fightFloor_GetIsJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId);
+_JOUTAI *fightFloor_GetJoutaiPtr(FIGHT_FLOOR *floor, u16 index);
+u8 fightFloorIsJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId);
 void fightFloor_SetAttackMsgId(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetAppointMsgPtr(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetCriticakMsgId(FIGHT_FLOOR *floor, s32 messageId);
