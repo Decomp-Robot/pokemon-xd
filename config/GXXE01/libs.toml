@@ -2241,6 +2241,11 @@ name = "game/menuDataBios.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]
 
+[[lib.object]]
+name = "game/menuPanel.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-inline noauto"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"

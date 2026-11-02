@@ -330,6 +330,10 @@ game/dbgMenuMenu.cpp:
 game/menuDataBios.cpp:
 	.text       start:0x8007C9B8 end:0x8007CD64
 
+game/menuPanel.cpp:
+	.text       start:0x8007CD64 end:0x8007D088
+	.bss        start:0x80435C38 end:0x80435C48
+
 game/menuCB_Sub1.cpp:
 	.text       start:0x8007E5AC end:0x80084758
 	.rodata     start:0x802EB920 end:0x802EB93C
