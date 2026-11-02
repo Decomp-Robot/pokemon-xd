@@ -4,7 +4,7 @@ extern "C" {
 #include <dolphin/gx/GXEnum.h>
 }
 
-extern GSgfxDL _colsysDL;
+GSgfxDL _colsysDL;
 
 extern "C" {
 void* memset(void* dst, int value, unsigned int size);

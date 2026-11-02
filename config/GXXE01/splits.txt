@@ -1793,6 +1793,7 @@ game/GScolsys2.c:
 
 game/GScolsys2Draw.cpp:
 	.text       start:0x801186C4 end:0x8011908C
+	.bss        start:0x80446E60 end:0x80446E70
 	.sdata2     start:0x804ED720 end:0x804ED750
 
 game/GScolsys2Walk.cpp:
