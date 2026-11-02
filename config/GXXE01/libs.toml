@@ -2258,6 +2258,10 @@ name = "game/menuPanel.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole", "-inline noauto"]
 
+[[lib.object]]
+name = "game/floorLayerConfig.cpp"
+completed = true
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"
