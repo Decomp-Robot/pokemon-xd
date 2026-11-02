@@ -3,30 +3,28 @@
 #include <msgctrl.h>
 #include <types.h>
 #include <GSinput.h>
+#include <GSthread.h>
 #include <menuSub.h>
 
 /* Debug message test/serial-message check menus. */
 #pragma force_active on
 
-void winMsgOpenError(s32 a, s32 b, s32 c);
-void winMsgCloseError(s32 id);
-void winMsgOpenField(s32 msg, s32 a, s32 b);
-void winMsgCloseField(s32 id);
-void GSthreadSwitch(void);
-void menuSubKeyWait(void);
-
 #pragma peephole off
 
+enum {
+    /* R trigger starts the serial-message check. */
+    MSG_PAD_TRIGGER_R = 0x20
+};
 
 s32 dbgMenuMsgTest(s32 menuID, s32 state)
 {
     switch (state) {
     case 0:
-        fadeSet(3, 0.5f);
+        fadeSet(FADE_OUT_BLACK, 0.5f);
         fadeCheck(1);
         winMsgOpenError(1, 1, 0);
         winMsgClose(1);
-        fadeSet(2, 0.5f);
+        fadeSet(FADE_IN_BLACK, 0.5f);
         fadeCheck(1);
         break;
     case 1:
@@ -42,7 +40,7 @@ s32 dbgMenuMsgTest(s32 menuID, s32 state)
         GSthreadSwitch();
         break;
     case 3:
-        msgctrlSetValue(0x31, 0x7DA);
+        msgctrlSetValue(MSGCTRL_VALUE_MESSAGE_ID, 2010);
         break;
     }
     return 0;
@@ -52,7 +50,7 @@ s32 dbgMenuMsgCheck(void)
 {
     s32 msg;
 
-    if (GSinputButtonsPressed(GS_INPUT_PORT_1) & 0x20) {
+    if (GSinputButtonsPressed(GS_INPUT_PORT_1) & MSG_PAD_TRIGGER_R) {
         if (!menuSubOpenNumberInputDigit(0, &msg)) {
             return -1;
         }
@@ -65,6 +63,5 @@ s32 dbgMenuMsgCheck(void)
 }
 
 #pragma peephole reset
-
 
 #pragma force_active reset

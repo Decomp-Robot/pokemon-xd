@@ -48,6 +48,8 @@ u8 menuSubOpenNumberInput(u32 value, u32 *out, u8 mode, s16 x, s16 y,
                           MENU_SUB_CLOSE_ON_EXIT closeOnExit);
 // Closes the number entry sub dialog.
 void menuSubCloseNumberInput(void);
+// Waits for a menu key press on controller one.
+void menuSubKeyWait(void);
 u8 menuSubOpenNumberInputID(u32 value, u32 *out, u16 *(*getName)(u32));
 // Filled rectangle on a GSgfx layer.
 void menuSubDrawTile(s32 layerID, s32 x, s32 y, s32 width, s32 height, GXColor *color);
