@@ -54,15 +54,18 @@ f32 dirSubHalf(f32 dir1, f32 dir2);
 
 void menuPtSpriteDrawColor(unsigned short spriteID, long x, long y, unsigned long color);
 
+// Sound state the pocket menus set aside while they are open: the BGM and
+// environment IDs with the volumes they were playing at.
 struct MenuPtWorkSound {
-    unsigned long mBgmID;
-    unsigned long mEnvID;
-    unsigned char mBgmVolume;
-    unsigned char mEnvVolume;
+    u32 mBgmID;
+    u32 mEnvID;
+    u8 mBgmVolume;
+    u8 mEnvVolume;
 };
 
 void menuPtSaveSound(MenuPtWorkSound *sound);
 void menuPtRestoreSound(MenuPtWorkSound *sound);
+void menuPtStopSound(MenuPtWorkSound *sound);
 void menuPtPlayBgm(unsigned long bgmID);
 void menuPtPlaySe(unsigned long seID);
 void menuPocketSetDarkPokemon(Pokemon &pokemon, float rate, unsigned short darkID);
@@ -93,7 +96,6 @@ void menuPtSpriteWorkSetSw(tagWINDOW_WORK *window, unsigned long itemID, long of
 void menuPtSpriteWorkSetSpriteId(tagSPRITE_WORK *sprite, unsigned long spriteID);
 void menuPtSpriteWorkSetSpriteData(tagSPRITE_WORK *sprite, MenuSpriteData *data);
 void menuPtSpriteWorkSetMenuItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned long itemID);
-void menuPtStopSound(MenuPtWorkSound *sound);
 void menuPocketButtonWait();
 float menuGetPokemonScale(unsigned long modelID, int pokemonID);
 void menuPocketDebugMakeDarkPokemonByID(Pokemon &pokemon, unsigned short darkID, float rate);
