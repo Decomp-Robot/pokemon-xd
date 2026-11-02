@@ -2503,6 +2503,9 @@ game/app/fight/fightFloorDB.cpp:
 game/app/fight/fightSideDB.cpp:
 	.text       start:0x801F8CF0 end:0x801F8DDC
 
+game/app/fight/fightTrainerEnemy.cpp:
+	.text       start:0x802000F0 end:0x802004EC
+
 game/app/item/fightItemBios.cpp:
 	.text       start:0x802004EC end:0x8020058C
 
