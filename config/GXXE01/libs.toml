@@ -5025,6 +5025,11 @@ completed = true
 name = "game/app/item/fightItemBios.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/item/fightItem.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
 [[lib]]
 name = "GSres"
 mw_version = "GC/2.6"
