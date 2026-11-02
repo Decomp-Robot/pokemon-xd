@@ -9,6 +9,17 @@ typedef struct FlagWork {
     s16 head;
 } FlagWork;
 
+/* One shared flag catalog record per entry: level selects the flag block the
+ * entry's bits live in, width is that bit-array width, bitPosition is the
+ * entry's slot inside the block and nextId links to the next entry. */
+typedef struct FlagEntry {
+    u8 level : 2;
+    u8 width : 6;
+    u8 unknown01;
+    u16 bitPosition;
+    s16 nextId;
+} FlagEntry;
+
 /* One registered flag level: its capacity in words and the array that
  * holds the packed bits. Entry 0 stays unused; GSflagInit registers 1-3. */
 typedef struct FlagLevel {
@@ -27,6 +38,7 @@ void GSflagSet(s32 flag, u32 value);
 void GSflagOn(s32 flag);
 void GSflagOff(s32 flag);
 extern FlagWork *flag_data_number;
+extern FlagEntry *flag_data;
 extern FlagLevel *flag_level;
 #ifdef __cplusplus
 }

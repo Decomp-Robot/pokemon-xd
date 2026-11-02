@@ -6,18 +6,6 @@
 #include <GSflag.h>
 #include <stdio.h>
 
-/* The shared flag catalog holds one linked record per flag entry.
- * attributes holds the flag block in bits 6-7 and the bit-array width in the
- * low 6 bits (GSflagInitBitPos); bitPosition is the record's slot in its block. */
-typedef struct {
-    u8 attributes;
-    u8 unknown01;
-    u16 bitPosition;
-    s16 nextId;
-} FlagEntry;
-
-extern FlagEntry *flag_data;
-
 typedef struct {
     s16 top;
     s16 row;

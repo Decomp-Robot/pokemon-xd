@@ -13,19 +13,6 @@
 #include <GSflag.h>
 #include <GSlog.h>
 
-/* One shared flag catalog record per entry: level picks the flag block the
- * entry's bits live in, width is that bit-array width, bitPosition is the
- * record's slot inside the block and nextId links to the next entry. */
-typedef struct FlagEntry {
-    u8 level : 2;
-    u8 width : 6;
-    u8 unknown01;
-    u16 bitPosition;
-    s16 nextId;
-} FlagEntry;
-
-extern FlagEntry *flag_data;
-
 u32 _flagGetBitLength(u32 value);
 u32 _flagGet(u32 *bits, FlagEntry *entries, s32 flag);
 void _flagSet(u32 *bits, FlagEntry *entries, s32 flag, u32 value);
