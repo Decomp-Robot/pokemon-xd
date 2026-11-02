@@ -1616,12 +1616,8 @@ void _menuPokemonMakeStatus(MENU_POKEMON_STATUS_TBL *tbl)
 
         pokemonToMenuPokemonStatus(pokemon, 0, status, -1);
 
-        {
-            s32 joutaiStatus = pokemonGetStatus(pokemon, 0, POKEMON_QUERY_IS_FAINTED, 0);
-
-            if (((bool)joutaiStatus) == true)
-                status->mHp = 0;
-        }
+        if ((bool)pokemonGetStatus(pokemon, 0, POKEMON_QUERY_IS_FAINTED, 0) == true)
+            status->mHp = 0;
 
         status->mJoutaiId = menuPokemonGetJoutaiSpriteID(pokemon, 0);
     }
@@ -1638,9 +1634,7 @@ void menuPokemonUpdate(void)
 u16 menuPokemonGetJoutaiSpriteID(Pokemon *pokemon, bool sprite)
 {
     u16 id;
-    s32 joutaiStatus = pokemonGetStatus(pokemon, 0, POKEMON_QUERY_IS_FAINTED, 0);
-
-    if (((bool)joutaiStatus) == true) {
+    if ((bool)pokemonGetStatus(pokemon, 0, POKEMON_QUERY_IS_FAINTED, 0) == true) {
         id = CONDITION_PANEL_FAINTED;
     } else {
         switch (pokemonGetJoutaiMenuSpriteId(pokemon)) {

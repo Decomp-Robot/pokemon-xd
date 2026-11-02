@@ -155,9 +155,8 @@ enum MenuPokemonPanelTarget {
 // Floor pushed while the party menu owns the screen.
 enum { FLOOR_ID_PARTY_MENU = 933 };
 
-// Party-menu work block, shared by menuPokemonInitWork and the party-menu
-// flow.
-enum { MENU_POKEMON_LIST = 76 };
+// Party list window id.
+enum { MENU_POKEMON_LIST = MENU_ID_PARTY_LIST };
 
 // Party-menu work cleared when the menu opens.
 struct MenuPokemonWork {
