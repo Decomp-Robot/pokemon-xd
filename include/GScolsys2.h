@@ -12,56 +12,56 @@
 #define GSCOLSYS2_OBJECT_DISABLED 0x0001
 
 /* Bytes in one floor record. */
-#define GSCOLSYS2_FLOOR_SIZE 0xDC0
+#define GSCOLSYS2_FLOOR_SIZE 3520
 
 /* Objects and registered humans per floor block. */
-#define GSCOLSYS2_OBJECT_MAX 0x40
-#define GSCOLSYS2_HUMAN_MAX 0x30
+#define GSCOLSYS2_OBJECT_MAX 64
+#define GSCOLSYS2_HUMAN_MAX 48
 #define GSCOLSYS2_THRU_MAX 4
 #define GSCOLSYS2_WALK_MAX 8
 
 /* Passes the push solve makes before it gives up. */
 #define GSCOLSYS2_HUMAN_PASSES 10
 
-/* One triangle of a collision mesh: three corner points (0x00-0x23) and the
- * face normal (0x24-0x2F). Every CCD_*MDL entry starts with this block; the
- * per-kind records append their own fields after it. */
+/* One triangle of a collision mesh: three corner points and the face
+ * normal. Every CCD_*MDL entry starts with this block; the per-kind records
+ * append their own fields after it. */
 struct CCD_TRI {
     GSvec mPoint[3];
     GSvec mNormal;
 };
 
-/* Hit-mesh entry (0x34 bytes). */
+/* Hit-mesh entry (52 bytes). */
 struct CCD_HITMDL {
     CCD_TRI mTri;
-    /* 0x30: triangle edge/vertex selection masks. */
+    /* Triangle edge/vertex selection masks. */
     u16 mEdgeMask[2];
 };
 
-/* Walk-mesh entry (0x34 bytes). Same triangle block; 0x30 and 0x31 hold the
- * two texture-coordinate bytes drawWalkMdl packs into the vertex colour. */
+/* Walk-mesh entry (52 bytes). Same triangle block; mColor0 and mColor1 hold
+ * the two texture-coordinate bytes drawWalkMdl packs into the vertex colour. */
 struct CCD_WALKMDL {
     CCD_TRI mTri;
-    u8 mColor0;  // 0x30
-    u8 mColor1;  // 0x31
+    u8 mColor0;
+    u8 mColor1;
     u8 _32[2];
 };
 
-/* Thru-mesh entry (0x34 bytes). Carries the event id the getMdlEventList
- * walkers report in 0x32. */
+/* Thru-mesh entry (52 bytes). Carries the event id the getMdlEventList
+ * walkers report. */
 struct CCD_THRUMDL {
     CCD_TRI mTri;
-    u16 mFlags;   // 0x30
-    u16 mEventId; // 0x32
+    u16 mFlags;
+    u16 mEventId;
 };
 
-/* Check-mesh entry (0x30 bytes): the triangle block only. */
+/* Check-mesh entry (48 bytes): the triangle block only. */
 struct CCD_CHECKMDL {
     CCD_TRI mTri;
 };
 
 /* Collision-mesh head. mModel points at an array of mCount entries; the
- * GScolsys2 draw and check entry points walk it in 0x34 (or 0x30) strides. */
+ * GScolsys2 draw and check entry points walk it one entry at a time. */
 struct CCD_MDLHEAD {
     void* mModel;
     s32 mCount;
@@ -70,16 +70,16 @@ struct CCD_MDLHEAD {
 /* Common head of a bucketed mesh: the model array plus the uniform grid the
  * mesh is bucketed into. Every GScolsys2 head but the check mesh carries one. */
 struct CCD_GRIDHEAD {
-    void* mModel;      // 0x00
-    s32 mCount;        // 0x04
-    s32* mCellStart;   // 0x08 {first, count} per cell
-    s32* mCellList;    // 0x0C flat triangle indices
-    u16 mCountX;       // 0x10 cells along x
-    u16 mCountZ;       // 0x12 cells along z
-    f32 mCellSizeX;    // 0x14
-    f32 mCellSizeZ;    // 0x18
-    f32 mOriginX;      // 0x1C
-    f32 mOriginZ;      // 0x20
+    void* mModel;
+    s32 mCount;
+    s32* mCellStart; /* {first, count} per cell */
+    s32* mCellList; /* flat triangle indices */
+    u16 mCountX; /* cells along x */
+    u16 mCountZ; /* cells along z */
+    f32 mCellSizeX;
+    f32 mCellSizeZ;
+    f32 mOriginX;
+    f32 mOriginZ;
 };
 
 struct CCD_HITMDL_HEAD : public CCD_GRIDHEAD {
@@ -100,34 +100,34 @@ struct CCD_CHECKMDL_HEAD {
     s32 mCount;
 };
 
-/* One CCD object record (0x40 bytes). */
+/* One CCD object record (64 bytes). */
 struct CCD_OBJECT {
-    u8 _00[0x24];
-    CCD_WALKMDL_HEAD* mWalkMdl;  // 0x24
-    CCD_HITMDL_HEAD* mHitMdl;    // 0x28
-    CCD_THRUMDL_HEAD* mThruMdl;  // 0x2C
-    CCD_THRUMDL_HEAD* mThruMdl2; // 0x30
-    CCD_HITMDL_HEAD* mHitMdl2;   // 0x34
-    CCD_CHECKMDL_HEAD* mCheckMdl; // 0x38
-    u16 mFlags;                  // 0x3C
+    u8 _00[36];
+    CCD_WALKMDL_HEAD* mWalkMdl;
+    CCD_HITMDL_HEAD* mHitMdl;
+    CCD_THRUMDL_HEAD* mThruMdl;
+    CCD_THRUMDL_HEAD* mThruMdl2;
+    CCD_HITMDL_HEAD* mHitMdl2;
+    CCD_CHECKMDL_HEAD* mCheckMdl;
+    u16 mFlags;
 };
 
-/* Per-floor object transform and collision flags (0x28 bytes). */
-class GSCOLSYS2_OBJECT_STATE {
+/* Per-floor object transform and collision flags. */
+class GSCOLSYS2_OBJ {
 public:
-    GSvec mPosition; // 0x00
-    GSvec mRotation; // 0x0C
-    GSvec mScale;    // 0x18
-    u16 mFlags;     // 0x24
+    GSvec mPosition;
+    GSvec mRotation;
+    GSvec mScale;
+    u16 mFlags;
     u16 mPadding;
-    GSCOLSYS2_OBJECT_STATE();
+    GSCOLSYS2_OBJ() {}
 };
 
 /* The whole collision-file header the GScolsys2 entry points read through
  * (GScolsys2LoadCCD stores the loaded file here). */
 struct CCD_FILEHEAD {
-    CCD_OBJECT* mObject; // 0x00
-    s32 mObjectCount;    // 0x04
+    CCD_OBJECT* mObject;
+    s32 mObjectCount;
 };
 
 /* Human-table registration and collision-enable flags. */
@@ -147,21 +147,21 @@ enum GSCOLSYS2_RESULT {
     GSCOLSYS2_NO_COLLISION = 7
 };
 
-/* One human registered in a floor's collision table (0x14 bytes). */
+/* One human registered in a floor's collision table. */
 struct GSCOLSYS2_HUMAN {
-    s32 mGroupId;    // 0x00
-    s32 mResourceId; // 0x04
-    f32 mRadius;     // 0x08
-    f32 mHeight;     // 0x0C
-    u16 mFlags;      // 0x10: in-use and disabled flags
+    s32 mGroupId;
+    s32 mResourceId;
+    f32 mRadius;
+    f32 mHeight;
+    u16 mFlags; // in-use and disabled flags
     u16 _12;
 };
 
-/* Per-floor object states and human tables (0xDC0 bytes). */
+/* Per-floor object states and human tables. */
 struct GSCOLSYS2_FLOOR {
-    GSCOLSYS2_OBJECT_STATE mObject[GSCOLSYS2_OBJECT_MAX]; /* 0x000-0x9FF */
-    GSCOLSYS2_HUMAN mHuman[GSCOLSYS2_HUMAN_MAX]; /* 0xA00-0xDBF */
-    GSCOLSYS2_FLOOR();
+    GSCOLSYS2_OBJ mObject[GSCOLSYS2_OBJECT_MAX];
+    GSCOLSYS2_HUMAN mHuman[GSCOLSYS2_HUMAN_MAX];
+    GSCOLSYS2_FLOOR() {}
 };
 
 /* One hit result: a triangle reference plus its face normal. */
@@ -169,7 +169,7 @@ class GScolsys2Thru_c {
 public:
     GSvec mPoint[3];
     GSvec mNormal;
-    u16 mEventId; // 0x30
+    u16 mEventId;
     u16 _32;
 
     /* The caller fills the result fields. */
@@ -183,13 +183,13 @@ struct GScolsys2Check_c {
     u16 _32;
 };
 
-/* One walk-height sample GScolsys2WalkGetHeight fills in (0x0C bytes). */
+/* One walk-height sample GScolsys2WalkGetHeight fills in (12 bytes). */
 struct GSCOLSYS2_WALK_HEIGHT {
-    f32 mHeight; // 0x00
-    u16 mLayer;  // 0x04
-    u16 mLayer2; // 0x06
-    u8 mColor0;  // 0x08
-    u8 mColor1;  // 0x09
+    f32 mHeight;
+    u16 mLayer;
+    u16 mLayer2;
+    u8 mColor0;
+    u8 mColor1;
     u8 _0A[2];
 };
 

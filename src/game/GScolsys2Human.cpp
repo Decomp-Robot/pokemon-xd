@@ -16,10 +16,6 @@ s32 peopleGetHumanID(s32 groupId, s32 resourceId);
 bool gimmickBoxFixDistanceForPushBox(f32* reach, void* work, f32 dx, f32 dz);
 u8 gimmickBoxIsBox(void* work);
 GSvec* peopleBiosGetPosPtr(void* work);
-void GSgfxSetLineWidth(f32 width);
-void GSgfxSetPrimitiveType(s32 type);
-void GSgfxDrawBeginSurface(s32 count);
-void GSgfxDrawEndSurface(void);
 }
 
 static const s32 kCollisionCircleSectors = 16;
@@ -68,7 +64,7 @@ extern "C" void GScolsys2HumanDispColision(void)
     GSgfxLayerSetActive(GSGFX_LAYER_DEFAULT);
     GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_NONE);
-    GSgfxSelectVertexFormat(GSgfxVFBuildTemp(GX_POS_XYZ, GX_F32, GX_FALSE, GX_NRM_XYZ,
+    GSgfxSetupRenderAndSelect(GSgfxVFBuildTemp(GX_POS_XYZ, GX_F32, GX_FALSE, GX_NRM_XYZ,
                                            1, GX_RGBA8, 0, GX_TEX_S, GX_U8));
     GSgfxBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA);
     GSgfxPixelMode(GX_TRUE, GX_TRUE, GX_TRUE);
@@ -90,7 +86,7 @@ extern "C" void GScolsys2HumanDispColision(void)
         position.x = position.y = position.z = (0.0f);
         peopleGetPos(human->mGroupId, human->mResourceId, &position);
         GSgfxSetPrimitiveType(GX_TRIANGLEFAN);
-        GSgfxDrawBeginSurface(kCollisionCircleSectors + 2);
+        GSgfxBeginSurface(kCollisionCircleSectors + 2);
         GSgfxVertex3f(position.x, (0.1f) + position.y, position.z);
         GSgfxColor4u8(0, 0x7F, 0x7F, 0xC0);
         for (segment = 0; segment < kCollisionCircleSectors + 1; segment++) {
@@ -105,9 +101,9 @@ extern "C" void GScolsys2HumanDispColision(void)
                           position.z + radius * sine);
             GSgfxColor4u8(0, 0x7F, 0x7F, 0xC0);
         }
-        GSgfxDrawEndSurface();
+        GSgfxEndSurface();
         GSgfxSetPrimitiveType(GX_LINESTRIP);
-        GSgfxDrawBeginSurface(kCollisionCircleSectors + 1);
+        GSgfxBeginSurface(kCollisionCircleSectors + 1);
         talkRadius = human->mRadius + peopleGetTalkDistance(human->mGroupId,
                                                           human->mResourceId);
         for (segment = 0; segment < kCollisionCircleSectors + 1; segment++) {
@@ -121,7 +117,7 @@ extern "C" void GScolsys2HumanDispColision(void)
                           position.z + talkRadius * sine);
             GSgfxColor4u8(0x7F, 0x7F, 0xFF, 0xC0);
         }
-        GSgfxDrawEndSurface();
+        GSgfxEndSurface();
     }
 }
 

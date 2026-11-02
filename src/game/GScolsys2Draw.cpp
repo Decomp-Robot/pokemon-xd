@@ -4,14 +4,11 @@ extern "C" {
 #include <dolphin/gx/GXEnum.h>
 }
 
-extern u8 gsColSysFixedObjDisplayList[];
+extern GSgfxDL _colsysDL;
 
 extern "C" {
 void* memset(void* dst, int value, unsigned int size);
-void GSgfxDLBegin(void* list, GSgfxVF* vf, s32 size, s32 offset);
-void GSgfxDLEnd(void);
 void floorMapSetDisp(s32 flag);
-void GSgfxDLEndSurface(void);
 }
 
 union CollisionDebugColor { u8 channels[4]; u32 packed; };
@@ -141,7 +138,7 @@ void drawWalkMdl(CCD_WALKMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
     }
 }
 
-void* makeDisplayListFixedObj(void)
+GSgfxDL* makeDisplayListFixedObj(void)
 {
     u32 i;
     CCD_OBJECT* object;
@@ -151,8 +148,8 @@ void* makeDisplayListFixedObj(void)
     if (file == 0) {
         return 0;
     }
-    memset(gsColSysFixedObjDisplayList, 0, 0x10);
-    GSgfxDLBegin(gsColSysFixedObjDisplayList, gsColSysState.mVf, 0x400, 0x8000);
+    memset(&_colsysDL, 0, sizeof(_colsysDL));
+    GSgfxDLBegin(&_colsysDL, GScolsys2.mVf, 1024, 32768);
     object = file->mObject;
     for (i = 0; i < (u32)file->mObjectCount; i++, object++) {
         GSmtx obj;
@@ -183,7 +180,7 @@ void* makeDisplayListFixedObj(void)
         }
     }
     GSgfxDLEnd();
-    return gsColSysFixedObjDisplayList;
+    return &_colsysDL;
 }
 
 extern "C" void GScolsys2Draw(void)
@@ -191,10 +188,10 @@ extern "C" void GScolsys2Draw(void)
     u32 i;
     CCD_OBJECT* object;
     CCD_FILEHEAD* file;
-    GSCOLSYS2_OBJECT_STATE* draw;
+    GSCOLSYS2_OBJ* draw;
     GSmtx obj;
     GSmtx rot;
-    void* list;
+    GSgfxDL* list;
 
     file = GScolsys2GetCCDFileHead();
     if (file == 0) {
@@ -208,12 +205,12 @@ extern "C" void GScolsys2Draw(void)
     GSgfxLayerSetActive(GSGFX_LAYER_DEFAULT);
     GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
     GSgfxCullMode(GX_CULL_FRONT);
-    GSgfxSelectVertexFormat(gsColSysState.mVf);
+    GSgfxSetupRenderAndSelect(GScolsys2.mVf);
     GSgfxBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA);
     GSgfxZCompare(GX_TRUE, GX_LEQUAL);
     GSgfxPixelMode(GX_TRUE, GX_TRUE, GX_TRUE);
     object = file->mObject;
-    draw = gsColSysState.mFloor[gsColSysState.mTableIndex].mObject;
+    draw = GScolsys2.mFloor[GScolsys2.mTableIndex].mObject;
     for (i = 0;
          i < (u32)file->mObjectCount; i++, object++, draw++) {
         /* Draw only moving objects whose floor record is enabled. */
@@ -247,12 +244,12 @@ extern "C" void GScolsys2Draw(void)
     }
     /* The fixed-object display list is built once and cached; the human
      * collision overlay is drawn whether or not the list was ready. */
-    if (gsColSysState.mFixedDisplayList == 0) {
-        gsColSysState.mFixedDisplayList = makeDisplayListFixedObj();
+    if (GScolsys2.mFixedDisplayList == 0) {
+        GScolsys2.mFixedDisplayList = makeDisplayListFixedObj();
     }
-    list = gsColSysState.mFixedDisplayList;
+    list = GScolsys2.mFixedDisplayList;
     if (list != 0) {
-        GSgfxBeginSurface(list);
+        GSgfxDLDraw(list);
     }
     GScolsys2HumanDispColision();
 }

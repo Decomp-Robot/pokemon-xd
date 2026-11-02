@@ -1787,7 +1787,9 @@ game/GSAPI/GSgapp/GSgapp.cpp:
 	.sbss       start:0x804EB028 end:0x804EB050
 
 game/GScolsys2.c:
-	.text       start:0x8011867C end:0x801186C4
+	.text       start:0x8011863C end:0x801186C4
+	.ctors      start:0x802E9FC0 end:0x802E9FC4
+	.bss        start:0x80445C20 end:0x804469F0
 
 game/GScolsys2Draw.cpp:
 	.text       start:0x801186C4 end:0x8011908C
