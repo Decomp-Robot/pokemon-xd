@@ -1622,23 +1622,17 @@ extern "C" int menuPocket2PrintExplanation(tagWINDOW_WORK *window, tagSPRITE_WOR
     return 0;
 }
 
-
-
-
 // menuPocket2GetHero -- fetch the hero and battle-trainer contexts the
 // pocket menu latched in Data.
-#pragma force_active on
 void menuPocket2GetHero(Hero **hero, FIGHT_TRAINER **trainer)
 {
     *hero = Data.mHero;
     *trainer = Data.mTrainer;
 }
-#pragma force_active reset
 
 // menuPocket2GetCurrentTemochiPokemonSlotID -- snapshot the selected
 // temochi pokemon slot ID into the current slot field of Data,
 // returning the snapshotted ID.
-#pragma force_active on
 u32 menuPocket2GetCurrentTemochiPokemonSlotID(void)
 {
     u32 slot;
@@ -1647,7 +1641,6 @@ u32 menuPocket2GetCurrentTemochiPokemonSlotID(void)
     Data.mCurrentSlotID = slot;
     return slot;
 }
-#pragma force_active reset
 
 extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightPokemon **fightPokemon)
 {
@@ -1664,15 +1657,12 @@ extern "C" void menuPocket2GetTemochiPokemon(u32 slot, Pokemon **pokemon, FightP
     *fightPokemon = battlePokemon;
 }
 
-#pragma force_active on
 extern "C" void menuPocket2ClosePokemonMenu(s32 slot)
 {
     Data.mCurrentSlotID = slot;
     menuPokemonClose();
 }
-#pragma force_active reset
 
-#pragma force_active on
 extern "C" u32 menuPocket2OpenPokemonMenu(u32 itemID, s32 wait)
 {
     menuCloseCustom(MENU_DATA_ACT_ROW, 0, 1);
@@ -1689,7 +1679,6 @@ extern "C" u32 menuPocket2OpenPokemonMenu(u32 itemID, s32 wait)
     }
     return slot;
 }
-#pragma force_active reset
 
 extern "C" int menuPocket2DrawNumMenuCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
@@ -2515,14 +2504,6 @@ extern "C" u16 menuPocket2Open(s32 mode, s32 *slotID, void *actor)
     if (slotID) *slotID = Data.mCurrentSlotID;
     return Data.mResult;
 }
-
-
-
-// MSL memory routine used to clear the item-script queue.
-
-
-
-#pragma peephole off
 
 // Return the last selected pocket slot.
 u8 menuPocket2GetLastSlotID(void)
