@@ -26,6 +26,25 @@
 
 extern u8 worldMapMenuOpen;
 
+enum WorldMapFlagState {
+    WORLD_MAP_FLAG_LOCKED = 0,
+    WORLD_MAP_FLAG_UNLOCKED = 1,
+    WORLD_MAP_FLAG_VISITED = 2
+};
+
+enum WorldMapIconMotion {
+    WORLD_MAP_ICON_HIDDEN = 0,
+    WORLD_MAP_ICON_APPEAR = 1,
+    WORLD_MAP_ICON_IDLE = 2,
+    WORLD_MAP_ICON_SCRIPT_SELECTED = 3,
+    WORLD_MAP_ICON_SELECTED = 4,
+    WORLD_MAP_ICON_CONFIRMED = 5,
+    WORLD_MAP_ICON_UNLOCKED_APPEAR = 6,
+    WORLD_MAP_ICON_UNLOCKED_IDLE = 7,
+    WORLD_MAP_ICON_UNLOCKED_SELECTED = 8,
+    WORLD_MAP_ICON_UNLOCKED_CONFIRMED = 9
+};
+
 extern f32 _a0;
 extern f32 _v0;
 
@@ -73,7 +92,7 @@ enum {
     worldMapKeyDownRight = 0x0A,
 };
 
-enum { worldMapFsysID = 0x9E6 };
+enum { worldMapFsysID = 2534 };
 
 enum {
     worldMapDemoSetAMapModel = 0x1B4A0400,
@@ -99,15 +118,14 @@ enum {
 };
 
 enum {
-    worldMapMenuID             = 0x54,
-    worldMapMsgWindowID        = 0x59,
-    worldMapDemoEndMsgID       = 0x1772,
-    worldMapScooterSeID        = 0x5B2,
-    worldMapSpecialScooterSeID = 0x5DC,
+    worldMapMsgWindowID        = 89,
+    worldMapDemoEndMsgID       = 6002,
+    worldMapScooterSeID        = 1458,
+    worldMapSpecialScooterSeID = 1500,
     worldMapMoveFadeScriptID   = 0x5960008,
 };
 
-enum { worldMapScooterUnlockFlag = 0x3C4 };
+enum { worldMapScooterUnlockFlag = 964 };
 
 extern u8 worldMapTargetDebugEnabled;
 
@@ -137,8 +155,17 @@ extern "C" void cameraSetFov(f32 fov);
 
 struct WorldMapLayerSelection { GSgfxLayerID layer; };
 
-static const WorldMapLayerSelection worldMapCursorLayers = {static_cast<GSgfxLayerID>(2)};
-static const WorldMapLayerSelection worldMapIconLayers = {static_cast<GSgfxLayerID>(2)};
+inline WorldMapLayerSelection worldMapCursorLayers()
+{
+    WorldMapLayerSelection selection = {GSGFX_LAYER_DEFAULT};
+    return selection;
+}
+
+inline WorldMapLayerSelection worldMapIconLayers()
+{
+    WorldMapLayerSelection selection = {GSGFX_LAYER_DEFAULT};
+    return selection;
+}
 
 extern WorldMapAnimeRecord _animeTable_A[];
 extern WorldMapAnimeRecord _animeTable_B[];
@@ -183,7 +210,7 @@ extern "C" void menuWorldMapMXDebug()
 {
     for (s32 i = 0; i < *worldmapXD_data_number; i++) {
         u32 flag = worldmapXD_data[i].mFlagID;
-        if (flag) GSflagSet(flag, 2);
+        if (flag) GSflagSet(flag, WORLD_MAP_FLAG_VISITED);
     }
 }
 
@@ -260,7 +287,7 @@ void WorldMap::CallBackFunc(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite)
     case 334: case 335: case 336: case 337: case 338: case 339: case 340:
     case 1505: case 908: case 909: case 910:
         if (worldMapLabelsVisible) {
-            if (menuItemBiosGetSelectFlag(worldMapMenuID, itemID)) {
+            if (menuItemBiosGetSelectFlag(MENU_ID_WORLD_MAP, itemID)) {
                 u32 labelIDs[18] = {327,328,329,330,331,332,333,334,335,336,337,338,339,340,1505,908,909,910};
                 s32 i;
                 s32 labelCursor = -1;
@@ -723,11 +750,11 @@ void WorldMap::MainSub2()
 {
     WorldMapWork* work = mModelWork;
 
-    menuOpenCustom(worldMapMenuID, windowGetActiveID(), &work->mMenuIndex, 0, 1, 0);
+    menuOpenCustom(MENU_ID_WORLD_MAP, windowGetActiveID(), &work->mMenuIndex, 0, 1, 0);
     if (pWorldmap != 0) {
         PreRead(0);
-        menuClose(worldMapMenuID);
-        menuCloseSync(worldMapMenuID, 1);
+        menuClose(MENU_ID_WORLD_MAP);
+        menuCloseSync(MENU_ID_WORLD_MAP, 1);
         menuScriptSetOpenWorldMapFlag(0);
         msgctrlSetValue(worldMapMsgWindowID, worldMapDemoEndMsgID);
         GSfloorPop();
@@ -737,7 +764,7 @@ void WorldMap::MainSub2()
 void WorldMap::MainSub()
 {
     s32 old = mModelWork->mMenuIndex;
-    int sel = menuOpenCustom(worldMapMenuID, windowGetActiveID(), &mModelWork->mMenuIndex, 0, 1, 0);
+    int sel = menuOpenCustom(MENU_ID_WORLD_MAP, windowGetActiveID(), &mModelWork->mMenuIndex, 0, 1, 0);
     WorldMapMapData* data;
 
     if (pWorldmap == 0) {
@@ -749,11 +776,11 @@ void WorldMap::MainSub()
     PreRead(sel);
     SelectIcon(sel);
     data = SearchData(_cursor_index[sel]);
-    menuClose(worldMapMenuID);
-    menuCloseSync(worldMapMenuID, 1);
+    menuClose(MENU_ID_WORLD_MAP);
+    menuCloseSync(MENU_ID_WORLD_MAP, 1);
     if (sel != old) {
         mModelWork->mMapChanged = 1;
-        heroMovePoolCounter(FOOT_STEP_COUNTER_TRAVEL, 0x28);
+        heroMovePoolCounter(FOOT_STEP_COUNTER_TRAVEL, 40);
         moveDemo(old, sel);
     }
     if (sel != old) {
@@ -837,10 +864,10 @@ void WorldMap::CheckPadIndex(bool flag)
                 if (i == j) {
                     continue;
                 }
-                if (GetFlagData(i) == 0) {
+                if (GetFlagData(i) == WORLD_MAP_FLAG_LOCKED) {
                     continue;
                 }
-                if (GetFlagData(j) == 0) {
+                if (GetFlagData(j) == WORLD_MAP_FLAG_LOCKED) {
                     continue;
                 }
                 for (k = 0; k < 8; k++) {
@@ -912,7 +939,7 @@ void WorldMap::CalcModel2D(f32 fieldOfView, bool flag)
             if (i != j) {
                 f32 ang;
 
-                if (GetFlagData(i) == 0 || GetFlagData(j) == 0) {
+                if (GetFlagData(i) == WORLD_MAP_FLAG_LOCKED || GetFlagData(j) == WORLD_MAP_FLAG_LOCKED) {
                     dist = 0.0f;
                     ang = dist;
                 } else {
@@ -957,6 +984,14 @@ s8 WorldMap::GetPadIndex3(f32 angle, long index, f32 width)
     }
     return padIndex;
 }
+
+// Angle of icon slot menuIndex on the World Map ring.
+#pragma auto_inline on
+static f32 worldMapIconAngle(long menuIndex)
+{
+    return menuIndex * (3.1415927f / 8.0f);
+}
+#pragma auto_inline reset
 
 void WorldMap::InitModel2D(f32 fieldOfView)
 {
@@ -1029,13 +1064,13 @@ void WorldMap::Init()
     for (i = 0; i < GetDataNum(); i++) {
         WorldMapMapData* data = SearchData(i);
         if (data->mFlagID == 0) {
-            menuItemBiosSetSelectFlag(0x54, data->mMenuItemID, 1);
+            menuItemBiosSetSelectFlag(MENU_ID_WORLD_MAP, data->mMenuItemID, 1);
             _cursor_index[count++] = i;
         } else if (GSflagGet(data->mFlagID) != 0) {
-            menuItemBiosSetSelectFlag(0x54, data->mMenuItemID, 1);
+            menuItemBiosSetSelectFlag(MENU_ID_WORLD_MAP, data->mMenuItemID, 1);
             _cursor_index[count++] = i;
         } else {
-            menuItemBiosSetSelectFlag(0x54, data->mMenuItemID, 0);
+            menuItemBiosSetSelectFlag(MENU_ID_WORLD_MAP, data->mMenuItemID, 0);
         }
     }
     _cursor_index_num = count;
@@ -1108,12 +1143,10 @@ void WorldMap::SelectIcon(long index)
     SetCameraNextWork(&target, distance, height, yaw, fov);
     SetCameraSpeed(1.0f);
     u32 model = mIcons[icon].mModel;
-    if (GetFlagData(icon) == 1) SetIconMotion(icon, model, 9, 0.0f, false);
-    else SetIconMotion(icon, model, 5, 0.0f, false);
+    if (GetFlagData(icon) == WORLD_MAP_FLAG_UNLOCKED) SetIconMotion(icon, model, WORLD_MAP_ICON_UNLOCKED_CONFIRMED, 0.0f, false);
+    else SetIconMotion(icon, model, WORLD_MAP_ICON_CONFIRMED, 0.0f, false);
     InitCursor(index, 2);
 }
-
-const f32 WorldMap::iconAngleStep = 3.1415927f / 8.0f;
 
 void WorldMap::TargetDebug(long index)
 {
@@ -1198,7 +1231,7 @@ bool WorldMap::Blendf(f32* result, f32 start, f32 end, f32 blend)
 
 void WorldMap::InitModel(long index)
 {
-    WorldMapLayerSelection selection = worldMapIconLayers;
+    WorldMapLayerSelection selection = worldMapIconLayers();
     _GSmodel* base;
     _GSmodel* iconModel;
     s32 i;
@@ -1216,17 +1249,17 @@ void WorldMap::InitModel(long index)
         mIcons[i].mModel = model;
         if (mModelWork->mScriptFlag) {
             if (i == _cursor_index[index]) {
-                if (flag == 2) mIcons[i].mMotion = 3;
-                else mIcons[i].mMotion = 7;
+                if (flag == WORLD_MAP_FLAG_VISITED) mIcons[i].mMotion = WORLD_MAP_ICON_SCRIPT_SELECTED;
+                else mIcons[i].mMotion = WORLD_MAP_ICON_UNLOCKED_IDLE;
             } else mIcons[i].mMotion = GetStartIconAnimIndex(flag);
         } else {
-            if (i == _cursor_index[index]) mIcons[i].mMotion = 4;
+            if (i == _cursor_index[index]) mIcons[i].mMotion = WORLD_MAP_ICON_SELECTED;
             else mIcons[i].mMotion = GetStartIconAnimIndex(flag);
         }
         SetLayerID(model, 1, &selection.layer);
         switch (mIcons[i].mMotion) {
-        case 0: Visibility(model, false); break;
-        case 3: case 4: SetMotion(model, mIcons[i].mMotion, 0.0f, true); break;
+        case WORLD_MAP_ICON_HIDDEN: Visibility(model, false); break;
+        case WORLD_MAP_ICON_SCRIPT_SELECTED: case WORLD_MAP_ICON_SELECTED: SetMotion(model, mIcons[i].mMotion, 0.0f, true); break;
         default: SetMotion(model, mIcons[i].mMotion, 0.0f, false); break;
         }
         GSmodelGetPosition(iconModel, &mIcons[i].pos);
@@ -1250,7 +1283,7 @@ void WorldMap::SetCursorPosition(long index, bool blend)
 
 void WorldMap::InitCursor(long index, short motion)
 {
-    WorldMapLayerSelection selection = worldMapCursorLayers;
+    WorldMapLayerSelection selection = worldMapCursorLayers();
     mCursorElapsed = 0.0f;
     mCursorHeight = 0.0f;
     mCursorModel = worldMapCursorModelID;
@@ -1276,9 +1309,9 @@ void WorldMap::SetSnap(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprit
 #pragma unused(sprite)
     WorldMapMapData* data = SearchData(_cursor_index[index]);
     switch (GetFlagData(_cursor_index[index])) {
-    case 0: break;
-    case 1: windowDrawSprite(0, 0, 0, 831, 0, window->mLayerID); break;
-    case 2: windowDrawSprite(0, 0, 0, data->mSnapTexture, 0, window->mLayerID); break;
+    case WORLD_MAP_FLAG_LOCKED: break;
+    case WORLD_MAP_FLAG_UNLOCKED: windowDrawSprite(0, 0, 0, 831, 0, window->mLayerID); break;
+    case WORLD_MAP_FLAG_VISITED: windowDrawSprite(0, 0, 0, data->mSnapTexture, 0, window->mLayerID); break;
     }
 }
 
@@ -1323,21 +1356,21 @@ s32 WorldMap::GetInfoLevel()
     return count - 1;
 }
 
-f32 WorldMap::GetAngle(long work)
+f32 WorldMap::GetAngle(long menuIndex)
 {
-    return CalculateIconAngle(work);
+    return worldMapIconAngle(menuIndex);
 }
 
 void WorldMap::SetFlagData(long index)
 {
     u32 flag = SearchData(index)->mFlagID;
-    if (flag != 0) GSflagSet(flag, 2);
+    if (flag != 0) GSflagSet(flag, WORLD_MAP_FLAG_VISITED);
 }
 
 u32 WorldMap::GetFlagData(long index)
 {
     u32 flag = SearchData(index)->mFlagID;
-    if (flag == 0) return 2;
+    if (flag == 0) return WORLD_MAP_FLAG_VISITED;
     return GSflagGet(flag);
 }
 
@@ -1386,17 +1419,17 @@ WorldMap::WorldMap()
     mDemoEffect = 0;
 }
 
-s16 WorldMap::GetStartIconAnimIndex(unsigned long index)
+s16 WorldMap::GetStartIconAnimIndex(unsigned long flagState)
 {
-    switch (index) {
-    case 0:
-        return 0;
-    case 1:
-        return 6;
-    case 2:
-        return 1;
+    switch (flagState) {
+    case WORLD_MAP_FLAG_LOCKED:
+        return WORLD_MAP_ICON_HIDDEN;
+    case WORLD_MAP_FLAG_UNLOCKED:
+        return WORLD_MAP_ICON_UNLOCKED_APPEAR;
+    case WORLD_MAP_FLAG_VISITED:
+        return WORLD_MAP_ICON_APPEAR;
     default:
-        return 0;
+        return WORLD_MAP_ICON_HIDDEN;
     }
 }
 
@@ -1434,29 +1467,29 @@ void WorldMap::CheckIconAnime(long index)
     for (s32 i = 0; i < GetDataNum(); i++) {
         u32 model = mIcons[i].mModel;
         switch (mIcons[i].mMotion) {
-        case 1:
-            if (!CheckMotion(model)) SetIconMotion(i, model, 2, 0.0f, true);
+        case WORLD_MAP_ICON_APPEAR:
+            if (!CheckMotion(model)) SetIconMotion(i, model, WORLD_MAP_ICON_IDLE, 0.0f, true);
             else mModelWork->mModelLoading = 1;
             break;
-        case 6:
-            if (!CheckMotion(model)) SetIconMotion(i, model, 7, 0.0f, true);
+        case WORLD_MAP_ICON_UNLOCKED_APPEAR:
+            if (!CheckMotion(model)) SetIconMotion(i, model, WORLD_MAP_ICON_UNLOCKED_IDLE, 0.0f, true);
             break;
-        case 2:
-            if (selected == i) SetIconMotion(i, model, 4, 0.0f, true);
+        case WORLD_MAP_ICON_IDLE:
+            if (selected == i) SetIconMotion(i, model, WORLD_MAP_ICON_SELECTED, 0.0f, true);
             break;
-        case 7:
-            if (selected == i) SetIconMotion(i, model, 8, 0.0f, true);
+        case WORLD_MAP_ICON_UNLOCKED_IDLE:
+            if (selected == i) SetIconMotion(i, model, WORLD_MAP_ICON_UNLOCKED_SELECTED, 0.0f, true);
             break;
-        case 4:
-            if (selected != i) SetIconMotion(i, model, 2, 0.0f, true);
+        case WORLD_MAP_ICON_SELECTED:
+            if (selected != i) SetIconMotion(i, model, WORLD_MAP_ICON_IDLE, 0.0f, true);
             break;
-        case 8:
-            if (selected != i) SetIconMotion(i, model, 7, 0.0f, true);
+        case WORLD_MAP_ICON_UNLOCKED_SELECTED:
+            if (selected != i) SetIconMotion(i, model, WORLD_MAP_ICON_UNLOCKED_IDLE, 0.0f, true);
             break;
-        case 5:
+        case WORLD_MAP_ICON_CONFIRMED:
             if (!CheckMotion(model)) StopMotion(model);
             break;
-        case 9:
+        case WORLD_MAP_ICON_UNLOCKED_CONFIRMED:
             if (!CheckMotion(model)) StopMotion(model);
             break;
         }
@@ -1482,20 +1515,12 @@ void WorldMap::SetIconMotion(long index, unsigned long model, short motion, f32 
 void WorldMap::GetCameraData(long index, GSvec* pos, f32* distance, f32* height, f32* yaw, f32* fov)
 {
     WorldMapCamData* entry;
-    f32 x;
-    f32 y;
-    f32 z;
 
     if ((u32)index >= *worldmap_cameradata_number) {
         return;
     }
     entry = &worldmap_cameradata[index];
-    z = entry->pos.z;
-    y = entry->pos.y;
-    x = entry->pos.x;
-    pos->x = x;
-    pos->y = y;
-    pos->z = z;
+    *pos = GSvec(entry->pos.x, entry->pos.y, entry->pos.z);
     *distance = entry->distance;
     *height = entry->height;
     *yaw = entry->yaw;

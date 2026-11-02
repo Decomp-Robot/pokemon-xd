@@ -21,7 +21,7 @@ struct WorldMapWork {
     f32 _08;
     f32 _0C;
     f32 _10;
-    u8 _14[0x18];
+    u8 _14[24];
 
     s32 mMenuIndex;
 
@@ -37,7 +37,7 @@ struct WorldMapWork {
     _GScamera* mAnimeCamera;
 
     u8 mModelLoading;
-    u8 _49[0x03];
+    u8 _49[3];
 
     u32 mMapModelID;
 
@@ -58,11 +58,11 @@ struct WorldMapWork {
 
     void* mScooter;
 
-    u32 mParticleRes[0x03];
-    _GSparticleGen* mParticleGen[0x03];
+    u32 mParticleRes[3];
+    _GSparticleGen* mParticleGen[3];
 
     u8 mMapChanged;
-    u8 _91[0x03];
+    u8 _91[3];
 };
 
 struct WorldMapIconSubWork {
@@ -78,7 +78,7 @@ struct WorldMapIconWork {
     u8 _06[2];
     GSvec pos;
 
-    s8 mNext[0x08];
+    s8 mNext[8];
 
     GSvec screen;
 
@@ -128,7 +128,7 @@ struct WorldMapAnimeRecord {
     u32 mModelRes;
 
     u32 mModelID;
-    u8 _08[0x02];
+    u8 _08[2];
 
     s16 mPart;
 
@@ -153,7 +153,7 @@ struct WorldMapMapData {
     u32 mIconModelID;
     u32 mSnapTexture;
     u32 mModelID;
-    u8 _18[0x04];
+    u8 _18[4];
     s32 mFloorID;
     u32 mNpcMsgID;
 };
@@ -253,19 +253,11 @@ public:
     void CalcModel2D(f32 angle, bool flag);
 
     s32 GetNowCursor(tagWINDOW_WORK* window);
-    s16 GetStartIconAnimIndex(unsigned long index);
+    s16 GetStartIconAnimIndex(unsigned long flagState);
 
     bool IsBlending();
-    f32 GetAngle(long work);
+    f32 GetAngle(long menuIndex);
 
-private:
-    static const f32 iconAngleStep;
-    static f32 CalculateIconAngle(long index)
-    {
-        return iconAngleStep * index;
-    }
-
-public:
     s32 GetModelID(long index);
     void SetCursorPosition(long index, bool flag);
     void InitModel2D(f32 param);
