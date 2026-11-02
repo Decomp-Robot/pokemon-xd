@@ -101,7 +101,7 @@ game/dbgMenuItemCreate.c:
 
 game/dbgMenuRelive.c:
 	.text       start:0x8000E53C end:0x8000E5AC
-	.sdata2     start:0x804EBDF8 end:0x804EBE00
+	.sdata2     start:0x804EBDF8 end:0x804EBDFC
 
 game/menuPokeCoupon.c:
 	.text       start:0x8000E5AC end:0x8000E64C
