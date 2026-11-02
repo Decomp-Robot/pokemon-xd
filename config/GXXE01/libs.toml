@@ -2236,6 +2236,11 @@ name = "game/app/people/peopleWalkList.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]
 
+[[lib.object]]
+name = "game/menuDataBios.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"

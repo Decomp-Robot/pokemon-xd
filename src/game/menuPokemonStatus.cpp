@@ -87,9 +87,9 @@ extern "C" unsigned long sub_menu_id[4] = {
 // the kind the pokemon wears, the first ribbon id of the kind and the highest
 // count the field can hold.
 struct RibbonKindData {
-    u16 mField; // 0x0: pokemon status field holding the count.
-    u8 mFirst;  // 0x2: first ribbon id of the kind.
-    u8 mMax;    // 0x3: highest count the field can hold.
+    u16 mField; // Pokemon status field holding the count.
+    u8 mFirst;  // First ribbon id of the kind.
+    u8 mMax;    // Highest count the field can hold.
 };
 
 extern "C" RibbonKindData ribbon_mapping_tbl[10] = {
@@ -1296,7 +1296,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                                                      MENU_POKEMON_STATUS_ITEM_MODEL);
         f32 angle[3];
 
-        menuModelSetSize(&_menuModel, item->mMessageX, item->mOffsetA,
+        menuModelSetSize(&_menuModel, item->mX, item->mY,
                          item->mWidth, item->mHeight);
         if (menuModelSetupPokemon(&_menuModel, pokemon) != 1)
             return;

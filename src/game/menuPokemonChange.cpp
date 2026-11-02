@@ -779,7 +779,7 @@ short _selectDisplay_2p_offset()
 {
     MENU_ITEM_dd_* first = menuPtItemGetByMenuIdAndItemId(CHANGE_MENU_PARTY, CHANGE_ITEM_PLAYER_PANEL, 0);
     MENU_ITEM_dd_* second = menuPtItemGetByMenuIdAndItemId(CHANGE_MENU_PARTY, CHANGE_ITEM_OTHER_PLAYER_PANEL, 0);
-    return second->mMessageX - first->mMessageX;
+    return second->mX - first->mX;
 }
 
 void CMenuPokemonChange::setMenuByTbl(long* table)
@@ -949,7 +949,7 @@ long CMenuPokemonChange::selectPokemonMenuOpen()
         offset = _selectDisplay_2p_offset();
         item = menuItemBiosGetPtr(CHANGE_MENU_SELECT_POKEMON, CHANGE_ITEM_GBA_PARTY_FIRST);
         for (long slot = 0; slot < CHANGE_PARTY_CAPACITY; ++slot) {
-            item->mMessageX += offset;
+            item->mX += offset;
             item = menuItemBiosGetPtr(CHANGE_MENU_SELECT_POKEMON, item->mNextID);
         }
     }

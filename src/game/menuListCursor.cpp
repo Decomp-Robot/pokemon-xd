@@ -30,7 +30,7 @@ s32 menuItemSetListCursorY(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
     tagMENU_ITEM_DATA *item;
 
     item = menuItemBiosGetPtr(window->mMenuID, work->mItemID);
-    work->mY = (s16)(item->mOffsetA + getCursorPositionY());
+    work->mY = (s16)(item->mY + getCursorPositionY());
     return 0;
 }
 

@@ -34,7 +34,7 @@
 // Argument the number window is opened with: the most of the item the player
 // may enter.
 struct NumWindowArg {
-    s32 mMaxNum; // 0x00: highest number the window accepts.
+    s32 mMaxNum; // Highest number the window accepts.
 };
 
 // Alpha a rolling row of the list starts from; the roll fades it out.
@@ -401,7 +401,7 @@ extern "C" s32 menuPcBoxDouguHikidasuDrawTitleText(tagWINDOW_WORK *window, tagSP
     item = menuPtItemGetBySpriteWork(window, sprite);
     width = sprite->mWidth / 2;
     half = (s16)(GSmsgGetMessageSize(msgID) >> 16) / 2;
-    sprite->mX = item->mMessageX + (s16)(width - half);
+    sprite->mX = item->mX + (s16)(width - half);
     return 0;
 }
 
@@ -565,13 +565,13 @@ extern "C" s32 menuPcBoxDouguHikidasuDrawLineCursor(tagWINDOW_WORK *window, tagS
     if (sSwapRow >= 0) {
         s32 row = sSwapRow - sListTop;
 
-        y = item->mOffsetA + row * _getItemListLineHeight();
+        y = item->mY + row * _getItemListLineHeight();
         if (sListRollFlip != 0) {
             y -= (s32)sListRollY;
         }
         winSpriteSetDisp(sprite, row >= 0 && row < ITEM_LIST_ROWS);
     } else {
-        y = item->mOffsetA + sListCursorRow * _getItemListLineHeight();
+        y = item->mY + sListCursorRow * _getItemListLineHeight();
         if (sListRollFlip == 0) {
             y += (s32)sListRollY;
         }
@@ -919,7 +919,7 @@ extern "C" s32 menuPcBoxDouguConfirmDrawCursor(tagWINDOW_WORK *window, tagSPRITE
         winSpriteSetDisp(sprite, 0);
         sItemCursorRow = window->mCursor.y;
     } else {
-        sprite->mY = item->mOffsetA + y;
+        sprite->mY = item->mY + y;
     }
     return 0;
 }

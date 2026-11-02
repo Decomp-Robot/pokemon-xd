@@ -288,8 +288,8 @@ void menuPtSpriteWorkSetMenuItem(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
     sprite->mSpriteY = value->mY;
     sprite->mTextureWidth = value->mWidth;
     sprite->mTextureHeight = value->mHeight;
-    sprite->mX = item->mMessageX;
-    sprite->mY = item->mOffsetA;
+    sprite->mX = item->mX;
+    sprite->mY = item->mY;
     sprite->mWidth = item->mWidth;
     sprite->mHeight = item->mHeight;
 }
@@ -334,17 +334,17 @@ void menuPtSpriteWorkSetWidthRateColor(tagWINDOW_WORK *window, unsigned long ite
 
 void menuPtItemDrawAlpha(MENU_ITEM_dd_ *item, unsigned char alpha)
 {
-    windowDrawSprite2(item->mMessageX, item->mOffsetA, item->mWidth, item->mHeight, 0xffffff00 | alpha, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mX, item->mY, item->mWidth, item->mHeight, 0xffffff00 | alpha, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtItemDrawOffset(MENU_ITEM_dd_ *item, long x, long y)
 {
-    windowDrawSprite2(item->mMessageX + x, item->mOffsetA + y, item->mWidth, item->mHeight, -1, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mX + x, item->mY + y, item->mWidth, item->mHeight, -1, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtItemDrawOffsetXWColor(MENU_ITEM_dd_ *item, long x, long width, unsigned long color)
 {
-    windowDrawSprite2(item->mMessageX + x, item->mOffsetA, width, item->mHeight, color, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
+    windowDrawSprite2(item->mX + x, item->mY, width, item->mHeight, color, 0, item->mSpriteID, 0, GSGFX_LAYER_MENU);
 }
 
 void menuPtSpriteDraw(unsigned short spriteID, long x, long y)

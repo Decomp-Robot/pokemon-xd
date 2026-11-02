@@ -58,10 +58,9 @@ struct SActionMenuItem {
         HIDE_FOR_IMPORTANT_ITEM = 2
     };
 
-    int mMsgID; // 0x00: label message id.
-    int (*mFunc)(int, int, int *); // 0x04: handler; null ends the table.
-    u16 mFlags; // 0x08: bit0 only for usable items, bit1 hidden for
-                //       important items.
+    int mMsgID; // Label message id.
+    int (*mFunc)(int, int, int *); // Handler; null ends the table.
+    u16 mFlags; // REQUIRE_USABLE_ITEM / HIDE_FOR_IMPORTANT_ITEM of the row.
 };
 
 // Handler of one action-menu row.
@@ -71,21 +70,21 @@ typedef int (*SActionMenuFunc)(int, int, int *);
 // index inside the tab.
 typedef void (*PocketItemPrintFunc)(GSgfxLayerID layer, int x, int y, int tab, int index);
 
-// One tab of the item list, 0x20 bytes.
+// One tab of the item list.
 struct PocketTabData {
-    u8 mItemKind; // 0x00: item kind held by the tab; 0x80 and above mark the
-                  //       items that live in the hidden-machine list.
-    u8 mSwapAble; // 0x01: items of the tab may be swapped.
-    u8 mSortAble; // 0x02: items of the tab may be sorted.
-    u8 _03; // 0x03: unknown.
-    u32 mTabItemID; // 0x04: tab menu item.
-    u32 mActiveTabItemID; // 0x08: highlighted tab item.
-    PocketItemPrintFunc mPrint; // 0x0C: prints one row of the tab.
-    u16 mCursorID; // 0x10: cursor the tab's list is drawn with.
-    u16 _12; // 0x12: unknown.
-    u32 mTitleMsgID; // 0x14: title of the tab.
-    const SActionMenuItem *mActMenu; // 0x18: rows offered in the field menu.
-    const SActionMenuItem *mActMenu2; // 0x1C: rows offered in battle.
+    u8 mItemKind; // Item kind held by the tab; 0x80 and above mark the items
+                  // that live in the hidden-machine list.
+    u8 mSwapAble; // Items of the tab may be swapped.
+    u8 mSortAble; // Items of the tab may be sorted.
+    u8 _03;
+    u32 mTabItemID; // Tab menu item.
+    u32 mActiveTabItemID; // Highlighted tab item.
+    PocketItemPrintFunc mPrint; // Prints one row of the tab.
+    u16 mCursorID; // Cursor the tab's list is drawn with.
+    u16 _12;
+    u32 mTitleMsgID; // Title of the tab.
+    const SActionMenuItem *mActMenu; // Rows offered in the field menu.
+    const SActionMenuItem *mActMenu2; // Rows offered in battle.
 };
 
 extern const PocketTabData lPocketTabData[];
@@ -95,11 +94,11 @@ extern "C" CURSOR pocketTabCursorResetPosition;
 
 // Measured columns of the action-menu rows.
 struct ActMenuResizeEntry {
-    u32 mItemID; // 0x00: menu-data id of the row.
-    s16 mRowOffset; // 0x04: row y offset.
-    s16 mColumnExtent; // 0x06: column layout extent.
-    u8 mFlag; // 0x08: set for the rows the window draws itself.
-    u8 _09[0x03]; // 0x09-0x0B: padding.
+    u32 mItemID; // Menu-data id of the row.
+    s16 mRowOffset; // Row y offset.
+    s16 mColumnExtent; // Column layout extent.
+    u8 mFlag; // Set for the rows the window draws itself.
+    u8 _09[3];
 };
 
 namespace {
@@ -650,7 +649,7 @@ void _setActMenuResizeWork(void)
 {
     for (u32 i = 0; i < 7; i++) {
         ActMenuResizeWork[i].mRowOffset =
-            menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mOffsetA;
+            menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mY;
         ActMenuResizeWork[i].mColumnExtent =
             menuItemBiosGetPtr(MENU_DATA_ACT_ROW, ActMenuResizeWork[i].mItemID)->mHeight;
     }
@@ -1918,7 +1917,7 @@ extern "C" int menuPocket2DrawActionCursorLine(tagWINDOW_WORK *window, tagSPRITE
     int spacing = _actionMenuLineHeight(window);
     int y = window->mCursor.y + rowOffset;
     y *= spacing;
-    sprite->mY = item->mOffsetA + y;
+    sprite->mY = item->mY + y;
     return 0;
 }
 
@@ -1994,7 +1993,7 @@ int _actionMenuLineHeight(tagWINDOW_WORK *window)
 {
     tagMENU_ITEM_DATA *second = menuItemBiosGetPtr(window->mMenuID, POCKET_ACTION_CURSOR_ROW_2);
     tagMENU_ITEM_DATA *first = menuItemBiosGetPtr(window->mMenuID, ACTION_ROW_4_CURSOR);
-    int spacing = second->mOffsetA - first->mOffsetA;
+    int spacing = second->mY - first->mY;
     if (spacing < 0) {
         spacing = -spacing;
     }
@@ -2052,7 +2051,7 @@ extern "C" int menuPocket2PrintItemList(tagWINDOW_WORK *window, tagSPRITE_WORK *
 {
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_LIST_SCISSOR_ITEM);
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mWidth, scissor->mHeight);
+    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mX - item->mX, scissor->mY - item->mY, scissor->mWidth, scissor->mHeight);
     CURSOR pos = cursorBiosGetPos(lPocketTabData[window->mCursor.y].mCursorID);
     _printItemList(winSpriteGetLayerID(window, sprite), Data.mTabScroll, window->mCursor.y, pos);
     if (0.0f != Data.mTabScroll) {
@@ -2084,7 +2083,7 @@ extern "C" int menuPocket2PrintItemKind(tagWINDOW_WORK *window, tagSPRITE_WORK *
     s16 nextWidth;
     tagMENU_ITEM_DATA *scissor = menuItemBiosGetPtr(window->mMenuID, POCKET_TITLE_SCISSOR_ITEM);
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mMessageX - item->mMessageX, scissor->mOffsetA - item->mOffsetA, scissor->mWidth, scissor->mHeight);
+    spriteSetScissor(winSpriteGetLayerID(window, sprite), scissor->mX - item->mX, scissor->mY - item->mY, scissor->mWidth, scissor->mHeight);
     int tab;
     int center = sprite->mWidth / 2;
     u32 message = lPocketTabData[window->mCursor.y].mTitleMsgID;
@@ -2158,7 +2157,7 @@ extern "C" int menuPocket2DrawExchangeCursor(tagWINDOW_WORK *window, tagSPRITE_W
     }
     if (Data.mExchangeSlot >= 0) {
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-        sprite->mY = item->mOffsetA + y;
+        sprite->mY = item->mY + y;
         winSpriteSetDisp(sprite, 1);
         static f32 pulsePeriod = 0.5f;
         Data.mExchangeTime += timeGetLastFrameSec();
@@ -2233,7 +2232,7 @@ extern "C" int menuPocket2DrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
     }
     if (visible) {
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-        sprite->mY = (s16)(item->mOffsetA + y);
+        sprite->mY = (s16)(item->mY + y);
         if (Data.mExchangeSlot >= 0) {
             winSpriteSetDisp(sprite, 0);
             tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);

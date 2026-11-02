@@ -247,9 +247,9 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             closestDistance = kCursorLimitUpDown;
             for (;;) {
                 if (traversal.current->mShownFlag) {
-                    s32 dy = traversal.origin->mOffsetA - traversal.current->mOffsetA;
+                    s32 dy = traversal.origin->mY - traversal.current->mY;
                     if (dy > 0) {
-                        s32 dx = traversal.origin->mMessageX - traversal.current->mMessageX;
+                        s32 dx = traversal.origin->mX - traversal.current->mX;
                         if (dx < 0) {
                             dx = -dx;
                         }
@@ -269,9 +269,9 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             closestDistance = kCursorLimitUpDown;
             for (;;) {
                 if (traversal.current->mShownFlag) {
-                    s32 dy = traversal.current->mOffsetA - traversal.origin->mOffsetA;
+                    s32 dy = traversal.current->mY - traversal.origin->mY;
                     if (dy > 0) {
-                        s32 dx = traversal.origin->mMessageX - traversal.current->mMessageX;
+                        s32 dx = traversal.origin->mX - traversal.current->mX;
                         if (dx < 0) {
                             dx = -dx;
                         }
@@ -291,9 +291,9 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             closestDistance = kCursorLimitLeftRight;
             for (;;) {
                 if (traversal.current->mShownFlag) {
-                    s32 dx = traversal.origin->mMessageX - traversal.current->mMessageX;
+                    s32 dx = traversal.origin->mX - traversal.current->mX;
                     if (dx > kMinimumHorizontalSeparation) {
-                        s32 dy = traversal.origin->mOffsetA - traversal.current->mOffsetA;
+                        s32 dy = traversal.origin->mY - traversal.current->mY;
                         if (dy < 0) {
                             dy = -dy;
                         }
@@ -313,9 +313,9 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             closestDistance = kCursorLimitLeftRight;
             for (;;) {
                 if (traversal.current->mShownFlag) {
-                    s32 dx = traversal.current->mMessageX - traversal.origin->mMessageX;
+                    s32 dx = traversal.current->mX - traversal.origin->mX;
                     if (dx > kMinimumHorizontalSeparation) {
-                        s32 dy = traversal.origin->mOffsetA - traversal.current->mOffsetA;
+                        s32 dy = traversal.origin->mY - traversal.current->mY;
                         if (dy < 0) {
                             dy = -dy;
                         }
@@ -1196,8 +1196,8 @@ extern "C" long BattleDiskItemDraw(tagWINDOW_WORK* window, tagSPRITE_WORK* sprit
         else if(gBDisk.mScrollTargetY>gBDisk.mScrollY) gBDisk.mScrollY+=6;
         {
             tagMENU_ITEM_DATA* item=menuItemBiosGetPtr(window->mMenuID,kItemDiskListScissor);
-            spriteSetScissor(winSpriteGetLayerID(window,sprite),item->mMessageX-sprite->mX,
-                             item->mOffsetA-sprite->mY,item->mWidth,item->mHeight);
+            spriteSetScissor(winSpriteGetLayerID(window,sprite),item->mX-sprite->mX,
+                             item->mY-sprite->mY,item->mWidth,item->mHeight);
             for(long i=0;i<gBDisk.mDiskCount;i++) {
                 s16 y=gBDisk.mScrollY+i*30;
                 if(y>-64 && y<480) {

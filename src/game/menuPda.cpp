@@ -750,8 +750,8 @@ void _SelectCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s8 select)
             count = _SelectCursorSub(select, vertices);
             item = menuItemBiosGetPtr(0x6B, sprite->mItemID);
             for (i = 0; i < count; i++) {
-                vertices[i].x -= item->mMessageX;
-                vertices[i].y -= item->mOffsetA;
+                vertices[i].x -= item->mX;
+                vertices[i].y -= item->mY;
             }
             layer->blendMode(GSGFX_BLEND_BLEND, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_ONE, true);
             layer->beginSurface(GSGFX_PRIM_TRIANGLE_FAN, GSgfxVFGetPredef(3), count);
@@ -817,7 +817,7 @@ extern s32 _SelectLabel[];
 void _SelectCursorCalcAngle(s8 select)
 {
     tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(0x6B, _SelectLabel[select]);
-    _menuPdaStatus.mCursorTargetY = (s16)(item->mOffsetA - 5);
+    _menuPdaStatus.mCursorTargetY = (s16)(item->mY - 5);
     _menuPdaStatus.mOuterStartAngle = acos((_menuPdaStatus.mCursorY - menuPdaCursorCenterOuter.y) / _r1);
     {
         f32 height = 30.0f;

@@ -972,7 +972,7 @@ s32 menuPokemonCtrl(tagWINDOW_WORK *win)
             s32 i;
 
             for (i = 0; i < 6; i++) {
-                menuItemSetPosition(win->mMenuID, menu_info[_menuPokemon.mPanelLayout][i].mSlotIcon,
+                menuItemBiosSetXY(win->mMenuID, menu_info[_menuPokemon.mPanelLayout][i].mSlotIcon,
                             menu_info[_menuPokemon.mPanelLayout][i].mX,
                             menu_info[_menuPokemon.mPanelLayout][i].mY);
                 menuDataBiosSetXY(menu_info[_menuPokemon.mPanelLayout][i].mWindowId,

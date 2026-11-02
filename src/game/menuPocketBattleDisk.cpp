@@ -66,7 +66,7 @@ extern "C" s32 menuPocketBattleDiskDrawLineCursor(tagWINDOW_WORK *window, tagSPR
     tagMENU_ITEM_DATA *item;
 
     item = menuItemBiosGetPtr(window->mMenuID, work->mItemID);
-    work->mY = (s16)(item->mOffsetA + getCursorPositionY());
+    work->mY = (s16)(item->mY + getCursorPositionY());
     return 0;
 }
 
@@ -181,8 +181,8 @@ extern "C" s32 menuPocketBattleDiskPrintItemList(tagWINDOW_WORK *window, tagSPRI
     tagMENU_ITEM_DATA *listArea = menuItemBiosGetPtr(window->mMenuID, 0x11B);
     tagMENU_ITEM_DATA *rowArea = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
     s32 layer = winSpriteGetLayerID(window, sprite);
-    spriteSetScissor(layer, listArea->mMessageX - rowArea->mMessageX,
-                     listArea->mOffsetA - rowArea->mOffsetA,
+    spriteSetScissor(layer, listArea->mX - rowArea->mX,
+                     listArea->mY - rowArea->mY,
                      listArea->mWidth, listArea->mHeight);
     spriteSetEnv(winSpriteGetLayerID(window, sprite));
     printItemList(window, sprite);
@@ -351,8 +351,8 @@ void diskUsedMarkDisplay(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, int y)
 {
     tagMENU_ITEM_DATA *row = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
     tagMENU_ITEM_DATA *icon = menuItemBiosGetPtr(window->mMenuID, 0x117);
-    s32 iconX = icon->mMessageX - row->mMessageX;
-    s32 iconY = icon->mOffsetA - row->mOffsetA;
+    s32 iconX = icon->mX - row->mX;
+    s32 iconY = icon->mY - row->mY;
     s16 *texture = (s16 *)menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(0xD9));
     s32 layer = winSpriteGetLayerID(window, sprite);
     windowDrawSprite2((s16)iconX, (s16)(iconY + y), texture[2], texture[3],

@@ -1032,8 +1032,8 @@ void menuCB_RuleItemFlagDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if (last >= 0x3E)
         last = 0x3E;
 
-    spriteSetScissor(layer, itemTop->mMessageX - itemRow->mMessageX,
-                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mWidth,
+    spriteSetScissor(layer, itemTop->mX - itemRow->mX,
+                     itemTop->mY - itemRow->mY, itemRow->mWidth,
                      itemRow->mHeight);
 
     for (i = first; i <= last; i++, y += 0x18) {
@@ -1074,8 +1074,8 @@ void menuCB_RuleItemNameEntry(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if (last >= 0x3E)
         last = 0x3E;
 
-    spriteSetScissor(layer, itemTop->mMessageX - itemRow->mMessageX,
-                     itemTop->mOffsetA - itemRow->mOffsetA, itemRow->mWidth,
+    spriteSetScissor(layer, itemTop->mX - itemRow->mX,
+                     itemTop->mY - itemRow->mY, itemRow->mWidth,
                      itemRow->mHeight);
 
     for (s32 i = first; i <= last; i++, y += 0x18) {
