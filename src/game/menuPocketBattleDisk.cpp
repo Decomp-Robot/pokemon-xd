@@ -12,15 +12,12 @@
 #include <menuPocketTool.h>
 #include <hero.h>
 #include <fightTrainer.h>
+#include <menuSub.h>
 
 extern "C" void *memset(void *dst, int value, unsigned int size);
 extern "C" void winSeqSetMenu(long menuID, s32 sequence);
-extern "C" void menuSubCursorAnimeInit(void);
-extern "C" void menuSubCursorAnimeMain(void);
 
 u8 deckDataVirtualDB_GetFlagData(u16 index);
-extern "C" void menuSubCursorAnimeStart(void);
-
 
 void menuPocketButtonWait(void);
 extern "C" void menuBattleDiskOpenDoc(u8 itemKind);
@@ -56,21 +53,20 @@ u16 getItemIDFromMenuPos(int menuPosition);
 long getItemNameMsg(unsigned long itemID);
 }
 
-extern "C" void menuSubCursorAnimeValGet(f32 *values, s32 *anime);
-extern "C" void windowDrawSpriteCursor(s16 x, s16 y, u32 color, tagWINDOW_WORK *window, u16 itemID, u32 flags, s32 layer,
-                            f32 *animeValues, u32 animeColor);
-
-
-extern "C" s32 menuPocketBattleDiskDrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
+// Item cursor hook for the battle-disk list: the cursor line is drawn on the
+// row the cursor stands on.
+extern "C" s32 menuPocketBattleDiskDrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     tagMENU_ITEM_DATA *item;
 
-    item = menuItemBiosGetPtr(window->mMenuID, work->mItemID);
-    work->mY = (s16)(item->mY + getCursorPositionY());
+    item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
+    sprite->mY = (s16)(item->mY + getCursorPositionY());
     return 0;
 }
 
-extern "C" s32 menuPocketBattleDiskDrawBallCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *work)
+// Item cursor hook for the battle-disk list: draw the animated ball cursor of
+// the row, then hide the row sprite.
+extern "C" s32 menuPocketBattleDiskDrawBallCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     f32 vals[2] = { 0.0f, 0.0f };
     s32 anime;
@@ -81,9 +77,9 @@ extern "C" s32 menuPocketBattleDiskDrawBallCursor(tagWINDOW_WORK *window, tagSPR
     if (window->mMenuID == windowGetActiveID()) {
         menuSubCursorAnimeValGet(vals, &anime);
     }
-    layer = winSpriteGetLayerID(window, work);
-    windowDrawSpriteCursor(0, getCursorPositionY(), -1, window, 194, 0, layer, vals, anime);
-    winSpriteSetDisp(work, 0);
+    layer = winSpriteGetLayerID(window, sprite);
+    windowDrawSpriteCursor(0, getCursorPositionY(), -1, window, MENU_LIST_CURSOR_TEXTURE, 0, layer, vals, anime);
+    winSpriteSetDisp(sprite, 0);
     return 0;
 }
 
