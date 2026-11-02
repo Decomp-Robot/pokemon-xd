@@ -5016,6 +5016,10 @@ cflags_extra = ["-use_lmw_stmw on"]
 name = "game/app/item/itemFightItem.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/item/fightItemBios.cpp"
+completed = true
+
 [[lib]]
 name = "GSres"
 mw_version = "GC/2.6"
