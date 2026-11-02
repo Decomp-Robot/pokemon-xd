@@ -117,15 +117,19 @@ enum {
     worldMapSpecialScooterParticle1 = 0x213D1400,
 };
 
+/* Message id of the name shown in place of a character that has none of their own. */
+enum { worldMapUnnamedSpeakerMsgID = 6002 };
+
 enum {
-    worldMapMsgWindowID        = 89,
-    worldMapDemoEndMsgID       = 6002,
     worldMapScooterSeID        = 1458,
     worldMapSpecialScooterSeID = 1500,
     worldMapMoveFadeScriptID   = 0x5960008,
 };
 
 enum { worldMapScooterUnlockFlag = 964 };
+
+/* Snapshot window contents for a floor the player has unlocked but not yet entered. */
+enum { worldMapUnvisitedSnapTexture = 831 };
 
 extern u8 worldMapTargetDebugEnabled;
 
@@ -268,9 +272,8 @@ extern "C" s32 menuWorldMapMX(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite)
 
 void WorldMap::CallBackFunc(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite)
 {
-    s32 itemID;
     s32 cursor = GetNowCursor(window);
-    itemID = sprite->mItemID;
+    s32 itemID = sprite->mItemID;
     switch (itemID) {
     case 917:
         SetSnap(cursor, window, sprite);
@@ -756,7 +759,8 @@ void WorldMap::MainSub2()
         menuClose(MENU_ID_WORLD_MAP);
         menuCloseSync(MENU_ID_WORLD_MAP, 1);
         menuScriptSetOpenWorldMapFlag(0);
-        msgctrlSetValue(worldMapMsgWindowID, worldMapDemoEndMsgID);
+        /* Drop the speaker name the map script may have set. */
+        msgctrlSetValue(MSG_VAR_CHARACTER_NAME, worldMapUnnamedSpeakerMsgID);
         GSfloorPop();
     }
 }
@@ -1310,7 +1314,7 @@ void WorldMap::SetSnap(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprit
     WorldMapMapData* data = SearchData(_cursor_index[index]);
     switch (GetFlagData(_cursor_index[index])) {
     case WORLD_MAP_FLAG_LOCKED: break;
-    case WORLD_MAP_FLAG_UNLOCKED: windowDrawSprite(0, 0, 0, 831, 0, window->mLayerID); break;
+    case WORLD_MAP_FLAG_UNLOCKED: windowDrawSprite(0, 0, 0, worldMapUnvisitedSnapTexture, 0, window->mLayerID); break;
     case WORLD_MAP_FLAG_VISITED: windowDrawSprite(0, 0, 0, data->mSnapTexture, 0, window->mLayerID); break;
     }
 }
@@ -1320,8 +1324,8 @@ void WorldMap::SetInfo(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprit
     SearchData(_cursor_index[index]);
     if (mModelWork->mScriptFlag) {
         u32 name = charNameBiosGetNameID(GetNpcID(index));
-        if (!name) name = 6002;
-        msgctrlSetValue(worldMapMsgWindowID, name);
+        if (!name) name = worldMapUnnamedSpeakerMsgID;
+        msgctrlSetValue(MSG_VAR_CHARACTER_NAME, name);
     }
     GSmsgPrint2(window->mLayerID, 0, -4, 0xFFFFFF00 | sprite->mRgba.mAlpha, GetInfoMsgID(index));
 }
