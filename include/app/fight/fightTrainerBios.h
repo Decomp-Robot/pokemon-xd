@@ -21,9 +21,29 @@ typedef struct FightTrainerEnemyPokemon {
     u8 param1bantakaiFlag;      // has the highest parameter
 } FightTrainerEnemyPokemon;
 
+// One entry of the trainer kind table: the prize-money multiplier of the kind,
+// the message id the trainer class is named with and the BGM sound id played
+// for the kind.
+typedef struct FIGHT_TRAINER_KIND_DATA {
+    u16 mSyoukinBairitu;
+    u8 mUnknown[2];
+    u32 mPrefixName;
+    u32 mBgmSndId;
+} FIGHT_TRAINER_KIND_DATA;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// The trainer kind table loaded for the running fight and the number of records
+// it holds.
+extern u32 *fight_trainer_kind_data_number;
+extern FIGHT_TRAINER_KIND_DATA *fight_trainer_kind_data;
+
+u32 fightTrainerKindDataBiosGetBgmSndId(void *kindData);
+u32 fightTrainerKindDataBiosGetPrefixName(void *kindData);
+u16 fightTrainerKindDataBiosGetSyoukinBairitu(void *kindData);
+void *fightTrainerKindDataBiosGetPtr(u16 kindId);
 
 void fightTrainerEnemyPokemonBiosSetFightEntryeId(FightTrainerEnemyPokemon *pokemon,
                                                  s16 fightEntryeId);
