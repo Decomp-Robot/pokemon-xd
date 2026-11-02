@@ -187,7 +187,7 @@ s32 soundStop(s32 sndID, s32 fadeTime)
         _soundFadeout(fadeTime, isBGM, 1);
         if (isBGM) {
             GSlogWrite(gsBgmStopWarning, sndID);
-            _soundOpenPlay(8, 0, 0xFF, isBGM);
+            _soundOpenPlay(SOUND_SILENT_BGM, 0, 0xFF, isBGM);
         } else {
             GSsndClose(sndID);
         }

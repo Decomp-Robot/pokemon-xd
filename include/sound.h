@@ -5,6 +5,11 @@
 
 #include <GSsnd.h>
 
+/* Silent BGM, played in place of a BGM that has to be silenced. */
+enum {
+    SOUND_SILENT_BGM = 8
+};
+
 /* Sound currently playing in the environment slot and in the BGM slot. Both
    hold 0 while idle and are cleared when their sound is stopped or replaced. */
 extern s32 soundPlayEnvID;

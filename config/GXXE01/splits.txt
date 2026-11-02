@@ -47,6 +47,10 @@ game/dbgMenuPokemonEffort.c:
 game/dbgMenuGSgfx.c:
 	.text       start:0x8000B344 end:0x8000B3F8
 
+game/dbgMenuGSvtr.c:
+	.text       start:0x8000B3F8 end:0x8000B620
+	.sbss       start:0x804EA670 end:0x804EA678
+
 game/dbgMenuMemcard.c:
 	.text       start:0x8000B620 end:0x8000BAE4
 	.rodata     start:0x802EA0B8 end:0x802EA1E0
