@@ -1,14 +1,15 @@
 #ifndef MENU_POKEMON_MESSAGES_H
 #define MENU_POKEMON_MESSAGES_H
 
-// Message templates and gender strings shared by Pokemon panels.
+// Message templates and gender strings shared by the Pokemon and fight panels.
 enum {
-    MSG_LEVEL_TEXT = 0x4351,
-    MSG_STATUS_NUMBER = 0x4287,
-    MSG_SEX_MARK = 0x4276,
-    MSG_POKEMON_NAME = 0x4277,
-    MSG_SEX_MALE = 0x9C5,
-    MSG_SEX_FEMALE = 0x9C6,
+    MSG_PRINT_NUMBER = 17233,
+    MSG_PRINT_NUMBER_WIDE = 17239,
+    MSG_STATUS_NUMBER = 17031,
+    MSG_PRINT_TEXT = 17014,
+    MSG_POKEMON_NAME = 17015,
+    MSG_SEX_MALE = 2501,
+    MSG_SEX_FEMALE = 2502,
 };
 
 #endif

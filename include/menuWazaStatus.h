@@ -12,10 +12,16 @@ struct MENU_WAZA_ENTRY {
     u8 currentPP;
 };
 
+struct FightOutPokemon;
+
+// Waza rows of the displayed pokemon, shared by the party menu's move window
+// and by the fight menu's pokemon status panels.
 struct MENU_WAZA_STATUS {
     const u16* pokemonName;
     MENU_WAZA_ENTRY moves[4];
-    u8 reserved[0x14];
+    u8 reserved[12];
+    FightOutPokemon* fightOutPokemon; // pokemon the rows belong to
+    u8 reserved2[4];
 };
 
 extern "C" void pokemonToMenuWazaStatus(Pokemon* pokemon, MENU_WAZA_STATUS* status);

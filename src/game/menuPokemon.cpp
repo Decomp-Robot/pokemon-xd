@@ -63,8 +63,6 @@ enum {
     MSG_ITEM_NOROOM      = 15055, // bag has no room
     MSG_TM_ALREADY       = 15420, // pokemon already knows the move
 
-    MSG_HP_TEXT          = 17239,
-
     MSG_JOUTAI_LIST      = 15080,
     MSG_BATTLE_COMMAND   = 15284,
     MSG_FIELD_COMMAND    = 15422,
@@ -472,17 +470,17 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
         GSmsgPrint2(winSpriteGetLayerID(win, sprite), 44, 0, color, MSG_JOUTAI_LIST);
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mHp);
         GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, 42, sprite->mHeight, color,
-                    MSG_HP_TEXT);
+                    MSG_PRINT_NUMBER_WIDE);
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mMaxHp);
         GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth - 2, sprite->mHeight,
-                    color, MSG_HP_TEXT);
+                    color, MSG_PRINT_NUMBER_WIDE);
         return;
 
     case PANEL_ITEM_LEVEL_A:
     case PANEL_ITEM_LEVEL_B:
         msgctrlSetValue(MSGCTRL_NUM_VALUE, info->mLevel);
         GSmsgPrintRect(winSpriteGetLayerID(win, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color,
-                    MSG_LEVEL_TEXT);
+                    MSG_PRINT_NUMBER);
         return;
 
     case PANEL_ITEM_NAME_A:
@@ -505,7 +503,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
 
         if (sexId != 0) {
             msgctrlSetValue(MSGCTRL_TEXT, (u32)GSmsgGetStringPtr(sexId));
-            GSmsgPrint2(winSpriteGetLayerID(win, sprite), width - 2, 0, color, MSG_SEX_MARK);
+            GSmsgPrint2(winSpriteGetLayerID(win, sprite), width - 2, 0, color, MSG_PRINT_TEXT);
         }
         return;
     }

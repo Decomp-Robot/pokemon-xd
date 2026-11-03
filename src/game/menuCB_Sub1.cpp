@@ -334,7 +334,7 @@ u32 menuCBRegionMsgID(u32 msgID)
         switch (msgID) {
         case menuCBMsgCompactSexMark:
             return menuCBMsgCompactPokemonName;
-        case MSG_SEX_MARK:
+        case MSG_PRINT_TEXT:
             return MSG_POKEMON_NAME;
         case menuCBMsgPanelNumber:
             return menuCBMsgRegionalPanelNumber;
@@ -971,11 +971,11 @@ void menuCBTrainerNameDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 t
         msgctrlSetValue(MSGCTRL_TEXT, (unsigned long)name);
     }
 
-    msgID = menuCBRegionMsgID(MSG_SEX_MARK);
+    msgID = menuCBRegionMsgID(MSG_PRINT_TEXT);
     x = sprite->mWidth / 2 - (s16)(GSmsgGetMessageSize(msgID) >> 16) / 2;
     GSmsgPrint2(window->mLayerID, x, 0,
                 (sprite->mColor & 0xFFFFFF00) | window->mRgba.mColorA,
-                menuCBRegionMsgID(MSG_SEX_MARK));
+                menuCBRegionMsgID(MSG_PRINT_TEXT));
 }
 
 void menuCB_RuleDispColorChenge_flag(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
@@ -1092,7 +1092,7 @@ void menuCB_RuleItemNameEntry(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
             }
 
             GSmsgPrint2(window->mLayerID, 0, y, window->mRgba.mColorA | 0xFFFFFF00,
-                        menuCBRegionMsgID(MSG_SEX_MARK));
+                        menuCBRegionMsgID(MSG_PRINT_TEXT));
         }
     }
 
@@ -2273,7 +2273,7 @@ void menuCBPokemonItemName(tagWINDOW_WORK *window, unsigned long bank, unsigned 
     msgctrlSetValue(MSGCTRL_TEXT, (unsigned long)GSmsgGetStringPtr(message));
     switch ((s32)mode) {
     case 0: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBRegionMsgID(menuCBMsgCompactSexMark)); break;
-    case 1: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBRegionMsgID(MSG_SEX_MARK)); break;
+    case 1: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBRegionMsgID(MSG_PRINT_TEXT)); break;
     }
 }
 void menuCBPokemonWazaNAME(tagWINDOW_WORK *window, unsigned long bank, unsigned long index, unsigned long moveSlot)
@@ -2374,7 +2374,7 @@ void menuCBPokemonTOKUSEI(tagWINDOW_WORK *window, unsigned long bank, unsigned l
     switch (pokecoloGetCountryCode()) {
     case 0:
         GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBMsgAbilityLabel);
-        GSmsgPrint2(window->mLayerID,90,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_SEX_MARK);
+        GSmsgPrint2(window->mLayerID,90,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_PRINT_TEXT);
         break;
     case 1: case 2:
         GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBMsgRegionalAbilityLabel);
@@ -2449,7 +2449,7 @@ void menuCBPokemonSexOnly(tagWINDOW_WORK *window, unsigned long bank, unsigned l
             msgctrlSetValue(MSGCTRL_TEXT,(unsigned long)GSmsgGetStringPtr(message));
             switch ((s32)mode) {
             case 0: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBMsgCompactSexMark); break;
-            case 1: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_SEX_MARK); break;
+            case 1: GSmsgPrint2(window->mLayerID,0,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_PRINT_TEXT); break;
             }
         }
     }
@@ -2504,13 +2504,13 @@ void _menuCBPokemonName(tagWINDOW_WORK *window, unsigned long bank, unsigned lon
         case 0:
             switch ((s32)mode) {
             case 0: GSmsgPrint2(window->mLayerID,70,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBMsgCompactSexMark); break;
-            case 1: GSmsgPrint2(window->mLayerID,90,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_SEX_MARK); break;
+            case 1: GSmsgPrint2(window->mLayerID,90,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_PRINT_TEXT); break;
             }
             break;
         case 1: case 2:
             switch ((s32)mode) {
             case 0: GSmsgPrint2(window->mLayerID,90,0,0xFFFFFF00 | window->mRgba.mColorA,menuCBMsgCompactSexMark); break;
-            case 1: GSmsgPrint2(window->mLayerID,110,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_SEX_MARK); break;
+            case 1: GSmsgPrint2(window->mLayerID,110,0,0xFFFFFF00 | window->mRgba.mColorA,MSG_PRINT_TEXT); break;
             }
             break;
         }

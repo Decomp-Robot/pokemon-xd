@@ -37,6 +37,7 @@ struct FightPokemon {
 Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);
 Pokemon *fightOutPokemonGetPokemonPtr(FightOutPokemon *pokemon);
 u8 figthPokemonGetLevel(FightPokemon *pokemon);
+u8 fightPokemonCheckValid(FightPokemon *pokemon);
 u16 fightPokemonGetSoubiItemDataId(FightPokemon *pokemon);
 u8 fightOutPokemonIsUseHensinBuff(FightOutPokemon *pokemon);
 u16 fightOutPokemonGetTokuseiDataId(FightOutPokemon *pokemon);

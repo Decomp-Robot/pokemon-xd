@@ -4,7 +4,7 @@
 #include <types.h>
 
 // Substitution values consumed by message formats.
-enum { MSG_VAR_CHARACTER_NAME = 0x59 };
+enum { MSG_VAR_CHARACTER_NAME = 0x59, MSG_VAR_KANE = 80 };
 
 enum {
     MSGCTRL_NUM_ITEM = 0x2D,

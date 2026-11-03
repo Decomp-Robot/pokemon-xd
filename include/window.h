@@ -53,6 +53,8 @@ u16 windowGetKeyOn();
 void windowCloseMain(tagWINDOW_WORK *window);
 // Free work area of a window, or NULL when the window has none.
 struct WINDOW_FREE_WORK *windowGetFreeWork(tagWINDOW_WORK *window);
+// Work area the window allocates for its item hooks, or NULL when it has none.
+void *windowGetAllocPtr(tagWINDOW_WORK *window);
 #ifdef __cplusplus
 }
 #endif

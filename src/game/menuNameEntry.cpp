@@ -102,7 +102,8 @@ int menuNameEntryDrawBkCur(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     cursor = window->mCursor.y;
     if (cursor >= 0) {
         menuSubDrawCursorBackAnimeOnOffAuto(window, winSpriteGetLayerID(window, sprite), 0, cursor << 5,
-                                            sprite->mWidth, sprite->mHeight, window->mRgba.mColorA, 1);
+                                            sprite->mWidth, sprite->mHeight,
+                                            window->mRgba.mColorA, MENU_SUB_CURSOR_BACK_STYLE_VARIANT);
     }
     return 0;
 }

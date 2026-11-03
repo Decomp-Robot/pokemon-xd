@@ -20,6 +20,7 @@ s32 toolentryTaisenSetEtnryPokemonOrder(s32 port, s32 index);
 s32 toolentryTaisenDeleteEtnryPokemonOrder(s32 port);
 void toolentryTaisenSetEtnryPokemonOrderGBA(s32 port, s32 num, u32 *pokemon);
 u16 toolentryTaisenGetEntryPokemonNum(s32 port);
+u16 toolentryTaisenGetTrainerDataID(s32 port);
 s32 toolentryTaisenGetEntryPlayerNum(void);
 s32 toolentryTaisenGetBattleType(void);
 s32 toolentryTaisenGetBattleVersus(void);

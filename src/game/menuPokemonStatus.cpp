@@ -29,6 +29,7 @@
 #include <floor.h>
 #include <floorManager.h>
 #include <menuSub.h>
+#include <app/fight/fightKind.h>
 #include <zokusei.h>
 #include <libc/memory.h>
 
@@ -40,7 +41,6 @@ u16 zokuseiBiosGetSpriteID(u16 type);
 u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);
 u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
-u8 fightKind_CheckFightKind(s32 kind);
 s32 getRibbonCount(void);
 u32 getRibbonMsgID(s32 ribbon);
 }

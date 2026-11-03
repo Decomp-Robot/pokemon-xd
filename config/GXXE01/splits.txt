@@ -168,6 +168,16 @@ game/menuPokemon.cpp:
 	.sbss       start:0x804EA710 end:0x804EA718
 	.sdata2     start:0x804EBF48 end:0x804EBF7C
 
+game/menuFightStatus.cpp:
+	.text       start:0x800178C0 end:0x800178FC
+
+game/menuFight.cpp:
+	.text       start:0x800178FC end:0x8001B370
+	.data       start:0x80321FB8 end:0x80322320
+	.bss        start:0x80428250 end:0x80428260
+	.sbss       start:0x804EA728 end:0x804EA741
+	.sdata2     start:0x804EBFE0 end:0x804EBFE4
+
 game/menuPocketTool.cpp:
 	.text       start:0x8001EC10 end:0x8002208C
 	.data       start:0x80322460 end:0x80322498

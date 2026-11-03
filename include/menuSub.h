@@ -24,6 +24,14 @@ typedef s32 MENU_SUB_CLOSE_ON_EXIT;
 struct tagWINDOW_WORK;
 struct tagSPRITE_WORK;
 
+// Cursor-back graphic sets. The plain set draws one fixed sprite pair; the
+// variant set draws a second pair, or a third one when a colour variant is
+// requested.
+enum MenuSubCursorBackStyle {
+    MENU_SUB_CURSOR_BACK_STYLE_PLAIN = 0,
+    MENU_SUB_CURSOR_BACK_STYLE_VARIANT = 1,
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -70,10 +78,14 @@ u32 menuSubAnimAlpha(void);
 void menuSubCursorAnimeInit(void);
 void menuSubCursorAnimeMain(void);
 void menuSubDrawCursorBackAnimeOnOffAuto(struct tagWINDOW_WORK *window,
-    GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height, u8 alpha, u8 style);
+    GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height, u8 alpha,
+    u8 style);
 void menuSubCursorAnimeStart(void);
 void menuSubDrawCursorBack2(s32 layer, s32 x, s32 y, s32 width, s32 height,
                             u8 alpha, s32 leftStyle, s32 rightStyle);
+// Cursor-back highlight drawn behind a menu entry in the given style.
+void menuSubDrawCursorBack(GSgfxLayerID layer, s32 x, s32 y, s32 width,
+                           s32 height, u8 alpha, u8 style);
 
 #ifdef __cplusplus
 }

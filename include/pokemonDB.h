@@ -59,6 +59,7 @@ void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
 u32 pokemon_GetTokuseiFlag(void *pokemonData);
 u8 pokemonDB_GetTokuseiDataId(u16 species, u16 index);
 Pokemon *fightPokemon_GetPokemonBuffPtr(FightPokemon *pokemon);
+u8 fightPokemon_GetCatchEntryFlag(FightPokemon *pokemon);
 
 #ifdef __cplusplus
 }

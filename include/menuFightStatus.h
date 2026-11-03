@@ -13,4 +13,9 @@ void menuFightStatusSetHP(u32 menuId, u32 hp);
 }
 #endif
 
+#ifdef __cplusplus
+// Accumulates the elapsed fight time shown on the status screen.
+void menuUpdateStatusTime(void);
+#endif
+
 #endif

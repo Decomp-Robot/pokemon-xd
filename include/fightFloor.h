@@ -217,6 +217,9 @@ u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *tra
 u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
 void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
 u8 fightFloor_GetFightKindDoCriticalAttackFlag(FIGHT_FLOOR *floor);
+u8 fightFloor_GetFightKindGetOkaneFlag(FIGHT_FLOOR *floor);
+u8 fightFloor_GetFightKindOkanePoolFlag(FIGHT_FLOOR *floor);
+u16 fightFloor_GetFightTypeFightoutPokemonNum(FIGHT_FLOOR *floor);
 void fightFloor_SetFisstAttackRnd(FIGHT_FLOOR *floor, u16 value);
 u16 fightFloor_GetEncountDataId(FIGHT_FLOOR *floor);
 u8 fightFloor_GetIsJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId);

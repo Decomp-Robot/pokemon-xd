@@ -9,6 +9,7 @@
 #include <toolentry.h>
 #include <menuCBBattleStart.h>
 #include <app/fight/fightTrainerBios.h>
+#include <fightTrainerDB.h>
 
 /*
  * menuCB_BattleStart.cpp
@@ -34,14 +35,12 @@ MenuCBBattleWork _menuCBBattleStartWork;
  * ---------------------------------------------------------------------- */
 
 extern "C" {
-s32 toolentryTaisenGetTrainerDataID(s32 index);
 u16 toolentryTaisenGetEntryPokemonNum(s32 index);
 s32 toolentryGetTrainerBicFaceResID(s32 index, s32 big);
 s32 toolentryGetTrainerSamllFaceResID(s32 index, s32 small);
 
 void menuCBPokemonEntryTexWorkInit(void);
 void menuCBPokemonEntryLoadTex(void);
-u8 fightTrainerDB_GetKindDataId(s32 dataID);
 void GSresFreeResource(u32 group, u32 resID);
 }
 
