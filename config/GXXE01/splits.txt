@@ -2693,11 +2693,8 @@ game/GSAPI/GSgfx/renderModule.cpp:
 	.bss        start:0x804E71A8 end:0x804E72EC
 	.sbss       start:0x804EBD68 end:0x804EBD70
 
-src/init.c:
-	.init       start:0x80003458 end:0x80003488
-
 decomp/TRKMemory.c:
-	.init       start:0x80003488 end:0x800034AC
+	.init       start:0x80003458 end:0x800034AC
 
 decomp/TRKReset.c:
 	.init       start:0x800053E0 end:0x8000540C
