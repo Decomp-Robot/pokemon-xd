@@ -24,6 +24,7 @@ s32 GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 width, s32 height, u32 color, u
 s32 GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 width, s16 height, u32 color, s32 msgID);
 
 s32 GScharConvToGBACode(void *destination, const u16 *source, s32 language);
+s32 GScharConvToGCCode(u16 *destination, const u8 *source, s32 size, s32 language);
 
 u16 *GSmsgMakeGScharStr(u16 *message, s32 capacity, u32 messageID);
 #ifdef __cplusplus

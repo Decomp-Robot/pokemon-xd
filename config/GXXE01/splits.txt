@@ -187,6 +187,10 @@ game/menuPocket.cpp:
 	.sdata2     start:0x804EC098 end:0x804EC0D0
 	.sbss2      start:0x804EFCA0 end:0x804EFCB0
 
+game/gbaPokemonFromGC.cpp:
+	.text       start:0x80026898 end:0x800279CC
+	.data       start:0x80322608 end:0x803226C0
+
 game/gbaExchange.cpp:
 	.text       start:0x800279CC end:0x80027E6C
 

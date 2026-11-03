@@ -31,7 +31,6 @@ extern u32 *legendPokemonData_number;
 extern u16 *legendPokemonData;
 
 extern "C" {
-extern u8 pokemonBiosGetEventGetFlag(Pokemon *pokemon);
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
 extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 }

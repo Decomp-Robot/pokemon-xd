@@ -61,6 +61,7 @@ void gamedataSetStatus(void *gamedata, u16 field, u32 status);
 void gamedataAttestCreate(GamedataAttest *attest, u8 versionId, u8 generationId, u8 areaId, u8 langareaId);
 u8 gamedataAttestCheckValid(GamedataAttest *attest);
 u8 gamedataAttestBiosGetLangareaId(GamedataAttest *attest);
+u8 gamedataAttestBiosGetVerId(GamedataAttest *attest);
 #ifdef __cplusplus
 }
 #endif
