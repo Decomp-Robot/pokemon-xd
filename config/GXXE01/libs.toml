@@ -391,6 +391,16 @@ completed = true
 extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
+name = "game/menuPdaMemoListXD.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/menuPdaMemoListXDSort.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/dbgMenuSub.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]

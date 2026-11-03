@@ -305,6 +305,13 @@ game/menuCB_PokemonEntry.cpp:
 game/menuCBRule.cpp:
 	.text       start:0x8004B7B4 end:0x8004CE94
 
+game/menuPdaMemoListXD.cpp:
+	.text       start:0x80055528 end:0x80055540
+	.data       start:0x8032EC80 end:0x8032EC8C
+
+game/menuPdaMemoListXDSort.cpp:
+	.text       start:0x80055BC0 end:0x80055C94
+
 game/pokecolo.cpp:
 	.text       start:0x8005C1E8 end:0x8005C230
 	.sbss       start:0x804EA890 end:0x804EA898
