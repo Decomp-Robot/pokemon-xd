@@ -1,22 +1,20 @@
-#include <GSdvd.h>
-#include <winMsg.h>
-#include <pokecolo.h>
-#include <memcard.h>
-#include <savedata.h>
-#include <GSmem.h>
-#include <string.h>
 #include <types.h>
+#include <GSdvd.h>
+#include <GSmem.h>
+#include <gamedata.h>
+#include <hsd/assert.h>
 #include <memcard.h>
+#include <pokecolo.h>
 #include <savedata.h>
+#include <string.h>
+#include <winMsg.h>
 
-/* Save data handed to the memcard task; allocated and freed per use. */
+/* Save data swapped through the memcard task while a save is written. */
 u8 *bk_savedataPtr;
-/* Scratch buffer the DVD save is read into when the debug type is off. */
-extern u8 *memcard_dvd_buf;
-/* Scratch buffer the debug save is built in. */
+/* Scratch buffer a debug save is built in. */
 u8 *dbgMenuSaveData;
 
-/* Save-file names of the ten memcard debug slots. */
+/* Names of the ten debug save slots: five ".DSV1" and five ".DSV2" images. */
 const char *saveFileName[10] = {
     "HDSaveData1.DSV1",
     "HDSaveData2.DSV1",
@@ -30,13 +28,22 @@ const char *saveFileName[10] = {
     "HDSaveData_5.DSV2",
 };
 
-s32 memcardTaskCall(s32 a, s32 b, s32 c);
-u8 _memcard_debug_type_check(s32 type);
-void memcard_debug_Load(u8 *buf);
-void memcard_debug_Load2(void);
-void memcard_debug_Save(u8 *buf);
-void gamedataSetStatus(void *gamedata, s32 index, s32 status);
-void __assert(const char *file, s32 line, const char *cond);
+/* The regional builds the debug loader stamps a save for, as reported by
+   pokecoloGetCountryCode(). */
+enum {
+    COUNTRY_JAPAN = 0,
+    COUNTRY_USA = 1,
+    COUNTRY_EUROPE = 2
+};
+
+/* Messages the debug memcard menu shows. */
+enum {
+    MSG_MEMCARD_LOAD_COMPLETED = 242
+};
+
+/* Report a failed condition together with the caller's message. */
+#define ASSERTMSGLINE(line, cond, msg) \
+    ((cond) || (__assert(__FILE__, line, #cond " &&\"" msg "\""), 0))
 
 /* Not called directly by other code; marked so the linker keeps them. */
 #pragma force_active on
@@ -54,7 +61,6 @@ u8 _memcard_debug_type_check(s32 type) {
 	}
 }
 
-
 #pragma peephole off
 
 s32 dbgMenuMemcardDebugLoad(s32 menuID, s32 type)
@@ -71,36 +77,38 @@ s32 dbgMenuMemcardDebugLoad(s32 menuID, s32 type)
         return 0;
     }
     if (_memcard_debug_type_check(type)) {
-        dbgMenuSaveData = (u8 *)GSmemAllocAlign(0x28000, 0x20);
-        GSdvdRead(file, dbgMenuSaveData, 0x28000, 0);
+        dbgMenuSaveData = GSmemAllocAlign(163840, 32);
+        GSdvdRead(file, dbgMenuSaveData, 163840, 0);
         GSdvdClose(file);
+        /* The slot file carries an eight byte header before the image. */
         memcard_debug_Load(dbgMenuSaveData + 8);
         GSmemFree(dbgMenuSaveData);
         dbgMenuSaveData = 0;
     } else {
-        GSdvdRead(file, memcard_dvd_buf, 0x27FC0, 0);
+        GSdvdRead(file, now_savedata_ptr, 163776, 0);
         GSdvdClose(file);
         memcard_debug_Load2();
     }
-    gamedata = savedataGetStatus(0, 1);
+    /* Stamp the loaded save with this build's version and area. */
+    gamedata = savedataGetStatus(0, SAVE_DATA_GAME);
     switch (pokecoloGetCountryCode()) {
-    case 0:
-        gamedataSetStatus(gamedata, 2, 0xB);
-        gamedataSetStatus(gamedata, 3, 3);
-        gamedataSetStatus(gamedata, 4, 1);
-        gamedataSetStatus(gamedata, 5, 1);
+    case COUNTRY_JAPAN:
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_ORIGIN, GAMEDATA_ATTEST_VERSION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_GENERATION, GAMEDATA_ATTEST_GENERATION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_REGION, GAMEDATA_ATTEST_AREA_JAPAN);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_LANGUAGE, GAMEDATA_ATTEST_LANGAREA_JAPANESE);
         break;
-    case 1:
-        gamedataSetStatus(gamedata, 2, 0xB);
-        gamedataSetStatus(gamedata, 3, 3);
-        gamedataSetStatus(gamedata, 4, 2);
-        gamedataSetStatus(gamedata, 5, 2);
+    case COUNTRY_USA:
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_ORIGIN, GAMEDATA_ATTEST_VERSION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_GENERATION, GAMEDATA_ATTEST_GENERATION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_REGION, GAMEDATA_ATTEST_AREA_USA);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_LANGUAGE, GAMEDATA_ATTEST_LANGAREA_ENGLISH);
         break;
-    case 2:
-        gamedataSetStatus(gamedata, 2, 0xB);
-        gamedataSetStatus(gamedata, 3, 3);
-        gamedataSetStatus(gamedata, 4, 3);
-        gamedataSetStatus(gamedata, 5, 8);
+    case COUNTRY_EUROPE:
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_ORIGIN, GAMEDATA_ATTEST_VERSION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_GENERATION, GAMEDATA_ATTEST_GENERATION);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_REGION, GAMEDATA_ATTEST_AREA_EUROPE);
+        gamedataSetStatus(gamedata, GAMEDATA_STATUS_LANGUAGE, GAMEDATA_ATTEST_LANGAREA_EUROPE);
         break;
     }
     return 0;
@@ -111,7 +119,7 @@ s32 dbgMenuMemcardDebugSave(s32 menuID, s32 type)
     GSdvdFile *file;
 
     if (_memcard_debug_type_check(type)) {
-        dbgMenuSaveData = (u8 *)GSmemAllocAlign(0x28000, 0x20);
+        dbgMenuSaveData = GSmemAllocAlign(163840, 32);
         memcard_debug_Save(dbgMenuSaveData + 8);
         if (GSdvdOpenTest(saveFileName[type])) {
             file = GSdvdOpen(saveFileName[type]);
@@ -119,56 +127,52 @@ s32 dbgMenuMemcardDebugSave(s32 menuID, s32 type)
             file = GSdvdCreate(saveFileName[type]);
         }
         if (file != 0) {
-            GSdvdWrite(file, dbgMenuSaveData, 0x28000, 0);
+            GSdvdWrite(file, dbgMenuSaveData, 163840, 0);
             GSdvdClose(file);
         }
         GSmemFree(dbgMenuSaveData);
         dbgMenuSaveData = 0;
     } else {
-        bk_savedataPtr = (u8 *)memcardMemAllocForSavedata();
-        if (bk_savedataPtr == 0) {
-            /* CP932 message: "out of memory". */
-            __assert("dbgMenuMemcard.c", 501, "bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab\"");
-        }
-        memcpy(bk_savedataPtr, savedataGetStatus(0, 0), 0x27FD0);
-        if (memcardTaskCall(2, 2, 0) == 3) {
+        bk_savedataPtr = memcardMemAllocForSavedata();
+        /* "out of memory" */
+        ASSERTMSGLINE(501, bk_savedataPtr, "\x83\x81\x83\x82\x83\x8a\x81[\x95s\x91\xab");
+        memcpy(bk_savedataPtr, savedataGetStatus(0, SAVE_DATA_IMAGE), 163792);
+        if (memcardTaskCall(MEMCARD_TASK_LOAD, WINMSG_WINDOW_MENU, 0) == MEMCARD_RESULT_LOADED) {
             if (GSdvdOpenTest(saveFileName[type])) {
                 file = GSdvdOpen(saveFileName[type]);
             } else {
                 file = GSdvdCreate(saveFileName[type]);
             }
             if (file != 0) {
-                GSdvdWrite(file, memcard_dvd_buf, 0x27FC0, 0);
+                GSdvdWrite(file, now_savedata_ptr, 163776, 0);
                 GSdvdClose(file);
             }
         }
-        memcpy(savedataGetStatus(0, 0), bk_savedataPtr, 0x27FD0);
-        bk_savedataPtr = (u8 *)memcardMemFreeForSavedata(bk_savedataPtr);
-        if (bk_savedataPtr != 0) {
-            /* CP932 message: "free failed". */
-            __assert("dbgMenuMemcard.c", 534, "!bk_savedataPtr &&\"\x83\x81\x83\x82\x83\x8a\x81[\x89\xf0\x95\xfa\x8e\xb8\x94s\"");
-        }
+        memcpy(savedataGetStatus(0, SAVE_DATA_IMAGE), bk_savedataPtr, 163792);
+        bk_savedataPtr = memcardMemFreeForSavedata(bk_savedataPtr);
+        /* "free failed" */
+        ASSERTMSGLINE(534, !bk_savedataPtr, "\x83\x81\x83\x82\x83\x8a\x81[\x89\xf0\x95\xfa\x8e\xb8\x94s");
     }
     return 0;
 }
 
 s32 dbgMenuMemcardDelete(void)
 {
-    memcardTaskCall(0xC, 2, 0);
+    memcardTaskCall(MEMCARD_TASK_DELETE, WINMSG_WINDOW_MENU, 0);
     return 0;
 }
 
 s32 dbgMenuMemcardLoad(void)
 {
-    memcardTaskCall(2, 2, 0);
-    winMsgOpen(2, 0xF2, 1, 1);
+    memcardTaskCall(MEMCARD_TASK_LOAD, WINMSG_WINDOW_MENU, 0);
+    winMsgOpen(WINMSG_WINDOW_MENU, MSG_MEMCARD_LOAD_COMPLETED, 1, 1);
     winMsgClose(1);
     return 0;
 }
 
 s32 dbgMenuMemcardSave(void)
 {
-    memcardTaskCall(0xB, 2, 0);
+    memcardTaskCall(MEMCARD_TASK_SAVE, WINMSG_WINDOW_MENU, 0);
     return 0;
 }
 

@@ -4,6 +4,15 @@ struct tagWINDOW_WORK;
 struct tagSPRITE_WORK;
 #include <types.h>
 
+/* The message windows the message routines address. The field and battle
+   windows also have their own wrappers, winMsgOpenField() and
+   winMsgOpenFight(), which open their window with the matching kind. */
+enum WinMsgWindow {
+    WINMSG_WINDOW_MENU = 2,
+    WINMSG_WINDOW_FIELD = 3,
+    WINMSG_WINDOW_FIGHT = 4
+};
+
 #ifdef __cplusplus
 typedef bool WinMsgBool;
 extern "C" {
