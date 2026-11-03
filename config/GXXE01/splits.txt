@@ -309,6 +309,9 @@ game/pokecolo.cpp:
 	.text       start:0x8005C1E8 end:0x8005C230
 	.sbss       start:0x804EA890 end:0x804EA898
 
+game/menuScript.cpp:
+	.text       start:0x8005E794 end:0x8005E8AC
+
 game/menuPocketCologne.cpp:
 	.text       start:0x80063640 end:0x800636AC
 

@@ -65,6 +65,7 @@ bool pokemonBiosGetDarkFlag(Pokemon *pokemon);
 u8 pokemonBiosGetDarkFlag(Pokemon *pokemon);
 #endif
 int pokemonBiosGetDp(Pokemon *pokemon);
+u16 pokemonBiosGetDarkpokemonDataId(Pokemon *pokemon);
 u16 pokemonBiosGetFriend(Pokemon *pokemon);
 u8 pokemonBiosGetFlagAmari(Pokemon *pokemon);
 u8 pokemonBiosGetPcboxMark(Pokemon *pokemon);

@@ -61,6 +61,7 @@ extern "C" {
 DarkPokemon *darkPokemonGetDarkPokemon(u32 darkID);
 u32 darkPokemonGetSnatchSuccessNum(void);
 s32 darkPokemonGetReliveNum(void);
+u8 darkPokemonBiosGetReliveFlag(u16 darkID);
 void darkPokemonBiosSetInfomation(u16 pokemonID, u16 information);
 
 #ifdef __cplusplus

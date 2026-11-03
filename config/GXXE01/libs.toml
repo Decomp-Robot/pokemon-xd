@@ -381,6 +381,11 @@ completed = true
 extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
+name = "game/menuScript.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
+[[lib.object]]
 name = "game/menuPdaMemoWaveXDWaveData.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]
