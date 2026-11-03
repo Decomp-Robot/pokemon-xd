@@ -6,7 +6,7 @@
 #include <GSres.h>
 
 class NullSequence;
-struct WazaSequence;
+class WazaSequence;
 
 struct ScriptResultContext;
 

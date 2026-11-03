@@ -27,6 +27,10 @@ public:
     virtual void SetScale(GSvec *scale);
     virtual void SetVisibility(bool visible);
 
+    // Hand the data of the model the sequence was read from back to the systems
+    // that own its parts once the resource it was read into is released.
+    static void Unload(u8 *data);
+
 private:
     u32 resourceId;             // 0x3C: loaded model resource ID.
     u32 randomSeed;             // 0x40: seed supplied when creating the Pokemon model.

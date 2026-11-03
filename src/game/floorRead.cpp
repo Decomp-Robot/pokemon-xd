@@ -7,6 +7,7 @@
 #include <scene.h>
 #include <floorPostCall.h>
 #include <floor.h>
+#include <flashsystem.h>
 #include <ant.h>
 
 // Floor/map resource loading. Format-specific pre/post callbacks allocate
@@ -32,11 +33,10 @@ void floorAddResource(u32 group, u32 res);
 // the camera and the light registration both look their part up in it.
 extern char floorSceneDataName[];
 
-// The DECK data of a stage floor and the flash file system of the game take
-// what the reader read in, and give it back when the stage is left.
+// The DECK data of a stage floor takes what the reader read in, and gives it
+// back when the stage is left.
 void deckRegister(u32 group, u32 res);
 void deckUnRegister(u32 group, u32 res);
-void FlashSystemInit(u32 res, void *resource);
 
 void floorDelayPostFunc(void);
 

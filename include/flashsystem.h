@@ -5,8 +5,12 @@
 extern "C" {
 #endif
 // Flash movie player shared by the PDA and title screens; the resource id is
-// a GX texture handle such as 0x1FBD3000, the labels are frame labels inside
-// the movie.
+// the GX texture handle of the movie, the labels are frame labels inside it.
+// A stage hands the movie it read in to the player and takes it back when the
+// stage is left. The player plays a fixed number of movies at a time, so
+// taking one in answers 0 when it has no free slot left for it.
+s32 FlashSystemInit(u32 flash, void *resource);
+void FlashSystemRelease(u32 flash);
 void FlashSystemSetPlayFrameLabel(u32 flash, const char *start, const char *end);
 void FlashSystemSetNowFrameLabel(u32 flash, const char *label);
 void FlashSystemSetLoopFlag(u32 flash, s32 loop);
