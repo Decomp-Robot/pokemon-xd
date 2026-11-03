@@ -254,6 +254,9 @@ game/menuNameEntry.cpp:
 	.sbss       start:0x804EA7A0 end:0x804EA7C8
 	.sdata2     start:0x804EC110 end:0x804EC190
 
+game/menuPdaMemoXD.cpp:
+	.sbss       start:0x804EA858 end:0x804EA860
+
 game/menuPokemonStatus.cpp:
 	.text       start:0x80033440 end:0x80037A48
 	.ctors      start:0x802E9F90 end:0x802E9F94

@@ -371,6 +371,10 @@ name = "game/pokecolo.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/menuPdaMemoXD.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/menuPocketCologne.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]
