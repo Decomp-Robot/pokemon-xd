@@ -8,6 +8,7 @@ extern "C" {
 #endif
 f32 pokecoloGetFrameTime(void);
 s32 pokecoloGetCountryCode(void);
+void pokecoloInitRomVersion(void);
 s32 pokecoloGetLanguage(void);
 s32 pokecoloGetRomVersion(void);
 unsigned long pokecoloGetPlayTimeValue(void);

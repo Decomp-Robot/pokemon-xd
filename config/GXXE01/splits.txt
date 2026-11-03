@@ -305,6 +305,10 @@ game/menuCB_PokemonEntry.cpp:
 game/menuCBRule.cpp:
 	.text       start:0x8004B7B4 end:0x8004CE94
 
+game/pokecolo.cpp:
+	.text       start:0x8005C1E8 end:0x8005C230
+	.sbss       start:0x804EA890 end:0x804EA898
+
 game/menuPocketCologne.cpp:
 	.text       start:0x80063640 end:0x800636AC
 
