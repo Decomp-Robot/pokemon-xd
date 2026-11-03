@@ -3,9 +3,11 @@
 
 #include <hero.h>
 #include <types.h>
+#include <fightAction.h>
+#include <fightOutPokemon.h>
+#include <fightPokemon.h>
+#include <app/fight/fightTrainerBios.h>
 
-typedef struct FightPokemon FightPokemon;
-typedef struct FightOutPokemon FightOutPokemon;
 typedef struct FIGHT_TRAINER FIGHT_TRAINER;
 
 /* What fightTrainerCheckCanIrekaeFightPokemon makes of swapping a fight Pokemon
@@ -23,21 +25,41 @@ enum FightTrainerIrekaeState {
 struct FIGHT_TRAINER {
     FIGHT_TRAINER() {}
 
-    u16 mDataId;
+    u16 mDataId;                                  // data ID of the trainer.
     u16 mReserved;
-    Hero mHero;
-    u8 mWork[0x2BC8];
-    struct NullSequence *mSequence;  // 0x3544: sequence that drives the trainer model.
-    u8 _3548[0x1FC];
+    Hero mHero;                                   // hero record the fight is fought with.
+    FightPokemon mFightPokemon[6];                // party slots, one pokemon per slot.
+    FightOutPokemon mFightoutPokemon[2];          // the pokemon out on the field.
+    FightOutPokemon mFightoutPokemonBuff;         // working copy of the one that is out.
+    u8 mOkaneBai;                                 // prize money multiplier of the trainer.
+    u8 mNigeruCount;                              // times the trainer has run away.
+    u8 _353A[2];
+    u32 mKoban;                                   // prize money the fight is worth.
+    u8 mControllerId;                             // controller the fight is fought with.
+    u8 _3541[3];
+    struct NullSequence *mSequence;               // sequence that drives the trainer model.
+    FIGHT_ACTION mFightActionBuff;                // action work of the fight.
+    FightTrainerEnemyPokemon mEnemyPokemon[12];   // fight status of the party.
+    u8 _3740[4];
 };
 #else
 struct FIGHT_TRAINER {
-    u16 mDataId;
+    u16 mDataId;                                  // data ID of the trainer.
     u16 mReserved;
-    Hero mHero;
-    u8 mWork[0x2BC8];
-    struct NullSequence *mSequence;  // 0x3544: sequence that drives the trainer model.
-    u8 _3548[0x1FC];
+    Hero mHero;                                   // hero record the fight is fought with.
+    FightPokemon mFightPokemon[6];                // party slots, one pokemon per slot.
+    FightOutPokemon mFightoutPokemon[2];          // the pokemon out on the field.
+    FightOutPokemon mFightoutPokemonBuff;         // working copy of the one that is out.
+    u8 mOkaneBai;                                 // prize money multiplier of the trainer.
+    u8 mNigeruCount;                              // times the trainer has run away.
+    u8 _353A[2];
+    u32 mKoban;                                   // prize money the fight is worth.
+    u8 mControllerId;                             // controller the fight is fought with.
+    u8 _3541[3];
+    struct NullSequence *mSequence;               // sequence that drives the trainer model.
+    FIGHT_ACTION mFightActionBuff;                // action work of the fight.
+    FightTrainerEnemyPokemon mEnemyPokemon[12];   // fight status of the party.
+    u8 _3740[4];
 };
 #endif
 
@@ -108,6 +130,7 @@ struct FightPokemon *fightTrainerBiosGetFightPokemonPtr(FIGHT_TRAINER *trainer, 
 FightPokemon *fightTrainerGetValidFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
 u8 fightTrainerCheckCanIrekaeFightPokemon(FIGHT_TRAINER *trainer, FightPokemon *pokemon);
 FightOutPokemon *fightTrainerGetFightPokemonPtrToFightOutPokemonPtr(FIGHT_TRAINER *trainer, FightPokemon *pokemon);
+FightTrainerEnemyPokemon *fightTrainerGetFightEntryIdToEnemyPokemonPtr(FIGHT_TRAINER *trainer, s16 fightEntryId);
 Hero *fightTrainerBiosGetHeroPtr(FIGHT_TRAINER *trainer);
 FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *fightTrainerAiValueAddsubDataBiosGetPtr(u16 index);
 FIGHT_TRAINER_POKEMON_PART_DATA *fightTrainerPokemonPartDataBiosGetPtr(u16 index);
@@ -118,12 +141,50 @@ u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 extern u32 *fight_trainer_pokemon_part_data_number;
 extern u32 *fight_trainer_ai_value_addsub_data_number;
 
-Hero *fightTrainer_GetHeroPtr(FIGHT_TRAINER *trainer);
 u16 *fightTrainerGetPrefixNamePtr(FIGHT_TRAINER *trainer);
 u16 *fightTrainerGetNamePtr(FIGHT_TRAINER *trainer);
 void fightTrainerCallEffect(FIGHT_TRAINER *trainer, u8 operation);
 u8 fightTrainerIsAllyFightTargetPtr(FIGHT_TRAINER *trainer, FightOutPokemon *target, u16 fightType);
 void fightTrainerToMenuBallStatus(FIGHT_TRAINER *trainer, u8 *ballStatus);
+
+/* Field queries of one battle-side trainer record.  A missing record reads as
+   an empty value. */
+u16 fightTrainer_GetFightTrainerDataId(FIGHT_TRAINER *trainer);
+u8 fightTrainer_GetControllerId(FIGHT_TRAINER *trainer);
+u8 fightTrainer_GetNigeruCount(FIGHT_TRAINER *trainer);
+u32 fightTrainer_GetKoban(FIGHT_TRAINER *trainer);
+u8 fightTrainer_GetOkaneBai(FIGHT_TRAINER *trainer);
+struct NullSequence *fightTrainer_GetSequencePtr(FIGHT_TRAINER *trainer);
+FIGHT_ACTION *fightTrainer_GetFightActionBuffPtr(FIGHT_TRAINER *trainer);
+Hero *fightTrainer_GetHeroPtr(FIGHT_TRAINER *trainer);
+FightPokemon *fightTrainer_GetFightPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
+FightOutPokemon *fightTrainer_GetFightoutPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
+FightOutPokemon *fightTrainer_GetFightoutPokemonBuffPtr(FIGHT_TRAINER *trainer);
+FightTrainerEnemyPokemon *fightTrainer_GetFightTrainerEnemyPokemonAryPtr(FIGHT_TRAINER *trainer,
+                                                                        u8 index);
+
+/* Field queries of one of the enemy pokemon records of a trainer. */
+u8 fightTrainer_GetEnemyParam1bantakaiFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u8 fightTrainer_GetEnemyBadwazaHaveFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u8 fightTrainer_GetEnemyDefense1banhikuiFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u8 fightTrainer_GetEnemyLv1banhikuiFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u8 fightTrainer_GetEnemyNowhp1banhikuiFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u16 fightTrainer_GetEnemyStoreTokuseiData(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u8 fightTrainer_GetEnemyTokuseiFlag(FIGHT_TRAINER *trainer, s16 fightEntryId);
+u16 fightTrainer_GetEnemyExpectWazaData(FIGHT_TRAINER *trainer, s16 fightEntryId, u8 index);
+u16 fightTrainer_GetEnemyStoreWazaData(FIGHT_TRAINER *trainer, s16 fightEntryId, u8 index);
+u8 fightTrainer_GetEnemyStoreWazaNum(FIGHT_TRAINER *trainer, s16 fightEntryId);
+
+/* One word of the trainer AI additional-value records the debug menus edit; a
+   missing record reads as zero and ignores the update. */
+u32 fightTrainerAiValueAddsubDB_GetPrefixName(u16 index);
+u32 fightTrainerAiValueAddsubDB_GetKoudouName(u16 index);
+u32 fightTrainerAiValueAddsubDB_GetName(u16 index);
+s32 fightTrainerAiValueAddsubDB_GetValue(u16 index);
+void fightTrainerAiValueAddsubDB_SetPrefixName(u16 index, u32 prefixName);
+void fightTrainerAiValueAddsubDB_SetKoudouName(u16 index, u32 koudouName);
+void fightTrainerAiValueAddsubDB_SetName(u16 index, u32 name);
+void fightTrainerAiValueAddsubDB_SetValue(u16 index, s32 value);
 
 #ifdef __cplusplus
 }

@@ -4,6 +4,7 @@
 #include <Pokemon.h>
 #include <fightOutPokemon.h>
 #include <fightAction.h>
+#include <joutai.h>
 #include <types.h>
 
 #ifdef __cplusplus
@@ -13,6 +14,25 @@ extern "C" {
 typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
 struct NullSequence;
+
+// A Pokemon of a trainer's party: the Pokemon the record was made from, the
+// working copy the fight runs on, the status it carries into the fight, the
+// fight entry it is booked with and the damage the trainer AI has recorded
+// against each of its attacks.
+struct FightPokemon {
+    Pokemon *mMotoPokemon;    // Pokemon the record was made from.
+    Pokemon mPokemonBuff;     // working copy the fight runs on.
+    _JOUTAI mFightJoutai[1];  // status carried into the fight.
+    s16 mEntryId;             // fight entry the Pokemon is booked with.
+    // Flags the fight sets on the Pokemon; all cleared when the record is
+    // initialised.
+    u8 mCatchEntryFlag;
+    u8 mLevelUpFlag;
+    u8 mDarkOutFlag;
+    u8 mHokakuFlag;
+    u8 _0DE[34];
+    s32 mAiDamage[64][2];     // damage the AI has recorded per attack.
+};
 
 Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);
 Pokemon *fightOutPokemonGetPokemonPtr(FightOutPokemon *pokemon);
