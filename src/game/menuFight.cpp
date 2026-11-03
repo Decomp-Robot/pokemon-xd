@@ -914,17 +914,17 @@ extern "C" void menuFightDrawSecretPokemon(tagWINDOW_WORK *window, tagSPRITE_WOR
 extern "C" void menuFightDrawSecretPokemonStatus(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     u32 color;
-    long *cursor;
+    s32 *pSelect;
     Pokemon *pokemon;
     s32 slot;
     FIGHT_TRAINER *trainer;
     slot = -1;
     trainer = (FIGHT_TRAINER *)windowGetParam(window, 0);
-    cursor = (long *)windowGetParam(window, 1);
-    if (*cursor < 0) {
+    pSelect = (s32 *)windowGetParam(window, 1);
+    if (*pSelect < 0) {
         return;
     }
-    pokemon = _menuFightGetPokemonPtr(trainer, (u16)*cursor);
+    pokemon = _menuFightGetPokemonPtr(trainer, (u16)*pSelect);
     if (pokemon == NULL) {
         return;
     }
@@ -971,7 +971,7 @@ extern "C" void menuFightDrawSecretPokemonStatus(tagWINDOW_WORK *window, tagSPRI
         case SECRET_POKEMON_STATUS_ITEM_CURSOR_SLOT_4: slot = 4; break;
         case SECRET_POKEMON_STATUS_ITEM_CURSOR_SLOT_5: slot = 5; break;
         }
-        if (slot == *cursor) {
+        if (slot == *pSelect) {
             winSpriteSetDisp(sprite, true);
         } else {
             winSpriteSetDisp(sprite, false);
