@@ -312,6 +312,9 @@ game/menuCB_PokemonEntry.cpp:
 game/menuCBRule.cpp:
 	.text       start:0x8004B7B4 end:0x8004CE94
 
+game/menuPdaDPMonitorList.cpp:
+	.text       start:0x80052614 end:0x800528F4
+
 game/menuPdaMemoListXD.cpp:
 	.text       start:0x80055528 end:0x80055540
 	.data       start:0x8032EC80 end:0x8032EC8C
