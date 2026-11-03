@@ -49,10 +49,12 @@ private:
     u16 mTrainerName[11]; // 0x28: ten characters and terminator.
     u8 _3E[0x0A];
 };
-extern u32 darkPokemonList_number;
 #else
 typedef struct DarkPokemon DarkPokemon;
 #endif
+
+/* Number of entries in the dark pokemon list. */
+extern u32 darkPokemonList_number;
 
 #ifdef __cplusplus
 extern "C" {

@@ -421,6 +421,11 @@ completed = true
 extra_cflags = ["-O2,p", "-opt nopeephole"]
 
 [[lib.object]]
+name = "game/dbgMenuPokemonEditSub.c"
+completed = true
+extra_cflags = ["-O2,p", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/dbgMenuPokemonEffort.c"
 completed = true
 extra_cflags = ["-O2,p", "-opt nopeephole"]

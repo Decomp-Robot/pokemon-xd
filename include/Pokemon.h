@@ -89,41 +89,36 @@ enum POKEMON_FRIEND_FILTER_ID {
     POKEMON_FRIEND_FILTER_LEARN_MOVE = 4
 };
 
+// Species the game singles out wherever it inspects a pokemon record.
+enum POKEMON_SPECIES_ID {
+    POKEMON_SPECIES_MEW = 151,
+    POKEMON_SPECIES_DEOXYS = 410
+};
+
+// Balls the caught-ball field of a record can hold.
+enum POKEMON_CATCH_BALL {
+    POKEMON_CATCH_BALL_NONE = 0, // no ball recorded.
+    POKEMON_CATCH_BALL_POKE_BALL = 4,
+    POKEMON_CATCH_BALL_MAX = 12
+};
+
 // Fields read out of a pokemon with pokemonGetStatus.
 enum POKEMON_STATUS_FIELD {
-    POKEMON_STATUS_FIELD_HELD_ITEM = 130,
-    POKEMON_STATUS_FIELD_DARK_POINTS = 197,
-    POKEMON_STATUS_FIELD_REVERSE_MODE = 200,
-    POKEMON_STATUS_FIELD_CHAMP_RIBBON = 163,
-    POKEMON_STATUS_FIELD_WINNING_RIBBON = 164,
-    POKEMON_STATUS_FIELD_VICTORY_RIBBON = 165,
-    POKEMON_STATUS_FIELD_BROMIDE_RIBBON = 166,
-    POKEMON_STATUS_FIELD_GANBA_RIBBON = 167,
-    POKEMON_STATUS_FIELD_MARINE_RIBBON = 168,
-    POKEMON_STATUS_FIELD_LAND_RIBBON = 169,
-    POKEMON_STATUS_FIELD_SKY_RIBBON = 170,
-    POKEMON_STATUS_FIELD_COUNTRY_RIBBON = 171,
-    POKEMON_STATUS_FIELD_NATIONAL_RIBBON = 172,
-    POKEMON_STATUS_FIELD_EARTH_RIBBON = 173,
-    POKEMON_STATUS_FIELD_WORLD_RIBBON = 174,
-    POKEMON_STATUS_FIELD_STYLE_MEDAL = 176,
-    POKEMON_STATUS_FIELD_BEAUTIFUL_MEDAL = 177,
-    POKEMON_STATUS_FIELD_CUTE_MEDAL = 178,
-    POKEMON_STATUS_FIELD_CLEVER_MEDAL = 179,
-    POKEMON_STATUS_FIELD_STRONG_MEDAL = 180,
-    POKEMON_STATUS_FIELD_WAZA_PP = 128, // current PP of the given waza slot.
-    POKEMON_STATUS_FIELD_WAZA_ID = 127, // waza id of the given waza slot.
-    POKEMON_STATUS_FIELD_TRAINER_ID = 117, // id of the trainer that met the pokemon.
-    POKEMON_STATUS_FIELD_TRAINER_NAME = 118, // name of that trainer.
-    POKEMON_STATUS_FIELD_NICKNAME = 119, // name the pokemon is given.
     POKEMON_STATUS_FIELD_SPECIES = 110, // species of the pokemon.
     POKEMON_STATUS_FIELD_PID = 111, // personality value used to fit the pokemon's data.
     POKEMON_STATUS_FIELD_ATTEST = 112, // attest record; gamedataGetStatus(record, 2) selects the origin text.
     POKEMON_STATUS_FIELD_MET_PLACE = 113, // place the pokemon was caught in.
     POKEMON_STATUS_FIELD_MET_LEVEL = 114, // level the pokemon was caught at.
-    POKEMON_STATUS_FIELD_LEVEL = 122, // level the pokemon is on.
+    POKEMON_STATUS_FIELD_CAUGHT_BALL = 115, // ball the pokemon was caught in.
+    POKEMON_STATUS_FIELD_TRAINER_ID = 117, // id of the trainer that met the pokemon.
+    POKEMON_STATUS_FIELD_TRAINER_NAME = 118, // name of that trainer.
+    POKEMON_STATUS_FIELD_NICKNAME = 119, // name the pokemon is given.
     POKEMON_STATUS_FIELD_EXP = 121, // total experience of the pokemon.
-    POKEMON_STATUS_FIELD_FRIEND_LEVEL = 153, // friendship level of the pokemon.
+    POKEMON_STATUS_FIELD_LEVEL = 122, // level the pokemon is on.
+    POKEMON_STATUS_FIELD_WAZA_ID = 127, // waza id of the given waza slot.
+    POKEMON_STATUS_FIELD_WAZA_PP = 128, // current PP of the given waza slot.
+    POKEMON_STATUS_FIELD_WAZA_PP_COUNT = 129, // PP-ups spent on the given waza slot, 0 to 3.
+    POKEMON_STATUS_FIELD_HELD_ITEM = 130,
     POKEMON_STATUS_FIELD_HP = 131, // current HP.
     POKEMON_STATUS_FIELD_HP_MAX = 135, // maximum HP.
     POKEMON_STATUS_FIELD_ATTACK = 136, // battle stats shown on the summary page.
@@ -137,11 +132,50 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_SP_ATTACK_EFFORT = 144,
     POKEMON_STATUS_FIELD_SP_DEFENSE_EFFORT = 145,
     POKEMON_STATUS_FIELD_SPEED_EFFORT = 146,
+    POKEMON_STATUS_FIELD_HP_IV = 147, // individual values the debug editor may set directly.
+    POKEMON_STATUS_FIELD_ATTACK_IV = 148,
+    POKEMON_STATUS_FIELD_DEFENSE_IV = 149,
+    POKEMON_STATUS_FIELD_SP_ATTACK_IV = 150,
+    POKEMON_STATUS_FIELD_SP_DEFENSE_IV = 151,
+    POKEMON_STATUS_FIELD_SPEED_IV = 152,
+    POKEMON_STATUS_FIELD_FRIEND_LEVEL = 153, // friendship level of the pokemon.
+    POKEMON_STATUS_FIELD_CHAMP_RIBBON = 163,
+    POKEMON_STATUS_FIELD_WINNING_RIBBON = 164,
+    POKEMON_STATUS_FIELD_VICTORY_RIBBON = 165,
+    POKEMON_STATUS_FIELD_BROMIDE_RIBBON = 166,
+    POKEMON_STATUS_FIELD_GANBA_RIBBON = 167,
+    POKEMON_STATUS_FIELD_MARINE_RIBBON = 168,
+    POKEMON_STATUS_FIELD_LAND_RIBBON = 169,
+    POKEMON_STATUS_FIELD_SKY_RIBBON = 170,
+    POKEMON_STATUS_FIELD_COUNTRY_RIBBON = 171,
+    POKEMON_STATUS_FIELD_NATIONAL_RIBBON = 172,
+    POKEMON_STATUS_FIELD_EARTH_RIBBON = 173,
+    POKEMON_STATUS_FIELD_WORLD_RIBBON = 174,
+    POKEMON_STATUS_FIELD_AMARI_RIBBON = 175,
+    POKEMON_STATUS_FIELD_STYLE_MEDAL = 176,
+    POKEMON_STATUS_FIELD_BEAUTIFUL_MEDAL = 177,
+    POKEMON_STATUS_FIELD_CUTE_MEDAL = 178,
+    POKEMON_STATUS_FIELD_CLEVER_MEDAL = 179,
+    POKEMON_STATUS_FIELD_STRONG_MEDAL = 180,
     POKEMON_STATUS_FIELD_POKERUS = 181, // pokerus of the pokemon.
+    POKEMON_STATUS_FIELD_ABILITY_SLOT = 183, // which of the species abilities the pokemon uses.
+    POKEMON_STATUS_FIELD_SEX = 186, // sex of the pokemon.
     POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
     POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.
     POKEMON_STATUS_FIELD_WAZA_SEALED = 194, // non-zero while the waza pages stay closed.
+    POKEMON_STATUS_FIELD_DARK_ID = 195, // dark pokemon record of the pokemon, zero while it is not dark.
+    POKEMON_STATUS_FIELD_DARK_POINTS = 197,
+    POKEMON_STATUS_FIELD_POOL_EXP = 198, // experience pooled for the pokemon while it is dark.
+    POKEMON_STATUS_FIELD_POOL_FRIEND = 199, // friendship pooled for the pokemon while it is dark.
+    POKEMON_STATUS_FIELD_REVERSE_MODE = 200,
+    POKEMON_STATUS_FIELD_FIGHT_TRAINER_INDEX = 201, // fight trainer slot that owns the pokemon.
     POKEMON_STATUS_FIELD_LEVEL_UP_FLAG = 208, // fight record: set once the pokemon has gained a level.
+};
+
+// Fields read out of the species table with pokemonGetStatus(NULL, speciesId, field, index).
+enum POKEMON_BIOS_FIELD {
+    POKEMON_BIOS_FIELD_DEFAULT_NAME = 1, // default name of the species.
+    POKEMON_BIOS_FIELD_HAS_ABILITY2 = 23 // non-zero when the species has a second ability.
 };
 
 // Marking bits of Pokemon field POKEMON_STATUS_FIELD_MARKINGS (0xBB). Slot N
@@ -217,6 +251,8 @@ bool pokemonCheckValid(Pokemon *pokemon);
 u8 pokemonCheckValid(Pokemon *pokemon);
 #endif
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
+// Selects which of the species' two abilities the pokemon uses.
+void pokemonSetTokuseiFlag(Pokemon *pokemon, s32 abilitySlot);
 u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 // The field ID may select party data or deployed fight-record data.
@@ -226,16 +262,23 @@ void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
+u16 pokemonGetJoutaiDataId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);
 u8 pokemonIsJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 s16 pokemonGetCountAsJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
+s8 pokemonGetNowKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 s8 pokemonGetKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 void pokemonSetCountAsJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s16 count);
+void pokemonSetNowKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s8 nowKaisuu);
 void pokemonSetKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s8 kaisuu);
 void pokemonWriteJoutaiDataId(Pokemon *pokemon, u16 joutaiID, u16 targetID);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
+// Whether the status may be written; a JoutaiWriteResult value.
+u8 pokemonCheckWriteJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u32 filterID);
 void pokemonWazaCreate(Pokemon *pokemon, u16 slot, u16 wazaID);
+// Empties the move slot and resets its PP.
+void pokemonWazaInit(Pokemon *pokemon, u16 slot);
 s8 pokemonSearchWazaDataId(Pokemon *pokemon, u16 wazaID);
 void pokemonReplace(Pokemon *dst, Pokemon *src);
 u8 pokemonIsShadowPokemon(Pokemon *pokemon);
@@ -251,12 +294,16 @@ u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 apply);
 
 void pokemonAllKaihuku(Pokemon *pokemon);
 void pokemonResetBasisStatus(Pokemon *pokemon);
+// Stores the total experience, then recomputes the basis status for the level it gives.
+void pokemonGrowBasisStatus(Pokemon *pokemon, u32 exp);
 void pokemonSetCatchStatus(Pokemon *pokemon, u16 catchFloorId, u8 catchLevel, u8 catchBallId,
                           u8 sexDataId, unsigned int trainerId, const u16 *name);
 void pokemonBiosCopy(Pokemon *pokemon, const Pokemon *src);
 void pokemonInit(Pokemon *pokemon);
 void pokemonCreate(Pokemon *pokemon, u16 species, int level, void *attest);
 void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);
+// Turns the pokemon back into a plain pokemon, dropping its dark record.
+void pokemonInitDarkPokemon(Pokemon *pokemon);
 u16 pokemonBiosGetInitDp(Pokemon *pokemon);
 void pokemonSetDp(Pokemon *pokemon, f32 dp);
 // Level of a Pokemon record.
@@ -271,6 +318,8 @@ u8 pokemonGetDeoxysSel(u8 controllerId);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
 s32 pokemon_GetSeikaku(Pokemon *pokemon);
+// Total experience the pokemon needs to reach its current level.
+s32 pokemonGetNowLevelToExp(Pokemon *pokemon);
 s32 pokemonAdjustValueBySeikaku(s32 nature, s32 fieldID, s32 value);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 sex, s8 nature, s8 rare, u32 trainerRnd);
 void *pokemonCreateSequence(struct FightPokemon *pokemon);

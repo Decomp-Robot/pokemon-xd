@@ -4,13 +4,35 @@
 #include <types.h>
 #include <fightTrainer.h>
 
-// Field selectors of fightTrainerGetStatus / fightTrainerSetStatus.  The field
-// picks which value of the trainer, of one of its pokemon or of its AI data is
-// read or written, and the sub index picks the element of that value.
+/* Field selectors of fightTrainerGetStatus / fightTrainerSetStatus.  The field
+   picks which value of the trainer, of one of its pokemon or of its AI data is
+   read or written, and the sub index picks the element of that value.
+   The pokemon queries address the party record of the trainer's pokemon. */
 enum FightTrainerQuery {
     FIGHT_TRAINER_QUERY_AI_DATA_ID = 2,         /* AI data ID the trainer data entry names. */
     FIGHT_TRAINER_QUERY_DIALOGUE = 8,           /* dialogue scene of the given kind. */
     FIGHT_TRAINER_QUERY_POKEMON_PART_WAZA_TYPE_REVISE = 12,
+    /* Nickname of the pokemon in the trainer party record. */
+    FIGHT_TRAINER_QUERY_POKEMON_NICKNAME = 14,
+    /* One individual value or effort value, selected by the sub index. */
+    FIGHT_TRAINER_QUERY_POKEMON_IV = 15,
+    FIGHT_TRAINER_QUERY_POKEMON_EFFORT = 16,
+    FIGHT_TRAINER_QUERY_POKEMON_LEVEL = 17,
+    FIGHT_TRAINER_QUERY_POKEMON_DARK_ID = 19,
+    /* Which of the species' two abilities the pokemon uses. */
+    FIGHT_TRAINER_QUERY_POKEMON_TOKUSEI_SLOT = 20,
+    FIGHT_TRAINER_QUERY_POKEMON_SPECIES = 21,
+    FIGHT_TRAINER_QUERY_POKEMON_ITEM = 22,
+    /* One move id or one pp-up count, selected by the sub index. */
+    FIGHT_TRAINER_QUERY_POKEMON_WAZA_ID = 23,
+    FIGHT_TRAINER_QUERY_POKEMON_WAZA_PP_COUNT = 24,
+    FIGHT_TRAINER_QUERY_POKEMON_FRIEND_LEVEL = 25,
+    FIGHT_TRAINER_QUERY_POKEMON_SEX = 26,
+    FIGHT_TRAINER_QUERY_POKEMON_NATURE = 27,
+    /* Key player flag the pokemon has in the fight. */
+    FIGHT_TRAINER_QUERY_POKEMON_KEY_PLAYER_FLAG = 28,
+    /* Body part record the pokemon is drawn and animated with. */
+    FIGHT_TRAINER_QUERY_POKEMON_PART_DATA_ID = 29,
     FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_RANDOM_FLAG = 31,
     FIGHT_TRAINER_QUERY_AI_POKEMON_SELECT_WEAK_POINT_FLAG = 32,
     FIGHT_TRAINER_QUERY_AI_POKEMON_DATA_ORDER_OUT_FLAG = 33,

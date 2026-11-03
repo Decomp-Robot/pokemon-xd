@@ -24,4 +24,10 @@ extern FloorListHeader* floordata_number;
 /* Count of entries in the item data index table. */
 extern u32 *item_data_index_number;
 
+/* Count of entries in the pokemon data table. */
+extern u32 *pokemon_data_number;
+
+/* Count of entries in the pokemon nature (seikaku) table. */
+extern u32 *pokemon_seikaku_data_number;
+
 #endif

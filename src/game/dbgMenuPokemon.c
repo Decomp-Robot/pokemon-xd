@@ -16,24 +16,6 @@ enum {
     POKEMON_EDIT_KEY_FASTER = 0x400   // widens a step further.
 };
 
-/* Amount one step adds to the value of the selected entry. */
-enum {
-    POKEMON_EDIT_STEP = 1,
-    POKEMON_EDIT_STEP_FAST = 10,
-    POKEMON_EDIT_STEP_FASTER = 100,
-    POKEMON_EDIT_STEP_LIMIT = 65535
-};
-
-/* Results the editor window hands back to the menu that opened it. */
-enum {
-    POKEMON_EDIT_RESULT_CANCEL = -1, // the edited record is dropped.
-    POKEMON_EDIT_RESULT_CONFIRM = -2 // the edited record is kept.
-};
-
-/* Species entry, the first entry of the editor. The hook selects it whenever
- * the record under edit is unusable. */
-enum { POKEMON_EDIT_ITEM_SPECIES = 22 };
-
 /* Hook of the debug pokemon editor. mArgs[0] is the record under edit, mArgs[1]
  * receives the step the editor applies to the value of the selected entry. */
 void dbgMenuPokemonEditButton(tagWINDOW_WORK *window)
@@ -88,6 +70,7 @@ void dbgMenuPokemonEditButton(tagWINDOW_WORK *window)
     }
     if (!pokemonCheckValid(pokemon)) {
         window->mCursor.y = 0;
+        /* An unusable record leaves the editor on the species entry. */
         itemID = POKEMON_EDIT_ITEM_SPECIES;
     } else {
         menuDataBiosGetPtr(window->mMenuID);

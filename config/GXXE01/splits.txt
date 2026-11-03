@@ -41,6 +41,13 @@ game/dbgMenuFlagEtc.c:
 game/dbgMenuPokemon.c:
 	.text       start:0x80008998 end:0x80008BA8
 
+game/dbgMenuPokemonEditSub.c:
+	.text       start:0x80008BA8 end:0x8000ACBC
+	.rodata     start:0x802EA070 end:0x802EA088
+	.data       start:0x802FBF80 end:0x802FC110
+	.sdata2     start:0x804EBDD8 end:0x804EBDE8
+	.sbss2      start:0x804EFC80 end:0x804EFC84
+
 game/dbgMenuPokemonEffort.c:
 	.text       start:0x8000ACBC end:0x8000AD7C
 
