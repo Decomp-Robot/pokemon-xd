@@ -336,6 +336,12 @@ game/pokecolo.cpp:
 game/menuScript.cpp:
 	.text       start:0x8005E794 end:0x8005E8AC
 
+game/menuShop.cpp:
+	.text       start:0x800605B8 end:0x800605F0
+
+game/menuShopMax.cpp:
+	.text       start:0x80062568 end:0x80062618
+
 game/menuPocketCologne.cpp:
 	.text       start:0x80063640 end:0x800636AC
 

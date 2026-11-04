@@ -6,11 +6,13 @@
 /* Requests memcardTaskCall() hands to the memcard task thread, and the
    results it reports back once a task is done. The thread knows further
    request codes for the same card work; a load request leaves the save data
-   in memory and reports MEMCARD_RESULT_LOADED, a save request writes the save
-   file and reports MEMCARD_RESULT_WRITTEN, and a delete request removes the
-   save file and leaves it deleted. */
+   in memory and reports MEMCARD_RESULT_LOADED, a write request writes the
+   current save block and reports MEMCARD_RESULT_WRITTEN, a save request
+   (debug-menu save) also writes through the task, and a delete request
+   removes the save file and leaves it deleted. */
 enum MemcardTaskRequest {
     MEMCARD_TASK_LOAD = 2,
+    MEMCARD_TASK_WRITE = 4,
     MEMCARD_TASK_SAVE = 11,
     MEMCARD_TASK_DELETE = 12
 };
