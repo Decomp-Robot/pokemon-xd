@@ -189,6 +189,9 @@ game/menuFight.cpp:
 	.sbss       start:0x804EA728 end:0x804EA741
 	.sdata2     start:0x804EBFE0 end:0x804EBFE4
 
+game/menuFightSecretWazaTop.cpp:
+	.text       start:0x8001C054 end:0x8001C0B4
+
 game/menuPocketTool.cpp:
 	.text       start:0x8001EC10 end:0x8002208C
 	.data       start:0x80322460 end:0x80322498
