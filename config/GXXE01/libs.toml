@@ -385,6 +385,11 @@ completed = true
 extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
+name = "game/menuSub.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/menuPdaMemoWaveXD.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]

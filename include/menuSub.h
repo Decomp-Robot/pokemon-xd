@@ -40,10 +40,10 @@ s8 menuSubOpenYesNoField();
 u8 menuSubGetPokemonSexForFightDisp(struct Pokemon *pokemon);
 u8 menuSubGetPokemonSexForDisp(struct Pokemon *pokemon);
 void menuSubCursorAnimeValGet(f32 *values, s32 *animation);
-s32 menuSubOpenSelect2(s32 type, u32 *messageIDs, s32 count, s32 x, s32 y,
-                       s32 initialCursor, s32 displayedCount, s32 selectMode);
-void menuSubWait(f32 seconds);
-s32 menuSubOpenSelect(s32 type, u32 *messages, int count,
+s32 menuSubOpenSelect2(u8 type, u32 *messageIDs, s32 count, s32 x, s32 y,
+                       s32 initialCursor, s32 displayedCount, u8 selectMode);
+void menuSubSleep(f32 seconds);
+s32 menuSubOpenSelect(u8 type, u32 *messages, int count,
                       s32 x, s32 y, s32 cursor);
 
 // Yes/No sub dialog: type selects the dialog, x/y position it.

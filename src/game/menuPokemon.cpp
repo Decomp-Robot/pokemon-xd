@@ -1434,7 +1434,7 @@ s32 _menuPokemonActionField(signed char index)
 
                     pokemonReplace(from, to);
                     menuPokemonUpdate();
-                    menuSubWait(0.25f);
+                    menuSubSleep(0.25f);
 
                     _menuPokemonMovePanel(index, PARTY_PANEL_SHOW);
                     _menuPokemonMovePanel(target, PARTY_PANEL_SHOW);
