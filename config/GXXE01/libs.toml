@@ -480,6 +480,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-str reuse,readonly", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/dbgMenuHero.c"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
+[[lib.object]]
 name = "game/dbgMenuFloor.c"
 completed = true
 extra_cflags = ["-opt nopeephole"]
