@@ -28,6 +28,14 @@ enum {
     WINDOW_RUN_UPDATE = 4
 };
 
+// Sequence record the menu windows and the menu sprites play back: the
+// record winSetSequence fills in, and the record the sequence mover advances.
+typedef struct WINDOW_SEQUENCE {
+    void *mData;        // sequence data the record plays back.
+    u16 mSequenceID;    // id of the sequence, 0 clears the record.
+    u8 _06[54];
+} WINDOW_SEQUENCE;
+
 // Per-window drawing and input state.
 struct tagWINDOW_WORK {
     s8 mStateFlags;              // Window state flags.
@@ -44,7 +52,7 @@ struct tagWINDOW_WORK {
     u8 _20[4];
     tagSPRITE_WORK *mSpriteWork; // head of the window sprite-work list.
     u8 _28[4];
-    u8 mSeq[60];                // Sequence record of the menu the window runs.
+    WINDOW_SEQUENCE mSeq;       // Sequence record of the menu the window runs.
     union {
         u32 mArgs[8];
         NAME_ENTRY_ARG *mArg;        // argument the custom menu was opened with.
@@ -75,7 +83,8 @@ struct tagSPRITE_WORK {
     u8 _04;
     u8 _05;
     s16 mItemID;           // item id the node displays for the menu.
-    u8 _08[64];
+    u8 _08[4];
+    WINDOW_SEQUENCE mSeq;  // sequence the node's row hook plays.
     void *mHookFunction;   // hook the node was registered with.
     u32 mMsgID;            // message id the node prints.
     s16 mX;                // x position the row hooks place the sprite at.
@@ -129,6 +138,8 @@ extern "C" {
 #endif
 struct MENU_ITEM_dd_* windowGetCursorToItem(tagWINDOW_WORK* window);
 void winSpriteDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void winAnimeCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void winSetSequence(WINDOW_SEQUENCE *sequence, u16 sequenceID);
 
 // Key state of the window, also read directly by the debug menus.
 struct tagWINDOW_KEY *windowGetKeyInfo(void);

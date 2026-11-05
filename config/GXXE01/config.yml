@@ -1,8 +1,11 @@
 object: orig/GXXE01/sys/main.dol
 hash: ff9e752ead9914af0b363ae6c831a34ccce189d2
-symbols: config/GXXE01/symbols.txt
-splits: config/GXXE01/splits.txt
+symbols: src/game/menuField/symbols.txt
+splits: src/game/menuField/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 force_active:
   - OSLink
+block_relocations:
+  - source: ".text:0x8005B8EC"
+  - source: ".text:0x8005BA80"
