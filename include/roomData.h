@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 u32 roomDataGetFsysGidForLanguage(RoomData *room);
+u32 mapGetGroupID(RoomData *room);
 
 #ifdef __cplusplus
 }
