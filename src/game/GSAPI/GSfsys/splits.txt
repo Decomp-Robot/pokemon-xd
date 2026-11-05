@@ -288,6 +288,9 @@ game/menuPda.cpp:
 	.bss        start:0x80429900 end:0x8042990C
 	.sdata2     start:0x804EC1D0 end:0x804EC23C
 
+game/menuPdaMailListCursor.cpp:
+	.text       start:0x80043724 end:0x800437E4
+
 game/menu/menuColosseumBattle.cpp:
 	.text       start:0x80046530 end:0x80046598
 	.ctors      start:0x802E9F94 end:0x802E9F98

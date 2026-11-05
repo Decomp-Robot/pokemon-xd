@@ -1099,6 +1099,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++", "-str reuse,readonly", "-inline noauto", "-i src/ext/msl/include"]
 
 [[lib.object]]
+name = "game/menuPdaMailListCursor.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
+[[lib.object]]
 name = "game/gbaCommand.cpp"
 completed = true
 cflags = [
