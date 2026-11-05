@@ -1,11 +1,32 @@
 object: orig/GXXE01/sys/main.dol
 hash: ff9e752ead9914af0b363ae6c831a34ccce189d2
-symbols: src/game/menuField/symbols.txt
-splits: src/game/menuField/splits.txt
+symbols: src/game/menuNintendoWarning/symbols.txt
+splits: src/game/menuNintendoWarning/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
-force_active:
-  - OSLink
 block_relocations:
+  - source: ".text:0x80085FC4"
+  - source: ".text:0x80086070"
+  - source: ".text:0x8008618C"
+  - source: ".text:0x800864D0"
+  - source: ".text:0x80086500"
+  - source: ".text:0x80086604"
+  - source: ".text:0x80086660"
+  - source: ".text:0x80086770"
+  - source: ".text:0x80086834"
+  - source: ".text:0x800868E8"
+  - source: ".text:0x80086950"
+  - source: ".text:0x800869E4"
+  - source: ".text:0x80086AC0"
+  - source: ".text:0x80086B64"
+  - source: ".text:0x80086CB8"
+  - source: ".text:0x80086D34"
+  - source: ".text:0x80086E30"
+  - source: ".text:0x80086F08"
+  - source: ".text:0x80087844"
+  - source: ".text:0x8008789C"
+  - source: ".text:0x80087AA0"
   - source: ".text:0x8005B8EC"
   - source: ".text:0x8005BA80"
+force_active:
+  - OSLink

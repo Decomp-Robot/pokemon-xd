@@ -1998,6 +1998,21 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-lang=c++"]
 
 [[lib.object]]
+name = "game/menuNintendoWarningButton.cpp"
+completed = true
+extra_cflags = ["-inline deferred,noauto", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/menuNintendoWarning.cpp"
+completed = true
+extra_cflags = ["-inline deferred,noauto", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/menuNintendoWarningSeq.cpp"
+completed = true
+extra_cflags = ["-inline deferred,noauto", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/menuLogoDemo.cpp"
 completed = true
 extra_cflags = ["-inline deferred,noauto", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
