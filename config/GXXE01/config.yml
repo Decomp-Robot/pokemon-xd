@@ -1,7 +1,7 @@
 object: orig/GXXE01/sys/main.dol
 hash: ff9e752ead9914af0b363ae6c831a34ccce189d2
-symbols: src/game/menuNintendoWarning/symbols.txt
-splits: src/game/menuNintendoWarning/splits.txt
+symbols: src/game/menuInterrupt/symbols.txt
+splits: src/game/menuInterrupt/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 block_relocations:
