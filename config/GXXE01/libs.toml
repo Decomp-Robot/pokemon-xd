@@ -5346,3 +5346,100 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/msl/include", "-i 
 [[lib.object]]
 name = "game/GSAPI/GSgapp/GSgapp.cpp"
 completed = true
+[[lib]]
+name = "GSprim"
+mw_version = "GC/2.6"
+progress_category = "game"
+[[lib.object]]
+name = "game/GSAPI/GSprim/GSprim.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-D__GEKKO__",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+[[lib.object]]
+name = "game/GSAPI/GSprim/2d.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-D__GEKKO__",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+[[lib.object]]
+name = "game/GSAPI/GSprim/text.cpp"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-D__GEKKO__",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
