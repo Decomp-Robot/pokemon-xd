@@ -4910,6 +4910,16 @@ name = "game/GSAPI/GSfsys/GSfsys2.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
 
+[[lib.object]]
+name = "game/GSAPI/GSfsys/fsysTOC.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error", "-rostr"]
+
+[[lib.object]]
+name = "game/GSAPI/GSfsys/fsysTOC2.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error", "-rostr", "-sdata2", "0"]
+
 [[lib]]
 name = "GSflag"
 mw_version = "GC/2.6"

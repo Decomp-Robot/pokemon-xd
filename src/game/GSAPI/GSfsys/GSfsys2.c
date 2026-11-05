@@ -18,10 +18,6 @@ extern u8 _fsysInitialized;
 /*! Request option: keep the cache a pre-read fills instead of releasing it. */
 #define FSYS_REQUEST_KEEP_CACHE 1
 
-/*! The invalid resource id, the one GSfsysGetInvalidID() hands back: filing a
- *  read with it makes the queue engine read every resource of the group. */
-#define FSYS_INVALID_ID 0xFFFF
-
 /*! How a wait treats a group that has no work left in the file system. */
 #define FSYS_WAIT_REQUIRE_WORK 0 /* wait for a work entry to show up */
 #define FSYS_WAIT_ACCEPT_IDLE 1 /* nothing in flight already counts as done */

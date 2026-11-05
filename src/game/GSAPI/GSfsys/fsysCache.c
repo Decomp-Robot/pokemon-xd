@@ -9,8 +9,6 @@
 #include <GSAPI/GSmemman/GSmemman.h>
 void _fsysAddCacheManage(FsysCacheManage* cache);
 void _fsysAddArq(FsysArq* arq);
-void _fsysDelTAG(void* entry, void* listRoot);
-void _fsysAddTAG(void* entry, void* listRoot);
 
 /* Cache heap sizes, cursors and tables, with the ARAM range and heap they
  * are allocated from. */
