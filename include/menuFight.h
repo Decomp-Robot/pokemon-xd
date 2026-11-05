@@ -30,6 +30,12 @@ void menuFightOpenTotalTimer(void);
 u8 menuFightCloseCheckCountDown(void);
 void menuFightCloseCountDown(void);
 void menuFightOpenCountDown(void);
+// Secret target-selection subsystem of the fight menu: draws the target
+// marker over the selected panel, handles target selection input, and draws
+// the cursor over the currently selected target.
+void menuFightDrawTargetSecret(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
+void menuFightButtonTargetSecret(struct tagWINDOW_WORK *window);
+void menuFightDrawTargetCursor(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 
 #ifdef __cplusplus
 }

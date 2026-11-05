@@ -1638,6 +1638,7 @@ extern "C" void menuFightCtrlTarget(tagWINDOW_WORK *window)
 {
 }
 
+// Draws the cursor highlight over the currently selected secret-menu target.
 extern "C" void menuFightDrawTargetCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     if (menuItemBiosGetSelectFlag(window->mMenuID, sprite->mItemID)) {
@@ -1651,6 +1652,8 @@ extern "C" void menuFightDrawTargetCursor(tagWINDOW_WORK *window, tagSPRITE_WORK
     }
 }
 
+// Button input of the fight menu's secret target-selection window: maps the
+// pressed direction onto the target panel in that direction.
 extern "C" void menuFightButtonTargetSecret(tagWINDOW_WORK *window)
 {
     tagWINDOW_KEY *key = windowGetKeyInfo();
