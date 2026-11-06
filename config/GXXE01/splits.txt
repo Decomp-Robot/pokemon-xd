@@ -200,6 +200,9 @@ game/menuFight.cpp:
 game/menuFightSecretWazaTop.cpp:
 	.text       start:0x8001C054 end:0x8001C0B4
 
+game/menuFightTarget/menuFight.c:
+	.text       start:0x8001D934 end:0x8001D9A8
+
 game/menuPocketTool.cpp:
 	.text       start:0x8001EC10 end:0x8002208C
 	.data       start:0x80322460 end:0x80322498
