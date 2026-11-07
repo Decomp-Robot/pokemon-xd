@@ -20,6 +20,7 @@ public:
     void setPokemon(Pokemon *pokemon);
     void setPositionTableDummy();
     void setPositionIndex(long index);
+    long getPositionIndex() const { return mPositionIndex; }
     void setPositionTable(PocketVec<short> *table, long index);
 
 private:

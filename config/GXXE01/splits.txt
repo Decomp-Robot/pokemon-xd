@@ -354,6 +354,9 @@ game/menuPdaMemoListXD.cpp:
 game/menuPdaMemoListXDSort.cpp:
 	.text       start:0x80055BC0 end:0x80055C94
 
+game/menuPcBoxPokemon.cpp:
+	.text       start:0x80057890 end:0x80057C44
+
 game/menuField.cpp:
 	.text       start:0x8005B6C4 end:0x8005B754
 	.sbss       start:0x804EA878 end:0x804EA880 align:4

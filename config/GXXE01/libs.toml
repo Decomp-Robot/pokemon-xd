@@ -1083,6 +1083,40 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/menuPcBoxPokemon.cpp"
+completed = true
+extra_cflags = ["-pragma \"force_active on\"", "-i src/ext/dolphin_sdk/include/libc"]
+
+# The PC-box pokemon-leave party queries: the occupied-slot walk over the
+# hero's party, the capacity predicates, and the blank-slot search the
+# leave menu's action and animation states consult.
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline noauto",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+]
+
+[[lib.object]]
 name = "game/menuPcBoxDougu.cpp"
 completed = true
 cflags = [
