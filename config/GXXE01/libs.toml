@@ -1195,6 +1195,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
 
 [[lib.object]]
+name = "game/menuPdaMailListSort.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++", "-i src/ext/msl/include"]
+
+[[lib.object]]
 name = "game/menuPda.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole", "-use_lmw_stmw on", "-lang=c++", "-str reuse,readonly", "-inline noauto", "-i src/ext/msl/include"]
