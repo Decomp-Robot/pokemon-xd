@@ -7,7 +7,10 @@ typedef void *(*FloorPostCallFunc)(unsigned long group, unsigned long resource,
 class FloorPostCallManager
 {
 public:
+    FloorPostCallManager(void);
     void update(void);
+    void add(unsigned long group, unsigned long resource, unsigned long argument,
+             FloorPostCallFunc callback);
 
 private:
     struct PendingCall {
