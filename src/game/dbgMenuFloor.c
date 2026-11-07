@@ -1,6 +1,11 @@
 #include <types.h>
 #include <GSinput.h>
 #include <menuSub.h>
+#include <dbgMenu.h>
+#include <GSmsg.h>
+#include <GSsndPlayback.h>
+#include <GSthread.h>
+#include <menuIds.h>
 #include <floor.h>
 #include <floorDataBios.h>
 #include <roomData.h>
@@ -14,6 +19,9 @@ enum {
     FLOOR_CHANGE_PAD_TRIGGER_L = 0x40,
     FLOOR_CHANGE_PAD_BUTTON_Y = 0x800,
 };
+
+// Message shown when a floor change cannot be started.
+static const char sFloorChangeBusyMsg[48] = "このフロアからフロアチェンジはおこなえません";
 
 // Floor the debug entry changes to, keyed by the floor it is used on. The
 // entry looks the current floor up here to find the floor linked to it.
@@ -94,6 +102,33 @@ s32 dbgMenuFloorChange(s32 floorID)
         }
     }
     return 0;
+}
+
+// Reports an error while the player is on a pushed floor. Otherwise, when
+// R or Y is pressed, asks for a floor number and links to that floor.
+s32 dbgMenuFloorCheck(void)
+{
+    s32 floorID;
+    s32 i;
+
+    if (GSfloorIsFloorPushed()) {
+        GSsndPlayNow(MENU_SE_ERROR);
+        for (i = 0; i < 15; i++) {
+            GSprint(dbgMenuGetLayerID(), 200, 240, -1, sFloorChangeBusyMsg);
+            GSthreadSwitch();
+        }
+        return 0;
+    }
+
+    if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & FLOOR_CHANGE_PAD_TRIGGER_R) ||
+        (GSinputButtonsPressed(GS_INPUT_PORT_1) & FLOOR_CHANGE_PAD_BUTTON_Y)) {
+        if (!menuSubOpenNumberInputDigit(0, &floorID)) {
+            return -1;
+        }
+        floorLink(floorID, 0);
+        return 0;
+    }
+    return 1;
 }
 
 #pragma force_active reset

@@ -57,7 +57,8 @@ game/dbgMenuHero.c:
 	.sdata      start:0x804E7E40 end:0x804E7E48
 
 game/dbgMenuFloor.c:
-	.text       start:0x8000B15C end:0x8000B260
+	.text       start:0x8000B15C end:0x8000B344
+	.rodata     start:0x802EA088 end:0x802EA0B8
 	.data       start:0x802FC110 end:0x802FC8C8
 
 game/dbgMenuGSgfx.c:
