@@ -46,5 +46,6 @@ block_relocations:
   - source: ".text:0x8005A9BC"
   - source: ".text:0x8005AC20"
   - source: ".text:0x8005ACBC"
+  - source: ".text:0x8003AF74"
 force_active:
   - OSLink

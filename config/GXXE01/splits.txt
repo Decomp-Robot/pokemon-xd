@@ -303,6 +303,9 @@ game/menuPda.cpp:
 	.bss        start:0x80429900 end:0x8042990C
 	.sdata2     start:0x804EC1D0 end:0x804EC23C
 
+game/menuReliveHall.cpp:
+	.text       start:0x8003AF8C end:0x8003AFC0
+
 game/menuPdaMailListSort.cpp:
 	.text       start:0x800432CC end:0x800433D8
 
