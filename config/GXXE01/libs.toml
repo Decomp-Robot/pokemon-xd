@@ -1051,11 +1051,12 @@ cflags = [
 completed = true
 
 [[lib.object]]
-name = "game/menuCBRule.cpp"
+name = "game/menuCB_Rule.cpp"
 completed = true
 # The colosseum regulations of the link battles: the checks a rule set runs
 # over an entered party and over a single Pokemon, and the policy and time
 # limits the battle screens read back from the rule set.
+extra_cflags = ["-i src/ext/dolphin_sdk/include/libc"]
 cflags = [
     "-W error",
     "-nodefaults",

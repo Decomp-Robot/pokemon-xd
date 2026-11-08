@@ -41,10 +41,8 @@ struct FightRuleData {
     u16 mTitle[21]; // 0x1E: custom rule title.
     u32 m48[2];
     u16 mMsgId; // 0x50: message ID of the rule set; also marks initialized slots.
-    /* 0x52: the restriction positions of the rule set, one entry per list
-       position. The rule menus stamp the entries of the items a rule set
-       regulates; the entry screens test the positions one by one. */
-    u8 m52[0x3E];
+    /* One flag per item in the regulation list. */
+    u8 mRegulationItemFlags[62];
 };
 
 extern "C" {

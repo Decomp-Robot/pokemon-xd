@@ -1040,7 +1040,7 @@ void menuCB_RuleItemFlagDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         if (i == 0x3E) {
             GSmsgPrint2(window->mLayerID, 0, y, window->mRgba.mColorA | 0xFFFFFF00,
                         1);
-        } else if (_CB.mEntryRule->m52[i] != 0) {
+        } else if (_CB.mEntryRule->mRegulationItemFlags[i] != 0) {
             GSmsgPrint2(window->mLayerID, 0, y, window->mRgba.mColorA | 0xFF3F0000,
                         0x43E4);
         } else {

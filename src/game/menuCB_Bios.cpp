@@ -464,11 +464,11 @@ void menuCB_RULE_INIT(_TOOL_SAVEDATA *rules)
         rules->mRule[5].mPokemonCount = 4;
         for (i = 0; i < itemtoolbattle_number; i++) {
             if (menuCBRule_RegulationItemID(i) == 0xBF) {
-                rules->mRule[1].m52[i] = 1;
-                rules->mRule[2].m52[i] = 1;
-                rules->mRule[3].m52[i] = 1;
-                rules->mRule[4].m52[i] = 1;
-                rules->mRule[5].m52[i] = 1;
+                rules->mRule[1].mRegulationItemFlags[i] = 1;
+                rules->mRule[2].mRegulationItemFlags[i] = 1;
+                rules->mRule[3].mRegulationItemFlags[i] = 1;
+                rules->mRule[4].mRegulationItemFlags[i] = 1;
+                rules->mRule[5].mRegulationItemFlags[i] = 1;
             }
         }
         str = GSmsgGetStringPtr(0x438A);
@@ -552,11 +552,11 @@ void menuCBBios_InitContextAtFirst(_MENUCBWORK *w, _TOOL_SAVEDATA *set)
     w->mRulesetData[5].mPokemonCount = 4;
     for (i = 0; i < itemtoolbattle_number; i++) {
         if (menuCBRule_RegulationItemID(i) == 0xBF) {
-            w->mRulesetData[1].m52[i] = 1;
-            w->mRulesetData[2].m52[i] = 1;
-            w->mRulesetData[3].m52[i] = 1;
-            w->mRulesetData[4].m52[i] = 1;
-            w->mRulesetData[5].m52[i] = 1;
+            w->mRulesetData[1].mRegulationItemFlags[i] = 1;
+            w->mRulesetData[2].mRegulationItemFlags[i] = 1;
+            w->mRulesetData[3].mRegulationItemFlags[i] = 1;
+            w->mRulesetData[4].mRegulationItemFlags[i] = 1;
+            w->mRulesetData[5].mRegulationItemFlags[i] = 1;
         }
     }
     memcpy(menuCB_RuleTitleNameGet(3), &set->mRule[3].mTitle[0], 0x2A);

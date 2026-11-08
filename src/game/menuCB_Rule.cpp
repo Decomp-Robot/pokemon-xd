@@ -10,6 +10,9 @@
 #include <heroBios.h>
 #include <FightRuleData.h>
 #include <itemData.h>
+#include <menuCBItemList.h>
+#include <string.h>
+#include <GSmsg.h>
 #include <menuCBBios.h>
 #include <menuCBRule.h>
 #include <Pokemon.h>
@@ -24,7 +27,14 @@
 /* The fixed rule set the ore colosseum plays. */
 extern const FightRuleData oreRule;
 
-enum { MAX_TOTAL_EFFORT = 510, MAX_STAT_EFFORT = 255 };
+enum {
+    MAX_TOTAL_EFFORT = 510,
+    MAX_STAT_EFFORT = 255,
+    ITEM_ID_SOUL_DEW = 191,
+    MSG_RULE_TITLE_3 = 17290,
+    MSG_RULE_TITLE_4 = 17291,
+    MSG_RULE_TITLE_5 = 17292
+};
 
 /* Count and flat species-ID list for the legendary Pokemon restriction. */
 extern u32 *legendPokemonData_number;
@@ -32,6 +42,7 @@ extern u16 *legendPokemonData;
 
 extern "C" {
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
+extern u32 menuCBRule_RegulationItems(void);
 extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 }
 
@@ -728,4 +739,197 @@ extern "C" bool menuCBRule_CheckValidItem(u16 itemID)
     }
 
     return itemDataCheckValid(itemID);
+}
+
+/* Items which may be selected for an item's regulation position. */
+extern const u16 menuCBRule_RegulationItemData[];
+extern const FightRuleData menuCBRule_DefaultRuleData[];
+extern FightRuleData ruleTempBuff;
+
+extern "C" bool menuCBRule_CheckRegulationItem(u16 itemID)
+{
+    FightRuleData *rule = menuCBBios_CurrentRule();
+    u32 count;
+    u32 i;
+
+    if (!menuCBRule_CheckValidItem(itemID)) {
+        return false;
+    }
+
+    switch (rule->mHeldItemMode) {
+    case HELD_ITEMS_ALLOWED:
+        return true;
+
+    case HELD_ITEMS_FORBIDDEN:
+        return itemID == 0;
+
+    case HELD_ITEMS_RESTRICTED:
+        count = menuCBRule_RegulationItems();
+        for (i = 0; i < count; i++) {
+            if (itemID == menuCBRule_RegulationItemData[i]) {
+                return rule->mRegulationItemFlags[i] == 0;
+            }
+        }
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+extern "C" u16 menuCBRule_RegulationItemID(s32 index)
+{
+    if (index < 0 || menuCBRule_RegulationItems() <= (u32)index) {
+        return 0;
+    } else {
+        return menuCBRule_RegulationItemData[index];
+    }
+}
+
+extern "C" u32 menuCBRule_RegulationItems(void)
+{
+    return itemtoolbattle_number - 1;
+}
+
+extern "C" u32 menuCBRule_ParticipationPokemonMax2(void)
+{
+    u32 maxPokemon = 6;
+
+    switch (_CB.ruleId) {
+    case 0:
+        if (_CB.mRulesetData[0].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[0].mPokemonCount;
+        }
+        break;
+    case 1:
+        if (_CB.mRulesetData[1].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[1].mPokemonCount;
+        }
+        break;
+    case 2:
+        if (_CB.mRulesetData[2].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[2].mPokemonCount;
+        }
+        break;
+    case 3:
+        if (_CB.mRulesetData[3].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[3].mPokemonCount;
+        }
+        break;
+    case 4:
+        if (_CB.mRulesetData[4].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[4].mPokemonCount;
+        }
+        break;
+    case 5:
+        if (_CB.mRulesetData[5].mPokemonCountMode == 0) {
+            maxPokemon = _CB.mRulesetData[5].mPokemonCount;
+        }
+        break;
+    }
+    return maxPokemon;
+}
+
+extern "C" u32 menuCBRule_ParticipationPokemonMax(void)
+{
+    return menuCBRule_ParticipationPokemonMax2();
+}
+
+extern "C" FightRuleData *menuCBRule_ConstantRule2(s32 ruleId)
+{
+    const u16 *title;
+    s32 preset;
+    u32 i;
+    u32 j;
+
+    switch (ruleId) {
+    case 0:
+    case 1:
+    case 2:
+        preset = ruleId;
+        break;
+    case 3:
+    case 4:
+    case 5:
+        preset = 2;
+        break;
+    default:
+        preset = 0;
+        break;
+    }
+
+    memset(&ruleTempBuff, 0, sizeof(FightRuleData));
+    memcpy(&ruleTempBuff, &menuCBRule_DefaultRuleData[preset], sizeof(FightRuleData));
+
+    switch (ruleId) {
+    case 3:
+    case 4:
+    case 5:
+        ruleTempBuff.mPokemonCountMode = 0;
+        ruleTempBuff.mPokemonCount = 4;
+        break;
+    }
+
+    if (ruleId != 0) {
+        for (i = 0; i < itemtoolbattle_number; i++) {
+            if (menuCBRule_RegulationItemID(i) == ITEM_ID_SOUL_DEW) {
+                ruleTempBuff.mRegulationItemFlags[i] = 1;
+            }
+        }
+    }
+
+    switch (ruleId) {
+    case 0:
+    case 1:
+    case 2:
+        title = 0;
+        break;
+    case 3:
+        title = GSmsgGetStringPtr(MSG_RULE_TITLE_3);
+        break;
+    case 4:
+        title = GSmsgGetStringPtr(MSG_RULE_TITLE_4);
+        break;
+    case 5:
+        title = GSmsgGetStringPtr(MSG_RULE_TITLE_5);
+        break;
+    }
+
+    for (j = 0; j < 21; j++) {
+        if (title != 0) {
+            if (*title == 0xFFFF) {
+                title += 2;
+            }
+            ruleTempBuff.mTitle[j] = *title;
+            if (*title != 0) {
+                title++;
+            }
+        } else {
+            ruleTempBuff.mTitle[j] = 0;
+        }
+    }
+
+    return &ruleTempBuff;
+}
+
+extern "C" const FightRuleData *menuCBRule_GetDefaultRuleData(s32 index)
+{
+    switch (index) {
+    case 0:
+    case 1:
+    case 2:
+        return &menuCBRule_DefaultRuleData[index];
+    default:
+        return 0;
+    }
+}
+
+extern "C" void menuCBRule_CopyRuleData(FightRuleData *dst, const FightRuleData *src)
+{
+    memcpy(dst, src, sizeof(FightRuleData));
+}
+
+extern "C" bool menuCBRule_CompareRuleData(const FightRuleData *lhs, const FightRuleData *rhs)
+{
+    return memcmp(lhs, rhs, sizeof(FightRuleData)) == 0;
 }
