@@ -177,6 +177,7 @@ void GSmodelSetBoundCheck(_GSmodel *model, s32 enabled);
 void GSmodelSetShadowFlags(_GSmodel *model, u32 flags);
 void GSmodelSetShadowLight(_GSmodel *model, _GSlight *light);
 void GSmodelSetShadowSurface(_GSmodel *model, s32 count, _GSmodel **surfaces);
+void GSmodelSetShadowDebug(bool enabled);
 f32 GSmodelGetAnimRate(_GSmodel *model);
 void GSmodelUpdateAnimation(_GSmodel *model);
 f32 GSmodelGetAnimFrameCount(_GSmodel *model, s32 index);

@@ -829,6 +829,8 @@ typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long
 extern "C" {
 void GSgfxParseDisplayList(void *vtxAttr, void *dl, u32 size, const void *callbacks, void *ctx);
 u32 GSgfxPerfbarCPUEntry(u32 id);
+s32 GSgfxPerfbarGetRenderMode(void);
+void GSgfxPerfbarSetRenderMode(s32 renderMode);
 void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
 GSgfxLayer *GSgfxLayerFindByName(const char *name);
 void *GSgfxLayerGetFrameBufferTexture(void);

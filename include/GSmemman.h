@@ -125,6 +125,9 @@ extern GSmemPoolAllocator _poolArea[POOL_MAX];
 extern "C" {
 u32 GSmemGetLargestFree(void);
 u16 GSmemGetCurrentLayer(void);
+u8 GSmemCheckHeap(s32 heap);
+void GSmemDumpHeap(s32 heap);
+void GSmemDumpHeapInfo(void);
 s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, void* context, void* context2);
 u32 GSmemGetFreePool(GSmemPoolAllocator* pool);
 void GSmemDumpPool(GSmemPoolAllocator* pool);

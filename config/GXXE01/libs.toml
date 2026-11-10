@@ -460,6 +460,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/dbgMenuMisc.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-inline auto,deferred", "-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/dbgMenuPokemon.c"
 completed = true
 extra_cflags = ["-O2,p", "-opt nopeephole"]

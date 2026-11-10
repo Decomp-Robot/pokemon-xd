@@ -20,6 +20,7 @@ u32 GSdvdGetLength(GSdvdFile *file);
 u8 GSdvdReadAsync(GSdvdFile *file, void *buffer, u32 size, s32 offset,
                   GSdvdReadCompletionFunc completionFunc);
 s32 GSdvdGetFileInfoStatus(GSdvdFile *file);
+u8 GSdvdFstRefresh(void);
 
 #ifdef __cplusplus
 }

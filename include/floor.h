@@ -1,6 +1,7 @@
 #ifndef FLOOR_H
 #define FLOOR_H
 #include <GSgfxTypes.h>
+struct GStexture;
 #include <types.h>
 #include <GSthread.h>
 #include <roomData.h>
@@ -40,6 +41,9 @@ void floorExecScriptIntegerByName(const char *name, int parameter1, int paramete
 void floorExecScriptIntegerByNameThread(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
 int floorGetScriptResult(void);
 void floorSetDispScriptInfo(u8 state);
+u8 floorIsDispScriptInfo(void);
+s32 floorGetLocalHeapHandle(void);
+struct GStexture *floorGetActiveOffscreenTexture(void);
 void floorSetHumanColision(u8 enabled);
 #ifdef __cplusplus
 bool floorGetHumanColision(void);
