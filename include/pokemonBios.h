@@ -133,6 +133,7 @@ void pokemonBiosSetSpeAtkEffort(Pokemon *pokemon, u16 value);
 void pokemonBiosSetSpeDefEffort(Pokemon *pokemon, u16 value);
 
 void pokemonBiosSetRnd(Pokemon *pokemon, u32 value);
+void pokemonBiosSetDarkpokemonDataId(Pokemon *pokemon, u16 darkID);
 void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 value);
 void pokemonBiosSetExp(Pokemon *pokemon, u32 value);
 void pokemonBiosSetConditionAmari(Pokemon *pokemon, u32 value);

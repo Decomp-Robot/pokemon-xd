@@ -281,9 +281,6 @@ game/menuNameEntry.cpp:
 	.sbss       start:0x804EA7A0 end:0x804EA7C8
 	.sdata2     start:0x804EC110 end:0x804EC190
 
-game/menuPdaMemoXD.cpp:
-	.sbss       start:0x804EA858 end:0x804EA860
-
 game/menuPokemonStatus.cpp:
 	.text       start:0x80033440 end:0x80037A48
 	.ctors      start:0x802E9F90 end:0x802E9F94
@@ -354,6 +351,14 @@ game/menuCB_Rule.cpp:
 game/menuPdaDPMonitor.cpp:
 	.text       start:0x8004FB68 end:0x8004FCD4
 	.data       start:0x8032EC48 end:0x8032EC7C
+
+game/menuPdaDPM.cpp:
+	.text       start:0x8004FCD4 end:0x80050B30
+	.sbss       start:0x804EA848 end:0x804EA850
+	.sdata2     start:0x804EC3F0 end:0x804EC400
+
+game/menuPdaMemoXD.cpp:
+	.sbss       start:0x804EA858 end:0x804EA860
 
 game/menuPdaDPMonitorList.cpp:
 	.text       start:0x80052614 end:0x800528F4

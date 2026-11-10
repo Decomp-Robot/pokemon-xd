@@ -77,10 +77,15 @@ struct tagWINDOW_WORK {
     u8 mCancel;                  // set when the menu is cancelled.
 };
 
+// Flag bits of tagSPRITE_WORK::mFlags.
+enum {
+    SPRITE_FLAG_DISP = 2, // set while the node is drawn.
+};
+
 // Sprite work node used by menu entries.
 struct tagSPRITE_WORK {
     tagSPRITE_WORK *mNext; // next node in the list.
-    u8 _04;
+    s8 mFlags;             // node flags, see SPRITE_FLAG_*.
     u8 _05;
     s16 mItemID;           // item id the node displays for the menu.
     u8 _08[4];

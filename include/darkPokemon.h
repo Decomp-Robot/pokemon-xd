@@ -7,6 +7,7 @@
 enum darkPokemonStatus {
     DARK_POKEMON_STATUS_NONE = 0,
     DARK_POKEMON_STATUS_FIGHT = 1,
+    DARK_POKEMON_STATUS_UNKNOWN = 2,
     DARK_POKEMON_SNATCHED = 3,
     DARK_POKEMON_STATUS_RELIVED = 4
 };
@@ -19,7 +20,17 @@ enum darkPokemonWhere {
 enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HERO = 1 };
 class DarkPokemon {
 public:
+    u8 getCatchBallID() const;
     u16 getPokemonID() const;
+    bool isSnach() const;
+    bool isRelive() const;
+    const u16 *getTrainerName() const;
+    bool isUpdate() const;
+    u32 getRnd() const;
+    u16 getCatchFloorId() const;
+    u16 getOrgTrainer() const;
+    s32 getDarkPointDirect() const;
+    float getDarkPoint() const;
     void setSnatchIndex(u8 index);
     u8 isWazaNew(u8 index) const;
     void setWazaNew(u8 index, bool value);

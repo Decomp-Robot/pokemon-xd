@@ -1,36 +1,7 @@
-#include <winSprite.h>
-
-class menuPdaDPM;
-struct DPM_CONTENTS;
-
-class menuPdaDPM {
-public:
-    void Button(tagWINDOW_WORK *window);
-    void Cursor(tagWINDOW_WORK *window);
-    void Ctrl(tagWINDOW_WORK *window);
-    void PokemonBall(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void DarkPokemonRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void DispPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void DarkPokemonRelive(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void DarkPokemonInfo(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void DarkPokemonPlace(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void PokemonSex(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-    void PokemonName(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, DPM_CONTENTS *contents);
-};
+#include <menuPdaDPM.h>
 
 extern menuPdaDPM *_pDPM;
 
-// Sprite item selectors dispatched by menuPdaDPMCallBack.
-enum {
-    DPM_SPRITE_POKEMON_BALL = 97,
-    DPM_SPRITE_DARK_POKEMON_RIBBON = 98,
-    DPM_SPRITE_DARK_POKEMON_RELIVE = 103,
-    DPM_SPRITE_DISP_POKEMON_MODEL = 104,
-    DPM_SPRITE_DARK_POKEMON_INFO = 105,
-    DPM_SPRITE_DARK_POKEMON_PLACE = 106,
-    DPM_SPRITE_POKEMON_SEX = 108,
-    DPM_SPRITE_POKEMON_NAME = 109,
-};
 
 extern "C" long menuPdaDPMCallBack(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 extern "C" void menuPdaDPMButton(tagWINDOW_WORK *window);

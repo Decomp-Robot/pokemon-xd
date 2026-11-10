@@ -92,6 +92,7 @@ enum POKEMON_FRIEND_FILTER_ID {
 // Species the game singles out wherever it inspects a pokemon record.
 enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_MEW = 151,
+    POKEMON_SPECIES_TOGEPI = 175,
     POKEMON_SPECIES_DEOXYS = 410
 };
 

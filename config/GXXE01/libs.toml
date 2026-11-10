@@ -440,6 +440,11 @@ completed = true
 extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
+name = "game/menuPdaDPM.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-inline noauto"]
+
+[[lib.object]]
 name = "game/dbgMenuSub.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]
