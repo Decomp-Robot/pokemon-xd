@@ -1750,6 +1750,9 @@ libc/s_tan.c:
 libc/w_atan2.c:
 	.text       start:0x800E6AB8 end:0x800E6AD8
 
+libc/w_exp.c:
+	.text       start:0x800E6AD8 end:0x800E6AF8
+
 libc/w_fmod.c:
 	.text       start:0x800E6AF8 end:0x800E6B18
 
