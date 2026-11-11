@@ -1679,6 +1679,11 @@ libc/e_atan2.c:
 	.text       start:0x800E3804 end:0x800E3A94
 	.sdata2     start:0x804ECE88 end:0x804ECEE0
 
+libc/e_exp.c:
+	.text       start:0x800E3A94 end:0x800E3CB8
+	.rodata     start:0x802ECC08 end:0x802ECC38
+	.sdata2     start:0x804ECEE0 end:0x804ECF58
+
 libc/e_fmod.c:
 	.text       start:0x800E3CB8 end:0x800E3FF4
 	.rodata     start:0x802ECC38 end:0x802ECC48

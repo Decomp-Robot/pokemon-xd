@@ -4845,6 +4845,9 @@ completed = true
 name = "libc/misc_io.c"
 completed = true
 [[lib.object]]
+name = "libc/e_exp.c"
+completed = true
+[[lib.object]]
 name = "libc/e_fmod.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
