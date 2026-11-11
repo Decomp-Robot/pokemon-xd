@@ -4947,6 +4947,10 @@ name = "libc/k_tan.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include"]
 [[lib.object]]
+name = "libc/e_atan2.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include"]
+[[lib.object]]
 name = "libc/s_atan.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include"]
