@@ -14,6 +14,9 @@ struct tagSPRITE_WORK;
 extern "C" {
 #endif
 
+// Suppress the window daemon's default confirm/cancel key handling.
+enum { MENU_STATUS_NO_DEFAULT_INPUT = 0x10 };
+s32 menuSetStatus(s32 menuID, s32 status);
 void menuSetPosition(s32 menuID, s32 x, s32 y);
 void menuPlaySe(s32 menuID, s32 soundID);
 u8 menuSetEnablePort(s32 portMask);

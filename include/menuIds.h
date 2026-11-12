@@ -169,6 +169,7 @@ enum {
 };
 
 enum {
+    MENU_SE_CURSOR = 16,
     MENU_SE_CONFIRM = 17,
     MENU_SE_CANCEL = 18,
     MENU_SE_ERROR = 19

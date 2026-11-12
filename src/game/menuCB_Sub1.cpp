@@ -1259,7 +1259,7 @@ void menuCB_GCEntry_PokemonStatusDisp(void);
 s32 menuCB_GCEntry_SubWindow_Disp(void);
 void menuCB_TUNAIDE01_Rule_SELECT(void);
 void menuCB_GCEntry_OkPushErrorCheck(void);
-void menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
+u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                                        s32 arg, s32 slot);
 u8 menuCBPokemonEntryDispPokemonFace_AFTER(tagWINDOW_WORK *window,
                                            tagSPRITE_WORK *sprite, s32 arg, s32 slot);

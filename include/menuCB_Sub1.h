@@ -49,6 +49,16 @@ void menuCB_Cursol_Disp_AlphaSet(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
 void menuCB_AlphaGet(tagWINDOW_WORK *window);
 void menuCB_GCEntryCursolDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned char flag);
 void menuCB_GCPokemonHPandWAZA_MAX(void);
+void toolbattle_drawHeroID(tagWINDOW_WORK *window, s32 trainer);
+bool toolBattle_tunaideMenu02menuTempBuffGet(u32 mask);
+void toolBattle_tunaideMenu02menuTempBuffSet(u32 mask);
+void menuCBPokemonMaruWaku_ErrorSet(tagSPRITE_WORK *sprite, long slot);
+void menuCBPokemonItem_ErrorSet(tagSPRITE_WORK *sprite, long slot);
+u8 menuCBPokemon_ErrorDispSet(tagSPRITE_WORK *sprite, long slot);
+void menuCBPokemon_ErrorListDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long slot, long column);
+void menuCBBattleHeroNameDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 trainer);
+void toobattle_drawHeroName(tagWINDOW_WORK *window, s32 trainer);
+u32 toolbattle_trainerFace(s32 trainer);
 void menuCBTrainerNameDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 trainer);
 void menuCB_RuleDispColorChenge_flag(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned char flag);
 void menuCB_RuleDispColorChenge(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u32 value);

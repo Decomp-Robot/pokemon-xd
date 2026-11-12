@@ -4,6 +4,7 @@
 #include <GSinput.h>
 #include <Pokemon.h>
 #include <types.h>
+#include <winSprite.h>
 
 /* Per-player work of the Pokemon entry screen: mPos holds the on-screen
    position of every party slot (six x values followed by six y values),
@@ -50,6 +51,7 @@ extern "C" {
 #endif
 
 s32 menuCB_PokemonEntry(struct _MENUCBWORK *work);
+u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s32 player, s32 slot);
 void menuCBPokemonEntryButtonTask_20041006(void);
 u16 menuCBPokemonEntryPokemonNumMin(long port);
 void menuCBPokemonEntryPokemonFaceFree(void);

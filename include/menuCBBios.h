@@ -64,7 +64,8 @@ struct _MENUCBWORK {
     /* 0xAFD4 */ u8 _AFD4[0xAFE0 - 0xAFD4];
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
-    /* 0xAFE8 */ u8 _AFE8[0xAFF0 - 0xAFE8];
+    /* 0xAFE8 */ u8 _AFE8[0xAFEC - 0xAFE8];
+    /* 0xAFEC */ s32 mTeamSelect;
     /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
     /* 0xAFF4 */ u8 _AFF4[0xAFFC - 0xAFF4];
     union {
@@ -74,18 +75,27 @@ struct _MENUCBWORK {
     };
     /* 0xB000 */ s32 tunaideSelectPrev;
     /* 0xB004 */ s32 mRuleNo; // rule record (mRulesetData) the entry screens work on.
-    /* 0xB008 */ u8 _B008[0xB014 - 0xB008];
+    /* 0xB008 */ s32 error00Cursor;
+    /* 0xB00C */ s32 error01SelectedItem;
+    /* 0xB010 */ u8 _B010[0xB014 - 0xB010];
     /* 0xB014 */ s32 mEntrySelect; // entry the trainer rows are drawn for; -1 for the
                                   // rule row.
     /* 0xB018 */ u8 _B018[0xB028 - 0xB018];
     /* 0xB028 */ s32 listRow; // top row of the scrolled entry lists.
     /* 0xB02C */ u8 _B02C[0xB060 - 0xB02C];
     /* 0xB060 */ s32 confirmationComplete; // confirmation callback has finished.
-    /* 0xB064 */ u8 _B064[0xB0D8 - 0xB064];
+    /* 0xB064 */ u8 _B064[0xB068 - 0xB064];
+    /* 0xB068 */ s32 mTunaide02Cancel;
+    /* 0xB06C */ s32 mTeamSelectCancel;
+    /* 0xB070 */ u8 _B070[0xB088 - 0xB070];
+    /* 0xB088 */ s32 error00Confirmed;
+    /* 0xB08C */ s32 error01Confirmed;
+    /* 0xB090 */ u8 _B090[0xB0D4 - 0xB090];
+    /* 0xB0D4 */ s32 mTunaide02TempBuff;
     /* 0xB0D8 */ s32 entryNo; // entry the entry screens work on.
-    /* 0xB0DC */ u8 _B0DC[0xB0E0 - 0xB0DC];
+    /* 0xB0DC */ s32 error00LastCursor;
     /* 0xB0E0 */ s32 nameEntryMode; // input path the name entry windows pick.
-    /* 0xB0E4 */ u8 _B0E4[0xB0E8 - 0xB0E4];
+    /* 0xB0E4 */ s32 error01LastItem;
     /* 0xB0E8 */ int page2D; // 2D Pokemon page of battle mode 1.
     /* 0xB0EC */ s32 page2DSub; // 2D Pokemon page of battle mode 2.
     /* 0xB0F0 */ s32 battleMode2D; // battle mode the 2D Pokemon pages are laid out for.
@@ -127,7 +137,9 @@ struct _MENUCBWORK {
     /* 0xB17C */ u8 _B17C[4];
     /* 0xB180 */ s32 hpRecoverySound;
     /* 0xB184 */ s32 skipBattleEffect;
-    /* 0xB188 */ u8 _B188[20];
+    /* 0xB188 */ u8 _B188[0xB194 - 0xB188];
+    /* 0xB194 */ s32 mGbaDisconnected; // GBA link dropped while the menu was open.
+    /* 0xB198 */ s32 mTeamSelectGbaDisconnected;
     /* 0xB19C */ s32 battleDisconnected;
     /* 0xB1A0 */ s32 mPlayerLeftEntry; // set once a player left the entry.
     /* 0xB1A4 */ u8 _B1A4[0xB1D4 - 0xB1A4];

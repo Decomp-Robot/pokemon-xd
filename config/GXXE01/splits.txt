@@ -481,9 +481,13 @@ tool/wazaconv.c:
 	.text       start:0x8006C320 end:0x8006C504
 
 game/menuCB_externDB.cpp:
-	.text       start:0x8007A364 end:0x8007A89C
-	.rodata     start:0x802EB6A0 end:0x802EB6F8
+	.text       start:0x80076754 end:0x8007A89C
+	.rodata     start:0x802EB670 end:0x802EB6F8 align:4
+	.data       start:0x803C6750 end:0x803C7074
 	.bss        start:0x80435B60 end:0x80435B90
+	.sdata      start:0x804E7FE0 end:0x804E7FE8
+	.sbss       start:0x804EA9C0 end:0x804EA9C4
+	.sdata2     start:0x804EC6D0 end:0x804EC6EC
 
 game/menuDataBios.cpp:
 	.text       start:0x8007C9B8 end:0x8007CD64
