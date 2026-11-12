@@ -49,3 +49,6 @@ block_relocations:
   - source: ".text:0x8003AF74"
 force_active:
   - OSLink
+  - menuToolBattleInit
+  - menuToolBattleMain
+  - menuToolBattleExit

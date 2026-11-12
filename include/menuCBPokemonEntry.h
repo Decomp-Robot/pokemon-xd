@@ -49,10 +49,12 @@ extern MenuCBPokemonEntryWork _menuCBPokemonWork;
 extern "C" {
 #endif
 
-s32 menuCB_PokemonEntry(void);
+s32 menuCB_PokemonEntry(struct _MENUCBWORK *work);
 void menuCBPokemonEntryButtonTask_20041006(void);
 u16 menuCBPokemonEntryPokemonNumMin(long port);
 void menuCBPokemonEntryPokemonFaceFree(void);
+void menuCBPokemonEntryLoadTex(void);
+void menuCBpokemonFaceReadWait(void);
 
 #ifdef __cplusplus
 }

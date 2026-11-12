@@ -22,11 +22,7 @@ struct _MENUCBTRAINER {
     u8 _131C[0x1320 - 0x131C];
 };
 
-/*
- * Work area of the link (GBA) battles. The connect-battle menus (menuCB*)
- * keep their state here and address it directly; every member below sits at
- * the offset the corresponding menu reads or writes.
- */
+/* State shared by the link-battle menus. */
 /* Entry restrictions for one Pokemon. Only the first failed check is reported. */
 typedef struct MenuCBEntrySlotFlags {
     u8 legendPokemon : 1;
@@ -49,7 +45,7 @@ typedef struct MenuCBEntrySlotFlags {
 } MenuCBEntrySlotFlags;
 
 struct _MENUCBWORK {
-    /* 0x0000 */ u8 _00[0x04];
+    /* 0x0000 */ s32 battleResult;
     /* 0x0004 */ s32 connectMode; // GBA connect-battle flow variant; menuCBBios_InitContext
                                  // opens menu 0xA4 for 1 and 0xA9 otherwise.
     /* 0x0008 */ s32 battleMode; // battle mode the connect-battle menus run in.
@@ -70,7 +66,9 @@ struct _MENUCBWORK {
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
     /* 0xAFE8 */ u8 _AFE8[0xAFF0 - 0xAFE8];
     /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
-    /* 0xAFF4 */ u8 _AFF4[0xB004 - 0xAFF4];
+    /* 0xAFF4 */ u8 _AFF4[8];
+    /* 0xAFFC */ s32 battleStageMode;
+    /* 0xB000 */ u8 _B000[4];
     /* 0xB004 */ s32 mRuleNo; // rule record (mRulesetData) the entry screens work on.
     /* 0xB008 */ u8 _B008[0xB014 - 0xB008];
     /* 0xB014 */ s32 mEntrySelect; // entry the trainer rows are drawn for; -1 for the
@@ -106,7 +104,8 @@ struct _MENUCBWORK {
     /* 0xB12C */ u32 mRuleCursorColor; // colour the cursor row is drawn in.
     /* 0xB130 */ u8 _B130[0xB138 - 0xB130];
     /* 0xB138 */ u32 savedColor; // window colour menuCB_AlphaGet stored.
-    /* 0xB13C */ u8 _B13C[0xB144 - 0xB13C];
+    /* 0xB13C */ u8 _B13C[4];
+    /* 0xB140 */ s32 flashStart;
     /* 0xB144 */ s32 mEntryCursorPrev; // entry row that cursor just left; -1 while no
                                   // row transition is pending.
     /* 0xB148 */ u32 mEntryCursorPrevColor; // colour that row is drawn in.
@@ -117,10 +116,15 @@ struct _MENUCBWORK {
     /* 0xB15C */ s32 previousBattleMode2D; // outgoing page contents during scrolling.
     /* 0xB160 */ s32 previousPage2D;
     /* 0xB164 */ s32 previousPage2DSub;
-    /* 0xB168 */ u8 _B168[0xB180 - 0xB168];
+    /* 0xB168 */ u8 _B168[8];
+    /* 0xB170 */ s32 flashStartVS;
+    /* 0xB174 */ s32 flashEndVS;
+    /* 0xB178 */ s32 flashStartWinLose;
+    /* 0xB17C */ u8 _B17C[4];
     /* 0xB180 */ s32 hpRecoverySound;
     /* 0xB184 */ s32 skipBattleEffect;
-    /* 0xB188 */ u8 _B188[0xB1A0 - 0xB188];
+    /* 0xB188 */ u8 _B188[20];
+    /* 0xB19C */ s32 battleDisconnected;
     /* 0xB1A0 */ s32 mPlayerLeftEntry; // set once a player left the entry.
     /* 0xB1A4 */ u8 _B1A4[0xB1D4 - 0xB1A4];
     /* 0xB1D4 */ s32 dstBank; // bank/index a party copy is taken from.

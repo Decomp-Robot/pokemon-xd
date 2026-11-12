@@ -14,7 +14,11 @@ unsigned short fightGetFightResultId(void);
 enum FightResult {
     kFightResultCommunicationError = 1,
     kFightResultHostVictory = 2,
-    kFightResultOtherSideVictory = 3
+    kFightResultOtherSideVictory = 3,
+    kFightResultLoseWin = 4,
+    kFightResultWinLose = 5,
+    kFightResultDraw = 6,
+    kFightResultOtherDraw = 7
 };
 
 #endif

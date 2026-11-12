@@ -136,7 +136,9 @@ private:
     u32 mFollowerGroup; // 0x950
     u32 mFollowerObject; // 0x954
     u8 mFollowerModelLevel; // 0x958
+public:
     u8 mHeroStyle;
+private:
     u16 mBattleResumeFloorID;
     u8 mBattleResumeFloorIndex;
     u8 _95D[0x1B];

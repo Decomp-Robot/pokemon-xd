@@ -4,6 +4,7 @@
 #include <msgctrl.h>
 #include <gbaCommand.h>
 #include <menuCBBios.h>
+#include <menuCBBattle.h>
 #include <FightResult.h>
 #include <menu.h>
 #include <types.h>
@@ -56,10 +57,6 @@ s32 GSinputGetSubType(s32 pad);
  * Functions of this module
  * ---------------------------------------------------------------------- */
 
-/* Menu callback that runs the link-battle result screen the current battle
-   mode asks for. */
-extern "C" void menuCB_BattleResult(_MENUCBWORK *work);
-
 u16 _menuCB_BattleResultGetHomePlace(void);
 u8 _menuCBResultCheckController1sub(void);
 void _menuCBResultCheckController1(void);
@@ -73,16 +70,14 @@ s32 _menuCBResultGetHomePlace(void);
  * Battle result screen
  * ---------------------------------------------------------------------- */
 
-extern "C" void menuCB_BattleResult(_MENUCBWORK *work)
+extern "C" s32 menuCB_BattleResult(_MENUCBWORK *work)
 {
     switch (toolentryTaisenGetBattleMode()) {
     case 1:
-        _menuCB_BattleResultTonikaku(work);
-        break;
+        return _menuCB_BattleResultTonikaku(work);
     case 0:
     default:
-        menuCBResultMain(work);
-        break;
+        return menuCBResultMain(work);
     }
 }
 

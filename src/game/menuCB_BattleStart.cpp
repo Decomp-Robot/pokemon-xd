@@ -49,7 +49,7 @@ void GSresFreeResource(u32 group, u32 resID);
  * ---------------------------------------------------------------------- */
 
 /* State of the battle-start screen. */
-extern "C" void menuCBBattleStartInit(s32 mode, s32 status);
+extern "C" void menuCBBattleStartInit(_MENUCBWORK *context, s32 status);
 extern "C" void menuCBBattleStartSetStatus(s32 status);
 extern "C" void menuCBBattleStartDispTrainerInit(void);
 extern "C" void menuCBBattleStartTrainerLoadTex(void);
@@ -257,12 +257,12 @@ u8 _menuCBBattleCheckTrainer(long work, long mode)
 
 /* Battle start screen: load the background, pick the jingle and show the
    trainers of the players that are in the battle. */
-extern "C" void menuCBBattleStartInit(s32 mode, s32 status)
+extern "C" void menuCBBattleStartInit(_MENUCBWORK *context, s32 status)
 {
     u16 rnd;
 
     _menuCBBattleStartSetTrainerData();
-    _menuCBBattleStartWork.mode = mode;
+    _menuCBBattleStartWork.context = context;
     _menuCBBattleStartWork.status = status;
     _menuCBBattleStartSetIndex();
 

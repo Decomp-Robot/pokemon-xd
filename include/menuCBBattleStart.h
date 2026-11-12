@@ -3,7 +3,6 @@
 
 #include <menuModel.h>
 #include <types.h>
-#include <menuModel.h>
 
 /* One trainer face the battle-start screen shows: `resource` is the loaded resource,
    `resID` the resource that was asked for. */
@@ -14,8 +13,10 @@ typedef struct MenuCBBattleFace {
 
 /* Battle-start screen work. The fight-side presentation code reads the faces
    from here and waits until faceIndex catches up with faceNum. */
+struct _MENUCBWORK;
+
 typedef struct MenuCBBattleWork {
-    /* 0x000 */ s32 mode;
+    /* 0x000 */ _MENUCBWORK *context;
     /* 0x004 */ s32 status;
     /* 0x008 */ u8 _008[0x00C - 0x008];
     /* 0x00C */ MenuCBBattleFace face[4];
@@ -60,8 +61,12 @@ extern "C" {
 #endif
 
 s32 menuCBBattleStartGetStatus(void);
-void menuCBBattleStartInit(s32 mode, s32 status);
+void menuCBBattleStartInit(_MENUCBWORK *context, s32 status);
 void menuCBBattleStartSetStatus(s32 status);
+void menuCBBattleStartTrainerFaceFree(void);
+void menuCBBattleStartTrainerLoadTex(void);
+void menuCBtrainerFaceReadWait(void);
+void menuCBBattleEndSetPokemonHP(void);
 
 #ifdef __cplusplus
 }

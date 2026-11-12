@@ -8,6 +8,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void toolentryCopyHero(void);
 Hero* toolentryTaisenGetHeroPtr(s32 port);
 Pokemon *toolentryTaisenGetPokemonPtr(s32 bank, u32 index);
 Pokemon *toolentryTaisenGetEntryPokemonPtr(s32 port, s32 slot);

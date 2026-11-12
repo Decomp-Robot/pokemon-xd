@@ -135,7 +135,7 @@ u8 _menuCB_pokemonGetDeoxysSel(u16 port, bool flag)
 /* The entry screen itself: opens the window, waits until every player
    handed its party over and hands the entries on. Returns the menu the
    caller has to go to next. */
-extern "C" s32 menuCB_PokemonEntry(void)
+extern "C" s32 menuCB_PokemonEntry(_MENUCBWORK *work)
 {
     s32 opened;
     s32 i;
