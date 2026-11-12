@@ -137,10 +137,11 @@ enum WindowKeyMask {
 // Key state read by windowGetKeyOn/windowGetKeyTrg/windowGetKeyRepeat and by the debug menus.
 struct tagWINDOW_KEY {
     u16 mKeyOn;     // keys held this frame.
-    u16 mKeyState;
+    u16 mKeyOnPrev;
     u16 mKeyTrg;    // keys pressed this frame.
     u16 mKeyRepeat; // repeating keys.
-    u8 _08[18];
+    u16 mKeyRepeatActive;
+    s8 mKeyRepeatTimer[16];
 };
 
 #ifdef __cplusplus

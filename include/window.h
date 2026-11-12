@@ -13,7 +13,8 @@ struct WINDOW_SYS_WORK {
     u16 mDirectionRepeat;
     u8 mUnknown16[4];
     u16 mStickDirectionRepeat;
-    u8 mUnknown1C[0x7A];
+    u8 mUnknown1C[18];
+    tagWINDOW_KEY mPortKeys[4];
     u8 mEnablePortMask;
     u8 mUnknown97[9];
 };
@@ -33,6 +34,7 @@ struct WINDOW_FREE_WORK {
 extern "C" {
 #endif
 tagWINDOW_KEY* windowGetPortKeyInfo(u8 portMask);
+tagWINDOW_KEY* windowGetPortKeyInfo2(u8 portMask);
 
 void windowCreateCursorSprite(tagWINDOW_WORK* window);
 tagWINDOW_WORK *windowSearchID(s32 id);
