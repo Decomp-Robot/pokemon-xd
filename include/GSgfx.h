@@ -46,9 +46,6 @@ public:
 
 union GScolor { u32 rgba; struct { u8 r, g, b, a; } channels; };
 enum GSgfxTunitKReg { GSGFX_KREG0, GSGFX_KREG1, GSGFX_KREG2, GSGFX_KREG3 };
-// Texel filter a layer loads its texture with (GStextureSetFilter): 0 keeps the
-// nearest texel, 2 blends the neighbours linearly.
-enum GStextureFilter { GS_TEXTURE_FILTER_NEAREST = 0, GS_TEXTURE_FILTER_LINEAR = 2 };
 enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR, GSGFX_CUNIT_COLOR_AND_ALPHA = 2 };
 enum GSgfxCunitSrc { GSGFX_CUNIT_REGISTER, GSGFX_CUNIT_VERTEX_COLOR = 1 };
 enum GSgfxLightType { GSGFX_LIGHT_DIRECTIONAL, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_POINT };
@@ -114,12 +111,6 @@ typedef union {
 
 #define GSgfxFifo (*(PPCWGPipe *)0xCC008000)
 #define GXWGFifo (*(volatile PPCWGPipe *)0xCC008000)
-
-// Texture the layers cache and the game sprites draw.
-struct GStexture {
-    u8 _00[0x07];
-    u8 mStateDirty; // 0x07: nonzero when cached sampler state must be updated.
-};
 
 // Layer commands of the frame (GSgfxLayer +0x04): the bits the render modules
 // set and the layer's own setup pass consumes one by one.

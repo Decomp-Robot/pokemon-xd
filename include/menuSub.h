@@ -5,13 +5,7 @@
 #include <GSgfxTypes.h>
 #include <Pokemon.h>
 
-// RGBA colour, same layout as the GX colour type.
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} GXColor;
+#include <dolphin/gx/GXStruct.h>
 
 #ifdef __cplusplus
 typedef bool MENU_SUB_ANSWER;

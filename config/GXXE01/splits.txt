@@ -2019,6 +2019,14 @@ game/GSAPI/GSpart/GSpart.cpp:
 	.sbss       start:0x804EAF70 end:0x804EAFA0
 	.sdata2     start:0x804ED548 end:0x804ED570
 
+game/GSAPI/GStexture/GStexture.cpp:
+	.text       start:0x801016D4 end:0x8010315C
+	.rodata     start:0x802ED1D0 end:0x802ED240
+	.data       start:0x803D5080 end:0x803D512C
+	.bss        start:0x80443670 end:0x80444A70
+	.sbss       start:0x804EAFB8 end:0x804EAFC0
+	.sdata2     start:0x804ED570 end:0x804ED580
+
 game/GSAPI/GSinput/GSinput.cpp:
 	.text       start:0x80103F70 end:0x80105840
 	.bss        start:0x80444AF8 end:0x80444D08
