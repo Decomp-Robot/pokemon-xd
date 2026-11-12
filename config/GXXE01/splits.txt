@@ -2033,6 +2033,9 @@ game/GSAPI/GSparticle/peShape.cpp:
 game/app/joutai/joutai.cpp:
 	.text       start:0x8013C2D4 end:0x8013CD98
 
+game/app/joutai/joutaiBios.cpp:
+	.text       start:0x8013CF38 end:0x8013D03C
+
 game/app/pokemon/pokemonBios.cpp:
 	.text       start:0x80145928 end:0x80145990
 

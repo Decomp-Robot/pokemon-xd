@@ -5117,6 +5117,10 @@ cflags_extra = ["-use_lmw_stmw on", "-inline noauto"]
 name = "game/app/joutai/joutai.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/joutai/joutaiBios.cpp"
+completed = true
+
 
 [[lib]]
 name = "camera"
