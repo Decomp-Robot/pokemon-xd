@@ -45,6 +45,23 @@ typedef struct GSsndListener {
     SND_LISTENER listener;
 } GSsndListener;
 
+GSsndWork* _sndGetNewSndWork(void);
+void _sndCheckSndWorkALL(void);
+void _sndInitParms(GSsndSEEntry* entry, GSsndWork* work);
+void _sndOpenWave(u32 waveID, u32 fromDVD, u32 dvdFileID, u32 sampleOffset, u32 resourceGroup,
+                  u32 poolResID, u32 projectResID, u32 sampDirResID);
+void _sndSetReverbParm(u32 preset);
+u32 _sndSetVolumeWork(u32 soundID, u8 volume);
+void* _sndDoMalloc(size_t size);
+void _sndDoFree(void* ptr);
+void _sndInitSndWork(void);
+void _sndInitStack(void);
+void _sndInitListener(void);
+void _sndInitEmitter(void);
+u8 _sndStreamInit(u32 count);
+void _sndReceiveMessage(SND_VOICEID voiceID, s32 message);
+u32 _sndStreamCallback(void* buffer1, u32 len1, void* buffer2, u32 len2, u32 user);
+
 void _sndStreamPrepareGetData(GSsndStream *stream);
 u32 _sndStreamGetData(GSsndStream *stream, GSsndStreamDataCallback callback);
 void _sndStreamGetDataCallback_START(u32 fileNo, u32 arg, GSsndStream *stream);
@@ -57,7 +74,7 @@ GSsndListener *_sndGetNewListener(void);
 void _sndFreeEmitter(GSsndEmitter *emitter);
 void _sndFreeListener(GSsndListener *listener);
 u8 _sndGetProperVolume(GSsndSEEntry *entry, u8 volume);
-u32 _sndSetVolume(GSsndSEEntry *entry, u32 time, u32 volume);
+u32 _sndSetVolume(GSsndSEEntry *entry, s32 time, s32 volume);
 u32 _sndClose(u32 soundID, u8 stop);
 u32 _sndStopSTREAM(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndStopSE(GSsndSEEntry *entry, u32 time, u32 mode);

@@ -2721,7 +2721,8 @@ extra_cflags = [
 name = "game/GSAPI/GSsnd/GSsnd.cpp"
 completed = true
 extra_cflags = [
-    "-inline noauto",
+    "-inline deferred,noauto",
+    "-rostr",
     "-i src/game/GSAPI/GSsnd",
     "-i src/ext/dolphin_sdk/include",
     "-i src/ext/dolphin_sdk/include/libc",

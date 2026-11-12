@@ -2596,10 +2596,11 @@ game/app/sound/sound.c:
 	.sdata2     start:0x804EDF30 end:0x804EDF40
 
 game/GSAPI/GSsnd/GSsnd.cpp:
-	.text       start:0x80183A58 end:0x801851EC
+	.text       start:0x80183A58 end:0x801859F8
+	.rodata     start:0x802F3DD8 end:0x802F3DE8
 	.data       start:0x8040AF20 end:0x8040AF80
 	.sdata      start:0x804E8468 end:0x804E846C
-	.sdata2     start:0x804EDF48 end:0x804EDF60
+	.sdata2     start:0x804EDF40 end:0x804EDF60
 
 game/GSAPI/GSfilter/GSfilter.cpp:
 	.text       start:0x8018838C end:0x80188B50

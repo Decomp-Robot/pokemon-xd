@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void GSsndSetMasterVolume(unsigned char volume, unsigned short time, unsigned char music, unsigned char effects);
+void GSsndSetMasterVolume(long volume, long time, unsigned long music, unsigned long effects);
 unsigned long GSsndPlayNow(long soundID);
 void GSsndStopNow(unsigned long soundID);
 unsigned long GSsndPlay(long soundID, long time, long mode);

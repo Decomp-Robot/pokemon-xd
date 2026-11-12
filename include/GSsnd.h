@@ -53,7 +53,14 @@ typedef struct GSsndStream {
     struct GSsndStream* chain;   // 0x04
     long state;                            // 0x08
     unsigned long streamID;                // 0x0C MusyX stream handle
-    unsigned char  pad10[0x20];
+    void* sampleBuffer;
+    unsigned long bufferSize;
+    unsigned long samples;
+    unsigned long readSamplePosition;
+    unsigned long playbackSamplePosition;
+    unsigned long fileReadOffset;
+    unsigned long fileNo;
+    unsigned char pad2C[4];
     unsigned long soundID;                 // 0x30
     unsigned short time;                    // 0x34 volume fade time in ms; 0 snaps
     unsigned char  mode;                    // 0x36 fade mode handed to the stream control
@@ -95,16 +102,32 @@ typedef struct GSsndListener GSsndListener;
 
 typedef void (*GSsndStreamDataCallback)(unsigned long, unsigned long, GSsndStream*);
 
+enum {
+    GSSND_OUTPUTMODE_MONO = 0,
+    GSSND_OUTPUTMODE_STEREO = 1,
+    GSSND_OUTPUTMODE_SURROUND = 2
+};
+
+unsigned char GSsndInit(unsigned long musicCount, unsigned long stackSize,
+                        unsigned long effectCount, unsigned long listenerCount,
+                        unsigned long emitterCount);
+void GSsndQuit(void);
+long GSsndGetOutputMode(void);
+void GSsndSetOutputMode(long mode);
+unsigned long GSsndOpen(unsigned long soundID, unsigned long resourceGroup,
+                        unsigned long resourceID);
+
 /* Set once the stream layer is up. */
 extern unsigned char gSoundStreamReady;
 
+extern unsigned long* snd_rev_data_number;
 extern unsigned long* snd_data_number;
 extern GSsndSEEntry* snd_data;
 extern unsigned long* snd_wave_data_number;
 extern GSsndWaveEntry* snd_wave_data;
 
-void GSsndUpdateSettingsReverbHI(long preset);
-void GSsndSetVolume(long volume, long time, unsigned long bgm, unsigned long environment);
+void GSsndUpdateSettingsReverbHI(unsigned long preset);
+void GSsndSetVolume(long volume, long time, unsigned long music, unsigned long effects);
 
 
 void GSsndStreamPostFunc(unsigned long fileNo, unsigned long arg);
