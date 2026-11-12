@@ -21,6 +21,8 @@ void GSthreadSetArgs(GSthread *thread, s32 count, ...);
 void GSthreadSetName(GSthread *thread, const char *name);
 void GSthreadTerminate(GSthread *thread);
 void GSthreadSwitch(void);
+long GSthreadClose(GSthread *thread);
+u8 GSthreadIsRunning(GSthread *thread);
 
 #ifdef __cplusplus
 }

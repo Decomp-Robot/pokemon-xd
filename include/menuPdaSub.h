@@ -9,6 +9,8 @@
 extern "C" {
 #endif
 
+void menuPdaSubInitAlpha(f32 *alpha, long count, long selected);
+
 void menuPdaSubScrollBar(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                          long menuID, long itemID, u32 color, long count,
                          long visibleCount, GSivec2 *scroll);
