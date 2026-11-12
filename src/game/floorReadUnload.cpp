@@ -5,16 +5,13 @@
 #include <types.h>
 #include <GScamera.h>
 #include <GSlight.h>
+#include <GSlensFlare.h>
 #include <GSmsg.h>
 #include <GSparticle.h>
 #include <ModelSequence.h>
 #include <flashsystem.h>
 #include <floorManager.h>
 #include <wazaSequence.h>
-
-// The lens flare system keeps its flares under the handle they were loaded
-// with.
-extern "C" void GSlensFlareFree(u32 handle);
 
 // Gives the waza sequence of a stage back to the sequence system, which
 // releases the sequence it built around the data.

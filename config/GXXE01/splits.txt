@@ -241,6 +241,9 @@ game/agbCommunication.cpp:
 game/floorReadMain.cpp:
 	.text       start:0x8002D8C0 end:0x8002DED4
 
+game/floorReadGfl.cpp:
+	.text       start:0x8002DED4 end:0x8002DFD8
+
 game/floorReadBgm.cpp:
 	.text       start:0x8002DFD8 end:0x8002E000
 
