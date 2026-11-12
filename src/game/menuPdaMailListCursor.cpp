@@ -1,8 +1,7 @@
-#include <types.h>
+#include <menuPdaMailListXD.h>
 #include <winSprite.h>
 #include <menuPdaSub.h>
 
-CURSOR _getCursor(void);
 extern "C" s32 mailGetNbMailInMailbox(void);
 
 // Scroll arrow hooks of the PDA mail list: each shows or hides the arrow
