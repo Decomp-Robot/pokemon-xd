@@ -109,8 +109,13 @@ typedef union {
     f32 f32;
 } PPCWGPipe;
 
+enum { GSGFX_FIFO_LOAD_XF = 0x10, GSGFX_XF_CLIP_DISABLE = 0x1005 };
+
 #define GSgfxFifo (*(PPCWGPipe *)0xCC008000)
 #define GXWGFifo (*(volatile PPCWGPipe *)0xCC008000)
+
+// Render mode selected by the GS graphics layer.
+enum GSgfxRenderMode { GSGFX_RENDER_MODE_NORMAL = 0, GSGFX_RENDER_MODE_BLUE_CHANNEL = 1 };
 
 // Layer commands of the frame (GSgfxLayer +0x04): the bits the render modules
 // set and the layer's own setup pass consumes one by one.
@@ -137,11 +142,8 @@ enum GSgfxPassGroupAFlag {
     GSGFX_PASS_GROUP_A_PARTICLES = 0x1,
 };
 
-// Dirty bits the particle module sets in the pass state's second GX group.
-enum GSgfxPassGroupBFlag {
-    GSGFX_PASS_GROUP_B_PARTICLES = 0x4,
-    GSGFX_PASS_GROUP_B_CULL = 0x2,
-};
+// Dirty bits in the pass state's second GX group.
+enum GSgfxPassGroupBFlag { GSGFX_PASS_GROUP_B_PARTICLES = 0x4 };
 
 enum GSgfxLightStateFlag { GSGFX_LIGHT_STATE_CHANNEL_COUNT = 1, GSGFX_LIGHT_STATE_POSITION = 2, GSGFX_LIGHT_STATE_DIRECTION = 4, GSGFX_LIGHT_STATE_LIGHTS = 16 };
 enum GSgfxTunitCountFlag { GSGFX_TUNIT_COUNT_DIRTY = 1 };
@@ -279,6 +281,7 @@ enum GSgfxCachedStateConstants {
     GS_GFX_RASTER_DIRTY_CULL = 0x2,
     GS_GFX_RASTER_DIRTY_CLIP = 0x4,
     GS_GFX_RASTER_DIRTY_COPLANAR = 0x8,
+    GS_GFX_RASTER_DIRTY_VIEWPORT = 0x10,
     GS_GFX_GEOMETRY_DIRTY_TEXGEN_COUNT = 0x1,
     GS_GFX_CHANNEL_DIRTY_COUNT = 0x1,
     GS_GFX_TEV_DIRTY_COUNT = 0x1,
@@ -406,9 +409,9 @@ public:
     void drawTorus(f32 radius, u8 stacks, u8 slices);
     void cullMode(GSgfxCullType mode) {
         mCullMode = mode;
-        mPassState[0].mGroupBFlags |= GSGFX_PASS_GROUP_B_CULL;
+        mPassState[0].mGroupBFlags |= GS_GFX_RASTER_DIRTY_CULL;
         mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
-        mPassState[1].mGroupBFlags |= GSGFX_PASS_GROUP_B_CULL;
+        mPassState[1].mGroupBFlags |= GS_GFX_RASTER_DIRTY_CULL;
         mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
     }
     void cunitCount(u8 count) {
@@ -636,6 +639,8 @@ public:
         }
     }
     void InvalidateState();
+    void SetupFifo();
+    u16 tokenMark();
     void setRenderStateAndSelect(GSgfxVF *vf);
     void primitiveType(GSgfxPrimType type);
     void dlDraw(GSgfxDL *displayList);
@@ -652,7 +657,8 @@ public:
     u32 mRenderFlags;
     u8 _0008[0x20];
     GSgfxLayerID mLayerID; // 0x028: Slot the layer was registered in.
-    u8 _002C[0xC44];
+    s32 mRenderMode;
+    u8 _0030[0xC40];
     u8 mTexGenCount;
     u8 _0C71[0xD3];
     u8 mTexCoordLineOffset0;
@@ -815,6 +821,8 @@ void GSgfxLayerSetActive(GSgfxLayerID layer);
 
 
 extern "C" f32 GSgfxVideoGetLastRenderTime(void);
+extern "C" void GSgfxProjectSetupParameters(void);
+extern "C" void GSgfxTokenIfClearedReset(u16 *token);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
 typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);

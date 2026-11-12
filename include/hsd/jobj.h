@@ -14,6 +14,25 @@ typedef struct _HSD_ShapeAnimJoint _HSD_ShapeAnimJoint;
 
 typedef struct _HSD_JObj _HSD_JObj;
 typedef struct _HSD_Joint _HSD_Joint;
+struct _HSD_RObjDesc;
+struct _HSD_Joint {
+    char *mClassName;
+    u32 mJointFlags;
+    _HSD_Joint *mChild;
+    _HSD_Joint *mNext;
+    void *mContents;
+    Vec mRotate;
+    Vec mScale;
+    Vec mTranslate;
+    MtxPtr mInverseBindMatrix;
+    _HSD_RObjDesc *mRObj;
+};
+
+enum HSD_TransparencyMask {
+    HSD_TRSP_OPA = 1,
+    HSD_TRSP_XLU = 2,
+    HSD_TRSP_TEXEDGE = 4
+};
 
 typedef void (*HSD_JObjParticleCallback)(int type, int flags, int group,
                                          _HSD_JObj *jobj);
@@ -178,6 +197,16 @@ static inline void HSD_JObjSetMatrix(_HSD_JObj *jobj, Mtx mtx)
     HSD_JObjSetMtxDirty(jobj);
 }
 
+#line 1197 "jobj.h"
+static inline void HSD_JObjClearMatrix(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    jobj->flags &= ~(HSD_JOBJ_FLAG_USER_DEFINED_MTX |
+                     HSD_JOBJ_FLAG_MTX_INDEP_PARENT |
+                     HSD_JOBJ_FLAG_MTX_INDEP_SRT);
+    HSD_JObjSetMtxDirty(jobj);
+}
+
 #line 847 "jobj.h"
 static inline void HSD_JObjGetScale(_HSD_JObj *jobj, Vec *scale)
 {
@@ -247,6 +276,8 @@ static inline void HSD_JObjSetRotation(_HSD_JObj *jobj, const Quaternion *rotate
     HSD_JObjSetMtxDirty(jobj);
 }
 
+void HSD_JObjCountVertices(_HSD_JObj *joint, u32 *vertices, u32 *polygons);
+void HSD_JObjDispAll(_HSD_JObj *joint, f32 (*viewMatrix)[4], u32 flags, u32 renderMode);
 
 #ifdef __cplusplus
 }

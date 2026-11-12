@@ -6,7 +6,6 @@
 
 extern "C" {
 u32 GSmemGetSize(void *allocation);
-void GSboundCreate(GSbound *bound, void *vertices);
 void GSboundFree(GSbound *bound);
 s32 GSboundIsInViewFast(GSbound *bound);
 bool GSgfxTokenCleared(u16 token);

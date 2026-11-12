@@ -44,8 +44,15 @@ void _modelBoundPObj(_HSD_PObj *pobj, GSmtx *referenceMatrix, GSmtx *positionMat
 void _modelGetAnimFrameCountCB(_HSD_AnimJoint *joint, void **argp, int idx);
 
 /* Model state flags. */
+#define MODEL_FLAG_RENDER_ENABLED 0x1u
+#define MODEL_FLAG_VISIBLE 0x2u
 #define MODEL_FLAG_ROOT_ANIM_REMOVED 0x20000000u
 #define MODEL_FLAG_ROOT_JOINT_POSE 0x400
+#define MODEL_FLAG_CHECK_BOUND 0x00100000u
+#define MODEL_FLAG_DRAW_BOUND 0x00200000u
+#define MODEL_FLAG_OPAQUE_FOG_ENABLED 0x01000000u
+#define MODEL_FLAG_TRANSLUCENT_FOG_ENABLED 0x02000000u
+#define MODEL_FLAG_RENDER_MARUKAGE 0x08000000u
 #define MODEL_FLAG_60FPS_ANIM 0x800
 #define MODEL_FLAG_TEXANIM_LINKED 0x2000
 #define MODEL_FLAG_ANIM_PRESENT (1u << 2)
@@ -56,13 +63,36 @@ void _modelGetAnimFrameCountCB(_HSD_AnimJoint *joint, void **argp, int idx);
 #define MODEL_FLAG_FRAME_VISIBLE (1u << 26)
 #define MODEL_FLAG_DISTORTION_CLASS 0x80000
 
-/* Fractional-frame animation policy. */
+/* Model animation flags. */
 #define MODEL_ANIM_FLAG_SKIP_FRACTIONAL 0x1
 #define MODEL_ANIM_FLAG_USE_FRACTIONAL 0x2
+#define MODEL_ANIM_FLAG_UPDATE_OUTSIDE_VIEW 0x8u
 
+#define GSGFX_PERFBAR_MODEL_RENDER 0x0000FF
+#define GSGFX_PERFBAR_MODEL_ANIMATION 0x000080
+#define GSGFX_PERFBAR_MODEL_SHADOW 0xFF8000
 #define GSGFX_PERFBAR_MODEL_UPDATE 0xFF0000
 #define GSGFX_PERFBAR_MODEL_DISTORTION 0x8080FF
 #define DISTORTION_RELATIVE_LAYER_ID ((GSgfxLayerID)2)
+
+extern u8 modelLoading;
+extern u8 modelShadowDebugEnabled;
+extern GSgfxLayerID modelShadowLayerID;
+void modelShadowRenderDebug(void);
+void modelShadowRender(GSgfxLayer *layer);
+void modelShadowUpdate(void);
+void modelShadowRenderMarukage(_GSmodel *model, GSgfxLayer *layer);
+void modelShadowPrepare(_GSmodel *model, bool prepare);
+void modelShadowFreeModelList(_GSmodel *model);
+void modelMaterialFree(GSmaterial *material);
+void modelRemoveCenterNull(_GSmodel *model);
+void modelBankReleaseModel(_GSmodel *model);
+_GSmodel *modelBankGetFreeModel(void);
+void modelBankInit(void);
+void modelShadowInit(void);
+void modelMaterialInit(GSmaterial *material);
+extern s32 _modelInUseCount;
+extern s32 _modelMaxUsedCount;
 
 extern _GSmodel *gsModelList;
 u8 modelProcessAt60fps(_GSmodel *model);
@@ -108,6 +138,8 @@ void _modelGetEndFrame(_HSD_AObj *animation, f32 *endFrame);
 #define MODEL_FLAG_ATTACHMENT_UPDATING 0x800000u
 #define MODEL_FLAG_ATTACHMENT_UPDATED 0x400000u
 #define MODEL_FLAG_ATTACHMENT_DETACH 0x40000u
+#define MODEL_FLAG_FRAME_START_CLEAR_MASK \
+    (MODEL_FLAG_FRAME_VISIBLE | MODEL_FLAG_ATTACHMENT_UPDATED | MODEL_FLAG_TRANSFORM_UPDATED)
 #define MODEL_ANIM_EVENT_JOINT 1u
 #define MODEL_ANIM_EVENT_TEXTURE 2u
 #define MODEL_ANIM_EVENT_LOOP 4u

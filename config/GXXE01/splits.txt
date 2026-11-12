@@ -2009,6 +2009,11 @@ game/GSmodelAnim.cpp:
 	.data       start:0x803D5058 end:0x803D5080
 	.sdata2     start:0x804ED408 end:0x804ED468
 
+game/GSAPI/GSmodel/GSmodel.cpp:
+	.text       start:0x800F6E30 end:0x800F8998
+	.rodata     start:0x802ED0A0 end:0x802ED0C0
+	.sdata2     start:0x804ED468 end:0x804ED498
+
 game/GSmodelRender.cpp:
 	.text       start:0x800F8998 end:0x800F9058
 

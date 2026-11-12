@@ -28,6 +28,7 @@ struct _GScamera;
 struct GSlight;
 struct GSgfxVF;
 struct _GSparticleBank;
+struct GSboundAnimHeader;
 
 enum GSmodelDistortionWarpFlags {
     GS_MODEL_WARP_S = 1,
@@ -99,7 +100,8 @@ struct _GSmodel {
     GSbound mBound;
     _GScamera *mRenderCamera;
     u16 mAnimFlags;
-    u8 _062[0x0A];
+    u16 mRenderToken;
+    u8 mRenderLayers[8];
     s32 mMaxAnimIndex;
     s32 mMaxTexAnimIndex;
     GSmodelAnimState mAnim;
@@ -121,10 +123,11 @@ struct _GSmodel {
     GSvec mAttachedRotation;
     GSvec mAttachedScale;
     _GSparticleBank *mLinkedParticleBank;
-    u8 _5DC[4];
+    GSattachMode mParticleLinkAttachMode;
     struct GSmaterial *mMaterials;
     u32 mMaterialCount;
-    u8 _5E8[0x10];
+    u32 _5E8[3];
+    f32 _5F4;
     _GSparticleBank *mDustParticleBank;
     GSmodelDustEntry mDust[2];
     f32 mDustScale;
@@ -134,6 +137,8 @@ struct _GSmodel {
     _HSD_PObj *mDistortionPrimitive;
     GStexture *mDistortionTexture;
     GSgfxVF *mDistortionVF;
+    u32 mVertexCount;
+    u32 mPolygonCount;
 };
 
 typedef void (*GSmodelParseCb)(_HSD_PObj *, GSmtx *, GSmtx *, GSmtx *, void *);
@@ -160,7 +165,7 @@ struct GSmodelState {
 
 #ifdef __cplusplus
 extern "C" {
-_GSmodel* GSmodelLoad(_HSD_SceneModelSet* modelSet, u32 flags);
+_GSmodel* GSmodelLoad(_HSD_SceneModelSet* modelSet, GSboundAnimHeader *boundHeader);
 void GSmodelDestroyLinkedParticles(_GSmodel *model);
 void GSmodelFree(_GSmodel* model);
 void GSmodelAttachToGSpart(_GSmodel* model, GSpart* part, GSattachMode mode, u8 inheritScale, u8 keepTransform);
@@ -178,7 +183,7 @@ void GSmodelSetPosition(_GSmodel *model, GSvec *position);
 void GSmodelSetVisibility(_GSmodel *model, bool visible);
 void GSmodelSetRenderLayer(_GSmodel *model, s32 count, GSgfxLayerID *layers);
 void GSmodelSetRenderCamera(_GSmodel *model, _GScamera *camera);
-void GSmodelSetBoundCheck(_GSmodel *model, s32 enabled);
+void GSmodelSetBoundCheck(_GSmodel *model, u8 enabled);
 void GSmodelSetShadowFlags(_GSmodel *model, u32 flags);
 void GSmodelSetShadowLight(_GSmodel *model, GSlight *light);
 void GSmodelSetShadowSurface(_GSmodel *model, s32 count, _GSmodel **surfaces);
@@ -255,6 +260,28 @@ u8 GSmodelIsEnvMapEnabled(_GSmodel *model);
 void GSmodelDisableEnvMap(_GSmodel *model);
 void GSmodelSetEnvMapBlendValue(_GSmodel *model, f32 blend);
 void GSmodelEnableEnvMap(_GSmodel *model, s32 envMapMode, s32 envMapType, f32 blend);
+
+void GSmodelDisableAnimBlend(_GSmodel *model);
+void GSmodelFreeDistortion(_GSmodel *model);
+s32 GSmodelGetPartCount(_GSmodel *model);
+void GSmodelDrawModel(_GSmodel *model, GSgfxLayer *layer,
+                      GSgfxLayerPass pass);
+f32 GSmodelGetDistanceFromCamera(_GSmodel *model);
+_GSmodel *GSmodelSearchModelList(_HSD_JObj *root);
+GSattachMode GSmodelGetGSparticleLinkAttachMode(_GSmodel *model);
+_GSparticleBank *GSmodelGetLinkedGSparticleBank(_GSmodel *model);
+void GSmodelSetGSparticleLinkAttachMode(_GSmodel *model,
+                                          GSattachMode mode);
+void GSmodelLinkToGSparticleBank(_GSmodel *model,
+                                 _GSparticleBank *bank);
+void GSmodelSetFogState(_GSmodel *model, u8 opaqueFogEnabled, u8 translucentFogEnabled);
+GSvec *GSmodelGetScalePtr(_GSmodel *model);
+void GSmodelUpdate(_GSmodel *model);
+void GSmodelSetScale(_GSmodel *model, GSvec *scale);
+GSmtx *GSmodelGetMatrixPtr(_GSmodel *model);
+void GSmodelSetMatrix(_GSmodel *model, GSmtx *matrix);
+_GSmodel *GSmodelClone(_GSmodel *model);
+void GSmodelInit(void);
 #ifdef __cplusplus
 }
 #endif
