@@ -6,9 +6,10 @@
 
 struct WINDOW_SYS_WORK {
     u16 mWindowCapacity;
-    u8 mUnknown02[0x0A];
+    u8 mUnknown02[6];
+    s32 mActiveID;
     tagWINDOW_WORK* mWindowPool;
-    u8 mUnknown10[4];
+    tagWINDOW_WORK* mWindowList;
     u16 mDirectionRepeat;
     u8 mUnknown16[4];
     u16 mStickDirectionRepeat;
@@ -50,6 +51,12 @@ void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, unsigned long color,
 s32 windowGetActiveID();
 s32 windowGetValue(long windowID);
 u16 windowGetKeyOn();
+enum WindowCloseFlags {
+    WINDOW_CLOSE_CHILDREN_ONLY = 0x1,
+    WINDOW_CLOSE_KEEP_CHILDREN = 0x2,
+    WINDOW_CLOSE_RESPECT_MENU_FLAG = 0x4
+};
+long windowClose(tagWINDOW_WORK *window, unsigned long flags);
 void windowCloseMain(tagWINDOW_WORK *window);
 // Free work area of a window, or NULL when the window has none.
 struct WINDOW_FREE_WORK *windowGetFreeWork(tagWINDOW_WORK *window);

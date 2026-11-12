@@ -13,6 +13,11 @@ name = "game/app/floor/floorManager.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/window.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole"]
+
+[[lib.object]]
 name = "game/app/effects/filter.cpp"
 completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

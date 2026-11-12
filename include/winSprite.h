@@ -15,6 +15,7 @@ enum WINDOW_STATE {
     WINDOW_STATE_INIT = 0,
     WINDOW_STATE_ACTIVE = 2,
     WINDOW_STATE_CLOSING = 3,
+    WINDOW_STATE_DELETE = 5,
 };
 
 enum WindowSequenceState {
@@ -45,9 +46,13 @@ struct tagWINDOW_WORK {
     long mMenuID;                // menu data id used for item lookups.
     u8 _08;
     u8 mOpenPriority;            // window ordering priority.
-    u8 _0A[6];
+    u8 mCloseRequested;
+    u8 _0B;
+    tagWINDOW_WORK *mParent;
     tagWINDOW_WORK *mNext;       // next window in the window list.
-    u8 _14[8];
+    u8 _14[4];
+    u8 mInactive;
+    u8 _19[3];
     GSgfxLayerID mLayerID;               // GSgfx layer the window draws on.
     u8 _20[4];
     tagSPRITE_WORK *mSpriteWork; // head of the window sprite-work list.
