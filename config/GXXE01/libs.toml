@@ -407,6 +407,7 @@ completed = true
 [[lib.object]]
 name = "game/menuPdaMemoXD.cpp"
 completed = true
+extra_cflags = ["-opt nopeephole", "-inline noauto,deferred", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/menuPocketCologne.cpp"

@@ -3,6 +3,8 @@
 
 #include <types.h>
 #include <PokemonData.h>
+#include <menuModel.h>
+#include <winSprite.h>
 
 // One entry of the memo list while it is being sorted. The index selects the
 // entry in the source list, the key is the numeric value the list is ordered
@@ -22,6 +24,15 @@ public:
 #ifdef __cplusplus
 extern "C" {
 #endif
+MENU_MODEL *menuPdaMemoListGetMenuModelWork(void);
+u8 menuPdaMemoListIsLoadHero(void);
+void menuPdaMemoListSetHeroMotion(void);
+u8 menuPdaMemoListIsTermModel(void);
+void menuPdaMemoListLoadHero(bool hero);
+void menuPdaMemoListLoadPokemon(long index);
+void menuPdaMemoListDispPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned long model);
+u16 menuPdaMemoListGetPokemonID(long index);
+u16 *menuPdaMemoListGetPokemonName(long index);
 // Species data of the memo list entry at the given index.
 PokemonSpeciesStats *menuPdaMemoListGetPokemonDataPointer(long index);
 // Default model angle of the given memo-list entry component.

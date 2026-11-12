@@ -1259,7 +1259,7 @@ void menuFightDrawIwaitStatusWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
 
 extern "C" void menuFightDrawIwaitStatus(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    u16 spriteId;
+    u32 spriteId;
     u32 color;
     Pokemon *poke1;
     Pokemon *poke0;

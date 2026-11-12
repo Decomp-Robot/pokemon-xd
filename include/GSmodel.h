@@ -161,6 +161,7 @@ struct GSmodelState {
 #ifdef __cplusplus
 extern "C" {
 _GSmodel* GSmodelLoad(_HSD_SceneModelSet* modelSet, u32 flags);
+void GSmodelDestroyLinkedParticles(_GSmodel *model);
 void GSmodelFree(_GSmodel* model);
 void GSmodelAttachToGSpart(_GSmodel* model, GSpart* part, GSattachMode mode, u8 inheritScale, u8 keepTransform);
 #endif

@@ -378,11 +378,15 @@ game/menuPdaDPM.cpp:
 	.sbss       start:0x804EA848 end:0x804EA850
 	.sdata2     start:0x804EC3F0 end:0x804EC400
 
-game/menuPdaMemoXD.cpp:
-	.sbss       start:0x804EA858 end:0x804EA860
-
 game/menuPdaDPMonitorList.cpp:
 	.text       start:0x80052614 end:0x800528F4
+
+game/menuPdaMemoXD.cpp:
+	.text       start:0x800531DC end:0x80055428
+	.rodata     start:0x802EB0E0 end:0x802EB148
+	.bss        start:0x804354F8 end:0x80435510
+	.sbss       start:0x804EA858 end:0x804EA860
+	.sdata2     start:0x804EC438 end:0x804EC4A8
 
 game/menuPdaMemoListXD.cpp:
 	.text       start:0x80055528 end:0x80055540

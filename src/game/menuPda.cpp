@@ -22,6 +22,7 @@
 #include "GSres.h"
 #include "menuItemBios.h"
 #include "menuPda.h"
+#include <menuPdaMemoXD.h>
 #include "menuOffScreen.h"
 #include "menuSub.h"
 #include "time.h"
@@ -41,7 +42,6 @@ void GSthreadSwitch(void);
 
 void GSfloorPop(void);
 s32 pokecoloGetRomVersion(void);
-s32 menuPdaMemoXDGetItem(void);
 void menuPdaDPMonList(void);
 void menuPdaMemoList(void);
 void menuPdaMailListXD(void);

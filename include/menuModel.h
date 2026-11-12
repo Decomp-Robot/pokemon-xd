@@ -7,6 +7,7 @@
 #include <GStexture.h>
 
 struct Pokemon;
+struct _GSmodel;
 
 struct MENU_MODEL {
     MENU_MODEL() {}
@@ -23,6 +24,9 @@ struct MENU_MODEL {
 
 
 extern "C" {
+void menuModelSetCameraRotation(MENU_MODEL *model, const f32 *rotation);
+f32 *menuModelGetCameraRotation(MENU_MODEL *model);
+_GSmodel *menuModelGetModelPtr(MENU_MODEL *model);
 void menuModelInit(MENU_MODEL *model, int modelKind, int cameraKind);
 void menuModelFree(MENU_MODEL *model);
 s32 menuModelSetSize(MENU_MODEL *model, s32 x, s32 y, s32 width, s32 height);

@@ -102,6 +102,7 @@ void _menuPdaSetMenuItemScript(u8 mode);
 void _menuPdaSelectAnimeSet(long page);
 
 extern "C" {
+void menuPdaSetSubres(s32 res, s32 subres);
 void menuPdaDrawDirectModel(void);
 void menuPdaReleaseModelPointer(void);
 void menuPdaSetModelPointer(void);

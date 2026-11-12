@@ -787,7 +787,7 @@ void menuPokemonStatusDispSummary(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     u32 place;
     u32 next;
     u8 level;
-    u16 icon;
+    u32 icon;
     PokemonSpeciesStats *stats;
 
     if (pokemon == 0)

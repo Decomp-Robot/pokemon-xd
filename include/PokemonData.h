@@ -28,6 +28,10 @@ typedef struct PokemonTutorMove {
 extern "C" {
 #endif
 extern const PokemonTutorMove *pokemonTutorMoveTable;
+u16 pokemonDataBiosGetHeight(PokemonSpeciesStats *data);
+u16 pokemonDataBiosGetWeight(PokemonSpeciesStats *data);
+u32 pokemonDataBiosGetTypeName(PokemonSpeciesStats *data);
+u8 pokemonDataBiosGetTokuseiDataId(PokemonSpeciesStats *data, u16 index);
 PokemonSpeciesStats *pokemonDataBiosGetPtr(u16 species);
 s32 pokemonDataBiosGetVoice(PokemonSpeciesStats *stats);
 s8 *pokemonNakigoeDataBiosGetDataAddress(PokemonSpeciesStats *stats);

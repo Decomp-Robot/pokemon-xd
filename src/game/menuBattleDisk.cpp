@@ -479,7 +479,7 @@ extern "C" long menuBattleDiskPokemonInfoDraw(tagWINDOW_WORK* window, tagSPRITE_
         break;
     case kItemPokemonPrimaryType: {
         PokemonData* stats = pokemon->getPokemonDataPtr();
-        u16 kind = zokuseiGetPokemonSpriteID(stats, 0);
+        u32 kind = zokuseiGetPokemonSpriteID(stats, 0);
         if (kind != 0) {
             windowDrawSprite(0, 0, window, kind, 0, winSpriteGetLayerID(window, sprite));
         }
@@ -491,7 +491,7 @@ extern "C" long menuBattleDiskPokemonInfoDraw(tagWINDOW_WORK* window, tagSPRITE_
         u8 second = pokemonDataBiosGetZokuseiDataId(
             pokemon->getPokemonDataPtr(), 1);
         if (first != second) {
-            u16 kind = zokuseiGetPokemonSpriteID(
+            u32 kind = zokuseiGetPokemonSpriteID(
                 pokemon->getPokemonDataPtr(), 1);
             windowDrawSprite(0, 0, window, kind, 0, winSpriteGetLayerID(window, sprite));
         }
