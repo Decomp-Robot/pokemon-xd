@@ -2050,6 +2050,9 @@ ext/dolphin_sdk/gx/GXVert.c:
 game/app/floor/floorManager.cpp:
 	.text       start:0x80125AE4 end:0x80125C08
 
+game/app/floor/floorStack.cpp:
+	.text       start:0x801296C0 end:0x80129A40
+
 game/app/floor/floorsound.cpp:
 	.text       start:0x8012A550 end:0x8012AD50
 	.ctors      start:0x802E9FC8 end:0x802E9FCC

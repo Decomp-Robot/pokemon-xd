@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-struct RoomData;
-u32 roomDataGetFsysGidForLanguage(struct RoomData *data);
-struct RoomData *floorDataBiosGetPtr(s32 floorID);
+struct GSfloor_dd_;
+u32 roomDataGetFsysGidForLanguage(struct GSfloor_dd_ *data);
+struct GSfloor_dd_ *floorDataBiosGetPtr(s32 floorID);
 
 #ifdef __cplusplus
 }

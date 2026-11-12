@@ -10,12 +10,14 @@ typedef struct RoomData {
     u8 unknown8[56];
 } RoomData;
 
+typedef struct GSfloor_dd_ GSfloor_dd_;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-u32 roomDataGetFsysGidForLanguage(RoomData *room);
-u32 mapGetGroupID(RoomData *room);
+u32 roomDataGetFsysGidForLanguage(GSfloor_dd_ *room);
+u32 mapGetGroupID(GSfloor_dd_ *room);
 
 #ifdef __cplusplus
 }

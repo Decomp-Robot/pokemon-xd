@@ -9,7 +9,24 @@ enum FloorStateMode {
     FLOOR_STATE_MODE_FIGHT = 2,
     FLOOR_STATE_MODE_SAVE = 3
 };
-enum FloorEnterMode { FLOOR_ENTER_NORMAL = 0 };
+enum FloorState {
+    FloorStateUnused = 0,
+    FloorStateCreate = 1,
+    FloorStatePre = 2,
+    FloorStatePreWait = 3,
+    FloorStateNormal = 4,
+    FloorStateNormalWait = 5,
+    FloorStatePost = 6,
+    FloorStatePostWait = 7,
+    FloorStateFree = 8
+};
+enum FloorModuleType { FLOOR_MODULE_TYPE_ALL = 255 };
+enum FloorEnterMode {
+    FLOOR_ENTER_NORMAL = 0,
+    FLOOR_ENTER_PUSH = 1,
+    FLOOR_ENTER_POP = 2,
+    FLOOR_ENTER_CHANGE = 3
+};
 struct GSthread;
 struct FloorModuleInterface {
     void (*create)(unsigned int, FloorEnterMode);

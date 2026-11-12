@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-RoomData *floorDataBiosGetPtr(s32 roomID);
+GSfloor_dd_ *floorDataBiosGetPtr(s32 floorID);
 
 #ifdef __cplusplus
 }

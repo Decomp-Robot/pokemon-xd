@@ -824,7 +824,7 @@ void WorldMap::MainSub()
 void WorldMap::PreRead(long index)
 {
     WorldMapMapData* data = SearchData(_cursor_index[index]);
-    RoomData* mapData;
+    GSfloor_dd_* mapData;
 
     if (mModelWork->mScriptFlag != 0) {
         mapData = floorDataBiosGetPtr(mModelWork->mFloorID);

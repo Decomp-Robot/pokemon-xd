@@ -29,7 +29,7 @@ s32 floorGetPrevFloorID(void);
 u32 floorGetCurrentGroupID(void);
 void floorLink(s32 floorID, s32 mode);
 void floorSetFadeScript(s32 scriptID, s32 fadeID);
-RoomData* floorDataBiosGetPtr(s32 floorID);
+GSfloor_dd_* floorDataBiosGetPtr(s32 floorID);
 void GSfloorPop(void);
 void floorWaitForChange(void);
 void floorUnblockMainScript(void);

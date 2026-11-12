@@ -9,6 +9,7 @@ typedef struct GSthread GSthread;
 extern "C" {
 #endif
 void GSthreadUnblockGroup(unsigned long group);
+void GSthreadBlockGroup(unsigned long group);
 
 typedef void (*GSthreadEntry)(void);
 
