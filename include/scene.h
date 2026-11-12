@@ -11,6 +11,7 @@ struct _HSD_SceneDesc {
     _HSD_SceneModelSet** mModels;
     GScameraDesc* mCamera;
     void** mLights;
+    void** mFogs;
 };
 
 #endif

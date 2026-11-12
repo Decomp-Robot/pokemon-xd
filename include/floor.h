@@ -22,6 +22,8 @@ u32 floorReadMakeModelResID(u32 resource);
 u32 floorReadMakeLightResID(u32 resource);
 u32 floorReadMakeObjResID(u32 resource);
 void floorSetLightInfo(u32 resource, long count);
+void floorInitMap(u32 group, u32 res);
+void floorExecSoundScript(void);
 
 GSgfxLayerID floorGetMenuLayerID(void);
 s32 floorGetNextFloorID(void);

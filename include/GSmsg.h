@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 void *GSmsgOpen(void *data);
+void *GSmsgFontOpen(void *data);
 s32 GSmsgGetDataLanguage(const void *data);
 s32 GSmsgClose(void *data);
 s32 GSmsgFontClose(void *data);

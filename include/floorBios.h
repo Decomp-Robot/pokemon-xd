@@ -10,6 +10,7 @@ extern "C" {
 u8 floorDataBiosGetFloorKind(void*);
 RoomData* floorDataBiosGetCurrentPtr();
 u32 floorDataBiosGetMapResID(RoomData* floor);
+void floorDataBiosSetMapResID(RoomData* floor, u32 res);
 FloorCharacter* floorCharacterBiosFindByResID(u32 group, u32 id);
 u32 floorCharacterBiosGetNameID(FloorCharacter* character);
 u8 floorCharacterBiosGetTalkStartType(FloorCharacter* character);

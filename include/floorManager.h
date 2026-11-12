@@ -15,6 +15,7 @@ u8 GSfloorIsFloorPushed(void);
 u8 GSfloorIsPush(void);
 u8 floorIsPush(void);
 void floorUnmappingScript(void *data);
+void floorMappingScript(char *data);
 void GSfloorPush(u32 floorID);
 void GSfloorChange(u32 floorID);
 void GSfloorPop(void);
