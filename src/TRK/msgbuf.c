@@ -29,10 +29,10 @@ DSError TRKInitializeMessageBuffers(void)
     for (i = 0; i < kMessageBufferCount; i++) {
         TRKBuffer *buf = &gTRKMessageBuffers[i];
 
-        TRKLockInit(buf);
-        TRKLock(buf);
+        TRKInitializeMutex(buf);
+        TRKAcquireMutex(buf);
         buf->isInUse = FALSE;
-        TRKUnlock(buf);
+        TRKReleaseMutex(buf);
     }
 
     return DS_NoError;
@@ -48,7 +48,7 @@ DSError TRKGetFreeBuffer(MessageBufferID *bufferID, TRKBuffer **buffer)
     for (i = 0; i < kMessageBufferCount; i++) {
         TRKBuffer *candidate = TRKGetBuffer(i);
 
-        TRKLock(candidate);
+        TRKAcquireMutex(candidate);
         if (!candidate->isInUse) {
             candidate->length = 0;
             candidate->position = 0;
@@ -59,7 +59,7 @@ DSError TRKGetFreeBuffer(MessageBufferID *bufferID, TRKBuffer **buffer)
             // Free buffer found: end the scan.
             i = kMessageBufferCount;
         }
-        TRKUnlock(candidate);
+        TRKReleaseMutex(candidate);
     }
 
     if (result == DS_NoMessageBufferAvailable) {
@@ -94,9 +94,9 @@ void TRKReleaseBuffer(MessageBufferID bufferID)
     }
     buffer = &gTRKMessageBuffers[bufferID];
 
-    TRKLock(buffer);
+    TRKAcquireMutex(buffer);
     buffer->isInUse = 0;
-    TRKUnlock(buffer);
+    TRKReleaseMutex(buffer);
 }
 
 void TRKResetBuffer(TRKBuffer *buffer, BOOL keepData)

@@ -1559,6 +1559,15 @@ TRK/msghndlr.c:
 	.data       start:0x803D4390 end:0x803D43C8
 	.bss        start:0x804413C0 end:0x804413C8
 
+TRK/mutex_TRK.c:
+	.text       start:0x800D6348 end:0x800D6360
+
+TRK/notify.c:
+	.text       start:0x800D6360 end:0x800D63F8
+
+TRK/flush_cache.c:
+	.text       start:0x800D63F8 end:0x800D6430
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 

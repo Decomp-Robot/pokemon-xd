@@ -123,7 +123,7 @@ typedef struct {
 } TRKEvent;
 
 typedef struct {
-    s32 lock;              // lock word handed to TRKLock/TRKUnlock
+    s32 lock;              // lock word handed to TRKAcquireMutex/TRKReleaseMutex
     int count;             // events currently queued
     s32 next;              // slot the next TRKGetNextEvent takes from
     TRKEvent events[NUBQUEUELENGTH];  // ring of pending events
@@ -131,7 +131,7 @@ typedef struct {
 } TRKEventQueue;
 
 typedef struct {
-    s32 lock;                      // lock word handed to TRKLock/TRKUnlock
+    s32 lock;                      // lock word handed to TRKAcquireMutex/TRKReleaseMutex
     s32 isInUse;                   // non-zero while a message is being received
     u32 length;                    // number of bytes valid in data
     u32 position;                  // read/write cursor inside data
@@ -218,9 +218,20 @@ extern void usr_put_initialize(void);
 extern BOOL usr_puts_serial(const char *str);
 // All three return a DSError status (DS_NoError on success), which the
 // event-queue and message-buffer callers ignore.
-extern DSError TRKLock(void *lock);
-extern DSError TRKUnlock(void *lock);
-extern DSError TRKLockInit(void *lock);
+extern DSError TRKAcquireMutex(void *lock);
+extern DSError TRKReleaseMutex(void *lock);
+extern DSError TRKInitializeMutex(void *lock);
+
+typedef enum {
+    kDSNotifyStopped = 144,
+    kDSNotifyException = 145
+} MessageCommandID;
+
+extern DSError TRKDoNotifyStopped(MessageCommandID command);
+extern DSError TRKTargetAddStopInfo(TRKBuffer *buffer);
+extern DSError TRKTargetAddExceptionInfo(TRKBuffer *buffer);
+extern DSError TRKRequestSend(TRKBuffer *request, MessageBufferID *replyID,
+                             u32 minReplySize, u32 retryCount, BOOL useTimeout);
 
 extern TRKEventQueue gTRKEventQueue;
 extern TRKBuffer gTRKMessageBuffers[kMessageBufferCount];

@@ -19,7 +19,7 @@ DSError TRKPostEvent(TRKEvent *event)
     DSError ret = DS_NoError;
     int nextEventID;
 
-    TRKLock(&gTRKEventQueue);
+    TRKAcquireMutex(&gTRKEventQueue);
 
     if (gTRKEventQueue.count == NUBQUEUELENGTH) {
         ret = DS_EventQueueFull;
@@ -35,7 +35,7 @@ DSError TRKPostEvent(TRKEvent *event)
         gTRKEventQueue.count++;
     }
 
-    TRKUnlock(&gTRKEventQueue);
+    TRKReleaseMutex(&gTRKEventQueue);
     return ret;
 }
 
@@ -44,7 +44,7 @@ BOOL TRKGetNextEvent(TRKEvent *event)
 {
     BOOL status = 0;
 
-    TRKLock(&gTRKEventQueue);
+    TRKAcquireMutex(&gTRKEventQueue);
     if (gTRKEventQueue.count > 0) {
         TRK_memcpy(event, &gTRKEventQueue.events[gTRKEventQueue.next], sizeof(TRKEvent));
         gTRKEventQueue.count--;
@@ -53,7 +53,7 @@ BOOL TRKGetNextEvent(TRKEvent *event)
         }
         status = 1;
     }
-    TRKUnlock(&gTRKEventQueue);
+    TRKReleaseMutex(&gTRKEventQueue);
 
     return status;
 }
@@ -61,12 +61,12 @@ BOOL TRKGetNextEvent(TRKEvent *event)
 
 DSError TRKInitializeEventQueue(void)
 {
-    TRKLockInit(&gTRKEventQueue);
-    TRKLock(&gTRKEventQueue);
+    TRKInitializeMutex(&gTRKEventQueue);
+    TRKAcquireMutex(&gTRKEventQueue);
     gTRKEventQueue.count = 0;
     gTRKEventQueue.next = 0;
     gTRKEventQueue.eventID = kTRKFirstEventID;
-    TRKUnlock(&gTRKEventQueue);
+    TRKReleaseMutex(&gTRKEventQueue);
 
     return DS_NoError;
 }
