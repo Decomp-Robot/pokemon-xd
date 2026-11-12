@@ -1992,6 +1992,9 @@ game/GScolsys2Thru.cpp:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+game/app/floor/floorManager.cpp:
+	.text       start:0x80125AE4 end:0x80125C08
+
 game/app/floor/floorsound.cpp:
 	.text       start:0x8012A550 end:0x8012AD50
 	.ctors      start:0x802E9FC8 end:0x802E9FCC

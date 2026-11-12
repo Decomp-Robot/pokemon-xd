@@ -9,6 +9,10 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/app/floor/floorManager.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/effects/filter.cpp"
 completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
