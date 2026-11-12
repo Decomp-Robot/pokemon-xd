@@ -2422,6 +2422,11 @@ cflags = [
     "-lang=c++",
 ]
 
+[[lib.object]]
+name = "game/GSAPI/GSparticle/peEmitter.cpp"
+completed = true
+extra_cflags = ["-inline noauto,deferred", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 # The sound API's short id and volume wrappers stay out of line: the engine
 # entry points reach them as ordinary calls.
 [[lib.object]]
