@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 u8 exribbonGetNo(s32 ribbon);
+void exribbonSetNo(s32 ribbon, u8 no);
 
 #ifdef __cplusplus
 }

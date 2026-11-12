@@ -448,6 +448,12 @@ game/dbgMenuMenu.cpp:
 	.sbss       start:0x804EA9A8 end:0x804EA9C0
 	.sdata2     start:0x804EC6C0 end:0x804EC6C8
 
+tool/pokeconv.c:
+	.text       start:0x8006C184 end:0x8006C320
+
+tool/wazaconv.c:
+	.text       start:0x8006C320 end:0x8006C504
+
 game/menuDataBios.cpp:
 	.text       start:0x8007C9B8 end:0x8007CD64
 

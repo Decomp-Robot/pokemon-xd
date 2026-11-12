@@ -2714,6 +2714,16 @@ extra_cflags = ["-opt nopeephole", "-inline noauto"]
 name = "game/floorLayerConfig.cpp"
 completed = true
 
+[[lib.object]]
+name = "tool/pokeconv.c"
+completed = true
+extra_cflags = ["-lang=c++", "-opt nopeephole"]
+
+[[lib.object]]
+name = "tool/wazaconv.c"
+completed = true
+extra_cflags = ["-lang=c++", "-opt nopeephole"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"

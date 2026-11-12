@@ -10,6 +10,10 @@ extern "C" {
 
 
 void heroBiosSetPokedoru(Hero *hero, s32 pokedoru);
+void heroBiosSetHomePlace(Hero *hero, u8 homePlace);
+void heroBiosSetNamePtr(Hero *hero, u16 *name);
+void heroBiosSetRnd(Hero *hero, u32 rnd);
+void heroBiosSetSexDataId(Hero *hero, u8 sexDataId);
 u16 *heroBiosGetNamePtr(Hero *hero);
 u32 heroBiosGetRnd(Hero *hero);
 Pokemon *heroBiosGetPokemonPtr(Hero *hero, u16 slot);
