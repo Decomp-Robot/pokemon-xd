@@ -247,6 +247,9 @@ game/floorReadBgm.cpp:
 game/floorReadTexCol.cpp:
 	.text       start:0x8002E4D4 end:0x8002E64C
 
+game/floorReadMsg.cpp:
+	.text       start:0x8002EBF0 end:0x8002EDC8
+
 game/floorReadNormal.cpp:
 	.text       start:0x8002EDC8 end:0x8002EE00
 

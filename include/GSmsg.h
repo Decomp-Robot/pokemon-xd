@@ -5,6 +5,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void *GSmsgOpen(void *data);
+s32 GSmsgGetDataLanguage(const void *data);
 s32 GSmsgClose(void *data);
 s32 GSmsgFontClose(void *data);
 
