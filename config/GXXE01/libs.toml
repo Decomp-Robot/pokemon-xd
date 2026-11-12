@@ -3414,6 +3414,166 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "TRK/dolphin_trk_usb.c"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/ddh_cc.c"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/CircleBuffer.c"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/gdev_cc.c"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
+name = "TRK/MWRuntime.c"
+completed = true
+cflags = [
+    "-W error",
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-multibyte",
+    "-i include",
+    "-i build/$VERSION/include",
+    "-i src/TRK",
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+    "-DBUILD_VERSION=$VERSION_NUM",
+    "-DVERSION_$VERSION",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-lang=c",
+]
+
+[[lib.object]]
 name = "TRK/TRK_memcpy_local.c"
 completed = false
 

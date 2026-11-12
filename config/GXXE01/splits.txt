@@ -1618,6 +1618,23 @@ TRK/targcont.c:
 TRK/target_options.c:
 	.text       start:0x800D9030 end:0x800D904C
 
+TRK/dolphin_trk_usb.c:
+	.text       start:0x800D904C end:0x800D9290
+
+TRK/ddh_cc.c:
+	.text       start:0x800D9290 end:0x800D95D4
+	.rodata     start:0x802EC858 end:0x802EC938
+
+TRK/CircleBuffer.c:
+	.text       start:0x800D95D4 end:0x800D983C
+
+TRK/gdev_cc.c:
+	.text       start:0x800D983C end:0x800D9B88
+	.rodata     start:0x802EC938 end:0x802ECA18
+
+TRK/MWRuntime.c:
+	.text       start:0x800D9B88 end:0x800D9C30
+
 Runtime.PPCEABI.H/NMWException.cpp:
 	extab       start:0x80005600 end:0x80005640
 	extabindex  start:0x80005640 end:0x80005670

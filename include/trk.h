@@ -2,6 +2,7 @@
 #define TRK_TRK_H
 
 #include <types.h>
+#include <trk_trace.h>
 
 #ifndef BOOL
 typedef int BOOL;
@@ -157,18 +158,11 @@ typedef struct {
 } TRKSerialHandlerState;
 
 
-/* MWTRACE levels used by the serial link: the higher the level, the more
-   unusual the condition being reported. */
-#define TRK_TRACE_LEVEL_DETAIL 1
-#define TRK_TRACE_LEVEL_DEBUG  4
-#define TRK_TRACE_LEVEL_ERROR  8
-
 extern void *TRK_memcpy(void *dst, const void *src, unsigned long n);
 extern void *TRK_memset(void *dst, int c, unsigned long n);
 
 /* The debug nub declares its own non-variadic OSReport prototype. */
 extern void OSReport(const char *msg);
-extern void MWTRACE(int level, const char *fmt, ...);
 extern void TRK_board_display(const char *msg);
 extern void InitializeProgramEndTrap(void);
 extern s32 TRKInitializeIntDrivenUART(u32 baudRate, s32 channel, s32 flags, u8 **inputPendingPtr);

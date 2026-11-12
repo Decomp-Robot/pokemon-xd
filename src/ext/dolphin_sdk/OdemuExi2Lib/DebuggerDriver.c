@@ -236,7 +236,7 @@ s32 DBQueryData(void) {
     return RecvDataLeng;
 }
 
-s32 DBRead(void* data, s32 len) {
+s32 DBRead(void* data, u32 len) {
     BOOL enabled = OSDisableInterrupts();
 
     DBGRead(DBG_RECEIVE_BUFFER_BASE + ((SendMailData & DBG_MAIL_BUFFER_SELECT) ? DBG_ALTERNATE_BUFFER_STRIDE : 0), data, (len + 3) & ~3);

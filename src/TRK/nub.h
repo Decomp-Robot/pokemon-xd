@@ -2,6 +2,7 @@
 #define TRK_NUB_H
 
 #include <dolphin/os/OSContext.h>
+#include <trk_trace.h>
 
 /*
  * Definitions the MetroTRK nub shares: the debugger stub that runs on the
@@ -130,8 +131,8 @@ typedef struct DBCommTable {
     s32  (*enableInterrupts)(void);       /* 0x04 */
     s32  (*shutdown)(void);               /* 0x08 */
     s32  (*peek)(void);                   /* 0x0C */
-    s32  (*read)(void*, u32);             /* 0x10 */
-    s32  (*write)(void*, u32);            /* 0x14 */
+    s32  (*read)(void*, s32);             /* 0x10 */
+    s32  (*write)(void*, s32);            /* 0x14 */
     s32  (*open)(void);                   /* 0x18 */
     s32  (*close)(void);                  /* 0x1C */
     s32  (*unreservePort)(void);          /* 0x20 */
@@ -152,8 +153,8 @@ extern DBCommTable gDBCommTable;
 extern s32  udp_cc_initialize(volatile u8** inputPendingPtrRef, TRKCommCallback callback);
 extern s32  udp_cc_open(void);
 extern s32  udp_cc_close(void);
-extern s32  udp_cc_read(void*, u32);
-extern s32  udp_cc_write(void*, u32);
+extern s32  udp_cc_read(void*, s32);
+extern s32  udp_cc_write(void*, s32);
 extern s32  udp_cc_shutdown(void);
 extern s32  udp_cc_peek(void);
 extern s32  udp_cc_pre_continue(void);
@@ -163,8 +164,8 @@ extern s32  gdev_cc_initialize(volatile u8** inputPendingPtrRef, TRKCommCallback
 extern s32  gdev_cc_initinterrupts(void);
 extern s32  gdev_cc_open(void);
 extern s32  gdev_cc_close(void);
-extern s32  gdev_cc_read(void*, u32);
-extern s32  gdev_cc_write(void*, u32);
+extern s32  gdev_cc_read(void*, s32);
+extern s32  gdev_cc_write(void*, s32);
 extern s32  gdev_cc_shutdown(void);
 extern s32  gdev_cc_peek(void);
 extern s32  gdev_cc_pre_continue(void);
@@ -174,8 +175,8 @@ extern s32  ddh_cc_initialize(volatile u8** inputPendingPtrRef, TRKCommCallback 
 extern s32  ddh_cc_initinterrupts(void);
 extern s32  ddh_cc_open(void);
 extern s32  ddh_cc_close(void);
-extern s32  ddh_cc_read(void*, u32);
-extern s32  ddh_cc_write(void*, u32);
+extern s32  ddh_cc_read(void*, s32);
+extern s32  ddh_cc_write(void*, s32);
 extern s32  ddh_cc_shutdown(void);
 extern s32  ddh_cc_peek(void);
 extern s32  ddh_cc_pre_continue(void);
@@ -189,7 +190,6 @@ u32 ARGetDMAStatus(void);
 void ARStartDMA(u32 type, u32 uMainMem, u32 uARAM, u32 uLength);
 void DCFlushRange(void* addr, u32 nBytes);
 void ICInvalidateRange(void* addr, u32 nBytes);
-void MWTRACE(s32 level, const char* fmt, ...);
 s32 OSEnableScheduler(void);
 void OSReport(const char* message, ...);
 void TRKInterruptHandler(void);
@@ -206,6 +206,7 @@ void __ARClearInterrupt(void);
 u16 __ARGetInterruptStatus(void);
 
 /* Host-serviced file operations.  Arguments and results use the trap ABI. */
+BOOL GetTRKConnected(void);
 u32 TRKAccessFile(u8 command, u32 fileHandle, u32* length, u8* buffer);
 u32 TRKOpenFile(u8 command, const char* pathname, u8 openFlags,
                 u32* fileHandleOut);

@@ -18,6 +18,12 @@ extern DBInterface* __DBInterface;
 
 void DBInit(void);
 void DBInitComm(u8** inputFlagPtr, void (*mtrCallback)(s32, OSContext*));
+void DBInitInterrupts(void);
+s32 DBQueryData(void);
+s32 DBRead(void* data, u32 length);
+s32 DBWrite(void* data, s32 length);
+void DBOpen(void);
+void DBClose(void);
 void __DBExceptionDestination(void);
 void __DBExceptionDestinationAux(void);
 BOOL __DBIsExceptionMarked(__OSException exception);
