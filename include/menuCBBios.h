@@ -66,9 +66,13 @@ struct _MENUCBWORK {
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
     /* 0xAFE8 */ u8 _AFE8[0xAFF0 - 0xAFE8];
     /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
-    /* 0xAFF4 */ u8 _AFF4[8];
-    /* 0xAFFC */ s32 battleStageMode;
-    /* 0xB000 */ u8 _B000[4];
+    /* 0xAFF4 */ u8 _AFF4[0xAFFC - 0xAFF4];
+    union {
+        /* These fields share storage as the menu context is reused. */
+        /* 0xAFFC */ s32 battleStageMode;
+        /* 0xAFFC */ s32 tunaideSelect;
+    };
+    /* 0xB000 */ s32 tunaideSelectPrev;
     /* 0xB004 */ s32 mRuleNo; // rule record (mRulesetData) the entry screens work on.
     /* 0xB008 */ u8 _B008[0xB014 - 0xB008];
     /* 0xB014 */ s32 mEntrySelect; // entry the trainer rows are drawn for; -1 for the
@@ -91,10 +95,10 @@ struct _MENUCBWORK {
     /* 0xB100 */ s32 selectCount; // number of flagged entry slots.
     /* 0xB104 */ s32 mAbortRequest; // abort request of the entry screen.
     /* 0xB108 */ s32 mEntryState; // state of the entry screen.
-    /* 0xB10C */ u32 mRuleSelect; // regulation chosen in the rule submenu: 0 for its
+    /* 0xB10C */ s32 mRuleSelect; // regulation chosen in the rule submenu: 0 for its
                                   // first item, 1 for its last one.
     /* 0xB110 */ s32 confirmationInputDelay;
-    /* 0xB114 */ u8 _B114[0xB118 - 0xB114];
+    /* 0xB114 */ s32 tunaideSlide;
     /* 0xB118 */ s32 mRuleCursor; // row the rule and port windows' cursor is on.
     /* 0xB11C */ u32 selectedValue; // entry menuCB_RuleDispColorChenge compares.
     /* 0xB120 */ u8 _B120[0xB124 - 0xB120];

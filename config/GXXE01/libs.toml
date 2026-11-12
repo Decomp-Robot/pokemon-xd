@@ -14,6 +14,11 @@ completed = true
 extra_cflags = ["-opt nopeephole"]
 
 [[lib.object]]
+name = "game/menuCB_externDB.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/floor/floorManager.cpp"
 completed = true
 

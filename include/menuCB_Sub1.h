@@ -45,7 +45,7 @@ void _drawStrings(tagWINDOW_WORK *window, u16 *str, long x, long y, unsigned lon
 extern "C" {
 void menuCB_SE_Stop(unsigned long seID);
 void menuCB_SE_Play(unsigned long seID);
-void menuCB_Cursol_Disp_AlphaSet(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned char flag);
+void menuCB_Cursol_Disp_AlphaSet(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, bool flag);
 void menuCB_AlphaGet(tagWINDOW_WORK *window);
 void menuCB_GCEntryCursolDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, unsigned char flag);
 void menuCB_GCPokemonHPandWAZA_MAX(void);

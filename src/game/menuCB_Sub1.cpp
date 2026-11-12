@@ -249,7 +249,7 @@ void menuCBDrawStringCenter(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 
                             long x, long y, unsigned long msgID);
 void menuCB_SE_Play(unsigned long seID);
 void menuCB_Cursol_Disp_AlphaSet(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
-                          unsigned char flag);
+                          bool flag);
 void menuCB_AlphaGet(tagWINDOW_WORK *window);
 void menuCB_GCEntryCursolDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
                            unsigned char flag);
@@ -849,7 +849,7 @@ void menuCB_SE_Play(unsigned long seID)
 
 /* Alpha the sprite is drawn with, from the saved window colour. */
 void menuCB_Cursol_Disp_AlphaSet(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
-                          unsigned char flag)
+                          bool flag)
 {
     if (flag != 0) {
         if (window->mRgba.mColorA == 0xFF)

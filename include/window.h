@@ -50,6 +50,10 @@ void windowDrawSprite(s16 x, s16 y, tagWINDOW_WORK *window, u16 textureId,
 void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, unsigned long color,
                        tagWINDOW_WORK *window, u16 textureId, s32 drawMode,
                        GSgfxLayerID layer);
+void windowDrawSprite3(s16 x, s16 y, s16 width, s16 height, u32 color,
+                       tagWINDOW_WORK *window, u16 textureId, s16 offsetX,
+                       s16 offsetY, s16 clipWidth, s16 clipHeight, u32 flags,
+                       GSgfxLayerID layer);
 s32 windowGetActiveID();
 s32 windowGetValue(long windowID);
 u16 windowGetKeyOn();
