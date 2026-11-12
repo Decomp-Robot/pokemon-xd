@@ -19,15 +19,34 @@ struct _peModel {
     f32 mAnimationFrame;
 };
 
+struct peDistortionMotionParameters {
+    f32 mWidth;
+    f32 mHeight;
+    f32 mWidthRandom;
+    f32 mHeightRandom;
+};
+
+struct peDistortionParameters {
+    f32 mOffsetScaleX;
+    f32 mOffsetScaleY;
+    f32 mRotation;
+    f32 mRotationVelocity;
+    f32 mRotationVelocityRandom;
+};
+
 struct _peDistortion {
     u32 mFlags;
-    u8 mDistortionParameters[0x10];
+    peDistortionMotionParameters mMotion;
     peSpline *mWidthSpline;
     peSpline *mHeightSpline;
-    u8 mTextureParameters[0x14];
+    peDistortionParameters mParameters;
     peSpline *mRotationSpline;
-    struct peColorSpline *mColorSpline;
-    u8 mRenderParameters[0x28];
+    peSpline *mAlphaSpline;
+    u8 mRenderParameters[24];
+    f32 mTexCoordLeft;
+    f32 mTexCoordTop;
+    f32 mTexCoordRight;
+    f32 mTexCoordBottom;
     union {
         s32 mResourceID;
         GStexture *mTexture;

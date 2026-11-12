@@ -569,7 +569,7 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
             distortion->mRotationSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(distortion->mRotationSpline, base);
             distortion->mWidthSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(distortion->mWidthSpline, base);
             distortion->mHeightSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(distortion->mHeightSpline, base);
-            distortion->mColorSpline = (peColorSpline *)PE_BANK_RELOCATE_ADDRESS(distortion->mColorSpline, base);
+            distortion->mAlphaSpline = (peSpline *)PE_BANK_RELOCATE_ADDRESS(distortion->mAlphaSpline, base);
             break;
         }
         case PE_DATA_MODEL: {
