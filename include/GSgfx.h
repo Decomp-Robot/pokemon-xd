@@ -312,11 +312,15 @@ enum GSgfxCachedStateConstants {
     GS_GFX_COLOR_CHANNEL_NULL = 0xFF,
 };
 
+/* Selects the layer-owned, shared framebuffer copy in SetTextureCopy. */
+#define GS_GFX_LAYER_SHARED_TEXTURE_COPY ((GStexture *)0xFEFEFEFE)
+
 // Graphics state and draw commands for one layer.
 class GSgfxLayer {
 public:
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool flag, u8* image);
+    GStexture *GetTextureCopy(void);
     void perspectiveProjection(const f32 matrix[4][4])
     {
         mProjectionState.mType = GS_PROJECTION_PERSPECTIVE;

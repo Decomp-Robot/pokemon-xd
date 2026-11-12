@@ -120,7 +120,10 @@ struct _GSmodel {
     GSvec mAttachedRotation;
     GSvec mAttachedScale;
     _GSparticleBank *mLinkedParticleBank;
-    u8 _5DC[0x1C];
+    u8 _5DC[4];
+    struct GSmaterial *mMaterials;
+    u32 mMaterialCount;
+    u8 _5E8[0x10];
     _GSparticleBank *mDustParticleBank;
     GSmodelDustEntry mDust[2];
     f32 mDustScale;
@@ -234,6 +237,19 @@ s32 GSmodelGetMaxTexAnimIndex(_GSmodel *model);
 s32 GSmodelGetMaxAnimIndex(_GSmodel *model);
 void GSmodelRemoveNull(_GSmodel *model);
 void GSmodelDetachFromGSpart(_GSmodel *model, u8 keepTransform);
+void GSmodelResetTextureChange(_GSmodel *model);
+void GSmodelSetTextureChange(_GSmodel *model, GStexture *texture);
+u8 GSmodelIsModulationEnabled(_GSmodel *model);
+void GSmodelGetModulationColor(_GSmodel *model, GScolor *color);
+void GSmodelDisableModulation(_GSmodel *model);
+void GSmodelSetModulationColor(_GSmodel *model, GScolor *color);
+void GSmodelEnableModulation(_GSmodel *model, GScolor *color);
+void GSmodelDisableColorSwap(_GSmodel *model);
+void GSmodelEnableColorSwap(_GSmodel *model, GScolor *color);
+u8 GSmodelIsEnvMapEnabled(_GSmodel *model);
+void GSmodelDisableEnvMap(_GSmodel *model);
+void GSmodelSetEnvMapBlendValue(_GSmodel *model, f32 blend);
+void GSmodelEnableEnvMap(_GSmodel *model, s32 envMapMode, s32 envMapType, f32 blend);
 #ifdef __cplusplus
 }
 #endif
