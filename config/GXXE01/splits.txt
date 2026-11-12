@@ -1875,6 +1875,12 @@ game/GSAPI/GScamera/GScamera.cpp:
 	.bss        start:0x80442DB0 end:0x80442DF0
 	.sdata2     start:0x804ED2F0 end:0x804ED358
 
+game/GSlight.cpp:
+	.text       start:0x800EDC50 end:0x800EEC3C
+	.rodata     start:0x802ECF70 end:0x802ECF90
+	.sbss       start:0x804EAEF0 end:0x804EAF00
+	.sdata2     start:0x804ED358 end:0x804ED388
+
 game/GSmtx.cpp:
 	.text       start:0x800EF95C end:0x800EF9F8
 	.ctors      start:0x802E9FB0 end:0x802E9FB4

@@ -24,6 +24,10 @@ completed = true
 name = "game/GSAPI/GScamera/GScameraData.cpp"
 completed = true
 [[lib.object]]
+name = "game/GSlight.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+[[lib.object]]
 name = "game/GSmtx.cpp"
 completed = true
 mw_version = "GC/1.3"

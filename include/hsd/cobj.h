@@ -4,16 +4,12 @@
 #include <dolphin/mtx.h>
 #include <hsd/debug.h>
 #include <hsd/cobjtypes.h>
+#include <hsd/class.h>
 
 struct _HSD_CameraAnim;
 
 struct _HSD_CObj;
 
-struct _HSD_ClassInfo {
-    u8 _00[0x30];
-    void (*release)(void *object);
-    void (*destroy)(void *object);
-};
 
 struct _HSD_CObj {
     _HSD_ClassInfo *classInfo; // 0x00

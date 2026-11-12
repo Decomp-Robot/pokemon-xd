@@ -63,7 +63,7 @@ bool _unloadCamera(void *data, u32 group, u32 res)
 // Gives the lights of a stage back to the light system.
 bool _unloadLight(void *data, u32 group, u32 res)
 {
-    GSlightFree((_GSlight *)data);
+    GSlightFree((GSlight *)data);
     return true;
 }
 

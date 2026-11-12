@@ -25,7 +25,7 @@ struct _HSD_MatAnimJoint;
 struct _HSD_ShapeAnimJoint;
 struct GSgfxLayer;
 struct _GScamera;
-struct _GSlight;
+struct GSlight;
 struct GSgfxVF;
 struct _GSparticleBank;
 
@@ -179,7 +179,7 @@ void GSmodelSetRenderLayer(_GSmodel *model, s32 count, GSgfxLayerID *layers);
 void GSmodelSetRenderCamera(_GSmodel *model, _GScamera *camera);
 void GSmodelSetBoundCheck(_GSmodel *model, s32 enabled);
 void GSmodelSetShadowFlags(_GSmodel *model, u32 flags);
-void GSmodelSetShadowLight(_GSmodel *model, _GSlight *light);
+void GSmodelSetShadowLight(_GSmodel *model, GSlight *light);
 void GSmodelSetShadowSurface(_GSmodel *model, s32 count, _GSmodel **surfaces);
 void GSmodelSetShadowDebug(bool enabled);
 f32 GSmodelGetAnimRate(_GSmodel *model);

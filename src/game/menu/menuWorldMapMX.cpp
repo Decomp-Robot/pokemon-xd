@@ -503,7 +503,7 @@ void WorldMap::moveDemo(long from, long to)
     WorldMapMapData* data;
     _GSmodel* shadowModel;
     _GSmodel* shadowSurface;
-    _GSlight* shadowLight;
+    GSlight* shadowLight;
     _GSmodel* surfaces[1];
     f32 frames;
     f32 angle;
@@ -554,7 +554,7 @@ void WorldMap::moveDemo(long from, long to)
     }
     shadowModel = static_cast<_GSmodel*>(GSresGetResourceAllGroup(((WorldMapScooterData*)mModelWork->mScooter)->mMotionRes));
     shadowSurface = static_cast<_GSmodel*>(GSresGetResourceAllGroup(mModelWork->mDemoModel2));
-    shadowLight = static_cast<_GSlight*>(GSresGetResourceAllGroup(mModelWork->mDemoModel3));
+    shadowLight = static_cast<GSlight*>(GSresGetResourceAllGroup(mModelWork->mDemoModel3));
     surfaces[0] = shadowSurface;
     GSmodelSetShadowFlags(shadowModel, 1);
     GSmodelSetShadowLight(shadowModel, shadowLight);

@@ -18,6 +18,17 @@ struct _HSD_AObjDesc {
     f32 mEndFrame;
 };
 
+enum HSD_AnimObjectType {
+    HSD_ANIM_LIGHT_OBJECT = 7
+};
+
+enum HSD_AnimCallbackArgument {
+    HSD_ANIM_CALLBACK_NO_ARG = 0,
+    HSD_ANIM_CALLBACK_FLOAT_ARG = 1
+};
+
+#define HSD_ANIM_ALL 0xFFFFu
+
 #define HSD_AOBJ_FLAG_NO_ANIM 0x40000000u
 #define HSD_AOBJ_FLAG_LOOP 0x20000000u
 

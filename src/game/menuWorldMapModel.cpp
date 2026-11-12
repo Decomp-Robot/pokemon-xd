@@ -137,7 +137,7 @@ _HSD_SceneDesc* WorldMapModel::SetModel(unsigned long group, unsigned long resou
     _HSD_SceneDesc* header;
     long modelIndex = 0;
     long lightIndex = 0;
-    _GSlight* light;
+    GSlight* light;
     _GSmodel* model;
     header = makeArchiveHeader(resource);
     if (header == 0) {
@@ -305,7 +305,7 @@ static bool _unloadModel(void* model, unsigned long, unsigned long)
 /* Resource free callback for lights. */
 static bool _unloadLight(void* light, unsigned long, unsigned long)
 {
-    GSlightFree(static_cast<_GSlight*>(light));
+    GSlightFree(static_cast<GSlight*>(light));
     return 1;
 }
 
