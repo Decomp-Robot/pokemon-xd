@@ -245,7 +245,7 @@ enum GSgfxTunitFunc { GS_GFX_TUNIT_TEXTURE_REPLACE = 3 };
 
 enum GSgfxIndTexMtxID { GS_GFX_IND_MTX0 = 1 };
 
-enum GSgfxLayerType { GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
+enum GSgfxLayerType { GS_GFX_LAYER_NORMAL = 0, GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
 
 class GSgfxLayerConfig {
 public:

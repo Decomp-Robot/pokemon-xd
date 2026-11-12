@@ -3,6 +3,16 @@
 
 #include <types.h>
 
+struct RelivehallData {
+    u8 mHologramAlpha;
+    u8 unknown;
+    u16 mSteps;
+    u16 mModelScale;
+    u8 mPartIndex[68];
+};
+typedef struct RelivehallData RelivehallData;
+extern RelivehallData *relivehall_data;
+
 struct DbgMenuItem;
 
 extern u32 (*debugMenuDataGetNum)(void);

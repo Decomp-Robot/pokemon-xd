@@ -20,4 +20,10 @@ void preReliveDisplayHokoraParticle(void);
 }
 #endif
 
+#ifdef __cplusplus
+struct Pokemon;
+class ModelSequence;
+ModelSequence *reliveCeremonyFromHologram(Pokemon *pokemon, unsigned long sourceSequence);
+#endif
+
 #endif

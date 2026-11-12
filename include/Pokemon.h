@@ -163,6 +163,7 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_SEX = 186, // sex of the pokemon.
     POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
     POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.
+    POKEMON_STATUS_FIELD_SHINY = 193,
     POKEMON_STATUS_FIELD_WAZA_SEALED = 194, // non-zero while the waza pages stay closed.
     POKEMON_STATUS_FIELD_DARK_ID = 195, // dark pokemon record of the pokemon, zero while it is not dark.
     POKEMON_STATUS_FIELD_DARK_POINTS = 197,

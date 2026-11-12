@@ -520,7 +520,14 @@ game/menuLogoDemo.cpp:
 	.sbss       start:0x804EA9D8 end:0x804EA9E0
 
 game/menuHologram.cpp:
-	.text       start:0x80087B14 end:0x80087BF0
+	.text       start:0x80087B14 end:0x8008A160
+	.rodata     start:0x802EB960 end:0x802EB97C
+	.data       start:0x803C7A58 end:0x803C7DD8
+	.bss        start:0x804396A8 end:0x804396D8
+	.sdata      start:0x804E8038 end:0x804E8048
+	.sbss       start:0x804EA9F8 end:0x804EAA00
+	.sdata2     start:0x804EC7D0 end:0x804EC838
+	.sbss2      start:0x804EFCE0 end:0x804EFCF0
 
 game/menuBingo.cpp:
 	.text       start:0x8008A160 end:0x8008A180

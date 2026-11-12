@@ -27,6 +27,7 @@ extern "C" {
 void menuModelSetCameraRotation(MENU_MODEL *model, const f32 *rotation);
 f32 *menuModelGetCameraRotation(MENU_MODEL *model);
 _GSmodel *menuModelGetModelPtr(MENU_MODEL *model);
+u8 menuModelGetPokemonAnimationIndexByPointer(Pokemon *pokemon);
 void menuModelInit(MENU_MODEL *model, int modelKind, int cameraKind);
 void menuModelFree(MENU_MODEL *model);
 s32 menuModelSetSize(MENU_MODEL *model, s32 x, s32 y, s32 width, s32 height);
@@ -43,5 +44,7 @@ void menuModelLoad(MENU_MODEL *model, u32 resourceID);
 void menuModelLoadPokemon(MENU_MODEL *model, Pokemon *pokemon);
 void menuModelTerm(MENU_MODEL *model);
 }
+
+void menuModelGetPkxRndFromPokemonForSeqenceLoad(unsigned long &rnd, unsigned short &species, Pokemon *pokemon);
 
 #endif

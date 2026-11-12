@@ -197,6 +197,7 @@ void GSmodelGetPosition(_GSmodel *model, GSvec *position);
 void GSmodelPushState(_GSmodel *model, GSmodelState *state);
 void GSmodelPopState(_GSmodel *model, GSmodelState *state);
 void GSmodelGetScale(_GSmodel *model, GSvec *scale);
+void GSmodelSetScale(_GSmodel *model, GSvec *scale);
 bool GSmodelGetVisibility(_GSmodel *model);
 GSvec *GSmodelGetRotationPtr(_GSmodel *model);
 void GSmodelGetRotation(_GSmodel *model, GSvec *rotation);

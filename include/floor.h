@@ -14,6 +14,7 @@ struct GStexture;
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct _GSmodel *floorOpenObject(long id);
 void floorChangePos(u32 floorID, s16 rotY, f32 x, f32 y, f32 z);
 void floorMapSetDisp(long on);
 u32 floorReadMakeFogResID(u32 resource);

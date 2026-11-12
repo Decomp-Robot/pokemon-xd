@@ -5,6 +5,8 @@ splits: config/GXXE01/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 block_relocations:
+  - source: ".data:0x8041CA60"
+  - source: ".data:0x8041CA6C"
   - source: ".text:0x80085FC4"
   - source: ".text:0x80086070"
   - source: ".text:0x8008618C"
