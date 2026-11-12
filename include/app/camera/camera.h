@@ -33,7 +33,7 @@ void cameraPauseAnime();
 void cameraStopAnime();
 u8 cameraWaitSyncAnime(u8 wait);
 void cameraPlayOffsetAnime(u32 group, u32 id, s32 frame, u8 loop);
-void cameraPlayAnime(u32 group, u32 id, f32 frame, u8 loop);
+void cameraPlayAnime(u32 group, u32 id, f32 frame, bool loop);
 void cameraMoveStop();
 u8 cameraMoveEndCheckSpecial(u8 wait);
 u8 cameraMoveEndCheck(u8 wait);

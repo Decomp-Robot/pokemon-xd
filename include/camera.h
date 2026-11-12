@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include <types.h>
+#include <bool.h>
 
 struct GSvec;
 
@@ -26,7 +27,7 @@ void cameraSetTargetPos(struct GSvec *target);
 void cameraGetTargetOfs(struct GSvec *offset);
 void cameraSetTargetOfs(struct GSvec *offset);
 void cameraSetFov(f32 fov);
-void cameraPlayAnime(u32 groupID, u32 resourceID, f32 frame, u8 loop);
+void cameraPlayAnime(u32 groupID, u32 resourceID, f32 frame, bool loop);
 
 #ifdef __cplusplus
 }

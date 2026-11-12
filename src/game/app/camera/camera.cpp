@@ -306,7 +306,7 @@ void cameraMoveStop()
     pCamWork->movePending = 0;
 }
 
-void cameraPlayAnime(u32 group, u32 id, f32 frame, u8 loop)
+void cameraPlayAnime(u32 group, u32 id, f32 frame, bool loop)
 {
     if (pCamWork->animationGroup || pCamWork->animationID)
         cameraStopAnime();

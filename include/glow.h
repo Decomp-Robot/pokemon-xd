@@ -15,11 +15,11 @@ public:
 
     f32 mIntensity;
 
-    u8 mParam0;
-    u8 mParam1;
-    u8 mParam2;
-    u8 mParam3;
-    u8 mParam4;
+    u8 mBlurRadius;
+    u8 mAlphaBlend;
+    u8 mUseAlphaPass;
+    u8 mRenderMode;
+    u8 mBlurSteps;
 };
 
 #endif

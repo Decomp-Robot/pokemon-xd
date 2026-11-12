@@ -545,11 +545,11 @@ void WorldMap::moveDemo(long from, long to)
     initializeOffscreenData();
     if (mModelWork->mDemoModel1 == worldMapDemoSetAModel1 && mDemoEffect != 0) {
         mDemoEffect->mIntensity = 0.0f;
-        mDemoEffect->mParam0 = worldMapGlowParam0;
-        mDemoEffect->mParam1 = worldMapGlowParam1;
-        mDemoEffect->mParam2 = worldMapGlowParam2;
-        mDemoEffect->mParam3 = worldMapGlowParam3;
-        mDemoEffect->mParam4 = worldMapGlowParam4;
+        mDemoEffect->mBlurRadius = worldMapGlowParam0;
+        mDemoEffect->mAlphaBlend = worldMapGlowParam1;
+        mDemoEffect->mUseAlphaPass = worldMapGlowParam2;
+        mDemoEffect->mRenderMode = worldMapGlowParam3;
+        mDemoEffect->mBlurSteps = worldMapGlowParam4;
         mDemoEffect->Start();
     }
     shadowModel = static_cast<_GSmodel*>(GSresGetResourceAllGroup(((WorldMapScooterData*)mModelWork->mScooter)->mMotionRes));
