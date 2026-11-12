@@ -5,6 +5,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+s32 GSmsgClose(void *data);
+s32 GSmsgFontClose(void *data);
+
 unsigned long GSmsgGetCharLength(const u16* text);
 
 s32 GSmsgIsCheck(u32 messageID);

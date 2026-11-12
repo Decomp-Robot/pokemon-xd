@@ -251,7 +251,7 @@ game/floorReadNormal.cpp:
 	.text       start:0x8002EDC8 end:0x8002EE00
 
 game/floorReadUnload.cpp:
-	.text       start:0x8002EF80 end:0x8002F0D4
+	.text       start:0x8002EF80 end:0x8002F16C
 
 game/floorReadResource.cpp:
 	.text       start:0x8002F16C end:0x8002F1F0

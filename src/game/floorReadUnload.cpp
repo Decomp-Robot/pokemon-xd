@@ -5,6 +5,7 @@
 #include <types.h>
 #include <GScamera.h>
 #include <GSlight.h>
+#include <GSmsg.h>
 #include <GSparticle.h>
 #include <ModelSequence.h>
 #include <flashsystem.h>
@@ -76,5 +77,25 @@ bool _unloadScript(void *data, u32 group, u32 res)
         return false;
     }
     floorUnmappingScript(data);
+    return true;
+}
+
+// Keep the current font available while another floor is pushed.
+bool _unloadFont(void *data, u32 group, u32 res)
+{
+    if (floorIsPush()) {
+        return false;
+    }
+    GSmsgFontClose(data);
+    return true;
+}
+
+// Keep the current messages available while another floor is pushed.
+bool _unloadMsg(void *data, u32 group, u32 res)
+{
+    if (floorIsPush()) {
+        return false;
+    }
+    GSmsgClose(data);
     return true;
 }
