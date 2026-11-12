@@ -14,6 +14,7 @@ enum darkPokemonStatus {
 enum darkPokemonWhere {
     DARK_POKEMON_WHERE_NONE = 0,
     DARK_POKEMON_WHERE_PARTY = 1,
+    DARK_POKEMON_WHERE_PCBOX = 2,
     DARK_POKEMON_WHERE_SODATEYA = 4,
     DARK_POKEMON_EXCHANGED = 5
 };

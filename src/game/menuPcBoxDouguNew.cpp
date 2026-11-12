@@ -1,3 +1,4 @@
+#include <pcbox.h>
 #include <item.h>
 #include <itemBios.h>
 #include <winMsg.h>
@@ -98,13 +99,7 @@ s32 menuPocketInputNumber(tagWINDOW_WORK *window, s32 value, s32 max, u16 keys, 
 
 // ---- item, box and hero data --------------------------------------------
 
-extern "C" {
-struct ItemSlot *pcboxGetItem(s32 box, s16 slot);
-s32 pcboxGetNbItemSlot(s32 box);
-void pcboxDelItem(s32 box, u16 itemID, u16 count);
-void pcboxSwapItemSlot(s32 box, s16 from, s16 dest);
-// How many of the item the hero can still take.
-}
+
 
 // Window ids of the menus.
 enum {

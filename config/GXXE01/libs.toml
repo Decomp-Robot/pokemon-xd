@@ -2775,6 +2775,11 @@ name = "tool/wazaconv.c"
 completed = true
 extra_cflags = ["-lang=c++", "-opt nopeephole"]
 
+[[lib.object]]
+name = "game/app/pcbox/pcbox.cpp"
+completed = true
+extra_cflags = ["-inline noauto,deferred", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"

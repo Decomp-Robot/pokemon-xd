@@ -300,6 +300,7 @@ void pokemonGrowBasisStatus(Pokemon *pokemon, u32 exp);
 void pokemonSetCatchStatus(Pokemon *pokemon, u16 catchFloorId, u8 catchLevel, u8 catchBallId,
                           u8 sexDataId, unsigned int trainerId, const u16 *name);
 void pokemonBiosCopy(Pokemon *pokemon, const Pokemon *src);
+void pokemonInitAry(Pokemon* pokemon, u16 count);
 void pokemonInit(Pokemon *pokemon);
 void pokemonCreate(Pokemon *pokemon, u16 species, int level, void *attest);
 void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID);

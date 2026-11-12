@@ -2088,6 +2088,10 @@ game/app/dbgMenu/dbgMenu.cpp:
 	.sdata      start:0x804E83E8 end:0x804E83F0
 	.sbss       start:0x804EB2D8 end:0x804EB2E8
 
+game/app/pcbox/pcbox.cpp:
+	.text       start:0x801560EC end:0x801576DC
+	.sdata2     start:0x804EDC78 end:0x804EDC84
+
 game/app/kouka/koukaBios.cpp:
 	.text       start:0x80158BF8 end:0x80158D18
 
