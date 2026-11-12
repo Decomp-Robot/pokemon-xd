@@ -1548,6 +1548,17 @@ TRK/serpoll.c:
 TRK/usr_put.c:
 	.text       start:0x800D49C0 end:0x800D4A4C
 
+TRK/dispatch.c:
+	.text       start:0x800D4A4C end:0x800D4BC4
+	.rodata     start:0x802EC3D8 end:0x802EC411
+	.data       start:0x803D4320 end:0x803D4390
+
+TRK/msghndlr.c:
+	.text       start:0x800D4BC4 end:0x800D5C34
+	.rodata     start:0x802EC418 end:0x802EC600
+	.data       start:0x803D4390 end:0x803D43C8
+	.bss        start:0x804413C0 end:0x804413C8
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 

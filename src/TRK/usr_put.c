@@ -17,7 +17,7 @@ BOOL usr_puts_serial(const char *msg)
     // after.  The loop condition reports a status the body never raises, so
     // the string is always run to its terminator.
     while (!status && (c = *msg++) != '\0') {
-        connectionStatus = TRKIsConnected();
+        connectionStatus = GetTRKConnected();
 
         buf[0] = c;
         buf[1] = '\0';

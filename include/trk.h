@@ -50,6 +50,60 @@ typedef u32 NubEventID;
 #define DS_MessageBufferOverflow    0x301
 #define DS_MessageBufferReadError   0x302
 
+/* Debugger request commands and the fixed header fields they use. */
+typedef enum {
+    kDSConnect = 1,
+    kDSDisconnect = 2,
+    kDSReset = 3,
+    kDSVersions = 4,
+    kDSSupportMask = 5,
+    kDSOverride = 7,
+    kDSReadMemory = 16,
+    kDSWriteMemory = 17,
+    kDSReadRegisters = 18,
+    kDSWriteRegisters = 19,
+    kDSSetOption = 23,
+    kDSContinue = 24,
+    kDSStep = 25,
+    kDSStop = 26
+} DSCommand;
+
+enum {
+    kDSCommandOffset = 4,
+    kDSOptionsOffset = 8,
+    kDSLengthOffset = 12,
+    kDSAddressOffset = 16,
+    kDSRangeEndOffset = 20,
+    kDSFirstRegisterOffset = 12,
+    kDSLastRegisterOffset = 16,
+    kDSOptionValueOffset = 12,
+    kDSStepCountOffset = 12
+};
+
+enum {
+    kDSStepIntoCount = 0,
+    kDSStepIntoRange = 1,
+    kDSStepOverCount = 16,
+    kDSStepOverRange = 17,
+    kDSOptionSerialIO = 1,
+    kDSRegistersDefault = 0,
+    kDSRegistersFP = 1,
+    kDSRegistersExtended1 = 2,
+    kDSRegistersExtended2 = 3
+};
+
+#define kDSMemoryExtended 0x02
+#define kDSMemoryUserView 0x08
+#define kDSMemoryARAM     0x40
+#define DS_DispatchError 0x500
+#define DS_InvalidMemory 0x700
+#define DS_InvalidRegister 0x701
+#define DS_CWDSException 0x702
+#define DS_UnsupportedError 0x703
+#define DS_InvalidProcessId 0x704
+#define DS_InvalidThreadId 0x705
+#define DS_OsError 0x706
+
 /* Event queue slots.  Events of type NUBEVENT_Null are never posted; the
    switch in TRKNubMainLoop falls through and drops such an event.  A step
    request is serviced the same way as a full interrupt. */
@@ -120,17 +174,46 @@ extern void InitializeProgramEndTrap(void);
 extern s32 TRKInitializeIntDrivenUART(u32 baudRate, s32 channel, s32 flags, u8 **inputPendingPtr);
 extern void TRKTargetSetInputPendingPtr(u8 *inputPendingPtr);
 extern s32 TRKTargetStopped(void);
-extern void TRKTargetContinue(void);
+extern u32 TRKTargetContinue(void);
+extern DSError TRKTargetStop(void);
+extern u32 TRKTargetGetPC(void);
+extern DSError TRKTargetSingleStep(u32 count, BOOL stepOver);
+extern DSError TRKTargetStepOutOfRange(u32 start, u32 end, BOOL stepOver);
+extern DSError TRKTargetAccessDefault(u32 first, u32 last, TRKBuffer *buffer, u32 *length, BOOL read);
+extern DSError TRKTargetAccessFP(u32 first, u32 last, TRKBuffer *buffer, u32 *length, BOOL read);
+extern DSError TRKTargetAccessExtended1(u32 first, u32 last, TRKBuffer *buffer, u32 *length, BOOL read);
+extern DSError TRKTargetAccessExtended2(u32 first, u32 last, TRKBuffer *buffer, u32 *length, BOOL read);
+extern DSError TRKTargetAccessMemory(void *data, u32 address, u32 *length, s32 debuggerView, BOOL read);
+extern DSError TRKTargetAccessARAM(void *data, u32 address, u32 *length, BOOL read);
+extern void __TRK_reset(void);
+extern void __TRK_copy_vectors(void);
+extern void TRKSetUseSerialIO(u8 value);
 extern void TRKTargetInterrupt(TRKEvent *event);
 extern void TRKTargetSupportRequest(void);
 extern s32 TRKInitializeTarget(void);
 extern s32 TRKDispatchMessage(TRKBuffer *message);
 extern s32 TRKInitializeDispatcher(void);
-extern s32 TRKWriteUARTN(const void *data, u32 length);
+extern s32 TRKWriteUARTN(void *data, u32 length);
 extern s32 TRKReadUARTN(void *data, u32 length);
 extern s32 TRKPollUART(void);
-extern void SetTRKConnected(s32 connected);
-extern s32 TRKIsConnected(void);
+extern void SetTRKConnected(BOOL connected);
+extern BOOL GetTRKConnected(void);
+DSError TRKDoConnect(TRKBuffer *message);
+DSError TRKDoDisconnect(TRKBuffer *message);
+DSError TRKDoReset(TRKBuffer *message);
+DSError TRKDoVersions(TRKBuffer *message);
+DSError TRKDoSupportMask(TRKBuffer *message);
+DSError TRKDoOverride(TRKBuffer *message);
+DSError TRKDoReadMemory(TRKBuffer *message);
+DSError TRKDoWriteMemory(TRKBuffer *message);
+DSError TRKDoReadRegisters(TRKBuffer *message);
+DSError TRKDoWriteRegisters(TRKBuffer *message);
+DSError TRKDoContinue(TRKBuffer *message);
+DSError TRKDoStep(TRKBuffer *message);
+DSError TRKDoStop(TRKBuffer *message);
+DSError TRKDoSetOption(TRKBuffer *message);
+void OutputData(u8 *data, int length);
+
 extern void usr_put_initialize(void);
 extern BOOL usr_puts_serial(const char *str);
 // All three return a DSError status (DS_NoError on success), which the

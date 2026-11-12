@@ -2897,6 +2897,16 @@ cflags_preset = "sdk"
 progress_category = "sdk"
 
 [[lib.object]]
+name = "TRK/dispatch.c"
+cflags = ["-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse,readonly', '-multibyte', '-i include', '-i src/ext/dolphin_sdk/include/libc', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdata 0', '-sdata2 0']
+completed = true
+
+[[lib.object]]
+name = "TRK/msghndlr.c"
+cflags = ["-W error", '-nodefaults', '-proc gekko', '-align powerpc', '-enum int', '-fp hardware', '-Cpp_exceptions off', '-O4,p', '-inline auto', '-pragma "cats off"', '-pragma "warn_notinlined off"', '-maxerrors 1', '-nosyspath', '-RTTI off', '-fp_contract on', '-str reuse,readonly', '-multibyte', '-i include', '-i src/ext/dolphin_sdk/include/libc', '-i build/$VERSION/include', '-DBUILD_VERSION=$VERSION_NUM', '-DVERSION_$VERSION', '-use_lmw_stmw on', '-lang=c', '-sdata 0', '-sdata2 0']
+completed = true
+
+[[lib.object]]
 name = "TRK/targimpl.c"
 completed = true
 cflags = [
