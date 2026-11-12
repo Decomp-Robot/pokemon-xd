@@ -53,7 +53,8 @@ bool floorGetHumanColision(void);
 u8 floorGetHumanColision(void);
 #endif
 int floorTresureGetResID(u16 treasureID);
-GSthread *floorCreateThread(u32 priority, u32 unk1, u32 flags, void (*entry)());
+GSthread *floorCreateThread(s32 priority, u32 stackSize, s32 terminateOnExit, GSthreadEntry entry);
+GSthread *floorCreateThreadLocal(s32 priority, u32 stackSize, s32 terminateOnExit, GSthreadEntry entry);
 #ifdef __cplusplus
 }
 #endif

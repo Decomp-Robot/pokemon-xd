@@ -19,8 +19,20 @@ enum SaveDataRegion {
     SAVE_DATA_PCBOX = 3,
     SAVEDATA_BLOCK_SODATEYA = 11,
     SAVEDATA_BLOCK_MEMO = 12,
-    SAVE_DATA_FIGHT_RULE = 14
+    SAVE_DATA_FIGHT_RULE = 14,
+    SAVE_DATA_ANYWAY = 22
 };
+
+typedef struct AnywaySaveHeader {
+    char signature[4];
+    u32 size;
+    u32 scriptStateSize;
+    u32 moduleStateSize;
+    u32 unknown_10;
+    u32 maxSize;
+    u16 unknown_18;
+    u8 reserved[6];
+} AnywaySaveHeader;
 
 #ifdef __cplusplus
 extern "C" {

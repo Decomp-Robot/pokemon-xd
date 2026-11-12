@@ -2073,7 +2073,8 @@ ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
 game/app/floor/floorManager.cpp:
-	.text       start:0x80125AE4 end:0x80125C08
+	.text       start:0x80125AE4 end:0x80125F40
+	.rodata     start:0x802F32A8 end:0x802F32BC
 
 game/app/floor/floorStack.cpp:
 	.text       start:0x801296C0 end:0x80129A40

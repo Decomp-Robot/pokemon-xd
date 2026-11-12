@@ -22,6 +22,8 @@ void* GSmemAllocHeap(s32 heap, u32 size);
 void GSmemFreeHeap(s32 heap, void* block);
 s32 GSmemCreateExternalHeap(void* start, void* end, GSmemCell* cells, s32 cellCount);
 long GSmemGetCurrentHeap(void);
+s32 GSmemSetCurrentHeap(s32 heap);
+s32 GSmemCreateHeap(void* start, void* end);
 long GSmemSetAllocMethodHeap(long heap, long method);
 
 #ifdef __cplusplus

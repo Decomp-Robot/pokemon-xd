@@ -25,7 +25,16 @@ void floorChange(u32 floorID);
 void floorPop(void);
 void floorPush(u32 floorID);
 void floorOpen(u32 floorID);
+#ifdef __cplusplus
+bool floorCheckAnywaySaveData(void);
+void floorMemoryCardSaveCallback(void);
+bool floorMakeSaveData(unsigned char** data, unsigned long* size);
+#endif
+void floorFreeResource(unsigned long groupID, unsigned long resourceID);
+void floorAddResource(unsigned long groupID, unsigned long resourceID);
 void floorWaitForChange(void);
+void floorUnblockModule(unsigned long moduleHandle);
+void floorBlockModule(unsigned long moduleHandle);
 #ifdef __cplusplus
 }
 #endif

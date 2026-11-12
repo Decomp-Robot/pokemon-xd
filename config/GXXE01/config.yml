@@ -47,6 +47,15 @@ block_relocations:
   - source: ".text:0x8005AC20"
   - source: ".text:0x8005ACBC"
   - source: ".text:0x8003AF74"
+add_relocations:
+  - source: .text:0x801265E8
+    type: ha
+    target: lbl_802F32BC
+    addend: -0x14
+  - source: .text:0x801265EC
+    type: l
+    target: lbl_802F32BC
+    addend: -0x14
 force_active:
   - OSLink
   - menuToolBattleInit

@@ -2,6 +2,7 @@
 #include <dolphin/ar.h>
 #include <dolphin/os.h>
 #include <string.h>
+#include <GSmem.h>
 
 struct _GSgfxInitParms {
     u8 displayEnabled;
@@ -51,8 +52,6 @@ void *GSmemInit(void *, void *, s32);
 u32 GSfsysCreateLocalHeap(void);
 u32 GSfsysCreateCacheHeap(void);
 u32 floorCreateLocalHeap(void);
-void *GSmemCreateHeap(void *, void *);
-u32 GSmemSetCurrentHeap(void *);
 void GSmemInitSysdolAllocator(void);
 s32 pokecoloGetCountryCode(void);
 void sysvarsShowDebug(void);
@@ -96,8 +95,8 @@ int main(int argc, char **argv)
 
     arenaLo = OSGetArenaLo();
     void *arenaHi = OSGetArenaHi();
-    extern void *g_hSysdolphineHeap;
-    extern void *g_hFloorHeap;
+    extern s32 g_hSysdolphineHeap;
+    extern s32 g_hFloorHeap;
     GSmemSetCurrentHeap(
         g_hSysdolphineHeap = GSmemCreateHeap(arenaLo, arenaHi));
     OSSetArenaLo(arenaHi);

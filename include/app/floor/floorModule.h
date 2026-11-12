@@ -46,4 +46,13 @@ void FloorModuleInterface_clear(FloorModuleInterface* interface);
 unsigned long floorRegisterModule(unsigned char type, unsigned long groupID, FloorModuleInterface* interface);
 }
 
+class FloorModuleList {
+public:
+    void unblockModule(unsigned long moduleHandle);
+    void blockModule(unsigned long moduleHandle);
+
+private:
+    unsigned long unknown[6];
+};
+
 #endif

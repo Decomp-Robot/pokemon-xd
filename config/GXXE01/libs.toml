@@ -21,6 +21,7 @@ extra_cflags = ["-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include/
 [[lib.object]]
 name = "game/app/floor/floorManager.cpp"
 completed = true
+extra_cflags = ["-opt nopeephole", "-inline noauto", "-str reuse,readonly"]
 
 [[lib.object]]
 name = "game/window.cpp"

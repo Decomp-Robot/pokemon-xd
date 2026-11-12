@@ -25,10 +25,6 @@ bool _unloadLight(void *light, unsigned long group, unsigned long res);
 
 extern "C" {
 
-// The floor manager keeps the resources of a stage that are in memory, so the
-// resource a read produced is added to its list.
-void floorAddResource(u32 group, u32 res);
-
 // Name the public data of a stage archive carries its scene description under;
 // the camera and the light registration both look their part up in it.
 extern char floorSceneDataName[];
@@ -96,6 +92,7 @@ extern "C" void *floorReadResourceID(u32 group, u32 res)
         GSthreadSwitch();
     }
     GSfsysFree(group);
+    // Keep the loaded resource in the floor manager's stage list.
     floorAddResource(group, res);
     resource = GSresGetResource(group, res);
     floorReadBusyFlag.busy = 0;
