@@ -37,7 +37,7 @@ inline void filterEffect::StopModulation()
         u32 group = floorGetCurrentGroupID();
         u32 resource = floorDataBiosGetMapResID(floorDataBiosGetCurrentPtr());
         u32 index = 0;
-        void *archive = GSresGetResource(group, resource);
+        HSD_Archive *archive = (HSD_Archive *)GSresGetResource(group, resource);
         if (archive != NULL) {
             _HSD_SceneDesc *scene = (_HSD_SceneDesc *)HSD_ArchiveGetPublicAddress(archive, "scene_data");
             if (scene != NULL && scene->mModels != NULL) {
@@ -105,7 +105,7 @@ void filterEffect::UpdateModulation()
         u32 group = floorGetCurrentGroupID();
         u32 resource = floorDataBiosGetMapResID(floorDataBiosGetCurrentPtr());
         u32 index = 0;
-        void *archive = GSresGetResource(group, resource);
+        HSD_Archive *archive = (HSD_Archive *)GSresGetResource(group, resource);
         if (archive != NULL) {
             _HSD_SceneDesc *scene = (_HSD_SceneDesc *)HSD_ArchiveGetPublicAddress(archive, "scene_data");
             if (scene != NULL && scene->mModels != NULL) {
@@ -142,7 +142,7 @@ void filterEffect::InitModulation()
         u32 group = floorGetCurrentGroupID();
         u32 resource = floorDataBiosGetMapResID(floorDataBiosGetCurrentPtr());
         u32 index = 0;
-        void *archive = GSresGetResource(group, resource);
+        HSD_Archive *archive = (HSD_Archive *)GSresGetResource(group, resource);
         if (archive != NULL) {
             _HSD_SceneDesc *scene = (_HSD_SceneDesc *)HSD_ArchiveGetPublicAddress(archive, "scene_data");
             if (scene != NULL && scene->mModels != NULL) {

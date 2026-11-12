@@ -312,7 +312,7 @@ static bool _unloadLight(void* light, unsigned long, unsigned long)
 /* Fetch the map resource's archive header. */
 _HSD_SceneDesc* WorldMapModel::makeArchiveHeader(unsigned long resource)
 {
-    void* archive = GSresGetResourceAllGroup(resource);
+    HSD_Archive* archive = (HSD_Archive*)GSresGetResourceAllGroup(resource);
     return (_HSD_SceneDesc*)HSD_ArchiveGetPublicAddress(archive, sSceneDataName);
 }
 

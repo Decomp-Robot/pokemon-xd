@@ -111,10 +111,10 @@ void _fsysLoadCallbak(long requestType, void *context, long callbackArgument)
 // scene description its archive carries.
 extern "C" void *floorRegisterCamera(u32 group, u32 res)
 {
-    void *archive;
+    HSD_Archive *archive;
     _HSD_SceneDesc *scene;
 
-    archive = GSresGetResource(group, res);
+    archive = (HSD_Archive *)GSresGetResource(group, res);
     if (archive == 0) {
         return 0;
     }
@@ -130,13 +130,13 @@ extern "C" void *floorRegisterCamera(u32 group, u32 res)
 // stage lists, one resource id per light.
 extern "C" void *floorRegisterLight(u32 group, u32 res)
 {
-    void *archive;
+    HSD_Archive *archive;
     _HSD_SceneDesc *scene;
     void *light;
     u32 index = 0;
     u32 baseRes;
 
-    archive = GSresGetResource(group, res);
+    archive = (HSD_Archive *)GSresGetResource(group, res);
     if (archive == 0) {
         return 0;
     }
