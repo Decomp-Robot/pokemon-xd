@@ -2051,6 +2051,12 @@ game/app/hero/heroMemberFunctions.cpp:
 game/app/kouka/koukaBios.cpp:
 	.text       start:0x80158BF8 end:0x80158D18
 
+game/app/effects/filter.cpp:
+	.text       start:0x80158E64 end:0x801594C0
+	.rodata     start:0x802F38C8 end:0x802F3914
+	.data       start:0x80404E98 end:0x80404EC8
+	.sdata2     start:0x804EDC98 end:0x804EDCB0
+
 game/app/item/itemFightItem.cpp:
 	.text       start:0x80161268 end:0x80161308
 

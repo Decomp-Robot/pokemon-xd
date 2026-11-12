@@ -8,6 +8,7 @@
 #include <GSgfx.h>
 #include <GSpart.h>
 #include <hsd/scene.h>
+#include <hsd/state.h>
 
 // Animation mode used by model and part animation controls.
 enum GSmodelAnimType {
@@ -238,6 +239,8 @@ s32 GSmodelGetMaxAnimIndex(_GSmodel *model);
 void GSmodelRemoveNull(_GSmodel *model);
 void GSmodelDetachFromGSpart(_GSmodel *model, u8 keepTransform);
 void GSmodelResetTextureChange(_GSmodel *model);
+void GSmodelResetPEdescr(_GSmodel *model);
+void GSmodelSetPEdescr(_GSmodel *model, HSD_PEDesc *descriptor);
 void GSmodelSetTextureChange(_GSmodel *model, GStexture *texture);
 u8 GSmodelIsModulationEnabled(_GSmodel *model);
 void GSmodelGetModulationColor(_GSmodel *model, GScolor *color);
