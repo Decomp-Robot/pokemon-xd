@@ -247,6 +247,9 @@ game/floorReadGfl.cpp:
 game/floorReadBgm.cpp:
 	.text       start:0x8002DFD8 end:0x8002E000
 
+game/floorRead.cpp:
+	.text       start:0x8002E000 end:0x8002E4D4
+
 game/floorReadTexCol.cpp:
 	.text       start:0x8002E4D4 end:0x8002E64C
 
@@ -266,10 +269,7 @@ game/floorReadResource.cpp:
 	.text       start:0x8002F16C end:0x8002F1F0
 
 game/floorPostCall.cpp:
-	.text       start:0x8002F1F0 end:0x8002F2E0
-
-game/floorRead.cpp:
-	.text       start:0x8002F2E0 end:0x8002F308
+	.text       start:0x8002F1F0 end:0x8002F308
 	.ctors      start:0x802E9F84 end:0x802E9F88
 	.bss        start:0x804290D0 end:0x80429170
 

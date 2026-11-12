@@ -233,6 +233,7 @@ void GSmodelSetAnimEndedCallback(_GSmodel *model, GSmodelAnimEndedCallback cb, v
 void GSmodelSetForceUseFractionalFramesFlag(_GSmodel *model, u8 on);
 void GSmodelSetSkipFractionalFramesFlag(_GSmodel *model, u8 on);
 void GSmodelSet60fpsAnimFlag(_GSmodel *model, u8 on);
+void GSmodelLinkToGSparticleBank(_GSmodel *model, _GSparticleBank *bank);
 void GSmodelLinkTexAnimToAnim(_GSmodel *model, u8 link);
 s32 GSmodelGetMaxTexAnimIndex(_GSmodel *model);
 s32 GSmodelGetMaxAnimIndex(_GSmodel *model);

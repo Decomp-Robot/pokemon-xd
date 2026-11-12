@@ -1,14 +1,15 @@
 #ifndef FLOORBIOS_H
 #define FLOORBIOS_H
 #include <types.h>
+#include <roomData.h>
 struct FloorCharacter;
 struct FloorTreasure { u8 flags; };
 #ifdef __cplusplus
 extern "C" {
 #endif
 u8 floorDataBiosGetFloorKind(void*);
-void* floorDataBiosGetCurrentPtr();
-u32 floorDataBiosGetMapResID(void* floor);
+RoomData* floorDataBiosGetCurrentPtr();
+u32 floorDataBiosGetMapResID(RoomData* floor);
 FloorCharacter* floorCharacterBiosFindByResID(u32 group, u32 id);
 u32 floorCharacterBiosGetNameID(FloorCharacter* character);
 u8 floorCharacterBiosGetTalkStartType(FloorCharacter* character);

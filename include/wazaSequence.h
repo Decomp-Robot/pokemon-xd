@@ -19,6 +19,7 @@ public:
     WazaSequence(NullSequence *stage, u16 sequence, u8 category, u8 variation);
     ~WazaSequence();
 
+    static bool Load(u8 *data, u32 group, u32 res);
     static void Unload(u8 *data);
 
     f32 time;                 // playback position within the sequence.

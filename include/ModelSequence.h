@@ -29,6 +29,7 @@ public:
 
     // Hand the data of the model the sequence was read from back to the systems
     // that own its parts once the resource it was read into is released.
+    static bool Load(u8 *data, u32 group, u32 res);
     static void Unload(u8 *data);
 
 private:
@@ -45,5 +46,7 @@ private:
     _GSmodel *model;            // 0x94: engine model used for transforms.
     u8 _98[0x24];               // 0x98: remaining model-sequence state.
 };
+
+extern "C" bool ModelSequence_Load(u8 *data, u32 group, u32 res);
 
 #endif

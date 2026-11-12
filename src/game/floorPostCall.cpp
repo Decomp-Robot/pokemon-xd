@@ -42,3 +42,5 @@ FloorPostCallManager::FloorPostCallManager(void)
 {
     memset(pendingCalls, 0, sizeof(pendingCalls));
 }
+
+FloorPostCallManager _postFuncManager;
