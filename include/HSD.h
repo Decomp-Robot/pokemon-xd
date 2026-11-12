@@ -33,9 +33,11 @@ struct _HSD_VtxDescList {
     void *mArrayBase;
 };
 struct _HSD_PObj;
+struct _HSD_MObj;
 struct _HSD_DObj {
-    u8 _00[8];
-    void *mMaterial;
+    u8 _00[4];
+    _HSD_DObj *mNext;
+    _HSD_MObj *mMaterial;
     _HSD_PObj *mPrimitive;
 };
 
@@ -49,9 +51,29 @@ struct _HSD_PObj {
     u8 _14[4];
 };
 
+struct _HSD_TexAnim;
+struct _HSD_MatAnim {
+    _HSD_MatAnim *mNext;
+    _HSD_AObjDesc *mAnimation;
+    _HSD_TexAnim *mTexAnim;
+};
+struct _HSD_TObj {
+    u8 _00[100];
+    _HSD_AObj *mAObj;
+};
+struct _HSD_MObj {
+    u8 _00[8];
+    _HSD_TObj *mTObj;
+};
+extern "C" {
+void HSD_TObjRemoveAnim(_HSD_TObj *texture);
+void HSD_TObjAddAnim(_HSD_TObj *texture, _HSD_TexAnim *animation);
+void HSD_TObjReqAnim(_HSD_TObj *texture, f32 frame);
+}
 struct _HSD_MatAnimJoint {
     _HSD_MatAnimJoint *mChild;
     _HSD_MatAnimJoint *mNext;
+    _HSD_MatAnim *mMatAnim;
 };
 struct _HSD_ShapeAnimJoint {
     _HSD_ShapeAnimJoint *mChild;

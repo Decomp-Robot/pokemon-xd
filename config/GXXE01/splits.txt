@@ -1982,6 +1982,13 @@ game/GSmodelAnim.cpp:
 game/GSmodelRender.cpp:
 	.text       start:0x800F8998 end:0x800F9058
 
+game/GSAPI/GSpart/GSpart.cpp:
+	.text       start:0x800FF560 end:0x801010B4
+	.rodata     start:0x802ED1A0 end:0x802ED1D0
+	.bss        start:0x80443510 end:0x80443570
+	.sbss       start:0x804EAF70 end:0x804EAFA0
+	.sdata2     start:0x804ED548 end:0x804ED570
+
 game/GSAPI/GSinput/GSinput.cpp:
 	.text       start:0x80103F70 end:0x80105840
 	.bss        start:0x80444AF8 end:0x80444D08

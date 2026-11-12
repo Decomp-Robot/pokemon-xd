@@ -2,6 +2,7 @@
 #define HSD_JOBJ_H
 
 #include <types.h>
+
 #include <dolphin/mtx.h>
 #include <hsd/assert.h>
 
@@ -33,6 +34,7 @@ struct _HSD_JObj {
     _HSD_AObj *mAObj;    // 0x7C: animation object driving the joint.
 };
 
+#define HSD_JOBJ_TYPE_MASK 0x00600000
 #define HSD_JOBJ_FLAG_USER_DEFINED_MTX 0x00800000
 #define HSD_JOBJ_FLAG_MTX_DIRTY 0x00000040
 #define JOBJ_USE_QUATERNION 0x00020000
@@ -47,6 +49,8 @@ struct _HSD_JObj {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void HSD_JObjReqAnim(_HSD_JObj *joint, f32 frame);
+void HSD_JObjWalkTree(_HSD_JObj *joint, void (*callback)(_HSD_JObj *, void **, int), void **arg);
 void HSD_JObjUnref(_HSD_JObj *jobj);
 _HSD_JObj *HSD_JObjLoadJoint(_HSD_Joint *joint);
 void HSD_JObjAnim(_HSD_JObj *jobj);
@@ -86,6 +90,41 @@ static inline f32 HSD_JObjGetRotationX(_HSD_JObj *jobj)
     return jobj->mRotate[0];
 }
 
+#line 760 "jobj.h"
+static inline f32 HSD_JObjGetRotationY(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    return jobj->mRotate[1];
+}
+
+#line 774 "jobj.h"
+static inline f32 HSD_JObjGetRotationZ(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    return jobj->mRotate[2];
+}
+
+#line 897 "jobj.h"
+static inline f32 HSD_JObjGetScaleX(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    return jobj->mScale[0];
+}
+
+#line 909 "jobj.h"
+static inline f32 HSD_JObjGetScaleY(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    return jobj->mScale[1];
+}
+
+#line 921 "jobj.h"
+static inline f32 HSD_JObjGetScaleZ(_HSD_JObj *jobj)
+{
+    HSD_ASSERT(jobj);
+    return jobj->mScale[2];
+}
+
 #line 674 "jobj.h"
 static inline void HSD_JObjSetRotationX(_HSD_JObj *jobj, f32 value)
 {
@@ -117,6 +156,14 @@ inline void HSD_JObjSetupMatrix(_HSD_JObj *jobj)
 {
     if (!jobj || HSD_JObjMtxIsDirty(jobj) == 0) return;
     HSD_JObjSetupMatrixSub(jobj);
+}
+
+#line 1146 "jobj.h"
+static inline void HSD_JObjGetMatrix(_HSD_JObj *jobj, Mtx matrix)
+{
+    HSD_ASSERT(jobj);
+    HSD_JObjSetupMatrix(jobj);
+    PSMTXCopy(jobj->mMatrix, matrix);
 }
 
 #line 1171 "jobj.h"

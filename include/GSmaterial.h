@@ -5,11 +5,14 @@
 
 union GScolor;
 struct GStexture;
+struct _HSD_MObj;
 
 struct GSmaterial {
     u8 _00[2];
     u16 mEnabledExtensions; // 0x002: GS_MATERIAL_EXT_* flags currently on.
-    u8 _04[0x30];
+    u8 _04[4];
+    _HSD_MObj *mMaterial;
+    u8 _0C[40];
 };
 
 /* Extra rendering modes a material can carry. */

@@ -56,7 +56,7 @@ extern "C" f32 GSmodelGetAnimFrameCount(_GSmodel *model, s32 index)
     {
         _HSD_AnimJoint **table = model->mRoot->mAnimations;
 
-        GSmodelTraverseAnimJoint(table[index], _modelGetAnimFrameCountCB, &last);
+        GSpartAnimWalkTree(table[index], _modelGetAnimFrameCountCB, (void **)&last);
     }
     return 1.0f + last;
 }
@@ -1014,8 +1014,8 @@ void modelApplyPartAnimMixes(_GSmodel *model)
                 break;
             }
         } else {
-            _HSD_JObj *first = GSmodelGetJointByIndex(model->mJObj, model->mPartMix[i].mPartIndex);
-            _HSD_JObj *second = GSmodelGetJointByIndex(model->mBlendJObj, model->mPartMix[i].mPartIndex);
+            _HSD_JObj *first = GSpartGetJObjPtr(model->mJObj, model->mPartMix[i].mPartIndex);
+            _HSD_JObj *second = GSpartGetJObjPtr(model->mBlendJObj, model->mPartMix[i].mPartIndex);
             if (first != NULL && second != NULL) {
                 switch (model->mPartMix[i].mType) {
                 case GS_MODEL_PART_MIX_TRANSLATION:

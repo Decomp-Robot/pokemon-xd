@@ -81,7 +81,6 @@ inline void _jobjAddAnimAll(_HSD_JObj *joint, _HSD_AnimJoint *jointAnimation,
 extern "C" {
 u8 GSgfxVideoGetVsyncRate(void);
 f32 GSgfxVideoGetLastRenderTime(void);
-_HSD_JObj *GSmodelGetJointByIndex(_HSD_JObj *joint, s32 index);
 void _modelGetEndFrame(_HSD_AObj *animation, f32 *endFrame);
 }
 

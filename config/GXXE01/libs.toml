@@ -6049,3 +6049,14 @@ cflags_extra = ["-use_lmw_stmw on", "-inline deferred"]
 [[lib.object]]
 name = "game/app/dbgMenu/dbgMenu.cpp"
 completed = true
+
+[[lib]]
+name = "GSpart"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on", "-inline deferred", "-rostr", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/GSAPI/GSpart/GSpart.cpp"
+completed = true
