@@ -3,6 +3,11 @@
 
 #include <types.h>
 
+struct DbgMenuItem;
+
+extern u32 (*debugMenuDataGetNum)(void);
+extern struct DbgMenuItem *(*debugMenuDataGetPtr)(long itemNo);
+
 struct GSfloor_dd_ {
     u8 unknown;
     u8 kind;

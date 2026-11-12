@@ -31,7 +31,9 @@ typedef struct MenuData {
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern long _menu_data_number;
 MenuData *menuDataBiosGetPtr(s32 menuID);
+u8 menuDataBiosGetDispMax(s32 menuID);
 #ifdef __cplusplus
 }
 #endif

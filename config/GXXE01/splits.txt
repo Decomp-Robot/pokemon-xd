@@ -2051,6 +2051,11 @@ game/app/hero/heroMemberFunctions.cpp:
 	.text       start:0x801528C4 end:0x80153138
 	.sdata2     start:0x804EDC60 end:0x804EDC64
 
+game/app/dbgMenu/dbgMenu.cpp:
+	.text       start:0x801553A0 end:0x801560EC
+	.sdata      start:0x804E83E8 end:0x804E83F0
+	.sbss       start:0x804EB2D8 end:0x804EB2E8
+
 game/app/kouka/koukaBios.cpp:
 	.text       start:0x80158BF8 end:0x80158D18
 

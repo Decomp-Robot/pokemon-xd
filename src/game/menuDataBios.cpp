@@ -27,7 +27,6 @@ enum {
 
 extern "C" {
 extern u32 _menu_sprite_number;
-extern u32 _menu_data_number;
 extern MenuSpriteData _menu_sprite[];
 extern MenuData _menu_data[];
 extern tagMENU_ITEM_DATA _menu_item[];

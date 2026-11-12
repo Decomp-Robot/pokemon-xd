@@ -5790,3 +5790,14 @@ cflags_extra = ["-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/app/kouka/koukaBios.cpp"
 completed = true
+
+[[lib]]
+name = "dbgMenu"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on", "-inline deferred"]
+
+[[lib.object]]
+name = "game/app/dbgMenu/dbgMenu.cpp"
+completed = true
