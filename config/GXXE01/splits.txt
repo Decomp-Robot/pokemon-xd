@@ -3131,6 +3131,11 @@ game/GSAPI/GSgfx/renderModule.cpp:
 	.bss        start:0x804E71A8 end:0x804E72EC
 	.sbss       start:0x804EBD68 end:0x804EBD70
 
+game/GSAPI/GSgfx/reset.cpp:
+	.text       start:0x802C00AC end:0x802C0710
+	.sbss       start:0x804EBD90 end:0x804EBDB0
+	.sdata2     start:0x804EFBE0 end:0x804EFC00
+
 decomp/TRKMemory.c:
 	.init       start:0x80003458 end:0x800034AC
 

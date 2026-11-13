@@ -78,7 +78,7 @@ struct GSgfxTunitInputs { u32 a, b, c, d; };
 struct GSgfxTunitOpState { u32 operation, bias, scale; u8 clamp; u8 reserved[3]; u32 output; };
 
 enum GSgfxCullType { GSGFX_CULL_NONE = 0, GSGFX_CULL_BACK = 2 , GS_GFX_CULL_NONE = 0, GSGFX_CULL_FRONT = 1, GSGFX_CULL_ALL = 3 };
-enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0 , GS_GFX_CLIP_ENABLED = 0 };
+enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0, GS_GFX_CLIP_ENABLED = 0, GSGFX_CLIP_DISABLED = 1 };
 enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_LESS = 1, GSGFX_Z_COMPARE_ALWAYS = 7, GSGFX_Z_COMPARE_LEQUAL = 3, GS_GFX_Z_COMPARE_LEQUAL = 3 };
 enum GSgfxACmpFunc { GSGFX_A_COMPARE_ALWAYS = 7 , GS_GFX_A_COMPARE_ALWAYS = 7 };
 enum GSgfxAlphaOp { GSGFX_ALPHA_AND = 0 , GS_GFX_ALPHA_AND = 0 };
@@ -875,4 +875,5 @@ void GSgfxVFInit(void *vf);
 void GSgfxVFSetElement(void *vf, s32 attribute, u32 componentCount, u32 componentFormat, u8 fractionalBits);
 void GSgfxVFSetArray(void *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayMetadata);
 }
+void GSgfxShutdown(void);
 #endif
