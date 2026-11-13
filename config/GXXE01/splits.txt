@@ -3080,6 +3080,9 @@ game/app/people/peopleTalk.cpp:
 game/app/people/peopleWalkList.cpp:
 	.text       start:0x802A3820 end:0x802A3B40
 
+GSAPI/GSstream/GSstream.cpp:
+	.text       start:0x802A6220 end:0x802A6484
+
 game/GSAPI/GSgfx/renderModule.cpp:
 	.text       start:0x802B70C8 end:0x802B7464
 	.bss        start:0x804E71A8 end:0x804E72EC

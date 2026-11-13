@@ -15,6 +15,7 @@ GSdvdFile *GSdvdOpen(const char *fileName);
 GSdvdFile *GSdvdCreate(const char *fileName);
 s32 GSdvdRead(GSdvdFile *file, void *buffer, u32 size, s32 offset);
 s32 GSdvdWrite(GSdvdFile *file, void *buffer, u32 size, s32 offset);
+s32 GSdvdRemove(const char *fileName);
 s32 GSdvdClose(GSdvdFile *file);
 u32 GSdvdGetLength(GSdvdFile *file);
 u8 GSdvdReadAsync(GSdvdFile *file, void *buffer, u32 size, s32 offset,
