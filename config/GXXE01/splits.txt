@@ -440,7 +440,7 @@ game/menuInterrupt.cpp:
 	.sdata2     start:0x804EC638 end:0x804EC650
 
 game/dbgMenuSub.cpp:
-	.text       start:0x80066C90 end:0x80066D30
+	.text       start:0x80066C90 end:0x80067594
 
 game/dbgMenuSubHero.cpp:
 	.text       start:0x80067594 end:0x80067624
