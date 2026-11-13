@@ -15,6 +15,7 @@
 #include <peopleInfoBios.h>
 #include <menu.h>
 #include <menuTitle.h>
+#include <memcard.h>
 #include <menuTop.h>
 #include <floor.h>
 #include <winMsg.h>
@@ -131,7 +132,6 @@ void menuTitleBattleSelectFree(void);
 void cursorBiosInit(void);
 void heroMoveSyncWithHero(void);
 void pokecoloStartCountPlayTime(s32 enabled);
-u8 memcardIsMemCardValid(void);
 void menuTitleOption(void);
 
 void winSeqSetMenu(long menuID, s32 sequence);
@@ -148,7 +148,6 @@ void menuTopPrintItemMessage(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite, s32
 void floorSetContinueMode(s32 mode);
 void floorClearReturnPoint(void);
 void floorReturnSavePoint(void);
-void menuTitleUnloadMapModels(void);
 
 void GSthreadSwitch(void);
 void menuTitleLoadMap(void);

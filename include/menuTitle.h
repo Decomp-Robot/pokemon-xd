@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 void menuTitleBattleSelectFree(void);
+void menuTitleUnloadMapModels(void);
 void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuTitleCursorAnimeMain(void);
 

@@ -13,6 +13,7 @@
 enum MemcardTaskRequest {
     MEMCARD_TASK_LOAD = 2,
     MEMCARD_TASK_WRITE = 4,
+    MEMCARD_TASK_SAVE_OPTIONS = 7,
     MEMCARD_TASK_SAVE = 11,
     MEMCARD_TASK_DELETE = 12
 };
@@ -28,6 +29,7 @@ extern "C" {
 /* msgType is the window kind from <winMsg.h> the task opens its messages in;
    the memcard message routine passes it through to winMsgOpen(). Zero selects
    WINMSG_WINDOW_MENU. */
+u8 memcardIsMemCardValid(void);
 s32 memcardTaskCall(s32 task, s32 msgType, s32 argument);
 void memcardSetupTask(long task, long msgType, long argument);
 u8 memcardCheckTaskWaitGBA();

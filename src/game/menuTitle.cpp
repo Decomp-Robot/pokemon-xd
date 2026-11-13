@@ -1,5 +1,6 @@
 #include <menuDataBios.h>
 #include <menuTop.h>
+#include <menuTitle.h>
 #include <GSsnd.h>
 #include <GSthread.h>
 #include <winMsg.h>
@@ -150,7 +151,6 @@ void menuTitleStartBattleSelect(void);
 void menuTitleReadWazaSelectMenu(void);
 void menuTitleLoadMapModels(void);
 void menuTitleSetupMapCamera(void);
-void menuTitleUnloadMapModels(void);
 void menuTitleCursorAnimeMain(void);
 void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuTitleCursorShowSelected(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
