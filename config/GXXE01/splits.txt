@@ -1576,9 +1576,6 @@ ext/dolphin_sdk/perf/perfdraw.c:
 	.sbss       start:0x804EAE30 end:0x804EAE48
 	.sdata2     start:0x804ECCD0 end:0x804ECD1C
 
-libc/float.c:
-	.sdata      start:0x804E82E0 end:0x804E8318
-
 TRK/mainloop.c:
 	.text       start:0x800D39D0 end:0x800D3AC8
 
@@ -1708,6 +1705,8 @@ libc/errno.c:
 
 libc/ansi_files.c:
 	.text       start:0x800DAFC0 end:0x800DB0D8
+	.data       start:0x803D4460 end:0x803D45A0
+	.bss        start:0x804427F0 end:0x80442AF0
 
 libc/ansi_fp.c:
 	.text       start:0x800DB0D8 end:0x800DE6B4
@@ -1753,6 +1752,16 @@ libc/mem_funcs.c:
 
 libc/misc_io.c:
 	.text       start:0x800DF780 end:0x800DF790
+
+libc/printf.c:
+	.text       start:0x800DF790 end:0x800E1890
+	.rodata     start:0x802ECBA8 end:0x802ECBD0
+	.data       start:0x803D4A40 end:0x803D4C6C
+	.sdata      start:0x804E82D8 end:0x804E82DA
+	.sdata2     start:0x804ECD58 end:0x804ECD60
+
+libc/float.c:
+	.sdata      start:0x804E82E0 end:0x804E8318
 
 libc/qsort.c:
 	.text       start:0x800E1890 end:0x800E19FC

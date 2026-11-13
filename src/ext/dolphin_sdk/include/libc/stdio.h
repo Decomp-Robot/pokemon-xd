@@ -48,7 +48,7 @@ typedef struct FILE {
     unsigned long saved_buffer_length;
     unsigned long buffer_position; /* 0x34 */
     long (*position_fn)(int handle, long *position, int whence, MWIdleProc idle); /* 0x38 */
-    long (*read_fn)(int handle, char *buf, unsigned long *count, MWIdleProc idle);
+    int (*read_fn)(int handle, char *buf, unsigned long *count, MWIdleProc idle);
     long (*write_fn)(int handle, char *buf, unsigned long *buffer_length, MWIdleProc idle); /* 0x40 */
     int (*close_fn)(int handle);                                          /* 0x44 */
     MWIdleProc idle_fn;         /* 0x48 */

@@ -1,5 +1,6 @@
 /* Decimal <-> binary floating point conversions. */
 
+#include "ansi_fp.h"
 #include "ctype_inline.h"
 
 extern double copysign(double x, double y);
@@ -7,29 +8,6 @@ extern double pow(double x, double y);
 extern double ldexp(double x, int e);
 extern double frexp(double x, int *e);
 extern double modf(double x, double *iptr);
-
-/*
- * A decimal significand held as one digit per byte.
- * Zero, "not a number" and infinity are distinguished by the value
- * stored in the first digit: 0, 'N' and 'I' respectively.
- */
-typedef struct Dec {
-    unsigned char sign;        /* +0x00 sign of the value */
-    short exp;                 /* +0x02 power of ten */
-    unsigned char len;         /* +0x04 significant digits */
-    unsigned char digits[37];  /* +0x05 */
-} Dec;
-
-typedef struct DecFormat {
-    char style;
-    short digits;
-} DecFormat;
-
-double __dec2num(const Dec *d);
-void __num2dec(const DecFormat *format, double x, Dec *d);
-void __minus_dec(Dec *result, const Dec *a, Dec *b);
-int __equals_dec(Dec *a, Dec *b);
-void __two_exp(Dec *d, long e);
 
 extern void __num2dec_internal(Dec *d, double x);
 extern void __timesdec(Dec *result, const Dec *a, const Dec *b);
@@ -247,18 +225,18 @@ double __dec2num(const Dec *d) {
 
     if (d->len == 0) {
         return copysign(0.0,
-                        (signed char)d->sign == 0 ? 1.0 : -1.0);
+                        d->sign == 0 ? 1.0 : -1.0);
     }
     switch (d->digits[0]) {
     case '0':
         return copysign(0.0,
-                        (signed char)d->sign == 0 ? 1.0 : -1.0);
+                        d->sign == 0 ? 1.0 : -1.0);
     case 'I':
         return copysign(__float_huge[0],
-                        (signed char)d->sign == 0 ? 1.0 : -1.0);
+                        d->sign == 0 ? 1.0 : -1.0);
     case 'N': {
         bits.u = 0x7FF0000000000000ULL;
-        if ((signed char)d->sign != 0) {
+        if (d->sign != 0) {
             bits.u |= 0x8000000000000000ULL;
         }
         if (d->len == 1) {
@@ -404,7 +382,7 @@ double __dec2num(const Dec *d) {
         }
     }
 done:
-    if ((signed char)t.sign != 0) {
+    if (t.sign != 0) {
         value.d = -value.d;
     }
     return value.d;
