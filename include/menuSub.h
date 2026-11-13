@@ -68,7 +68,7 @@ void menuSubDrawTriangle(long layerID, long x1, long y1, long x2, long y2,
 // Blended sprite color of a menu window item.
 u32 menuSubCalcColor(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 
-u32 menuSubAnimAlpha(void);
+u8 menuSubAnimAlpha(void);
 void menuSubCursorAnimeInit(void);
 void menuSubCursorAnimeMain(void);
 void menuSubDrawCursorBackAnimeOnOffAuto(struct tagWINDOW_WORK *window,

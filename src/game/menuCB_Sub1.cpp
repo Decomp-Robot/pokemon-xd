@@ -136,8 +136,6 @@ f32 timeGetLastFrameSec(void);
 // Texture bios: the table of texture `id`, and its entry for the current
 // language. The entry +4/+6 halfwords are the texture width/height.
 
-// Fade alpha the menu windows are drawn with.
-u32 menuSubAnimAlpha(void);
 // The full-screen base window (menu 0x119) the entry screens open on entry
 // and close on exit: a single item, a 640x480 sprite, which the flash start
 // drops to window level 0 so it stays under the screen's other windows.

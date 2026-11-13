@@ -384,6 +384,10 @@ game/menuPdaDPM.cpp:
 game/menuPdaDPMonitorList.cpp:
 	.text       start:0x80052614 end:0x800528F4
 
+game/menuPdaSub.cpp:
+	.text       start:0x80052CBC end:0x800531DC
+	.sdata2     start:0x804EC418 end:0x804EC438
+
 game/menuPdaMemoXD.cpp:
 	.text       start:0x800531DC end:0x80055428
 	.rodata     start:0x802EB0E0 end:0x802EB148
