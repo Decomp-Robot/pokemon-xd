@@ -10,6 +10,7 @@ extern "C" {
 void menuScriptUsohachi2(void);
 void menuScriptReadMail(long mailID);
 void menuScriptReciveMail(void);
+u8 menuScriptCheckMailOpen(void);
 
 #ifdef __cplusplus
 }

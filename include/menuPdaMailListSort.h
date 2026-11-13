@@ -14,4 +14,6 @@ s32 menuPdaMailListSortInit(s32 mailId);
 }
 #endif
 
+void _menuClose(long menuId);
+
 #endif

@@ -318,6 +318,10 @@ game/menuPda.cpp:
 game/menuReliveHall.cpp:
 	.text       start:0x8003AF8C end:0x8003AFC0
 
+game/menuPdaMailXD.cpp:
+	.text       start:0x80042CD0 end:0x800432CC
+	.sbss       start:0x804EA808 end:0x804EA810
+
 game/menuPdaMailListSort.cpp:
 	.text       start:0x800432CC end:0x800433D8
 
