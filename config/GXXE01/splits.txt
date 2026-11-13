@@ -423,7 +423,8 @@ game/menuScript.cpp:
 	.text       start:0x8005E794 end:0x8005E8AC
 
 game/menuShop.cpp:
-	.text       start:0x800605B8 end:0x800605F0
+	.text       start:0x800605B8 end:0x800607FC
+	.sbss       start:0x804EA910 end:0x804EA91C
 
 game/menuShopMax.cpp:
 	.text       start:0x80062568 end:0x80062618

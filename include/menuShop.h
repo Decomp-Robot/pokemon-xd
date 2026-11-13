@@ -10,6 +10,9 @@ extern "C" {
 // Build the shop message and select the sound effect it should play.
 u32 menuShopGetMsgID(u8 *soundEffect, s32 windowID, s32 messageCode, s32 valueCode, ...);
 
+// Same for the coupon shop messages.
+u32 menuShopGetCouponMsgID(u8 *soundEffect, s32 windowID, s32 messageCode, s32 valueCode, ...);
+
 #ifdef __cplusplus
 }
 #endif
