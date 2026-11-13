@@ -3041,6 +3041,11 @@ game/app/fight/fightTimer/fightTimer.cpp:
 	.bss        start:0x804B0F60 end:0x804B0F80
 	.sdata2     start:0x804EEC50 end:0x804EEC70
 
+game/GSAPI/GSscript/tvariant.cpp:
+	.text       start:0x80242438 end:0x802424B4
+	.ctors      start:0x802E9FE8 end:0x802E9FEC
+	.bss        start:0x804B0F80 end:0x804B0F8C
+
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 
