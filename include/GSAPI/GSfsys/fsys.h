@@ -83,14 +83,14 @@ struct FsysArq {
  *  cache index below keys the ARAM cache its reads go through.  The table is
  *  an array of 64-byte slots. */
 struct FsysFile {
-    u32 groupId; /* group the file belongs to */
+    unsigned int groupId; /* group the file belongs to */
     u32 cacheIndex; /* index the reads of the file look their cache up with */
     u32 resourceId; /* resource being opened or read */
     GSdvdFile* dvdHandle; /* disc file while the file is open */
     s32 fileMode; /* FSYS_FILE_TYPE_STREAM streams through the ARAM cache,
                      FSYS_FILE_TYPE_NORMAL takes the plain handling */
     s32 fileState; /* task state the scheduler runs */
-    u32 pendingState; /* staged state copied into fileState */
+    s32 pendingState; /* staged state copied into fileState */
     FsysGroup* dvdEntry; /* group entry the length is read from */
     FsysHeader* header; /* resource table */
     u32 selectedIndex; /* table index the current request was filed with */
@@ -231,10 +231,17 @@ struct FsysBGWork {
  * releases it unless the caller asks to keep it. */
 #define FSYS_FILE_TYPE_NORMAL 1
 #define FSYS_FILE_TYPE_PREREAD 2
+#define FSYS_FILE_TYPE_SEEK 3
 #define FSYS_FILE_TYPE_STREAM 4
 
 /*! Set when data is read out of the cache into main memory. */
 #define FSYS_RES_STATUS_CACHED 0x8000000
+
+/*! Resource status: the resource is stored compressed on the disc. */
+#define FSYS_RES_STATUS_COMPRESSED 0x80000000
+
+/*! Group flag: every resource of the group has been read. */
+#define FSYS_GROUP_COMPLETE 1
 
 /*! Set in a resource header when the chunk was read to its very end. */
 #define FSYS_RES_STATUS_END 0x800000
@@ -243,14 +250,30 @@ struct FsysBGWork {
  *  it as expanded and stops polling the resource. */
 #define FSYS_RES_STATUS_EXPANDED 0x8
 
-/*! Tasks a work slot files on itself while it opens its file: the slot still
- *  has to read the header size of its group, its group table offset is known
- *  so it can go on and read its resource header, or the group was cancelled
- *  while it expanded.  A header-size read that comes back wrong files the
- *  first task again. */
-#define FSYS_WORK_TASK_READ_HEADER_SIZE 3
-#define FSYS_WORK_TASK_READ_HEADER 5
-#define FSYS_WORK_TASK_CANCELLED 10
+/*! Task states of an open file. */
+#define FSYS_TASK_NONE 0
+#define FSYS_TASK_READY_WAIT 1
+#define FSYS_TASK_READY 2
+#define FSYS_TASK_HEADERSIZE_READ 3
+#define FSYS_TASK_HEADERSIZE_READ_WAIT 4
+#define FSYS_TASK_START 5
+#define FSYS_TASK_READ 6
+#define FSYS_TASK_PREREAD 7
+#define FSYS_TASK_SEEK 8
+#define FSYS_TASK_STREAMING 9
+#define FSYS_TASK_READ_COMPLETE 10
+#define FSYS_TASK_COMPLETE 11
+#define FSYS_TASK_COMPLETE_WAIT 12
+#define FSYS_TASK_ERROR (-1000)
+#define FSYS_TASK_ERROR_WAIT (-999)
+#define FSYS_TASK_ERROR_FILEOPEN (-998)
+#define FSYS_TASK_ERROR_FILECLOSE (-997)
+#define FSYS_TASK_ERROR_READ (-996)
+#define FSYS_TASK_ERROR_PREREAD (-995)
+#define FSYS_TASK_ERROR_SEEK (-994)
+
+/*! No pending task state is waiting to replace the active state. */
+#define FSYS_PENDING_STATE_NONE 65535
 
 /*! ARAM the file system keeps for itself. */
 #define FSYS_CACHE_RESERVE 0xA00000
@@ -325,7 +348,6 @@ extern u8 _fsysAmemCell[0x2800]; /* ARAM cell table the external cache heap
     is created with: FSYS_HEAP_TABLE_ENTRIES GSmemCell entries */
 
 /* fsysTOC */
-extern char const fsysTOCFormat[]; /* format for a catalog count on the debug log */
 extern char const fsysTOCFilename[]; /* name of the catalog file on the disc */
 extern FsysTOC* _fsysTOC; /* the loaded gsfsys.toc catalog image */
 extern FsysDiscHeader* _headerTop; /* disc header the pending header-size read is staged into */
@@ -378,15 +400,33 @@ u8 _fsysCheckExpandCompleteAll(FsysFile* file);
 u8 _fsysCheckExpandComplete(FsysFile* file, u32 index);
 u8 _fsysInitTOC(void);
 
+/* Resource data-type hooks used by the TOC table and filesystem task engine. */
+typedef void* (*FsysDataTypeFunc)(u32 groupID, u32 resourceID, u32 size);
+typedef struct FsysDataType {
+    u32 pad00;
+    u32 typeID;
+    FsysDataTypeFunc preFunc;
+    FsysDataTypeFunc postFunc;
+} FsysDataType;
+
+/* Cross-module request/read helpers. */
+void _fsysSeekRequest(FsysFile* work);
+void _fsysReadRequest(FsysFile* work);
+u32 _fsysGetTransLength(u32 total, u32 offset);
+FsysDataType* _fsysGetDataType(u32 type);
+void* _fsysGetResource(u32 size, u32 groupID, u32 resourceID);
+void _fsysFree(void* memory);
+void* _fsysAlloc(u32 size);
+
 /* Work-pool and expand-engine routines the TOC catalog callbacks drive. */
-FsysGroup* _fsysGetGROUP(u32 groupID);
+FsysGroup* _fsysGetGROUP(unsigned int groupID);
 FsysFile* _fsysInfo2Work(GSdvdFile* file);
 void _fsysWorkSetTaskStatus(FsysFile* file, s32 status);
 void _fsysResHeaderSetTaskStatus(FsysResHeader* header, s32 status);
 s32 _fsysGetActiveTask(s32 fileMode);
 FsysFile* _fsysGetNewWork(void);
 FsysFile* _fsysGetNewWork_Sub(s32 ignoreDone);
-FsysFile* _fsysGetWork(u32 groupID, u8 busyOnly);
+FsysFile* _fsysGetWork(unsigned int groupID, u8 busyOnly);
 u8 _fsysOpenFile(FsysFile* file);
 u8 _fsysCloseFile(FsysFile* file, u8 releaseCache);
 u8 _fsysGetFilename(FsysFile* file, char* buffer);
@@ -404,7 +444,7 @@ u8 _fsysExpandFileExec(FsysFile* file, FsysResHeader* header);
 FsysResHeader* _fsysGetResHeader(FsysFile* file, u32 index);
 FsysHeader* _fsysGetHeader(FsysFile* file);
 u32 _fsysID2Index(FsysFile* file, u32 id);
-void _fsysMemSet(void* buffer, u8 value, u32 size);
+void _fsysMemSet(void* buffer, int value, u32 size);
 FsysCacheManage* _fsysGetCacheManage(u32 groupId, u32 cacheIndex);
 FsysArq* _fsysGetNewArq(void);
 FsysArq* _fsysArq2ArqTrans(ARQRequest* request);

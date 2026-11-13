@@ -10,11 +10,6 @@
 
 #include <GSAPI/GSfsys/fsys.h>
 
-#pragma force_active on
-char const fsysTOCFormat[] = "%d\n";
-#pragma force_active reset
-char const fsysTOCFilename[] = "gsfsys.toc";
-
 /*! Load the gsfsys.toc catalog off the disc into memory of its own and rebase
  *  the group paths it keeps onto the loaded image. */
 u8 _fsysInitTOC(void)

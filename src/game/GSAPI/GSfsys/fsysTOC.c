@@ -32,19 +32,19 @@ void _fsysHeaderSizeReadDvdCallback(s32 result, GSdvdFile* file)
 
     if (work == NULL) {
         _headerTop = NULL;
-        _fsysWorkSetTaskStatus(work, FSYS_WORK_TASK_READ_HEADER_SIZE);
+        _fsysWorkSetTaskStatus(work, FSYS_TASK_HEADERSIZE_READ);
         FSYS_ASSERT(work != NULL);
         return;
     }
     if (result < 0) {
         _headerTop = NULL;
-        _fsysWorkSetTaskStatus(work, FSYS_WORK_TASK_READ_HEADER_SIZE);
+        _fsysWorkSetTaskStatus(work, FSYS_TASK_HEADERSIZE_READ);
         FSYS_ASSERT(work != NULL);
         return;
     }
     work->dvdEntry->tableOffset = _headerTop->tableOffset;
     _headerTop = NULL;
-    _fsysWorkSetTaskStatus(work, FSYS_WORK_TASK_READ_HEADER);
+    _fsysWorkSetTaskStatus(work, FSYS_TASK_START);
 }
 
 /*! Clear the expand request flags of one group of the catalog. */
@@ -159,7 +159,7 @@ u8 _fsysCheckExpandComplete(FsysFile* file, u32 index)
             break;
         case FSYS_RES_TASK_READ_CACHE_GATED:
             if (file->cancelRequest == 1) {
-                _fsysWorkSetTaskStatus(file, FSYS_WORK_TASK_CANCELLED);
+                _fsysWorkSetTaskStatus(file, FSYS_TASK_READ_COMPLETE);
                 _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_EXPAND_BLOCKS);
                 break;
             }
@@ -178,7 +178,7 @@ u8 _fsysCheckExpandComplete(FsysFile* file, u32 index)
             break;
         case FSYS_RES_TASK_CHECK_CANCEL:
             if (file->cancelRequest == 1) {
-                _fsysWorkSetTaskStatus(file, FSYS_WORK_TASK_CANCELLED);
+                _fsysWorkSetTaskStatus(file, FSYS_TASK_READ_COMPLETE);
                 _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_EXPAND_BLOCKS);
             }
             break;

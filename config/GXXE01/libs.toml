@@ -5811,7 +5811,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "game/GSAPI/GSfsys/GSfsys2.c"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-W error", "-rostr"]
 
 [[lib.object]]
 name = "game/GSAPI/GSfsys/fsysTOC.c"

@@ -2804,14 +2804,17 @@ game/GSAPI/GSfsys/fsysCache.c:
 	.sbss       start:0x804EB600 end:0x804EB638
 
 game/GSAPI/GSfsys/GSfsys2.c:
-	.text       start:0x8019DD18 end:0x8019E1F0
+	.text       start:0x8019DD18 end:0x8019F5EC
+	.rodata     start:0x802F44C8 end:0x802F47E0
+	.bss        start:0x80478140 end:0x80478170
+	.sbss       start:0x804EB640 end:0x804EB680
+	.sdata2     start:0x804EE1D0 end:0x804EE1E0
 
 game/GSAPI/GSfsys/fsysTOC.c:
 	.text       start:0x8019F5EC end:0x8019FA90
 
 game/GSAPI/GSfsys/fsysTOC2.c:
 	.text       start:0x801A01E8 end:0x801A02CC
-	.rodata     start:0x802F47D0 end:0x802F47E0
 
 game/GSAPI/GSflag/GSflag.c:
 	.text       start:0x801A02F0 end:0x801A0364
