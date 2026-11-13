@@ -6,12 +6,6 @@
 #include <menu.h>
 #include <menuFight.h>
 
-// Selectors that locate the status panel of a fight trainer.
-enum {
-    FIGHT_SIDE_STATUS_SIDE_DATA_ID = 5,
-    FIGHT_SIDE_STATUS_FIGHT_TRAINER_STATUS_MENU_DATA_ID = 2
-};
-
 // Ball display state the trainer status panel is opened with, one entry per
 // party slot.
 struct MenuBallStatus {

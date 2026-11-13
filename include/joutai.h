@@ -31,7 +31,7 @@ struct _JOUTAI {
 
 #ifdef __cplusplus
     void writeJoutaiDataId(u16 dataId, u16 targetId);
-    s32 checkWriteJoutaiDataId(u16 dataId);
+    u8 checkWriteJoutaiDataId(u16 dataId);
     u8 isValid();
     void init();
 #endif
@@ -56,7 +56,7 @@ s32 joutaiGetKaisuuJoutaiDataId(void* status, u16 dataId);
 void joutaiSetCountAsJoutaiDataId(void* status, u16 dataId, u8 count);
 s32 joutaiGetCountAsJoutaiDataId(void* status, u16 dataId);
 void joutaiWriteJoutaiDataId(void* status, u16 dataId, u16 targetId);
-s32 joutaiCheckWriteJoutaiDataId(void* status, u16 dataId);
+u8 joutaiCheckWriteJoutaiDataId(void* status, u16 dataId);
 u8 joutaiIsJoutaiDataId(void* status, u16 dataId);
 void joutaiInitJoutaiDataId(void* status, u16 dataId);
 void joutaiInitAry(_JOUTAI* joutai, u16 length);

@@ -26,7 +26,7 @@ void _JOUTAI::writeJoutaiDataId(u16 dataId, u16 targetId)
     }
 }
 
-s32 _JOUTAI::checkWriteJoutaiDataId(u16 dataId)
+u8 _JOUTAI::checkWriteJoutaiDataId(u16 dataId)
 {
     if (dataId == 0) {
         return JOUTAI_WRITE_KEEP;
@@ -247,7 +247,7 @@ void joutaiWriteJoutaiDataId(void* status, u16 dataId, u16 targetId)
     }
 }
 
-s32 joutaiCheckWriteJoutaiDataId(void* status, u16 dataId)
+u8 joutaiCheckWriteJoutaiDataId(void* status, u16 dataId)
 {
     if (dataId == 0) {
         return JOUTAI_WRITE_KEEP;

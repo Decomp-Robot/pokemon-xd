@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+s16 fightPokemonBiosGetEntryId(FightPokemon *pokemon);
+
 u16 fightOutPokemonBiosGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);
 u8 fightPokemonBiosGetHokakuFlag(FightPokemon *pokemon);
 
