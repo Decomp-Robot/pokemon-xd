@@ -6498,3 +6498,7 @@ name = "game/GSAPI/GSmodel/GSmodel.cpp"
 completed = true
 mw_version = "GC/2.6"
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/app/floor/floorDataBios.cpp"
+completed = true
