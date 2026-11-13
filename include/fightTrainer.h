@@ -128,7 +128,23 @@ s32 fightTrainerGetHikaeFightPokemonNum(
     FIGHT_TRAINER *trainer, u16 pokemonNum, u16 fightoutPokemonNum);
 void fightTrainerInitAry(FIGHT_TRAINER *trainerAry, u16 trainerNum);
 void fightTrainer_SetEnemyPokemonRegist(FIGHT_TRAINER *trainer, s16 entryId);
+void fightTrainer_SetEnemyParam1bantakaiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyBadwazaHaveFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyDefense1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyLv1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyNowhp1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyStoreTokuseiData(FIGHT_TRAINER *trainer, s16 entryId, u16 data);
+void fightTrainer_SetEnemyTokuseiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 flag);
+void fightTrainer_SetEnemyExpectWazaData(FIGHT_TRAINER *trainer, s16 entryId, u8 index, u16 dataId);
+void fightTrainer_SetEnemyStoreWazaData(FIGHT_TRAINER *trainer, s16 entryId, u8 index, u16 dataId);
+void fightTrainer_SetEnemyExpectWazaNum(FIGHT_TRAINER *trainer, s16 entryId, u8 count);
+void fightTrainer_SetEnemyStoreWazaNum(FIGHT_TRAINER *trainer, s16 entryId, u8 count);
+void fightTrainer_SetSequencePtr(FIGHT_TRAINER *trainer, struct NullSequence *sequence);
+void fightTrainer_SetControllerId(FIGHT_TRAINER *trainer, s32 controllerId);
+void fightTrainer_SetNigeruCount(FIGHT_TRAINER *trainer, s32 count);
+void fightTrainer_SetKoban(FIGHT_TRAINER *trainer, s32 koban);
 void fightTrainer_SetOkaneBai(FIGHT_TRAINER *trainer, s32 multiplier);
+void fightTrainer_SetFightTrainerDataId(FIGHT_TRAINER *trainer, s32 dataId);
 s32 fightTrainerGetStatus(FIGHT_TRAINER *trainer, u16 id, u16 field, u16 sub);
 void fightTrainerSetStatus(FIGHT_TRAINER *trainer, u16 id, u16 field, u16 sub, s32 value);
 

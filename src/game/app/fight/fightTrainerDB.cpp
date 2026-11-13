@@ -1,4 +1,5 @@
 #include <fightTrainer.h>
+#include <app/fight/fightTrainerEnemy.h>
 
 // The trainer record is read and written through the adapters of this module:
 // the AI additional-value records the debug menus edit and the field queries of
@@ -6,6 +7,201 @@
 // and reads as an empty one.
 
 extern "C" {
+
+void fightTrainer_SetEnemyPokemonRegist(FIGHT_TRAINER *trainer, s16 entryId)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainer_GetFightTrainerEnemyPokemonAryPtr(trainer, 0);
+    if (pokemon == 0) {
+        return;
+    }
+    fightTrainerEnemyPokemonRegistAry(pokemon, 12, entryId);
+}
+
+void fightTrainer_SetEnemyParam1bantakaiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->param1bantakaiFlag = value;
+}
+
+void fightTrainer_SetEnemyBadwazaHaveFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->badwazaHaveFlag = value;
+}
+
+void fightTrainer_SetEnemyDefense1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->defense1banhikuiFlag = value;
+}
+
+void fightTrainer_SetEnemyLv1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->lv1banhikuiFlag = value;
+}
+
+void fightTrainer_SetEnemyNowhp1banhikuiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->nowhp1banhikuiFlag = value;
+}
+
+void fightTrainer_SetEnemyStoreTokuseiData(FIGHT_TRAINER *trainer, s16 entryId, u16 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->storeTokuseiData = value;
+}
+
+void fightTrainer_SetEnemyTokuseiFlag(FIGHT_TRAINER *trainer, s16 entryId, u8 value)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->tokuseiFlag = value;
+}
+
+void fightTrainer_SetEnemyExpectWazaData(FIGHT_TRAINER *trainer, s16 entryId, u8 index, u16 dataId)
+{
+    FightTrainerEnemyPokemon *pokemon;
+    if (trainer == 0) return;
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) return;
+    pokemon->expectWazaDataId[index] = dataId;
+}
+
+void fightTrainer_SetEnemyStoreWazaData(FIGHT_TRAINER *trainer, s16 entryId, u8 index, u16 dataId)
+{
+    FightTrainerEnemyPokemon *pokemon;
+    if (trainer == 0) return;
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) return;
+    pokemon->storeWazaDataId[index] = dataId;
+}
+
+void fightTrainer_SetEnemyExpectWazaNum(FIGHT_TRAINER *trainer, s16 entryId, u8 count)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->expectWazaNum = count;
+}
+
+void fightTrainer_SetEnemyStoreWazaNum(FIGHT_TRAINER *trainer, s16 entryId, u8 count)
+{
+    FightTrainerEnemyPokemon *pokemon;
+
+    if (trainer == 0) {
+        return;
+    }
+    pokemon = fightTrainerGetFightEntryIdToEnemyPokemonPtr(trainer, entryId);
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->storeWazaNum = count;
+}
+
+void fightTrainer_SetSequencePtr(FIGHT_TRAINER *trainer, struct NullSequence *sequence)
+{
+    if (trainer == 0) return;
+    trainer->mSequence = sequence;
+}
+
+void fightTrainer_SetControllerId(FIGHT_TRAINER *trainer, s32 controllerId)
+{
+    if (trainer == 0) return;
+    trainer->mControllerId = controllerId;
+}
+
+void fightTrainer_SetNigeruCount(FIGHT_TRAINER *trainer, s32 count)
+{
+    if (trainer == 0) return;
+    trainer->mNigeruCount = count;
+}
+
+void fightTrainer_SetKoban(FIGHT_TRAINER *trainer, s32 koban)
+{
+    if (trainer == 0) return;
+    trainer->mKoban = koban;
+}
+
+void fightTrainer_SetOkaneBai(FIGHT_TRAINER *trainer, s32 multiplier)
+{
+    if (trainer == 0) return;
+    trainer->mOkaneBai = multiplier;
+}
+
+void fightTrainer_SetFightTrainerDataId(FIGHT_TRAINER *trainer, s32 dataId)
+{
+    if (trainer == 0) return;
+    trainer->mDataId = dataId;
+}
+
 
 // Message ID printed in front of the name of the record.
 void fightTrainerAiValueAddsubDB_SetPrefixName(u16 index, u32 prefixName)
