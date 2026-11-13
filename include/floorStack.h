@@ -6,22 +6,28 @@
 #include <app/floor/floorModule.h>
 
 struct GSfloor_dd_;
-class AppScript;
+namespace GSscript { class Tiga; }
 
 class FloorStack {
 public:
     FloorStack();
+    void addResource(unsigned long groupID, unsigned long resourceID);
+    void freeAllResource();
+    void freeResource(unsigned long groupID, unsigned long resourceID);
     void unblock();
     void block();
     void setGroupID(unsigned long groupID);
+    void reallocPushData();
     void setPushState(void* data, unsigned long size);
     void setUpdateState(FloorState state);
     FloorEnterMode getObjective();
     unsigned long getFloorID() const;
     void setFloorID(unsigned long floorID);
+    void clearFlag();
     void setPopFlag();
     void setPushFlag();
     void clear();
+    GSscript::Tiga* getScriptModule();
     void makeScriptModule();
 
 private:
@@ -31,7 +37,7 @@ private:
     unsigned long mPushStateSize;
     bool mPushFlag;
     bool mPopFlag;
-    AppScript* mScriptModule;
+    GSscript::Tiga* mScriptModule;
     FloorModuleType mType;
     GSthread* mThread;
     GSresID mResources[64];
@@ -42,6 +48,8 @@ class FloorStackList {
 public:
     FloorStackList(unsigned long capacity);
     ~FloorStackList();
+    void freeResource(unsigned long groupID, unsigned long resourceID);
+    void addResource(unsigned long groupID, unsigned long resourceID);
     void unblock();
     void block();
     void setGroupID(unsigned long groupID);

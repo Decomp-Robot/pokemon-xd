@@ -13,7 +13,9 @@ void GSthreadBlockGroup(unsigned long group);
 
 typedef void (*GSthreadEntry)(void);
 
+void GSthreadUnblock(GSthread *thread);
 void GSthreadBlock(GSthread *thread);
+void GSthreadSetGroupID(GSthread *thread, u32 groupId);
 GSthread *GSthreadGetCurrentThread(void);
 GSthread *GSthreadCreate(s32 priority, u32 groupId, u32 stackSize, s32 saveFpr,
                          s32 terminateOnExit, GSthreadEntry entry);

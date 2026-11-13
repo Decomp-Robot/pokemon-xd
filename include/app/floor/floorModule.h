@@ -20,7 +20,10 @@ enum FloorState {
     FloorStatePostWait = 7,
     FloorStateFree = 8
 };
-enum FloorModuleType { FLOOR_MODULE_TYPE_ALL = 255 };
+enum FloorModuleType {
+    FLOOR_MODULE_TYPE_NONE = 0,
+    FLOOR_MODULE_TYPE_ALL = 255
+};
 enum FloorEnterMode {
     FLOOR_ENTER_NORMAL = 0,
     FLOOR_ENTER_PUSH = 1,

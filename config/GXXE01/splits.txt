@@ -2118,7 +2118,7 @@ game/app/floor/floorManager.cpp:
 	.rodata     start:0x802F32A8 end:0x802F32BC
 
 game/app/floor/floorStack.cpp:
-	.text       start:0x801296C0 end:0x80129A40
+	.text       start:0x801296C0 end:0x80129E00
 
 game/app/floor/floorsound.cpp:
 	.text       start:0x8012A550 end:0x8012AD50

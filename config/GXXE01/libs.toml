@@ -20,7 +20,7 @@ completed = true
 [[lib.object]]
 name = "game/app/floor/floorStack.cpp"
 completed = true
-extra_cflags = ["-opt nopeephole"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole"]
 
 [[lib.object]]
 name = "game/menuCB_externDB.cpp"
