@@ -317,6 +317,7 @@ game/menuPda.cpp:
 
 game/menuReliveHall.cpp:
 	.text       start:0x8003AF8C end:0x8003AFC0
+	.data       start:0x8032E548 end:0x8032E568
 
 game/menuPdaMailXD.cpp:
 	.text       start:0x80042CD0 end:0x800432CC
