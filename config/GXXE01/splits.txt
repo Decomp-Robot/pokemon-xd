@@ -2189,6 +2189,9 @@ game/app/joutai/joutai.cpp:
 game/app/joutai/joutaiBios.cpp:
 	.text       start:0x8013CF38 end:0x8013D03C
 
+game/app/waza/wazaDB.cpp:
+	.text       start:0x8013E044 end:0x8013E90C
+
 game/app/pokemon/pokemonBios.cpp:
 	.text       start:0x80145928 end:0x80145990
 

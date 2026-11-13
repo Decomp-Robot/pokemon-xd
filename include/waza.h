@@ -2,6 +2,8 @@
 #define WAZA_H
 
 #include <types.h>
+#include <bool.h>
+
 typedef struct FIGHT_WAZA FIGHT_WAZA;
 
 enum WAZA_FIELD {
@@ -57,6 +59,7 @@ enum WAZA_COMPATIBILITY {
 };
 
 enum { WAZA_ID_MASK = 0xFFFF };
+enum { WAZA_DATA_TYPE_ID_COUNT = 3 };
 enum {
     ZOKUSEI_DATA_ID_MYSTERY = 9,
     ZOKUSEI_DATA_ID_FLYING = 2,
@@ -72,10 +75,48 @@ enum {
     WAZA_STATUS_RISK_FLAG = 27
 };
 
+// An entry of the move database: everything the fight reads about one move.
 struct WazaData {
-    u32 _00[8];
-    u32 mNameID;
-    u32 _24[5];
+    s8 mPri; // 0x00
+    u8 mPp; // 0x01
+    u8 mZokuseiDataId; // 0x02
+    u8 mRangeId; // 0x03
+    u8 mAvg; // 0x04
+    u8 mAddFightKoukaAvg; // 0x05
+    u8 mDageki; // 0x06
+    u8 mMamoru; // 0x07
+    u8 mMajikku; // 0x08
+    u8 mYokodori; // 0x09
+    u8 mOumugaesi; // 0x0A
+    u8 mOujanosirusi; // 0x0B
+    u8 _0C[4];
+    u8 mBouon; // 0x10
+    u8 _11[1];
+    bool mHidenFlag; // 0x12
+    u8 mZokuseiKindData; // 0x13
+    u8 mRiskFlag; // 0x14
+    u8 mCompatible; // 0x15
+    u8 _16[2];
+    s16 mIryoku; // 0x18
+    u8 _1A[2];
+    u16 mSeqId; // 0x1C
+    u16 mWazaFuncDataId; // 0x1E
+    u32 mNameID; // 0x20
+    u32 _24[3];
+    u32 mWazawzxdataId; // 0x30
+    u8 mTypeId[WAZA_DATA_TYPE_ID_COUNT]; // 0x34
+    u8 _37[1];
+};
+
+// Function table the fight dispatches a move through, looked up by the
+// function data id of the move.
+struct WazaFuncData {
+    void *mFightTrainerAiWazaValueFunc; // 0x00
+    void *mFightTrainerAiWazaHitFunc; // 0x04
+    void *mFightTrainerAiWazaDamageFunc; // 0x08
+    void *mFightTrainerAiWazaDamageFightPokemonFunc; // 0x0C
+    void *mFightWazaWzxTypeFunc; // 0x10
+    void *mFightWazaWzxVariationFunc; // 0x14
 };
 
 #ifdef __cplusplus
@@ -84,22 +125,43 @@ extern "C" {
 
 struct WazaData *wazaDataBiosGetPtr(u16 wazaID);
 u32 wazaDataBiosGetName(struct WazaData *data);
+u16 wazaDataBiosGetWazaFuncDataId(struct WazaData *data);
+struct WazaFuncData *wazaFuncDataBiosGetPtr(u16 funcDataId);
 u32 wazaGetWazaTypeIdName(u8 typeId);
 
 s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, s32 index);
 void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, s32 index, s32 value);
 
+u8 wazaCheckDarkWaza(u16 move);
+u8 waza_GetZokuseiKindData(u16 move);
+
 u8 wazaDB_GetCompatible(u16 wazaID);
 s16 wazaDB_GetIryoku(u16 move);
-s32 fightWaza_GetDamage(FIGHT_WAZA *waza);
-void fightWaza_SetDamage(FIGHT_WAZA *waza, s32 damage);
 u16 wazaDB_GetSeqId(u16 move);
 u8 wazaDB_GetOujanosirusi(u16 move);
 s32 wazaDB_GetName(u16 move);
-u8 wazaCheckDarkWaza(u16 move);
 u8 wazaDB_GetRangeId(u16 move);
 u8 wazaDB_GetOumugaesi(u16 wazaDataId);
 u8 wazaDB_GetZokuseiDataId(u16 move);
+u8 wazaDB_GetRiskFlag(u16 move);
+u32 wazaDB_GetWazawzxdataId(u16 move);
+u8 wazaDB_GetTypeId(u16 move, u16 index);
+u8 wazaDB_GetBouon(u16 move);
+u8 wazaDB_GetYokodori(u16 move);
+u8 wazaDB_GetMajikku(u16 move);
+u8 wazaDB_GetMamoru(u16 move);
+u8 wazaDB_GetDageki(u16 move);
+u8 wazaDB_GetAddFightKoukaAvg(u16 move);
+u8 wazaDB_GetAvg(u16 move);
+s32 wazaDB_GetPri(u16 move);
+u8 wazaDB_GetPp(u16 move);
+
+void *wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move);
+void *wazaDB_GetFightWazaWzxTypeFuncPtr(u16 move);
+void *wazaDB_GetFightTrainerAiWazaDamageFightPokemonFuncPtr(u16 move);
+void *wazaDB_GetFightTrainerAiWazaDamageFuncPtr(u16 move);
+void *wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move);
+void *wazaDB_GetFightTrainerAiWazaValueFuncPtr(u16 move);
 
 #ifdef __cplusplus
 }
