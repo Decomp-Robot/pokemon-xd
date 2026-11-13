@@ -248,10 +248,24 @@ enum GSgfxTunitFunc { GS_GFX_TUNIT_TEXTURE_REPLACE = 3 };
 
 enum GSgfxIndTexMtxID { GS_GFX_IND_MTX0 = 1 };
 
-enum GSgfxLayerType { GS_GFX_LAYER_NORMAL = 0, GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
+enum GSgfxLayerType { GS_GFX_LAYER_NORMAL = 0, GS_GFX_LAYER_DISTORTION = 1, GS_GFX_LAYER_FRAMEBUFFER_COPY = 4 };
+
+struct _GSgfxLayerData {
+    GSgfxLayerID id;
+    char *name;
+    GSgfxLayerType type;
+    bool clearColor;
+    bool clearAlpha;
+    bool clearDepth;
+    bool visible;
+    unsigned long pass0FifoSize;
+    unsigned long pass1FifoSize;
+    unsigned long matrixStackCapacity;
+};
 
 class GSgfxLayerConfig {
 public:
+    static void Setup(_GSgfxLayerData *config);
     static void Remove(GSgfxLayerID id);
     static void Move(GSgfxLayerID from, GSgfxLayerID to, GSgfxLayerOffset offset);
     /* Registers a layer and hands back the id it was filed under, which the
@@ -315,6 +329,8 @@ enum GSgfxCachedStateConstants {
 // Graphics state and draw commands for one layer.
 class GSgfxLayer {
 public:
+    void SetPassRedirect(GSgfxLayerPass fromPass, bool enabled, GSgfxLayer *toLayer,
+                         GSgfxLayerPass toPass, GSgfxLayerOffset offset);
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool flag, u8* image);
     GStexture *GetTextureCopy(void);
@@ -851,6 +867,7 @@ s32 GSgfxPerfbarGetRenderMode(void);
 void GSgfxPerfbarSetRenderMode(s32 renderMode);
 void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
 GSgfxLayer *GSgfxLayerFindByName(const char *name);
+extern "C" GSgfxLayerID GSgfxLayerFindByName_C(const char *name);
 void *GSgfxLayerGetFrameBufferTexture(void);
 void *GSgfxVFCreate(void *vf);
 void GSgfxVFFree(void *vf);

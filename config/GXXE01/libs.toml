@@ -3089,7 +3089,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/i
 
 [[lib.object]]
 name = "game/floorLayerConfig.cpp"
-extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-str reuse,readonly", "-opt nopeephole"]
 completed = true
 
 [[lib.object]]

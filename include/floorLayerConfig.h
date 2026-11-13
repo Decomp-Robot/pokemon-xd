@@ -5,6 +5,7 @@
 
 extern "C" {
 GSgfxLayerID floorGetMenuLayerID();
+void floorLayerConfig(unsigned long floorID, unsigned char floorKind);
 }
 
 #endif

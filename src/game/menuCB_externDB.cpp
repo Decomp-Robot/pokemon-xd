@@ -507,6 +507,7 @@ static s16 gbaIconShake[4] = {-1, 0, 1, 0};
 
 // Player slot (1-based) allowed to start once all players have confirmed.
 s32 tunaide02_last_kakunin_flag;
+s32 _ruleCursol2;
 
 extern "C" void menuCB_BattleBeforeAfter3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {

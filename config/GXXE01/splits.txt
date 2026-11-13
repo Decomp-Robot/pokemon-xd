@@ -503,7 +503,7 @@ game/menuCB_externDB.cpp:
 	.data       start:0x803C6750 end:0x803C7074
 	.bss        start:0x80435B60 end:0x80435B90
 	.sdata      start:0x804E7FE0 end:0x804E7FE8
-	.sbss       start:0x804EA9C0 end:0x804EA9C4
+	.sbss       start:0x804EA9C0 end:0x804EA9C8
 	.sdata2     start:0x804EC6D0 end:0x804EC6EC
 
 game/menuDataBios.cpp:
@@ -514,8 +514,13 @@ game/menuPanel.cpp:
 	.bss        start:0x80435C38 end:0x80435C48
 
 game/floorLayerConfig.cpp:
-	.text       start:0x8007E350 end:0x8007E35C
-	.sdata      start:0x804E8010 end:0x804E8018
+	.text       start:0x8007E350 end:0x8007E5AC
+	.ctors      start:0x802E9FA0 end:0x802E9FA4
+	.rodata     start:0x802EB8B0 end:0x802EB920 align:4
+	.data       start:0x803C7268 end:0x803C7790
+	.sdata      start:0x804E8000 end:0x804E8018
+	.sbss       start:0x804EA9C8 end:0x804EA9D0
+	.sdata2     start:0x804EC700 end:0x804EC718
 
 game/menuCB_Sub1.cpp:
 	.text       start:0x8007E5AC end:0x80084758
