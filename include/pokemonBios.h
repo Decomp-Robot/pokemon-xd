@@ -6,6 +6,38 @@
 #include <types.h>
 typedef struct PokemonTokuseiData PokemonTokuseiData;
 
+// Ribbon word of a Pokemon record (0x7C). Each of the twelve contest ribbons
+// takes one flag in the top twelve bits of the word; the amari ribbon count
+// follows at bit 12 and spans eight bits, so it shares the second and third
+// byte of the word.
+typedef struct PokemonRibbon {
+    u8 champ : 1;
+    u8 winning : 1;
+    u8 victory : 1;
+    u8 bromide : 1;
+    u8 ganba : 1;
+    u8 marine : 1;
+    u8 land : 1;
+    u8 sky : 1;
+    u8 country : 1;
+    u8 national : 1;
+    u8 earth : 1;
+    u8 world : 1;
+    u32 amari : 8;
+} PokemonRibbon;
+
+// Contest record of a Pokemon's expand status: the five contest categories in
+// the order the status field ids select them. A Pokemon holds two of these
+// records, one with the contest values themselves and one with the medals it
+// won in each category.
+typedef struct PokemonExpandStatus {
+    u8 style; // 0x0
+    u8 beautiful; // 0x1
+    u8 cute; // 0x2
+    u8 clever; // 0x3
+    u8 strong; // 0x4
+} PokemonExpandStatus;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -112,6 +144,12 @@ u8 pokemonBiosGetCountryRibbon(Pokemon *pokemon);
 u8 pokemonBiosGetNationalRibbon(Pokemon *pokemon);
 u8 pokemonBiosGetEarthRibbon(Pokemon *pokemon);
 u8 pokemonBiosGetWorldRibbon(Pokemon *pokemon);
+
+// Ribbon word and contest records of a Pokemon record; null for a Pokemon
+// without one. The expand status index selects the contest values (0) or the
+// contest medals (1).
+PokemonRibbon *pokemonBiosGetRibbonPtr(Pokemon *pokemon);
+PokemonExpandStatus *pokemonBiosGetExpandStatusPtr(Pokemon *pokemon, u16 index);
 
 #ifdef __cplusplus
 bool pokemonBiosGetEventGetFlag(Pokemon *pokemon);

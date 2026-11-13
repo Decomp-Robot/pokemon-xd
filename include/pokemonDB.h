@@ -69,9 +69,31 @@ u16 fightOutPokemon_GetLastUseWazaDataId(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetSuccessCnt(FightOutPokemon *pokemon);
 void fightOutPokemon_SetSuccessCnt(FightOutPokemon *pokemon, u8 count);
 
+// Contest medals and ribbons of a Pokemon; each setter writes one field of the
+// medal record or of the ribbon word and leaves the others alone.
+void pokemon_SetStyleMedal(Pokemon *pokemon, u8 value);
+void pokemon_SetBeautifulMedal(Pokemon *pokemon, u8 value);
+void pokemon_SetCuteMedal(Pokemon *pokemon, u8 value);
+void pokemon_SetCleverMedal(Pokemon *pokemon, u8 value);
+void pokemon_SetStrongMedal(Pokemon *pokemon, u8 value);
+void pokemon_SetAmariRibbon(Pokemon *pokemon, u8 value);
+void pokemon_SetWorldRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetEarthRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetNationalRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetCountryRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetSkyRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetLandRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetMarineRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetGanbaRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetBromideRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetVictoryRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetWinningRibbon(Pokemon *pokemon, bool flag);
+void pokemon_SetChampRibbon(Pokemon *pokemon, bool flag);
+
 u16 pokemon_GetPokemonWazaDataId(Pokemon *pokemon, u16 slot);
 u8 pokemon_GetPokemonWazaPp(Pokemon *pokemon, u16 slot);
 void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
+
 u32 pokemon_GetTokuseiFlag(void *pokemonData);
 u8 pokemonDB_GetTokuseiDataId(u16 species, u16 index);
 Pokemon *fightPokemon_GetPokemonBuffPtr(FightPokemon *pokemon);
