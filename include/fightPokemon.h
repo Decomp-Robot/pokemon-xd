@@ -38,6 +38,7 @@ Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);
 Pokemon *fightOutPokemonGetPokemonPtr(FightOutPokemon *pokemon);
 u8 figthPokemonGetLevel(FightPokemon *pokemon);
 u8 fightPokemonCheckValid(FightPokemon *pokemon);
+u8 fightPokemonCheckFightOut(FightPokemon *pokemon);
 u16 fightPokemonGetSoubiItemDataId(FightPokemon *pokemon);
 u8 fightOutPokemonIsUseHensinBuff(FightOutPokemon *pokemon);
 u16 fightOutPokemonGetTokuseiDataId(FightOutPokemon *pokemon);
@@ -56,6 +57,9 @@ s32 fightOutPokemonGetJoutaiMigawariHp(FightOutPokemon *pokemon);
 u8 fightOutPokemonIsZokuseiDataId(FightOutPokemon *pokemon, u16 type);
 u8 fightOutPokemonIsHpMantan(FightOutPokemon *pokemon);
 u8 fightOutPokemonCheckFightOut(FightOutPokemon *pokemon);
+u8 fightOutPokemonIsFightActionUseItemKind(FightOutPokemon *pokemon, u8 itemKind,
+                                             u8 matchKind, u8 unused);
+u16 fightOutPokemonGetFightActionUseItemDataId(FightOutPokemon *pokemon);
 u16 *fightOutPokemonGetNicknamePtr(FightOutPokemon *pokemon);
 u8 fightOutPokemonCheckWriteJoutaiDataId(FightOutPokemon *pokemon, u16 status);
 void fightOutPokemonWriteJoutaiDataId(FightOutPokemon *pokemon, u16 status, u16 targetId);

@@ -12,7 +12,7 @@ RoomData* floorDataBiosGetCurrentPtr();
 u32 floorDataBiosGetMapResID(RoomData* floor);
 void floorDataBiosSetMapResID(RoomData* floor, u32 res);
 FloorCharacter* floorCharacterBiosFindByResID(u32 group, u32 id);
-u32 floorCharacterBiosGetNameID(FloorCharacter* character);
+u16 floorCharacterBiosGetNameID(FloorCharacter* character);
 u8 floorCharacterBiosGetTalkStartType(FloorCharacter* character);
 u8 floorCharacterBiosGetTalkWallThrough(FloorCharacter* character);
 FloorTreasure* floorEventGetTresureList(u32 id);

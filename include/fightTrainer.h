@@ -136,6 +136,21 @@ FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *fightTrainerAiValueAddsubDataBiosGetPtr(u16 
 FIGHT_TRAINER_POKEMON_PART_DATA *fightTrainerPokemonPartDataBiosGetPtr(u16 index);
 FIGHT_TRAINER_AI_DATA *fightTrainerAiDataBiosGetPtr(u16 index);
 
+enum FightTrainerMenuBallStatus {
+    FIGHT_TRAINER_MENU_BALL_STATUS_NONE = 0,
+    FIGHT_TRAINER_MENU_BALL_STATUS_NORMAL = 1,
+    FIGHT_TRAINER_MENU_BALL_STATUS_ABNORMAL = 2,
+    FIGHT_TRAINER_MENU_BALL_STATUS_FIGHT_OUT = 3
+};
+
+void fightTrainerSetNameHearFlag(u16 encountNo);
+u16 fightTrainerGetTemotiNormalItemDataIdAry(FIGHT_TRAINER *trainer,
+                                             u16 *itemDataIdAry,
+                                             u16 capacity,
+                                             u8 excludeSelected);
+u8 fightTrainerIsUsedItem(FIGHT_TRAINER *trainer);
+FightPokemon *fightTrainerSearchInvalidFightPokemonPtr(FIGHT_TRAINER *trainer,
+                                                       u16 entryPokemonNum);
 void fightTrainerCreateFightTrainerDataIdToHero(u16 trainerDataId, s32 controllerId, Hero *hero, u32 battleId);
 u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 extern u32 *fight_trainer_pokemon_part_data_number;

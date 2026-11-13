@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 u16 fightOutPokemonBiosGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);
+u8 fightPokemonBiosGetHokakuFlag(FightPokemon *pokemon);
 
 void fightOutPokemonBiosCopy(FightOutPokemon *dst, const FightOutPokemon *src);
 

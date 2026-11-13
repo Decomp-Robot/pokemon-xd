@@ -92,11 +92,11 @@ void peopleSetTalkFlagCallback() {
         u32 name = TALK_UNNAMED_SPEAKER;
         FloorCharacter* character = floorCharacterBiosFindByResID(_peopleTalkRes[0], _peopleTalkRes[1]);
         if (character) {
-            u32 nameId = floorCharacterBiosGetNameID(character);
-            u16 hearFlag = charNameBiosGetHearFlag(nameId);
+            u16 nameIndex = floorCharacterBiosGetNameID(character);
+            u16 hearFlag = charNameBiosGetHearFlag(nameIndex);
             if (hearFlag) {
                 GSflagOn(hearFlag);
-                name = charNameBiosGetNameID(nameId);
+                name = charNameBiosGetNameID(nameIndex);
             }
         }
         msgctrlSetValue(TALK_SPEAKER_NAME_VALUE, name);
@@ -107,7 +107,7 @@ void peopleSetTalkKeyWaitCallback() {
         peopleSpeakStart(_peopleTalkRes[0], _peopleTalkRes[1]);
 }
 static inline void _peopleTalkPrepare(u32 group, u32 id, tagPeopleWork* people, u8& sound) {
-    u32 nameId;
+    u16 nameIndex;
     u16 hearFlag;
     u32 name;
     if (people) {
@@ -133,10 +133,10 @@ static inline void _peopleTalkPrepare(u32 group, u32 id, tagPeopleWork* people, 
         name = TALK_UNNAMED_SPEAKER;
         FloorCharacter* character = floorCharacterBiosFindByResID(people->state.group, people->state.id);
         if (character) {
-            nameId = floorCharacterBiosGetNameID(character);
-            hearFlag = charNameBiosGetHearFlag(nameId);
+            nameIndex = floorCharacterBiosGetNameID(character);
+            hearFlag = charNameBiosGetHearFlag(nameIndex);
             if (!hearFlag) name = TALK_UNNAMED_SPEAKER;
-            else if (GSflagTest(hearFlag) == 1) name = charNameBiosGetNameID(nameId);
+            else if (GSflagTest(hearFlag) == 1) name = charNameBiosGetNameID(nameIndex);
         }
         msgctrlSetValue(TALK_SPEAKER_NAME_VALUE, name);
     }

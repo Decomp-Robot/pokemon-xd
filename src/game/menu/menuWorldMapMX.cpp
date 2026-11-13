@@ -1,4 +1,5 @@
 #include <camera.h>
+#include <charNameBios.h>
 #include <HSD_Rand.h>
 #include <fade.h>
 #include <msgctrl.h>
@@ -143,7 +144,6 @@ extern "C" double sin(double angle);
 extern "C" f32 GSlerpGetLinearInterpolationFloat(f32 start, f32 end, f32 blend);
 
 
-extern "C" u32 charNameBiosGetNameID(u32 npcID);
 extern u8 worldMapLabelsVisible;
 
 struct WorldMapInfoData { s32 mUnlockIndex; u32 mMessages[18]; };
@@ -1330,7 +1330,7 @@ void WorldMap::SetInfo(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprit
     GSmsgPrint2(window->mLayerID, 0, -4, 0xFFFFFF00 | sprite->mRgba.mAlpha, GetInfoMsgID(index));
 }
 
-u32 WorldMap::GetNpcID(long index)
+u16 WorldMap::GetNpcID(long index)
 {
     return SearchData(_cursor_index[index])->mNpcID;
 }

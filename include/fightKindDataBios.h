@@ -9,6 +9,7 @@ extern "C" {
 
 void *fightKindDataBiosGetPtr(u16 kindId);
 u32 fightKindDataBiosGetName(void *data);
+u8 fightKindDataBiosGetHostEnemyMsgFlag(void *fightKindData);
 
 extern u32 *fight_kind_data_number;
 

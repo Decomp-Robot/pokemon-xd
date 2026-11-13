@@ -4,9 +4,9 @@
 
 // One record of the loaded character name table.
 struct CharNameData {
-    u16 hearFlag; // 0x00: set once the name has already been heard.
-    u8 _02[2];    // 0x02-0x03: unknown.
-    u32 nameID;   // 0x04: name id.
+    u16 hearFlag;
+    u16 reserved;
+    u32 nameID;
 };
 
 extern "C" {
@@ -38,9 +38,9 @@ u16 charNameBiosSearchIndex(u32 nameID) {
     return 0;
 }
 
-// The name id of the record for name, or 0 when name is out of range.
-u32 charNameBiosGetNameID(u32 name) {
-    CharNameData* data = charNameBiosGetPtr(name);
+// The name ID of the indexed record, or 0 when the index is out of range.
+u32 charNameBiosGetNameID(u16 index) {
+    CharNameData* data = charNameBiosGetPtr(index);
 
     if (data == 0) {
         return 0;
@@ -48,9 +48,9 @@ u32 charNameBiosGetNameID(u32 name) {
     return data->nameID;
 }
 
-// The heard flag of the record for name, or 0 when name is out of range.
-u16 charNameBiosGetHearFlag(u32 name) {
-    CharNameData* data = charNameBiosGetPtr(name);
+// The heard flag of the indexed record, or 0 when the index is out of range.
+u16 charNameBiosGetHearFlag(u16 index) {
+    CharNameData* data = charNameBiosGetPtr(index);
 
     if (data == 0) {
         return 0;

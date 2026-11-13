@@ -269,6 +269,7 @@ void pokemonSetStatus(void *record, unsigned short pokemonDataID, int fieldID, i
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
+u8 pokemonIsJoutaiNormal(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
 u16 pokemonGetJoutaiDataId(Pokemon *pokemon);
 f32 pokemonGetDp(Pokemon *pokemon);

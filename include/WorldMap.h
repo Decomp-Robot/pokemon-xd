@@ -217,7 +217,7 @@ public:
     void InitCursor(long index, short motion);
     void SetSnap(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprite);
     void SetInfo(long index, tagWINDOW_WORK* window, tagSPRITE_WORK* sprite);
-    u32 GetNpcID(long index);
+    u16 GetNpcID(long index);
     u32 GetInfoMsgID(long index);
     _GSmodel* GetModelPointer(long index);
     s32 GetInfoLevel();
