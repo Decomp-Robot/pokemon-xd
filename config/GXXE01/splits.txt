@@ -2093,11 +2093,6 @@ game/GSAPI/GSgapp/GSgapp.cpp:
 	.text       start:0x8010BD24 end:0x8010C320
 	.sbss       start:0x804EB028 end:0x804EB050
 
-game/menu/menuFaceBios.cpp:
-	.text       start:0x80112114 end:0x801121E8
-	.rodata     start:0x802F2F00 end:0x802F2F20
-	.data       start:0x803FC020 end:0x803FC034
-
 game/app/menu/menuOffScreen.cpp:
 	.text       start:0x801145EC end:0x80114D30
 	.sdata      start:0x804E8378 end:0x804E8380
@@ -2245,6 +2240,13 @@ game/app/hero/heroPokemonGet.cpp:
 game/app/hero/heroMemberFunctions.cpp:
 	.text       start:0x801528C4 end:0x80153138
 	.sdata2     start:0x804EDC60 end:0x804EDC64
+
+game/GSAPI/GSeffect/GSeffect.cpp:
+	.text       start:0x80153188 end:0x80153550
+	.rodata     start:0x802F38A8 end:0x802F38C8
+	.data       start:0x804046D8 end:0x804046F8
+	.sbss       start:0x804EB1E8 end:0x804EB1F0
+	.sdata2     start:0x804EDC68 end:0x804EDC70
 
 game/app/dbgMenu/dbgMenu.cpp:
 	.text       start:0x801553A0 end:0x801560EC

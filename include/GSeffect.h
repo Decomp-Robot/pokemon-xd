@@ -8,8 +8,12 @@ class GSeffect {
 protected:
     bool mActive;
     bool mVisible;
-    u8 _02[2];
     GSeffect* mNext;
+
+    friend void _effectFastRender(void);
+    friend void _effectRender(GSgfxLayer* layer, GSgfxLayerPass pass);
+    friend void _effectUpdate(f32 delta);
+
 public:
     GSeffect();
     virtual bool _start();
@@ -21,5 +25,7 @@ public:
     bool Start();
     void Stop();
 };
+
+extern "C" void GSeffectInitSystem(void);
 
 #endif
