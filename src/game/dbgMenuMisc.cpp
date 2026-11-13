@@ -234,7 +234,7 @@ extern "C" s32 dbgMenuScreenFilterHi(void)
 
 extern "C" s32 dbgMenuGSmemCheck(void)
 {
-    u8 ok;
+    bool ok;
 
     GSlogWrite("check fsys heap\n");
     ok = GSmemCheckHeap(0);

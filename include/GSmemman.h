@@ -125,8 +125,11 @@ extern GSmemPoolAllocator _poolArea[POOL_MAX];
 extern "C" {
 u32 GSmemGetLargestFree(void);
 u16 GSmemGetCurrentLayer(void);
-u8 GSmemCheckHeap(s32 heap);
+u8 GSmemIsInitialized(void);
+bool GSmemCheckHeap(s32 heap);
 void GSmemDumpHeap(s32 heap);
+s32 GSmemGetHeapFreeSize(s32 heap, u32* totalSize, u32* largestSize);
+s32 GSmemShrinkHeap(s32 heap, void* ptr, u32 size);
 void GSmemDumpHeapInfo(void);
 s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, void* context, void* context2);
 u32 GSmemGetFreePool(GSmemPoolAllocator* pool);
@@ -144,6 +147,9 @@ s32 OSGetHeapFreeSize(s32 heap, u32* totalSize, u32* largestSize);
 s32 OSGetHeapSize(s32 heap);
 s32 OSCreateExternalHeap(void* start, void* end, GSmemCell* cells, s32 cellCount);
 s32 OSShrinkHeap(s32 heap, void* ptr, u32 size);
+void* GSmemAllocAlignHeap(s32 heap, u32 size, u16 alignment);
+void* GSmemAllocClrHeap(s32 heap, u32 size);
+void* GSmemAllocFillHeap(s32 heap, u32 size, u8 fill);
 }
 
 BOOL _memCheckOwnCallback(void* ptr);

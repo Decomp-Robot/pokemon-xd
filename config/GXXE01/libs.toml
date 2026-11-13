@@ -5588,6 +5588,12 @@ progress_category = "game"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSAPI/GSmemman/GSmemman.cpp"
+completed = true
+mw_version = "GC/2.6"
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/os", "-i src/ext/dolphin_sdk/dvd", "-D__GEKKO__", "-DSDK_REVISION=1", "-O0,p", "-inline noauto", "-opt peephole", "-schedule on", "-use_lmw_stmw on", "-str reuse,readonly", "-lang=c++"]
+
+[[lib.object]]
 name = "game/GSAPI/GSmemman/OSAlloc.cpp"
 completed = true
 mw_version = "GC/2.6"

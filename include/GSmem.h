@@ -17,14 +17,18 @@ void* GSmemAlloc(u32 size);
 void* GSmemAllocClr(u32 size);
 void* GSmemAllocAlign(u32 size, u16 alignment);
 void* GSmemAllocAlignFromEnd(u32 size, u16 alignment);
+void* GSmemAllocAlignClr(u32 size, u16 alignment);
 void GSmemFree(void* ptr);
+s32 GSmemShrink(void* ptr, u32 size);
 void* GSmemAllocHeap(s32 heap, u32 size);
 void GSmemFreeHeap(s32 heap, void* block);
 s32 GSmemCreateExternalHeap(void* start, void* end, GSmemCell* cells, s32 cellCount);
 long GSmemGetCurrentHeap(void);
+u32 GSmemGetSize(void* ptr);
 s32 GSmemSetCurrentHeap(s32 heap);
 s32 GSmemCreateHeap(void* start, void* end);
 long GSmemSetAllocMethodHeap(long heap, long method);
+void* GSmemInit(void* start, void* end, s32 heapCount);
 
 #ifdef __cplusplus
 }
