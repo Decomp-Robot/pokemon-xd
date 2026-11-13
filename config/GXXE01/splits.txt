@@ -2807,9 +2807,10 @@ game/app/battleGrid/battleCamera.cpp:
 	.sbss       start:0x804EB690 end:0x804EB698
 
 game/app/fade/fade_effect.cpp:
-	.text       start:0x801B711C end:0x801B715C
+	.text       start:0x801B70C0 end:0x801B715C
 	.ctors      start:0x802E9FD8 end:0x802E9FDC
 	.bss        start:0x80478210 end:0x8047840C
+	.sbss       start:0x804EB6A0 end:0x804EB6A4
 
 game/app/fade/fade_fluid.cpp:
 	.text       start:0x801B715C end:0x801B8474
