@@ -34,7 +34,8 @@ struct _psGenerator {
     u16 mIndex;          // 0x8E: index psCreateGeneratorID was called with.
     GSvec mRotation;     // 0x90: Euler radians.
     GSvec mScale;        // 0x9C
-    u8 _A8[16];
+    _HSD_JObj *mJObj;    // 0xA8: joint the linked child generators follow.
+    u8 _AC[12];
 };
 
 #ifdef __cplusplus

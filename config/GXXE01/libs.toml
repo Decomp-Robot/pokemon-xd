@@ -5631,6 +5631,16 @@ completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
 
 [[lib]]
+name = "hsdparticle_gs"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/particle/particle.c"
+completed = true
+
+[[lib]]
 name = "GSScript.a"
 mw_version = "GC/2.6"
 cflags_preset = "game"
