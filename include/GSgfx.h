@@ -820,6 +820,14 @@ void GSgfxLayerSetActive(GSgfxLayerID layer);
 }
 
 
+extern "C" {
+// Copy the back framebuffer into texture and call callback with the frame count
+// and param until it returns zero.
+s32 GSgfxBeginBackFBCapture(GStexture *texture, u8 (*callback)(GStexture *, u32, void *),
+                            void *param);
+}
+
+
 extern "C" f32 GSgfxVideoGetLastRenderTime(void);
 extern "C" void GSgfxProjectSetupParameters(void);
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);

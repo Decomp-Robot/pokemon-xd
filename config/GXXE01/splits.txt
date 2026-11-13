@@ -2080,6 +2080,12 @@ game/GSAPI/GSgapp/GSgapp.cpp:
 	.text       start:0x8010BD24 end:0x8010C320
 	.sbss       start:0x804EB028 end:0x804EB050
 
+game/app/menu/menuOffScreen.cpp:
+	.text       start:0x801145EC end:0x80114D30
+	.sdata      start:0x804E8378 end:0x804E8380
+	.sbss       start:0x804EB098 end:0x804EB0B8
+	.sdata2     start:0x804ED6E0 end:0x804ED708
+
 game/window.cpp:
 	.text       start:0x80115938 end:0x80115B90
 
