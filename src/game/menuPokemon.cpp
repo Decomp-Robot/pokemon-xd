@@ -964,7 +964,7 @@ s32 menuPokemonCtrl(tagWINDOW_WORK *win)
     menuOffScreenSetPriority(0);
 
     if (win->mState == WINDOW_SEQUENCE_OPEN) {
-        win->cursorTo = -1;
+        win->mPreviousCursor.y = -1;
 
         if (win->mFlag == 0) {
             s32 i;

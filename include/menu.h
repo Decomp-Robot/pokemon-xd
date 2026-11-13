@@ -5,6 +5,7 @@
 #include <menuIds.h>
 #include <types.h>
 #include <bool.h>
+#include <cursorBios.h>
 
 struct Pokemon;
 struct tagWINDOW_WORK;
@@ -23,6 +24,7 @@ u8 menuSetEnablePort(s32 portMask);
 s32 menuGetLastError(void);
 s32 menuGetCursor(s32 menuID);
 s32 menuGetCursorItemID(s32 menuID);
+u8 menuCursorCmp(CURSOR previous, CURSOR current);
 void menuCursorNormal(struct tagWINDOW_WORK *window, s32 mode);
 u8 menuIsCheck(s32 menuID);
 f32 menuGetTotalTime(void);

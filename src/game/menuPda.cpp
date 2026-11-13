@@ -310,7 +310,7 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
                 work->mCursorMoved = 1;
             }
         }
-        if (window->cursorTo != window->mCursor.y) {
+        if (window->mPreviousCursor.y != window->mCursor.y) {
             break;
         }
         stepX = stepX + 0x10;
@@ -887,7 +887,7 @@ s8 _menuPdaGetCurrentID(tagWINDOW_WORK *window, tagSPRITE_WORK *)
 {
     if (_checkAddFunc(window)) return 0;
     u16 item = menuGetCursorItemID(window->mMenuID);
-    if (window->cursorTo != window->mCursor.y || menuPdaCursorInit != 0) {
+    if (window->mPreviousCursor.y != window->mCursor.y || menuPdaCursorInit != 0) {
         _menuPdaSelectAnimeSet(_cursor_index[window->mCursor.y]);
         menuPdaCursorInit = 0;
     }

@@ -194,16 +194,6 @@ enum {
     SECRET_POKEMON_STATUS_ITEM_MOVE_3_KNOWN = 722,
 };
 
-// Sprite items of the four panels of the target window, one per stick
-// direction. The button hook moves the cursor onto the panel whose item the
-// pressed direction selects.
-enum {
-    TARGET_PANEL_LEFT = 55,
-    TARGET_PANEL_UP = 56,
-    TARGET_PANEL_DOWN = 64,
-    TARGET_PANEL_RIGHT = 65,
-};
-
 // Sprite items of the two target windows: the cursor and the target name row of
 // each panel. The second window repeats both rows at its own item ids.
 enum {
@@ -368,15 +358,6 @@ enum {
 
 // Status flags of the fight menu.
 u32 menuFightStatus;
-
-// One slot of the target selection window, shared by the window's draw and
-// button siblings; the four rows are the up/left/down/right panels. mNickname
-// is the nickname of the pokemon the panel stands for.
-struct MENU_FIGHT_TARGET_SLOT {
-    u32 _00;
-    s32 mItemID;
-    u16 *mNickname;
-};
 
 extern "C" void menuFightButtonSecretWazaTop(tagWINDOW_WORK *window)
 {

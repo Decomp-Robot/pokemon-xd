@@ -15,7 +15,7 @@ f32 _fieldMenuTimer;
 void _menuFieldMenuCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long row)
 {
     s16 cursorY = window->mCursor.y;
-    s16 cursorTo = window->cursorTo;
+    s16 cursorTo = window->mPreviousCursor.y;
 
     if (cursorY == row) {
         if (cursorTo != cursorY) {

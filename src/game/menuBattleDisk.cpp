@@ -332,7 +332,7 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
                 traversal.current = menuItemBiosGetPtr(window->mMenuID, traversal.current->mNextID);
             }
         }
-        if (window->cursorTo != window->mCursor.y) {
+        if (window->mPreviousCursor.y != window->mCursor.y) {
             break;
         }
         traversal.current = traversal.origin;
@@ -1487,7 +1487,7 @@ extern "C" void menuBattleDiskMain(void)
                             if (gBDisk.mSelectedPokemonIndex != windowSearchID(kMenuDiskPokemonPanels)->mCursor.y) {
                                 windowCreateCursorSprite(windowSearchID(kMenuDiskPokemonPanels));
                                 const s16 cursor = windowSearchID(kMenuDiskPokemonPanels)->mCursor.y;
-                                windowSearchID(kMenuDiskPokemonPanels)->cursorTo = cursor;
+                                windowSearchID(kMenuDiskPokemonPanels)->mPreviousCursor.y = cursor;
                                 gBDisk.mSelectedPokemonIndex = cursor;
                                 menuPlaySe(kMenuDiskPokemonPanels, kCursorSound);
                             }

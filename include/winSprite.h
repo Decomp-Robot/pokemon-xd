@@ -76,8 +76,7 @@ struct tagWINDOW_WORK {
     };
     u8 _94[8];
     CURSOR mCursor;              // cursor position in the window.
-    u8 _A0[2];
-    s16 cursorTo;                // cursor the window is scrolled to.
+    CURSOR mPreviousCursor;
     u8 mAccept;                  // set when the menu is confirmed.
     u8 mCancel;                  // set when the menu is cancelled.
 };

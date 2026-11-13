@@ -1751,7 +1751,7 @@ s32 menuPokemonStatusCtrl(tagWINDOW_WORK *window)
 {
     switch (window->mState) {
     case 0:
-        window->cursorTo = -1;
+        window->mPreviousCursor.y = -1;
         _menuStatus.mPage = MENU_POKEMON_STATUS_PAGE_SELECT;
         _menuStatus.mWazaSlot = window->mCursor.y;
         _menuStatus.mSlotPrev = -1;
