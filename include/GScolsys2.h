@@ -17,6 +17,7 @@
 /* Objects and registered humans per floor block. */
 #define GSCOLSYS2_OBJECT_MAX 64
 #define GSCOLSYS2_HUMAN_MAX 48
+#define GSCOLSYS2_CHECK_MAX 4
 #define GSCOLSYS2_THRU_MAX 4
 #define GSCOLSYS2_WALK_MAX 8
 
@@ -55,8 +56,15 @@ struct CCD_THRUMDL {
     u16 mEventId;
 };
 
-/* Check-mesh entry (48 bytes): the triangle block only. */
+/* Check-mesh entry (52 bytes). Carries the event id the check walker
+ * reports and the caller keeps as its trigger id. */
 struct CCD_CHECKMDL {
+    CCD_TRI mTri;
+    u16 mEventId;
+};
+
+/* Triangle-mesh entry (48 bytes): the triangle block only. */
+struct CCD_TRIMDL {
     CCD_TRI mTri;
 };
 
@@ -68,7 +76,8 @@ struct CCD_MDLHEAD {
 };
 
 /* Common head of a bucketed mesh: the model array plus the uniform grid the
- * mesh is bucketed into. Every GScolsys2 head but the check mesh carries one. */
+ * mesh is bucketed into. The walk, hit and thru meshes carry one; the check
+ * and triangle meshes are walked one entry at a time and use plain heads. */
 struct CCD_GRIDHEAD {
     void* mModel;
     s32 mCount;
@@ -100,15 +109,20 @@ struct CCD_CHECKMDL_HEAD {
     s32 mCount;
 };
 
+struct CCD_TRIMDL_HEAD {
+    CCD_TRIMDL* mModel;
+    s32 mCount;
+};
+
 /* One CCD object record (64 bytes). */
 struct CCD_OBJECT {
     u8 _00[36];
     CCD_WALKMDL_HEAD* mWalkMdl;
     CCD_HITMDL_HEAD* mHitMdl;
     CCD_THRUMDL_HEAD* mThruMdl;
-    CCD_THRUMDL_HEAD* mThruMdl2;
-    CCD_HITMDL_HEAD* mHitMdl2;
     CCD_CHECKMDL_HEAD* mCheckMdl;
+    CCD_HITMDL_HEAD* mHitMdl2;
+    CCD_TRIMDL_HEAD* mTriMdl;
     u16 mFlags;
 };
 
@@ -176,10 +190,12 @@ public:
     inline GScolsys2Thru_c() {}
 };
 
+/* One check result: the crossed triangle, its world normal and the trigger
+ * id the check mesh gave it. */
 struct GScolsys2Check_c {
     GSvec mPoint[3];
     GSvec mNormal;
-    u16 mFlags;
+    u16 mEventId;
     u16 _32;
 };
 
@@ -225,6 +241,7 @@ s32 GScolsys2HumanEnable(s32 index, s32 enable);
 s32 GScolsys2HumanAddCurrentFloor(s32* slotIndex, void* character);
 f32 GScolsys2HumanGetWalkHeight(GSvec* pos);
 f32 GScolsys2HumanGetWalkHighest(GSvec* pos);
+s32 GScolsys2CheckGetEventID(GSvec* start, GSvec* end, GScolsys2Check_c* out);
 s32 GScolsys2ThruPassEventID(GSvec* start, GSvec* end, GScolsys2Thru_c* out);
 s32 GScolsys2ThruGetEventID(GSvec* start, GSvec* end, f32 radius, GScolsys2Thru_c* out);
 }

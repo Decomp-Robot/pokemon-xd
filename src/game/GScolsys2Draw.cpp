@@ -89,9 +89,9 @@ void drawHitMdl(CCD_HITMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
 
 inline void drawThruMdl(CCD_THRUMDL_HEAD* head, GSmtx* mtx) { CollisionDebugColor color = {{255,0,255,192}}; drawDebugMesh<CCD_THRUMDL>(head, mtx, color); }
 
-inline void drawSecondaryThruMdl(CCD_THRUMDL_HEAD* head, GSmtx* mtx) { CollisionDebugColor color = {{255,255,0,192}}; drawDebugMesh<CCD_THRUMDL>(head, mtx, color); }
+inline void drawCheckMdl(CCD_CHECKMDL_HEAD* head, GSmtx* mtx) { CollisionDebugColor color = {{255,255,0,192}}; drawDebugMesh<CCD_CHECKMDL>(head, mtx, color); }
 
-inline void drawCheckMdl(CCD_CHECKMDL_HEAD* head, GSmtx* mtx) { CollisionDebugColor color = {{0,255,255,192}}; drawDebugMesh<CCD_CHECKMDL>(head, mtx, color); }
+inline void drawTriMdl(CCD_TRIMDL_HEAD* head, GSmtx* mtx) { CollisionDebugColor color = {{0,255,255,192}}; drawDebugMesh<CCD_TRIMDL>(head, mtx, color); }
 
 void drawWalkMdl(CCD_WALKMDL_HEAD* head, GSmtx* mtx, GSmtx* rotMtx)
 {
@@ -169,14 +169,14 @@ GSgfxDL* makeDisplayListFixedObj(void)
         if (object->mThruMdl != 0) {
             drawThruMdl(object->mThruMdl, &obj);
         }
-        if (object->mThruMdl2 != 0) {
-            drawSecondaryThruMdl(object->mThruMdl2, &obj);
+        if (object->mCheckMdl != 0) {
+            drawCheckMdl(object->mCheckMdl, &obj);
         }
         if (object->mHitMdl2 != 0) {
             drawHitMdl(object->mHitMdl2, &obj, &rot);
         }
-        if (object->mCheckMdl != 0) {
-            drawCheckMdl(object->mCheckMdl, &obj);
+        if (object->mTriMdl != 0) {
+            drawTriMdl(object->mTriMdl, &obj);
         }
     }
     GSgfxDLEnd();
@@ -231,14 +231,14 @@ extern "C" void GScolsys2Draw(void)
         if (object->mThruMdl != 0) {
             drawThruMdl(object->mThruMdl, &obj);
         }
-        if (object->mThruMdl2 != 0) {
-            drawSecondaryThruMdl(object->mThruMdl2, &obj);
+        if (object->mCheckMdl != 0) {
+            drawCheckMdl(object->mCheckMdl, &obj);
         }
         if (object->mHitMdl2 != 0) {
             drawHitMdl(object->mHitMdl2, &obj, &rot);
         }
-        if (object->mCheckMdl != 0) {
-            drawCheckMdl(object->mCheckMdl, &obj);
+        if (object->mTriMdl != 0) {
+            drawTriMdl(object->mTriMdl, &obj);
         }
 
     }
