@@ -3013,6 +3013,9 @@ game/GSAPI/GSprim/text.cpp:
 	.sdata      start:0x804E8660 end:0x804E8670
 	.sdata2     start:0x804EF550 end:0x804EF560
 
+game/app/deck/deck.cpp:
+	.text       start:0x8028B348 end:0x8028B988
+
 game/app/people/peoplePartAnimation.cpp:
 	.text       start:0x802A1644 end:0x802A1A74
 	.sdata2     start:0x804EF908 end:0x804EF928

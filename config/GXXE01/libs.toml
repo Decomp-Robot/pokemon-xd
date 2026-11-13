@@ -14,6 +14,10 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/app/deck/deck.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/floor/floorStack.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole"]
