@@ -31,7 +31,9 @@ public:
     u16 getCatchFloorId() const;
     u16 getOrgTrainer() const;
     s32 getDarkPointDirect() const;
+    s32 getInitDarkPointDirect() const;
     float getDarkPoint() const;
+    u8 getSnatchIndex() const;
     void setSnatchIndex(u8 index);
     u8 isWazaNew(u8 index) const;
     void setWazaNew(u8 index, bool value);

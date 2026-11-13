@@ -478,7 +478,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-opt nopeephole", "-i src/ext
 [[lib.object]]
 name = "game/menuPdaDPMonitorList.cpp"
 completed = true
-extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-inline noauto"]
 
 [[lib.object]]
 name = "game/menuPdaSub.cpp"
