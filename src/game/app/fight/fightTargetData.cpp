@@ -1,0 +1,40 @@
+#include <fightTarget.h>
+#include <status.h>
+
+// One record per target id, storing its status kind, relative-side flag and
+// buff value. Entry 0 is reserved.
+FIGHT_TARGET_DATA fight_target_data[] = {
+    { 0, 0, 0 },
+    { STATUS_KIND_FIGHT_FLOOR, 1, 0 },
+    { STATUS_KIND_FIGHT_SIDE, 1, 0 },
+    { STATUS_KIND_FIGHT_SIDE, 1, 0 },
+    { STATUS_KIND_FIGHT_SIDE, 0, 0 },
+    { STATUS_KIND_FIGHT_SIDE, 0, 0 },
+    { STATUS_KIND_FIGHT_TRAINER, 1, 0 },
+    { STATUS_KIND_FIGHT_TRAINER, 1, 1 },
+    { STATUS_KIND_FIGHT_TRAINER, 0, 0 },
+    { STATUS_KIND_FIGHT_TRAINER, 1, 0 },
+    { STATUS_KIND_FIGHT_TRAINER, 1, 1 },
+    { STATUS_KIND_FIGHT_TRAINER, 0, 0 },
+    { STATUS_KIND_POKEMON, 1, 0 },
+    { STATUS_KIND_POKEMON, 1, 1 },
+    { STATUS_KIND_POKEMON, 0, 0 },
+    { STATUS_KIND_POKEMON, 1, 0 },
+    { STATUS_KIND_POKEMON, 1, 1 },
+    { STATUS_KIND_POKEMON, 0, FIGHT_TARGET_STATUS_MENU_SELECTOR_ATTACKER },
+    { STATUS_KIND_POKEMON, 0, FIGHT_TARGET_STATUS_MENU_SELECTOR_DEFENDER },
+    { STATUS_KIND_POKEMON, 0, 0 },
+    { STATUS_KIND_POKEMON, 0, FIGHT_TARGET_STATUS_MENU_SELECTOR_ATTACKER },
+    { STATUS_KIND_POKEMON, 0, FIGHT_TARGET_STATUS_MENU_SELECTOR_ATTACKER },
+    { STATUS_KIND_POKEMON, 0, FIGHT_TARGET_STATUS_MENU_SELECTOR_ATTACKER },
+    { STATUS_KIND_POKEMON, 0, 0 },
+    { STATUS_KIND_POKEMON, 0, 0 },
+    { STATUS_KIND_POKEMON, 0, 0 },
+    { STATUS_KIND_FIGHT_TRAINER, 0, 0 },
+    { STATUS_KIND_WAZA, 0, 0 },
+    { STATUS_KIND_FIGHT_SIDE, 0, 0 },
+    { STATUS_KIND_ITEM, 0, 0 },
+};
+
+// Number of records in the target table.
+u32 fight_target_data_number = 30;

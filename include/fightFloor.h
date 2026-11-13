@@ -12,6 +12,7 @@ typedef struct FIGHT_WAZA FIGHT_WAZA;
 
 /* Statuses fightFloorGetStatus reports for a floor record. */
 enum FightFloorStatus {
+    FIGHT_FLOOR_STATUS_FIGHT_FLOOR_PTR = 0,
     FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
 };
 
@@ -230,6 +231,7 @@ void fightFloor_SetAppointMsgPtr(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetCriticakMsgId(FIGHT_FLOOR *floor, s32 messageId);
 void fightFloor_SetWazakoukaMsgId(FIGHT_FLOOR *floor, s32 messageId);
 FIGHT_SIDE *fightFloorGetValidFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
+FIGHT_SIDE *fightFloor_GetFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
 void fightFloorReplaceFightOutPokemonAttackToDefense(FIGHT_FLOOR *floor);
 u8 fightFloorIsNowEncountSnatchOnly(FIGHT_FLOOR *floor);
 u8 fightFloorLoopValidFightTrainer(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);

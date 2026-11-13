@@ -16,13 +16,13 @@ extern "C" {
 extern u32 *fight_type_data_number;
 extern FIGHT_TYPE_DATA *fight_type_data;
 
-u16 fightTypeGetFightSideFightOutPokemonMax(long fightType);
+u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType);
 u32 fightTypeDataBiosGetName(void *fightTypeData);
 }
 
 // How many Pokemon one side of the fight keeps out at once: every trainer of
 // that side keeps its own Pokemon out.
-u16 fightTypeGetFightSideFightOutPokemonMax(long fightType) {
+u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType) {
     u8 trainerNum = fightTypeDataBiosGetTrainerNum(fightTypeDataBiosGetPtr(fightType));
     u8 fightoutPokemonNum = fightTypeDataBiosGetFightoutPokemonNum(fightTypeDataBiosGetPtr(fightType));
     return trainerNum * fightoutPokemonNum;
@@ -77,9 +77,9 @@ u32 fightTypeDataBiosGetName(void *fightTypeData) {
 }
 
 // Record of a fight type, or null when the fight has no such type.
-void *fightTypeDataBiosGetPtr(long type) {
-    if ((u16)type > *fight_type_data_number) {
+void *fightTypeDataBiosGetPtr(u16 type) {
+    if (type > *fight_type_data_number) {
         return 0;
     }
-    return &fight_type_data[(u16)type];
+    return &fight_type_data[type];
 }

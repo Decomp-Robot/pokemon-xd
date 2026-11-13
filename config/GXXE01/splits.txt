@@ -2869,7 +2869,8 @@ game/app/fight/fightKind.cpp:
 	.text       start:0x801EF688 end:0x801EFA74
 
 game/app/fight/fightTarget.cpp:
-	.text       start:0x801EFC3C end:0x801EFCAC
+	.text       start:0x801EFA74 end:0x801F0208
+	.data       start:0x804130D0 end:0x80413104
 
 game/app/fight/fightType.cpp:
 	.text       start:0x801F0208 end:0x801F0324
@@ -2943,6 +2944,10 @@ game/app/fight/fightKoukaBios.cpp:
 game/app/fight/fightJouken.cpp:
 	.text       start:0x8020C1F0 end:0x8020C590
 	.data       start:0x80413760 end:0x8041377C
+
+game/app/fight/fightTargetData.cpp:
+	.data       start:0x804139B8 end:0x80413AA8
+	.sdata      start:0x804E8588 end:0x804E8590
 
 game/app/fight/fightJoukenBios.cpp:
 	.text       start:0x8020C590 end:0x8020C88C
