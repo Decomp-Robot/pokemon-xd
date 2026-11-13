@@ -3106,6 +3106,13 @@ game/app/people/peopleWalkList.cpp:
 GSAPI/GSstream/GSstream.cpp:
 	.text       start:0x802A6220 end:0x802A6484
 
+game/GSAPI/GSgfx/project.cpp:
+	.text       start:0x802AD7A0 end:0x802ADCC8
+	.data       start:0x8041CC58 end:0x8041CC70
+	.bss        start:0x804E66F0 end:0x804E6710
+	.sbss       start:0x804EBD08 end:0x804EBD18
+	.sdata2     start:0x804EFB10 end:0x804EFB28
+
 game/GSAPI/GSgfx/renderModule.cpp:
 	.text       start:0x802B70C8 end:0x802B7464
 	.bss        start:0x804E71A8 end:0x804E72EC

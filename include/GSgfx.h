@@ -8,6 +8,9 @@
 #include <GSvec.h>
 #include <GStexture.h>
 
+struct _GScamera;
+typedef struct _GScamera GScamera;
+
 struct GSgfxVF {
     u32 reserved[0x110];
 };
@@ -829,7 +832,11 @@ s32 GSgfxBeginBackFBCapture(GStexture *texture, u8 (*callback)(GStexture *, u32,
 
 
 extern "C" f32 GSgfxVideoGetLastRenderTime(void);
+extern "C" s32 GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count);
+extern "C" s32 GSgfxProjectFast(GSvec *src, GSvec *dst);
+extern "C" void GSgfxProjectSetupCameraParameters(GScamera *camera);
 extern "C" void GSgfxProjectSetupParameters(void);
+extern "C" f32 (*GSgfxMatrixGetPtr(u32 matrix))[4];
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
