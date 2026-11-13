@@ -10,6 +10,11 @@ void fightKoukaDoFightKoukaJoukenAndKouka(void *target, u16 fightKoukaId);
 u32 tenkouDataBiosGetFightInitMsgId(u16 weatherId);
 }
 
+extern "C" u8 fightActionFlowHeijou(FIGHT_ACTION *action)
+{
+    return 1;
+}
+
 u8 _fightActionFlowTenkouInitSubGetSeqFightOutPokemonPtr(void *pokemon, u16, void *result)
 {
     if (fightOutPokemon_GetSequencePtr((FightOutPokemon *)pokemon) != 0) {
