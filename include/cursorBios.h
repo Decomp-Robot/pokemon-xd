@@ -14,6 +14,7 @@ extern "C" {
 
 CURSOR cursorBiosGetPos(int cursorID);
 CURSOR cursorBiosSetPos(int cursorID, CURSOR pos);
+void cursorBiosInit(void);
 
 #ifdef __cplusplus
 }

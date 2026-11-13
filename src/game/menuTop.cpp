@@ -14,6 +14,7 @@
 #include <menuSub.h>
 #include <peopleInfoBios.h>
 #include <menu.h>
+#include <cursorBios.h>
 #include <menuTitle.h>
 #include <memcard.h>
 #include <menuTop.h>
@@ -129,7 +130,6 @@ void menuTitleBattlePreReadCheck(void);
 void menuTitlePreReadWait(void);
 void menuTitleBattleSelectFree(void);
 
-void cursorBiosInit(void);
 void heroMoveSyncWithHero(void);
 void pokecoloStartCountPlayTime(s32 enabled);
 void menuTitleOption(void);

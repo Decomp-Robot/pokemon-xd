@@ -3016,6 +3016,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole"]
 
 [[lib.object]]
+name = "game/app/menu/cursorBios.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-inline deferred"]
+
+[[lib.object]]
 name = "game/menu/window.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline deferred"]
