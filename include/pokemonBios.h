@@ -38,6 +38,15 @@ typedef struct PokemonExpandStatus {
     u8 strong; // 0x4
 } PokemonExpandStatus;
 
+// Move record of a Pokemon. The move data ID names the move in the slot, the
+// PP is what the slot has left and the PP count is the number of PP ups the
+// move holds. A Pokemon carries four of these records.
+typedef struct PokemonWaza {
+    u16 dataId; // 0x0
+    u8 pp; // 0x2
+    u8 ppCount; // 0x3
+} PokemonWaza;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -107,6 +116,12 @@ u16 pokemonBiosGetItemDataId(Pokemon *pokemon);
 u32 pokemonBiosGetExp(Pokemon *pokemon);
 u16 pokemonBiosGetPara1Amari(Pokemon *pokemon);
 u8 pokemonBiosGetPokemonWazaPpCount(Pokemon *pokemon, u16 slot);
+#ifdef __cplusplus
+PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, bool flag);
+#else
+PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, u8 flag);
+#endif
+void pokemonWazaBiosCopy(PokemonWaza *destination, PokemonWaza *source);
 u16 pokemonBiosGetCatchFloorId(Pokemon *pokemon);
 u8 pokemonBiosGetCatchLevel(Pokemon *pokemon);
 u8 pokemonBiosGetCatchTrainerSex(Pokemon *pokemon);
