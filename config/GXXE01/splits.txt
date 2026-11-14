@@ -2093,6 +2093,11 @@ game/GSAPI/GSpart/GSpart.cpp:
 	.sbss       start:0x804EAF70 end:0x804EAFA0
 	.sdata2     start:0x804ED548 end:0x804ED570
 
+game/GSAPI/GSscratch/GSscratch.cpp:
+	.text       start:0x801010B4 end:0x801016D4
+	.bss        start:0x80443570 end:0x80443670
+	.sbss       start:0x804EAFA0 end:0x804EAFB8
+
 game/GSAPI/GStexture/GStexture.cpp:
 	.text       start:0x801016D4 end:0x8010315C
 	.rodata     start:0x802ED1D0 end:0x802ED240

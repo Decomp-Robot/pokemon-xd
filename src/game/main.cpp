@@ -1,3 +1,4 @@
+#include <GSscratch.h>
 #include <dolphin/ai.h>
 #include <dolphin/ar.h>
 #include <dolphin/os.h>
@@ -56,7 +57,6 @@ u32 floorCreateLocalHeap(void);
 void GSmemInitSysdolAllocator(void);
 s32 pokecoloGetCountryCode(void);
 void sysvarsShowDebug(void);
-void GSscratchInit(u32);
 void GSdvdSetDVDServer(void *, u32);
 void GSdvdSetReportServer(void *, u32, u32);
 void GSdvdSetGCClient(void *, void *, void *, u32);
