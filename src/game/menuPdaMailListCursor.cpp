@@ -1,7 +1,11 @@
 #include <menuPdaMailListXD.h>
 
 #include <GSmem.h>
+#include <GSmsg.h>
+#include <msgctrl.h>
 #include <menu.h>
+#include <menuItemBios.h>
+#include <sprite.h>
 #include <menuPdaSub.h>
 #include <winSeq.h>
 #include <winSprite.h>
@@ -9,8 +13,15 @@
 extern "C" s32 mailGetNbMailInMailbox(void);
 extern "C" CURSOR *menuPdaMailXD(CURSOR *cursor, bool check, long flag);
 void _pdaMailSort(void);
-extern u16 *_sortwork;
-extern "C" void _menuClose(long menuID);
+u16 *_sortwork;
+static void _menuClose(long menuID);
+void _menuPdaMailListPosition(void);
+void _menuPdaMailListCalcPosition(CURSOR *cursor);
+void _menuPdaMailCalc(f32 *position, f32 target, f32 speed);
+u32 _getSubject(s32 index);
+u32 _getSenderName(s32 index);
+s32 _getMailID(s32 index);
+extern "C" s32 pdaMailGetMailID(s32 index);
 
 enum {
     MAIL_LIST_VISIBLE_COUNT = 5,
@@ -197,4 +208,151 @@ void _menuPdaMailListXDInit(void)
         _maillistwork.mVisibleCount = count;
     }
     menuPdaSubInitAlpha(_menuPdaMailAlpha, MAIL_LIST_VISIBLE_COUNT, 0);
+}
+
+extern "C" {
+long mailGetSortMode(void);
+s32 mailGetMailIDInMailbox(s32 index);
+u32 mailGetSenderName(s32 mailID);
+u32 mailGetSubject(s32 mailID);
+}
+
+static const s32 MAIL_LIST_ROW_HEIGHT = 47;
+static const s32 MAIL_LIST_SENDER_X_OFFSET = 47;
+enum {
+    MAIL_LIST_TEXT_MESSAGE = 17014,
+    MAIL_LIST_PAGE_MESSAGE = 17007,
+    MAIL_LIST_CURSOR_SLOT = 10,
+    MAIL_LIST_CLIP_ITEM = 112
+};
+static const f32 MAIL_LIST_SECOND_LINE_Y = 21.0f;
+static const f32 MAIL_LIST_SCROLL_SPEED = 20.0f;
+static const u32 MAIL_LIST_SUBJECT_COLOR = 0xD5AA3300u;
+static const u32 MAIL_LIST_SENDER_COLOR = 0xF0F0F000u;
+static const u32 MAIL_LIST_PAGE_COLOR = 0xFFFFFF00u;
+
+void _menuPdaMailListMain(tagWINDOW_WORK *window)
+{
+    CURSOR cursor = _getCursor();
+    _menuPdaMailListPosition();
+    _menuPdaMailListCalcPosition(&cursor);
+    menuPdaSubCalcAlpha(_menuPdaMailAlpha, MAIL_LIST_VISIBLE_COUNT, cursor.y);
+}
+
+void _menuPdaMailListCalcPosition(CURSOR *cursor)
+{
+    _maillistwork.mTargetScrollY = -cursor->x * MAIL_LIST_ROW_HEIGHT;
+}
+
+void _menuPdaMailListPosition(void)
+{
+    if (_maillistwork.mScrollX != _maillistwork.mTargetScrollX)
+        _menuPdaMailCalc(&_maillistwork.mScrollX, _maillistwork.mTargetScrollX, MAIL_LIST_SCROLL_SPEED);
+    if (_maillistwork.mScrollY != _maillistwork.mTargetScrollY)
+        _menuPdaMailCalc(&_maillistwork.mScrollY, _maillistwork.mTargetScrollY, MAIL_LIST_SCROLL_SPEED);
+}
+
+void _menuPdaMailCalc(f32 *position, f32 target, f32 speed)
+{
+    menuPdaSubCalcPositon(position, target, speed);
+}
+
+long _pdaMailListDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    CURSOR cursor = _getCursor();
+    s32 count = mailGetNbMailInMailbox();
+    u32 subjectColor = MAIL_LIST_SUBJECT_COLOR | window->mRgba.mColorA;
+    u32 senderColor = MAIL_LIST_SENDER_COLOR | window->mRgba.mColorA;
+    tagMENU_ITEM_DATA *area = menuItemBiosGetPtr(MAIL_LIST_SUB_MENU_ID, MAIL_LIST_CLIP_ITEM);
+    tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(MAIL_LIST_SUB_MENU_ID, sprite->mItemID);
+    spriteSetScissor(window->mLayerID, area->mX - item->mX, area->mY - item->mY, area->mWidth, area->mHeight);
+    f32 y = _maillistwork.mScrollY;
+    s32 x = (s32)_maillistwork.mScrollX;
+    s32 secondX = (s32)(MAIL_LIST_SENDER_X_OFFSET + _maillistwork.mScrollX);
+    for (s32 i = 0; i < count; i++) {
+        if (i >= cursor.x - 1 && i < cursor.x + 6) {
+            u32 message = _getSubject(i);
+            if (message) {
+                u32 text = (u32)GSmsgGetStringPtr(message);
+                msgctrlSetValue(MSGCTRL_TEXT, text);
+                GSmsgPrint2(window->mLayerID, x, (s32)y, subjectColor | window->mRgba.mColorA, MAIL_LIST_TEXT_MESSAGE);
+            } else GSmsgPrint2(window->mLayerID, x, (s32)y, subjectColor | window->mRgba.mColorA, 0);
+            message = _getSenderName(i);
+            if (message) {
+                msgctrlSetValue(MSGCTRL_TEXT, (u32)GSmsgGetStringPtr(message));
+                GSmsgPrint2(window->mLayerID, secondX, (s32)(MAIL_LIST_SECOND_LINE_Y + y), senderColor | window->mRgba.mColorA, MAIL_LIST_TEXT_MESSAGE);
+            } else GSmsgPrint2(window->mLayerID, secondX, (s32)(MAIL_LIST_SECOND_LINE_Y + y), senderColor | window->mRgba.mColorA, 0);
+        }
+        y += MAIL_LIST_ROW_HEIGHT;
+    }
+    spriteClearScissor(window->mLayerID);
+    return 0;
+}
+
+long _pdaMailListPageBunbo(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    s32 count = mailGetNbMailInMailbox();
+    if (count != 0) {
+        msgctrlSetValue(MSGCTRL_NUM_PANEL, count);
+        s32 width = GSmsgGetMessageSize(MAIL_LIST_PAGE_MESSAGE) >> 16;
+        GSmsgPrint2(window->mLayerID, sprite->mWidth - width, 0,
+                    MAIL_LIST_PAGE_COLOR | window->mRgba.mColorA, MAIL_LIST_PAGE_MESSAGE);
+    }
+    return 0;
+}
+
+long _pdaMailListPageBunshi(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    s32 count = mailGetNbMailInMailbox();
+    if (count != 0) {
+        msgctrlSetValue(MSGCTRL_NUM_PANEL, window->mCursor.x + window->mCursor.y + 1);
+        s32 width = GSmsgGetMessageSize(MAIL_LIST_PAGE_MESSAGE) >> 16;
+        GSmsgPrint2(window->mLayerID, sprite->mWidth - width, 0,
+                    MAIL_LIST_PAGE_COLOR | window->mRgba.mColorA, MAIL_LIST_PAGE_MESSAGE);
+    }
+    return 0;
+}
+
+void _pdaMailListPage(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    if (mailGetNbMailInMailbox() != 0) winSpriteSetDisp(sprite, 1);
+    else winSpriteSetDisp(sprite, 0);
+}
+
+static void _menuClose(long menuID)
+{
+    menuClose(menuID);
+    menuCloseSync(menuID, 1);
+}
+
+#pragma dont_inline on
+void _sortReceive(u16 *work)
+{
+    s32 index = mailGetNbMailInMailbox() - 1;
+    while (index >= 0) {
+        u16 mailID = mailGetMailIDInMailbox(index);
+        index--;
+        *work++ = mailID;
+    }
+}
+
+void _pdaMailSort(void)
+{
+    u16 *work = _sortwork;
+    mailGetSortMode();
+    _sortReceive(work);
+}
+#pragma dont_inline reset
+
+void _setCursor(CURSOR cursor) { cursorBiosSetPos(MAIL_LIST_CURSOR_SLOT, cursor); }
+CURSOR _getCursor(void) { return cursorBiosGetPos(MAIL_LIST_CURSOR_SLOT); }
+
+u32 _getSenderName(s32 index) { return mailGetSenderName(_getMailID(index)); }
+u32 _getSubject(s32 index) { return mailGetSubject(_getMailID(index)); }
+s32 _getMailID(s32 index) { return pdaMailGetMailID(index); }
+
+extern "C" s32 pdaMailGetMailID(s32 index)
+{
+    if (index < 0 || index >= mailGetNbMailInMailbox()) return -1;
+    return _sortwork[index];
 }
