@@ -78,7 +78,11 @@ enum {
     JOUTAI_ID_MAGIC_COAT = 55,
     JOUTAI_ID_FOLLOW_ME = 77,
     JOUTAI_ID_PERISH_SONG = 30,
-    JOUTAI_ID_FLYING = 31
+    JOUTAI_ID_FLYING = 31,
+    JOUTAI_ID_DIGGING = 32,
+    JOUTAI_ID_DIVING = 33,
+    JOUTAI_ID_MIST = 76,
+    JOUTAI_ID_UPROAR = 11
 };
 enum {
     FIGHT_SEQ_FLAG_ATTACKER_DEFENDER_SWAPPED = 0x1000,
@@ -94,6 +98,12 @@ enum {
 enum { FIGHT_STAT_STAGE_LIMIT = 12, FIGHT_STAT_ATTACK=1, FIGHT_STAT_DEFENSE=2, FIGHT_STAT_SPEED=3, FIGHT_STAT_SPECIAL_ATTACK=4, FIGHT_STAT_SPECIAL_DEFENSE=5, FIGHT_STAT_ACCURACY=6 };
 enum { FIGHT_STAT_MESSAGE_LOWER_ONE = 21, FIGHT_STAT_MESSAGE_LOWER_MULTIPLE = 45, FIGHT_STAT_MESSAGE_RAISE_ONE = 14, FIGHT_STAT_MESSAGE_RAISE_MULTIPLE = 38 };
 enum {
+    WAZA_SEQUENCE_ID_TWISTER = 146,
+    WAZA_SEQUENCE_ID_EARTHQUAKE = 147,
+    WAZA_SEQUENCE_ID_GUST = 149,
+    WAZA_SEQUENCE_ID_THUNDER = 152,
+    WAZA_SEQUENCE_ID_SKY_UPPERCUT = 207,
+    WAZA_SEQUENCE_ID_LOCK_ON = 94,
     WAZA_SEQUENCE_ID_BATON_PASS = 127,
     WAZA_SEQUENCE_ID_HIGH_CRITICAL = 43,
     WAZA_SEQUENCE_ID_SKY_ATTACK = 75,
@@ -174,6 +184,9 @@ u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *attacker, Fi
 void fightSeqFightOutPokemonTokuseiCheckWazaHitAfterAll(void);
 void fightSeqSoubiItemCheckWazaHitAfterAll(void);
 s32 fightSeqCondChgActTypeToPokemonStatusId(u8 type);
+s8 fightSeqCondChgActParaIdToValue(u8 paraId);
+u8 fightSeqGetTextureZokuseiAry(FightOutPokemon *pokemon, s32 *zokuseiAry);
+u8 fightSeqIsGuard(FightOutPokemon *pokemon, u16 wazaDataId);
 void fightSeq_NextWazaSeq(s32 count);
 void fightSeq_JumpWazaSeq(u8 *sequence);
 void fightSeqCheckSetHensinBuffToMotoPokemon(FightOutPokemon *pokemon, u32 field);
