@@ -11,8 +11,6 @@ extern "C" {
 #include <people.h>
 
 extern "C" {
-void* peopleSearchID(s32 peopleId);
-s32 peopleGetHumanID(s32 groupId, s32 resourceId);
 bool gimmickBoxFixDistanceForPushBox(f32* reach, void* work, f32 dx, f32 dz);
 u8 gimmickBoxIsBox(void* work);
 GSvec* peopleBiosGetPosPtr(void* work);

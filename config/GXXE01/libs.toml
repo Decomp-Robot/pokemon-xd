@@ -3300,6 +3300,11 @@ cflags = [
     "-lang=c++",
 ]
 
+[[lib.object]]
+name = "game/app/script/scriptModel.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-O4,s", "-inline noauto", "-opt nopeephole"]
+
 # The sound engine's stream callbacks: the file system and the audio loader
 # reach them as ordinary calls, so they stay out of line.
 

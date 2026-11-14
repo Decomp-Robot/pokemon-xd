@@ -91,6 +91,14 @@ struct tagPeopleInfoBios {
 };
 extern "C" {
 tagPeopleWork* peopleGet(unsigned long group, unsigned long id);
+unsigned long peopleGetHumanID(unsigned long group, unsigned long id);
+tagPeopleWork* peopleSearchID(unsigned long humanID);
+_GSmodel* peopleBiosGetModelPtr(tagPeopleWork* people);
+void peopleAttach(unsigned long group, unsigned long id, unsigned long parentGroup, unsigned long parentID, long partIndex);
+void peopleDetach(unsigned long group, unsigned long id, bool keepTransform);
+bool peopleWaitSyncMotion(unsigned long group, unsigned long id, bool wait);
+void peopleStopMotion(unsigned long group, unsigned long id);
+void peopleSetMotionForce(unsigned long group, unsigned long id, long motion, long frame, bool loop);
 s32 peopleBiosGetMaxNum();
 tagPeopleWork* peopleBiosGetWorkPtr(s32 index);
 u8 peopleBiosCheckFlag(tagPeopleWork* people, unsigned long flag);

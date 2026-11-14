@@ -10,7 +10,7 @@ extern "C" {
 unsigned long peopleGetAnywaySaveSize();
 void peopleRestoreAnywaySaveData(void*, unsigned long);
 void peopleMakeAnywaySaveData(void*, unsigned long);
-int peopleOpen(unsigned long, unsigned long, unsigned long);
+unsigned long peopleOpen(unsigned long, unsigned long, unsigned long);
 void peopleClose(unsigned long, unsigned long, bool);
 void peopleAddCollision(unsigned long, unsigned long);
 void peopleSetDisp(unsigned long, unsigned long, bool);

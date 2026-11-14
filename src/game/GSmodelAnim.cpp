@@ -93,7 +93,7 @@ extern "C" void GSmodelSetAnimEndedCallback(_GSmodel *model, GSmodelAnimEndedCal
     model->mAnimEndedCBArg = arg;
 }
 
-extern "C" void GSmodelSetForceUseFractionalFramesFlag(_GSmodel *model, u8 on)
+extern "C" void GSmodelSetForceUseFractionalFramesFlag(_GSmodel *model, bool on)
 {
     if (on == 1) {
         model->mAnimFlags |= MODEL_ANIM_FLAG_USE_FRACTIONAL;

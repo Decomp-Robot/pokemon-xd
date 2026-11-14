@@ -236,7 +236,7 @@ void GSmodelAdvanceAnimation(_GSmodel *model, f32 frameStep);
 void GSmodelRemoveRootJointAnimation(_GSmodel *model);
 void GSmodelUseRootJointAnimation(_GSmodel *model, u8 use);
 void GSmodelSetAnimEndedCallback(_GSmodel *model, GSmodelAnimEndedCallback cb, void *arg);
-void GSmodelSetForceUseFractionalFramesFlag(_GSmodel *model, u8 on);
+void GSmodelSetForceUseFractionalFramesFlag(_GSmodel *model, bool on);
 void GSmodelSetSkipFractionalFramesFlag(_GSmodel *model, u8 on);
 void GSmodelSet60fpsAnimFlag(_GSmodel *model, u8 on);
 void GSmodelLinkToGSparticleBank(_GSmodel *model, _GSparticleBank *bank);
