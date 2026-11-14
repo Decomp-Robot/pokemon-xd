@@ -19,18 +19,8 @@ void menuDrawReliveUpdate(void);
 u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
 void menuPdaSetSubres(s32 res, s32 subres);
-long menuPdaDPMListDispRelive(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long x, long y, long index,
-                              u8 alpha, bool frame);
 void menuDrawReliveMeterByDarkPokemon(DarkPokemon *pokemon, long x, long y, s16 width, s16 height, u8 alpha,
                                       long layerID);
-u32 menuPdaDPMListGetDarkPokemonPlaceMsgID(long index, u8 *number);
-u16 menuPdaDPMListGetDarkPokemonID(long index);
-u16 menuPdaDPMListGetPokemonID(long index);
-u16 *menuPdaDPMListGetPokemonName(long index);
-u16 menuPdaDPMListGetDarkpokemonID(long index);
-DarkPokemon *menuPdaDPMListGetDPointer(long index);
-long menuPdaDPMListGetDPNum(void);
-CURSOR *menuPdaDPMon(CURSOR *cursor);
 }
 
 menuPdaDPM *_pDPM;
@@ -38,8 +28,6 @@ static CURSOR _cursor;
 
 // Menu data of the dark pokemon monitor window and of its row sprites.
 enum {
-    MENU_ID_PDA_DPMON = 117,
-    MENU_ID_PDA_DPMON_LIST = 116,
     DPM_ITEM_RELIVE = 74,
     DPM_LIST_LINES = 10,
     DPM_PDA_SUBRES = 2,

@@ -395,8 +395,10 @@ game/menuPdaDPM.cpp:
 	.sdata2     start:0x804EC3F0 end:0x804EC400
 
 game/menuPdaDPMonitorList.cpp:
-	.text       start:0x80051E74 end:0x80052A94
-	.sdata2     start:0x804EC408 end:0x804EC418
+	.text       start:0x80050B30 end:0x80052CBC
+	.rodata     start:0x802EB0B8 end:0x802EB0E0
+	.sbss       start:0x804EA850 end:0x804EA858
+	.sdata2     start:0x804EC400 end:0x804EC418
 
 game/menuPdaSub.cpp:
 	.text       start:0x80052CBC end:0x800531DC

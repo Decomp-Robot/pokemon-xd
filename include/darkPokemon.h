@@ -15,8 +15,10 @@ enum darkPokemonWhere {
     DARK_POKEMON_WHERE_NONE = 0,
     DARK_POKEMON_WHERE_PARTY = 1,
     DARK_POKEMON_WHERE_PCBOX = 2,
+    DARK_POKEMON_WHERE_RELIVE_HALL = 3,
     DARK_POKEMON_WHERE_SODATEYA = 4,
-    DARK_POKEMON_EXCHANGED = 5
+    DARK_POKEMON_EXCHANGED = 5,
+    DARK_POKEMON_WHERE_RELEASED = 6
 };
 enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HERO = 1 };
 class DarkPokemon {
@@ -41,6 +43,7 @@ public:
     void setStatus(darkPokemonStatus status);
     void setCatchFloorId(u16 floorID);
     void setUpdate(bool update);
+    void getPlace(darkPokemonWhere &where, u8 &index) const;
     void setPlace(darkPokemonWhere where, u8 index);
     void addStatus(darkPokemonStatus status);
     darkPokemonSnatchWho getSnatchFromWho() const;
@@ -76,6 +79,7 @@ extern "C" {
 
 DarkPokemon *darkPokemonGetDarkPokemon(u32 darkID);
 u32 darkPokemonGetSnatchSuccessNum(void);
+u32 darkPokemonGetMeetNum(void);
 s32 darkPokemonGetReliveNum(void);
 u8 darkPokemonBiosGetReliveFlag(u16 darkID);
 void darkPokemonBiosSetInfomation(u16 pokemonID, u16 information);
