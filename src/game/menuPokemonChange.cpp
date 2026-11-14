@@ -101,7 +101,6 @@ enum PokemonChangeInterfaceID {
     CHANGE_SPRITE_LOCAL_PANEL = 0x20F,
     CHANGE_SPRITE_GBA_PANEL = 0x20E,
     CHANGE_SEQUENCE_SELECT = 0x1BC,
-    CHANGE_ROM_VERSION_UNKNOWN = 0xFFFF,
     CHANGE_SOUND_ERROR = 0x13,
 };
 
@@ -614,7 +613,7 @@ void CMenuPokemonChange::main()
     mState.mNextState = STATE_START;
     memset(mState.mWork, 0, sizeof(mState.mWork));
     loop();
-    menuGBACSetRomVer(0, CHANGE_ROM_VERSION_UNKNOWN);
+    menuGBACSetRomVer(GBA_ROM_VERSION_UNKNOWN, GBA_ROM_ENTRY_ALL);
     _pokemonChangeFadeOut(0.3f);
     menuStateChange(MENU_CLOSED);
     while (menuFaceCheckLoading())

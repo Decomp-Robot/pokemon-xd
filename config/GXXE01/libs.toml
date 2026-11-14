@@ -3153,6 +3153,11 @@ name = "game/menuToolBattle.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-inline noauto", "-opt nopeephole", "-str reuse,readonly", "-lang=c++"]
 
+[[lib.object]]
+name = "game/menuGBAC.cpp"
+completed = true
+extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-opt nopeephole", "-str reuse,readonly"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"

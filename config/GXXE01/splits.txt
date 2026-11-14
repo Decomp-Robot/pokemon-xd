@@ -385,6 +385,15 @@ game/menuToolBattle.cpp:
 	.rodata     start:0x802EAF30 end:0x802EAF98
 	.sdata2     start:0x804EC3D0 end:0x804EC3E0
 
+game/menuGBAC.cpp:
+	.text       start:0x8004E54C end:0x8004FB68
+	.rodata     start:0x802EAF98 end:0x802EB0B8
+	.data       start:0x8032EBD8 end:0x8032EC48
+	.bss        start:0x804354A8 end:0x804354F4
+	.sdata      start:0x804E7F60 end:0x804E7F80
+	.sbss       start:0x804EA840 end:0x804EA848
+	.sdata2     start:0x804EC3E0 end:0x804EC3F0
+
 game/menuPdaDPMonitor.cpp:
 	.text       start:0x8004FB68 end:0x8004FCD4
 	.data       start:0x8032EC48 end:0x8032EC7C

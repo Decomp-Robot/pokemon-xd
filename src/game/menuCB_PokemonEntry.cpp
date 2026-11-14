@@ -5,6 +5,7 @@
 #include <menuCB.h>
 #include <toolentry.h>
 #include <gbaCommand.h>
+#include <menuGBA.h>
 #include <sound.h>
 #include <menu.h>
 #include <savedata.h>
@@ -54,7 +55,6 @@ typedef struct GBA_DeokisisuParam {
 extern const GBA_DeokisisuParam _GBA_DeokisisuParamTable[];
 
 extern "C" {
-s32 menuGBACGetRomVer(s32 index);
 void menuCBBattleStartTrainerFaceFree(void);
 void GSthreadSwitch(void);
 }
@@ -107,17 +107,17 @@ u8 _menuCB_pokemonGetDeoxysSel(u16 port, bool flag)
         u16 romVer = menuGBACGetRomVer(gbaIndex);
 
         switch (romVer) {
-        case 1:
-        case 2:
+        case GBA_ROM_VERSION_RUBY:
+        case GBA_ROM_VERSION_SAPPHIRE:
             form = 0;
             break;
-        case 3:
+        case GBA_ROM_VERSION_FIRE_RED:
             form = 1;
             break;
-        case 4:
+        case GBA_ROM_VERSION_LEAF_GREEN:
             form = 2;
             break;
-        case 5:
+        case GBA_ROM_VERSION_EMERALD:
             form = 3;
             break;
         default:

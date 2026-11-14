@@ -61,7 +61,7 @@ u8 menuCBRule_CheckRegulationAll(Hero *hero, FightRuleData *rule);
 u8 menuCBRule_CheckTrainerError(Hero *hero, s32 index);
 u8 menuCBRule_CheckTrainerErrorAll(Hero *hero);
 u8 menuCBRule_CheckErrorAll(Hero *hero);
-s32 menuCBRule_CheckHero(Hero *hero);
+u8 menuCBRule_CheckHero(Hero *hero);
 
 u8 menuCBRule_EnableSkill_SonicBoom(void);
 u8 menuCBRule_EnableSkill_Michidure(void);

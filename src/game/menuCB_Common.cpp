@@ -18,11 +18,7 @@ typedef struct MenuCBStack {
 
 MenuCBStack _CBC;
 
-extern "C" {
-s32 winMsgCheck(void);
-}
-
-extern "C" s32 menuCB_MessageDispCheck(void)
+extern "C" s8 menuCB_MessageDispCheck(void)
 {
     return winMsgCheck();
 }

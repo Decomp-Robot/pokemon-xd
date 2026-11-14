@@ -19,10 +19,12 @@ enum {
 };
 
 #ifdef __cplusplus
+class Hero;
 long _menuCB_NotDarkWaza(long wazaID);
 void _menuCB_ErrorTAMAGOCheck(void);
 void _menuCBGCDelPokemon(void);
 extern "C" {
+void menuCB_ShowPartyErrors(Hero *hero, s32 entry);
 void menuCB2DItemMsgDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 u32 menuCBRegionMsgID(u32 msgID);
 }

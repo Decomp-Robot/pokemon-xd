@@ -51,6 +51,7 @@ enum SaveMetadataField {
 #ifdef __cplusplus
 extern "C" {
 #endif
+GamedataAttest *gamedataBiosGetGamedataAtttestPtr(void *gamedata);
 // A null save selects the current game data.
 unsigned long gamedatasaveGetStatus(void *save, int field);
 void gamedatasaveSetStatus(void *save, int field, unsigned long value);

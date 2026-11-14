@@ -198,11 +198,7 @@ long _AGB_SendWazaText(long chan, u8 *data);
 #define GBA_CODE_FILE_SIZE 0x20000
 #define GBA_CODE_ALIGN 0x20
 
-// Status AGB_Terminate leaves on a channel whose transfer was still running,
-// the word the cached controller-type lookup reports for the port
-// a GBA answers
-// on, and the word an idle poke of the GBA sends.
-#define AGB_STATUS_TERMINATED 4
+// Controller type for a GBA and the command sent by an idle probe.
 #define GBA_PORT_ID 0x00040000
 #define GBA_IDLE_POKE 0x11
 

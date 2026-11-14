@@ -10,7 +10,7 @@ struct MenuSpriteData;
 extern "C" {
 #endif
 
-s32 menuCB_MessageDispCheck(void);
+s8 menuCB_MessageDispCheck(void);
 void menuCB_MessageDispOff(void);
 void menuCB_MessageDispOn(s32 msgID, bool mode);
 s32 menuCB_GetDisconnectedGBA(void);

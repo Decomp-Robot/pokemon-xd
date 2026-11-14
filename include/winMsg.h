@@ -45,7 +45,7 @@ struct MENU_LVUP_STATUS {
 #ifdef __cplusplus
 extern "C" {
 #endif
-s32 winMsgCheck(void);
+s8 winMsgCheck(void);
 s32 winMsgCheckField(void);
 void winMsgOpenFieldWithSE(u32 message, WinMsgBool wait, WinMsgBool flags, u8 sound);
 void winMsgOpenField(u32 message, WinMsgBool wait, WinMsgBool flags);

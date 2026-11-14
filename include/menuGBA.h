@@ -3,8 +3,22 @@
 #include <types.h>
 
 class Hero;
+
+// Cartridge identifiers reported by the GBA link program.
+enum GBA_ROM_VERSION {
+    GBA_ROM_VERSION_UNKNOWN = 0,
+    GBA_ROM_VERSION_RUBY = 1,
+    GBA_ROM_VERSION_SAPPHIRE = 2,
+    GBA_ROM_VERSION_FIRE_RED = 3,
+    GBA_ROM_VERSION_LEAF_GREEN = 4,
+    GBA_ROM_VERSION_EMERALD = 5
+};
+
+enum { GBA_ROM_ENTRY_ALL = 0xFFFF };
+
+extern "C" u16 menuGBACGetRomVer(u16 entry);
 extern "C" long openMenuGBA(long menu, long mode, Hero** heroes);
-extern "C" void menuGBACSetRomVer(long port, unsigned short version);
+extern "C" void menuGBACSetRomVer(unsigned short version, unsigned short entry);
 // Link progress of one controller port while menuGBAC talks to the GBAs.
 enum _GBA_PHASE {
     GBA_PHASE_NONE = 0,         // port takes no part in the transfer.

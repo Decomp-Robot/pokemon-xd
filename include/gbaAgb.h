@@ -106,6 +106,8 @@
 #define AGB_STATUS_ERROR 1
 #define AGB_STATUS_NO_ANSWER 2
 #define AGB_STATUS_RUNNING 3
+// A transfer stopped by AGB_Terminate.
+#define AGB_STATUS_TERMINATED 4
 
 // Game codes the code of the GBA is run on: the upload of the code accepts the
 // Japanese and the American Pokemon Ruby only, which answer the reset of the
@@ -145,6 +147,10 @@ extern "C" {
 long AGB_GetPokemon(long chan, void *record, unsigned long *dest);
 long AGB_Upload(long chan, long mode);
 long AGB_Prepare(const char *path);
+void AGB_Terminate_init(void);
+long AGB_Terminate(long chan);
+long AGB_GetStatus(long chan);
+long AGB_IsComplete(long chan);
 
 // The request entry points of the link library the battle menus drive. Every
 // one of them takes the channel over, runs its exchange and reports the code of

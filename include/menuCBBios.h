@@ -130,7 +130,8 @@ struct _MENUCBWORK {
     /* 0xB15C */ s32 previousBattleMode2D; // outgoing page contents during scrolling.
     /* 0xB160 */ s32 previousPage2D;
     /* 0xB164 */ s32 previousPage2DSub;
-    /* 0xB168 */ u8 _B168[8];
+    /* 0xB168 */ s32 gbaConnectMode;
+    /* 0xB16C */ s32 gbaConnectPort; // controller port being linked, -1 for none.
     /* 0xB170 */ s32 flashStartVS;
     /* 0xB174 */ s32 flashEndVS;
     /* 0xB178 */ s32 flashStartWinLose;

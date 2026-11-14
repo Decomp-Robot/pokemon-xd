@@ -615,9 +615,9 @@ extern "C" bool menuCBRule_CheckPokemonRegulation(Pokemon *pokemon, FightRuleDat
 }
 
 /* Whether the party may enter a battle under the current rule set. */
-extern "C" s32 menuCBRule_CheckHero(Hero *hero)
+extern "C" u8 menuCBRule_CheckHero(Hero *hero)
 {
-    s32 result = 0;
+    u8 result = 0;
 
     if (menuCBRule_CheckErrorAll(hero)) {
         if (menuCBRule_CheckRegulationAll(hero, menuCBBios_CurrentRule())) {
