@@ -11,6 +11,9 @@ struct GStexture;
 // stage; the length of an archive is rounded up to it.
 #define FLOOR_READ_ALIGN 0x20
 
+struct GSfloor_dd_;
+struct _GSmodel;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,6 +50,14 @@ void floorSetDispScriptInfo(u8 state);
 u8 floorIsDispScriptInfo(void);
 s32 floorGetLocalHeapHandle(void);
 struct GStexture *floorGetActiveOffscreenTexture(void);
+struct _GSmodel *floorOpenModel(u32 groupID, u32 resourceID);
+s32 floorMoviePlay(u32 movieID, s32 flags, s32 loop, u32 targetModelResourceID, u16 width, u16 height);
+void floorOffscreenPlayWait(void);
+s32 floorSetOffscreenIndex(s32 index);
+void floorReleaseOffscreen(void);
+void floorUpdateOffscreen(void);
+void floorInitOffscreen(struct GSfloor_dd_ *floor);
+void floorOffscreenMainInit(void);
 void floorSetHumanColision(u8 enabled);
 #ifdef __cplusplus
 bool floorGetHumanColision(void);

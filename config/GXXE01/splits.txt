@@ -2176,6 +2176,12 @@ game/app/floor/floorDataBios.cpp:
 ext/dolphin_sdk/gx/GXVert.c:
 	.text       start:0x80125678 end:0x80125684
 
+game/app/floor/floorOffscreen.cpp:
+	.text       start:0x801256A0 end:0x80125AE0
+	.bss        start:0x80447058 end:0x80447070
+	.sdata      start:0x804E8398 end:0x804E83A0
+	.sbss       start:0x804EB138 end:0x804EB150
+
 game/app/floor/floorManager.cpp:
 	.text       start:0x80125AE4 end:0x80125F40
 	.rodata     start:0x802F32A8 end:0x802F32BC

@@ -19,11 +19,15 @@ struct DbgMenuItem;
 extern u32 (*debugMenuDataGetNum)(void);
 extern struct DbgMenuItem *(*debugMenuDataGetPtr)(long itemNo);
 
+struct FloorOffscreenResources;
+
 struct GSfloor_dd_ {
     u8 unknown;
     u8 kind;
     u16 floorID;
-    u8 unknownData[0x3c];
+    u8 unknownData[36];
+    struct FloorOffscreenResources **offscreen;
+    u8 unknownTail[20];
 };
 
 // Usable from C as well as C++.
