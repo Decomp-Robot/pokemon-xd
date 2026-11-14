@@ -3,6 +3,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include <GSmem.h>
+#include <GSlog.h>
 
 struct _GSgfxInitParms {
     u8 displayEnabled;
@@ -55,7 +56,6 @@ u32 floorCreateLocalHeap(void);
 void GSmemInitSysdolAllocator(void);
 s32 pokecoloGetCountryCode(void);
 void sysvarsShowDebug(void);
-void GSlogInit(u32, u32);
 void GSscratchInit(u32);
 void GSdvdSetDVDServer(void *, u32);
 void GSdvdSetReportServer(void *, u32, u32);

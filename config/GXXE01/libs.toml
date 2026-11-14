@@ -6529,3 +6529,15 @@ extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src
 [[lib.object]]
 name = "game/app/floor/floorDataBios.cpp"
 completed = true
+
+[[lib]]
+name = "GSlogM"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSlog/GSlog.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

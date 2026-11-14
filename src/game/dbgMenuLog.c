@@ -2,6 +2,7 @@
 #include <GSgfxC.h>
 #include <GSmsg.h>
 #include <types.h>
+#include <GSlog.h>
 #include <winSprite.h>
 #include <menuSub.h>
 
@@ -18,9 +19,6 @@ void windowSetParam(struct tagWINDOW_WORK *window, long no, long value);
 long windowGetParam(struct tagWINDOW_WORK *window, long no);
 
 u8 menuIsCheck(long menuID);
-
-long GSlogGetLineCount(void);
-const char *GSlogGetLine(long line);
 
 #pragma peephole off
 

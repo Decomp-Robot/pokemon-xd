@@ -3134,6 +3134,15 @@ game/app/people/peopleWalkList.cpp:
 GSAPI/GSstream/GSstream.cpp:
 	.text       start:0x802A6220 end:0x802A6484
 
+game/GSAPI/GSlog/GSlog.cpp:
+	.text       start:0x802A6484 end:0x802A6E90
+	.rodata     start:0x802FBAE0 end:0x802FBB68
+	.data       start:0x8041CBA0 end:0x8041CC24
+	.bss        start:0x804E0CE0 end:0x804E0E58
+	.sdata      start:0x804E86C0 end:0x804E86C8
+	.sbss       start:0x804EBC70 end:0x804EBC90
+	.sdata2     start:0x804EF970 end:0x804EF988
+
 game/GSAPI/GSgfx/project.cpp:
 	.text       start:0x802AD7A0 end:0x802ADCC8
 	.data       start:0x8041CC58 end:0x8041CC70
