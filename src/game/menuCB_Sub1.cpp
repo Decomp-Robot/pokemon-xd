@@ -2781,7 +2781,6 @@ void menuCB_PrintXP(tagSPRITE_WORK *sprite, s32 trainer)
 #include <menuCBBattleStart.h>
 
 extern "C" {
-GSgfxVF *GSgfxVFBuildTemp(s32, s32, s32, s32, s32, s32, s32, s32, s32);
 
 void menuCBBattleStartDispTrainerFaceSub(tagWINDOW_WORK *window,
                                       tagSPRITE_WORK *sprite, s32 trainer)

@@ -7,12 +7,27 @@
 #include <libc/memory.h>
 #include <GSvec.h>
 #include <GStexture.h>
+#include <dolphin/gx/GXStruct.h>
 
 struct _GScamera;
 typedef struct _GScamera GScamera;
 
+struct GSgfxVFArray {
+    u16 flags;
+    u8 stride;
+    GXAttr attr;
+    void *base;
+    u32 size;
+};
+
 struct GSgfxVF {
-    u32 reserved[0x110];
+    u16 flags;
+    u8 colorCount;
+    u8 textureCount;
+    GXVtxFmt fmtIndex;
+    GXVtxAttrFmtList fmt[GX_VA_MAX_ATTR + 1];
+    GXVtxDescList desc[GX_VA_MAX_ATTR + 1];
+    GSgfxVFArray array[GX_VA_MAX_ATTR + 1];
 };
 
 struct GSgfxLight;
@@ -661,6 +676,7 @@ public:
     void SetupFifo();
     u16 tokenMark();
     void setRenderStateAndSelect(GSgfxVF *vf);
+    void ResetVertexFormat(GSgfxVF *vf);
     void primitiveType(GSgfxPrimType type);
     void dlDraw(GSgfxDL *displayList);
     bool IsLayerVisible(void);
@@ -672,7 +688,7 @@ public:
     void dlDrawExt(u8 *dl, unsigned long size);
 
 /* Layer registry entry and cached render state. */
-    u8 _0000[4];
+    GSgfxLayer *mNext;
     u32 mRenderFlags;
     u8 _0008[0x20];
     GSgfxLayerID mLayerID; // 0x028: Slot the layer was registered in.
@@ -788,8 +804,8 @@ struct GSgfxLight {
         }
     }
 };
+extern "C" GSgfxLayer *GSgfxLayerGetLayerList(void);
 extern "C" GSgfxVF *GSgfxVFGetPredef(u32 format);
-extern "C" GSgfxVF *GSgfxVFBuildTemp(s32 p1, s32 p2, s32 p3, s32 p4, s32 p5, s32 p6, s32 p7, s32 p8, s32 p9);
 void GSprimSetup2DRender(GSgfxLayer *layer);
 extern "C" GSgfxLayer *GSgfxLayerFindByID(GSgfxLayerID id);
 
@@ -820,10 +836,10 @@ s32 GSgfxGPUSetMode(s32 mode);
 void GSgfxRender(void);
 void GSgfxDLPrimitiveType(u32 primitive);
 GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
-                         s32 hasNormal, s32 normalComponents,
-                         s32 colorCount, s32 colorType,
-                         s32 texCoordCount, s32 texCoordComponents,
-                         s32 texCoordType);
+                         u8 hasNormal, s32 normalComponents,
+                         u8 colorCount, s32 colorFormat,
+                         u8 textureCount, s32 textureComponents,
+                         s32 textureFormat);
 }
 
 
@@ -881,11 +897,16 @@ void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
 GSgfxLayer *GSgfxLayerFindByName(const char *name);
 extern "C" GSgfxLayerID GSgfxLayerFindByName_C(const char *name);
 void *GSgfxLayerGetFrameBufferTexture(void);
-void *GSgfxVFCreate(void *vf);
-void GSgfxVFFree(void *vf);
-void GSgfxVFInit(void *vf);
-void GSgfxVFSetElement(void *vf, s32 attribute, u32 componentCount, u32 componentFormat, u8 fractionalBits);
-void GSgfxVFSetArray(void *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayMetadata);
+u8 GSgfxVFGetTextureCount(GSgfxVF *vf);
+u8 GSgfxVFGetColorCount(GSgfxVF *vf);
+void GSgfxVFRemoveElement(GSgfxVF *vf, GXAttr attribute);
+bool GSgfxVFHasElement(GSgfxVF *vf, GXAttr attribute);
+BOOL GSgfxVFIsUsed(GSgfxVF *vf);
+GSgfxVF *GSgfxVFCreate(GSgfxVF *vf);
+void GSgfxVFFree(GSgfxVF *vf);
+void GSgfxVFInit(GSgfxVF *vf);
+void GSgfxVFSetElement(GSgfxVF *vf, s32 attribute, u32 componentCount, u32 componentFormat, u8 fractionalBits);
+void GSgfxVFSetArray(GSgfxVF *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayBytes);
 }
 void GSgfxShutdown(void);
 #endif
