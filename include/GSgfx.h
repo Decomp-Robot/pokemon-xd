@@ -853,6 +853,18 @@ extern "C" s32 GSgfxProjectFast(GSvec *src, GSvec *dst);
 extern "C" void GSgfxProjectSetupCameraParameters(GScamera *camera);
 extern "C" void GSgfxProjectSetupParameters(void);
 extern "C" f32 (*GSgfxMatrixGetPtr(u32 matrix))[4];
+extern u16 _tokenCurrent;
+extern u16 _tokenFrameStart;
+extern u16 _tokenFrameEnd;
+extern u16 _tokenLastGPU;
+extern u16 _tokenMaximum;
+
+u16 GSgfxTokenMark_Sub(void);
+void GSgfxTokenMarkFrame(void);
+void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
+void GSgfxTokenAbortFrame(void);
+void GSgfxTokenInit(void);
+void GSgfxGPUSetDrawSyncCallback(void (*callback)(u16));
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);

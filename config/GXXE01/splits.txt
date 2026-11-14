@@ -3175,6 +3175,11 @@ game/GSAPI/GSlog/GSlog.cpp:
 	.sbss       start:0x804EBC70 end:0x804EBC90
 	.sdata2     start:0x804EF970 end:0x804EF988
 
+game/GSAPI/GSgfx/token.cpp:
+	.text       start:0x802AD5E4 end:0x802AD7A0
+	.bss        start:0x804E66D0 end:0x804E66F0
+	.sbss       start:0x804EBCF8 end:0x804EBD08
+
 game/GSAPI/GSgfx/project.cpp:
 	.text       start:0x802AD7A0 end:0x802ADCC8
 	.data       start:0x8041CC58 end:0x8041CC70

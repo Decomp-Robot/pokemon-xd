@@ -6576,3 +6576,8 @@ completed = true
 [[lib.object]]
 name = "game/app/exribbon/exribbon.cpp"
 completed = true
+
+[[lib.object]]
+name = "game/GSAPI/GSgfx/token.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
