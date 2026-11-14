@@ -2688,6 +2688,7 @@ extra_cflags = [
 [[lib.object]]
 name = "game/pokemonRelive.cpp"
 completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/app/pokemon/pokemon.cpp"

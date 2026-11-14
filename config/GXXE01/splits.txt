@@ -3035,9 +3035,9 @@ game/app/tableRes/tableResBios.cpp:
 	.data       start:0x80418790 end:0x804187A6
 
 game/pokemonRelive.cpp:
-	.text       start:0x80233B1C end:0x80233B20
+	.text       start:0x80233AB4 end:0x80233B20
 	.ctors      start:0x802E9FE4 end:0x802E9FE8
-	.sbss       start:0x804EB988 end:0x804EB990
+	.sbss       start:0x804EB988 end:0x804EB9A8
 
 game/app/pokemon/pokemonWazaSequenceDisplay.cpp:
 	.text       start:0x80233B20 end:0x80233C8C

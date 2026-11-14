@@ -16,6 +16,7 @@ void preReliveSetParameter(int mode, int parameter, bool wait);
 
 void reliveMain(void);
 void preReliveDisplayHokoraParticle(void);
+void preReliveExit(void);
 #ifdef __cplusplus
 }
 #endif

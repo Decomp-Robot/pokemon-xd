@@ -1,4 +1,7 @@
 #include <types.h>
+#include <GSthread.h>
+#include <GSparticle.h>
+#include <pokemonRelive.h>
 
 /*
  * pokemonRelive.cpp
@@ -16,7 +19,6 @@ public:
     {
     }
 
-    // Leading word of the parameter block.
     u32 mUnknown0;
 
     // Selected ceremony pattern; -1 while there is none.
@@ -24,3 +26,23 @@ public:
 };
 
 ReliveParameter pParameter;
+
+Pokemon *mParameter;
+GSthread *hokoraParticleThread;
+u32 keepRelivePatternIsHologram;
+_GSparticleGen *hokoraParticleGen;
+bool hokoraParticleActive;
+
+extern "C" void preReliveExit(void)
+{
+    if (hokoraParticleThread != 0 && GSthreadIsRunning(hokoraParticleThread)) {
+        GSthreadClose(hokoraParticleThread);
+        hokoraParticleThread = 0;
+    }
+
+    if (hokoraParticleActive == true) {
+        GSparticleDestroyGenerator(hokoraParticleGen, true);
+        hokoraParticleGen = 0;
+        hokoraParticleActive = false;
+    }
+}
