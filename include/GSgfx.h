@@ -36,10 +36,12 @@ enum GSgfxMatrixFlags { GS_MATRIX_INVERSE_TRANSPOSE_DIRTY = 1 };
 struct GSgfxMatrixStackEntry {
     u32 mFlags;
     GSmtx mMatrix;
-    u8 reserved[0x30];
+    u8 reserved[48];
 };
 class GSgfxMatrixStack {
 public:
+    GSgfxMatrixStack(u32 capacity);
+    ~GSgfxMatrixStack();
     void push(GSmtx *mtx);
     void pushMult(GSmtx *mtx);
     void pop(void);
@@ -57,8 +59,9 @@ public:
                     (f32 (*)[4])&mCurrentEntry->mMatrix);
         mCurrentEntry->mFlags |= GS_MATRIX_INVERSE_TRANSPOSE_DIRTY;
     }
-    u8 reservedHeader[4];
+    GSgfxMatrixStackEntry *mEntries;
     GSgfxMatrixStackEntry *mCurrentEntry;
+    GSgfxMatrixStackEntry *mLastEntry;
 };
 
 
