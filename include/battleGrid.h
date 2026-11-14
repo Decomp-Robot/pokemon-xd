@@ -4,13 +4,15 @@
 #include <types.h>
 
 struct ModelSequence;
+struct NullSequence;
 
 // One position of the battle grid: the sequence that drives the model of the
 // trainer standing there and the sequences of the two Pokemon deployed on it.
 struct battleGridPosition {
     struct ModelSequence *trainerSequence;      // 0x00
     struct ModelSequence *pokemonSequence[2];   // 0x04, 0x08
-    u8 _0C[4];                                  // 0x0C
+    u16 pokemonNum;                            // 0x0C
+    u8 _0E[2];                                 // 0x0E
 };
 
 // The positions the battle models stand on, followed by the number of trainers
@@ -25,7 +27,18 @@ struct battleGrid {
 extern "C" {
 #endif
 
+extern struct battleGrid gBattleGrid;
+extern s32 g_max_model_size;
+extern bool gSavedVisibilityCodes[12];
+extern bool gBackupVisibilityCodes[12];
+
 struct battleGrid *battleGridGetPtr(void);
+u16 battleGridGetNumPokemonsForTrainer(struct NullSequence *sequence);
+void battleGridRestoreModelVisibilityFlags(void);
+void battleGridBackupModelVisibilityFlags(void);
+void battleGridResetModelVisibilityFlags(void);
+void battleGridStoreModelVisibilityFlags(void);
+void battleGridHideModelsExcept(struct NullSequence *sequence);
 void battleGridReplacePokemon(void *oldSequence, void *newSequence);
 void battleGridUpdate(void);
 void battleGridReset(void);

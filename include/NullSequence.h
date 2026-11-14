@@ -52,7 +52,7 @@ public:
                              //       with (the species of the Pokemon model).
     bool visible;            // 0x06: set while the stage is drawn.
     u8 _07;                  // 0x07: unknown.
-    u32 isModel;             // 0x08: 1 while the stage is a Pokemon model: the
+    s32 isModel;             // 0x08: 1 while the stage is a model: the
                              //       sequence code only hands a ModelSequence
                              //       to the resource lookup.
     GSvec position;          // 0x0C: where the stage stands.
