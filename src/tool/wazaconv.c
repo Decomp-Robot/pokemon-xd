@@ -17,8 +17,6 @@ static const u16 GBA_STRING_END = 0xFFFF;
 static const u8 GBA_WAZA_LINE_BREAK = 0xFE;
 static const u8 GBA_WAZA_DOC_END = 0xFF;
 
-extern "C" u32 itemBallDataBiosGetSnatchSnatchWzxDataId(WazaData *waza);
-
 extern "C" long GetWazaDocGBA(u8 *destination, u16 moveId);
 static long convline(u8 *destination, const u16 **source);
 
@@ -50,7 +48,7 @@ extern "C" long GetWazaDocGBA(u8 *destination, u16 moveId)
     memset(destination, 0, GBA_WAZA_DOC_SIZE);
     if (waza != 0) {
         const u16 *message =
-            GSmsgGetStringPtr(itemBallDataBiosGetSnatchSnatchWzxDataId(waza));
+            GSmsgGetStringPtr(wazaDataBiosGetDoc(waza));
 
         destination += convline(destination, &message);
         if (*message == GBA_STRING_END) {

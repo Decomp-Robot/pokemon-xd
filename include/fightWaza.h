@@ -60,8 +60,8 @@ void fightWaza_SetKaisuu(FIGHT_WAZA *waza, u8 kaisuu);
 void fightWaza_SetAutoMakeFlag(FIGHT_WAZA *waza, u8 autoMakeFlag);
 
 u8 fightWaza_GetWazaBanme(FIGHT_WAZA *waza);
-u16 fightWaza_GetMotoWazaDataId(FIGHT_WAZA *waza);
-u16 fightWaza_GetUseWazaDataId(FIGHT_WAZA *waza);
+u32 fightWaza_GetMotoWazaDataId(FIGHT_WAZA *waza);
+u32 fightWaza_GetUseWazaDataId(FIGHT_WAZA *waza);
 u16 fightWaza_GetTargetDataId(FIGHT_WAZA *waza);
 s32 fightWaza_GetHitDamage(FIGHT_WAZA *waza);
 s32 fightWaza_GetDamage(FIGHT_WAZA *waza);
@@ -69,6 +69,31 @@ u8 fightWaza_GetKaisuu(FIGHT_WAZA *waza);
 u8 fightWaza_GetAutoMakeFlag(FIGHT_WAZA *waza);
 _JOUTAI *fightWaza_GetJoutaiPtr(FIGHT_WAZA *waza, u16 index);
 
+void fightWazaBiosSetWazaBanme(FIGHT_WAZA *waza, s8 wazaBanme);
+u8 fightWazaBiosGetWazaBanme(FIGHT_WAZA *waza);
+void fightWazaBiosSetMotoWazaDataId(FIGHT_WAZA *waza, u16 motoWazaDataId);
+u16 fightWazaBiosGetMotoWazaDataId(FIGHT_WAZA *waza);
+void fightWazaBiosSetUseWazaDataId(FIGHT_WAZA *waza, u16 useWazaDataId);
+u16 fightWazaBiosGetUseWazaDataId(FIGHT_WAZA *waza);
+void fightWazaBiosSetTargetDataId(FIGHT_WAZA *waza, u16 targetDataId);
+u16 fightWazaBiosGetTargetDataId(FIGHT_WAZA *waza);
+_JOUTAI *fightWazaBiosGetJoutaiPtr(FIGHT_WAZA *waza, s32 index);
+void fightWazaBiosSetCritical(FIGHT_WAZA *waza, u8 critical);
+u8 fightWazaBiosGetCritical(FIGHT_WAZA *waza);
+void fightWazaBiosSetDamageValue(FIGHT_WAZA *waza, u8 damageValue);
+u8 fightWazaBiosGetDamageValue(FIGHT_WAZA *waza);
+void fightWazaBiosSetDamage(FIGHT_WAZA *waza, s32 damage);
+s32 fightWazaBiosGetDamage(FIGHT_WAZA *waza);
+void fightWazaBiosSetHitDamage(FIGHT_WAZA *waza, s32 hitDamage);
+s32 fightWazaBiosGetHitDamage(FIGHT_WAZA *waza);
+void fightWazaBiosSetIryoku(FIGHT_WAZA *waza, u16 iryoku);
+u16 fightWazaBiosGetIryoku(FIGHT_WAZA *waza);
+void fightWazaBiosSetZokusei(FIGHT_WAZA *waza, u16 zokusei);
+u16 fightWazaBiosGetZokusei(FIGHT_WAZA *waza);
+void fightWazaBiosSetKaisuu(FIGHT_WAZA *waza, u8 kaisuu);
+u8 fightWazaBiosGetKaisuu(FIGHT_WAZA *waza);
+void fightWazaBiosSetAutoMakeFlag(FIGHT_WAZA *waza, u8 autoMakeFlag);
+u8 fightWazaBiosGetAutoMakeFlag(FIGHT_WAZA *waza);
 #ifdef __cplusplus
 }
 #endif

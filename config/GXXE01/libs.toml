@@ -290,6 +290,10 @@ name = "game/app/waza/fightWazaBios.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/waza/waza.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/waza/wazaDB.cpp"
 completed = true
 

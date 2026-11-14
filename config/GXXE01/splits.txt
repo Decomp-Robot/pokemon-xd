@@ -2232,6 +2232,10 @@ game/app/joutai/joutai.cpp:
 game/app/joutai/joutaiBios.cpp:
 	.text       start:0x8013CD98 end:0x8013D03C
 
+game/app/waza/waza.cpp:
+	.text       start:0x8013D03C end:0x8013D7B0
+	.data       start:0x803FCAB0 end:0x803FCC88
+
 game/app/waza/wazaDB.cpp:
 	.text       start:0x8013E044 end:0x8013E90C
 

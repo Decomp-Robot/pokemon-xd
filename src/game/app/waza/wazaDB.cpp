@@ -191,7 +191,7 @@ u16 fightWaza_GetTargetDataId(FIGHT_WAZA *waza)
     return waza->mTargetDataId;
 }
 
-u16 fightWaza_GetUseWazaDataId(FIGHT_WAZA *waza)
+u32 fightWaza_GetUseWazaDataId(FIGHT_WAZA *waza)
 {
     if (waza == 0) {
         return 0;
@@ -199,7 +199,7 @@ u16 fightWaza_GetUseWazaDataId(FIGHT_WAZA *waza)
     return waza->mUseWazaDataId;
 }
 
-u16 fightWaza_GetMotoWazaDataId(FIGHT_WAZA *waza)
+u32 fightWaza_GetMotoWazaDataId(FIGHT_WAZA *waza)
 {
     if (waza == 0) {
         return 0;
