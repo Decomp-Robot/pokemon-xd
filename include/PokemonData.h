@@ -39,6 +39,14 @@ u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
 u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);
 
+// One of the five evolution entries a species carries: the method that fires
+// it, the level, friendship, beauty or item it asks for, and the species it
+// evolves into.
+void *pokemonDataBiosGetSinkaPtr(PokemonSpeciesStats *data, u16 index);
+u8 pokemonDataBiosGetSinkaKind(PokemonSpeciesStats *data, u16 index);
+u16 pokemonDataBiosGetSinkaBuff(PokemonSpeciesStats *data, u16 index);
+u32 pokemonDataBiosGetSinkaPokemonDataId(PokemonSpeciesStats *data, u16 index);
+
 void *pokemonSeikakuDataBiosGetPtr(u8 id);
 
 u32 pokemonSeikakuDataGetMessageId(void *ptr);

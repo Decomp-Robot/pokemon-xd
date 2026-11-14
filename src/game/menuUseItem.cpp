@@ -393,7 +393,7 @@ u32 item_crane_memo_number = 5;
 /* Function of this file with C++ linkage that is used before it is defined. */
 s32 cbForgetWazaSelect(Pokemon *pokemon, u16 wazaID, long context);
 /* Stats record of a pokemon, or null when there is no such pokemon. */
-PokemonSpeciesStats *getPokemonData(Pokemon *pokemon)
+static PokemonSpeciesStats *getPokemonData(Pokemon *pokemon)
 {
     if (pokemon == 0) {
         return 0;

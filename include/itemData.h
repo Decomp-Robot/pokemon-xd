@@ -143,6 +143,7 @@ u8 itemDataBiosGetDeposit(ItemData *data);
 u8 itemDataBiosGetKinomiNo(u16 itemID);
 u8 itemDataBiosGetHidenMachineNo(ItemData *data);
 u8 itemDataBiosGetWazaMachineNo(ItemData *data);
+u16 itemDataBiosGetItemSoubiDataId(ItemData *data);
 u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 u8 itemDataBiosGetKind(ItemData *data);
 u32 itemDataBiosGetDoc(ItemData *data);

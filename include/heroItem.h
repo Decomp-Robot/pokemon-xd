@@ -17,6 +17,9 @@ s32 heroItemCheckAddItemDataId(Hero *hero, u16 itemID);
 s32 heroItemAddItemDataId(Hero *hero, u16 itemID, u16 count, s16 itemPosition);
 s32 heroItemDecItemDataId(Hero *hero, u16 itemID, u16 count, s16 itemPosition);
 
+// Whether the inventory holds the item. A null hero selects the current hero.
+u8 heroItemCheckHaveItemDataId(Hero *hero, u16 itemDataId);
+
 // A null hero selects the current hero. All metadata outputs are optional.
 // Slot count is the array length; stock maximum is the limit per stack.
 ItemSlot *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 itemKind,
