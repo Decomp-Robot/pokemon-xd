@@ -5742,6 +5742,11 @@ cflags_preset = "game"
 progress_category = "game"
 
 [[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/archive.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/random.c"
 completed = true
 

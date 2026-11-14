@@ -3064,6 +3064,10 @@ game/GSAPI/GSscript/tvariant.cpp:
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 
+game/GSAPI/GSsysdolphin_baselib/baselib/archive.c:
+	.text       start:0x80243E38 end:0x80244048
+	.rodata     start:0x802F97B0 end:0x802F97F4
+
 game/GSAPI/GSsysdolphin_baselib/baselib/fog.c:
 	.text       start:0x8024BDC4 end:0x8024C088
 	.rodata     start:0x802F9AA0 end:0x802F9AC0
