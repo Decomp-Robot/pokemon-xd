@@ -40,7 +40,7 @@ void floorDelayPostFunc(void);
 
 // The callback the IDEX read of a stage archive hands over once the read is
 // done.
-void _fsysLoadCallbak(long requestType, void *context, long callbackArgument);
+static void _fsysLoadCallbak(long requestType, void *context, long callbackArgument);
 
 // The busy flag of the reader, set while a resource of the stage archive is
 // loading.
@@ -100,7 +100,7 @@ extern "C" void *floorReadResourceID(u32 group, u32 res)
 }
 
 // An archive of a stage needs no additional work when its read completes.
-void _fsysLoadCallbak(long requestType, void *context, long callbackArgument)
+static void _fsysLoadCallbak(long requestType, void *context, long callbackArgument)
 {
 }
 

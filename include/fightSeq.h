@@ -154,6 +154,12 @@ enum {
     FIGHT_SEQ_WORK_ESCAPE_ABILITY_HOLDER_INDEX = 90115,
     JOUTAI_ID_REGULATION_REJECTED_MOVE = 69
 };
+enum {
+    FIGHT_SEQ_WAZA_WORK_MESSAGE_STATE = 7,
+    FIGHT_SEQ_MESSAGE_IDLE = 0,
+    FIGHT_SEQ_MESSAGE_WAIT_FRAMES = 2
+};
+extern s16 msgFrame;
 extern u8 fightSeqWazaWork[8];
 extern u8 *UserWork;
 extern u8 *_wazaSeqAdrs;
@@ -221,6 +227,8 @@ void WS_DAMAGE_CALC(void);
 void WS_TYPE_CHECK(void);
 void WS_DAMAGE_LOSS(void);
 void fightSeqVanishOff(FightOutPokemon *pokemon);
+void fightSeqEventKurein(s32 index);
+void fightSeq_ClearUserWork(void);
 
 #ifdef __cplusplus
 }

@@ -2780,6 +2780,7 @@ extra_cflags = ["-str reuse,readonly", "-opt nopeephole"]
 [[lib.object]]
 name = "game/app/fight/fight.cpp"
 completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-use_lmw_stmw on"]
 cflags = [
     "-W error",
     "-nodefaults",
@@ -2788,15 +2789,15 @@ cflags = [
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    "-O4,p",
-    "-inline auto",
+    "-O4,s",
+    "-inline noauto",
     "-pragma \"cats off\"",
     "-pragma \"warn_notinlined off\"",
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
     "-fp_contract on",
-    "-str reuse",
+    "-str reuse,readonly",
     "-multibyte",
     "-i include",
     "-i build/GXXE01/include",

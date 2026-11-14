@@ -1,5 +1,6 @@
 #include <battleGrid.h>
 #include <fight.h>
+#include <fightGSfloor.h>
 #include <fightFloor.h>
 #include <fightOutPokemon.h>
 #include <fightSeq.h>
@@ -18,55 +19,42 @@ enum { FIGHT_GSEVENT_DATA_ID = 64 };
 // it was loaded from and the pose it was showing, followed by the grid slot it
 // has to be put back into.
 struct FightGSFloorTrainerRecord {
-    FIGHT_TRAINER *mTrainer;        // 0x00: trainer that plays the sequence.
-    u16 mDataId;                    // 0x04
-    u8 mFlags;                      // 0x06
-    bool mFlipped;                  // 0x07
-    ModelSequence **mSlot;          // 0x08: grid slot that held the sequence.
-    GSmodelState mState;            // 0x0C
+    FIGHT_TRAINER *mTrainer; // trainer that plays the sequence.
+    u16 mDataId;
+    u8 mFlags;
+    bool mFlipped;
+    ModelSequence **mSlot; // grid slot that held the sequence.
+    GSmodelState mState;
 };
 
 struct FightGSFloorPokemonRecord {
-    FightOutPokemon *mPokemon;      // 0x00: deployed Pokemon that plays the sequence.
-    u16 mDataId;                    // 0x04
-    u8 mFlags;                      // 0x06
-    bool mRare;                     // 0x07
-    bool mFlipped;                  // 0x08
+    FightOutPokemon *mPokemon; // deployed Pokemon that plays the sequence.
+    u16 mDataId;
+    u8 mFlags;
+    bool mRare;
+    bool mFlipped;
     u8 _09[3];
-    u32 mRnd;                       // 0x0C
-    ModelSequence **mSlot;          // 0x10: grid slot that held the sequence.
-    GSmodelState mState;            // 0x14
+    u32 mRnd;
+    ModelSequence **mSlot; // grid slot that held the sequence.
+    GSmodelState mState;
 };
 
 // Header of the block fightGSfloorPushData writes in front of the grid snapshot.
 struct FightGSFloorHeader {
-    u16 mTrainerNum;                // 0x00
-    u16 mPokemonNum;                // 0x02
-    u16 mHasEvent;                  // 0x04
+    u16 mTrainerNum;
+    u16 mPokemonNum;
+    u16 mHasEvent;
     u8 _06[2];
 };
 
 // State carried through one traversal of the battle floor sequences.
 struct FightGSFloorPass {
-    bool mSnapshot;                 // 0x00: write a record for every sequence.
-    bool mFree;                     // 0x01: release every sequence that is walked.
-    u16 mCount;                     // 0x02: sequences walked so far.
-    battleGrid *mGrid;              // 0x04: grid the sequences standing on it are saved from.
-    u8 *mRecord;                    // 0x08: record the next snapshot is written to.
+    bool mSnapshot; // write a record for every sequence.
+    bool mFree; // release every sequence that is walked.
+    u16 mCount; // sequences walked so far.
+    battleGrid *mGrid; // grid the sequences standing on it are saved from.
+    u8 *mRecord; // record the next snapshot is written to.
 };
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void fightGSfloorFree(void);
-s32 fightGSfloorGetPushDataSize(void);
-void fightGSfloorPushData(void *data);
-void fightGSfloorPopData(void *data);
-
-#ifdef __cplusplus
-}
-#endif
 
 u8 _fightGSfloorTrainerEvt(void *unused, u16 index, void *argument);
 u8 _fightGSfloorPokemonCB(void *pokemon, u16 index, void *argument);
@@ -94,7 +82,7 @@ void fightGSfloorFree(void)
 }
 
 // Size of the block that holds the grid snapshot and one record per sequence.
-s32 fightGSfloorGetPushDataSize(void)
+unsigned long fightGSfloorGetPushDataSize(void)
 {
     FightGSFloorPass pass;
     u16 trainerNum;
@@ -122,7 +110,7 @@ s32 fightGSfloorGetPushDataSize(void)
 
 // Snapshots the grid and the sequences standing on it into the block that
 // fightGSfloorGetPushDataSize sized.
-void fightGSfloorPushData(void *data)
+void fightGSfloorPushData(void *data, unsigned long size)
 {
     u16 trainerNum;
     u16 pokemonNum;
@@ -159,7 +147,7 @@ void fightGSfloorPushData(void *data)
 
 // Rebuilds every battle floor sequence from the snapshot block, restores the
 // pose it was showing and puts it back into the grid slot it came from.
-void fightGSfloorPopData(void *data)
+void fightGSfloorPopData(void *data, unsigned long size)
 {
     FightGSFloorHeader *header = (FightGSFloorHeader *)data;
     u16 trainerNum = header->mTrainerNum;

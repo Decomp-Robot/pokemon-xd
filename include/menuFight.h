@@ -26,6 +26,8 @@ enum {
 extern "C" {
 #endif
 
+void menuFightCloseAll(void);
+
 // Reports whether the ball panel may be opened for the given status menu.
 s32 menuFightChkOpenBall(s32 menuId);
 

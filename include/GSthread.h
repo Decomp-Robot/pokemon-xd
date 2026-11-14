@@ -22,6 +22,7 @@ GSthread *GSthreadCreate(s32 priority, u32 groupId, u32 stackSize, s32 saveFpr,
 void GSthreadSetArgs(GSthread *thread, s32 count, ...);
 void GSthreadSetName(GSthread *thread, const char *name);
 void GSthreadTerminate(GSthread *thread);
+void GSthreadTerminateGroup(u32 groupId);
 void GSthreadSwitch(void);
 long GSthreadClose(GSthread *thread);
 u8 GSthreadIsRunning(GSthread *thread);

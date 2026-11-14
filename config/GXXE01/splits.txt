@@ -3009,9 +3009,12 @@ game/app/fight/fightAbicnt.cpp:
 	.text       start:0x8020C88C end:0x8020C9B0
 
 game/app/fight/fight.cpp:
-	.text       start:0x8020D854 end:0x8020D858
+	.text       start:0x8020D2AC end:0x8020D858
 	.ctors      start:0x802E9FE0 end:0x802E9FE4
-	.bss        start:0x804B0048 end:0x804B0078
+	.rodata     start:0x802F8A98 end:0x802F8AF4
+	.bss        start:0x804B0048 end:0x804B0A20
+	.sbss       start:0x804EB908 end:0x804EB918
+	.sdata2     start:0x804EEAD0 end:0x804EEADC
 
 game/app/fight/fightSeq/fightSeqWSWaza.cpp:
 	.text       start:0x8020D858 end:0x8020FD6C

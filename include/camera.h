@@ -18,6 +18,8 @@ extern "C" {
 u8 cameraWaitSyncAnime(u8 wait);
 
 u8 cameraSetType(u8 type);
+u8 cameraGetType(void);
+void battleCameraStartRandom(s32 mode);
 void cameraGetPosition(struct GSvec *position);
 void cameraSetPosition(struct GSvec *position);
 void cameraGetRotation(struct GSvec *rotation);

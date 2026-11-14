@@ -16,6 +16,14 @@ enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
 };
 
+/* Menu IDs accepted by the fight status-menu count accessors. */
+enum FightStatusMenuId {
+    FIGHT_STATUS_MENU_LEFT = 55,
+    FIGHT_STATUS_MENU_UP = 56,
+    FIGHT_STATUS_MENU_DOWN = 64,
+    FIGHT_STATUS_MENU_RIGHT = 65
+};
+
 enum FightFloorSwitchResult {
     FIGHT_FLOOR_SWITCH_ALLOWED = 0,
     FIGHT_FLOOR_SWITCH_BLOCKED_BY_STATUS = 1,
@@ -269,6 +277,10 @@ FIGHT_SIDE *fightFloorGetValidFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
 FIGHT_SIDE *fightFloor_GetFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
 void fightFloorReplaceFightOutPokemonAttackToDefense(FIGHT_FLOOR *floor);
 u8 fightFloorIsNowEncountSnatchOnly(FIGHT_FLOOR *floor);
+u8 fightFloorIsNowEncountHostPokemonKime(FIGHT_FLOOR *floor);
+u8 fightFloorIsNowEncountHostEnemyPokemonKime(FIGHT_FLOOR *floor);
+s8 fightFloor_GetStatusMenuCnt(s32 menuID);
+void fightFloor_SetStatusMenuCnt(s32 menuID, s8 count);
 u8 fightFloorLoopValidFightTrainer(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
 void fightFloorSetShadow(void);
 

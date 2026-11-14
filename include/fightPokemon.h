@@ -107,6 +107,8 @@ void fightOutPokemon_SetSketchWazaDataId(FightOutPokemon *pokemon, u16 wazaDataI
 void fightOutPokemonSetIdBuffJoutaiDataId(FightOutPokemon *pokemon, u16 dataId, u16 wazaDataId);
 void fightOutPokemonSetVisibility(FightOutPokemon *pokemon, s32 visibility);
 void fightOutPokemonSetOumuWazaDataId(FightOutPokemon *defender, FightOutPokemon *attacker, u16 wazaDataId);
+void fightPokemonSetNonTrainerPokemonIsActiveFlag(u8 flag);
+
 u16 fightOutPokemon_GetStockItemDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetStockItemDataId(FightOutPokemon *pokemon, u16 item);
 u16 fightOutPokemonDoItemSoubi(FightOutPokemon *pokemon, u16 item, u8 equip, u8 recordUsedItem);

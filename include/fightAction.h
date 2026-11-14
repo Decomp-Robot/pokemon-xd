@@ -33,6 +33,9 @@ struct FIGHT_KIND_DATA {
 };
 
 enum FightActionKind {
+    FIGHT_ACTION_KIND_KAIJOU = 1,
+    FIGHT_ACTION_KIND_KAISI_NYUUJOU_TRAINER = 3,
+    FIGHT_ACTION_KIND_KAISI_NYUUJOU_POKEMON = 4,
     FIGHT_ACTION_KIND_FOCUS_PUNCH_PREPARE = 12,
     FIGHT_ACTION_KIND_FIGHT_OUT_POKEMON_WAZA = 19
 };
@@ -42,6 +45,8 @@ enum { FIGHT_ACTION_FIFO_NUM = 32 };
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern FIGHT_ACTION_DATA_dd_ fight_action_data_kaisi[];
+
 u16 fightActionGetKindDataId(FIGHT_ACTION *action);
 s8 fightActionGetPri(FIGHT_ACTION *action);
 void fightActionDispFifoAll(void);
