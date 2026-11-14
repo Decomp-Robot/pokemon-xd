@@ -11,6 +11,9 @@ void __assert(const char *file, int line, const char *expression);
 }
 #endif
 
+#define HSD_ASSERTLINE(line, condition) \
+    ((condition) ? (void)0 : __assert(__FILE__, (line), #condition))
+
 #define HSD_ASSERT(condition) \
     ((condition) ? (void)0 : __assert(__FILE__, __LINE__, #condition))
 

@@ -42,6 +42,7 @@
 /* Called by GSmemVisitHeapAllocated for every allocated cell of a heap. */
 typedef void (*GSmemCellVisitor)(void* ptr, u32 size, void* context, void* context2);
 
+#ifdef __cplusplus
 class GSmemHeapDesc;
 
 class GSmemCell {
@@ -101,6 +102,11 @@ public:
     void init(u32 cellCount, u32 cellSize);
 };
 
+#else
+typedef struct GSmemHeapDesc GSmemHeapDesc;
+typedef struct GSmemPoolAllocator GSmemPoolAllocator;
+#endif
+
 /* Heap descriptor array, its length and the arena the internal heaps span. */
 extern GSmemHeapDesc* HeapArray;
 extern s32 NumHeaps;
@@ -119,20 +125,26 @@ extern GSmemPoolAllocator* _Sysdol28Allocator;
 extern GSmemPoolAllocator* _Sysdol48Allocator;
 
 /* Table of pool allocators; GSmemCreatePool fills the first free entry. */
+#ifdef __cplusplus
 extern GSmemPoolAllocator _poolArea[POOL_MAX];
+#endif
 
 /* GSmem allocation and fixed-size pool entry points. */
+#ifdef __cplusplus
 extern "C" {
+#endif
 u32 GSmemGetLargestFree(void);
 u16 GSmemGetCurrentLayer(void);
 u8 GSmemIsInitialized(void);
+#ifdef __cplusplus
 bool GSmemCheckHeap(s32 heap);
+#endif
 void GSmemDumpHeap(s32 heap);
 s32 GSmemGetHeapFreeSize(s32 heap, u32* totalSize, u32* largestSize);
 s32 GSmemShrinkHeap(s32 heap, void* ptr, u32 size);
 void GSmemDumpHeapInfo(void);
 s32 GSmemVisitHeapAllocated(s32 heap, GSmemCellVisitor visitor, void* context, void* context2);
-u32 GSmemGetFreePool(GSmemPoolAllocator* pool);
+s32 GSmemGetFreePool(GSmemPoolAllocator* pool);
 void GSmemDumpPool(GSmemPoolAllocator* pool);
 u8 GSmemIsRegistrationPool(GSmemPoolAllocator* pool, void* ptr);
 void GSmemFreePool(GSmemPoolAllocator* pool, void* ptr);
@@ -150,7 +162,9 @@ s32 OSShrinkHeap(s32 heap, void* ptr, u32 size);
 void* GSmemAllocAlignHeap(s32 heap, u32 size, u16 alignment);
 void* GSmemAllocClrHeap(s32 heap, u32 size);
 void* GSmemAllocFillHeap(s32 heap, u32 size, u8 fill);
+#ifdef __cplusplus
 }
+#endif
 
 BOOL _memCheckOwnCallback(void* ptr);
 void _memClearCallback(void);

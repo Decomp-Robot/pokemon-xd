@@ -18,7 +18,7 @@ GSmemPoolAllocator _poolArea[POOL_MAX];
 void _setDabr(u32 dabr);
 u32 _getDabr();
 
-extern "C" u32 GSmemGetFreePool(GSmemPoolAllocator* pool) {
+extern "C" s32 GSmemGetFreePool(GSmemPoolAllocator* pool) {
     if (pool) {
         return pool->getFreeCell();
     }

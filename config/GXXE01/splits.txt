@@ -3093,6 +3093,11 @@ game/GSAPI/GSsysdolphin_baselib/baselib/fog.c:
 	.sdata2     start:0x804EEEE8 end:0x804EEF10
 	.sbss2      start:0x804EFD30 end:0x804EFD34
 
+game/GSAPI/GSsysdolphin_baselib/baselib/list.c:
+	.text       start:0x80253338 end:0x80253594
+	.bss        start:0x804B2298 end:0x804B22F0
+	.sdata2     start:0x804EF010 end:0x804EF028
+
 game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.text       start:0x8025C940 end:0x8025CA38
 	.sdata      start:0x804E8610 end:0x804E8618
