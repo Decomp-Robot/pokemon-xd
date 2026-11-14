@@ -276,3 +276,57 @@ FsysCacheManage* _fsysGetFreshCacheManage(u32 groupId, u8 preferTail)
     }
     return best;
 }
+
+/*! Find the cache at an ARAM address. */
+FsysCacheManage* _fsysGetCacheManageAddr(u32 aramAddress)
+{
+    s32 intr = OSDisableInterrupts();
+    FsysCacheManage* cache = _fsysCACHEManageRoot;
+
+    while (cache != 0) {
+        if (cache->aramAddress == aramAddress) {
+            break;
+        }
+        cache = cache->next;
+    }
+    OSRestoreInterrupts(intr);
+    return cache;
+}
+
+/*! Find the first cache belonging to a group. */
+FsysCacheManage* _fsysGetCacheManageGroup(u32 groupId)
+{
+    s32 intr = OSDisableInterrupts();
+    FsysCacheManage* cache = _fsysCACHEManageRoot;
+
+    while (cache != 0) {
+        if (cache->groupId == groupId) {
+            break;
+        }
+        cache = cache->next;
+    }
+    OSRestoreInterrupts(intr);
+    return cache;
+}
+
+/*! Find the cache of one resource in a group. */
+FsysCacheManage* _fsysGetCacheManage(u32 groupId, u32 cacheIndex)
+{
+    s32 intr = OSDisableInterrupts();
+    FsysCacheManage* cache = _fsysCACHEManageRoot;
+
+    while (cache != 0) {
+        if (cache->groupId == groupId && cache->cacheIndex == cacheIndex) {
+            break;
+        }
+        cache = cache->next;
+    }
+    OSRestoreInterrupts(intr);
+    return cache;
+}
+
+/*! Remove a cache descriptor from the live list. */
+void _fsysDelCacheManage(FsysCacheManage* cache)
+{
+    _fsysDelTAG(cache, &_fsysCACHEManageRoot);
+}

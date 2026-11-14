@@ -2831,7 +2831,7 @@ game/GSAPI/GSfsys/fsysBlock.c:
 	.sbss       start:0x804EB5E8 end:0x804EB600
 
 game/GSAPI/GSfsys/fsysCache.c:
-	.text       start:0x8019B6B4 end:0x8019BD84
+	.text       start:0x8019B6B4 end:0x8019BED4
 	.bss        start:0x80475940 end:0x80478140
 	.sbss       start:0x804EB600 end:0x804EB638
 
