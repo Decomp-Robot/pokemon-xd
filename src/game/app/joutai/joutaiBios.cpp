@@ -1,5 +1,77 @@
 #include "joutaiBios.h"
 
+u8 joutaiDataBiosGetKaisuuDataId(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->kaisuuDataId;
+}
+
+u8 joutaiDataBiosGetMaxCount(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->maxCount;
+}
+
+u16 joutaiDataBiosGetSameJoutai(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->sameJoutai;
+}
+
+u8 joutaiDataBiosGetWriteMode(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->writeMode;
+}
+
+u8 joutaiDataBiosGetUseBanme(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->useBanme;
+}
+
+u16 joutaiDataBiosGetStatus(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->status;
+}
+
+u8 joutaiDataBiosGetStatusKind(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->statusKind;
+}
+
+u32 joutaiDataBiosGetName(u16 dataId)
+{
+    JoutaiData* data = joutaiDataBiosGetDataPtr(dataId);
+    if (data == 0) {
+        return 0;
+    }
+    return data->name;
+}
+
 JoutaiData* joutaiDataBiosGetDataPtr(u16 dataId)
 {
     if (dataId >= joutai_data_number) {

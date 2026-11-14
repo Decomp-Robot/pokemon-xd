@@ -2230,7 +2230,7 @@ game/app/joutai/joutai.cpp:
 	.text       start:0x8013C2D4 end:0x8013CD98
 
 game/app/joutai/joutaiBios.cpp:
-	.text       start:0x8013CF38 end:0x8013D03C
+	.text       start:0x8013CD98 end:0x8013D03C
 
 game/app/waza/wazaDB.cpp:
 	.text       start:0x8013E044 end:0x8013E90C
