@@ -441,7 +441,8 @@ game/pokecolo.cpp:
 	.sbss       start:0x804EA890 end:0x804EA898
 
 game/menuScript.cpp:
-	.text       start:0x8005E794 end:0x8005E8AC
+	.text       start:0x8005E794 end:0x8005E95C
+	.bss        start:0x80435528 end:0x80435540 align:4
 
 game/menuShop.cpp:
 	.text       start:0x800605B8 end:0x800607FC

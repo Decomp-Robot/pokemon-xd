@@ -16,4 +16,19 @@ u8 menuScriptCheckMailOpen(void);
 }
 #endif
 
+#ifdef __cplusplus
+struct WAZAOSHIEDEF {
+    u16 wazaID;
+    u32 nameID;
+    u8 pp;
+    u8 zokuseiDataID;
+    s16 iryoku;
+    u8 avg;
+    u32 docID;
+    u8 tutorFlagSet;
+};
+
+void _getWazaData(u16 wazaID, WAZAOSHIEDEF *work);
+#endif
+
 #endif

@@ -4,6 +4,8 @@
 #include <pokemonBios.h>
 #include <darkPokemon.h>
 #include <types.h>
+#include <waza.h>
+#include <menuScript.h>
 
 // Adds wazaID to the waza list the caller is building unless that waza is
 // already in it. The caller advances count when the waza is appended.
@@ -49,4 +51,26 @@ Pokemon *_getPokemonPtr(long index)
     }
 
     return 0;
+}
+
+WAZAOSHIEDEF _wazawork;
+
+void _getWazaData(u16 wazaID, WAZAOSHIEDEF *work)
+{
+    WazaData *waza = wazaDataBiosGetPtr(wazaID);
+    WAZAOSHIEDEF *data;
+
+    if (work != 0) {
+        data = work;
+    } else {
+        data = &_wazawork;
+    }
+    data->wazaID = wazaID;
+    data->nameID = wazaDataBiosGetName(waza);
+    data->pp = wazaDataBiosGetPp(waza);
+    data->zokuseiDataID = wazaDataBiosGetZokuseiDataId(waza);
+    data->iryoku = wazaDataBiosGetIryoku(waza);
+    data->avg = wazaDataBiosGetAvg(waza);
+    data->docID = wazaDataBiosGetDoc(waza);
+    data->tutorFlagSet = 0;
 }
