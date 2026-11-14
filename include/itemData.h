@@ -147,11 +147,14 @@ u16 itemDataBiosGetItemSoubiDataId(ItemData *data);
 u16 itemDataBiosGetWazaIDByWazaMachineNo(u8 machineNo);
 u8 itemDataBiosGetKind(ItemData *data);
 u32 itemDataBiosGetDoc(ItemData *data);
-int itemDataBiosGetPrice(ItemData *data);
-int itemDataBiosGetName(ItemData *data);
+u16 itemDataBiosGetPrice(ItemData *data);
+u32 itemDataBiosGetName(ItemData *data);
 PocketItemUseFunc itemDataBiosGetFieldUseFunc(ItemData *data);
 PocketItemUseFunc itemDataBiosGetBattleUseFunc(ItemData *data);
 u8 itemDataBiosGetUseful(ItemData *data);
+u16 itemDataBiosGetFightUseKoukaDataId(ItemData *data);
+s8 itemDataBiosGetUseFriend(ItemData *data, u16 friendIndex);
+u32 itemDataBiosGetBuff(ItemData *data);
 u8 itemDataBiosCheckExportable(ItemData *data);
 u8 itemDataBiosCheckImportable(ItemData *data);
 
