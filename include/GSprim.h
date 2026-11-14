@@ -78,9 +78,9 @@ static inline void GSprimLayerLineWidth(GSgfxLayer *layer, u8 width)
     state->mLineWidth = width;
     state->mLineWidthTexOffset = 0;
     layer->mPassState[0].mGeometryFlags |= 0x4;
-    layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     layer->mPassState[1].mGeometryFlags |= 0x4;
-    layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
 }
 
 static inline void GSprimLayerPointSize(GSgfxLayer *layer, u8 size)
@@ -89,9 +89,9 @@ static inline void GSprimLayerPointSize(GSgfxLayer *layer, u8 size)
     state->mPointSize = size;
     state->mPointSizeTexOffset = 0;
     layer->mPassState[0].mGeometryFlags |= 0x8;
-    layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     layer->mPassState[1].mGeometryFlags |= 0x8;
-    layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+    layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
 }
 
 static inline void GSprimLayerClipRect(GSgfxLayer *layer, GSrectS rect)

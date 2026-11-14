@@ -67,13 +67,14 @@ public:
 
 union GScolor { u32 rgba; struct { u8 r, g, b, a; } channels; };
 enum GSgfxTunitKReg { GSGFX_KREG0, GSGFX_KREG1, GSGFX_KREG2, GSGFX_KREG3 };
-enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR, GSGFX_CUNIT_COLOR_AND_ALPHA = 2 };
+enum GSgfxCunitAlpha { GSGFX_CUNIT_COLOR, GSGFX_CUNIT_ALPHA, GSGFX_CUNIT_COLOR_AND_ALPHA = 2 };
 enum GSgfxCunitSrc { GSGFX_CUNIT_REGISTER, GSGFX_CUNIT_VERTEX_COLOR = 1 };
-enum GSgfxLightType { GSGFX_LIGHT_DIRECTIONAL, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_POINT };
+enum GSgfxLightType { GSGFX_LIGHT_SPECULAR, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_DIFFUSE };
 enum GSgfxDiffuseFunc { GSGFX_DIFFUSE_NONE, GSGFX_DIFFUSE_SIGN, GSGFX_DIFFUSE_CLAMP };
 enum GSgfxTunitCArg {
     GSGFX_TUNIT_C_PREV = 0,
     GSGFX_TUNIT_C_TEXC = 8,
+    GSGFX_TUNIT_C_TEXA = 9,
     GSGFX_TUNIT_C_RASC = 10,
     GSGFX_TUNIT_C_ONE = 12,
     GSGFX_TUNIT_C_KONST = 14,
@@ -117,7 +118,7 @@ enum GSgfxBlendFactor { GSGFX_BLEND_ZERO, GSGFX_BLEND_ONE, GSGFX_BLEND_SRC_COLOR
 enum GSgfxLayerPass {
     GSGFX_LAYER_PASS_OPAQUE = 0,
     GSGFX_LAYER_PASS_XLU = 1, GS_GFX_PASS_OPAQUE = 0, GS_GFX_PASS_TRANSLUCENT = 1 };
-struct GSgfxDrawPass { u8 _00[0xBC]; };
+struct GSgfxDrawPass { void *mFifoBuffer; u8 _04[0xB8]; };
 
 // Write-gather FIFO the GS layers emit their primitives into.
 typedef union {
@@ -145,11 +146,9 @@ enum GSgfxRenderFlag {
     GSGFX_RENDER_FLAG_ZDRAW_GENERATOR = 0x10000000, // particle generator started
 };
 
-// Setup groups of a pass state (GSgfxPassState +0x00): every group owns the
-// dirty word behind it and runs when its bit is set. Only the group the GPU
-// state setup consumes (0x40) and the light group (0x4) show what they do.
+// Groups of layer state that must be sent to the GPU before drawing.
 enum GSgfxPassFlag {
-    GSGFX_PASS_FLAG_GROUP_A = 0x1,
+    GSGFX_PASS_FLAG_GEOMETRY = 0x1,
     GSGFX_PASS_FLAG_GROUP_B = 0x2,
     GSGFX_PASS_FLAG_LIGHT = 0x4,
     GSGFX_PASS_FLAG_TUNIT = 0x8,
@@ -184,11 +183,11 @@ enum GSgfxGpuFlag {
 struct GSgfxPassState {
     u32 mFlags;          // 0x00: setup groups the pass still has to run.
     u32 mGeometryFlags;  // 0x04
-    u8 _08[0x04];
+    u32 mTexGenFlags;
     u32 mGroupAFlags;    // 0x0C: dirty bits of the pass state's first group.
     u32 mGroupBFlags;    // 0x10: dirty bits of the pass state's second group.
     u32 mLightFlags;     // 0x14
-    u8 _18[0x04];
+    u32 mChannelFlags;
     u32 mAmbientFlags;   // 0x1C
     u32 mMaterialFlags;  // 0x20
     u32 mTunitCountFlags;// 0x24
@@ -262,7 +261,35 @@ enum GSgfxTgenFunc { GS_GFX_TGEN_MTX3X4 = 0, GS_GFX_TGEN_MTX2X4 = 1 };
 
 enum GSgfxTgenSrc { GS_GFX_TGEN_SRC_POSITION = 0, GS_GFX_TGEN_SRC_TEX0 = 4 };
 
-enum GSgfxTunitFunc { GS_GFX_TUNIT_TEXTURE_REPLACE = 3 };
+enum GSgfxTunitFunc {
+    GS_GFX_TUNIT_MODULATE = 0,
+    GS_GFX_TUNIT_DECAL = 1,
+    GS_GFX_TUNIT_BLEND = 2,
+    GS_GFX_TUNIT_TEXTURE_REPLACE = 3,
+    GS_GFX_TUNIT_COLOR_REPLACE = 4,
+    GS_GFX_TUNIT_TEXTURE_ADD = 5,
+    GS_GFX_TUNIT_COLOR_ADD = 6,
+    GS_GFX_TUNIT_MODULATE_ADD = 7
+};
+
+struct GSgfxTexGenState {
+    GSgfxTgenFunc mFunction;
+    GSgfxTgenSrc mSource;
+    u32 mMatrix;
+    bool mNormalize;
+    u32 mPostMatrix;
+    u32 mFlags;
+};
+
+struct GSgfxChannelState {
+    u8 mLightingEnabled;
+    GSgfxCunitSrc mAmbientSource;
+    GSgfxCunitSrc mMaterialSource;
+    u32 mLightMask;
+    GSgfxDiffuseFunc mDiffuseFunction;
+    GSgfxLightType mLightType;
+    GSgfxLight *mLights[8];
+};
 
 enum GSgfxIndTexMtxID { GS_GFX_IND_MTX0 = 1 };
 
@@ -385,16 +412,16 @@ public:
             mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
         }
         mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_PROJECTION;
-        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
         mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_PROJECTION;
-        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     }
     void texCoordGeneratorCount(u8 count) {
         mTexGenCount = count;
         mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
-        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
         mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
-        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     }
     void FlushState();
     void endSurface();
@@ -434,7 +461,7 @@ public:
     void tunitKRegSel(u8 stage, GSgfxTunitKReg reg);
     void cunitChannelGen(u8 channel, GSgfxCunitAlpha alpha,
                          GSgfxCunitSrc ambient, GSgfxCunitSrc material,
-                         unsigned long lightMask, GSgfxLight **lights,
+                         unsigned long lightCount, GSgfxLight **lights,
                          GSgfxLightType type, GSgfxDiffuseFunc diffuse);
     void drawCube();
     void drawCylinder(u8 slices);
@@ -565,9 +592,9 @@ public:
     void tgenCount(u8 count) {
         mTexGenCount = count;
         mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
-        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
         mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
-        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     }
     void channelCount(u8 count) {
         mCunitCount = count;
@@ -678,16 +705,17 @@ public:
     void InvalidateState();
     void SetupFifo();
     u16 tokenMark();
+    void SetDistortionParams(f32 (*matrix)[3], signed char scaleExponent);
     void setRenderStateAndSelect(GSgfxVF *vf);
     void ResetVertexFormat(GSgfxVF *vf);
     void primitiveType(GSgfxPrimType type);
     void dlDraw(GSgfxDL *displayList);
     bool IsLayerVisible(void);
     void SetLayerVisibility(bool on);
-    void tunitFunc(u8 textureUnit, GSgfxTunitFunc func);
+    void tunitFunc(u8 stage, GSgfxTunitFunc func);
     void tgenFunc(u8 texGen, GSgfxTgenFunc func, GSgfxTgenSrc src, GSmtx *textureMatrix,
                   bool normalize, GSmtx *postMatrix);
-    void tunitIndTexMtx(GSgfxIndTexMtxID id, f32 (*m)[3], signed char scaleExponent);
+    void tunitIndTexMtx(GSgfxIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
     void dlDrawExt(u8 *dl, unsigned long size);
 
 /* Layer registry entry and cached render state. */
@@ -698,7 +726,9 @@ public:
     s32 mRenderMode;
     u8 _0030[0xC40];
     u8 mTexGenCount;
-    u8 _0C71[0xD3];
+    u8 _0C71[3];
+    GSgfxTexGenState mTexGen[8];
+    u8 _0D34[0x10];
     u8 mTexCoordLineOffset0;
     u8 mTexCoordPointOffset0;
     u8 _0D46[0x0E];
@@ -711,7 +741,8 @@ public:
     u8 _0D95[3];
     GSgfxLight *mLights[8];// 0xD98
     u8 mCunitCount;        // 0xDB8
-    u8 _0DB9[0xE9C - 0xDB9];
+    u8 _0DB9[3];
+    GSgfxChannelState mChannels[4];
     GScolor mAmbientColor[2]; // 0xE9C
     GScolor mMaterialColor[2];// 0xEA4
     u8 mTunitCount;        // 0xEAC
@@ -775,6 +806,9 @@ public:
     GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
     GSgfxVF *mVertexFormat; // 0x199C
     GSgfxMatrixStack *mMatrixStack; // 0x19A0
+    u8 _19A4[0x14];
+    s8 mDistortionScale;
+    f32 mDistortionMatrix[2][3];
 };
 
 struct GSgfxLight {
@@ -791,15 +825,15 @@ struct GSgfxLight {
 
     void position(GSvec *pos) {
         switch (mType) {
-        case GSGFX_LIGHT_POINT: mPosition = *pos; break;
+        case GSGFX_LIGHT_DIFFUSE: mPosition = *pos; break;
         case GSGFX_LIGHT_SPOT: mPosition = *pos; break;
-        case GSGFX_LIGHT_DIRECTIONAL: return;
+        case GSGFX_LIGHT_SPECULAR: return;
         }
         mFlags |= GSGFX_LIGHT_STATE_POSITION;
     }
     void direction(GSvec *dir) {
         switch (mType) {
-        case GSGFX_LIGHT_DIRECTIONAL:
+        case GSGFX_LIGHT_SPECULAR:
         case GSGFX_LIGHT_SPOT:
             mDirection = *dir;
             mFlags |= GSGFX_LIGHT_STATE_DIRECTION;
@@ -879,6 +913,7 @@ extern u16 _tokenLastGPU;
 extern u16 _tokenMaximum;
 
 u16 GSgfxTokenMark_Sub(void);
+extern "C" void GSgfx_GCWriteIndTexMtx(GXIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
 void GSgfxTokenMarkFrame(void);
 void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
 void GSgfxTokenAbortFrame(void);

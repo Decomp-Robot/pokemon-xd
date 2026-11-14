@@ -594,7 +594,7 @@ void CMenuHologram::renderOffscreenData()
     layer->tgenFunc(0, GS_GFX_TGEN_MTX2X4, GS_GFX_TGEN_SRC_TEX0, 0, false, 0);
     layer->cunitCount(1);
     layer->cunitChannelGen(0, GSGFX_CUNIT_COLOR_AND_ALPHA, GSGFX_CUNIT_VERTEX_COLOR, GSGFX_CUNIT_VERTEX_COLOR, 0,
-                           0, GSGFX_LIGHT_POINT, GSGFX_DIFFUSE_NONE);
+                           0, GSGFX_LIGHT_DIFFUSE, GSGFX_DIFFUSE_NONE);
     layer->tunitCount(1);
     layer->tunitMapping(0, 0, 0, 0);
     layer->tunitColorOp(0, GSGFX_TUNIT_OP_ADD, GSGFX_TUNIT_BIAS_ZERO, GSGFX_TUNIT_SCALE_ONE, true, GSGFX_TUNIT_REG_PREV);

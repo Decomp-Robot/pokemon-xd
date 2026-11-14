@@ -311,7 +311,7 @@ void peShapeContainer::Render()
                 diffuse->position(lightPos);
                 g_current_layer->cunitChannelGen(0, GSGFX_CUNIT_COLOR,
                     GSGFX_CUNIT_REGISTER, GSGFX_CUNIT_REGISTER, 1, &diffuse,
-                    GSGFX_LIGHT_POINT, GSGFX_DIFFUSE_CLAMP);
+                    GSGFX_LIGHT_DIFFUSE, GSGFX_DIFFUSE_CLAMP);
                 if (flags & PE_SHAPE_SPECULAR) {
                     specular = shape->specularLight;
                     lights[1] = specular;
@@ -327,7 +327,7 @@ void peShapeContainer::Render()
                     g_current_layer->cunitCount(2);
                     g_current_layer->cunitChannelGen(1, GSGFX_CUNIT_COLOR,
                         GSGFX_CUNIT_REGISTER, GSGFX_CUNIT_REGISTER, 1, &specular,
-                        GSGFX_LIGHT_DIRECTIONAL, GSGFX_DIFFUSE_CLAMP);
+                        GSGFX_LIGHT_SPECULAR, GSGFX_DIFFUSE_CLAMP);
                     if (PSVECSquareMag((const Vec *)&shape->lightPosition) < 0.00001f) {
                         direction.x = 0.0f; direction.y = -1.0f; direction.z = 0.0f;
                     } else {

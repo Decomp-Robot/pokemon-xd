@@ -344,9 +344,9 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
             layer->mTexCoordLineOffset0 = 0;
             layer->mTexCoordPointOffset0 = 0;
             layer->mPassState[0].mGroupAFlags |= GSGFX_PASS_GROUP_A_PARTICLES;
-            layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+            layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
             layer->mPassState[1].mGroupAFlags |= GSGFX_PASS_GROUP_A_PARTICLES;
-            layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_A;
+            layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
             if (rendered) GScameraLoadActiveCameraMatrix(layer->mLayerID);
         }
         /* Every layer of the set ends the pass in the engine's layer call. */
