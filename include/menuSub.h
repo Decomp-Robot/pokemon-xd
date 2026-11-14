@@ -69,6 +69,7 @@ void menuSubDrawTriangle(long layerID, long x1, long y1, long x2, long y2,
 u32 menuSubCalcColor(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 
 u8 menuSubAnimAlpha(void);
+s32 menuSubCheckSelect(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 void menuSubCursorAnimeInit(void);
 void menuSubCursorAnimeMain(void);
 void menuSubDrawCursorBackAnimeOnOffAuto(struct tagWINDOW_WORK *window,

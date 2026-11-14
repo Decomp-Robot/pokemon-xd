@@ -14,6 +14,65 @@
 #include <pokemonDB.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
+
+static f32 _cursorSec = 0.5f;
+static f32 _max_alpha = 255.0f;
+static f32 _min_alpha = 128.0f;
+static f32 _cursorTimer;
+
+u8 _animAlpha(void);
+void menuSubCheckSelectSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long row);
+
+enum MenuSubSelectItem {
+    MENU_SUB_SELECT_FIRST = 57,
+    MENU_SUB_SELECT_SECOND = 58,
+    MENU_SUB_SELECT_FIRST_ALT = 75,
+    MENU_SUB_SELECT_SECOND_ALT = 76
+};
+
+u8 menuSubAnimAlpha(void)
+{
+    return _animAlpha();
+}
+
+u8 _animAlpha(void)
+{
+    f32 speed = (2.0f * M_PI) / _cursorSec;
+    f32 timer = menuGetTotalTime();
+    timer *= speed;
+    _cursorTimer = timer;
+    f32 range = _max_alpha - _min_alpha;
+    f32 alpha = (1.0f + (f32)cos(_cursorTimer)) / 2.0f;
+    alpha = range * alpha;
+    alpha += _min_alpha;
+    if (alpha > 255.0f)
+        alpha = 255.0f;
+    return alpha;
+}
+
+s32 menuSubCheckSelect(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    switch (sprite->mItemID) {
+    case MENU_SUB_SELECT_FIRST:
+    case MENU_SUB_SELECT_FIRST_ALT:
+        menuSubCheckSelectSub(window, sprite, 0);
+        break;
+    case MENU_SUB_SELECT_SECOND:
+    case MENU_SUB_SELECT_SECOND_ALT:
+        menuSubCheckSelectSub(window, sprite, 1);
+        break;
+    }
+    return 0;
+}
+
+void menuSubCheckSelectSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long row)
+{
+    if (window->mCursor.y == row)
+        winSpriteSetDisp(sprite, true);
+    else
+        winSpriteSetDisp(sprite, false);
+}
 
 // Cooperative wait: yields until waitSec of in-game time has elapsed.
 void menuSubSleep(f32 seconds)
