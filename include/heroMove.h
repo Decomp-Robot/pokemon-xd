@@ -85,6 +85,7 @@ extern HeroMoveState HeroMove;
 extern "C" {
 #endif
 
+long heroMoveAddStepCallback(void (*callback)(long, FootStepCounter, long), long context);
 /* Add steps to a counter for dispatch with the next movement update. */
 void heroMovePoolCounter(FootStepCounter counter, long amount);
 void heroMoveGetHeroPos(GSvec *pos);

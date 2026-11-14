@@ -1,3 +1,4 @@
+#include <mail.h>
 #include <GSmem.h>
 #include <menu.h>
 #include <menuPdaMailListSort.h>
@@ -6,8 +7,6 @@
 void _pdaMailSort(void);
 
 extern u16 *_sortwork;
-
-extern "C" s32 mailGetNbMailInMailbox(void);
 
 // Closes the given menu, waiting for the close to finish.
 void _menuClose(long menuId)

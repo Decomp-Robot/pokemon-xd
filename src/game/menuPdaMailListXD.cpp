@@ -1,9 +1,8 @@
+#include <mail.h>
 #include <menuPdaMailListXD.h>
 #include <window.h>
 #include <winSeq.h>
 #include <GSsndPlayback.h>
-
-extern "C" s32 mailGetNbMailInMailbox(void);
 
 enum {
     MAIL_LIST_VISIBLE_COUNT = 5,

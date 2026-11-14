@@ -1,3 +1,4 @@
+#include <mail.h>
 #include <menuPdaMailListXD.h>
 
 #include <GSmem.h>
@@ -10,7 +11,6 @@
 #include <winSeq.h>
 #include <winSprite.h>
 
-extern "C" s32 mailGetNbMailInMailbox(void);
 extern "C" CURSOR *menuPdaMailXD(CURSOR *cursor, bool check, long flag);
 void _pdaMailSort(void);
 u16 *_sortwork;
@@ -208,13 +208,6 @@ void _menuPdaMailListXDInit(void)
         _maillistwork.mVisibleCount = count;
     }
     menuPdaSubInitAlpha(_menuPdaMailAlpha, MAIL_LIST_VISIBLE_COUNT, 0);
-}
-
-extern "C" {
-long mailGetSortMode(void);
-s32 mailGetMailIDInMailbox(s32 index);
-u32 mailGetSenderName(s32 mailID);
-u32 mailGetSubject(s32 mailID);
 }
 
 static const s32 MAIL_LIST_ROW_HEIGHT = 47;

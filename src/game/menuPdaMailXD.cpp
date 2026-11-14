@@ -1,3 +1,4 @@
+#include <mail.h>
 #include <menuPdaMailXD.h>
 #include <menuPdaMailListSort.h>
 #include <menu.h>
@@ -10,11 +11,6 @@
 #include <msgctrl.h>
 
 extern "C" {
-u32 mailGetAttachFileGroup(s32 mailID);
-u32 mailGetContents(s32 mailID);
-s32 mailGetNbMailInMailbox(void);
-u32 mailGetSenderName(s32 mailID);
-u32 mailGetSubject(s32 mailID);
 s32 pdaMailGetMailID(s32 index);
 }
 

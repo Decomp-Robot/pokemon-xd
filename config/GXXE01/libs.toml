@@ -18,6 +18,16 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/mail/mailMain.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred", "-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/app/mail/mail.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred", "-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GStexture/GStexture.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-str reuse,readonly"]
