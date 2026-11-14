@@ -477,7 +477,7 @@ extra_cflags = ["-opt nopeephole", "-inline noauto,deferred", "-i src/ext/msl/in
 [[lib.object]]
 name = "game/menuPocketCologne.cpp"
 completed = true
-extra_cflags = ["-opt nopeephole"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline noauto,deferred"]
 
 [[lib.object]]
 name = "game/menuSub.cpp"

@@ -451,7 +451,9 @@ game/menuShopMax.cpp:
 	.text       start:0x80062568 end:0x80062618
 
 game/menuPocketCologne.cpp:
-	.text       start:0x80063560 end:0x800636AC
+	.text       start:0x80063560 end:0x80063B2C
+	.rodata     start:0x802EB330 end:0x802EB350
+	.sbss2      start:0x804EFCC8 end:0x804EFCD0
 
 game/menuSub.cpp:
 	.text       start:0x800647A0 end:0x80065104
