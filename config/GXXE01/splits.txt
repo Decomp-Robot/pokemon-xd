@@ -3127,6 +3127,12 @@ game/GSAPI/GSprim/text.cpp:
 game/app/deck/deck.cpp:
 	.text       start:0x8028B348 end:0x8028B988
 
+game/app/ribbon/ribbon.cpp:
+	.text       start:0x802922C4 end:0x802922FC
+
+game/app/exribbon/exribbon.cpp:
+	.text       start:0x802922FC end:0x8029245C
+
 game/app/people/peoplePartAnimation.cpp:
 	.text       start:0x802A1644 end:0x802A1A74
 	.sdata2     start:0x804EF908 end:0x804EF928

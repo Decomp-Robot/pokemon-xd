@@ -4,6 +4,7 @@
 #include <heroBios.h>
 #include <Pokemon.h>
 #include <exribbon.h>
+#include <ribbon.h>
 // Pokemon status menu (summary / waza / ribbon pages).
 #include <GSgfx.h>
 #include <menuItemBios.h>
@@ -41,8 +42,6 @@ u16 zokuseiBiosGetSpriteID(u16 type);
 u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);
 u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
-s32 getRibbonCount(void);
-u32 getRibbonMsgID(s32 ribbon);
 }
 
 // Menus hidden while the waza pages are up.
@@ -133,7 +132,7 @@ void menuPokemonStatusDrawRibbon(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         s8 grid = _menuStatus.mGridIndex;
         ribbon = _menuStatus.mRibbon.mCells[grid % 9][grid / 9];
         if (ribbon < 0) {
-            if ((u32)getRibbonCount() <= (u32)ribbon)
+            if ((u32)getRibbonCnt() <= (u32)ribbon)
                 return;
         }
         {

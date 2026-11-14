@@ -6550,3 +6550,18 @@ cflags_extra = ["-use_lmw_stmw on"]
 name = "game/GSAPI/GSlog/GSlog.cpp"
 completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib]]
+name = "ribbon"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-O4,s", "-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/ribbon/ribbon.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/exribbon/exribbon.cpp"
+completed = true
