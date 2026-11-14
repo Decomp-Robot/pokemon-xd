@@ -35,7 +35,9 @@ extern "C" {
 #endif
 
 u8 *fightEncountDataBiosGetPtr(u16 encountNo);
+u32 fightEncountGetEnvSndDataId(u16 encountDataId);
 u32 fightEncountDataBiosGetFightKind(void* data);
+u8 fightEncountDataBiosGetFightType(void *data);
 void fightEncountDataBiosSetFightKind(void* data, u8 value);
 u32 fightEncountDataBiosGetTrainer(void* data);
 void fightEncountDataBiosSetTrainer(void* data, u8 value);
@@ -43,7 +45,7 @@ u32 fightEncountDataBiosGetPokemon(void* data);
 void fightEncountDataBiosSetPokemon(void* data, u8 value);
 u32 fightEncountDataBiosGetEntry(void* data);
 void fightEncountDataBiosSetEntry(void* data, u8 value);
-u32 fightEncountDataBiosGetFightFloorDataId(void* data);
+u16 fightEncountDataBiosGetFightFloorDataId(void* data);
 void fightEncountDataBiosSetFightFloorDataId(void* data, u16 value);
 u32 fightEncountDataBiosGetFightTrainerDataId(void* data, s32 player);
 void fightEncountDataBiosSetFightTrainerDataId(void* data, s32 player, u16 trainerDataId);

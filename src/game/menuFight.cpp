@@ -1857,7 +1857,7 @@ s32 getKane(void)
     void *kindData;
     FIGHT_TRAINER *targetTrainer;
     FightPokemon *pokemon;
-    u8 playerNum;
+    u32 playerNum;
     u16 bairitu;
     u16 multi;
     s32 i;

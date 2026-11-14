@@ -15,6 +15,7 @@ u8 fightTypeDataBiosGetEntryPokemonNum(void *fightTypeData);
 u8 fightTypeDataBiosGetFightoutPokemonNum(void *fightTypeData);
 void *fightTypeDataBiosGetPtr(u16 type);
 u8 fightTypeDataBiosGetTrainerNum(void *fightTypeData);
+u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType);
 
 #ifdef __cplusplus
 }

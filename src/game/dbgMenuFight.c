@@ -138,6 +138,7 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
     u8* data;
     s32 result;
     s32 id;
+    u32 floorDataId;
 
     if (encountNo == 0) {
         return 1;
@@ -193,7 +194,8 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             fightEncountDataBiosSetEntry(data, id);
             continue;
         case ENCOUNT_EDIT_ITEM_FIELD:
-            id = dbgMenuFightGetFightFloorDataId(fightEncountDataBiosGetFightFloorDataId(data));
+            floorDataId = fightEncountDataBiosGetFightFloorDataId(data);
+            id = dbgMenuFightGetFightFloorDataId(floorDataId);
             if (id < 0) {
                 continue;
             }
