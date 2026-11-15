@@ -510,7 +510,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
 
     case PANEL_ITEM_FACE_A:
     case PANEL_ITEM_FACE_B:
-        menuFaceDispSub(win, sprite, info->mFaceId);
+        menuFaceDispFromID(win, sprite, info->mFaceId);
         return;
 
     case PANEL_ITEM_HPGAUGE_A:

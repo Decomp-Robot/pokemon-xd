@@ -14,6 +14,7 @@
 #include <waza.h>
 #include <winSprite.h>
 #include <menu.h>
+#include <menuFace.h>
 #include <window.h>
 #include <gamedata.h>
 #include <savedata.h>

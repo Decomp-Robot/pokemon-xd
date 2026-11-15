@@ -8,6 +8,7 @@
 // Pokemon -- party/battle pokemon record.
 typedef struct Pokemon Pokemon;
 typedef struct PokemonData PokemonData;
+struct FightPokemon;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
     u16 mItemDataId; // 0x02: held item data ID.
@@ -113,6 +114,8 @@ enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_MEW = 151,
     POKEMON_SPECIES_PICHU = 172,
     POKEMON_SPECIES_TOGEPI = 175,
+    POKEMON_SPECIES_ANNON = 201,
+    POKEMON_SPECIES_RUGIA = 249,
     POKEMON_SPECIES_HOUOU = 250,
     POKEMON_SPECIES_SHEDINJA = 303,
     POKEMON_SPECIES_PLUSLE = 353,
@@ -205,7 +208,8 @@ enum POKEMON_STATUS_FIELD {
 // Fields read out of the species table with pokemonGetStatus(NULL, speciesId, field, index).
 enum POKEMON_BIOS_FIELD {
     POKEMON_BIOS_FIELD_DEFAULT_NAME = 1, // default name of the species.
-    POKEMON_BIOS_FIELD_HAS_ABILITY2 = 23 // non-zero when the species has a second ability.
+    POKEMON_BIOS_FIELD_HAS_ABILITY2 = 23, // non-zero when the species has a second ability.
+    POKEMON_BIOS_FIELD_FACE_ID = 91 // index 0: normal face; index 1: shiny face.
 };
 
 // Marking bits of Pokemon field POKEMON_STATUS_FIELD_MARKINGS (0xBB). Slot N
@@ -350,6 +354,8 @@ s8 pokemonOboeWaza(Pokemon *pokemon, u8 level, u8 replace, u8 *index);
 // exchange each copy them into their own name buffers.
 u8 pokemonGetSex(Pokemon *pokemon);
 u8 pokemonGetDeoxysSel(u8 controllerId);
+u8 pokemonGetFightPokemonDeoxysSel(struct FightPokemon *pokemon);
+u8 pokemonGetAnnonKatati(u32 rnd);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
 u8 pokemon_GetSeikaku(Pokemon *pokemon);

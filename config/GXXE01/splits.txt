@@ -2191,6 +2191,12 @@ game/app/kaisuu/kaisuu.cpp:
 game/app/kaisuu/kaisuuBios.cpp:
 	.text       start:0x8010C390 end:0x8010C3E4
 
+game/app/menu/menuFace.cpp:
+	.text       start:0x80110A04 end:0x80112114
+	.data       start:0x803FBFB0 end:0x803FC020
+	.bss        start:0x80445918 end:0x80445A08
+	.sbss       start:0x804EB078 end:0x804EB088
+
 game/app/menu/menuOffScreen.cpp:
 	.text       start:0x801145EC end:0x80114D30
 	.sdata      start:0x804E8378 end:0x804E8380

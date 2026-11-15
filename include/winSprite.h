@@ -118,6 +118,8 @@ struct tagSPRITE_WORK {
     f32 mScaleY;            // vertical scale.
     f32 mYaw;               // rotation about the Y axis, in radians.
     u8 mUseFloorMenuLayer;
+    u8 mAlphaMode;
+    u8 mAlignMode;
 };
 
 // Key mask bits held in tagWINDOW_KEY: direction pad, accept/cancel, X/Z and
@@ -149,6 +151,7 @@ struct tagWINDOW_KEY {
 extern "C" {
 #endif
 struct MENU_ITEM_dd_* windowGetCursorToItem(tagWINDOW_WORK* window);
+void winSpriteDrawTexture(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void winSpriteDraw(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void winAnimeCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void winSetSequence(WINDOW_SEQUENCE *sequence, u16 sequenceID);

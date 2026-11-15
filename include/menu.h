@@ -34,13 +34,9 @@ u8 menuIsCheck(s32 menuID);
 f32 menuGetTotalTime(void);
 f32 menuGetLastTime(void);
 void menuButtonNormal(struct tagWINDOW_WORK *window);
-u8 menuFaceCheckLoading(void);
 void menuDataBiosSetXY(s32 id, s16 x, s16 y);
 void menuDataBiosGetXY(s32 id, s16 *x, s16 *y);
 u8 menuDataBiosGetDispMax(s32 id);
-void menuFaceDispSub(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite, u16 faceID);
-u16 menuFaceGetID2(struct Pokemon *pokemon, u8 deoxysSel);
-void menuFaceLoad_Tool(struct Pokemon *pokemon, struct Pokemon *(*callback)(void *), void *context);
 
 void windowCloseMain(struct tagWINDOW_WORK *window);
 #ifdef __cplusplus

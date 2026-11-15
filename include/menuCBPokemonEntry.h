@@ -46,6 +46,9 @@ typedef struct MenuCBPokemonEntryWork {
 
 extern MenuCBPokemonEntryWork _menuCBPokemonWork;
 
+// Face ID of the slot most recently returned by the tool loader callback.
+extern u16 uToolPokemon_faceId;
+
 #ifdef __cplusplus
 extern "C" {
 #endif

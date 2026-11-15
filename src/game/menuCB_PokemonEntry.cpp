@@ -8,6 +8,7 @@
 #include <menuGBA.h>
 #include <sound.h>
 #include <menu.h>
+#include <menuFace.h>
 #include <savedata.h>
 #include <menuCBBattleStart.h>
 #include <menuCBBios.h>
@@ -534,9 +535,6 @@ void _menuCBPokemonEntryWorkInit(void)
  * Face texture work of the entry screen
  * ---------------------------------------------------------------------- */
 
-/* Face ID the loader keeps for the slot it loaded last. */
-extern u16 uToolPokemon_faceId;
-
 /* The face texture work walks four parties of six slots each. */
 enum { FACE_WORK_PLAYER_NUM = 4, FACE_WORK_SLOT_NUM = 6 };
 
@@ -716,7 +714,7 @@ extern "C" u8 menuCBPokemonEntryDispPokemonFace(tagWINDOW_WORK *window,
     MenuCBPokemonEntryFaceWork *face = _menuCBPokemonEntryGetFaceBase(player, slot);
 
     if (face->mLoaded) {
-        menuFaceDispSub(window, sprite, face->mFaceID);
+        menuFaceDispFromID(window, sprite, face->mFaceID);
         return 1;
     }
 
