@@ -6363,6 +6363,11 @@ name = "game/app/item/fightItem.cpp"
 completed = true
 extra_cflags = ["-O4,s"]
 
+[[lib.object]]
+name = "game/app/item/itemBios.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred"]
+
 [[lib]]
 name = "GSres"
 mw_version = "GC/2.6"

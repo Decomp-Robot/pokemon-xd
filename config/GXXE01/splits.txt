@@ -2329,6 +2329,11 @@ game/app/item/item.cpp:
 	.text       start:0x8015D75C end:0x8015D960
 	.data       start:0x804059F8 end:0x80405A80
 
+game/app/item/itemBios.cpp:
+	.text       start:0x8015D960 end:0x8015EB84
+	.rodata     start:0x802F3928 end:0x802F3B28
+	.data       start:0x80405A80 end:0x80405B00
+
 game/app/item/itemFightItem.cpp:
 	.text       start:0x80161268 end:0x80161308
 

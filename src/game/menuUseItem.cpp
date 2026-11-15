@@ -162,45 +162,6 @@ enum {
 #define ITEM_BLACK_FLUTE 0x2A
 #define ITEM_WHITE_FLUTE 0x2B
 
-/* Recover types itemParamGetRecoverType reports. That routine probes the item
- * parameter in turn and reports the first thing it finds: 0x03 to 0x09 are
- * single-bit probes (of which more than one set reports
- * RECOVER_TYPE_MULTIPLE_STATUS), 0x0B to 0x11 test the recovery bytes whole,
- * and the ids past 0x11 are further single flags. This is a different id space
- * from the effect ids the item-use log is filled with below. */
-#define RECOVER_TYPE_NONE 0x00       // nothing the item can recover
-#define RECOVER_TYPE_REVIVE_ALL 0x01 // revives every fainted party member
-#define RECOVER_TYPE_LEVEL_UP 0x02  // raises the level
-#define RECOVER_TYPE_SLEEP 0x03      // the item wakes a sleeping pokemon
-#define RECOVER_TYPE_POISON 0x04     // the item clears poison
-/* The remaining status bits, named after the accessors that read them. */
-#define RECOVER_TYPE_BURN 0x05
-#define RECOVER_TYPE_FREEZE 0x06
-#define RECOVER_TYPE_PARALYZE 0x07
-#define RECOVER_TYPE_CONFUSE 0x08
-#define RECOVER_TYPE_MULTIPLE_STATUS 0x0A // more than one of the flags above
-/* Clears infatuation in battle. */
-#define RECOVER_TYPE_INFATUATION 0x09
-/* HP restoration and stat-effort increases share the field recovery handler.
- * Battle permits HP restoration here, but not effort increases. */
-#define RECOVER_TYPE_HP 0x0B
-#define RECOVER_TYPE_EFFORT_ATTACK_UP 0x0C
-#define RECOVER_TYPE_EFFORT_MAX_HP_UP 0x0D
-#define RECOVER_TYPE_EFFORT_SP_ATTACK_UP 0x0E
-#define RECOVER_TYPE_EFFORT_SP_DEFENSE_UP 0x0F
-#define RECOVER_TYPE_EFFORT_SPEED_UP 0x10
-#define RECOVER_TYPE_EFFORT_DEFENSE_UP 0x11
-/* The evolution-stone flag; the nazonomi dispatchers do not route it because
- * these items are used through the evolution handler instead. */
-#define RECOVER_TYPE_EVOLUTION 0x12
-/* 0x13 tests the same parameter bit as itemParamGetPPMaxUpFlag and 0x14 the
- * bit itemParamGetPPMaxFullFlag reads; both reach menuUseItemWPointUp, which
- * raises a move's maximum PP. */
-#define RECOVER_TYPE_PP_MAX_UP 0x13
-#define RECOVER_TYPE_PP_MAX_FULL 0x14
-#define RECOVER_TYPE_PP 0x15           // restores PP
-#define RECOVER_TYPE_NO_FLAG 0x16     // the item carries no recover flag
-
 /* Entry counts of the tables the item handlers scan, and of the item id list
  * the recover items are read from. */
 #define COLOGNE_TABLE_COUNT 3
@@ -698,19 +659,19 @@ extern "C" int menuUseItemBattleNazonomi(unsigned long itemID, int *consumed)
     itemParamConvertOrigFormat(&param, &itemParamOrigBattle);
     type = itemParamGetRecoverType(&param);
     switch (type) {
-    case RECOVER_TYPE_NONE:
+    case ITEM_RECOVER_BATTLE_BOOST:
         return menuUseItemStatusUp(itemID, consumed);
-    case RECOVER_TYPE_SLEEP:
-    case RECOVER_TYPE_POISON:
-    case RECOVER_TYPE_BURN:
-    case RECOVER_TYPE_FREEZE:
-    case RECOVER_TYPE_PARALYZE:
-    case RECOVER_TYPE_CONFUSE:
-    case RECOVER_TYPE_INFATUATION:
-    case RECOVER_TYPE_MULTIPLE_STATUS:
-    case RECOVER_TYPE_HP:
+    case ITEM_RECOVER_SLEEP:
+    case ITEM_RECOVER_POISON:
+    case ITEM_RECOVER_BURN:
+    case ITEM_RECOVER_FREEZE:
+    case ITEM_RECOVER_PARALYZE:
+    case ITEM_RECOVER_CONFUSE:
+    case ITEM_RECOVER_INFATUATION:
+    case ITEM_RECOVER_MULTIPLE_STATUS:
+    case ITEM_RECOVER_HP:
         return menuUseItemRecovery(itemID, consumed);
-    case RECOVER_TYPE_PP:
+    case ITEM_RECOVER_PP:
         return menuUseItemPPRecovery(itemID, consumed);
     default:
         return menuUseItemDummy(itemID, consumed);
@@ -796,28 +757,28 @@ extern "C" int menuUseItemFieldNazonomi(unsigned long itemID, int *consumed)
     itemParamConvertOrigFormat(&param, &itemParamOrigField);
     type = itemParamGetRecoverType(&param);
     switch (type) {
-    case RECOVER_TYPE_SLEEP:
-    case RECOVER_TYPE_POISON:
-    case RECOVER_TYPE_BURN:
-    case RECOVER_TYPE_FREEZE:
-    case RECOVER_TYPE_PARALYZE:
-    case RECOVER_TYPE_MULTIPLE_STATUS:
-    case RECOVER_TYPE_HP:
-    case RECOVER_TYPE_EFFORT_ATTACK_UP:
-    case RECOVER_TYPE_EFFORT_MAX_HP_UP:
-    case RECOVER_TYPE_EFFORT_SP_ATTACK_UP:
-    case RECOVER_TYPE_EFFORT_SP_DEFENSE_UP:
-    case RECOVER_TYPE_EFFORT_SPEED_UP:
-    case RECOVER_TYPE_EFFORT_DEFENSE_UP:
+    case ITEM_RECOVER_SLEEP:
+    case ITEM_RECOVER_POISON:
+    case ITEM_RECOVER_BURN:
+    case ITEM_RECOVER_FREEZE:
+    case ITEM_RECOVER_PARALYZE:
+    case ITEM_RECOVER_MULTIPLE_STATUS:
+    case ITEM_RECOVER_HP:
+    case ITEM_RECOVER_ATTACK_EFFORT:
+    case ITEM_RECOVER_HP_EFFORT:
+    case ITEM_RECOVER_SP_ATTACK_EFFORT:
+    case ITEM_RECOVER_SP_DEFENCE_EFFORT:
+    case ITEM_RECOVER_QUICK_EFFORT:
+    case ITEM_RECOVER_DEFENCE_EFFORT:
         return menuUseItemRecovery(itemID, consumed);
-    case RECOVER_TYPE_REVIVE_ALL:
+    case ITEM_RECOVER_REVIVE_ALL:
         return menuUseItemAlldeathRcv(itemID, consumed);
-    case RECOVER_TYPE_LEVEL_UP:
+    case ITEM_RECOVER_LEVEL_UP:
         return menuUseItemListLVUp(itemID, consumed);
-    case RECOVER_TYPE_PP_MAX_UP:
-    case RECOVER_TYPE_PP_MAX_FULL:
+    case ITEM_RECOVER_PP_MAX_UP:
+    case ITEM_RECOVER_PP_MAX_FULL:
         return menuUseItemWPointUp(itemID, consumed);
-    case RECOVER_TYPE_PP:
+    case ITEM_RECOVER_PP:
         return menuUseItemPPRecovery(itemID, consumed);
     default:
         return menuUseItemDummy(itemID, consumed);

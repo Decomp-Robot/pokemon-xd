@@ -4,9 +4,7 @@
 #include <types.h>
 #include <bool.h>
 
-// Item IDs used by the inventory routines. The low block is the bag's
-// ordinary stock; the key-item block contains the cologne and battle disk
-// cases, their contents, and the disks themselves.
+// Item IDs used by the inventory routines.
 enum ItemID {
     ITEM_MASTER_BALL = 1,
     ITEM_ULTRA_BALL = 2,
@@ -23,24 +21,26 @@ enum ItemID {
     ITEM_POTION = 13,
     ITEM_HYPER_POTION = 21,
 
-    // Berries, in the order the game numbers them: 134 is berry 2.
+    // Berries.
+    ITEM_CHERI_BERRY = 133,
     ITEM_CHESTO_BERRY = 134,
     ITEM_PECHA_BERRY = 135,
     ITEM_RAWST_BERRY = 136,
+    ITEM_ENIGMA_BERRY = 175,
 
     // Technical machines.
     ITEM_TM01 = 289,
     ITEM_TM02 = 290,
 
     // The cologne case opens the scent menu; the scents follow it.
-    ITEM_COLOGNE_CASE = 0x200,
+    ITEM_COLOGNE_CASE = 512,
     ITEM_JOY_SCENT = 513,
     ITEM_EXCITE_SCENT = 514,
     ITEM_VIVID_SCENT = 515,
 
     // The battle disk case opens the disk list; the disks follow it,
     // one item ID per disk, in disk order.
-    ITEM_BATTLE_DISK_CASE = 0x215,
+    ITEM_BATTLE_DISK_CASE = 533,
     ITEM_BATTLE_DISK_01 = 534,
     ITEM_BATTLE_DISK_02 = 535,
     ITEM_BATTLE_DISK_03 = 536,
@@ -114,23 +114,26 @@ enum PocketItemUseResult {
     POCKET_ITEM_USE_CLOSE = 2
 };
 
-// Item-table record, 0x28 bytes; separate from the menu-item layout.
+// Item-table record; separate from the menu-item layout.
 typedef struct ItemData ItemData;
 struct ItemData {
-    u8 mBagPocket; // 0x00: bag pocket the item belongs to.
-    u8 mImportant; // 0x01: item cannot be thrown away or sold.
-    u8 mUsable; // 0x02: item may be used.
-    u8 mDepositAble; // 0x03: item may be put into the PC.
-    u8 mFunctionalID; // 0x04: index of the item-use parameters.
+    u8 mBagPocket; // bag pocket the item belongs to.
+    u8 mImportant; // item cannot be thrown away or sold.
+    u8 mUsable; // item may be used.
+    u8 mDepositAble; // item may be put into the PC.
+    u8 mFunctionalID; // index of the item-use parameters.
     u8 mReservedFlags;
-    u16 mPrice; // 0x06: price the item is sold for.
-    u8 _08[0x08]; // 0x08-0x0F: unknown.
-    u32 mNameMsgID; // 0x10: message id of the item name.
-    u32 mDescriptionMsgID; // 0x14: message id describing the item.
-    u32 mMachineNo; // 0x18: machine number in the low byte.
-    PocketItemUseFunc mFieldUseFunc; // 0x1C: routine the item runs in the field.
-    PocketItemUseFunc mBattleUseFunc; // 0x20: routine the item runs in battle.
-    u8 _24[0x04]; // 0x24-0x27: unknown.
+    u16 mPrice; // price the item is sold for.
+    u16 mCoupon;
+    u16 mItemSoubiDataId;
+    u16 mFightUseKoukaDataId;
+    u16 mUnknown;
+    u32 mNameMsgID; // message id of the item name.
+    u32 mDescriptionMsgID; // message id describing the item.
+    u32 mBuff; // Item-specific data; TM/HM items store their machine number here.
+    PocketItemUseFunc mFieldUseFunc; // routine the item runs in the field.
+    PocketItemUseFunc mBattleUseFunc; // routine the item runs in battle.
+    s8 mUseFriend[3];
 };
 
 #ifdef __cplusplus
@@ -157,6 +160,21 @@ s8 itemDataBiosGetUseFriend(ItemData *data, u16 friendIndex);
 u32 itemDataBiosGetBuff(ItemData *data);
 u8 itemDataBiosCheckExportable(ItemData *data);
 u8 itemDataBiosCheckImportable(ItemData *data);
+
+void itemDataBiosSetBuff(ItemData *data, u32 value);
+void itemDataBiosSetUseFriend(ItemData *data, u16 range, s8 value);
+void itemDataBiosSetFightUseKoukaDataId(ItemData *data, u16 value);
+void itemDataBiosSetItemSoubiDataId(ItemData *data, u16 value);
+void itemDataBiosSetDoc(ItemData *data, u32 value);
+void itemDataBiosSetUseful(ItemData *data, u8 value);
+void itemDataBiosSetImportant(ItemData *data, u8 value);
+void itemDataBiosSetPrice(ItemData *data, u16 value);
+void itemDataBiosSetKind(ItemData *data, u8 value);
+void itemDataBiosSetName(ItemData *data, u32 value);
+u32 itemDataBiosGetBuff(ItemData *data);
+s8 itemDataBiosGetUseFriend(ItemData *data, u16 range);
+u16 itemDataBiosGetFightUseKoukaDataId(ItemData *data);
+u16 itemDataBiosGetCoupon(ItemData *data);
 
 bool itemDataCheckValid(u16 itemID);
 u8 itemDataBiosGetItemEffectParam(ItemData *data);
