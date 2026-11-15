@@ -5,6 +5,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern u32 *esabadata_number;
+s32 esabaGetDigestRate(u16 place);
 int esabaSet(int place);
 void esabaSetPokemonRnd(s32 place, u32 random);
 

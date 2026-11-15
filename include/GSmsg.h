@@ -27,7 +27,7 @@ u16 *GSmsgGetStringPtr(u32 messageID);
 s32 GSmsgGetLength(u32 messageID);
 u32 GSmsgGetMessageSize(s32 messageID);
 s32 GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 width, s32 height, u32 color, u32 messageID);
-s32 GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 width, s16 height, u32 color, s32 msgID);
+s32 GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 width, s16 height, u32 color, u32 msgID);
 
 s32 GScharConvToGBACode(void *destination, const u16 *source, s32 language);
 s32 GScharConvToGCCode(u16 *destination, const u8 *source, s32 size, s32 language);
