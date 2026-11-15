@@ -4,6 +4,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void spriteGetOffset(s32 layerID, s16 *x, s16 *y);
+void spriteSetOffset(s32 layerID, s16 x, s16 y);
 void spriteClearEnv(s32 layer);
 void spriteSetEnv(s32 layerID);
 void spriteSetScissor(s32 layerID, s32 x, s32 y, s32 width, s32 height);

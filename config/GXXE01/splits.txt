@@ -2164,10 +2164,6 @@ game/GSAPI/GSinput/GSinput.cpp:
 	.sbss       start:0x804EAFF8 end:0x804EB005
 	.sdata2     start:0x804ED580 end:0x804ED5C8
 
-game/app/kaisuu/kaisuuData.cpp:
-	.data       start:0x803D51C0 end:0x803D5210
-	.sdata      start:0x804E8350 end:0x804E8358
-
 game/GSAPI/GSres/GSres.cpp:
 	.text       start:0x80105840 end:0x80105FEC
 	.rodata     start:0x802ED2A0 end:0x802ED348
@@ -2175,6 +2171,15 @@ game/GSAPI/GSres/GSres.cpp:
 
 game/GSAPI/GSmsg/GSmsg.cpp:
 	.text       start:0x80106C8C end:0x80107050
+
+game/GSAPI/GSmsg/sprite.cpp:
+	.text       start:0x8010B458 end:0x8010BD24
+	.data       start:0x803D5190 end:0x803D51C0
+	.sdata2     start:0x804ED618 end:0x804ED648
+
+game/app/kaisuu/kaisuuData.cpp:
+	.data       start:0x803D51C0 end:0x803D5210
+	.sdata      start:0x804E8350 end:0x804E8358
 
 game/GSAPI/GSgapp/GSgapp.cpp:
 	.text       start:0x8010BD24 end:0x8010C320

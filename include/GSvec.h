@@ -23,6 +23,11 @@ struct GSvec {
 #ifdef __cplusplus
     GSvec() {}
     void clear();
+    void set(f32 positionX, f32 positionY, f32 positionZ) {
+        x = positionX;
+        y = positionY;
+        z = positionZ;
+    }
     GSvec(const GSvec &other) : x(other.x), y(other.y), z(other.z) {}
     GSvec &operator=(const GSvec &other) {
         x = other.x;

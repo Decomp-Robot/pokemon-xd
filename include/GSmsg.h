@@ -3,7 +3,9 @@
 #include <GSgfxTypes.h>
 #include <bool.h>
 #ifdef __cplusplus
+class GSgfxLayer;
 extern "C" {
+extern GSgfxLayer *_TargetLayer;
 #endif
 void *GSmsgOpen(void *data);
 void *GSmsgFontOpen(void *data);
