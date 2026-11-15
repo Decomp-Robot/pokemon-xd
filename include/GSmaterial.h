@@ -2,13 +2,14 @@
 #define GS_MATERIAL_H
 
 #include <types.h>
+#include <hsd/state.h>
 
 union GScolor;
 struct GStexture;
 struct _HSD_MObj;
 
 struct GSmaterial {
-    u8 _00[2];
+    u16 mSavedAlpha;
     u16 mEnabledExtensions; // 0x002: GS_MATERIAL_EXT_* flags currently on.
     u8 _04[4];
     _HSD_MObj *mMaterial;
@@ -25,6 +26,14 @@ enum GSmaterialExtension {
 extern "C" void *GSmaterialGetTexture(void *material, void *tex);
 
 extern "C" {
+void GSmaterialResetPEdescr(GSmaterial *material);
+void GSmaterialSetPEdescr(GSmaterial *material, HSD_PEDesc *descriptor);
+void GSmaterialResetAlpha(GSmaterial *material);
+void GSmaterialStoreAlpha(GSmaterial *material);
+void GSmaterialSetAlpha(GSmaterial *material, f32 alpha);
+void GSmaterialResetFlags(GSmaterial *material);
+u32 GSmaterialGetFlags(GSmaterial *material);
+void GSmaterialSetFlags(GSmaterial *material, u32 flags);
 void GSmaterialResetTexture(GSmaterial *material);
 void GSmaterialSetTexture(GSmaterial *material, GStexture *texture);
 void GSmaterialGetModulate(GSmaterial *material, GScolor *color);

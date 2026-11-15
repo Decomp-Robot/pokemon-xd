@@ -216,3 +216,93 @@ void GSmodelEnableEnvMap(_GSmodel *model, s32 envMapMode, s32 envMapType, f32 bl
         GSmaterialEnableExtension(material, GS_MATERIAL_EXT_ENV_MAP);
     }
 }
+void GSmodelResetPEdescr(_GSmodel *model)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    material = model->mMaterials;
+    count = model->mMaterialCount;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialResetPEdescr(material);
+    }
+}
+
+void GSmodelSetPEdescr(_GSmodel *model, HSD_PEDesc *descriptor)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    count = model->mMaterialCount;
+    material = model->mMaterials;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialSetPEdescr(material, descriptor);
+    }
+}
+
+void GSmodelResetMaterialAlpha(_GSmodel *model)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    material = model->mMaterials;
+    count = model->mMaterialCount;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialResetAlpha(material);
+    }
+}
+
+void GSmodelInitMaterialAlpha(_GSmodel *model)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    count = model->mMaterialCount;
+    material = model->mMaterials;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialStoreAlpha(material);
+    }
+}
+
+void GSmodelSetMaterialAlpha(_GSmodel *model, f32 alpha)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    count = model->mMaterialCount;
+    material = model->mMaterials;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialSetAlpha(material, material->mSavedAlpha * alpha / 255.0f);
+    }
+}
+
+void GSmodelResetRenderFlags(_GSmodel *model)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    material = model->mMaterials;
+    count = model->mMaterialCount;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialResetFlags(material);
+    }
+}
+
+void GSmodelSetRenderFlags(_GSmodel *model, u32 flags)
+{
+    u32 i;
+    u32 count;
+    GSmaterial *material;
+
+    count = model->mMaterialCount;
+    material = model->mMaterials;
+    for (i = 0; i < count; i++, material++) {
+        GSmaterialSetFlags(material, flags | GSmaterialGetFlags(material));
+    }
+}
