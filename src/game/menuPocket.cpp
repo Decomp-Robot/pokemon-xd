@@ -160,14 +160,6 @@ enum {
     MSG_VAR_ITEM_QUANTITY = 0x2F,
 };
 
-// Message codes the shop messages are built with.
-enum MENU_SHOP_MSG_CODE {
-    MENU_MSG_ITEM_NUM = 0x0B,
-    MENU_MSG_ITEM_PRICE = 0x0D,
-    MENU_MSG_SELL_TOTAL = 0x09,
-    MENU_MSG_SELL_CONFIRM = 0x0A,
-};
-
 // Menu-data id and row id the action-menu row layout is read from.
 enum {
     MENU_DATA_ACT_ROW = 0x2C,
@@ -709,13 +701,13 @@ int _execSell(int tab, u16 itemID, int menuPos)
 
     if (price <= 0) {
         menuPtPlaySe(0x13);
-        int msg = menuShopGetMsgID(&se, window, MENU_MSG_ITEM_NUM, 0x2D, itemID, -1);
+        int msg = menuShopGetMsgID(&se, window, MENU_SHOP_MSG_CANNOT_SELL, 0x2D, itemID, -1);
         winMsgOpenWithSE(2, msg, 1, 0, se);
         winMsgClose(1);
         return 0;
     }
 
-    _setExplanationMsgID(menuShopGetMsgID(&se, window, MENU_MSG_ITEM_PRICE, 0x2D, itemID, -1));
+    _setExplanationMsgID(menuShopGetMsgID(&se, window, MENU_SHOP_MSG_SELL_QUANTITY, 0x2D, itemID, -1));
 
     int digitCount;
 
@@ -735,7 +727,7 @@ int _execSell(int tab, u16 itemID, int menuPos)
 
     int total = unitPrice * num;
 
-    int msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_TOTAL, 0x4B, total, -1);
+    int msg = menuShopGetMsgID(&se, window, MENU_SHOP_MSG_SELL_TOTAL, 0x4B, total, -1);
     winMsgOpenWithSE(2, msg, 1, 0, se);
 
     s8 answer = (s8)menuSubOpenYesNo(0, -1, -1, 0);
@@ -748,7 +740,7 @@ int _execSell(int tab, u16 itemID, int menuPos)
     _decItem(itemID, lPocketTabData[Data.mTab].mItemKind, menuPos, num);
     GSsndPlay(0x1A, 0, 0);
     heroAddPokedoru(Data.mHero, total);
-    msg = menuShopGetMsgID(&se, window, MENU_MSG_SELL_CONFIRM, 0x2D, itemID, 0x4B, total, -1);
+    msg = menuShopGetMsgID(&se, window, MENU_SHOP_MSG_SELL_COMPLETE, 0x2D, itemID, 0x4B, total, -1);
     _infoOnly(msg);
     return 1;
 }

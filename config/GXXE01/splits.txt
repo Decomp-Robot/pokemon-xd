@@ -462,7 +462,7 @@ game/menuReliveMeter.cpp:
 	.sbss       start:0x804EA8F0 end:0x804EA8F8
 
 game/menuShop.cpp:
-	.text       start:0x800605B8 end:0x800608B4
+	.text       start:0x800605B8 end:0x80060F88
 	.sbss       start:0x804EA910 end:0x804EA91C
 	.sdata2     start:0x804EC588 end:0x804EC598
 

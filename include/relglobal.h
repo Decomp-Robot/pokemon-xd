@@ -37,6 +37,30 @@ extern u32 *pokemon_data_number;
 /* Count of entries in the pokemon nature (seikaku) table. */
 extern u32 *pokemon_seikaku_data_number;
 
+struct SHOP_DATA {
+    u8 mMessageSet;
+    u8 mShopType;
+    u16 mGoodsIndex;
+};
+typedef struct SHOP_DATA SHOP_DATA;
+
+struct SHOP_SALESMAN {
+    u8 mSoundEffect;
+    u32 mMessages[14];
+};
+typedef struct SHOP_SALESMAN SHOP_SALESMAN;
+
+struct SHOP_EXCHANGER {
+    u8 mSoundEffect;
+    u32 mMessages[18];
+};
+typedef struct SHOP_EXCHANGER SHOP_EXCHANGER;
+
+extern SHOP_SALESMAN *shopSalesman;
+extern u16 *shopGoods;
+extern SHOP_EXCHANGER *shopExchanger;
+extern SHOP_DATA *shopData;
+
 extern u32 *ribbon_data_number;
 extern RibbonData *ribbon_data;
 

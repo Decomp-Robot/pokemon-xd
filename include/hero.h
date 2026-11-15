@@ -216,6 +216,7 @@ s16 heroCatchPokemon(Hero *hero, const Pokemon *pokemon, u16 catchFloorID, u8 ca
 ItemSlot *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 kind, u16 *count, u16 *maxQuantity, u8 *sortMode, u8 *insertionMode);
 ItemSlot *heroItemGetItemDataIdToItemAryPtr(Hero *hero, u16 itemID, u16 *num, u16 *max, u8 *sortMode, u8 *insertionMode);
 
+void heroDecPokecoupon(Hero *hero, s32 point);
 s32 heroItemCheckAddItemDataId(Hero* hero, u16 itemID);
 s32 heroItemAddItemDataId(Hero* hero, u16 itemID, u16 count, s16 menuPos);
 s32 heroItemDecItemDataId(Hero* hero, u16 itemID, u16 count, s16 menuPos);
