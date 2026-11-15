@@ -248,8 +248,8 @@ u32 wazaGetWazaTypeIdName(u8 typeId);
 u8 wazaIsWazaTypeId(u16 move, u8 typeId);
 u8 wazaGetMaxPP(u16 move, u8 ppUpCount);
 
-s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, s32 index);
-void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, s32 index, s32 value);
+s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, u16 index);
+void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, u16 index, s32 value);
 
 u8 wazaCheckDarkWaza(u16 move);
 u8 waza_GetZokuseiKindData(u16 move);
@@ -307,7 +307,7 @@ void wazaDataBiosSetNegoto(struct WazaData *data, u8 value);
 void wazaDataBiosSetBouon(struct WazaData *data, u8 value);
 void wazaDataBiosSetPressure(struct WazaData *data, u8 value);
 void wazaDataBiosSetHidenFlag(struct WazaData *data, u8 value);
-void wazaDataBiosSetTypeId(struct WazaData *data, s32 index, u8 typeId);
+void wazaDataBiosSetTypeId(struct WazaData *data, u16 index, u8 typeId);
 void wazaDataBiosSetRiskFlag(struct WazaData *data, u8 value);
 void wazaDataBiosSetFightTrainerAiWazaValueFuncPtr(struct WazaData *data, void * func);
 void wazaDataBiosSetFightTrainerAiWazaHitFuncPtr(struct WazaData *data, void * func);
@@ -340,7 +340,7 @@ u8 wazaDataBiosGetNegoto(struct WazaData *data);
 u8 wazaDataBiosGetBouon(struct WazaData *data);
 u8 wazaDataBiosGetPressure(struct WazaData *data);
 u8 wazaDataBiosGetHidenFlag(struct WazaData *data);
-u8 wazaDataBiosGetTypeId(struct WazaData *data, s32 index);
+u8 wazaDataBiosGetTypeId(struct WazaData *data, u16 index);
 u8 wazaDataBiosGetRiskFlag(struct WazaData *data);
 void *wazaDataBiosGetFightTrainerAiWazaValueFuncPtr(struct WazaData *data);
 void *wazaDataBiosGetFightTrainerAiWazaHitFuncPtr(struct WazaData *data);

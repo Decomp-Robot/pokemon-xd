@@ -143,7 +143,7 @@ extern "C" void WS_WKC_ACT(void)
                 hit == 1 &&
                 (dmgAtk != 0 || dmgSpe != 0) &&
                 iryoku != 0) {
-                s32 actType = fightSeqCondChgActTypeToPokemonStatusId(FIGHT_STAT_ATTACK);
+                u16 actType = fightSeqCondChgActTypeToPokemonStatusId(FIGHT_STAT_ATTACK);
                 s8 count = (s8)pokemonGetStatus(def, 0, actType, 0);
                 if (count < FIGHT_STAT_STAGE_LIMIT) {
                     pokemonSetStatus(def, 0, actType, 0, (s8)(count + 1));

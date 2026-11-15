@@ -79,7 +79,7 @@ extern "C" u8 wazaGetMaxPP(u16 move, u8 ppUpCount)
     return pp + (pp * 20 * ppUpCount) / 100;
 }
 
-extern "C" void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, s32 index, s32 value)
+extern "C" void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, u16 index, s32 value)
 {
     if (fieldID == WAZA_FIELD_NONE || fieldID >= WAZA_FIELD_COUNT) return;
     void *record;
@@ -141,7 +141,7 @@ extern "C" void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, s32 index, s3
     }
 }
 
-extern "C" s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, s32 index)
+extern "C" s32 wazaGetStatus(void *data, u16 wazaID, u16 fieldID, u16 index)
 {
     if (fieldID == WAZA_FIELD_NONE || fieldID >= WAZA_FIELD_COUNT) return 0;
     void *record;

@@ -74,7 +74,7 @@ void fightWazaBiosSetUseWazaDataId(FIGHT_WAZA *waza, u16 useWazaDataId);
 u16 fightWazaBiosGetUseWazaDataId(FIGHT_WAZA *waza);
 void fightWazaBiosSetTargetDataId(FIGHT_WAZA *waza, u16 targetDataId);
 u16 fightWazaBiosGetTargetDataId(FIGHT_WAZA *waza);
-_JOUTAI *fightWazaBiosGetJoutaiPtr(FIGHT_WAZA *waza, s32 index);
+_JOUTAI *fightWazaBiosGetJoutaiPtr(FIGHT_WAZA *waza, u16 index);
 void fightWazaBiosSetCritical(FIGHT_WAZA *waza, u8 critical);
 u8 fightWazaBiosGetCritical(FIGHT_WAZA *waza);
 void fightWazaBiosSetDamageValue(FIGHT_WAZA *waza, u8 damageValue);

@@ -19,6 +19,7 @@ enum STATUS_KIND {
 #ifdef __cplusplus
 extern "C" {
 #endif
+s32 statusSetStatus(u8 statusKind, void* status, u16 dataId, u16 fieldId, u16 index, s32 value);
 s32 statusGetStatus(u8 statusKind, void* status, u16 dataId, u16 fieldId, u16 index);
 #ifdef __cplusplus
 }

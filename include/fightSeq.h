@@ -192,7 +192,7 @@ void fightSeqFightOutPokemonTokuseiCheckSinkuroDef(FightOutPokemon *attacker, Fi
 u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *attacker, FightOutPokemon *defender);
 void fightSeqFightOutPokemonTokuseiCheckWazaHitAfterAll(void);
 void fightSeqSoubiItemCheckWazaHitAfterAll(void);
-s32 fightSeqCondChgActTypeToPokemonStatusId(u8 type);
+u16 fightSeqCondChgActTypeToPokemonStatusId(u8 type);
 s8 fightSeqCondChgActParaIdToValue(u8 paraId);
 u8 fightSeqGetTextureZokuseiAry(FightOutPokemon *pokemon, s32 *zokuseiAry);
 u8 fightSeqIsGuard(FightOutPokemon *pokemon, u16 wazaDataId);

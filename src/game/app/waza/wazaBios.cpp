@@ -18,16 +18,15 @@ u8 wazaDataBiosGetRiskFlag(struct WazaData *data)
     return data->mRiskFlag;
 }
 
-u8 wazaDataBiosGetTypeId(struct WazaData *data, s32 index)
+u8 wazaDataBiosGetTypeId(struct WazaData *data, u16 index)
 {
     if (data == 0) {
         return 0;
     }
-    u16 typeIndex = (u16)index;
-    if (typeIndex >= WAZA_DATA_TYPE_ID_COUNT) {
+    if (index >= WAZA_DATA_TYPE_ID_COUNT) {
         return 0;
     }
-    return data->mTypeId[typeIndex];
+    return data->mTypeId[index];
 }
 
 void wazaDataBiosSetHidenFlag(struct WazaData *data, u8 value)

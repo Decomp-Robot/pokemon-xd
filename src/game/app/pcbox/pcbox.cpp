@@ -140,12 +140,12 @@ static inline s8 pcboxGetPokemonBoxNbUsedSlot(PCStorageRecord* storage, s8 box)
     return count;
 }
 
-extern "C" s32 pcboxGetStatus(void)
+extern "C" s32 pcboxGetStatus(void* storage, u16 field, u16 index)
 {
     return 0;
 }
 
-extern "C" void pcboxSetStatus(void)
+extern "C" void pcboxSetStatus(void* storage, u16 field, s32 value)
 {
 }
 

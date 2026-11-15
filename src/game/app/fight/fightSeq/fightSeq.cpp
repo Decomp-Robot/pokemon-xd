@@ -457,7 +457,7 @@ u8 *_fightSeqSoubiItemCheckTurnSubAbiCntUp(FightOutPokemon *pokemon, u8 mode, lo
 {
     u8 *sequence = 0;
     if (mode == 0 || mode == 2) {
-        s32 statusId = fightSeqCondChgActTypeToPokemonStatusId(type);
+        u16 statusId = fightSeqCondChgActTypeToPokemonStatusId(type);
         u8 stage = pokemonGetStatus(pokemon, 0, statusId, 0);
         if (fightOutPokemonIsNokoriHpFollowing(pokemon, (u16)divisor) && stage < STAT_STAGE_MAX) {
             UserWork[SEQ_WORK_STAT_ACTION] = type + actionBase;

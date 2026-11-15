@@ -46,6 +46,7 @@ enum ItemStatusKind {
     ITEM_STATUS_LIMIT = 35
 };
 s32 itemGetStatus(ItemSlot* item, u16 itemID, u16 kind, u16 index);
+void itemSetStatus(ItemSlot* item, u16 itemID, u16 kind, u16 index, s32 value);
 void itemReplace(ItemSlot* first, ItemSlot* second);
 s32 itemDecItemDataIdAry(ItemSlot* items, u16 count, u16 itemID, u16 quantity,
                          s16 firstSlot, u16 maxQuantity, u8 sort);

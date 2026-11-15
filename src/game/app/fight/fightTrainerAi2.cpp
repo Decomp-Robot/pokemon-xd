@@ -120,7 +120,7 @@ u8 fightTrainerAiCheckAbiCnt(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, 
     FightOutPokemon *target;
     FIGHT_SIDE *side;
     u8 changeFlags;
-    s32 statusId;
+    u16 statusId;
     u8 ignoreStatDownPrevention = 0;
     u8 skipGuard = 0;
     s8 stage;
@@ -155,12 +155,12 @@ u8 fightTrainerAiCheckAbiCnt(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, 
         }
         if (fightTrainerAiIsFightOutPokemonTokuseiDataId(trainer, target, TOKUSEI_DATA_ID_KEEN_EYE) == 1
             && !ignoreStatDownPrevention
-            && (u16)statusId == POKEMON_STATUS_FIELD_ACCURACY_STAGE) {
+            && statusId == POKEMON_STATUS_FIELD_ACCURACY_STAGE) {
             return 0;
         }
         if (fightTrainerAiIsFightOutPokemonTokuseiDataId(trainer, target, TOKUSEI_DATA_ID_HYPER_CUTTER) == 1
             && !ignoreStatDownPrevention
-            && (u16)statusId == POKEMON_STATUS_FIELD_ATTACK_STAGE) {
+            && statusId == POKEMON_STATUS_FIELD_ATTACK_STAGE) {
             return 0;
         }
         if (fightTrainerAiIsFightOutPokemonTokuseiDataId(trainer, target, TOKUSEI_DATA_ID_SHIELD_DUST) == 1

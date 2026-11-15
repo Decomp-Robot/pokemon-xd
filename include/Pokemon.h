@@ -294,8 +294,8 @@ void pokemonSetTokuseiFlag(Pokemon *pokemon, s32 abilitySlot);
 u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 // The field ID may select party data or deployed fight-record data.
-s32 pokemonGetStatus(void *record, u16 speciesId, s32 field, u16 elementIndex);
-void pokemonSetStatus(void *record, unsigned short pokemonDataID, int fieldID, int index, unsigned long value);
+s32 pokemonGetStatus(void *record, u16 speciesId, u16 field, u16 elementIndex);
+void pokemonSetStatus(void *record, u16 speciesId, u16 fieldID, u16 index, unsigned long value);
 void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
 void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);

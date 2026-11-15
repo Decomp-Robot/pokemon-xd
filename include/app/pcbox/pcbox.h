@@ -60,8 +60,8 @@ s32 pcboxSetPokemonBoxName(PCStorageRecord* storage, s8 box, const u16* name);
 u16* pcboxGetPokemonBoxName(PCStorageRecord* storage, s8 box);
 s32 pcboxAddPokemon(PCStorageRecord* storage, Pokemon* pokemon, s8 box);
 void pcboxInit(PCStorageRecord* storage);
-void pcboxSetStatus(void);
-s32 pcboxGetStatus(void);
+void pcboxSetStatus(void* storage, u16 field, s32 value);
+s32 pcboxGetStatus(void* storage, u16 field, u16 index);
 }
 
 #endif

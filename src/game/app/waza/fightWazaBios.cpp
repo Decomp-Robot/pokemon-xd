@@ -202,14 +202,14 @@ u8 fightWazaBiosGetCritical(FIGHT_WAZA *waza) {
     return waza->mCritical;
 }
 
-_JOUTAI *fightWazaBiosGetJoutaiPtr(FIGHT_WAZA *waza, s32 index) {
+_JOUTAI *fightWazaBiosGetJoutaiPtr(FIGHT_WAZA *waza, u16 index) {
     if (waza == 0) {
         return 0;
     }
-    if ((u16)index >= FIGHT_WAZA_JOUTAI_COUNT) {
+    if (index >= FIGHT_WAZA_JOUTAI_COUNT) {
         return 0;
     }
-    return &waza->mJoutai[(u16)index];
+    return &waza->mJoutai[index];
 }
 
 u16 fightWazaBiosGetTargetDataId(FIGHT_WAZA *waza) {
