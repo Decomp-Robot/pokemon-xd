@@ -43,6 +43,8 @@ struct DeckStatusDetermVal {
  */
 class DeckTrainerAI {
 public:
+    static DeckTrainerAI *getDeckTrainerAIObj(u32 index);
+
     void setTotalCorrection(u8 correction);
     u8 getTotalCorrection() const;
 

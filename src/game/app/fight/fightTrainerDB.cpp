@@ -1,4 +1,5 @@
 #include <fightTrainer.h>
+#include <deck.h>
 #include <app/fight/fightTrainerEnemy.h>
 
 // The trainer record is read and written through the adapters of this module:
@@ -559,6 +560,270 @@ s32 fightTrainerAiValueAddsubDB_GetValue(u16 index)
         return 0;
     }
     return addsubData->mValue;
+}
+
+void fightTrainerAiDB_SetParamStoreFlag(u16 aiDataId, u8 flag)
+{
+
+}
+
+u8 fightTrainerAiDB_GetParamStoreFlag(u16 aiDataId)
+{
+    return 1;
+}
+
+void fightTrainerAiDB_SetParamExpectFlag(u16 aiDataId, u8 flag)
+{
+
+}
+
+u8 fightTrainerAiDB_GetParamExpectFlag(u16 aiDataId)
+{
+    return 1;
+}
+
+void fightTrainerAiDB_SetComboValue(u16 aiDataId, u8 value)
+{
+
+}
+
+u8 fightTrainerAiDB_GetComboValue(u16 aiDataId)
+{
+    return 100;
+}
+
+void fightTrainerAiDB_SetLastValueRevise(u16 aiDataId, u8 correction)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setTotalCorrection(correction);
+}
+
+u8 fightTrainerAiDB_GetLastValueRevise(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getTotalCorrection();
+}
+
+void fightTrainerAiDB_SetWazaTypeReviseValue(u16 aiDataId, u8 slot, u8 value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    if (slot >= 2) {
+        return;
+    }
+    ai->setWazaKindParam(slot, value);
+}
+
+u8 fightTrainerAiDB_GetWazaTypeReviseValue(u16 aiDataId, u8 slot)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    if (slot >= 2) {
+        return 0;
+    }
+    return ai->getWazaKindParam(slot);
+}
+
+void fightTrainerAiDB_SetWazaTypeReviseTypeDataId(u16 aiDataId, u8 slot, u8 typeDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    if (slot >= 2) {
+        return;
+    }
+    ai->setWazaKindID(slot, typeDataId);
+}
+
+u8 fightTrainerAiDB_GetWazaTypeReviseTypeDataId(u16 aiDataId, u8 slot)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    if (slot >= 2) {
+        return 0;
+    }
+    return ai->getWazaKindID(slot);
+}
+
+void fightTrainerAiDB_SetZokuseiReviseValue(u16 aiDataId, u8 slot, u8 value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    if (slot >= 2) {
+        return;
+    }
+    ai->setAttrTypeParam(slot, value);
+}
+
+u8 fightTrainerAiDB_GetZokuseiReviseValue(u16 aiDataId, u8 slot)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    if (slot >= 2) {
+        return 0;
+    }
+    return ai->getAttrTypeParam(slot);
+}
+
+void fightTrainerAiDB_SetZokuseiReviseZokuseiDataId(u16 aiDataId, u8 slot, u8 zokuseiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    if (slot >= 2) {
+        return;
+    }
+    ai->setAttrTypeID(slot, zokuseiDataId);
+}
+
+u8 fightTrainerAiDB_GetZokuseiReviseZokuseiDataId(u16 aiDataId, u8 slot)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    if (slot >= 2) {
+        return 0;
+    }
+    return ai->getAttrTypeID(slot);
+}
+
+void fightTrainerAiDB_SetWazaNokoriPpValue(u16 aiDataId, u8 rate)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setLastPPDetermRate(rate);
+}
+
+u8 fightTrainerAiDB_GetWazaNokoriPpValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getLastPPDetermRate();
+}
+
+void fightTrainerAiDB_SetNokoriHpValue(u16 aiDataId, u8 rate)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setLowHPDetermRate(rate);
+}
+
+u8 fightTrainerAiDB_GetNokoriHpValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getLowHPDetermRate();
+}
+
+u8 fightTrainerAiDB_GetStrokeValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getAnnihilateDetermRate();
+}
+
+void fightTrainerAiDB_SetWazaAvgValue(u16 aiDataId, u8 rate)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setHitRate(rate);
+}
+
+u8 fightTrainerAiDB_GetWazaAvgValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getHitRate();
+}
+
+void fightTrainerAiDB_SetItemValue(u16 aiDataId, u8 rate)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setItemUseRate(rate);
+}
+
+u8 fightTrainerAiDB_GetItemValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getItemUseRate();
+}
+
+void fightTrainerAiDB_SetIrekaeValue(u16 aiDataId, u8 rate)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setPokeChgRate(rate);
+}
+
+u8 fightTrainerAiDB_GetIrekaeValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getPokeChgRate();
 }
 
 }

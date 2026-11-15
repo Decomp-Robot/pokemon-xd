@@ -223,6 +223,34 @@ void fightTrainerAiValueAddsubDB_SetKoudouName(u16 index, u32 koudouName);
 void fightTrainerAiValueAddsubDB_SetName(u16 index, u32 name);
 void fightTrainerAiValueAddsubDB_SetValue(u16 index, s32 value);
 
+void fightTrainerAiDB_SetParamStoreFlag(u16 aiDataId, u8 flag);
+u8 fightTrainerAiDB_GetParamStoreFlag(u16 aiDataId);
+void fightTrainerAiDB_SetParamExpectFlag(u16 aiDataId, u8 flag);
+u8 fightTrainerAiDB_GetParamExpectFlag(u16 aiDataId);
+void fightTrainerAiDB_SetComboValue(u16 aiDataId, u8 value);
+u8 fightTrainerAiDB_GetComboValue(u16 aiDataId);
+void fightTrainerAiDB_SetLastValueRevise(u16 aiDataId, u8 correction);
+u8 fightTrainerAiDB_GetLastValueRevise(u16 aiDataId);
+void fightTrainerAiDB_SetWazaTypeReviseValue(u16 aiDataId, u8 slot, u8 value);
+u8 fightTrainerAiDB_GetWazaTypeReviseValue(u16 aiDataId, u8 slot);
+void fightTrainerAiDB_SetWazaTypeReviseTypeDataId(u16 aiDataId, u8 slot, u8 typeDataId);
+u8 fightTrainerAiDB_GetWazaTypeReviseTypeDataId(u16 aiDataId, u8 slot);
+void fightTrainerAiDB_SetZokuseiReviseValue(u16 aiDataId, u8 slot, u8 value);
+u8 fightTrainerAiDB_GetZokuseiReviseValue(u16 aiDataId, u8 slot);
+void fightTrainerAiDB_SetZokuseiReviseZokuseiDataId(u16 aiDataId, u8 slot, u8 zokuseiDataId);
+u8 fightTrainerAiDB_GetZokuseiReviseZokuseiDataId(u16 aiDataId, u8 slot);
+void fightTrainerAiDB_SetWazaNokoriPpValue(u16 aiDataId, u8 rate);
+u8 fightTrainerAiDB_GetWazaNokoriPpValue(u16 aiDataId);
+void fightTrainerAiDB_SetNokoriHpValue(u16 aiDataId, u8 rate);
+u8 fightTrainerAiDB_GetNokoriHpValue(u16 aiDataId);
+u8 fightTrainerAiDB_GetStrokeValue(u16 aiDataId);
+void fightTrainerAiDB_SetWazaAvgValue(u16 aiDataId, u8 rate);
+u8 fightTrainerAiDB_GetWazaAvgValue(u16 aiDataId);
+void fightTrainerAiDB_SetItemValue(u16 aiDataId, u8 rate);
+u8 fightTrainerAiDB_GetItemValue(u16 aiDataId);
+void fightTrainerAiDB_SetIrekaeValue(u16 aiDataId, u8 rate);
+u8 fightTrainerAiDB_GetIrekaeValue(u16 aiDataId);
+
 #ifdef __cplusplus
 }
 #endif
