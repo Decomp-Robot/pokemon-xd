@@ -241,6 +241,8 @@ s32 GScolsys2HumanEnable(s32 index, s32 enable);
 s32 GScolsys2HumanAddCurrentFloor(s32* slotIndex, void* character);
 f32 GScolsys2HumanGetWalkHeight(GSvec* pos);
 f32 GScolsys2HumanGetWalkHighest(GSvec* pos);
+bool GScolsys2SunArray(bool* hits, GSvec* start, GSvec* ends, u32 count);
+bool GScolsys2Sun(GSvec* start, GSvec* end);
 s32 GScolsys2CheckGetEventID(GSvec* start, GSvec* end, GScolsys2Check_c* out);
 s32 GScolsys2ThruPassEventID(GSvec* start, GSvec* end, GScolsys2Thru_c* out);
 s32 GScolsys2ThruGetEventID(GSvec* start, GSvec* end, f32 radius, GScolsys2Thru_c* out);
