@@ -6916,3 +6916,21 @@ cflags_extra = ["-use_lmw_stmw on", "-opt nopeephole", "-i src/ext/dolphin_sdk/i
 [[lib.object]]
 name = "game/GSAPI/GSmsg/GSmsg.cpp"
 completed = true
+
+[[lib]]
+name = "kaisuu"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+
+[[lib.object]]
+name = "game/app/kaisuu/kaisuu.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/kaisuu/kaisuuBios.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/kaisuu/kaisuuData.cpp"
+completed = true

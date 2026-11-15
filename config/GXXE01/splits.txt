@@ -2159,6 +2159,10 @@ game/GSAPI/GSinput/GSinput.cpp:
 	.sbss       start:0x804EAFF8 end:0x804EB005
 	.sdata2     start:0x804ED580 end:0x804ED5C8
 
+game/app/kaisuu/kaisuuData.cpp:
+	.data       start:0x803D51C0 end:0x803D5210
+	.sdata      start:0x804E8350 end:0x804E8358
+
 game/GSAPI/GSres/GSres.cpp:
 	.text       start:0x80105840 end:0x80105FEC
 	.rodata     start:0x802ED2A0 end:0x802ED348
@@ -2170,6 +2174,12 @@ game/GSAPI/GSmsg/GSmsg.cpp:
 game/GSAPI/GSgapp/GSgapp.cpp:
 	.text       start:0x8010BD24 end:0x8010C320
 	.sbss       start:0x804EB028 end:0x804EB050
+
+game/app/kaisuu/kaisuu.cpp:
+	.text       start:0x8010C320 end:0x8010C390
+
+game/app/kaisuu/kaisuuBios.cpp:
+	.text       start:0x8010C390 end:0x8010C3E4
 
 game/app/menu/menuOffScreen.cpp:
 	.text       start:0x801145EC end:0x80114D30
