@@ -10,6 +10,40 @@
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
 
+enum GSgfxGPUMode {
+    GSGFX_GPU_MODE_NONE = 0,
+    GSGFX_GPU_MODE_IMMEDIATE = 1,
+    GSGFX_GPU_MODE_BUFFERED = 2
+};
+
+struct GSgfx_GCFifoObj {
+    u8 *base;
+    u8 *top;
+    u32 size;
+    u32 hiWatermark;
+    u32 loWatermark;
+    void *rdPtr;
+    void *wrPtr;
+    s32 count;
+    u8 bind_cpu;
+    u8 bind_gp;
+    u8 pad0[42];
+    u32 blockComplete;
+    u8 pad1[48];
+};
+
+struct GSgfxState {
+    u8 reserved[3152];
+    GSgfx_GCFifoObj *blockFifo;
+    GSgfx_GCFifoObj *blockGpuFifo;
+    void *blockStart;
+    void *blockEnd;
+    u8 blockComplete;
+    u8 blockActive;
+};
+extern GSgfxState *gsgfxState;
+extern GSgfxGPUMode gsgfx_gpu_mode;
+
 struct _GScamera;
 typedef struct _GScamera GScamera;
 
@@ -870,7 +904,6 @@ struct GSgfxRenderModule {
 #define GSGFX_RENDER_MODULE_SIGNATURE 0xB29A48E1
 void GSgfxRenderModuleRegister(u8 priority, GSgfxRenderModule *module, void *argument);
 extern "C" {
-s32 GSgfxGPUSetMode(s32 mode);
 void GSgfxRender(void);
 void GSgfxDLPrimitiveType(u32 primitive);
 GSgfxVF* GSgfxVFBuildTemp(s32 positionComponents, s32 positionType,
@@ -914,14 +947,15 @@ extern u16 _tokenLastGPU;
 extern u16 _tokenMaximum;
 
 u16 GSgfxTokenMark_Sub(void);
+extern "C" void GSgfx_GCReset(void);
 extern "C" void GSgfx_GCWriteIndTexMtx(GXIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
 void GSgfxTokenMarkFrame(void);
 void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
 void GSgfxTokenAbortFrame(void);
 void GSgfxTokenInit(void);
-void GSgfxGPUSetDrawSyncCallback(void (*callback)(u16));
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);
 extern "C" void GSgfxTokenWaitForClearAndReset(u16 *token);
+void GSgfxRenderAbortFrame(void);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
 typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
@@ -990,6 +1024,19 @@ void GSgfxVFSetElement(GSgfxVF *vf, s32 attribute, u32 componentCount, u32 compo
 void GSgfxVFSetArray(GSgfxVF *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayBytes);
 }
 void GSgfxShutdown(void);
+void GSgfxGPUProcessBlock(GSgfx_GCFifoObj *fifo, void *start, void *end);
+void GSgfxGPUInitFifoBase(GSgfx_GCFifoObj *fifo, void *base, u32 size);
+void GSgfxGPUSetBreakpointCallback(void (*callback)(void));
+void GSgfxGPUSetDrawDoneCallback(void (*callback)(void));
+void GSgfxGPUEnterBufferedMode(GSgfx_GCFifoObj *fifo);
+GSgfx_GCFifoObj *GSgfxGPUGetImmediateFifo(void);
+void GSgfxGPUShutdown(void);
+void GSgfxGPUInit(void);
+bool GSgfxGPUIsIdle(void);
+void GSgfxGPUSetFifoWritePtr(GSgfx_GCFifoObj *fifo, void *writePtr);
+
+extern "C" s32 GSgfxGPUSetMode(s32 mode);
+void GSgfxGPUSetDrawSyncCallback(void (*callback)(u16));
 void GSgfxGPUGetBPTick(long *gpTick, long *bpTick);
 void GSgfxPerfbarRender(GSgfxLayer *layer);
 u32 GSgfxPerfbarGPUEntry(u32 color);

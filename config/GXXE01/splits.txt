@@ -3417,6 +3417,11 @@ game/GSAPI/GSgfx/project.cpp:
 	.sbss       start:0x804EBD08 end:0x804EBD18
 	.sdata2     start:0x804EFB10 end:0x804EFB28
 
+game/GSAPI/GSgfx/gpu.cpp:
+	.text       start:0x802AF8B0 end:0x802AFF40
+	.bss        start:0x804E6C68 end:0x804E6D68
+	.sbss       start:0x804EBD28 end:0x804EBD50
+
 game/GSAPI/GSgfx/vf.cpp:
 	.text       start:0x802AFF40 end:0x802B10F4
 	.data       start:0x8041CD50 end:0x8041F3F0
