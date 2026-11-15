@@ -595,7 +595,8 @@ game/menuHologram.cpp:
 	.sbss2      start:0x804EFCE0 end:0x804EFCF0
 
 game/menuBingo.cpp:
-	.text       start:0x8008A160 end:0x8008A180
+	.text       start:0x8008A160 end:0x8008A294
+	.bss        start:0x804396D8 end:0x8043A318
 
 game/menuBingoQuery.cpp:
 	.text       start:0x8008A294 end:0x8008A348
