@@ -3516,6 +3516,12 @@ game/GSAPI/GSgfx/reset.cpp:
 	.sbss       start:0x804EBD90 end:0x804EBDB0
 	.sdata2     start:0x804EFBE0 end:0x804EFC00
 
+game/app/fight/fightTrainerAi.cpp:
+	.sbss       start:0x804EBDB0 end:0x804EBDB4
+
+game/app/fight/fightTrainerAiComboFunc.cpp:
+	.text       start:0x802D6E3C end:0x802D8AA8
+
 decomp/TRKMemory.c:
 	.init       start:0x80003458 end:0x800034AC
 
