@@ -84,9 +84,22 @@ struct tagPeopleWork {
     float speechTimer;
 };
 struct tagPeopleInfoBios {
-    u8 unknown00[4];
-    unsigned long biosId;
-    u8 unknown08[0x20];
+    u8 talkSe : 3;
+    u8 boundCheck : 1;
+    u8 colType : 2;
+    u8 unknownFlags : 2;
+    char neckIndex;
+    char chestIndex;
+    u8 unknown03;
+    unsigned long modelResID;
+    float walkLength;
+    float runLength;
+    float colBallSize;
+    float neckLeftLimit;
+    float neckRightLimit;
+    float neckUpLimit;
+    float neckDownLimit;
+    float talkDistance;
     char speechParts[7];
     char blinkParts[4];
     u8 unknown33;
