@@ -13,6 +13,9 @@ s32 pokecoloGetLanguage(void);
 s32 pokecoloGetRomVersion(void);
 unsigned long pokecoloGetPlayTimeValue(void);
 void pokecoloSetPlayTime(f64 playTime);
+void pokecoloStartCountPlayTime(u8 started);
+f64 pokecoloGetPlayTime(void);
+void pokecoloCountPlayTime(void);
 #ifdef __cplusplus
 }
 #endif

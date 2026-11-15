@@ -131,7 +131,6 @@ void menuTitlePreReadWait(void);
 void menuTitleBattleSelectFree(void);
 
 void heroMoveSyncWithHero(void);
-void pokecoloStartCountPlayTime(s32 enabled);
 void menuTitleOption(void);
 
 void winSeqSetMenu(long menuID, s32 sequence);

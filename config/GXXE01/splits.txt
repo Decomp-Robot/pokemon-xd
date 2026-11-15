@@ -439,8 +439,9 @@ game/menuField.cpp:
 	.sdata2     start:0x804EC4F8 end:0x804EC518
 
 game/pokecolo.cpp:
-	.text       start:0x8005C1E8 end:0x8005C230
-	.sbss       start:0x804EA890 end:0x804EA898
+	.text       start:0x8005C084 end:0x8005C264
+	.sbss       start:0x804EA890 end:0x804EA8A0
+	.sdata2     start:0x804EC528 end:0x804EC53C
 
 game/menuScript.cpp:
 	.text       start:0x8005E794 end:0x8005E95C
