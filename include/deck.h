@@ -141,6 +141,72 @@ private:
     u8 mWazaKindParam[2]; // 0x1C
     u8 mTotalCorrection; // 0x1E
 };
+
+/* Shadow Pokemon parameters stored in the Dark Pokemon deck. */
+class DeckDarkPokemon {
+public:
+    u8 getUnderTakerFlag() const;
+    u8 getRevers() const;
+    bool isScenarioPokemon() const;
+    u16 getDarkWaza(s8 index) const;
+    u16 getBonusExp() const;
+    u16 getInitDarkPoint() const;
+    u16 getDeckPokemonID() const;
+    u8 getPlayerLevel() const;
+    u8 getSnatchRatio() const;
+    u8 getWorth() const;
+
+private:
+    u8 mWorth;
+    u8 mSnatchRatio;
+    u8 mPlayerLevel;
+    u8 mScenarioPokemon : 1;
+    u8 mReservedFlags : 7;
+    u32 mDeckPokemonID;
+    u16 mInitDarkPoint;
+    u16 mBonusExp;
+    u16 mDarkWaza[4];
+    u8 mRevers;
+    u8 mUnderTakerFlag;
+    u8 mReserved[2];
+};
+
+/* A Pokemon's battle-deck settings, including its authored stats and moves. */
+class DeckPokemon {
+public:
+    u8 getRandomSetting() const;
+    u8 getTokuseiFlag() const;
+    u8 getSex() const;
+    u8 getSeikakuID() const;
+    u8 getComboPartnerAll() const;
+    u16 getWazaID(u8 index) const;
+    u8 getStatusEffort(u8 index) const;
+    u8 getStatusRnd(u8 index) const;
+    u8 getKeyPlayer() const;
+    u8 getRole() const;
+    u16 getHoldItem() const;
+    u8 getFriendLevel() const;
+    u8 getLevel() const;
+    u16 getPokemonID() const;
+
+private:
+    u16 mPokemonID;
+    u8 mLevel;
+    u8 mFriendLevel;
+    u16 mHoldItem;
+    u8 mRole;
+    u8 mKeyPlayer;
+    u8 mStatusRnd[6];
+    u8 mStatusEffort[6];
+    u16 mWazaID[4];
+    u8 mReserved;
+    u8 mComboPartnerAll;
+    u8 mSeikakuID : 5;
+    u8 mSex : 2;
+    u8 mTokuseiFlag : 1;
+    u8 mRandomSetting : 1;
+    u8 mReservedFlags : 7;
+};
 #endif
 
 #endif

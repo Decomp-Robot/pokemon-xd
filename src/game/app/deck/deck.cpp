@@ -341,3 +341,151 @@ bool DeckTrainerAI::getSelectRandomPokemon() const
     if (this == NULL) return false;
     return mSelectRandomPokemon;
 }
+
+u8 DeckDarkPokemon::getUnderTakerFlag() const
+{
+    if (this == NULL) return 0;
+    return mUnderTakerFlag;
+}
+
+u8 DeckDarkPokemon::getRevers() const
+{
+    if (this == NULL) return 0;
+    return mRevers;
+}
+
+bool DeckDarkPokemon::isScenarioPokemon() const
+{
+    if (this == NULL) return false;
+    return mScenarioPokemon == 1;
+}
+
+u16 DeckDarkPokemon::getDarkWaza(s8 index) const
+{
+    if (this == NULL) return 0;
+    if (index < 0 || index >= 4) return 0;
+    return mDarkWaza[index];
+}
+
+u16 DeckDarkPokemon::getBonusExp() const
+{
+    if (this == NULL) return 0;
+    return mBonusExp;
+}
+
+u16 DeckDarkPokemon::getInitDarkPoint() const
+{
+    if (this == NULL) return 0;
+    return mInitDarkPoint;
+}
+
+u16 DeckDarkPokemon::getDeckPokemonID() const
+{
+    if (this == NULL) return 0;
+    return mDeckPokemonID;
+}
+
+u8 DeckDarkPokemon::getPlayerLevel() const
+{
+    if (this == NULL) return 0;
+    return mPlayerLevel;
+}
+
+u8 DeckDarkPokemon::getSnatchRatio() const
+{
+    if (this == NULL) return 0;
+    return mSnatchRatio;
+}
+
+u8 DeckDarkPokemon::getWorth() const
+{
+    if (this == NULL) return 0;
+    return mWorth;
+}
+
+u8 DeckPokemon::getRandomSetting() const
+{
+    if (this == NULL) return 0;
+    return mRandomSetting;
+}
+
+u8 DeckPokemon::getTokuseiFlag() const
+{
+    if (this == NULL) return 0;
+    return mTokuseiFlag;
+}
+
+u8 DeckPokemon::getSex() const
+{
+    if (this == NULL) return 0;
+    return mSex;
+}
+
+u8 DeckPokemon::getSeikakuID() const
+{
+    if (this == NULL) return 0;
+    return mSeikakuID;
+}
+
+u8 DeckPokemon::getComboPartnerAll() const
+{
+    if (this == NULL) return 0;
+    return mComboPartnerAll;
+}
+
+u16 DeckPokemon::getWazaID(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 4) return 0;
+    return mWazaID[index];
+}
+
+u8 DeckPokemon::getStatusEffort(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 6) return 0;
+    return mStatusEffort[index];
+}
+
+u8 DeckPokemon::getStatusRnd(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 6) return 0;
+    return mStatusRnd[index];
+}
+
+u8 DeckPokemon::getKeyPlayer() const
+{
+    if (this == NULL) return 0;
+    return mKeyPlayer;
+}
+
+u8 DeckPokemon::getRole() const
+{
+    if (this == NULL) return 0;
+    return mRole;
+}
+
+u16 DeckPokemon::getHoldItem() const
+{
+    if (this == NULL) return 0;
+    return mHoldItem;
+}
+
+u8 DeckPokemon::getFriendLevel() const
+{
+    if (this == NULL) return 0;
+    return mFriendLevel;
+}
+
+u8 DeckPokemon::getLevel() const
+{
+    if (this == NULL) return 0;
+    return mLevel;
+}
+
+u16 DeckPokemon::getPokemonID() const
+{
+    if (this == NULL) return 0;
+    return mPokemonID;
+}
