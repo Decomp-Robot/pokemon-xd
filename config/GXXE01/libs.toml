@@ -6851,6 +6851,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/floor/floorCharacterBios.cpp"
+completed = true
+extra_cflags = ["-inline off", "-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/floor/floorDataBios.cpp"
 completed = true
 

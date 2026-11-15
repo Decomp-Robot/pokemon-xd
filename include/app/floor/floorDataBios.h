@@ -3,12 +3,14 @@
 
 #include <types.h>
 #include <roomData.h>
+#include <app/floor/floorCharacterBios.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 GSfloor_dd_ *floorDataBiosGetPtr(s32 floorID);
+FloorCharacter *floorDataBiosGetCharInfo(GSfloor_dd_ *floor, u32 index);
 u32 floorDataBiosModelIDGetFogState(u32 modelID);
 u32 floorDataBiosGetSecondaryRenderNum(RoomData *room);
 u32 floorDataBiosGetSecondaryRenderID(RoomData *room, u32 index);

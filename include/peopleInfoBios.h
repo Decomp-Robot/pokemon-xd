@@ -44,6 +44,7 @@ unsigned long peopleInfoBiosGetModelResID(PeopleInfo *info);
 s8 peopleInfoBiosGetNeckIndex(PeopleInfo *info);
 PeopleInfo *peopleInfoBiosGetPtr(unsigned long id);
 void peopleInfoBiosGetMotion(PeopleInfo *info, u8 motionType, int *motionIndex, u8 *looping);
+PeopleInfo *peopleInfoBiosGetPtrFromIndex(u32 index);
 }
 
 #endif
