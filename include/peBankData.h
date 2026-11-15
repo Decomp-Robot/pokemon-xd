@@ -7,9 +7,12 @@
 
 struct _peModel {
     u32 mFlags;
-    u8 mModelParameters[0x30];
-    peSpline *mScaleSplines[3];
+    GSvec mRotation;
+    GSvec mRotationVelocity;
+    GSvec mScale;
+    GSvec mScaleRandom;
     peSpline *mRotationSplines[3];
+    peSpline *mScaleSplines[3];
     union {
         s32 mResourceID;
         u32 mShapeHandle;
@@ -68,8 +71,22 @@ struct _peParticleStrip {
 };
 
 enum peModelFlags {
+    PE_MODEL_SECONDARY_LAYER = 0x2,
     PE_MODEL_LOOP = 0x04,
+    PE_MODEL_ANIMATION_LIFETIME = 0x8,
+    PE_MODEL_ROTATION_SPLINE = 0x20,
     PE_MODEL_SHAPE_RESOURCE = 0x40,
+    PE_MODEL_RANDOM_ROTATION_X = 0x80,
+    PE_MODEL_RANDOM_ROTATION_Y = 0x100,
+    PE_MODEL_RANDOM_ROTATION_Z = 0x200,
+    PE_MODEL_RANDOM_VELOCITY_X = 0x400,
+    PE_MODEL_RANDOM_VELOCITY_Y = 0x800,
+    PE_MODEL_RANDOM_VELOCITY_Z = 0x1000,
+    PE_MODEL_RANDOM_REFLECT_X = 0x2000,
+    PE_MODEL_RANDOM_REFLECT_Y = 0x4000,
+    PE_MODEL_RANDOM_REFLECT_Z = 0x8000,
+    PE_MODEL_DEPTH_SORT = 0x10000,
+    PE_MODEL_RANDOM_ORIENTATION_MASK = 0xE380,
 };
 enum peStripFlags {
     PE_STRIP_TEXTURE_LIST = 0x400,

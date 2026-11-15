@@ -618,12 +618,12 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
                 --resourceCount;
             }
             if (!resourceCount) model->mJoint = 0;
-            model->mScaleSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[0], base);
-            model->mScaleSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[1], base);
-            model->mScaleSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[2], base);
             model->mRotationSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mRotationSplines[0], base);
             model->mRotationSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mRotationSplines[1], base);
             model->mRotationSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mRotationSplines[2], base);
+            model->mScaleSplines[0] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[0], base);
+            model->mScaleSplines[1] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[1], base);
+            model->mScaleSplines[2] = (peSpline *)PE_BANK_RELOCATE_ADDRESS(model->mScaleSplines[2], base);
             break;
         }
         case PE_DATA_SHAPE: {

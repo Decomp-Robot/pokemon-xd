@@ -2,7 +2,7 @@
 #define HSD_COBJ_H
 
 #include <dolphin/mtx.h>
-#include <hsd/debug.h>
+#include <hsd/assert.h>
 #include <hsd/cobjtypes.h>
 #include <hsd/class.h>
 
@@ -36,13 +36,13 @@ enum HSD_CObjFlag {
 
 inline void HSD_CObjSetFlags(_HSD_CObj *cobj, u32 flags)
 {
-    HSD_ASSERT(0x19E, cobj);
+    HSD_ASSERTLINE(0x19E, cobj);
     cobj->flags |= flags;
 }
 
 inline void HSD_CObjClearFlags(_HSD_CObj *cobj, u32 flags)
 {
-    HSD_ASSERT(0x1AA, cobj);
+    HSD_ASSERTLINE(0x1AA, cobj);
     cobj->flags &= ~flags;
 }
 
@@ -52,6 +52,7 @@ enum HSD_CObjProjectionType {
 
 extern "C" {
 _HSD_CObj *HSD_CObjLoadDesc(_HSD_CObjDesc *desc);
+int HSD_CObjSetCurrent(_HSD_CObj *camera);
 MtxPtr HSD_CObjGetViewingMtxPtr(_HSD_CObj *camera);
 void HSD_CObjGetEyePosition(_HSD_CObj *camera, Vec *position);
 BOOL HSD_CObjGetUpVector(_HSD_CObj *camera, Vec *up);
