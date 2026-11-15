@@ -22,6 +22,13 @@ public:
     void setPositionIndex(long index);
     long getPositionIndex() const { return mPositionIndex; }
     void setPositionTable(PocketVec<short> *table, long index);
+    Pokemon *getPokemonPointer() {
+        if (mPokemon.checkValid()) {
+            return &mPokemon;
+        }
+        return NULL;
+    }
+    CAnt *getAntPointer() { return &mAnt; }
 
 private:
     enum AnimationState { ANIMATION_NONE, ANIMATION_EXCHANGE, ANIMATION_REMOVE, ANIMATION_MOVE };
