@@ -15,8 +15,7 @@ struct GSvec;
 typedef struct GSvec GSvec;
 #endif
 
-/* 3D point / direction / plane vector. The GS geometry library takes and
- * returns these by pointer everywhere. */
+/* A three-component position or direction. */
 struct GSvec {
     f32 x;
     f32 y;
@@ -24,6 +23,13 @@ struct GSvec {
 #ifdef __cplusplus
     GSvec() {}
     void clear();
+    GSvec(const GSvec &other) : x(other.x), y(other.y), z(other.z) {}
+    GSvec &operator=(const GSvec &other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        return *this;
+    }
     GSvec(f32 positionX, f32 positionY, f32 positionZ)
         : x(positionX), y(positionY), z(positionZ) {}
 

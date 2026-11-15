@@ -607,7 +607,7 @@ extern "C" _GSmodel *GSmodelClone(_GSmodel *model)
     if (GSboundHasAnimData(&model->mBound) == 0) {
         return _modelLoad(model->mRoot, &joint, 0);
     }
-    GSboundAnimHeader *boundHeader = model->mBound.mAnimHeader;
+    GSboundAnimHeader *boundHeader = model->mBound.u.anim.mAnimHeader;
     return _modelLoad(model->mRoot, &joint, boundHeader);
 }
 

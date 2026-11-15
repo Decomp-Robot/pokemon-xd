@@ -19,4 +19,59 @@ inline void PSMTXMultVecSR(const Mtx matrix, const GSvec* source, GSvec* result)
 
 inline f32 PSVECDistance(const GSvec* a, const GSvec* b) { return ::PSVECDistance((const Vec*)a, (const Vec*)b); }
 
+inline f32 PSVECMag(const GSvec *v) { return ::PSVECMag((const Vec *)v); }
+inline f32 PSVECSquareMag(const GSvec *v) { return ::PSVECSquareMag((const Vec *)v); }
+inline void PSVECNormalize(const GSvec *src, GSvec *dst) { ::PSVECNormalize((const Vec *)src, (Vec *)dst); }
+inline f32 PSVECDotProduct(const GSvec *a, const GSvec *b) { return ::PSVECDotProduct((const Vec *)a, (const Vec *)b); }
+inline void PSVECCrossProduct(const GSvec *a, const GSvec *b, GSvec *axb) { ::PSVECCrossProduct((const Vec *)a, (const Vec *)b, (Vec *)axb); }
+
+static inline GSvec &operator+=(GSvec &value, const GSvec &other) {
+    PSVECAdd(&value, &other, &value);
+    return value;
+}
+static inline GSvec &operator-=(GSvec &value, const GSvec &other) {
+    PSVECSubtract(&value, &other, &value);
+    return value;
+}
+static inline GSvec operator+(const GSvec &a, const GSvec &b) {
+    GSvec result;
+    PSVECAdd(&a, &b, &result);
+    return result;
+}
+static inline GSvec operator-(const GSvec &a, const GSvec &b) {
+    GSvec result;
+    PSVECSubtract(&a, &b, &result);
+    return result;
+}
+static inline GSvec operator*(const GSvec &v, f32 scale) {
+    GSvec result;
+    PSVECScale(&v, &result, scale);
+    return result;
+}
+static inline f32 GSvecAbsDotProduct(const GSvec &a, const GSvec &b) {
+    f32 result;
+    if (PSVECDotProduct(&a, &b) > 0.0f) {
+        result = PSVECDotProduct(&a, &b);
+    } else {
+        result = -PSVECDotProduct(&a, &b);
+    }
+    return result;
+}
+
+static inline GSvec GSvecNormalized(const GSvec &v) {
+    GSvec result;
+    PSVECNormalize(&v, &result);
+    return result;
+}
+static inline GSvec GSvecCross(const GSvec &a, const GSvec &b) {
+    GSvec result;
+    PSVECCrossProduct(&a, &b, &result);
+    return result;
+}
+static inline GSvec GSvecTransformSR(const Mtx matrix, const GSvec &v) {
+    GSvec result;
+    PSMTXMultVecSR(matrix, &v, &result);
+    return result;
+}
+
 #endif

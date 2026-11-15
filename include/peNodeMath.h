@@ -3,6 +3,7 @@
 
 #include <dolphin/mtx.h>
 #include <peNode.h>
+#include <GSAPI/GSvec/GSvec.h>
 
 // GS and Dolphin math objects have the same component layout.
 static inline const Vec *SDKVector(const GSvec *value) {
@@ -18,29 +19,6 @@ static inline Quaternion *SDKQuaternion(f32 *value) {
     return reinterpret_cast<Quaternion *>(value);
 }
 
-static inline GSvec operator+(const GSvec &a, const GSvec &b) {
-    GSvec result;
-    PSVECAdd(SDKVector(&a), SDKVector(&b), SDKVector(&result));
-    return result;
-}
-static inline GSvec operator-(const GSvec &a, const GSvec &b) {
-    GSvec result;
-    PSVECSubtract(SDKVector(&a), SDKVector(&b), SDKVector(&result));
-    return result;
-}
-static inline GSvec operator*(const GSvec &a, f32 value) {
-    GSvec result;
-    PSVECScale(SDKVector(&a), SDKVector(&result), value);
-    return result;
-}
-static inline GSvec &operator+=(GSvec &a, const GSvec &b) {
-    PSVECAdd(SDKVector(&a), SDKVector(&b), SDKVector(&a));
-    return a;
-}
-static inline GSvec &operator-=(GSvec &a, const GSvec &b) {
-    PSVECSubtract(SDKVector(&a), SDKVector(&b), SDKVector(&a));
-    return a;
-}
 static inline GSvec &operator*=(GSvec &a, f32 value) {
     PSVECScale(SDKVector(&a), SDKVector(&a), value);
     return a;

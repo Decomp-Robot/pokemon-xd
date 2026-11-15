@@ -706,6 +706,7 @@ public:
     void SetupFifo();
     u16 tokenMark();
     void SetDistortionParams(f32 (*matrix)[3], signed char scaleExponent);
+    void setRenderState(bool vertexColor, u8 textureCount, bool lighting);
     void setRenderStateAndSelect(GSgfxVF *vf);
     void ResetVertexFormat(GSgfxVF *vf);
     void primitiveType(GSgfxPrimType type);
