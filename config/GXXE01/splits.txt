@@ -3137,6 +3137,14 @@ game/GSAPI/GSmovie/movieStream.cpp:
 	.rodata     start:0x802F8880 end:0x802F88A0
 	.sdata2     start:0x804EE988 end:0x804EE998
 
+game/GSAPI/GSmovie/GSmovie.cpp:
+	.text       start:0x801E21E0 end:0x801E425C
+	.rodata     start:0x802F88A0 end:0x802F88CC
+	.data       start:0x80413000 end:0x8041302C
+	.sdata      start:0x804E8538 end:0x804E8540
+	.sbss       start:0x804EB750 end:0x804EB780
+	.sdata2     start:0x804EE998 end:0x804EE9B8
+
 game/GSAPI/GSmovie/THPAudio.c:
 	.text       start:0x801EC734 end:0x801ECBB0
 

@@ -6944,6 +6944,11 @@ extra_cflags = ["-O4,s"]
 completed = true
 
 [[lib.object]]
+name = "game/GSAPI/GSmovie/GSmovie.cpp"
+extra_cflags = ["-O4,s"]
+completed = true
+
+[[lib.object]]
 name = "game/GSAPI/GSmovie/THPAudio.c"
 completed = true
 mw_version = "GC/1.2.5n"

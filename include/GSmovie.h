@@ -3,6 +3,8 @@
 
 #include <types.h>
 
+enum { MOVIE_STREAM_BUFFER_MSEC = 60, MOVIE_STREAM_LOOP_FLAG = 1 };
+
 struct GStexture;
 
 #ifdef __cplusplus
@@ -15,10 +17,24 @@ enum THPAudioOutputMode {
 
 u32 THPAudioDecode(s16 *audioBuffer, u8 *audioFrame, enum THPAudioOutputMode outputMode);
 
+enum GSmovieStatus {
+    GSMOVIE_STATUS_ERROR = -2,
+    GSMOVIE_STATUS_IDLE = -1,
+    GSMOVIE_STATUS_DONE = 0,
+    GSMOVIE_STATUS_BUSY = 1,
+    GSMOVIE_STATUS_PAUSED = 2
+};
+
 u8 GSmoviePlayCheck(u32 movieID);
 void GSmovieStop(u32 movieID);
 void GSmoviePlayWait(u32 movieID);
-s32 GSmoviePlay(u32 movieID, s32 flags, s32 loopFlag, struct GStexture *texture);
+void GSmoviePlay(u32 movieID, s32 preload, s32 loopFlag, struct GStexture *texture);
+void GSmovieInit(void);
+void GSmovieAllContinue(void);
+void GSmovieAllPause(void);
+void GSmovieStreamPostFunc(u32 movieID, u32 resourceID);
+void *GSmovieStreamPreFunc(u32 movieID);
+s32 GSmovieGetStatus(u32 movieID);
 #ifdef __cplusplus
 }
 #endif
@@ -46,6 +62,7 @@ enum THPPlayerState {
     THP_PLAYER_READY = 1,
     THP_PLAYER_PLAYING = 2,
     THP_PLAYER_FINISHED = 3,
+    THP_PLAYER_PAUSED = 4,
     THP_PLAYER_ERROR = 5
 };
 
@@ -105,6 +122,33 @@ struct THPAudioBuffer {
     u8 pad[3];
 };
 
+enum THPVideoFlags {
+    THP_VIDEO_ODD_INTERLACE = 1,
+    THP_VIDEO_EVEN_INTERLACE = 2
+};
+
+struct THPVideoInfo {
+    u32 width;
+    u32 height;
+    u32 viFlags;
+};
+
+struct THPAudioInfo {
+    u32 numAudioChannels;
+    u32 audioFrequency;
+    u32 soundSamples;
+    u32 soundTracks;
+};
+
+struct THPAudioSampleState {
+    u64 sampleRing[THP_SAMPLE_RING_SIZE];
+    u32 ringReadIndex;
+    u32 ringWriteIndex;
+    u64 sampleTotal;
+    u64 samplePosition;
+    u64 sampleAccumulator;
+};
+
 struct THPPlayer {
     char magic[4];
     u32 version;
@@ -114,16 +158,14 @@ struct THPPlayer {
     u32 numFrames;
     u32 firstFrameSize;
     u32 movieDataSize;
-    u32 dataOffsets[4];
+    u32 componentInfoOffset;
+    u32 frameOffsetsOffset;
+    u32 movieDataStart;
+    u32 finalFrameOffset;
     u32 numComponents;
     u8 componentTypes[16];
-    u32 width;
-    u32 height;
-    u32 viFlags;
-    u32 numAudioChannels;
-    u32 audioFrequency;
-    u32 soundSamples;
-    u32 soundTracks;
+    THPVideoInfo videoInfo;
+    THPAudioInfo audioInfo;
     u8 staging[THP_STREAM_BLOCK_SIZE];
     u32 streamState;
     u32 readIndex;
@@ -135,8 +177,8 @@ struct THPPlayer {
     u8 subState;
     u8 loopFlag;
     u8 hasAudio;
-    u32 dvdError;
-    u32 videoResult;
+    s32 dvdError;
+    s32 videoResult;
     u8 preload;
     u8 startAudioPending;
     u8 paused;
@@ -145,9 +187,9 @@ struct THPPlayer {
     u32 movieDataOffset;
     u32 loopFrameSize;
     u32 startFrame;
-    u64 retraceCount;
-    u32 previousScaled;
-    u32 scaled;
+    s64 retraceCount;
+    s32 previousScaled;
+    s32 scaled;
     u32 decodedCount;
     u32 audioTrack;
     u32 presentedVideoFrameCount;
@@ -170,12 +212,7 @@ struct THPPlayer {
     u32 soundHandle1;
     void *audioBuffer0;
     void *audioBuffer1;
-    u64 sampleRing[THP_SAMPLE_RING_SIZE];
-    u32 ringReadIndex;
-    u32 ringWriteIndex;
-    u64 sampleTotal;
-    u64 samplePosition;
-    u64 sampleAccumulator;
+    THPAudioSampleState audioSampleState;
     u32 pad[2];
 };
 

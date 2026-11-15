@@ -8,7 +8,7 @@
 
 extern "C" s32 THPVideoDecode(void *src, void *yBuffer, void *uBuffer, void *vBuffer, void *workBuffer);
 
-enum { MOVIE_STREAM_PRIORITY = 255, MOVIE_STREAM_BUFFER_MSEC = 60, MOVIE_STREAM_LOOP_FLAG = 1 };
+enum { MOVIE_STREAM_PRIORITY = 255 };
 
 static inline void _movieStreamAdvanceRead(THPPlayer *player, u32 frameSize, __GSmovieStreaming *stream)
 {
@@ -403,7 +403,7 @@ static inline void _StreamFillBuffer(__GSmovieStreaming *stream, s16 *leftBuffer
     remaining = sampleCount;
     left = leftBuffer;
     right = rightBuffer;
-    position = player->sampleAccumulator;
+    position = player->audioSampleState.sampleAccumulator;
 
     for (;;) {
         long status;
@@ -419,10 +419,10 @@ static inline void _StreamFillBuffer(__GSmovieStreaming *stream, s16 *leftBuffer
                 right += samplesRead;
             }
             THPPlayer *ring = stream->player;
-            ring->sampleRing[ring->ringWriteIndex] = position;
-            ring->ringWriteIndex = ring->ringWriteIndex + 1;
-            if ((s32)ring->ringWriteIndex >= THP_SAMPLE_RING_SIZE) {
-                ring->ringWriteIndex = 0;
+            ring->audioSampleState.sampleRing[ring->audioSampleState.ringWriteIndex] = position;
+            ring->audioSampleState.ringWriteIndex = ring->audioSampleState.ringWriteIndex + 1;
+            if ((s32)ring->audioSampleState.ringWriteIndex >= THP_SAMPLE_RING_SIZE) {
+                ring->audioSampleState.ringWriteIndex = 0;
             }
             continue;
         }
@@ -432,7 +432,7 @@ static inline void _StreamFillBuffer(__GSmovieStreaming *stream, s16 *leftBuffer
         }
         break;
     }
-    player->sampleAccumulator += sampleCount;
+    player->audioSampleState.sampleAccumulator += sampleCount;
 }
 
 u32 StreamUpdateCallback(void *buffer1, u32 len1, void *buffer2, u32 len2, u32 user)
@@ -451,25 +451,25 @@ u32 StreamUpdateCallback(void *buffer1, u32 len1, void *buffer2, u32 len2, u32 u
         return 0;
     }
 
-    chunk = (((u32)((float)(player->audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u) / 2;
-    player->samplePosition = player->sampleTotal + (u64)len1 + len2;
+    chunk = (((u32)((float)(player->audioInfo.audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u) / 2;
+    player->audioSampleState.samplePosition = player->audioSampleState.sampleTotal + (u64)len1 + len2;
     {
         THPPlayer *dropPlayer = stream->player;
-        u64 position = player->samplePosition;
-        while ((s32)dropPlayer->ringReadIndex != (s32)dropPlayer->ringWriteIndex) {
-            if (position < dropPlayer->sampleRing[dropPlayer->ringReadIndex]) {
+        u64 position = player->audioSampleState.samplePosition;
+        while ((s32)dropPlayer->audioSampleState.ringReadIndex != (s32)dropPlayer->audioSampleState.ringWriteIndex) {
+            if (position < dropPlayer->audioSampleState.sampleRing[dropPlayer->audioSampleState.ringReadIndex]) {
                 break;
             }
-            dropPlayer->ringReadIndex++;
-            if ((s32)dropPlayer->ringReadIndex >= THP_SAMPLE_RING_SIZE) {
-                dropPlayer->ringReadIndex = 0;
+            dropPlayer->audioSampleState.ringReadIndex++;
+            if ((s32)dropPlayer->audioSampleState.ringReadIndex >= THP_SAMPLE_RING_SIZE) {
+                dropPlayer->audioSampleState.ringReadIndex = 0;
             }
             dropPlayer->playedAudioFrameCount++;
         }
     }
     if (len1 + len2 >= chunk) {
         if (buffer1 == player->audioBuffer0) {
-            if (player->numAudioChannels == 2) {
+            if (player->audioInfo.numAudioChannels == 2) {
                 _StreamFillBuffer(stream, (s16 *)player->audioBuffer0,
                                  (s16 *)player->audioBuffer1, chunk);
             } else {
@@ -477,12 +477,12 @@ u32 StreamUpdateCallback(void *buffer1, u32 len1, void *buffer2, u32 len2, u32 u
             }
             DCFlushRange(player->audioBuffer0, chunk * 2);
             sndStreamARAMUpdate(player->soundHandle0, 0, chunk, 0, 0);
-            if (player->numAudioChannels == 2) {
+            if (player->audioInfo.numAudioChannels == 2) {
                 DCFlushRange(player->audioBuffer1, chunk * 2);
                 sndStreamARAMUpdate(player->soundHandle1, 0, chunk, 0, 0);
             }
         } else {
-            if (player->numAudioChannels == 2) {
+            if (player->audioInfo.numAudioChannels == 2) {
                 _StreamFillBuffer(stream, (s16 *)player->audioBuffer0 + chunk,
                                  (s16 *)player->audioBuffer1 + chunk, chunk);
             } else {
@@ -491,12 +491,12 @@ u32 StreamUpdateCallback(void *buffer1, u32 len1, void *buffer2, u32 len2, u32 u
             }
             DCFlushRange((u8 *)player->audioBuffer0 + chunk * 2, chunk * 2);
             sndStreamARAMUpdate(player->soundHandle0, chunk, chunk, 0, 0);
-            if (player->numAudioChannels == 2) {
+            if (player->audioInfo.numAudioChannels == 2) {
                 DCFlushRange((u8 *)player->audioBuffer1 + chunk * 2, chunk * 2);
                 sndStreamARAMUpdate(player->soundHandle1, chunk, chunk, 0, 0);
             }
         }
-        player->sampleTotal += chunk;
+        player->audioSampleState.sampleTotal += chunk;
         return chunk;
     }
     return 0;
@@ -507,26 +507,26 @@ extern "C" s32 _StreamInit(__GSmovieStreaming *stream)
 {
     u32 chunk;
     THPPlayer *player = stream->player;
-    chunk = (((u32)((float)(player->audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u);
+    chunk = (((u32)((float)(player->audioInfo.audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u);
 
-    player->soundHandle0 = sndStreamAllocEx(MOVIE_STREAM_PRIORITY, player->audioBuffer0, chunk, player->audioFrequency, 127,
-                                            (player->numAudioChannels == 2u ? (u8)0 : (u8)64), 0, 0, 0, 0, SND_STREAM_INACTIVE | SND_STREAM_MANUALARAMUPD, StreamUpdateCallback, (u32)stream, NULL);
+    player->soundHandle0 = sndStreamAllocEx(MOVIE_STREAM_PRIORITY, player->audioBuffer0, chunk, player->audioInfo.audioFrequency, 127,
+                                            (player->audioInfo.numAudioChannels == 2u ? (u8)0 : (u8)64), 0, 0, 0, 0, SND_STREAM_INACTIVE | SND_STREAM_MANUALARAMUPD, StreamUpdateCallback, (u32)stream, NULL);
     if (player->soundHandle0 == SND_ID_ERROR) {
         return 0;
     }
-    if (player->numAudioChannels == 2) {
-        player->soundHandle1 = sndStreamAllocEx(MOVIE_STREAM_PRIORITY, player->audioBuffer1, chunk, player->audioFrequency, 127,
+    if (player->audioInfo.numAudioChannels == 2) {
+        player->soundHandle1 = sndStreamAllocEx(MOVIE_STREAM_PRIORITY, player->audioBuffer1, chunk, player->audioInfo.audioFrequency, 127,
                                                 127, 0, 0, 0, 0, SND_STREAM_INACTIVE | SND_STREAM_MANUALARAMUPD, StreamUpdateCallback, 0, NULL);
         if (player->soundHandle1 == SND_ID_ERROR) {
             sndStreamFree(player->soundHandle0);
             return 0;
         }
     }
-    player->ringReadIndex = 0;
-    player->ringWriteIndex = 0;
-    player->sampleTotal = 0;
-    player->samplePosition = 0;
-    player->sampleAccumulator = 0;
+    player->audioSampleState.ringReadIndex = 0;
+    player->audioSampleState.ringWriteIndex = 0;
+    player->audioSampleState.sampleTotal = 0;
+    player->audioSampleState.samplePosition = 0;
+    player->audioSampleState.sampleAccumulator = 0;
     return 1;
 }
 
@@ -534,16 +534,16 @@ extern "C" s32 _StreamInit(__GSmovieStreaming *stream)
 extern "C" s32 _StreamInitFillStreamBuffer(__GSmovieStreaming *stream)
 {
     THPPlayer *player = stream->player;
-    u32 chunk = (((u32)((float)(player->audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u);
+    u32 chunk = (((u32)((float)(player->audioInfo.audioFrequency * MOVIE_STREAM_BUFFER_MSEC) / 1000.0f + 0.5f) + 31) & ~31u);
 
-    if (player->numAudioChannels == 2) {
+    if (player->audioInfo.numAudioChannels == 2) {
         _StreamFillBuffer(stream, (s16 *)player->audioBuffer0, (s16 *)player->audioBuffer1, chunk);
     } else {
         _StreamFillBuffer(stream, (s16 *)player->audioBuffer0, NULL, chunk);
     }
     DCFlushRange(player->audioBuffer0, chunk * 2);
     sndStreamARAMUpdate(player->soundHandle0, 0, chunk, 0, 0);
-    if (player->numAudioChannels == 2) {
+    if (player->audioInfo.numAudioChannels == 2) {
         DCFlushRange(player->audioBuffer1, chunk * 2);
         sndStreamARAMUpdate(player->soundHandle1, 0, chunk, 0, 0);
     }

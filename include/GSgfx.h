@@ -300,7 +300,8 @@ struct GSgfxProjectionState {
 };
 enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_LINE_WIDTH = 0x4, GSGFX_GEOMETRY_POINT_SIZE = 0x8, GSGFX_GEOMETRY_PROJECTION = 0x20 };
 
-enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2 };
+enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2,
+                        GS_LAYER_INSERT_FIRST = 3, GS_LAYER_INSERT_LAST = 4 };
 
 
 enum GSgfxTgenFunc { GS_GFX_TGEN_MTX3X4 = 0, GS_GFX_TGEN_MTX2X4 = 1 };
@@ -424,6 +425,8 @@ public:
                          GSgfxLayerPass toPass, GSgfxLayerOffset offset);
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool flag, u8* image);
+    void textureCopy(GSgfxLayerPass pass, GStexture *texture, bool flag, u8 *image,
+                     bool clearColor, bool clearAlpha, bool clearDepth);
     GStexture *GetTextureCopy(void);
     void perspectiveProjection(const f32 matrix[4][4])
     {

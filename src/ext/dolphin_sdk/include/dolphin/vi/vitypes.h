@@ -9,6 +9,9 @@
 #define VI_NON_INTERLACE 1
 #define VI_PROGRESSIVE   2
 
+#define VI_FIELD_ABOVE 0
+#define VI_FIELD_BELOW 1
+
 #define VI_NTSC      0
 #define VI_PAL       1
 #define VI_MPAL      2
