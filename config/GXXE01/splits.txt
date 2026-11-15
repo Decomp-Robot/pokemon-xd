@@ -3146,6 +3146,11 @@ game/app/mail/mail.cpp:
 game/app/wazaSequence/nullSequence.cpp:
 	.text       start:0x801DA000 end:0x801DA0B0
 
+game/app/wazaSequence/billboard.cpp:
+	.text       start:0x801DF42C end:0x801DF9AC
+	.data       start:0x80412FC0 end:0x80412FE0
+	.sdata2     start:0x804EE900 end:0x804EE918
+
 game/GSAPI/GSvtr/GSvtr.cpp:
 	.text       start:0x801E01A8 end:0x801E07B8
 	.bss        start:0x804A1578 end:0x804A1588

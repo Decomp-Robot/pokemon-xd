@@ -6535,6 +6535,11 @@ cflags_extra = ["-use_lmw_stmw on"]
 name = "game/app/wazaSequence/nullSequence.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/wazaSequence/billboard.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "sodateya"
 mw_version = "GC/2.6"

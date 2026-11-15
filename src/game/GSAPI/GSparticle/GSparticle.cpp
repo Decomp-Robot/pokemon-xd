@@ -688,7 +688,7 @@ bool GSparticleIsGeneratorAlive(_GSparticleGen *gen)
     return GSparticleGenIsAlive(gen);
 }
 
-s32 GSparticleGetGeneratorLife(_GSparticleGen *gen)
+u32 GSparticleGetGeneratorLife(_GSparticleGen *gen)
 {
     return GSparticleGenGetLife(gen);
 }

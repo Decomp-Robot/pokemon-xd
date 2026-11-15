@@ -110,7 +110,7 @@ void GSparticleSetOffsetRotationInLocal(_GSparticleGen *gen, bool enable,
 void GSparticleActivateBank(_GSparticleBank *bank);
 void GSparticleDisactivateBank(_GSparticleBank *bank);
 bool GSparticleIsGeneratorAlive(_GSparticleGen *gen);
-s32 GSparticleGetGeneratorLife(_GSparticleGen *gen);
+u32 GSparticleGetGeneratorLife(_GSparticleGen *gen);
 void GSparticleSetGeneratorScale(_GSparticleGen *gen, GSvec *scale,
                                  bool enableAngleRadiusScale,
                                  bool angleRadiusScale);
