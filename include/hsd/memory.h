@@ -6,7 +6,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 s32 _HSD_MemCheckOwn(void *memory);
+void *HSD_Alloc(u32 size);
+void HSD_Free(void *ptr);
+
 #ifdef __cplusplus
 }
 #endif

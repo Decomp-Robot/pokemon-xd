@@ -16,6 +16,24 @@ typedef struct _HSD_CObj _HSD_CObj;
 struct _HSD_JObj;
 typedef struct _HSD_JObj _HSD_JObj;
 
+enum {
+    PS_NUM_LINK = 16,
+    PS_Z_WRITE_SHIFT = 3,
+    PS_SORT_ORDER_SHIFT = 25,
+    PS_SORT_ORDER_COUNT = 8
+};
+#define PS_FLAG_Z_WRITE 0x00000008U
+#define PS_SORT_ORDER_MASK 0x0E000000U
+
+typedef struct _psParticle _psParticle;
+struct _psParticle {
+    _psParticle *next;
+    u32 flags;
+    u8 _08[21];
+    u8 linkNo;
+    u8 _1E[118];
+};
+
 /* Generator records shared by the particle-system modules. */
 typedef struct _psGenerator _psGenerator;
 struct _psGenerator {
@@ -41,6 +59,21 @@ struct _psGenerator {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern u16 g_ps_token;
+extern u16 numPeakPSAppSRT;
+extern u16 numPeakGenerators;
+extern u16 numPeakParticles;
+extern u16 numActivePSAppSRT;
+extern u16 numActiveGenerators;
+extern u16 numActiveParticles;
+
+_psParticle *particleSort(int linkNo, _psParticle **zWriteHead, _psParticle **xluHead);
+_psParticle *_psListGetFirst(int linkNo);
+void _psListDelete(_psParticle *pp, _psParticle *parent);
+_psParticle *_psListNew(_psParticle *parent, int linkNo);
+void _psListClear(void);
+int _psLinkInit(int count);
 
 void psInitParticle(u32 count);
 void psInitGenerator(u32 count);

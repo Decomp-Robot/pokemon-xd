@@ -2950,8 +2950,15 @@ game/GSAPI/GSfilter/GSfilter.cpp:
 	.sbss       start:0x804EB540 end:0x804EB548
 	.sdata2     start:0x804EDFB0 end:0x804EDFC4
 
+game/GSAPI/GSsysdolphin_baselib/particle/pslist.c:
+	.text       start:0x80188B50 end:0x80189250
+	.rodata     start:0x802F3EA8 end:0x802F3F10
+	.bss        start:0x80474DC0 end:0x80474E80
+	.sbss       start:0x804EB548 end:0x804EB550
+
 game/GSAPI/GSsysdolphin_baselib/particle/particle.c:
 	.text       start:0x80189564 end:0x801896CC
+	.sbss       start:0x804EB550 end:0x804EB560
 
 game/GSAPI/GSspline/GSspline.c:
 	.text       start:0x801964F4 end:0x80196A14

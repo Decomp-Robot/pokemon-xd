@@ -5947,6 +5947,11 @@ cflags_preset = "game"
 progress_category = "game"
 
 [[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/particle/pslist.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-use_lmw_stmw on", "-str reuse,readonly", "-inline auto,deferred"]
+
+[[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/particle/particle.c"
 completed = true
 

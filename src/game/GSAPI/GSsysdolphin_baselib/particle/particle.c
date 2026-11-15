@@ -1,5 +1,13 @@
 #include <GSAPI/GSsysdolphin_baselib/particle/particle.h>
 
+u16 numActiveParticles;
+u16 numActiveGenerators;
+u16 numActivePSAppSRT;
+u16 numPeakParticles;
+u16 numPeakGenerators;
+u16 numPeakPSAppSRT;
+u16 g_ps_token;
+
 /* Instance options of a generator. Every psSet* entry point below toggles a
  * single bit of _psGenerator::mOptionFlags; the generator reads the bits back
  * while it spawns and updates the particles of its family. The mode bits of
