@@ -17,6 +17,7 @@ double sin(double x);
 double cos(double x);
 double fmod(double x, double y);
 double atan2(double y, double x);
+double asin(double x);
 
 float sinf(float x);
 float cosf(float x);

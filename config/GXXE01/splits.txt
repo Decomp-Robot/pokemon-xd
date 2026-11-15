@@ -3341,6 +3341,10 @@ game/GSAPI/GSsysdolphin_baselib/baselib/list.c:
 	.bss        start:0x804B2298 end:0x804B22F0
 	.sdata2     start:0x804EF010 end:0x804EF028
 
+game/GSAPI/GSsysdolphin_baselib/baselib/mtx.c:
+	.text       start:0x802579A8 end:0x802594C0
+	.sdata2     start:0x804EF0B8 end:0x804EF0F8
+
 game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.text       start:0x8025C940 end:0x8025CA38
 	.sdata      start:0x804E8610 end:0x804E8618
