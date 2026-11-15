@@ -2929,7 +2929,9 @@ game/app/recovery/recovery.cpp:
 	.text       start:0x801CF348 end:0x801CF404
 
 game/app/recovery/recoveryEvent.cpp:
-	.text       start:0x801CF738 end:0x801CF7A4
+	.text       start:0x801CF404 end:0x801CF7A4
+	.data       start:0x8040C570 end:0x8040C5A8
+	.sdata2     start:0x804EE7C8 end:0x804EE7E0
 
 game/app/mail/mailMain.cpp:
 	.text       start:0x801CF7A4 end:0x801CFCA8
