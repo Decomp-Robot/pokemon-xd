@@ -32,8 +32,27 @@ struct GSgfx_GCFifoObj {
     u8 pad1[48];
 };
 
+class GSgfxLayer;
+struct GSgfxRenderFifoEntry {
+    GSgfx_GCFifoObj *fifo;
+    void *start;
+    void *end;
+    u32 color;
+    void (*completionCallback)(void *);
+    void *callbackArgument;
+};
+
+enum GSgfxRenderPhase {
+    GSGFX_RENDER_PHASE_BLOCKS = 0,
+    GSGFX_RENDER_PHASE_XFB_COPY = 1
+};
+
 struct GSgfxState {
-    u8 reserved[3152];
+    u8 reserved[3136];
+    GSgfxLayer *activeLayer;
+    void *pendingXFB;
+    GSgfxRenderPhase renderPhase;
+    GSgfxRenderFifoEntry *renderFifoCursor;
     GSgfx_GCFifoObj *blockFifo;
     GSgfx_GCFifoObj *blockGpuFifo;
     void *blockStart;
@@ -161,7 +180,17 @@ enum GSgfxBlendFactor { GSGFX_BLEND_ZERO, GSGFX_BLEND_ONE, GSGFX_BLEND_SRC_COLOR
 enum GSgfxLayerPass {
     GSGFX_LAYER_PASS_OPAQUE = 0,
     GSGFX_LAYER_PASS_XLU = 1, GS_GFX_PASS_OPAQUE = 0, GS_GFX_PASS_TRANSLUCENT = 1 };
-struct GSgfxDrawPass { void *mFifoBuffer; u8 _04[0xB8]; };
+struct _gsgfxLayerFifo {
+    void *mFifoBuffer;
+    u32 bufferSize;
+    GSgfx_GCFifoObj fifo;
+    void *renderStart;
+    void *renderEnd;
+    u8 reserved[44];
+};
+typedef _gsgfxLayerFifo GSgfxDrawPass;
+extern _gsgfxLayerFifo *gsgfx_layer_activeFifo;
+extern u8 gsgfx_layer_surface_active;
 
 enum { GSGFX_FIFO_LOAD_XF = 0x10, GSGFX_XF_CLIP_DISABLE = 0x1005 };
 
@@ -1018,6 +1047,36 @@ extern "C" void GSgfxTokenWaitForClear(u16 token);
 extern "C" void GSgfxTokenWaitForClearAndReset(u16 *token);
 void GSgfxRenderAbortFrame(void);
 void GSgfxRenderWaitForDrawComplete();
+struct GSgfxRenderWaitData {
+    u32 startVsync;
+    u32 savedPerfColor;
+};
+extern "C" bool GSgfxRenderIsPaused(void);
+extern "C" void GSgfxRenderPause(void);
+extern "C" void GSgfxRenderUnpause(void);
+void GSgfxRenderSetupFirstFrame(void);
+void GSgfxRenderAddToFifoList(GSgfx_GCFifoObj *fifo, void *start, void *end,
+                            u32 color, void (*callback)(void *), void *argument);
+void GSgfxRenderWaitExit(GSgfxRenderWaitData *data);
+void GSgfxRenderWaitTick(GSgfxRenderWaitData *data);
+void GSgfxRenderWaitInit(GSgfxRenderWaitData *data);
+void GSgfxRenderInit(void);
+void GSgfxRenderModuleInit(void);
+void GSgfxRenderModuleDoPreUpdate(f32 delta);
+void GSgfxRenderModuleDoPostUpdate(f32 delta);
+void GSgfxLayerPrepareNextFrame(void);
+void GSgfxLayerUpdateActiveFifoStats(void);
+GSgfxLayer *GSgfxLayerPrerender(void);
+void GSgfxLayerRenderStats(GSgfxLayer *layer);
+void GSgfxLayerInvalidateAll(void);
+void GSgfxLayerBuildRenderList(void);
+void GSgfxBackFBDoFrame(GSgfxLayer *layer);
+void GSgfxResetUpdate(void);
+void GSgfxSSUpdate(void);
+void GSgfxCaptureRenderFrameNumber(GSgfxLayer *layer);
+void GSgfxCaptureUpdate(void *xfb);
+extern "C" bool GSgfxTokenCleared(u16 token);
+
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
 typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
 struct GSgfxParseCallbackList {

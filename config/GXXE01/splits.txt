@@ -3480,6 +3480,13 @@ game/GSAPI/GSlog/GSlog.cpp:
 	.sbss       start:0x804EBC70 end:0x804EBC90
 	.sdata2     start:0x804EF970 end:0x804EF988
 
+game/GSAPI/GSgfx/render.cpp:
+	.text       start:0x802AAF90 end:0x802ABFE4
+	.bss        start:0x804E1B60 end:0x804E2240
+	.sbss       start:0x804EBCB0 end:0x804EBCC8
+	.sdata2     start:0x804EFA80 end:0x804EFA8C
+	.sbss2      start:0x804EFD50 end:0x804EFD54
+
 game/GSAPI/GSgfx/perfbar.cpp:
 	.text       start:0x802ABFE4 end:0x802AD060
 	.rodata     start:0x802FBC98 end:0x802FBD30

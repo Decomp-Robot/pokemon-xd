@@ -29,6 +29,8 @@ enum GSgfxVideoFilter {
 extern "C" {
 #endif
 u8 GSgfxVideoGetVsyncRate(void);
+u32 GSgfxVideoGetVsyncCount(void);
+u8 GSgfxVideoGetXFBCount(void);
 f32 GSgfxVideoGetLastRealRenderTime(void);
 f32 GSgfxVideoGetLastRenderTime(void);
 s32 GSgfxVideoGetLockFrameRate(void);
@@ -40,5 +42,11 @@ u8 GSgfxVideoGetLockFrameActive(void);
 void GSgfxVideoSetLockFrameActive(bool active);
 #ifdef __cplusplus
 }
+void GSgfxVideoSetupNextFrame(void);
+void *GSgfxVideoCopyEFBToXFB(void);
+u32 GSgfxVideoBuildEFB2XFBCopy(void *commands, void *xfb);
+void *GSgfxVideoFindFreeXFB(bool wait);
+bool GSgfxVideoSetXFBReady(void *xfb);
+void GSgfxVideoSetOneShotPostCallback(void (*callback)(void *));
 #endif
 #endif
