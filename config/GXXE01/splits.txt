@@ -446,6 +446,10 @@ game/menuScript.cpp:
 	.text       start:0x8005E794 end:0x8005E95C
 	.bss        start:0x80435528 end:0x80435540 align:4
 
+game/menuReliveMeter.cpp:
+	.text       start:0x8005F524 end:0x8005F740
+	.sbss       start:0x804EA8F0 end:0x804EA8F8
+
 game/menuShop.cpp:
 	.text       start:0x800605B8 end:0x800608B4
 	.sbss       start:0x804EA910 end:0x804EA91C

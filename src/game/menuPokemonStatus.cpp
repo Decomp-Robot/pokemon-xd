@@ -36,7 +36,7 @@
 
 extern "C" {
 void menuDrawReliveUpdate(void);
-void menuDrawReliveMeter(Pokemon *pokemon, s16 x, s16 y, GSgfxLayerID layer);
+void menuDrawReliveMeter(Pokemon *pokemon, long width, long height, GSgfxLayerID layer);
 void menuPlaySe(s32 p1, s32 p2);
 u16 zokuseiBiosGetSpriteID(u16 type);
 u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);

@@ -19,8 +19,18 @@ void menuDrawReliveUpdate(void);
 u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
 void menuPdaSetSubres(s32 res, s32 subres);
-void menuDrawReliveMeterByDarkPokemon(DarkPokemon *pokemon, long x, long y, s16 width, s16 height, u8 alpha,
-                                      long layerID);
+long menuPdaDPMListDispRelive(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long x, long y, long index,
+                              u8 alpha, bool frame);
+void menuDrawReliveMeterByDarkPokemon(DarkPokemon *pokemon, long x, long y, long width, long height, u8 alpha,
+                                      GSgfxLayerID layerID);
+u32 menuPdaDPMListGetDarkPokemonPlaceMsgID(long index, u8 *number);
+u16 menuPdaDPMListGetDarkPokemonID(long index);
+u16 menuPdaDPMListGetPokemonID(long index);
+u16 *menuPdaDPMListGetPokemonName(long index);
+u16 menuPdaDPMListGetDarkpokemonID(long index);
+DarkPokemon *menuPdaDPMListGetDPointer(long index);
+long menuPdaDPMListGetDPNum(void);
+CURSOR *menuPdaDPMon(CURSOR *cursor);
 }
 
 menuPdaDPM *_pDPM;
