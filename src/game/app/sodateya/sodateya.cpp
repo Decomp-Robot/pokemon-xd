@@ -6,6 +6,10 @@
 #include <hero.h>
 #include <darkPokemon.h>
 #include <fightSeq.h>
+#include <heroMove.h>
+#include <GSflag.h>
+#include <GSthread.h>
+#include <menuScript.h>
 
 // DP are charged in steps of this size; one step costs PRICE_UNIT on top of
 // the base fee.
@@ -16,13 +20,13 @@ enum {
 };
 
 // Day-care block of the save image.
-typedef struct SodateyaSave {
+struct SodateyaSave {
     u8 occupied; // 0 while the slot is empty, 1 while a Pokemon is deposited
     u8 savedLevel; // level the Pokemon had when it was left here
-    u8 pad[2];
+    u16 stepCount;
     u32 savedDp; // DP the Pokemon had when it was left here
     Pokemon pokemon; // deposited Pokemon
-} SodateyaSave;
+};
 
 // Day-care block of the save image, or null when the save data is unavailable.
 inline SodateyaSave *sodateyaGetSavePtr(SodateyaSave *save)
@@ -213,4 +217,158 @@ int sodateyaGetPokemonLevelUpValue(void)
     u8 level = pokemonBiosGetLevel(sodateyaGetSavedPokemon());
 
     return level - (u8)savedLevel;
+}
+
+static long _sodateyaHandle;
+static void _sodateyaCallBackFunc(long context, FootStepCounter counter, long steps);
+
+enum {
+    SODATEYA_DP_STEPS = 256,
+    SODATEYA_WALK_DP_EXCLUDED_DARK_ID = 73,
+    SODATEYA_STEP_FLAG_ENABLE = 4,
+    SODATEYA_STEP_FLAG = 5,
+    SODATEYA_STEP_FLAG_TARGET = 10000,
+    SODATEYA_STEP_FLAG_MAX = 65535,
+    SODATEYA_MAX_LEVEL = 100,
+    SODATEYA_WALK_DP_FILTER = 1
+};
+
+inline void sodateyaSetStepCount(SodateyaSave *save, u16 steps)
+{
+    save = sodateyaGetSavePtr(save);
+    if (save != 0) {
+        save->stepCount = steps;
+    }
+}
+
+Pokemon *sodateyaGetPokemonPtr(int saveAddress)
+{
+    return &sodateyaGetSavePtr((SodateyaSave *)saveAddress)->pokemon;
+}
+
+void sodateyaInit(SodateyaSave *save)
+{
+    save = sodateyaGetSavePtr(save);
+    if (save != 0) {
+        sodateyaSetStepCount(save, 0);
+        save->savedLevel = 0;
+        save->occupied = 0;
+    }
+}
+
+void sodateyaHeroCallBackInit(void)
+{
+    _sodateyaHandle = heroMoveAddStepCallback(_sodateyaCallBackFunc, 0);
+}
+
+inline u16 sodateyaGetWalkingDarkId(Pokemon *pokemon, FootStepCounter counter)
+{
+    u16 darkID = pokemonBiosGetDarkpokemonDataId(pokemon);
+    if (darkID != 0) {
+        if (counter == FOOT_STEP_COUNTER_BATTLE) {
+            if (darkPokemonBiosGetReliveFlag(darkID) || darkID == SODATEYA_WALK_DP_EXCLUDED_DARK_ID) {
+                return 0;
+            }
+            if (pokemonGetDp(pokemon) == 0.0f) {
+                return darkID;
+            }
+            return 0;
+        } else {
+            if (darkPokemonBiosGetReliveFlag(darkID) || pokemonBiosGetHp(pokemon) == 0 ||
+                darkID == SODATEYA_WALK_DP_EXCLUDED_DARK_ID) {
+                return 0;
+            }
+        }
+    }
+    return darkID;
+}
+
+inline void sodateyaInfoRelive(Pokemon *pokemon, FootStepCounter counter)
+{
+    u16 darkID = sodateyaGetWalkingDarkId(pokemon, counter);
+    if (darkID != 0 && !darkPokemonBiosGetInformationFlag(darkID)) {
+        heroMoveInitEvent();
+        heroMoveSetColision(1);
+        GSthreadSwitch();
+        menuScriptInfoRelive(pokemon, 1);
+        heroMoveTermEvent();
+    }
+}
+
+inline u16 sodateyaGetUnpurifiedDarkId(Pokemon *pokemon, FootStepCounter counter)
+{
+    u16 darkID = 0;
+    if (pokemon != 0) {
+        darkID = sodateyaGetWalkingDarkId(pokemon, counter);
+        if (darkID != 0 && darkPokemonBiosGetReliveFlag(darkID)) {
+            darkID = 0;
+        }
+    }
+    return darkID;
+}
+
+inline u16 sodateyaGetNewDarkSteps(u16 darkID, long steps)
+{
+    u16 darkSteps = darkPokemonBiosGetSteps(darkID);
+    darkSteps += steps;
+    return darkSteps;
+}
+
+inline void sodateyaUpdatePartyDp(FootStepCounter counter, long steps)
+{
+    Pokemon *pokemon;
+    Hero *hero = (Hero *)savedataGetStatus(0, SAVE_DATA_HERO);
+    if (hero != 0) {
+        for (u16 slot = 0; slot < 6; slot++) {
+            pokemon = heroBiosGetPokemonPtr(hero, slot);
+            if (pokemonCheckValid(pokemon) && pokemon != 0) {
+                u16 darkID = sodateyaGetWalkingDarkId(pokemon, counter);
+                if (darkID != 0) {
+                    u32 darkPoints = pokemonBiosGetDp(pokemon);
+                    if (darkPoints != 0) {
+                        u16 darkSteps = sodateyaGetNewDarkSteps(darkID, steps);
+                        if (darkSteps >= SODATEYA_DP_STEPS) {
+                            pokemonAddDpFormPokemonDpFilterId(pokemon, 0, SODATEYA_WALK_DP_FILTER);
+                            if (pokemonGetDp(pokemon) == 0.0f) {
+                                sodateyaInfoRelive(pokemon, counter);
+                                darkPokemonBiosSetSteps(darkID, 0);
+                            } else {
+                                darkPokemonBiosSetSteps(darkID, darkSteps - SODATEYA_DP_STEPS);
+                            }
+                        } else {
+                            darkPokemonBiosSetSteps(darkID, darkSteps);
+                        }
+                    } else {
+                        sodateyaInfoRelive(pokemon, counter);
+                    }
+                }
+            }
+        }
+    }
+}
+
+static void _sodateyaCallBackFunc(long, FootStepCounter counter, long steps)
+{
+    u16 stepCount;
+    sodateyaUpdatePartyDp(counter, steps);
+    if (GSflagGet(SODATEYA_STEP_FLAG_ENABLE)) {
+        stepCount = GSflagGet(SODATEYA_STEP_FLAG);
+        if (stepCount < SODATEYA_STEP_FLAG_TARGET) {
+            stepCount = stepCount + steps < SODATEYA_STEP_FLAG_MAX ? stepCount + steps : SODATEYA_STEP_FLAG_MAX;
+        }
+        GSflagSet(SODATEYA_STEP_FLAG, stepCount);
+    }
+    if (sodateyaGetSavePtr(0)->occupied) {
+        if (steps > 0) {
+            Pokemon *pokemon = sodateyaGetSavedPokemon();
+            if (sodateyaGetUnpurifiedDarkId(pokemon, counter) == 0 && pokemonBiosGetLevel(pokemon) < SODATEYA_MAX_LEVEL) {
+                u32 exp = pokemonBiosGetExp(pokemon);
+                u32 newExp = exp + steps;
+                pokemonGrowBasisStatus(pokemon, exp > newExp ? (u32)-1 : newExp);
+                u8 index = 0;
+                pokemonOboeWaza(pokemon, pokemonBiosGetLevel(pokemon), 1, &index);
+            }
+        }
+        sodateyaSetStepCount(0, stepCount);
+    }
 }

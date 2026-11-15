@@ -10,6 +10,7 @@
 #include <winSprite.h>
 #include <menuSub.h>
 #include <menuOrre.h>
+#include <menuScript.h>
 
 // Debug menu entries for the world map, the Pokespot ("esaba") and the Under
 // ("undertaker"), and the cursor hooks of the windows those entries open.
@@ -82,7 +83,6 @@ u8 menuIsCheck(s32 menuID);
 // menu scripts
 void menuScriptOpenWorldMap(u16 mapIndex);
 void menuScriptUsohachi(void);
-void menuScriptInfoRelive(s32 a, s32 b);
 void menuScriptInfoEsa(void);
 void menuScriptTutorial(void);
 void menuScriptEevee(void);

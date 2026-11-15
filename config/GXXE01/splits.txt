@@ -3051,7 +3051,9 @@ game/GSAPI/GSmovie/movieStream.cpp:
 	.sdata2     start:0x804EE988 end:0x804EE998
 
 game/app/sodateya/sodateya.cpp:
-	.text       start:0x801ECBB0 end:0x801ED098
+	.text       start:0x801ECBB0 end:0x801ED628
+	.sbss       start:0x804EB8B8 end:0x804EB8BC
+	.sdata2     start:0x804EEA00 end:0x804EEA04
 
 game/GSAPI/GSlensFlare/GSlensFlare.cpp:
 	.text       start:0x801ED628 end:0x801ED774

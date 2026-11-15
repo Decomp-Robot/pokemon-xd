@@ -82,6 +82,9 @@ u32 darkPokemonGetSnatchSuccessNum(void);
 u32 darkPokemonGetMeetNum(void);
 s32 darkPokemonGetReliveNum(void);
 u8 darkPokemonBiosGetReliveFlag(u16 darkID);
+u16 darkPokemonBiosGetSteps(u16 darkID);
+void darkPokemonBiosSetSteps(u16 darkID, u16 steps);
+u8 darkPokemonBiosGetInformationFlag(u16 darkID);
 void darkPokemonBiosSetInfomation(u16 pokemonID, u16 information);
 
 #ifdef __cplusplus

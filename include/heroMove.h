@@ -85,6 +85,8 @@ extern HeroMoveState HeroMove;
 extern "C" {
 #endif
 
+void heroMoveInitEvent(void);
+void heroMoveSetColision(u8 enabled);
 long heroMoveAddStepCallback(void (*callback)(long, FootStepCounter, long), long context);
 /* Add steps to a counter for dispatch with the next movement update. */
 void heroMovePoolCounter(FootStepCounter counter, long amount);

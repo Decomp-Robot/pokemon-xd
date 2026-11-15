@@ -2,11 +2,13 @@
 #define MENU_SCRIPT_H
 
 #include <types.h>
+#include <Pokemon.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void menuScriptInfoRelive(Pokemon *pokemon, u8 mode);
 void menuScriptUsohachi2(void);
 void menuScriptReadMail(long mailID);
 void menuScriptReciveMail(void);

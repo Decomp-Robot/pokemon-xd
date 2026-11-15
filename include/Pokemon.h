@@ -322,6 +322,7 @@ void pokemonSetDp(Pokemon *pokemon, f32 dp);
 u8 pokemonBiosGetLevel(Pokemon *pokemon);
 // Next move learned at this level; advances the learnset index.
 u16 pokemonGetOboeWazaDataId(Pokemon *pokemon, u8 level, u8 *outIndex);
+s8 pokemonOboeWaza(Pokemon *pokemon, u8 level, u8 replace, u8 *index);
 // Gender and nickname of a Pokemon. Nicknames are UTF-16 strings of at most
 // ten characters; the name entry mode, the message layer and the link
 // exchange each copy them into their own name buffers.
