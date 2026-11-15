@@ -3450,6 +3450,10 @@ game/GSAPI/GSgfx/renderModule.cpp:
 	.bss        start:0x804E71A8 end:0x804E72EC
 	.sbss       start:0x804EBD68 end:0x804EBD70
 
+game/GSAPI/GSgfx/light.cpp:
+	.text       start:0x802B814C end:0x802B8504
+	.sdata2     start:0x804EFB60 end:0x804EFB70
+
 game/GSAPI/GSgfx/reset.cpp:
 	.text       start:0x802C00AC end:0x802C0710
 	.sbss       start:0x804EBD90 end:0x804EBDB0

@@ -197,6 +197,15 @@ enum GSgfxPassGroupAFlag {
 enum GSgfxPassGroupBFlag { GSGFX_PASS_GROUP_B_PARTICLES = 0x4 };
 
 enum GSgfxLightStateFlag { GSGFX_LIGHT_STATE_CHANNEL_COUNT = 1, GSGFX_LIGHT_STATE_POSITION = 2, GSGFX_LIGHT_STATE_DIRECTION = 4, GSGFX_LIGHT_STATE_LIGHTS = 16 };
+enum GSgfxLightDirtyFlag {
+    GSGFX_LIGHT_DIRTY_COLOR = 0x01,
+    GSGFX_LIGHT_DIRTY_POSITION = 0x02,
+    GSGFX_LIGHT_DIRTY_DIRECTION = 0x04,
+    GSGFX_LIGHT_DIRTY_ATTENUATION = 0x08,
+    GSGFX_LIGHT_DIRTY_SPOT = 0x10,
+    GSGFX_LIGHT_DIRTY_HALF_ANGLE = 0x20,
+    GSGFX_LIGHT_DIRTY_SHININESS = 0x40
+};
 enum GSgfxTunitCountFlag { GSGFX_TUNIT_COUNT_DIRTY = 1 };
 
 // Dirty bits of the GPU state group (GSgfxPassState +0x64).
@@ -848,15 +857,35 @@ public:
 
 struct GSgfxLight {
     GSgfxLight();
-    void MakeDiff(GSgfxColAu8 *color, GSvec *position, bool attenuation);
-    void MakeSpec(GSgfxColAu8 *color, GSvec *direction, f32 shininess, GSvec *position);
+    u32 Load(u8 index);
+    void MakeDiff(GSgfxColAu8 *color, GSvec *position, bool directional);
+    void MakeSpec(GSgfxColAu8 *color, GSvec *direction, f32 shininess, GSvec *halfAngle);
     u16 mFlags;
     u8 _02[2];
     GSgfxLightType mType;
-    u8 _08[4];
+    GSgfxColAu8 mColor;
     GSvec mPosition;
     GSvec mDirection;
-    u8 _24[0x80 - 0x24];
+    union {
+        struct {
+            f32 halfAngleX, halfAngleY, halfAngleZ;
+            f32 shininess;
+        } specular;
+        struct {
+            f32 cutoff;
+            GXSpotFn function;
+            f32 referenceDistance;
+            f32 referenceBrightness;
+            GXDistAttnFn distanceFunction;
+        } spot;
+        struct {
+            f32 a0, a1, a2;
+            f32 k0, k1, k2;
+        } attenuation;
+    } mParameters;
+    GXLightObj mLightObj;
+    u8 mSlot;
+    u8 _7D[3];
 
     void position(GSvec *pos) {
         switch (mType) {
@@ -864,14 +893,14 @@ struct GSgfxLight {
         case GSGFX_LIGHT_SPOT: mPosition = *pos; break;
         case GSGFX_LIGHT_SPECULAR: return;
         }
-        mFlags |= GSGFX_LIGHT_STATE_POSITION;
+        mFlags |= GSGFX_LIGHT_DIRTY_POSITION;
     }
     void direction(GSvec *dir) {
         switch (mType) {
         case GSGFX_LIGHT_SPECULAR:
         case GSGFX_LIGHT_SPOT:
             mDirection = *dir;
-            mFlags |= GSGFX_LIGHT_STATE_DIRECTION;
+            mFlags |= GSGFX_LIGHT_DIRTY_DIRECTION;
             break;
         }
     }
