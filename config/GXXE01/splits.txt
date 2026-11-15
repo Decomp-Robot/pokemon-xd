@@ -3175,6 +3175,11 @@ game/GSAPI/GSmovie/GSmovie.cpp:
 	.sbss       start:0x804EB750 end:0x804EB780
 	.sdata2     start:0x804EE998 end:0x804EE9B8
 
+game/GSAPI/GSmovie/THPDraw.cpp:
+	.text       start:0x801E425C end:0x801E51CC
+	.sbss       start:0x804EB780 end:0x804EB784
+	.sdata2     start:0x804EE9B8 end:0x804EE9E0
+
 game/GSAPI/GSmovie/THPAudio.c:
 	.text       start:0x801EC734 end:0x801ECBB0
 

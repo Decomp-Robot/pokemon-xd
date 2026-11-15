@@ -303,7 +303,7 @@ void _particleRender(GSgfxLayer *layer, GSgfxLayerPass pass)
         GSparticleZDrawPendingBank = 0;
     }
     if (GSparticleZDrawPendingGenerator != 0) {
-        layer->mRenderFlags |= GSGFX_RENDER_FLAG_ZDRAW_GENERATOR;
+        layer->mRenderFlags |= GSGFX_RENDER_FLAG_INVALIDATE_TEXTURE_CACHE;
         GSparticleZDrawPendingGenerator = 0;
     }
     if (fog) layer->fog(false);

@@ -7,6 +7,7 @@
 #include <libc/memory.h>
 #include <GSvec.h>
 #include <GStexture.h>
+#include <GSgfxVideo.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
 
@@ -127,6 +128,8 @@ enum GSgfxLightType { GSGFX_LIGHT_SPECULAR, GSGFX_LIGHT_SPOT, GSGFX_LIGHT_DIFFUS
 enum GSgfxDiffuseFunc { GSGFX_DIFFUSE_NONE, GSGFX_DIFFUSE_SIGN, GSGFX_DIFFUSE_CLAMP };
 enum GSgfxTunitCArg {
     GSGFX_TUNIT_C_PREV = 0,
+    GSGFX_TUNIT_C_APREV = 1,
+    GSGFX_TUNIT_C_C0 = 2,
     GSGFX_TUNIT_C_TEXC = 8,
     GSGFX_TUNIT_C_TEXA = 9,
     GSGFX_TUNIT_C_RASC = 10,
@@ -136,6 +139,7 @@ enum GSgfxTunitCArg {
 };
 enum GSgfxTunitAArg {
     GSGFX_TUNIT_A_PREV = 0,
+    GSGFX_TUNIT_A_A0 = 1,
     GSGFX_TUNIT_A_TEXA = 4,
     GSGFX_TUNIT_A_RASA = 5,
     GSGFX_TUNIT_A_KONST = 6,
@@ -145,6 +149,12 @@ enum GSgfxKColorSelection { GSGFX_KCOLOR_K0 = 12, GSGFX_KCOLOR_K1 = 13, GSGFX_KC
 enum GSgfxKAlphaSelection { GSGFX_KALPHA_K0 = 28, GSGFX_KALPHA_K1 = 29, GSGFX_KALPHA_K2 = 30, GSGFX_KALPHA_K3 = 31 };
 enum GSgfxTunitSentinel { GSGFX_TUNIT_NO_TEXTURE = 255 };
 enum GSgfxTunitChannel { GSGFX_TUNIT_CHANNEL_COLOR1A = 1 };
+struct GSgfxTunitColor {
+    u32 signedFormat;
+    union { GScolor color; GXColorS10 signedColor; } value;
+};
+struct GSgfxTunitSwapMode { GXTevSwapSel raster, texture; };
+struct GSgfxTunitSwapTable { GXTevColorChan red, green, blue, alpha; };
 struct GSgfxTunitOrder { u32 texCoord, texMap, channel; };
 struct GSgfxTunitInputs { u32 a, b, c, d; };
 // Texture-unit operation state stored by each layer stage.
@@ -155,10 +165,10 @@ enum GSgfxClipMode { GSGFX_CLIP_ENABLED = 0, GS_GFX_CLIP_ENABLED = 0, GSGFX_CLIP
 enum GSgfxZCmpFunc { GSGFX_Z_COMPARE_LESS = 1, GSGFX_Z_COMPARE_ALWAYS = 7, GSGFX_Z_COMPARE_LEQUAL = 3, GS_GFX_Z_COMPARE_LEQUAL = 3 };
 enum GSgfxACmpFunc { GSGFX_A_COMPARE_ALWAYS = 7 , GS_GFX_A_COMPARE_ALWAYS = 7 };
 enum GSgfxAlphaOp { GSGFX_ALPHA_AND = 0 , GS_GFX_ALPHA_AND = 0 };
-enum GSgfxTunitOp { GSGFX_TUNIT_OP_ADD = 0 };
+enum GSgfxTunitOp { GSGFX_TUNIT_OP_ADD = 0, GSGFX_TUNIT_OP_SUBTRACT = 1 };
 enum GSgfxTunitBias { GSGFX_TUNIT_BIAS_ZERO = 0 };
-enum GSgfxTunitScale { GSGFX_TUNIT_SCALE_ONE = 0 };
-enum GSgfxTunitReg { GSGFX_TUNIT_REG_PREV = 0 };
+enum GSgfxTunitScale { GSGFX_TUNIT_SCALE_ONE = 0, GSGFX_TUNIT_SCALE_TWO = 1 };
+enum GSgfxTunitReg { GSGFX_TUNIT_REG_PREV = 0, GSGFX_TUNIT_REG0 = 1 };
 
 
 // Layer selected for a primitive submission.
@@ -203,7 +213,7 @@ enum GSgfxRenderMode { GSGFX_RENDER_MODE_NORMAL = 0, GSGFX_RENDER_MODE_BLUE_CHAN
 // set and the layer's own setup pass consumes one by one.
 enum GSgfxRenderFlag {
     GSGFX_RENDER_FLAG_ZDRAW_BANK = 0x08000000,      // particle bank started
-    GSGFX_RENDER_FLAG_ZDRAW_GENERATOR = 0x10000000, // particle generator started
+    GSGFX_RENDER_FLAG_INVALIDATE_TEXTURE_CACHE = 0x10000000, // invalidate all textures before drawing
 };
 
 // Groups of layer state that must be sent to the GPU before drawing.
@@ -213,6 +223,7 @@ enum GSgfxPassFlag {
     GSGFX_PASS_FLAG_LIGHT = 0x4,
     GSGFX_PASS_FLAG_TUNIT = 0x8,
     GSGFX_PASS_FLAG_KCOLOR = 0x10,
+    GSGFX_PASS_FLAG_SWAP = 0x20,
     GSGFX_PASS_FLAG_GPU_STATE = 0x40,
     GSGFX_PASS_FLAG_INDIRECT = 0x80,
 };
@@ -265,7 +276,7 @@ struct GSgfxPassState {
     u32 mAlphaInputFlags;// 0x30
     u32 mColorOpFlags;   // 0x34
     u32 mAlphaOpFlags;   // 0x38
-    u8 _3C[4];
+    u32 mRegColorFlags;
     u32 mIndirectOperationFlags; // 0x40
     u32 mIndirectStageFlags; // 0x44
     u32 mIndirectOrderFlags; // 0x48
@@ -273,7 +284,8 @@ struct GSgfxPassState {
     u32 mKColorFlags;    // 0x50
     u32 mKColorSelFlags; // 0x54
     u32 mKAlphaSelFlags; // 0x58
-    u8 _5C[0x08];
+    u32 mSwapModeFlags;
+    u32 mSwapTableFlags;
     u32 mGpuFlags;       // 0x64: dirty bits of the GPU state setup.
     u8 _68[0x2C];
     u32 mTextureState;   // 0x94: bits of the texture slots the pass loaded.
@@ -553,6 +565,48 @@ public:
         mPassState[1].mFlags |= GSGFX_PASS_FLAG_GPU_STATE;
     }
 
+
+    void tunitSwapMode(u8 stage, GXTevSwapSel raster, GXTevSwapSel texture) {
+        mTunitSwapMode[stage].raster = raster;
+        mTunitSwapMode[stage].texture = texture;
+        mPassState[0].mSwapModeFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_SWAP;
+        mPassState[1].mSwapModeFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_SWAP;
+    }
+    void tunitSwapTable(u8 table, GXTevColorChan red, GXTevColorChan green,
+                        GXTevColorChan blue, GXTevColorChan alpha) {
+        mTunitSwapTable[table].red = red;
+        mTunitSwapTable[table].green = green;
+        mTunitSwapTable[table].blue = blue;
+        mTunitSwapTable[table].alpha = alpha;
+        mPassState[0].mSwapTableFlags |= 1 << table;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_SWAP;
+        mPassState[1].mSwapTableFlags |= 1 << table;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_SWAP;
+    }
+    void tunitRegColor(GSgfxTunitReg reg, GXColorS10 color) {
+        mTunitRegColor[reg].signedFormat = 1;
+#define CLAMP_TEV_COLOR(c) (((c) > -1024 ? (c) : -1024) < 1023 ? ((c) > -1024 ? (c) : -1024) : 1023)
+        mTunitRegColor[reg].value.signedColor.r = CLAMP_TEV_COLOR(color.r);
+        mTunitRegColor[reg].value.signedColor.g = CLAMP_TEV_COLOR(color.g);
+        mTunitRegColor[reg].value.signedColor.b = CLAMP_TEV_COLOR(color.b);
+        mTunitRegColor[reg].value.signedColor.a = CLAMP_TEV_COLOR(color.a);
+#undef CLAMP_TEV_COLOR
+        mPassState[0].mRegColorFlags |= 1 << reg;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mRegColorFlags |= 1 << reg;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void scissor() {
+        mProjectionState.mScissorLeft = 0;
+        mProjectionState.mScissorTop = 0;
+        GSgfxVideoGetEFBSize(&mProjectionState.mScissorWidth, &mProjectionState.mScissorHeight);
+        mPassState[0].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+        mPassState[1].mGroupBFlags |= GS_GFX_RASTER_DIRTY_SCISSOR;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GROUP_B;
+    }
 
     void tunitKRegSel(u8 stage, GSgfxTunitKReg reg);
     void cunitChannelGen(u8 channel, GSgfxCunitAlpha alpha,
@@ -856,7 +910,7 @@ public:
     GSgfxTunitInputs mTunitAlphaInputs[16]; // 0x1070
     GSgfxTunitOpState mTunitColorOp[16]; // 0x1170
     GSgfxTunitOpState mTunitAlphaOp[16]; // 0x12B0
-    u8 _13F0[0x30];
+    GSgfxTunitColor mTunitRegColor[4];
     u32 mTevIndirectOperation0;
     u8 mTevIndirectStage0;
     u8 mTevWarpSignedOffset0;
@@ -875,7 +929,8 @@ public:
     GScolor mTunitKColor[4]; // 0x14F4
     u32 mTunitKColorSel[16]; // 0x1504
     u32 mTunitKAlphaSel[16]; // 0x1544
-    u8 _1584[0x1644 - 0x1584];
+    GSgfxTunitSwapMode mTunitSwapMode[16];
+    GSgfxTunitSwapTable mTunitSwapTable[4];
     GSgfxBlendType mBlendType; // 0x1644
     GSgfxBlendFactor mBlendSrc; // 0x1648
     GSgfxBlendFactor mBlendDst; // 0x164C
@@ -1128,7 +1183,6 @@ void GSgfxDLCreate(GSgfxDL *list, GSgfxPrimType primitive, GSgfxVF *vf, u16 vert
 u32 GSgfxPerfbarCPUEntry(u32 id);
 s32 GSgfxPerfbarGetRenderMode(void);
 void GSgfxPerfbarSetRenderMode(s32 renderMode);
-void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
 GSgfxLayer *GSgfxLayerFindByName(const char *name);
 extern "C" GSgfxLayerID GSgfxLayerFindByName_C(const char *name);
 void *GSgfxLayerGetFrameBufferTexture(void);

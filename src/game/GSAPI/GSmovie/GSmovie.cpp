@@ -7,6 +7,7 @@
 #include <GSAPI/GSfsys/GSfsys.h>
 #include <GSAPI/GSgapp/GSgapp.h>
 #include <GSgfx.h>
+#include <GSAPI/GSmovie/THPDraw.h>
 #include <GSgfxVideo.h>
 #include <GSmem.h>
 #include <GSscratch.h>
@@ -14,11 +15,6 @@
 
 extern "C" {
 BOOL THPInit(void);
-void THPGXSetRenderLayer(GSgfxLayer *layer);
-void THPGXYuv2RgbSetup(void);
-u16 THPGXYuv2RgbDraw(void *yImage, void *uImage, void *vImage, s16 x, s16 y,
-                    s16 textureWidth, s16 textureHeight, s16 polygonWidth, s16 polygonHeight);
-void THPGXRestore(void);
 }
 
 static GSgfxLayerID _movieLayerID = GSGFX_LAYER_INVALID;

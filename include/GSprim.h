@@ -11,9 +11,6 @@ typedef struct GSrectS { s16 left, top, right, bottom; } GSrectS;
 #ifdef __cplusplus
 void GSprimSetup3DRender(GSgfxLayer *layer);
 
-// TEV register-zero inputs used by clipped textured quads: color C0 and alpha A0.
-static const GSgfxTunitCArg GSGFX_TUNIT_C_C0 = (GSgfxTunitCArg)2;
-static const GSgfxTunitAArg GSGFX_TUNIT_A_A0 = (GSgfxTunitAArg)1;
 #endif
 
 #ifdef __cplusplus
@@ -46,18 +43,6 @@ void GSprimDraw2DHLine(GSgfxColAu8 color, f32 left, f32 right, f32 y);
 void GSprimDraw2DLine(const GSgfxColAu8 *startColor, const GSgfxColAu8 *endColor, f32 x1, f32 y1, f32 x2, f32 y2);
 
 
-// Clip state shared by the primitive renderer and the layer.
-struct GSgfxLayerDeferredState {
-    u8 _0000[0x13FC];
-    u32 mClipRectEnabled;
-    GSrectS mClipRect;
-};
-
-struct GSgfxPassStateClipView {
-    u8 _0000[0x3C];
-    u32 mClipRectFlags;
-};
-
 enum GSprimExtraPrimType { GSprimPrimLines = 0xA8, GSprimPrimPoints = 0xB8 };
 
 #ifndef GSmax
@@ -79,17 +64,14 @@ static inline void GSprimLayerPointSize(GSgfxLayer *layer, u8 size)
 
 static inline void GSprimLayerClipRect(GSgfxLayer *layer, GSrectS rect)
 {
-    GSgfxLayerDeferredState *state = (GSgfxLayerDeferredState *)layer;
-    GSgfxPassStateClipView *pass0 = (GSgfxPassStateClipView *)&layer->mPassState[0];
-    GSgfxPassStateClipView *pass1 = (GSgfxPassStateClipView *)&layer->mPassState[1];
-    state->mClipRectEnabled = 1;
-    state->mClipRect.left = GSmin(GSmax(rect.left, -1024), 1023);
-    state->mClipRect.top = GSmin(GSmax(rect.top, -1024), 1023);
-    state->mClipRect.right = GSmin(GSmax(rect.right, -1024), 1023);
-    state->mClipRect.bottom = GSmin(GSmax(rect.bottom, -1024), 1023);
-    pass0->mClipRectFlags |= 0x2;
+    layer->mTunitRegColor[GSGFX_TUNIT_REG0].signedFormat = 1;
+    layer->mTunitRegColor[GSGFX_TUNIT_REG0].value.signedColor.r = GSmin(GSmax(rect.left, -1024), 1023);
+    layer->mTunitRegColor[GSGFX_TUNIT_REG0].value.signedColor.g = GSmin(GSmax(rect.top, -1024), 1023);
+    layer->mTunitRegColor[GSGFX_TUNIT_REG0].value.signedColor.b = GSmin(GSmax(rect.right, -1024), 1023);
+    layer->mTunitRegColor[GSGFX_TUNIT_REG0].value.signedColor.a = GSmin(GSmax(rect.bottom, -1024), 1023);
+    layer->mPassState[0].mRegColorFlags |= 1 << GSGFX_TUNIT_REG0;
     layer->mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
-    pass1->mClipRectFlags |= 0x2;
+    layer->mPassState[1].mRegColorFlags |= 1 << GSGFX_TUNIT_REG0;
     layer->mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
 }
 

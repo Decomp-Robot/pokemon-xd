@@ -28,6 +28,7 @@ enum GSgfxVideoFilter {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void GSgfxVideoGetEFBSize(u16 *width, u16 *height);
 u8 GSgfxVideoGetVsyncRate(void);
 u32 GSgfxVideoGetVsyncCount(void);
 u8 GSgfxVideoGetXFBCount(void);

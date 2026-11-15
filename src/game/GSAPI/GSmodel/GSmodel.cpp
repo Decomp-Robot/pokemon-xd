@@ -53,7 +53,7 @@ void _modelRender(GSgfxLayer *layer, GSgfxLayerPass pass)
 
     if (modelLoading == 1) {
         layer->mRenderFlags |= GSGFX_RENDER_FLAG_ZDRAW_BANK;
-        layer->mRenderFlags |= GSGFX_RENDER_FLAG_ZDRAW_GENERATOR;
+        layer->mRenderFlags |= GSGFX_RENDER_FLAG_INVALIDATE_TEXTURE_CACHE;
         modelLoading = 0;
     }
 
