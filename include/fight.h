@@ -15,6 +15,8 @@ extern "C" {
 
 u8 fightReadResource(unsigned long groupID, unsigned long resourceID);
 void fightFreeResource(unsigned long groupID, unsigned long resourceID);
+void fightSoundOpenPlayInit(void);
+extern s8 fightColosseumTrainerIndex;
 u8 fightIsFight(void);
 void fightSetFightResultId(u16 result);
 u16 fightGetFightResultId(void);

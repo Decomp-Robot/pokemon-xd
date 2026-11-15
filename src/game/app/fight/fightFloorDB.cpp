@@ -1,4 +1,5 @@
 #include <fightFloor.h>
+#include <fightEncount.h>
 #include <fightEncountBios.h>
 #include <fightKindDataBios.h>
 #include <app/fight/fightType.h>

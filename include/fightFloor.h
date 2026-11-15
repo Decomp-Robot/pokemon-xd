@@ -10,9 +10,10 @@
 
 typedef struct FIGHT_WAZA FIGHT_WAZA;
 
-/* Statuses fightFloorGetStatus reports for a floor record. */
+/* Status selectors for battle floor records. */
 enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_FIGHT_FLOOR_PTR = 0,
+    FIGHT_FLOOR_STATUS_ENCOUNT_DATA_ID = 13,
     FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
 };
 
@@ -175,6 +176,9 @@ u8 fightFloorDataBiosGetTikeiDataId(FIGHT_FLOOR_DATA *data);
 u16 fightFloorDataBiosGetFightSideDataId(FIGHT_FLOOR_DATA *data, u8 side);
 u16 fightFloorDataBiosGetFloorDataId(FIGHT_FLOOR_DATA *data);
 FIGHT_FLOOR_DATA *fightFloorDataBiosGetPtr(u16 index);
+u8 fightFloorIsGcHeroWin(FIGHT_FLOOR *floor, u16 result);
+void fightFloor_SetEncountFloorId(FIGHT_FLOOR *floor, u32 floorID);
+u8 fightFloorSetStatus(FIGHT_FLOOR *floor, u16 floorDataId, u16 status, u32 index, u32 value);
 u32 fightFloorDB_GetEnvSndId(u16 floorDataId);
 u32 fightFloorGetBgmSndDataId(FIGHT_FLOOR *floor);
 u32 fightFloorDB_GetBgmSndId(u16 floorDataId);

@@ -1,6 +1,7 @@
 #ifndef FIGHT_ENCOUNT_BIOS_H
 #define FIGHT_ENCOUNT_BIOS_H
 
+#include <fade.h>
 #include <types.h>
 
 /* One trainer entry of an encounter record: the deck its side fights with, the
@@ -34,8 +35,20 @@ typedef struct {
 extern "C" {
 #endif
 
+u16 fightEncountDataBiosGetDiskId(void *data);
+u8 fightEncountDataBiosGetZenmetuFlag(void *data);
+u32 fightEncountDataBiosGetBgmSndId(void *data);
+u32 fightEncountDataBiosGetWipeId(void *data);
+void *fightEncountWipeDataBiosGetPtr(u32 wipeId);
+u16 fightEncountDataBiosGetWipeEffectSndID(void *wipeData);
+f32 fightEncountDataBiosGetWipeEffectTime(void *wipeData);
+#ifdef __cplusplus
+bool fightEncountDataBiosGetWipeSnapshotUse(void *wipeData);
+#else
+u8 fightEncountDataBiosGetWipeSnapshotUse(void *wipeData);
+#endif
+FadeFunction fightEncountDataBiosGetWipeFunction(void *wipeData);
 u8 *fightEncountDataBiosGetPtr(u16 encountNo);
-u32 fightEncountGetEnvSndDataId(u16 encountDataId);
 u32 fightEncountDataBiosGetFightKind(void* data);
 u8 fightEncountDataBiosGetFightType(void *data);
 void fightEncountDataBiosSetFightKind(void* data, u8 value);
@@ -47,7 +60,7 @@ u32 fightEncountDataBiosGetEntry(void* data);
 void fightEncountDataBiosSetEntry(void* data, u8 value);
 u16 fightEncountDataBiosGetFightFloorDataId(void* data);
 void fightEncountDataBiosSetFightFloorDataId(void* data, u16 value);
-u32 fightEncountDataBiosGetFightTrainerDataId(void* data, s32 player);
+u16 fightEncountDataBiosGetFightTrainerDataId(void* data, u8 player);
 void fightEncountDataBiosSetFightTrainerDataId(void* data, s32 player, u16 trainerDataId);
 u32 fightEncountDataBiosGetGSInputDevice(void* data, s32 player);
 void fightEncountDataBiosSetGSInputDevice(void* data, s32 player, s32 devId);

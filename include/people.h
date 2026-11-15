@@ -6,6 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void peopleAllBlockMoveScript(void);
+
 void peopleSetTresureSearchDistance(u16 treasureId, float distance);
 void peopleTalkMessageBgmMask(bool enabled);
 void peopleTalkMessageBgmSetFadeSpeed(float inTime, float outTime);

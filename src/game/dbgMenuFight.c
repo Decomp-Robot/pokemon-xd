@@ -139,6 +139,7 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
     s32 result;
     s32 id;
     u32 floorDataId;
+    u32 trainerDataId;
 
     if (encountNo == 0) {
         return 1;
@@ -202,7 +203,8 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             fightEncountDataBiosSetFightFloorDataId(data, id);
             continue;
         case ENCOUNT_EDIT_ITEM_TRAINER_DATA_0:
-            id = dbgMenuFightGetFightTrainerDataId(fightEncountDataBiosGetFightTrainerDataId(data, 0));
+            trainerDataId = fightEncountDataBiosGetFightTrainerDataId(data, 0);
+            id = dbgMenuFightGetFightTrainerDataId(trainerDataId);
             if (id < 0) {
                 continue;
             }
@@ -214,7 +216,8 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             fightEncountDataBiosSetGSInputDevice(data, 0, id);
             continue;
         case ENCOUNT_EDIT_ITEM_TRAINER_DATA_1:
-            id = dbgMenuFightGetFightTrainerDataId(fightEncountDataBiosGetFightTrainerDataId(data, 1));
+            trainerDataId = fightEncountDataBiosGetFightTrainerDataId(data, 1);
+            id = dbgMenuFightGetFightTrainerDataId(trainerDataId);
             /* The second player does not take data id 0. */
             if (id < 1) {
                 continue;
@@ -227,7 +230,8 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             fightEncountDataBiosSetGSInputDevice(data, 1, id);
             continue;
         case ENCOUNT_EDIT_ITEM_TRAINER_DATA_2:
-            id = dbgMenuFightGetFightTrainerDataId(fightEncountDataBiosGetFightTrainerDataId(data, 2));
+            trainerDataId = fightEncountDataBiosGetFightTrainerDataId(data, 2);
+            id = dbgMenuFightGetFightTrainerDataId(trainerDataId);
             if (id < 0) {
                 continue;
             }
@@ -239,7 +243,8 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
             fightEncountDataBiosSetGSInputDevice(data, 2, id);
             continue;
         case ENCOUNT_EDIT_ITEM_TRAINER_DATA_3:
-            id = dbgMenuFightGetFightTrainerDataId(fightEncountDataBiosGetFightTrainerDataId(data, 3));
+            trainerDataId = fightEncountDataBiosGetFightTrainerDataId(data, 3);
+            id = dbgMenuFightGetFightTrainerDataId(trainerDataId);
             if (id < 0) {
                 continue;
             }

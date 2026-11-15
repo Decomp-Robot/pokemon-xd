@@ -6,7 +6,8 @@
 
 enum FightBattleKind {
     FIGHT_BATTLE_KIND_WILD_POKEMON = 12,
-    FIGHT_BATTLE_KIND_BATTLE_BINGO = 13
+    FIGHT_BATTLE_KIND_BATTLE_BINGO = 13,
+    FIGHT_BATTLE_KIND_BATTLE_DISK = 15
 };
 
 #ifdef __cplusplus
@@ -24,7 +25,6 @@ u32 fightEncountDataBiosGetPokemonPerPlayer(void* data);
 void fightEncountDataBiosSetPokemonPerPlayer(void* data, u8 value);
 u32 fightEncountDataBiosGetBattleField(void* data);
 void fightEncountDataBiosSetBattleField(void* data, u16 value);
-u32 fightEncountDataBiosGetFightTrainerDataId(void* data, s32 player);
 void fightEncountDataBiosSetFightTrainerDataId(void* data, s32 player, u16 trainerDataId);
 u32 fightEncountDataBiosGetPlayerController(void* data, s32 player);
 void fightEncountDataBiosSetPlayerController(void* data, s32 player, s32 devId);

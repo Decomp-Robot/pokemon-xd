@@ -346,6 +346,11 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/fight/fightEncount.cpp"
+completed = true
+extra_cflags = ["-O4,s", "-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/fight/fightFloorDB.cpp"
 completed = true
 cflags = [

@@ -55,6 +55,9 @@ typedef struct FIGHT_ENCOUNT FIGHT_ENCOUNT;
 extern "C" {
 #endif
 
+u8 fightEncountCheckZenmetu(void);
+u32 fightEncountGetEnvSndDataId(u16 encountId);
+u32 fightEncountGetBgmSndDataId(u16 encountId);
 u16 fightEncount(u16 encountId);
 FIGHT_ENCOUNT *fightEncountGetStrObj();
 #ifdef __cplusplus

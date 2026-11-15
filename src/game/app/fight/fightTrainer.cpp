@@ -34,7 +34,7 @@ void fightTrainerSetNameHearFlag(u16 encountNo)
     void *fightKindData = fightKindDataBiosGetPtr(fightKind);
 
     if (fightKindData != 0 && fightKindDataBiosGetHostEnemyMsgFlag(fightKindData) != 0) {
-        u32 trainerDataId = fightEncountDataBiosGetFightTrainerDataId(encountData, 1);
+        u16 trainerDataId = fightEncountDataBiosGetFightTrainerDataId(encountData, 1);
 
         if (fightTrainerDataBiosGetPtr(trainerDataId) != 0) {
             u16 trainerName = fightTrainerDB_GetName(trainerDataId);
