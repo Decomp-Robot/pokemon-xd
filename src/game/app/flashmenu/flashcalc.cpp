@@ -5,6 +5,76 @@
 static f32 blend(f32 first, f32 second, f32 t);
 static f32 blend(s32 first, s32 second, f32 t);
 
+extern "C" void flcalcMatrix(GSvec2* destination, FLASHMATRIXF* matrix, GSvec2* point)
+{
+    GSvec2 source = *point;
+    f32 m00 = matrix->m00;
+    f32 m01 = matrix->m01;
+    f32 m10 = matrix->m10;
+    f32 m11 = matrix->m11;
+    destination->x = matrix->tx + (m00 * source.x + m10 * source.y);
+    destination->y = matrix->ty + (m01 * source.x + m11 * source.y);
+}
+
+extern "C" void flcalcMatrixScale(FLASHMATRIXF* destination, FLASHMATRIXF* matrix, GSvec2* scale)
+{
+    f32 scaleX = scale->x;
+    f32 scaleY = scale->y;
+    destination->m00 = matrix->m00 * scaleX + matrix->m01 * lbl_804EF3D0;
+    destination->m01 = matrix->m00 * lbl_804EF3D0 + matrix->m01 * scaleY;
+    destination->m10 = matrix->m10 * scaleX + matrix->m11 * lbl_804EF3D0;
+    destination->m11 = matrix->m10 * lbl_804EF3D0 + matrix->m11 * scaleY;
+    destination->tx = matrix->tx;
+    destination->ty = matrix->ty;
+}
+
+extern "C" void flcalcMatrixTranslate(FLASHMATRIXF* destination, FLASHMATRIXF* matrix, GSvec2* translation)
+{
+    f32 x = translation->x;
+    f32 y = translation->y;
+    destination->m00 = matrix->m00 * lbl_804EF3D4 + matrix->m01 * lbl_804EF3D0;
+    destination->m01 = matrix->m00 * lbl_804EF3D0 + matrix->m01 * lbl_804EF3D4;
+    destination->m10 = matrix->m10 * lbl_804EF3D4 + matrix->m11 * lbl_804EF3D0;
+    destination->m11 = matrix->m10 * lbl_804EF3D0 + matrix->m11 * lbl_804EF3D4;
+    destination->tx = x + (matrix->tx * lbl_804EF3D4 + matrix->ty * lbl_804EF3D0);
+    destination->ty = y + (matrix->tx * lbl_804EF3D0 + matrix->ty * lbl_804EF3D4);
+}
+
+extern "C" void flcalcMatrixCopy(FLASHMATRIXF* destination, FLASHMATRIXF* source)
+{
+    *destination = *source;
+}
+
+extern "C" void flcalcUnitMatrix(FLASHMATRIXF* matrix)
+{
+    matrix->m00 = lbl_804EF3D4;
+    matrix->m01 = lbl_804EF3D0;
+    matrix->m10 = lbl_804EF3D0;
+    matrix->m11 = lbl_804EF3D4;
+    matrix->tx = lbl_804EF3D0;
+    matrix->ty = lbl_804EF3D0;
+}
+
+extern "C" void flcalcUnitMatrix2(FLASHMATRIX* matrix)
+{
+    matrix->m00 = 65536;
+    matrix->m01 = 0;
+    matrix->m10 = 0;
+    matrix->m11 = 65536;
+    matrix->tx = 0;
+    matrix->ty = 0;
+}
+
+extern "C" void flcalcMulMatrixf(FLASHMATRIXF* destination, FLASHMATRIXF* first, FLASHMATRIXF* second)
+{
+    destination->m00 = first->m00 * second->m00 + first->m01 * second->m10;
+    destination->m01 = first->m00 * second->m01 + first->m01 * second->m11;
+    destination->m10 = first->m10 * second->m00 + first->m11 * second->m10;
+    destination->m11 = first->m10 * second->m01 + first->m11 * second->m11;
+    destination->tx = second->tx + (first->tx * second->m00 + first->ty * second->m10);
+    destination->ty = second->ty + (first->tx * second->m01 + first->ty * second->m11);
+}
+
 extern "C" void flcalcMulCxform(FLASHCXFORM* destination,
                                 FLASHCXFORM* first,
                                 FLASHCXFORM* second)
