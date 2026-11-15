@@ -7,6 +7,7 @@
 #include <hsd/assert.h>
 #include <hsd/forward.h>
 #include <hsd/object.h>
+#include <hsd/spline.h>
 
 /* A scene joint whose rotation may hold Euler angles or a quaternion. */
 struct _HSD_Joint {
@@ -38,7 +39,10 @@ struct _HSD_JObj {
     _HSD_JObj *mParent;  // 0x0C: parent joint.
     _HSD_JObj *child;    // 0x10: first child joint.
     u32 flags;     // 0x14: transform flags (see the HSD_JOBJ_FLAG_* below).
-    _HSD_DObj *mDrawable; // 0x18: drawable chain for ordinary joints.
+    union {
+        _HSD_DObj *mDrawable;
+        HSD_Spline *spline;
+    } u;           // 0x18: drawable object or spline data.
     f32 mRotate[4]; // 0x1C: Euler angles, later a quaternion.
     f32 mScale[3];  // 0x2C: joint scale.
     f32 mTrans[3];  // 0x38: joint translation.

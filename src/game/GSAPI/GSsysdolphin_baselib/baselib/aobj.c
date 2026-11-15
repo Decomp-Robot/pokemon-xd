@@ -310,9 +310,9 @@ static inline void WObjForeachAnim(HSD_WObj *wobj, HSD_TypeMask mask, void (*fun
         return;
     }
     if (mask & WOBJ_MASK) {
-        callbackForeachFunc(wobj->mAObj, wobj, WOBJ_TYPE, func, arg_type, arg);
+        callbackForeachFunc(wobj->aobj, wobj, WOBJ_TYPE, func, arg_type, arg);
     }
-    RObjForeachAnim(wobj->mRObj, mask, func, arg_type, arg);
+    RObjForeachAnim(wobj->robj, mask, func, arg_type, arg);
 }
 
 static inline void FogForeachAnim(HSD_Fog *fog, HSD_TypeMask mask, void (*func)(), AObjArgType arg_type,
@@ -370,7 +370,7 @@ void JObjForeachAnim(HSD_JObj *obj, HSD_TypeMask mask, void (*func)(), AObjArgTy
         callbackForeachFunc(obj->mAObj, obj, JOBJ_TYPE, func, arg_type, arg);
     }
     if (union_type_dobj(obj)) {
-        DObjForeachAnim(obj->mDrawable, mask, func, arg_type, arg);
+        DObjForeachAnim(obj->u.mDrawable, mask, func, arg_type, arg);
     }
     RObjForeachAnim(obj->mRObj, mask, func, arg_type, arg);
     if (!(obj->flags & HSD_JOBJ_TRAVERSAL_BARRIER)) {

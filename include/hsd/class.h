@@ -41,6 +41,7 @@ extern "C" {
 #endif
 
 extern _HSD_ClassInfo hsdClass;
+extern _HSD_ClassInfo hsdObj;
 
 _HSD_ClassInfo *hsdSearchClassInfo(const char *class_name);
 int hsdIsDescendantOf(_HSD_ClassInfo *class_info, _HSD_ClassInfo *parent_info);

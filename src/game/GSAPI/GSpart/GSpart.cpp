@@ -47,7 +47,7 @@ static inline BOOL jobjHasDrawable(_HSD_JObj *jobj)
 
 static inline _HSD_DObj *jobjGetDrawable(_HSD_JObj *jobj)
 {
-    return jobjHasDrawable(jobj) ? jobj->mDrawable : NULL;
+    return jobjHasDrawable(jobj) ? jobj->u.mDrawable : NULL;
 }
 
 /* Returns the material of the index-th drawable of a chain. */

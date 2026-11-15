@@ -287,10 +287,10 @@ extern "C" void GSmodelCreateDistortion(_GSmodel *model, u16 part, u8 material,
     if (ok == 0) {
         return;
     }
-    if (joint->mDrawable == NULL) {
+    if (joint->u.mDrawable == NULL) {
         return;
     }
-    distortionPrimitive = joint->mDrawable->mPrimitive;
+    distortionPrimitive = joint->u.mDrawable->mPrimitive;
     if (distortionPrimitive == NULL) {
         return;
     }
