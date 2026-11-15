@@ -20,12 +20,15 @@ extern u32 (*debugMenuDataGetNum)(void);
 extern struct DbgMenuItem *(*debugMenuDataGetPtr)(long itemNo);
 
 struct FloorOffscreenResources;
+struct FloorFieldCameraList;
 
 struct GSfloor_dd_ {
     u8 unknown;
     u8 kind;
     u16 floorID;
-    u8 unknownData[36];
+    u8 unknownData[16];
+    struct FloorFieldCameraList **fieldCameraList;
+    u8 unknownMid[16];
     struct FloorOffscreenResources **offscreen;
     u8 unknownTail[20];
 };

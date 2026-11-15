@@ -1,5 +1,6 @@
 #include <floorManager.h>
 #include <floorRoom.h>
+#include <floorFieldCameraEditor.h>
 #include <menu.h>
 #include <types.h>
 

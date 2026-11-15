@@ -23,6 +23,7 @@ struct GSvec {
     f32 z;
 #ifdef __cplusplus
     GSvec() {}
+    void clear();
     GSvec(f32 positionX, f32 positionY, f32 positionZ)
         : x(positionX), y(positionY), z(positionZ) {}
 
@@ -33,6 +34,8 @@ struct GSvec {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void GSvecCopy(GSvec *out, const GSvec *value);
 
 /* Euler angles of a rotation quaternion (x, y, z, w), in radians. */
 void GSvecMakeFromQuat(GSvec *euler, const f32 *quat);

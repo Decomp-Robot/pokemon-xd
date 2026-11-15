@@ -10,6 +10,11 @@ double fmod(double numerator, double denominator);
 
 #ifdef __cplusplus
 }
+
+namespace std {
+float sinf(float angle);
+float cosf(float angle);
+}
 #endif
 
 #endif

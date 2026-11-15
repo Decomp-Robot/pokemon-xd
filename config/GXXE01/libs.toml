@@ -6628,6 +6628,11 @@ extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src
 name = "game/app/floor/floorDataBios.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/floor/floorFieldCameraEditor.cpp"
+completed = true
+extra_cflags = ["-inline off", "-opt nopeephole,nodeadstore", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "GSlogM"
 mw_version = "GC/2.6"

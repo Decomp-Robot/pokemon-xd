@@ -709,6 +709,8 @@ public:
     void setRenderStateAndSelect(GSgfxVF *vf);
     void ResetVertexFormat(GSgfxVF *vf);
     void primitiveType(GSgfxPrimType type);
+    void vertex3f(f32 x, f32 y, f32 z);
+    void color4u8(u8 red, u8 green, u8 blue, u8 alpha);
     void dlDraw(GSgfxDL *displayList);
     bool IsLayerVisible(void);
     void SetLayerVisibility(bool on);
