@@ -2143,6 +2143,11 @@ game/GSmodelRender.cpp:
 	.text       start:0x800F8998 end:0x800F9368
 	.sdata2     start:0x804ED498 end:0x804ED4A8
 
+game/GSAPI/GSmodel/save_state.cpp:
+	.text       start:0x800FC9D0 end:0x800FCD04
+	.rodata     start:0x802ED130 end:0x802ED140
+	.sdata2     start:0x804ED4F0 end:0x804ED508
+
 game/GSAPI/GSmodel/bank.cpp:
 	.text       start:0x800FEEE0 end:0x800FF560
 	.sbss       start:0x804EAF68 end:0x804EAF70

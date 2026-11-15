@@ -247,6 +247,7 @@ void GSmodelLinkToGSparticleBank(_GSmodel *model, _GSparticleBank *bank);
 void GSmodelLinkTexAnimToAnim(_GSmodel *model, u8 link);
 s32 GSmodelGetMaxTexAnimIndex(_GSmodel *model);
 s32 GSmodelGetMaxAnimIndex(_GSmodel *model);
+void GSmodelAddNull(_GSmodel *model, GSvec *position, GSvec *rotation, GSvec *scale);
 void GSmodelRemoveNull(_GSmodel *model);
 void GSmodelDetachFromGSpart(_GSmodel *model, u8 keepTransform);
 void GSmodelUpdate(_GSmodel *model);
