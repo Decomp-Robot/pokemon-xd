@@ -4,6 +4,8 @@
 #include <GSmem.h>
 #include <savedata.h>
 
+FloorManager* _floorManager;
+
 u32 GSfloorGetCurrent(void)
 {
     return floorGetCurrent();
@@ -140,4 +142,38 @@ void FloorManager::blockModule(unsigned long moduleHandle)
     if (moduleList) {
         moduleList->blockModule(moduleHandle);
     }
+}
+
+unsigned long floorRegisterScriptModule(unsigned char priority, unsigned long groupID,
+    unsigned long preID, unsigned long updateID, unsigned long postID)
+{
+    if (_floorManager == 0) {
+        return 0;
+    }
+    return _floorManager->registerScriptModule(priority, groupID, preID, updateID, postID);
+}
+
+unsigned long FloorManager::registerScriptModule(unsigned char priority, unsigned long groupID,
+    unsigned long preID, unsigned long updateID, unsigned long postID)
+{
+    if (moduleList == 0) {
+        return 0;
+    }
+    return moduleList->registerScriptModule(priority, groupID, preID, updateID, postID);
+}
+
+unsigned long floorRegisterModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface)
+{
+    if (_floorManager == 0) {
+        return 0;
+    }
+    return _floorManager->registerModule(priority, groupID, interface);
+}
+
+unsigned long FloorManager::registerModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface)
+{
+    if (moduleList == 0) {
+        return 0;
+    }
+    return moduleList->registerModule(priority, groupID, interface);
 }

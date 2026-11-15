@@ -7,6 +7,9 @@
 class FloorModuleList;
 class FloorManager {
 public:
+    unsigned long registerScriptModule(unsigned char priority, unsigned long groupID,
+        unsigned long preID, unsigned long updateID, unsigned long postID);
+    unsigned long registerModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface);
     bool makeSaveData(unsigned char** data, unsigned long* size);
     void freeResource(unsigned long groupID, unsigned long resourceID);
     void addResource(unsigned long groupID, unsigned long resourceID);

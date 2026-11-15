@@ -2,6 +2,7 @@
 #define INCLUDE_APP_FLOOR_FLOORMODULE_H
 
 #include <GSAPI/GSthread/GSthread.h>
+#include <floorManager.h>
 
 enum FloorStateMode {
     FLOOR_STATE_MODE_NONE = 0,
@@ -46,11 +47,13 @@ struct FloorModuleInterface {
 };
 extern "C" {
 void FloorModuleInterface_clear(FloorModuleInterface* interface);
-unsigned long floorRegisterModule(unsigned char type, unsigned long groupID, FloorModuleInterface* interface);
 }
 
 class FloorModuleList {
 public:
+    unsigned long registerScriptModule(unsigned char priority, unsigned long groupID,
+        unsigned long preID, unsigned long updateID, unsigned long postID);
+    unsigned long registerModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface);
     void unblockModule(unsigned long moduleHandle);
     void blockModule(unsigned long moduleHandle);
 

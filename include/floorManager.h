@@ -1,6 +1,8 @@
 #ifndef FLOOR_MANAGER_H
 #define FLOOR_MANAGER_H
 #include <types.h>
+
+struct FloorModuleInterface;
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,6 +32,9 @@ bool floorCheckAnywaySaveData(void);
 void floorMemoryCardSaveCallback(void);
 bool floorMakeSaveData(unsigned char** data, unsigned long* size);
 #endif
+unsigned long floorRegisterScriptModule(unsigned char priority, unsigned long groupID,
+    unsigned long preID, unsigned long updateID, unsigned long postID);
+unsigned long floorRegisterModule(unsigned char priority, unsigned long groupID, struct FloorModuleInterface* interface);
 void floorFreeResource(unsigned long groupID, unsigned long resourceID);
 void floorAddResource(unsigned long groupID, unsigned long resourceID);
 void floorWaitForChange(void);
