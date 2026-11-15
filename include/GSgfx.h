@@ -111,7 +111,15 @@ enum GSgfxTunitReg { GSGFX_TUNIT_REG_PREV = 0 };
 #include <GSgfxTypes.h>
 
 // Primitive operation emitted by a surface.
-enum GSgfxPrimType { GSGFX_PRIM_TRIANGLE_FAN = 0xA0 , GSGFX_QUADS = 0x80, GS_GFX_PRIM_TRIANGLE_STRIP = 0x98 };
+enum GSgfxPrimType {
+    GSGFX_QUADS = 0x80,
+    GSGFX_PRIM_TRIANGLES = 0x90,
+    GS_GFX_PRIM_TRIANGLE_STRIP = 0x98,
+    GSGFX_PRIM_TRIANGLE_FAN = 0xA0,
+    GSGFX_PRIM_LINES = 0xA8,
+    GSGFX_PRIM_LINE_STRIP = 0xB0,
+    GSGFX_PRIM_POINTS = 0xB8
+};
 enum GSgfxLogicOp { GSGFX_LOGIC_NOOP = 5 };
 enum GSgfxBlendType { GSGFX_BLEND_NONE, GSGFX_BLEND_BLEND, GSGFX_BLEND_LOGIC, GSGFX_BLEND_SUBTRACT , GS_GFX_BLEND_NONE = 0, GS_GFX_BLEND_ALPHA = 1 };
 enum GSgfxBlendFactor { GSGFX_BLEND_ZERO, GSGFX_BLEND_ONE, GSGFX_BLEND_SRC_COLOR, GSGFX_BLEND_INV_SRC_COLOR, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_INV_SRC_ALPHA, GSGFX_BLEND_DST_ALPHA, GSGFX_BLEND_INV_DST_ALPHA , GS_GFX_FACTOR_ZERO = 0, GS_GFX_FACTOR_ONE = 1 };
@@ -215,6 +223,7 @@ struct GSgfxPassState {
 enum GSgfxDLFlags {
     GS_DISPLAY_LIST_ALLOCATED = 1,
     GS_DISPLAY_LIST_DIRTY = 2,
+    GS_DISPLAY_LIST_SINGLE_SURFACE = 4,
 };
 
 enum { GS_DISPLAY_LIST_HEADER_BYTES = 3 };
@@ -926,11 +935,52 @@ extern "C" void GSgfxTokenIfClearedReset(u16 *token);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
 typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
-#define GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX 0x1u
-#define GS_GFX_PARSE_ATTRIBUTE_POSITION 0x2u
+struct GSgfxParseCallbackList {
+    GSgfxParseSurfaceCB mBeginSurface;
+    void (*mBeginVertex)(void *userContext);
+    GSgfxParseVertexCB mVertex;
+    void (*mEndVertex)(void *userContext);
+    void (*mEndSurface)(void *userContext);
+};
+struct _HSD_VtxDescList;
+enum GSgfxParseFlags {
+    GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX = 0x1,
+    GS_GFX_PARSE_ATTRIBUTE_POSITION = 0x2,
+    GS_GFX_PARSE_ATTRIBUTE_NORMAL = 0x4,
+    GS_GFX_PARSE_ATTRIBUTE_NBT = 0x8,
+    GS_GFX_PARSE_ATTRIBUTE_COLOR0 = 0x10,
+    GS_GFX_PARSE_ATTRIBUTE_COLOR1 = 0x20,
+    GS_GFX_PARSE_ATTRIBUTE_TEXMTXIDX = 0x40,
+    GS_GFX_PARSE_ATTRIBUTE_TEX0 = 0x80,
+    GS_GFX_PARSE_ATTRIBUTE_TEX1 = 0x100,
+    GS_GFX_PARSE_ATTRIBUTE_TEX2 = 0x200,
+    GS_GFX_PARSE_ATTRIBUTE_TEX3 = 0x400,
+    GS_GFX_PARSE_ATTRIBUTE_TEX4 = 0x800,
+    GS_GFX_PARSE_ATTRIBUTE_TEX5 = 0x1000,
+    GS_GFX_PARSE_ATTRIBUTE_TEX6 = 0x2000,
+    GS_GFX_PARSE_ATTRIBUTE_TEX7 = 0x4000,
+    GS_GFX_PARSE_FORMAT_U8 = 0x10000,
+    GS_GFX_PARSE_FORMAT_S8 = 0x20000,
+    GS_GFX_PARSE_FORMAT_U16 = 0x40000,
+    GS_GFX_PARSE_FORMAT_S16 = 0x80000,
+    GS_GFX_PARSE_FORMAT_F32 = 0x100000,
+    GS_GFX_PARSE_FORMAT_RGB565 = 0x200000,
+    GS_GFX_PARSE_FORMAT_RGB8 = 0x400000,
+    GS_GFX_PARSE_FORMAT_RGBX8 = 0x800000,
+    GS_GFX_PARSE_FORMAT_RGBA4 = 0x1000000,
+    GS_GFX_PARSE_FORMAT_RGBA6 = 0x2000000,
+    GS_GFX_PARSE_FORMAT_RGBA8 = 0x4000000,
+    GS_GFX_PARSE_COMPONENTS_1 = 0x10000000,
+    GS_GFX_PARSE_COMPONENTS_2 = 0x20000000,
+    GS_GFX_PARSE_COMPONENTS_3 = 0x40000000,
+    GS_GFX_PARSE_COMPONENTS_4 = 0x80000000,
+};
+
 #define GS_GFX_POSITION_MATRIX_ROWS 3
 extern "C" {
-void GSgfxParseDisplayList(void *vtxAttr, void *dl, u32 size, const void *callbacks, void *ctx);
+void GSgfxParseDisplayList(_HSD_VtxDescList *vtxAttr, void *dl, u32 size, GSgfxParseCallbackList *callbacks, void *ctx);
+void GSgfxDLFree(GSgfxDL *list);
+void GSgfxDLCreate(GSgfxDL *list, GSgfxPrimType primitive, GSgfxVF *vf, u16 vertexCount);
 u32 GSgfxPerfbarCPUEntry(u32 id);
 s32 GSgfxPerfbarGetRenderMode(void);
 void GSgfxPerfbarSetRenderMode(s32 renderMode);

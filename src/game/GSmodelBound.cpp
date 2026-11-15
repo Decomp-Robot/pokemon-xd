@@ -52,17 +52,6 @@ extern "C" void GSmodelRecalculateBound(_GSmodel *model)
     model->mScale.z = scaleZ;
 }
 
-/* Display-list parse callback list: slot 0 begins a surface, slot 2 reports
- * each parsed vertex, and the remaining slots bracket each vertex and end the
- * surface. */
-struct GSgfxParseCallbackList {
-    GSgfxParseSurfaceCB mBeginSurface;
-    void (*mBeginVertex)(void *userContext);
-    GSgfxParseVertexCB mVertex;
-    void (*mEndVertex)(void *userContext);
-    void (*mEndSurface)(void *userContext);
-};
-
 /* Parser callbacks: slot 0 begins a surface and slot 2 reports each vertex. */
 static GSgfxParseCallbackList cblist = {
     _modelBoundBeginSurface,

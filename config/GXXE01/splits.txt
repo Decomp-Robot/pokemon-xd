@@ -3355,6 +3355,13 @@ game/GSAPI/GSgfx/vf.cpp:
 	.bss        start:0x804E6D68 end:0x804E71A8
 	.sbss       start:0x804EBD50 end:0x804EBD58
 
+game/GSAPI/GSgfx/dl.cpp:
+	.text       start:0x802B10F4 end:0x802B1D70
+	.rodata     start:0x802FBD30 end:0x802FBD78
+	.data       start:0x8041F3F0 end:0x8041F508
+	.sdata      start:0x804E86F0 end:0x804E86F8
+	.sbss       start:0x804EBD58 end:0x804EBD60
+
 game/GSAPI/GSgfx/matrixStack.cpp:
 	.text       start:0x802B5AFC end:0x802B5CB4
 

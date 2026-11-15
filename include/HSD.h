@@ -2,6 +2,7 @@
 #define HSD_H
 
 #include <types.h>
+#include <dolphin/gx/GXEnum.h>
 #include <GSmath.h>
 
 #ifndef NULL
@@ -23,10 +24,10 @@ enum HSDVertexDescriptorConstants {
     HSD_VTX_INPUT_DIRECT = 1
 };
 struct _HSD_VtxDescList {
-    int mAttribute;
-    s32 mInputType;
-    u32 mComponentCount;
-    u32 mComponentFormat;
+    GXAttr mAttribute;
+    GXAttrType mInputType;
+    GXCompCnt mComponentCount;
+    GXCompType mComponentFormat;
     u8 mFractionalBits;
     u8 _11;
     u16 mStride;
