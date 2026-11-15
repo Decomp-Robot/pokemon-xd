@@ -202,6 +202,7 @@ void heroMoveTermEvent(void);
 unsigned long heroGetPokeomCount(Hero* hero);
 void heroDecPokedoru(Hero *hero, u32 amount);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
+u8 heroAddPokemon(Hero *hero, const Pokemon *pokemon);
 void heroSetStatus(Hero* hero, u16 statusID, u32 value);
 u16* heroBiosGetNamePtr(Hero* hero);
 Pokemon* heroBiosGetPokemonPtr(Hero* hero, u16 slot);

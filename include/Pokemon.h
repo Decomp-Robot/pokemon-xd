@@ -98,6 +98,7 @@ enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_PICHU = 172,
     POKEMON_SPECIES_TOGEPI = 175,
     POKEMON_SPECIES_HOUOU = 250,
+    POKEMON_SPECIES_SHEDINJA = 303,
     POKEMON_SPECIES_PLUSLE = 353,
     POKEMON_SPECIES_MINUN = 354,
     POKEMON_SPECIES_DEOXYS = 410
@@ -169,6 +170,8 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_ABILITY_SLOT = 183, // which of the species abilities the pokemon uses.
     POKEMON_STATUS_FIELD_SEX = 186, // sex of the pokemon.
     POKEMON_STATUS_FIELD_MARKINGS = 187, // markings the pokemon wears.
+    POKEMON_STATUS_FIELD_MAIL_ID = 188,
+    POKEMON_STATUS_FIELD_AMARI = 190,
     POKEMON_STATUS_FIELD_NATURE = 191, // nature index, into the nature table.
     POKEMON_STATUS_FIELD_SHINY = 193,
     POKEMON_STATUS_FIELD_WAZA_SEALED = 194, // non-zero while the waza pages stay closed.
@@ -258,8 +261,10 @@ enum PokemonAilment {
 
 #ifdef __cplusplus
 bool pokemonCheckValid(Pokemon *pokemon);
+bool pokemonDataCheckValid(Pokemon *pokemon, u16 species);
 #else
 u8 pokemonCheckValid(Pokemon *pokemon);
+u8 pokemonDataCheckValid(Pokemon *pokemon, u16 species);
 #endif
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
 // Selects which of the species' two abilities the pokemon uses.

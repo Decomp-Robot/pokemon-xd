@@ -108,7 +108,7 @@ PokemonLevelUpMove *pokemonDataBiosGetGetWazaPtr(PokemonData *data, u16 index)
     return &data->mGetWaza[index];
 }
 
-u32 pokemonDataBiosGetSinkaPokemonDataId(PokemonData *data, u16 index)
+u16 pokemonDataBiosGetSinkaPokemonDataId(PokemonData *data, u16 index)
 {
     PokemonEvolution *evolution = pokemonDataBiosGetSinkaPtr(data, index);
     if (evolution == 0) return 0;

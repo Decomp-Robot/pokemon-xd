@@ -22,7 +22,7 @@ u8 pokemonDataBiosGetWazaMcn(PokemonData *data, u16 index);
 u16 pokemonDataBiosGetGetWazaDataId(PokemonData *data, u16 index);
 u8 pokemonDataBiosGetGetWazaLevel(PokemonData *data, u16 index);
 PokemonLevelUpMove *pokemonDataBiosGetGetWazaPtr(PokemonData *data, u16 index);
-u32 pokemonDataBiosGetSinkaPokemonDataId(PokemonData *data, u16 index);
+u16 pokemonDataBiosGetSinkaPokemonDataId(PokemonData *data, u16 index);
 u16 pokemonDataBiosGetSinkaBuff(PokemonData *data, u16 index);
 u8 pokemonDataBiosGetSinkaKind(PokemonData *data, u16 index);
 PokemonEvolution *pokemonDataBiosGetSinkaPtr(PokemonData *data, u16 index);

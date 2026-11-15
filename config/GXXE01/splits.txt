@@ -2374,8 +2374,10 @@ game/app/pokemon/pokemonDB.cpp:
 	.text       start:0x801479CC end:0x80147EC8
 
 game/app/pokemon/pokemonEvolution.cpp:
-	.text       start:0x8014A2E8 end:0x8014A978
+	.text       start:0x80149C0C end:0x8014AA60
+	.rodata     start:0x802F37C0 end:0x802F37F0
 	.data       start:0x80404460 end:0x804044A4
+	.sdata2     start:0x804EDB80 end:0x804EDB88
 
 game/app/hero/heroMove.cpp:
 	.text       start:0x8015215C end:0x8015224C

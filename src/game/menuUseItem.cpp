@@ -21,6 +21,7 @@
 #include <Pokemon.h>
 #include <waza.h>
 #include <evolution.h>
+#include <pokemonEvolution.h>
 #include <fightTrainer.h>
 #include <hero.h>
 #include <menuPocket2.h>
@@ -969,7 +970,7 @@ extern "C" int menuUseItemEvolution(unsigned long itemID, int *consumed)
     ITEMUSE2POKEMON_LOG1 log[32];
     s16 result = -1;
     s32 slot = menuPocket2OpenPokemonMenu(itemID, 1);
-    s32 evoSpecies;
+    u16 evoSpecies;
     u16 addedSpecies;
     POKEMON_EVOLUTION_INFO evoInfo;
 
@@ -1104,7 +1105,7 @@ extern "C" int menuUseItemListLVUp(unsigned long itemID, int *consumed)
     FightPokemon *fightPokemon;
     s32 slot = menuPocket2OpenPokemonMenu(itemID, 1);
     unsigned long nickname;
-    s32 evoSpecies;
+    u16 evoSpecies;
     u8 level;
     s16 count;
     POKEMON_EVOLUTION_INFO evoInfo;
