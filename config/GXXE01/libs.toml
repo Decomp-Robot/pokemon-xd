@@ -6814,6 +6814,34 @@ name = "game/GSAPI/GSmovie/movieStream.cpp"
 extra_cflags = ["-O4,s"]
 completed = true
 
+[[lib.object]]
+name = "game/GSAPI/GSmovie/THPAudio.c"
+completed = true
+mw_version = "GC/1.2.5n"
+cflags = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,s",
+    "-inline auto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-multibyte",
+    "-i include",
+    "-DNDEBUG=1",
+    "-W error",
+    "-use_lmw_stmw on",
+    "-lang=c",
+]
+
 [[lib]]
 name = "GSdvd"
 mw_version = "GC/2.6"

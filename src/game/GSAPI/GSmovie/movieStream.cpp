@@ -6,7 +6,6 @@
 #include <GSmovie.h>
 #include <GSAPI/GSfsys/GSfsys.h>
 
-extern "C" u32 THPAudioDecode(s16 *buffer, u8 *frame, s32 flag);
 extern "C" s32 THPVideoDecode(void *src, void *yBuffer, void *uBuffer, void *vBuffer, void *workBuffer);
 
 enum { MOVIE_STREAM_PRIORITY = 255, MOVIE_STREAM_BUFFER_MSEC = 60, MOVIE_STREAM_LOOP_FLAG = 1 };
@@ -201,7 +200,7 @@ static inline void _movieStreamDecodeAudio(__GSmovieStreaming *stream)
                     switch (flag) {
                     case THP_COMPONENT_AUDIO:
                         u32 size = *componentSize;
-                        u32 samplesDecoded = THPAudioDecode(audioBuffer->buffer, end + size * player->audioTrack, 0);
+                        u32 samplesDecoded = THPAudioDecode(audioBuffer->buffer, end + size * player->audioTrack, THP_AUDIO_INTERLEAVED);
                         audioBuffer->remaining = samplesDecoded;
                         audioBuffer->currentSample = audioBuffer->buffer;
                         audioBuffer->valid = 1;

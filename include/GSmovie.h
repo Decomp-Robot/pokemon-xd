@@ -8,6 +8,13 @@ struct GStexture;
 #ifdef __cplusplus
 extern "C" {
 #endif
+enum THPAudioOutputMode {
+    THP_AUDIO_INTERLEAVED = 0,
+    THP_AUDIO_PLANAR = 1
+};
+
+u32 THPAudioDecode(s16 *audioBuffer, u8 *audioFrame, enum THPAudioOutputMode outputMode);
+
 u8 GSmoviePlayCheck(u32 movieID);
 void GSmovieStop(u32 movieID);
 void GSmoviePlayWait(u32 movieID);
