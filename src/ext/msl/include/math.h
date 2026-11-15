@@ -30,6 +30,7 @@ double ldexp(double x, int exp);
 double scalbn(double x, int n);
 
 double copysign(double x, double y);
+double sqrt(double value);
 
 #ifdef __MWERKS__
 #pragma cplusplus on
@@ -77,8 +78,6 @@ extern inline float sqrtf(float value)
         return value;
     }
 }
-
-double sqrt(double value);
 
 #ifdef __MWERKS__
 #define fabs(x) __fabs(x)
