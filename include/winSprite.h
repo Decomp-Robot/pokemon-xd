@@ -120,8 +120,8 @@ struct tagSPRITE_WORK {
     u8 mUseFloorMenuLayer;
 };
 
-// Key mask bits held in tagWINDOW_KEY: direction pad, accept/cancel and the
-// L/R triggers.
+// Key mask bits held in tagWINDOW_KEY: direction pad, accept/cancel, X/Z and
+// the L/R triggers.
 enum WindowKeyMask {
     WINDOW_KEY_UP = 0x1,
     WINDOW_KEY_DOWN = 0x2,
@@ -129,6 +129,8 @@ enum WindowKeyMask {
     WINDOW_KEY_RIGHT = 0x8,
     WINDOW_KEY_ACCEPT = 0x10,
     WINDOW_KEY_CANCEL = 0x20,
+    WINDOW_KEY_X = 0x40,
+    WINDOW_KEY_Z = 0x100,
     WINDOW_KEY_TRIGGER_L = 0x200,
     WINDOW_KEY_TRIGGER_R = 0x400,
 };

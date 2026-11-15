@@ -2653,6 +2653,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/menuReliveHallTutorial.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/menuPokemonChange.cpp"
 completed = true
 extra_cflags = ["-opt nopeephole", "-inline deferred,noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

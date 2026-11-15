@@ -18,6 +18,7 @@ public:
     bool isMsgEnd();
     void exec(CMetaMenu &menu, unsigned long messageID, bool closeOnEnd);
     void draw();
+    unsigned short getKeyTrigger() const { return mKeyTrigger; }
     void setMsgCtrlValue(unsigned long id, unsigned long value);
 
 private:

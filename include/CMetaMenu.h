@@ -7,6 +7,8 @@
 #include <menuInfoWindow.h>
 #include <string.h>
 
+class CMenuGlobalState;
+
 extern "C" long menuMetaDefaults[];
 
 #pragma pack(push, 4)
@@ -27,9 +29,9 @@ protected:
     CInfoWindow mTutorialInfo;
     CState mState;
     u64 mAnimationTime;
-    u8 reserved328[4];
+    CMenuGlobalState *mGlobalState;
     bool mTutorialKeysValid;
-    short mTutorialKeys;
+    unsigned short mTutorialKeys;
 
     void init(const long *info)
     {
@@ -82,6 +84,8 @@ public:
     void alphaFadeOutKick();
     void alphaFadeInKick();
     bool isAlphaFadeEnd() const { return mAlphaFadeState == FADE_OPAQUE || mAlphaFadeState == FADE_TRANSPARENT; }
+    unsigned short tutorialManagePrime();
+    void tutorialMessage(unsigned long messageID);
     unsigned short tutorialManage();
     void tutorialManageUpdate();
     void localWindowRemove(long windowID);
