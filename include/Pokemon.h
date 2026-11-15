@@ -120,7 +120,9 @@ enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_SHEDINJA = 303,
     POKEMON_SPECIES_PLUSLE = 353,
     POKEMON_SPECIES_MINUN = 354,
-    POKEMON_SPECIES_DEOXYS = 410
+    POKEMON_SPECIES_DEOXYS = 410,
+    POKEMON_SPECIES_USOHACHI = 413,
+    POKEMON_SPECIES_GONBE = 414
 };
 
 // Balls the caught-ball field of a record can hold.
@@ -362,6 +364,7 @@ u8 pokemon_GetSeikaku(Pokemon *pokemon);
 // Total experience the pokemon needs to reach its current level.
 s32 pokemonGetNowLevelToExp(Pokemon *pokemon);
 s32 pokemonAdjustValueBySeikaku(u8 nature, s32 fieldID, s32 value);
+u32 pokemonCreateRnd(void);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 sex, s8 nature, s8 rare, u32 trainerRnd);
 void *pokemonCreateSequence(struct FightPokemon *pokemon);
 void pokemonSetSequenceStatus(Pokemon *pokemon, void *sequence);

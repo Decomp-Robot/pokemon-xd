@@ -210,7 +210,7 @@ s32 Hero::getLegendPokemonSize() const
     return count;
 }
 
-u16 Hero::itemQuantity(u16 itemID)
+int Hero::itemQuantity(u16 itemID)
 {
     u16 num = 0;
     u16 max = 0;

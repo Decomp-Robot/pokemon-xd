@@ -58,7 +58,7 @@ void item_SetItemDataId(ItemSlot *item, u16 itemID);
 u16 item_GetNum(ItemSlot *item);
 u16 item_GetItemDataId(ItemSlot *item);
 void itemSortAryByPriority(void *ary, u16 num, long kind);
-u16 itemGetQuantityInAry(const void *ary, u16 num, u16 itemID, u16 max);
+int itemGetQuantityInAry(const void *ary, u16 num, u16 itemID, u16 max);
 #ifdef __cplusplus
 }
 #endif

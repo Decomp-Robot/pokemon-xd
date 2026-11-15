@@ -97,12 +97,6 @@ void menuIntUnderTakerOpenIcon(void);
 void pokemonBiosSetRnd(Pokemon *pokemon, u32 rnd);
 void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
 
-// pokespot ("esaba")
-void esabaGet(s32 place);
-void esabaPut(s32 place);
-u16 esabaGetPokemonMax(u16 place);
-void esabaSetPokemon(u16 place, u16 species);
-
 // Under ("undertaker")
 u32 undertakerGetPlace(u32 *places);
 void undertakerSetPlace(u32 place);

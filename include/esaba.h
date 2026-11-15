@@ -6,9 +6,15 @@
 extern "C" {
 #endif
 extern u32 *esabadata_number;
-s32 esabaGetDigestRate(u16 place);
+void esabaSetPokemon(u16 place, u16 species);
+u16 esabaGetPokemonMax(u16 place);
+int esabaGetDigestRate(u16 place);
+long esabaGet(int place);
+long esabaPut(int place);
+void esabaHeroCallBackInit(void);
+u32 esabaGetPokemonRnd(int place);
 int esabaSet(int place);
-void esabaSetPokemonRnd(s32 place, u32 random);
+void esabaSetPokemonRnd(int place, u32 random);
 
 u16 esabaGetPokemonID(int place);
 void esabaSetEsaNum(int place, int number);

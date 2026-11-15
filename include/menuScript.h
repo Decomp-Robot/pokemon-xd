@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 void menuScriptInfoRelive(Pokemon *pokemon, u8 mode);
+void menuScriptInfoEsa(void);
 void menuScriptUsohachi2(void);
 void menuScriptReadMail(long mailID);
 void menuScriptReciveMail(void);

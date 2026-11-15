@@ -49,6 +49,9 @@ void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, u32 color,
                        struct tagWINDOW_WORK *window, u16 spriteID, s32 flags,
                        GSgfxLayerID layer);
 
+bool menuPanelInputNumber(long initial, long *output, long lower, long upper,
+                          bool closeOnExit);
+
 s32 menuOpen(s32 menuID, s32 mode);
 u16 windowGetKeyTrg(void);
 enum { MENU_OPEN_FLAG_NO_ACTIVATE = 4 };

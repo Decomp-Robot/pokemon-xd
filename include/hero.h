@@ -79,7 +79,7 @@ public:
 
     // Items.
     bool itemSort(u8 kind);
-    u16 itemQuantity(u16 itemID);
+    int itemQuantity(u16 itemID);
 
     // Map state.
     u8 getFollowerID();
