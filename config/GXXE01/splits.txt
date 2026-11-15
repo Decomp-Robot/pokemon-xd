@@ -447,8 +447,9 @@ game/menuScript.cpp:
 	.bss        start:0x80435528 end:0x80435540 align:4
 
 game/menuShop.cpp:
-	.text       start:0x800605B8 end:0x800607FC
+	.text       start:0x800605B8 end:0x800608B4
 	.sbss       start:0x804EA910 end:0x804EA91C
+	.sdata2     start:0x804EC588 end:0x804EC598
 
 game/menuShopMax.cpp:
 	.text       start:0x80062568 end:0x80062618

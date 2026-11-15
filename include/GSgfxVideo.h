@@ -30,6 +30,7 @@ extern "C" {
 #endif
 u8 GSgfxVideoGetVsyncRate(void);
 f32 GSgfxVideoGetLastRealRenderTime(void);
+f32 GSgfxVideoGetLastRenderTime(void);
 s32 GSgfxVideoGetLockFrameRate(void);
 GSgfxVideoVSyncCallback GSgfxVideoSetVSyncCallback(GSgfxVideoVSyncCallback callback);
 bool GSgfxVideoSetMode(GSgfxVideoMode mode, GSgfxVideoFrame frame, bool interlace,

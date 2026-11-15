@@ -1,4 +1,6 @@
 #include <types.h>
+#include <GSgfxVideo.h>
+#include <GSthread.h>
 #include <hero.h>
 #include <item.h>
 #include <memcard.h>
@@ -119,4 +121,16 @@ int writeBackPcBox(int windowID, u8 mode, VPC_BOX *box)
         heroSetStatus(NULL, HERO_STATUS_POKECOUPON, CouponBackup);
     }
     return 1;
+}
+
+// Wait in render frames, yielding to the other threads between updates.
+void waitTime(float seconds)
+{
+    int frameCount = (u32)(seconds * GSgfxVideoGetVsyncRate());
+    int elapsedFrames = 0;
+
+    while (elapsedFrames < frameCount) {
+        GSthreadSwitch();
+        elapsedFrames += GSgfxVideoGetLastRenderTime();
+    }
 }
