@@ -53,6 +53,8 @@ s32 itemAddItemDataIdAry(ItemSlot* items, u16 count, u16 itemID, u16 quantity,
                          s16 firstSlot, u16 maxQuantity, u8 sort, u8 option);
 void itemInitAry(ItemSlot* items, u16 count);
 u8 itemCheckValid(ItemSlot *slot);
+void item_SetNum(ItemSlot *item, u16 quantity);
+void item_SetItemDataId(ItemSlot *item, u16 itemID);
 u16 item_GetNum(ItemSlot *item);
 u16 item_GetItemDataId(ItemSlot *item);
 void itemSortAryByPriority(void *ary, u16 num, long kind);

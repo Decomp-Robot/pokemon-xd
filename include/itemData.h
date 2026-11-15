@@ -178,6 +178,8 @@ u16 itemDataBiosGetCoupon(ItemData *data);
 
 bool itemDataCheckValid(u16 itemID);
 u8 itemDataBiosGetItemEffectParam(ItemData *data);
+u32 itemDB_GetBuff(u16 itemID);
+u16 itemDB_GetItemSoubiDataId(u16 itemID);
 u8 itemDB_GetKind(u16 itemID);
 u32 itemDB_GetName(u16 itemID);
 

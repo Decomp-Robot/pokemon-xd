@@ -29,7 +29,10 @@ struct ItemBallData {
     u32 mSnatchPokeoutWzxDataId;
     u32 mSnatchShakeWzxDataId;
     u32 mSnatchSnatchWzxDataId;
-    u8 mUnknown[16];
+    u32 mYaseiBallLandWzxDataId;
+    u32 mYaseiShakeWzxDataId;
+    u32 mYaseiGetWzxDataId;
+    u32 mYaseiPokeoutWzxDataId;
 };
 
 #ifdef __cplusplus
