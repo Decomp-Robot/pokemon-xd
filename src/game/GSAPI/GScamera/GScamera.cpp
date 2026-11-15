@@ -47,15 +47,15 @@ static inline void cameraSetAnimationFrame(_GScamera *camera, f32 frame)
 {
     if (camera->mHasAnimation) {
         camera->mAnimFrame = frame;
-        HSD_ForeachAnim(camera->mCObj, 2, 0xFFFFu,
-                        (void (*)())HSD_AObjSetRate, 1, (0.0));
+        HSD_ForeachAnim(camera->mCObj, COBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, (0.0));
         HSD_CObjReqAnim(camera->mCObj, camera->mAnimFrame);
         HSD_CObjAnim(camera->mCObj);
         HSD_CObjGetEyePosition(camera->mCObj, (Vec *)&camera->mPosition);
         HSD_CObjGetUpVector(camera->mCObj, (Vec *)&camera->mUp);
         HSD_CObjGetInterest(camera->mCObj, (Vec *)&camera->mInterest);
-        HSD_ForeachAnim(camera->mCObj, 2, 0xFFFFu,
-                        (void (*)())HSD_AObjSetRate, 1, camera->mAnimRate);
+        HSD_ForeachAnim(camera->mCObj, COBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, camera->mAnimRate);
     }
 }
 
@@ -66,8 +66,8 @@ static inline void cameraSetAnimRate(_GScamera *camera, f32 rate)
             rate *= (1.2f);
         }
         camera->mAnimRate = rate;
-        HSD_ForeachAnim(camera->mCObj, 2, 0xFFFFu,
-                        (void (*)())HSD_AObjSetRate, 1, camera->mAnimRate);
+        HSD_ForeachAnim(camera->mCObj, COBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, camera->mAnimRate);
     }
 }
 
@@ -80,8 +80,8 @@ static inline void cameraSetAnimIndex(_GScamera *camera, unsigned int index)
             HSD_CObjAddAnim(camera->mCObj,
                             camera->mDesc->mAnimations[camera->mAnimIndex]);
             _frameCount = (0.0f);
-            HSD_ForeachAnim(camera->mCObj, 2, 0xFFFFu,
-                            (void (*)())cameraGetFrameCount, 0);
+            HSD_ForeachAnim(camera->mCObj, COBJ_TYPE, HSD_ALL_MASK,
+                            (void (*)())cameraGetFrameCount, AOBJ_ARG_A);
             camera->mAnimFrameCount = _frameCount;
             cameraSetAnimationFrame(camera, (0.0f));
         }
@@ -317,8 +317,8 @@ extern "C" void GScameraSetAnimRate(_GScamera *camera, f32 rate)
             rate *= (1.2f);
         }
         camera->mAnimRate = rate;
-        HSD_ForeachAnim(camera->mCObj, 2, 0xFFFFu,
-                        (void (*)())HSD_AObjSetRate, 1, camera->mAnimRate);
+        HSD_ForeachAnim(camera->mCObj, COBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, camera->mAnimRate);
     }
 }
 

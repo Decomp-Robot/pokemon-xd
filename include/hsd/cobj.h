@@ -3,13 +3,9 @@
 
 #include <dolphin/mtx.h>
 #include <hsd/assert.h>
+#include <hsd/wobj.h>
 #include <hsd/cobjtypes.h>
 #include <hsd/class.h>
-
-struct _HSD_CameraAnim;
-
-struct _HSD_CObj;
-
 
 struct _HSD_CObj {
     _HSD_ClassInfo *classInfo; // 0x00
@@ -24,9 +20,12 @@ struct _HSD_CObj {
     u16 scissorRight;           // 0x1E
     u16 scissorTop;             // 0x20
     u16 scissorBottom;          // 0x22
-    u8 _24[0x2C];
+    _HSD_WObj *eye;
+    _HSD_WObj *interest;
+    u8 _2C[36];
     u8 projectionType;          // 0x50
     Mtx viewMtx;                // 0x54
+    _HSD_AObj *mAObj;
 };
 
 enum HSD_CObjFlag {
@@ -36,13 +35,13 @@ enum HSD_CObjFlag {
 
 inline void HSD_CObjSetFlags(_HSD_CObj *cobj, u32 flags)
 {
-    HSD_ASSERTLINE(0x19E, cobj);
+    HSD_ASSERTLINE(414, cobj);
     cobj->flags |= flags;
 }
 
 inline void HSD_CObjClearFlags(_HSD_CObj *cobj, u32 flags)
 {
-    HSD_ASSERTLINE(0x1AA, cobj);
+    HSD_ASSERTLINE(426, cobj);
     cobj->flags &= ~flags;
 }
 
@@ -50,7 +49,9 @@ enum HSD_CObjProjectionType {
     HSD_COBJ_PERSPECTIVE = 1
 };
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 _HSD_CObj *HSD_CObjLoadDesc(_HSD_CObjDesc *desc);
 int HSD_CObjSetCurrent(_HSD_CObj *camera);
 MtxPtr HSD_CObjGetViewingMtxPtr(_HSD_CObj *camera);
@@ -73,6 +74,8 @@ void HSD_CObjSetNear(_HSD_CObj *camera, f32 nearPlane);
 void HSD_CObjSetFar(_HSD_CObj *camera, f32 farPlane);
 int HSD_CObjMakeProjectionMtx(_HSD_CObj *camera, Mtx44 matrix);
 void HSD_CObjSetupViewingMtx(_HSD_CObj *camera);
+#ifdef __cplusplus
 }
+#endif
 
 #endif

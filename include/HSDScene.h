@@ -21,15 +21,6 @@ struct HSD_SceneDesc {
     HSD_SceneModel **mModels;
 };
 
-enum HSD_AnimationTraversal {
-    HSD_ANIMATION_JOINT = 6,
-    HSD_ANIMATION_ALL = 0xFFFF,
-    HSD_ANIMATION_FLOAT_ARGUMENT = 1,
-    HSD_ANIMATION_POINTER_ARGUMENT = 2,
-    HSD_ANIMATION_FLAGS_ARGUMENT = 3,
-    HSD_ANIMATION_LOOP = 0x20000000,
-};
-
 extern "C" {
 HSD_JObj *HSD_JObjLoadJoint(HSD_Joint *joint);
 void HSD_JObjUnref(HSD_JObj *joint);

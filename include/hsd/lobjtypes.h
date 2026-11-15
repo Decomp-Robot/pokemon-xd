@@ -5,11 +5,7 @@
 #include <dolphin/gx/GXStruct.h>
 #include <hsd/cobjtypes.h>
 #include <hsd/class.h>
-
-typedef struct _HSD_LObj _HSD_LObj;
-typedef struct _HSD_LObjDesc _HSD_LObjDesc;
-typedef struct _HSD_LObjAnimAll _HSD_LObjAnimAll;
-typedef struct _HSD_WObj _HSD_WObj;
+#include <hsd/wobj.h>
 
 enum HSD_LObjFlags {
     HSD_LOBJ_TYPE_MASK = 0x3,
@@ -39,6 +35,8 @@ struct _HSD_LObj {
     u8 _14[0x04];
     _HSD_WObj *position;
     _HSD_WObj *interest;
+    u8 _20[40];
+    _HSD_AObj *mAObj;
 };
 
 #endif

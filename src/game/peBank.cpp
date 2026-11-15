@@ -597,15 +597,15 @@ bool _peConvertFileData(_gpdHeader *file, _gpdResourceItem *resources,
                                 if (sceneModel->mShapeAnimations) shapeAnimation = *sceneModel->mShapeAnimations;
                                 HSD_JObjAddAnimAll(joint, jointAnimation, materialAnimation, shapeAnimation);
                                 if (model->mFlags & PE_MODEL_LOOP)
-                                    HSD_ForeachAnim(joint, HSD_ANIMATION_JOINT, HSD_ANIMATION_ALL,
-                                        (void (*)())HSD_AObjSetFlags, HSD_ANIMATION_FLAGS_ARGUMENT, HSD_ANIMATION_LOOP);
+                                    HSD_ForeachAnim(joint, JOBJ_TYPE, HSD_ALL_MASK,
+                                        (void (*)())HSD_AObjSetFlags, AOBJ_ARG_AU, HSD_AOBJ_FLAG_LOOP);
                                 else
-                                    HSD_ForeachAnim(joint, HSD_ANIMATION_JOINT, HSD_ANIMATION_ALL,
-                                        (void (*)())HSD_AObjClearFlags, HSD_ANIMATION_FLAGS_ARGUMENT, HSD_ANIMATION_LOOP);
-                                HSD_ForeachAnim(joint, HSD_ANIMATION_JOINT, HSD_ANIMATION_ALL,
-                                    (void (*)())HSD_AObjSetRate, HSD_ANIMATION_FLOAT_ARGUMENT, 0.0);
-                                HSD_ForeachAnim(joint, HSD_ANIMATION_JOINT, HSD_ANIMATION_ALL,
-                                    (void (*)())_modelGetEndFrame, HSD_ANIMATION_POINTER_ARGUMENT, &model->mAnimationLength);
+                                    HSD_ForeachAnim(joint, JOBJ_TYPE, HSD_ALL_MASK,
+                                        (void (*)())HSD_AObjClearFlags, AOBJ_ARG_AU, HSD_AOBJ_FLAG_LOOP);
+                                HSD_ForeachAnim(joint, JOBJ_TYPE, HSD_ALL_MASK,
+                                    (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, 0.0);
+                                HSD_ForeachAnim(joint, JOBJ_TYPE, HSD_ALL_MASK,
+                                    (void (*)())_modelGetEndFrame, AOBJ_ARG_AV, &model->mAnimationLength);
                                 HSD_JObjReqAnimAll(joint, 0.0f);
                                 HSD_JObjAnimAll(joint);
                                 model->mAnimationLength /= PE_ANIMATION_FRAMES_PER_SECOND;

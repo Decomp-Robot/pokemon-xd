@@ -16,12 +16,12 @@ static inline void lightSetAnimationFrame(GSlight *light, f32 frame)
 {
     if (light->mHasAnimation) {
         light->mAnimFrame = frame;
-        HSD_ForeachAnim(light->mLObj, HSD_ANIM_LIGHT_OBJECT, HSD_ANIM_ALL,
-                        (void (*)())HSD_AObjSetRate, HSD_ANIM_CALLBACK_FLOAT_ARG, 0.0);
+        HSD_ForeachAnim(light->mLObj, LOBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, 0.0);
         HSD_LObjReqAnim(light->mLObj, light->mAnimFrame);
         HSD_LObjAnim(light->mLObj);
-        HSD_ForeachAnim(light->mLObj, HSD_ANIM_LIGHT_OBJECT, HSD_ANIM_ALL,
-                        (void (*)())HSD_AObjSetRate, HSD_ANIM_CALLBACK_FLOAT_ARG, light->mAnimRate);
+        HSD_ForeachAnim(light->mLObj, LOBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, light->mAnimRate);
     }
 }
 
@@ -32,8 +32,8 @@ static inline void lightSetAnimRate(GSlight *light, f32 rate)
             rate *= 1.2f;
         }
         light->mAnimRate = rate;
-        HSD_ForeachAnim(light->mLObj, HSD_ANIM_LIGHT_OBJECT, HSD_ANIM_ALL,
-                        (void (*)())HSD_AObjSetRate, HSD_ANIM_CALLBACK_FLOAT_ARG, light->mAnimRate);
+        HSD_ForeachAnim(light->mLObj, LOBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, light->mAnimRate);
     }
 }
 
@@ -47,8 +47,8 @@ static inline void lightSetAnimIndex(GSlight *light, unsigned int index)
                                light->mDesc->mAnimations[light->mAnimIndex]);
             HSD_LObjReqAnimAll(light->mLObj, 0.0f);
             _frameCount = 0.0f;
-            HSD_ForeachAnim(light->mLObj, HSD_ANIM_LIGHT_OBJECT, HSD_ANIM_ALL,
-                            (void (*)())lightGetFrameCount, HSD_ANIM_CALLBACK_NO_ARG);
+            HSD_ForeachAnim(light->mLObj, LOBJ_TYPE, HSD_ALL_MASK,
+                            (void (*)())lightGetFrameCount, AOBJ_ARG_A);
             light->mAnimFrameCount = _frameCount;
             lightSetAnimationFrame(light, 0.0f);
         }
@@ -264,8 +264,8 @@ extern "C" void GSlightSetAnimRate(GSlight *light, f32 rate)
             rate *= 1.2f;
         }
         light->mAnimRate = rate;
-        HSD_ForeachAnim(light->mLObj, HSD_ANIM_LIGHT_OBJECT, HSD_ANIM_ALL,
-                        (void (*)())HSD_AObjSetRate, HSD_ANIM_CALLBACK_FLOAT_ARG, light->mAnimRate);
+        HSD_ForeachAnim(light->mLObj, LOBJ_TYPE, HSD_ALL_MASK,
+                        (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF, light->mAnimRate);
     }
 }
 

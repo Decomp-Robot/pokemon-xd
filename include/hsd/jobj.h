@@ -5,16 +5,10 @@
 
 #include <dolphin/mtx.h>
 #include <hsd/assert.h>
+#include <hsd/forward.h>
+#include <hsd/object.h>
 
 /* A scene joint whose rotation may hold Euler angles or a quaternion. */
-typedef struct _HSD_AObj _HSD_AObj;
-typedef struct _HSD_DObj _HSD_DObj;
-typedef struct _HSD_MatAnimJoint _HSD_MatAnimJoint;
-typedef struct _HSD_ShapeAnimJoint _HSD_ShapeAnimJoint;
-
-typedef struct _HSD_JObj _HSD_JObj;
-typedef struct _HSD_Joint _HSD_Joint;
-struct _HSD_RObjDesc;
 struct _HSD_Joint {
     char *mClassName;
     u32 mJointFlags;
@@ -39,7 +33,7 @@ typedef void (*HSD_JObjParticleCallback)(int type, int flags, int group,
 typedef void (*HSD_JObjParticleTargetCallback)(_HSD_JObj *jobj, int id);
 
 struct _HSD_JObj {
-    u8 _00[0x08];
+    HSD_Obj object;
     _HSD_JObj *next;     // 0x08: next sibling in the joint list.
     _HSD_JObj *mParent;  // 0x0C: parent joint.
     _HSD_JObj *child;    // 0x10: first child joint.
@@ -51,6 +45,7 @@ struct _HSD_JObj {
     Mtx mMatrix; // 0x44
     u8 _74[8];
     _HSD_AObj *mAObj;    // 0x7C: animation object driving the joint.
+    _HSD_RObj *mRObj;
 };
 
 #define HSD_JOBJ_TYPE_MASK 0x00600000
@@ -71,6 +66,14 @@ extern "C" {
 void HSD_JObjReqAnim(_HSD_JObj *joint, f32 frame);
 void HSD_JObjWalkTree(_HSD_JObj *joint, void (*callback)(_HSD_JObj *, void **, int), void **arg);
 void HSD_JObjUnref(_HSD_JObj *jobj);
+
+static inline void HSD_JObjRef(_HSD_JObj *jobj)
+{
+    if (jobj) {
+        HSD_ObjRef(jobj);
+    }
+}
+
 _HSD_JObj *HSD_JObjLoadJoint(_HSD_Joint *joint);
 void HSD_JObjAnim(_HSD_JObj *jobj);
 void HSD_JObjClearFlags(_HSD_JObj *jobj, u32 flags);

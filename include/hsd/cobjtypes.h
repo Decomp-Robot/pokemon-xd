@@ -2,22 +2,8 @@
 #define HSD_COBJ_TYPES_H
 
 #include <types.h>
-
-typedef struct _HSD_Vec3 _HSD_Vec3;
-typedef struct _HSD_WObjDesc _HSD_WObjDesc;
-typedef struct _HSD_CObjDesc _HSD_CObjDesc;
-
-struct _HSD_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-};
-
-struct _HSD_WObjDesc {
-    const char *className;
-    _HSD_Vec3 position;
-    void *constraints;
-};
+#include <hsd/forward.h>
+#include <hsd/wobj.h>
 
 struct _HSD_CObjDesc {
     const char *className;

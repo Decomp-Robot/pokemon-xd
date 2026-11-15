@@ -6020,6 +6020,11 @@ name = "game/GSAPI/GSsysdolphin_baselib/baselib/mtx.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-use_lmw_stmw on"]
 
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/aobj.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-use_lmw_stmw on", "-inline auto,deferred"]
+
 [[lib]]
 name = "hsdparticle_gs"
 mw_version = "GC/2.6"

@@ -2,11 +2,10 @@
 #define HSD_FOG_H
 
 #include <types.h>
-#include <dolphin/gx.h>
+#include <dolphin/gx/GXStruct.h>
 #include <dolphin/mtx.h>
 
-typedef struct _HSD_FogAdj _HSD_FogAdj;
-typedef struct _HSD_Fog _HSD_Fog;
+#include <hsd/forward.h>
 
 /* Flags of a fog range adjustment. Each flag selects where the matching GX
  * range adjustment argument comes from; no flag disables the adjustment. */
@@ -31,6 +30,7 @@ struct _HSD_Fog {
     f32 start;           // 0x10
     f32 end;             // 0x14
     GXColor color;       // 0x18
+    _HSD_AObj *mAObj;
 };
 
 #ifdef __cplusplus

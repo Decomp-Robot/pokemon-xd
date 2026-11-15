@@ -3404,6 +3404,14 @@ game/GSAPI/GSsysdolphin_baselib/baselib/util.c:
 	.data       start:0x80419AA8 end:0x80419AD0
 	.sdata2     start:0x804EF378 end:0x804EF388
 
+game/GSAPI/GSsysdolphin_baselib/baselib/aobj.c:
+	.text       start:0x8026CC2C end:0x8026F478
+	.rodata     start:0x802FA8D0 end:0x802FA940
+	.data       start:0x80419AD0 end:0x80419FB4
+	.bss        start:0x804B24E0 end:0x804B2510
+	.sbss       start:0x804EBB18 end:0x804EBB28
+	.sdata2     start:0x804EF388 end:0x804EF3A0
+
 game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x802723FC end:0x80272BA4
 	.sdata2     start:0x804EF3D0 end:0x804EF3F8

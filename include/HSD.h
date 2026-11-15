@@ -3,7 +3,10 @@
 
 #include <types.h>
 #include <dolphin/gx/GXEnum.h>
+#include <dolphin/mtx.h>
+#ifdef __cplusplus
 #include <GSmath.h>
+#endif
 
 #ifndef NULL
 #define NULL 0
@@ -11,66 +14,19 @@
 
 #include <hsd/jobj.h>
 #include <hsd/aobj.h>
+#include <hsd/dobj.h>
+#include <hsd/mobj.h>
+#include <hsd/tobj.h>
+#include <hsd/pobj.h>
+#ifdef __cplusplus
 #include <HSDScene.h>
+#endif
 
-extern "C" void QuatSlerp(const Quaternion *first, const Quaternion *second, Quaternion *out, f32 blend);
+#ifdef __cplusplus
+extern "C"
+#endif
+int QuatSlerp(const Quaternion *first, const Quaternion *second, Quaternion *out, f32 blend);
 
-#define HSD_POBJ_TYPE_MASK 0x3000
-#define HSD_POBJ_SHAPE_ANIM 0x1000
-
-enum HSDVertexDescriptorConstants {
-    HSD_VTX_ATTR_POSITION = 9,
-    HSD_VTX_ATTR_NULL = 0xFF,
-    HSD_VTX_INPUT_DIRECT = 1
-};
-struct _HSD_VtxDescList {
-    GXAttr mAttribute;
-    GXAttrType mInputType;
-    GXCompCnt mComponentCount;
-    GXCompType mComponentFormat;
-    u8 mFractionalBits;
-    u8 _11;
-    u16 mStride;
-    void *mArrayBase;
-};
-struct _HSD_PObj;
-struct _HSD_MObj;
-struct _HSD_DObj {
-    u8 _00[4];
-    _HSD_DObj *mNext;
-    _HSD_MObj *mMaterial;
-    _HSD_PObj *mPrimitive;
-};
-
-/* A primitive object: one display list plus its vertex description. */
-struct _HSD_PObj {
-    u8 _00[0x08];
-    _HSD_VtxDescList *mVtxAttr; // 0x08: vertex attribute layout array.
-    u16 mFlags; // 0x0C: primitive rendering flags.
-    u16 mDisplayListBlocks; // 0x0E: display-list length in 32-byte blocks.
-    void *mDisplayList; // 0x10
-    u8 _14[4];
-};
-
-struct _HSD_TexAnim;
-struct _HSD_MatAnim {
-    _HSD_MatAnim *mNext;
-    _HSD_AObjDesc *mAnimation;
-    _HSD_TexAnim *mTexAnim;
-};
-struct _HSD_TObj {
-    u8 _00[100];
-    _HSD_AObj *mAObj;
-};
-struct _HSD_MObj {
-    u8 _00[8];
-    _HSD_TObj *mTObj;
-};
-extern "C" {
-void HSD_TObjRemoveAnim(_HSD_TObj *texture);
-void HSD_TObjAddAnim(_HSD_TObj *texture, _HSD_TexAnim *animation);
-void HSD_TObjReqAnim(_HSD_TObj *texture, f32 frame);
-}
 struct _HSD_MatAnimJoint {
     _HSD_MatAnimJoint *mChild;
     _HSD_MatAnimJoint *mNext;
@@ -91,7 +47,9 @@ struct _HSD_AnimJoint {
     u32 mFlags;
 };
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 void *HSD_SetVertexBuffer(void *buffer, u32 count);
 void *HSD_SetExpArgBuffer(void *buffer, u32 count);
 void *HSD_SetNormalBuffer(void *buffer, u32 count);
@@ -104,16 +62,16 @@ void HSD_JObjAddAnimAll(_HSD_JObj *joint, _HSD_AnimJoint *jointAnimation,
 void HSD_JObjReqAnimAllByFlags(_HSD_JObj *joint, u32 flags, f32 frame);
 void HSD_JObjAnimAll(_HSD_JObj *joint);
 void HSD_JObjRemoveAnim(_HSD_JObj *joint);
+#ifdef __cplusplus
 }
+#endif
 
-#define HSD_ANIM_ARG_POINTER 2u
-#define HSD_ANIM_ARG_UNSIGNED 3u
-#define HSD_OBJECT_JOINT 6u
-
+#ifdef __cplusplus
 /* Adapts the game's matrix class to the SDK matrix array. */
 static inline void HSD_JObjSetMatrix(_HSD_JObj *jobj, GSmtx *mtx)
 {
     HSD_JObjSetMatrix(jobj, reinterpret_cast<MtxPtr>(mtx));
 }
+#endif
 
 #endif

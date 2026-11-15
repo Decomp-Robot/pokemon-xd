@@ -326,11 +326,11 @@ extern "C" void GSmodelSetBlendAnimIndex(_GSmodel *model, unsigned long fromInde
         HSD_JObjAnimAll(model->mJObj);
         HSD_JObjAnimAll(model->mBlendJObj);
         model->mAnim.mEndFrame = 0.0f;
-        HSD_ForeachAnim(model->mJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
-            HSD_ANIM_ARG_POINTER, &model->mAnim.mEndFrame);
+        HSD_ForeachAnim(model->mJObj, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
+            AOBJ_ARG_AV, &model->mAnim.mEndFrame);
         model->mBlendAnim.mEndFrame = 0.0f;
-        HSD_ForeachAnim(model->mBlendJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
-            HSD_ANIM_ARG_POINTER, &model->mBlendAnim.mEndFrame);
+        HSD_ForeachAnim(model->mBlendJObj, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
+            AOBJ_ARG_AV, &model->mBlendAnim.mEndFrame);
         model->mAnim.mAnimation = modelGetAnimationObject(model->mJObj, MODEL_ANIM_JOINT_AOBJ);
         model->mBlendAnim.mAnimation = modelGetAnimationObject(model->mBlendJObj, MODEL_ANIM_JOINT_AOBJ);
         modelSetAnimationRate(model, rate);
@@ -493,8 +493,8 @@ extern "C" void GSmodelSetAnimIndex(_GSmodel *model, unsigned long index)
             if ((model->mFlags & MODEL_FLAG_ROOT_ANIM_REMOVED) && joint->mAObj)
             HSD_JObjRemoveAnim(joint);
             model->mAnim.mEndFrame = 0.0f;
-            HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
-                HSD_ANIM_ARG_POINTER, &model->mAnim.mEndFrame);
+            HSD_ForeachAnim(joint, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK, (void (*)())_modelGetEndFrame,
+                AOBJ_ARG_AV, &model->mAnim.mEndFrame);
             model->mAnim.mAnimation = modelGetAnimationObject(joint, MODEL_ANIM_JOINT_AOBJ);
             if (model->mFlags & MODEL_FLAG_PART_ANIM_MIX) {
                 modelPausePartAnimations(model, 0);
@@ -822,7 +822,6 @@ void modelUpdateAttachments(_GSmodel *model)
 
 
 
-#define HSD_ANIM_RATE_ARGUMENT 1u
 #define VIDEO_PAL_VSYNC_RATE 50u
 
 static inline u8 modelRequires60fpsUpdate(_GSmodel *model)
@@ -906,11 +905,11 @@ extern "C" void GSmodelUpdateAnimation(_GSmodel *model)
     if (model->mFlags & MODEL_FLAG_BLEND_ACTIVE) {
         if ((model->mFlags & MODEL_FLAG_ANIM_PRESENT) &&
             model->mAnim.mAnimation != NULL && model->mBlendAnim.mAnimation != NULL) {
-            HSD_ForeachAnim(model->mJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+            HSD_ForeachAnim(model->mJObj, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK,
+                            (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF,
                             modelAnimationFrameStep(model, &model->mAnim));
-            HSD_ForeachAnim(model->mBlendJObj, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+            HSD_ForeachAnim(model->mBlendJObj, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK,
+                            (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF,
                             modelAnimationFrameStep(model, &model->mBlendAnim));
         }
         HSD_JObjAnimAll(model->mJObj);
@@ -934,13 +933,13 @@ extern "C" void GSmodelUpdateAnimation(_GSmodel *model)
             joint = joint->child;
         }
         if ((model->mFlags & MODEL_FLAG_ANIM_PRESENT) && model->mAnim.mAnimation != NULL) {
-            HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_JOINT_MASK,
-                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+            HSD_ForeachAnim(joint, JOBJ_TYPE, MODEL_ANIM_JOINT_MASK,
+                            (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF,
                             modelAnimationFrameStep(model, &model->mAnim));
         }
         if ((model->mFlags & MODEL_FLAG_TEXANIM_PRESENT) && model->mTexAnim.mAnimation != NULL) {
-            HSD_ForeachAnim(joint, HSD_OBJECT_JOINT, MODEL_ANIM_MATERIAL_MASK,
-                            (void (*)())HSD_AObjSetRate, HSD_ANIM_RATE_ARGUMENT,
+            HSD_ForeachAnim(joint, JOBJ_TYPE, MODEL_ANIM_MATERIAL_MASK,
+                            (void (*)())HSD_AObjSetRate, AOBJ_ARG_AF,
                             modelAnimationFrameStep(model, &model->mTexAnim));
         }
         HSD_JObjAnimAll(joint);
