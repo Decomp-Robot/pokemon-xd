@@ -2353,7 +2353,9 @@ game/app/waza/wazaDB.cpp:
 	.text       start:0x8013E044 end:0x8013E90C
 
 game/app/pokemon/pokemon.cpp:
-	.text       start:0x8013E934 end:0x8013EA84
+	.text       start:0x8013E934 end:0x8013F0F4
+	.rodata     start:0x802F37A0 end:0x802F37C0
+	.sdata2     start:0x804EDB48 end:0x804EDB80
 
 game/app/pokemon/pokemonBios.cpp:
 	.text       start:0x80145928 end:0x80146078

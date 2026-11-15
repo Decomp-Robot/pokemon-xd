@@ -28,6 +28,11 @@ enum {
     TOKUSEI_DATA_ID_WHITE_SMOKE = 73
 };
 
+u16 pokemon_GetInitDp(Pokemon *pokemon);
+u16 pokemon_GetDarkpokemonDataId(Pokemon *pokemon);
+void pokemon_SetDarkpokemonDataId(Pokemon *pokemon, u16 darkID);
+u8 pokemon_GetDarkFlag(Pokemon *pokemon);
+
 enum PokemonDataID {
     POKEMON_DATA_ID_BUTTERFREE = 12,
     POKEMON_DATA_ID_BEEDRILL = 15,

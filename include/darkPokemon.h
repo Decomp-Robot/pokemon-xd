@@ -23,6 +23,8 @@ enum darkPokemonWhere {
 enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HERO = 1 };
 class DarkPokemon {
 public:
+    u8 getReversPattern() const;
+    void setDarkPokemonID(u16 darkID);
     u8 getCatchBallID() const;
     u16 getPokemonID() const;
     bool isSnach() const;
@@ -78,6 +80,8 @@ extern "C" {
 #endif
 
 DarkPokemon *darkPokemonGetDarkPokemon(u32 darkID);
+u16 darkPokemonBiosGetDarkPoint(u16 darkID);
+u16 darkPokemonBiosGetTemotiDarkWaza(u16 darkID, u16 slot);
 u32 darkPokemonGetSnatchSuccessNum(void);
 u32 darkPokemonGetMeetNum(void);
 s32 darkPokemonGetReliveNum(void);

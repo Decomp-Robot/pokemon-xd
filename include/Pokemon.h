@@ -55,6 +55,7 @@ struct Pokemon {
     u8 _BC[8];
 
 #ifdef __cplusplus
+    void setReversMode(bool enabled);
     bool isHatena() const;
     bool isFuseiFlag() const;
     GamedataAttest *getAttest();
@@ -286,7 +287,7 @@ void pokemonWriteJoutaiDataId(Pokemon *pokemon, u16 joutaiID, u16 targetID);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 // Whether the status may be written; a JoutaiWriteResult value.
 u8 pokemonCheckWriteJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
-void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u32 filterID);
+void pokemonAddDpFormPokemonDpFilterId(Pokemon *pokemon, u16 itemID, u16 filterID);
 void pokemonWazaCreate(Pokemon *pokemon, u16 slot, u16 wazaID);
 // Empties the move slot and resets its PP.
 void pokemonWazaInit(Pokemon *pokemon, u16 slot);
@@ -330,10 +331,10 @@ u8 pokemonGetSex(Pokemon *pokemon);
 u8 pokemonGetDeoxysSel(u8 controllerId);
 u16 *pokemon_GetNickname(Pokemon *pokemon);
 
-s32 pokemon_GetSeikaku(Pokemon *pokemon);
+u8 pokemon_GetSeikaku(Pokemon *pokemon);
 // Total experience the pokemon needs to reach its current level.
 s32 pokemonGetNowLevelToExp(Pokemon *pokemon);
-s32 pokemonAdjustValueBySeikaku(s32 nature, s32 fieldID, s32 value);
+s32 pokemonAdjustValueBySeikaku(u8 nature, s32 fieldID, s32 value);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 sex, s8 nature, s8 rare, u32 trainerRnd);
 void *pokemonCreateSequence(struct FightPokemon *pokemon);
 void pokemonSetSequenceStatus(Pokemon *pokemon, void *sequence);
@@ -346,6 +347,26 @@ void pokemonWazaReplace(Pokemon *pokemon, s32 prev, s32 slot);
 
 s32 pokemonGetLevelToExp(Pokemon *pokemon, u8 level);
 
+enum PokemonDarkLevel {
+    POKEMON_DARK_LEVEL_CLOSED = 0,
+    POKEMON_DARK_LEVEL_FIRST = 1,
+    POKEMON_DARK_LEVEL_SECOND = 2,
+    POKEMON_DARK_LEVEL_THIRD = 3,
+    POKEMON_DARK_LEVEL_FOURTH = 4,
+    POKEMON_DARK_LEVEL_FIFTH = 5,
+    POKEMON_DARK_LEVEL_OPEN = 6,
+    POKEMON_DARK_LEVEL_NONE = 7
+};
+enum PokemonDpFilter {
+    POKEMON_DP_FILTER_FIGHTOUT = 0,
+    POKEMON_DP_FILTER_WALK = 1,
+    POKEMON_DP_FILTER_CALL = 2,
+    POKEMON_DP_FILTER_SODATEYA = 3,
+    POKEMON_DP_FILTER_NADENADE = 4,
+    POKEMON_DP_FILTER_OPEN = 5
+};
+u8 pokemonGetDarkPokemonHyperJoutaiKakuritu(Pokemon *pokemon);
+void pokemonAddDp(Pokemon *pokemon, f32 change);
 u8 pokemonGetDarkPokemonLevel(Pokemon *pokemon);
 
 u8 pokemonCheckRare2(Pokemon *pokemon);

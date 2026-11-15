@@ -63,7 +63,7 @@ void GSthreadSwitch(void);
 void _menuCB_DeoxysParamCustom(Pokemon *pokemon, u16 port)
 {
     s32 level = pokemonGetStatus(pokemon, 0, 0x7A, 0);
-    s32 nature = pokemon_GetSeikaku(pokemon);
+    u8 nature = pokemon_GetSeikaku(pokemon);
     s32 ivPhyAtk = pokemonGetStatus(pokemon, 0, 0x94, 0);
     s32 ivPhyDef = pokemonGetStatus(pokemon, 0, 0x95, 0);
     s32 ivSpeAtk = pokemonGetStatus(pokemon, 0, 0x96, 0);

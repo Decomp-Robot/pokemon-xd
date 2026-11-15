@@ -4,6 +4,8 @@
 #include <types.h>
 #include <bool.h>
 
+enum ItemKind { ITEM_KIND_COLOGNE = 6 };
+
 // Item IDs used by the inventory routines.
 enum ItemID {
     ITEM_MASTER_BALL = 1,

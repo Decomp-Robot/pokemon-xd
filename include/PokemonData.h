@@ -109,9 +109,13 @@ u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);
 
 
-void *pokemonSeikakuDataBiosGetPtr(u8 id);
+typedef struct PokemonDpFilterData PokemonDpFilterData;
+typedef struct PokemonSeikakuData PokemonSeikakuData;
+typedef struct PokemonSeikakuRateData PokemonSeikakuRateData;
 
-u32 pokemonSeikakuDataGetMessageId(void *ptr);
+PokemonSeikakuData *pokemonSeikakuDataBiosGetPtr(u8 id);
+
+u32 pokemonSeikakuDataGetMessageId(PokemonSeikakuData *data);
 #ifdef __cplusplus
 }
 #endif

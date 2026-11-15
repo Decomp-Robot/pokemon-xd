@@ -107,6 +107,17 @@ bool pokemonBiosGetDarkFlag(Pokemon *pokemon);
 u8 pokemonBiosGetDarkFlag(Pokemon *pokemon);
 #endif
 int pokemonBiosGetDp(Pokemon *pokemon);
+void pokemonBiosSetDp(Pokemon *pokemon, int dp);
+PokemonDpFilterData *pokemonDpFilterDataBiosGetPtr(u16 filterID);
+s8 pokemonDpFilterDataBiosGetValue(PokemonDpFilterData *filter);
+PokemonSeikakuRateData *pokemonSeikakuRateDataBiosGetPtr(u8 rateID);
+u8 pokemonSeikakuRateDataBiosGetKake(PokemonSeikakuRateData *rate);
+u8 pokemonSeikakuRateDataBiosGetWaru(PokemonSeikakuRateData *rate);
+s8 pokemonSeikakuDataBiosGetReliveFightout(PokemonSeikakuData *nature);
+s8 pokemonSeikakuDataBiosGetReliveWalk(PokemonSeikakuData *nature);
+s8 pokemonSeikakuDataBiosGetReliveCall(PokemonSeikakuData *nature);
+s8 pokemonSeikakuDataBiosGetReliveSodateya(PokemonSeikakuData *nature);
+s8 pokemonSeikakuDataBiosGetReliveNadenade(PokemonSeikakuData *nature);
 u16 pokemonBiosGetDarkpokemonDataId(Pokemon *pokemon);
 u16 pokemonBiosGetFriend(Pokemon *pokemon);
 u8 pokemonBiosGetFlagAmari(Pokemon *pokemon);
