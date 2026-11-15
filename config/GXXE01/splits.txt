@@ -675,6 +675,9 @@ game/GSAPI/GSmemman/GSmemman.cpp:
 	.sdata      start:0x804E80F0 end:0x804E80F8
 	.sbss       start:0x804EAA78 end:0x804EAA7C
 
+game/GSAPI/GSmemman/memOverride.cpp:
+	.text       start:0x800A7BF8 end:0x800A7CD8
+
 game/GSAPI/GSmemman/OSAlloc.cpp:
 	.text       start:0x800A7CDC end:0x800A8E7C
 	.rodata     start:0x802EBD60 end:0x802EC1A8
