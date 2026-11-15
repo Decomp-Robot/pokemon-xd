@@ -10,21 +10,18 @@ enum { FIGHT_WAZA_JOUTAI_COUNT = 9 };
 
 struct FIGHT_WAZA {
     u8 mWazaBanme; // 0x00
-    u8 _01[1];
     u16 mMotoWazaDataId; // 0x02
     u16 mUseWazaDataId; // 0x04
     u16 mTargetDataId; // 0x06
     _JOUTAI mJoutai[FIGHT_WAZA_JOUTAI_COUNT]; // 0x08
     u8 mCritical; // 0x98
     u8 mDamageValue; // 0x99
-    u8 _9A[2];
     s32 mDamage; // 0x9C
     s32 mHitDamage; // 0xA0
     u16 mIryoku; // 0xA4
     u16 mZokusei; // 0xA6
     u8 mKaisuu; // 0xA8
     u8 mAutoMakeFlag; // 0xA9
-    u8 _AA[2];
 };
 
 #ifdef __cplusplus

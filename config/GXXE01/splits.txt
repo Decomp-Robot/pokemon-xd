@@ -3117,7 +3117,7 @@ game/app/fight/fightType.cpp:
 	.text       start:0x801F0208 end:0x801F0324
 
 game/app/waza/fightWazaBios.cpp:
-	.text       start:0x801F09D8 end:0x801F0A6C
+	.text       start:0x801F09D8 end:0x801F0D18
 
 game/app/fight/fightEncount.cpp:
 	.text       start:0x801F0D18 end:0x801F14C8
