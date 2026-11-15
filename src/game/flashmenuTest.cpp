@@ -2,8 +2,8 @@
 #include <types.h>
 #include <GSgfx.h>
 #include <winSprite.h>
+#include <flashsystem.h>
 
-extern "C" void FlashSystemSetLoopFlag(unsigned long flash, s32 loop);
 extern "C" {
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 extern f32 flashTestTextureDimensions[2];

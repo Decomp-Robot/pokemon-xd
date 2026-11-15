@@ -3395,6 +3395,10 @@ game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x802723FC end:0x80272BA4
 	.sdata2     start:0x804EF3D0 end:0x804EF3F8
 
+game/app/flashmenu/flashsystem.cpp:
+	.text       start:0x80276370 end:0x80277BB4
+	.bss        start:0x804DFC28 end:0x804DFC78
+
 game/GSAPI/GSprim/GSprim.cpp:
 	.text       start:0x8027C208 end:0x8027C920
 	.bss        start:0x804DFDD8 end:0x804DFDF0

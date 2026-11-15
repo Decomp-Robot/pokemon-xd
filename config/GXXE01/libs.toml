@@ -6523,6 +6523,10 @@ cflags_extra = ["-inline auto,deferred", "-opt nopeephole", "-use_lmw_stmw on"]
 name = "game/app/flashmenu/flashcalc.cpp"
 completed = true
 
+[[lib.object]]
+name = "game/app/flashmenu/flashsystem.cpp"
+completed = true
+
 [[lib]]
 name = "item"
 mw_version = "GC/2.6"
