@@ -46,11 +46,22 @@ void floorWaitForChange(void);
 void floorUnblockMainScript(void);
 void floorBlockMainScript(void);
 u8 GSfloorIsPop(void);
-void floorExecScriptInteger(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
-void floorExecScriptIntegerThread(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
-void floorExecScriptIntegerByName(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
-void floorExecScriptIntegerByNameThread(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
+int floorExecScriptInteger(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
+long floorExecScriptIntegerThread(int scriptID, int parameter1, int parameter2, int parameter3, int parameter4);
+int floorExecScriptIntegerByName(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
+long floorExecScriptIntegerByNameThread(const char *name, int parameter1, int parameter2, int parameter3, int parameter4);
+int floorExecScriptRes(int scriptID, unsigned long groupID, unsigned long resourceID);
+long floorExecScriptResThread(int scriptID, unsigned long groupID, unsigned long resourceID);
 int floorGetScriptResult(void);
+#ifdef __cplusplus
+bool floorIsRunningThread(long threadHandle);
+#else
+u8 floorIsRunningThread(long threadHandle);
+#endif
+void floorBlockScriptThread(long threadHandle);
+void floorUnblockScriptThread(long threadHandle);
+int floorGetScriptMode(int scriptID);
+int floorGetCurentScriptMode(void);
 void floorSetDispScriptInfo(u8 state);
 u8 floorIsDispScriptInfo(void);
 s32 floorGetLocalHeapHandle(void);
@@ -79,6 +90,7 @@ GSthread *floorCreateThreadLocal(s32 priority, u32 stackSize, s32 terminateOnExi
 #ifdef __cplusplus
 namespace GSscript { class Tiga; }
 GSscript::Tiga *floorGetCommonScript(void);
+GSscript::Tiga *floorGetCurentScript(void);
 #endif
 
 #endif

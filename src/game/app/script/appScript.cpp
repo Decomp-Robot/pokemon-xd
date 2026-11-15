@@ -1514,7 +1514,7 @@ int AppScript::cmpEsaba(int cmd, GSscript::tigaVariant* args, GSscript::tigaVari
     return 0;
 }
 
-extern "C" int appScriptCommonCall(int scriptId)
+extern "C" bool appScriptCommonCall(int scriptId)
 {
     GSscript::Tiga* common = floorGetCommonScript();
     return common->runParamsWait(scriptId, 0, 0, 0);

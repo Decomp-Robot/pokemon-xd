@@ -3067,6 +3067,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
 
 [[lib.object]]
+name = "game/app/floor/floorScript.cpp"
+completed = true
+extra_cflags = ["-inline off", "-sym on", "-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/floor/floorsound.cpp"
 completed = true
 extra_cflags = ["-inline off", "-sym on", "-opt nopeephole", "-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

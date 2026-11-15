@@ -4,7 +4,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-int appScriptCommonCall(int scriptID);
+#ifdef __cplusplus
+bool appScriptCommonCall(int scriptID);
+#else
+unsigned char appScriptCommonCall(int scriptID);
+#endif
 #ifdef __cplusplus
 }
 #endif

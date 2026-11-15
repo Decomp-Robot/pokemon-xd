@@ -134,8 +134,16 @@ public:
     u8 mUnknownStateAfterArrays[0x10];
     TigaThread* mCurrentThread;
 
+    bool isMapping();
+    int getNameToFuncId(const char* name);
+    GSresID* searchResID(unsigned long groupID, unsigned long resourceID);
+    long runParams(int functionID, tigaVariant* parameters, int count, bool newThread);
+    long getResultValue(long threadHandle);
+    bool isRunningThread(long threadHandle);
+    void blockThread(long threadHandle);
+    void unblockThread(long threadHandle);
     void setRpVec(const GSvec*);
-    int runParamsWait(int, tigaVariant*, int, tigaVariant*);
+    bool runParamsWait(int, tigaVariant*, int, tigaVariant*);
     virtual int execExtendMethod(int, int, tigaVariant*, tigaVariant*);
     virtual int execExtendGlobalFunction(int, tigaVariant*, tigaVariant*);
     virtual int getExtendVariable(tigaVariant*, int, int);
