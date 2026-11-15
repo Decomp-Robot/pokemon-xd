@@ -6789,3 +6789,15 @@ cflags_extra = ["-use_lmw_stmw on", "-str reuse,readonly", "-inline auto,deferre
 name = "game/GSAPI/GSmovie/movieStream.cpp"
 extra_cflags = ["-O4,s"]
 completed = true
+
+[[lib]]
+name = "GSdvd"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSdvd/GSdvd.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-str reuse,readonly", "-W error"]

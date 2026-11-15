@@ -5,6 +5,7 @@
 #include <string.h>
 #include <GSmem.h>
 #include <GSlog.h>
+#include <GSdvd.h>
 
 struct _GSgfxInitParms {
     u8 displayEnabled;
@@ -57,9 +58,6 @@ u32 floorCreateLocalHeap(void);
 void GSmemInitSysdolAllocator(void);
 s32 pokecoloGetCountryCode(void);
 void sysvarsShowDebug(void);
-void GSdvdSetDVDServer(void *, u32);
-void GSdvdSetReportServer(void *, u32, u32);
-void GSdvdSetGCClient(void *, void *, void *, u32);
 s32 gameRuntimeMain(s32, char **);
 extern StartupSettings startupSettings;
 }

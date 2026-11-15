@@ -10,6 +10,13 @@ extern "C" {
 typedef struct GSdvdFile GSdvdFile;
 typedef void (*GSdvdReadCompletionFunc)(s32 result, GSdvdFile *file);
 
+u8 GSdvdInit(u32 maxFiles);
+void GSdvdSetGCClient(const char *address, const char *netmask, const char *gateway, u8 apply);
+void GSdvdSetReportServer(const char *address, u16 port, u8 apply);
+void GSdvdSetDVDServer(const char *address, u16 port);
+void GSdvdSetErrorMsg(u32 coverOpen, u32 noDisc, u32 wrongDisc, u32 retry, u32 fatalError);
+s32 GSdvdGetDriveStatus(void);
+u8 GSdvdSeekAsync(GSdvdFile *file, s32 offset, GSdvdReadCompletionFunc completion);
 u8 GSdvdOpenTest(const char *fileName);
 GSdvdFile *GSdvdOpen(const char *fileName);
 GSdvdFile *GSdvdCreate(const char *fileName);

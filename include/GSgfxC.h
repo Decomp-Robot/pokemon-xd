@@ -16,6 +16,8 @@ enum {
 extern "C" {
 #endif
 
+u8 GSgfxResetDisable(void);
+
 void GSgfxZCompare(s32 enable, s32 comparison);
 void GSgfxPixelMode(s32 colorUpdate, s32 alphaUpdate, s32 depthUpdate);
 void GSgfxCullMode(s32 mode);

@@ -2908,6 +2908,14 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.sdata      start:0x804E8468 end:0x804E846C
 	.sdata2     start:0x804EDF40 end:0x804EDF60
 
+game/GSAPI/GSdvd/GSdvd.c:
+	.text       start:0x801879A4 end:0x8018838C
+	.rodata     start:0x802F3E40 end:0x802F3E88
+	.data       start:0x8040AF80 end:0x8040AFE0
+	.sdata      start:0x804E8470 end:0x804E84A0
+	.sbss       start:0x804EB520 end:0x804EB540
+	.sdata2     start:0x804EDF90 end:0x804EDFB0
+
 game/GSAPI/GSfilter/GSfilter.cpp:
 	.text       start:0x8018838C end:0x80188B50
 	.rodata     start:0x802F3E88 end:0x802F3EA4
