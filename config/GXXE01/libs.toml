@@ -3166,6 +3166,11 @@ completed = true
 extra_cflags = [ "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSAPI/GSparticle/peSpline.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GSparticle/peShape.cpp"
 completed = true
 extra_cflags = ["-inline noauto,deferred", "-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

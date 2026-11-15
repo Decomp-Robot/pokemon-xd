@@ -2298,6 +2298,10 @@ game/GSAPI/GSparticle/peDistortion.cpp:
 	.data       start:0x803FC328 end:0x803FC350
 	.sdata2     start:0x804EDAB0 end:0x804EDAE8
 
+game/GSAPI/GSparticle/peSpline.cpp:
+	.text       start:0x80138724 end:0x80138B7C
+	.sdata2     start:0x804EDB00 end:0x804EDB10
+
 game/GSAPI/GSparticle/particleEngine.cpp:
 	.text       start:0x8013A678 end:0x8013A67C
 	.ctors      start:0x802E9FCC end:0x802E9FD0

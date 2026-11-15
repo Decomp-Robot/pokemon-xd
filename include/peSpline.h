@@ -7,12 +7,16 @@
  * spline unused: the callers keep their constant multiplier instead. */
 enum peSplineMode {
     PE_SPLINE_MODE_NONE = 0,
+    PE_SPLINE_MODE_LINEAR = 1,
+    PE_SPLINE_MODE_STEP = 2,
+    PE_SPLINE_MODE_HERMITE = 3,
     PE_SPLINE_MODE_MASK = 3
 };
 
 struct peSpline {
     u8 flags;
-    u8 reserved[3];
+    u8 knotCount;
+    u8 reserved[2];
     f32 value;
     f32 time;
 };
