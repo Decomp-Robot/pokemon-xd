@@ -41,3 +41,11 @@ extern "C" u8 fightActionFlowTenkouInit(FIGHT_ACTION *action)
     }
     return 1;
 }
+
+extern "C" u8 fightActionFlowWazaKiaipantiPre(FIGHT_ACTION *action)
+{
+    fightFloor_SetAttackPokemonPtr(0,
+        (FightOutPokemon *)fightActionBiosGetActorFightTargetPtr(action));
+    fightSeqExec(action, (u8 *)fightActionBiosGetBuffDataPtr(action), 0);
+    return 1;
+}
