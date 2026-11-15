@@ -2739,6 +2739,7 @@ cflags = [
 [[lib.object]]
 name = "game/app/pokemon/pokemonBios.cpp"
 completed = true
+extra_cflags = ["-O4,s"]
 
 [[lib.object]]
 name = "game/app/pokemon/pokemonDB.cpp"

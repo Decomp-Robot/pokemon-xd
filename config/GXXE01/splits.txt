@@ -2275,7 +2275,7 @@ game/app/pokemon/pokemon.cpp:
 	.text       start:0x8013E934 end:0x8013EA84
 
 game/app/pokemon/pokemonBios.cpp:
-	.text       start:0x80145928 end:0x80145990
+	.text       start:0x80145928 end:0x80146078
 
 game/app/pokemon/pokemonDB.cpp:
 	.text       start:0x801479CC end:0x80147EC8

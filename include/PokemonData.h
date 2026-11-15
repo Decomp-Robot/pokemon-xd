@@ -6,11 +6,80 @@
 typedef struct PokemonData PokemonData;
 typedef PokemonData PokemonSpeciesStats;
 
+enum PokemonDataLimits {
+    POKEMON_DATA_TYPE_COUNT = 2,
+    POKEMON_DATA_ABILITY_COUNT = 2,
+    POKEMON_DATA_ITEM_COUNT = 2,
+    POKEMON_DATA_MACHINE_COUNT = 58,
+    POKEMON_DATA_EVOLUTION_COUNT = 5,
+    POKEMON_DATA_LEVEL_UP_MOVE_COUNT = 20,
+    POKEMON_DATA_BODY_COUNT = 2
+};
+
+enum PokemonDataStatSet {
+    POKEMON_DATA_BASE_STATS = 0,
+    POKEMON_DATA_EFFORT_YIELD = 1,
+    POKEMON_DATA_STAT_SET_COUNT = 2
+};
+
+typedef struct PokemonBaseStats {
+    u16 mMaxHp;
+    u16 mPhysicalAttack;
+    u16 mPhysicalDefense;
+    u16 mSpecialAttack;
+    u16 mSpecialDefense;
+    u16 mNimbleness;
+} PokemonBaseStats;
+
+typedef struct PokemonEvolution {
+    u8 mKind;
+    u8 _01;
+    u16 mCondition;
+    u16 mPokemonDataId;
+} PokemonEvolution;
+
+typedef struct PokemonLevelUpMove {
+    u8 mLevel;
+    u8 _01;
+    u16 mWazaDataId;
+} PokemonLevelUpMove;
+
+typedef struct PokemonBody {
+    u8 mColor;
+    u8 _01;
+    u16 mStatusFaceMenuSpriteId;
+    u32 mPokebodyId;
+} PokemonBody;
+
 struct PokemonData {
-    u8 _00[36];
-    s32 mMitaFlagId; // id of the zukan seen flag.
-    s32 mTukamaetaFlagId; // id of the zukan caught flag.
-    u8 _2C[248];
+    u8 mGrowDataId;
+    u8 mCatchRate;
+    u8 mSexRatio;
+    u8 _03;
+    u16 mGiveExp;
+    u16 mInitFriend;
+    u16 mHeight;
+    u16 mWeight;
+    u16 mVoice;
+    u8 _0E[10];
+    u32 mNameMessageId;
+    u32 mTypeNameMessageId;
+    u32 mDescriptionMessageId;
+    // id of the zukan seen flag.
+    s32 mMitaFlagId;
+    // id of the zukan caught flag.
+    s32 mTukamaetaFlagId;
+    u8 _2C[4];
+    u8 mZokuseiDataId[POKEMON_DATA_TYPE_COUNT];
+    u8 mTokuseiDataId[POKEMON_DATA_ABILITY_COUNT];
+    u8 mWazaMachineCompatibility[POKEMON_DATA_MACHINE_COUNT];
+    u8 _6E[12];
+    u16 mItemDataId[POKEMON_DATA_ITEM_COUNT];
+    u8 _7E[16];
+    PokemonBaseStats mBaseStatsAndEffortYield[POKEMON_DATA_STAT_SET_COUNT];
+    PokemonEvolution mSinka[POKEMON_DATA_EVOLUTION_COUNT];
+    PokemonLevelUpMove mGetWaza[POKEMON_DATA_LEVEL_UP_MOVE_COUNT];
+    PokemonBody mBody[POKEMON_DATA_BODY_COUNT];
 };
 
 // Voice id reported for a species that has no voice data to play.
@@ -35,17 +104,10 @@ u8 pokemonDataBiosGetTokuseiDataId(PokemonSpeciesStats *data, u16 index);
 PokemonSpeciesStats *pokemonDataBiosGetPtr(u16 species);
 s32 pokemonDataBiosGetVoice(PokemonSpeciesStats *stats);
 s8 *pokemonNakigoeDataBiosGetDataAddress(PokemonSpeciesStats *stats);
-u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, s32 index);
+u32 pokemonDataBiosGetZokuseiDataId(PokemonSpeciesStats *data, u16 index);
 u32 pokemonDB_GetName(u16 species);
 u8 pokemonDataBiosGetWazaMcn(PokemonSpeciesStats *stats, u16 machineNo);
 
-// One of the five evolution entries a species carries: the method that fires
-// it, the level, friendship, beauty or item it asks for, and the species it
-// evolves into.
-void *pokemonDataBiosGetSinkaPtr(PokemonSpeciesStats *data, u16 index);
-u8 pokemonDataBiosGetSinkaKind(PokemonSpeciesStats *data, u16 index);
-u16 pokemonDataBiosGetSinkaBuff(PokemonSpeciesStats *data, u16 index);
-u32 pokemonDataBiosGetSinkaPokemonDataId(PokemonSpeciesStats *data, u16 index);
 
 void *pokemonSeikakuDataBiosGetPtr(u8 id);
 

@@ -4,6 +4,7 @@
 #include <Pokemon.h>
 #include <PokemonData.h>
 #include <types.h>
+#include <pokemonDataBios.h>
 typedef struct PokemonTokuseiData PokemonTokuseiData;
 
 // Ribbon word of a Pokemon record (0x7C). Each of the twelve contest ribbons
