@@ -17,7 +17,10 @@ static const GSgfxTunitAArg GSGFX_TUNIT_A_A0 = (GSgfxTunitAArg)1;
 #ifdef __cplusplus
 extern "C" {
 #endif
-enum { GS_PRIM_VERTEX_ORDER_PERIMETER_QUADS = 1 };
+enum {
+    GS_PRIM_VERTEX_ORDER_TRIANGLE_STRIP = 0,
+    GS_PRIM_VERTEX_ORDER_PERIMETER_QUADS = 1
+};
 void GSprimSetQuadVertexOrder(s32 order);
 void GSprimDraw2DQuad(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height);
 void GSprimDraw2DQuad4V(GSvec2 *vertices, GSgfxColAu8 color);
@@ -33,11 +36,11 @@ void GSprimSetBlendMode(s32 mode);
 void GSprimWriteChar(f32 x, f32 y, char c);
 void GSprimDraw2DTexQuad4VCA(GSvec2 *vertices, GSvec2 *texCoords, GStexture *texture,
                              const GSgfxColAu8 *color, GSrectS *clipArea);
-void GSprimDraw2DQuadWH(const GSgfxColAu8 *color, f32 x, f32 y, f32 width, f32 height);
+void GSprimDraw2DQuadWH(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height);
 void GSprimDraw2DPixelListC(GSivec2 *positions, u32 count, GSgfxColAu8 *colors);
 void GSprimDraw2DLineListC(GSvec2 *positions, u32 count, GSgfxColAu8 *colors);
-void GSprimDraw2DVLine(const GSgfxColAu8 *color, f32 x, f32 top, f32 bottom);
-void GSprimDraw2DHLine(const GSgfxColAu8 *color, f32 left, f32 right, f32 y);
+void GSprimDraw2DVLine(GSgfxColAu8 color, f32 x, f32 top, f32 bottom);
+void GSprimDraw2DHLine(GSgfxColAu8 color, f32 left, f32 right, f32 y);
 void GSprimDraw2DLine(const GSgfxColAu8 *startColor, const GSgfxColAu8 *endColor, f32 x1, f32 y1, f32 x2, f32 y2);
 
 
@@ -127,4 +130,7 @@ extern GSprimData primData;
 
 void GSprimSetup2DRender(GSgfxLayer *layer);
 
+#ifdef __cplusplus
+void GSprimSetRenderLayer(GSgfxLayer *layer);
+#endif
 #endif

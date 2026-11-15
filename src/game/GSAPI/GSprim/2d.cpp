@@ -133,9 +133,9 @@ void GSprimDraw2DQuad4V(GSvec2 *vertices, GSgfxColAu8 color)
     primData.layer->endSurface();
 }
 
-void GSprimDraw2DQuadWH(const GSgfxColAu8 *color, f32 x, f32 y, f32 width, f32 height)
+void GSprimDraw2DQuadWH(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height)
 {
-    GSgfxColAu8 col = *color;
+    GSgfxColAu8 col = color;
 
     primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
     primData.layer->mPrimitiveType = primData.primitiveType;
@@ -224,10 +224,10 @@ static inline void primDrawLineVerts(f32 x1, f32 y1, GSgfxColAu8 c1, f32 x2, f32
     }
 }
 
-void GSprimDraw2DVLine(const GSgfxColAu8 *color, f32 x, f32 top, f32 bottom)
+void GSprimDraw2DVLine(GSgfxColAu8 color, f32 x, f32 top, f32 bottom)
 {
-    GSgfxColAu8 bottomColor = *color;
-    GSgfxColAu8 topColor = *color;
+    GSgfxColAu8 bottomColor = color;
+    GSgfxColAu8 topColor = color;
 
     if (primData.linePushMode != 1) {
         GSprimLayerLineWidth(primData.layer, (u8)(6.0f * primData.lineWidth));
@@ -242,10 +242,10 @@ void GSprimDraw2DVLine(const GSgfxColAu8 *color, f32 x, f32 top, f32 bottom)
     primData.layer->endSurface();
 }
 
-void GSprimDraw2DHLine(const GSgfxColAu8 *color, f32 left, f32 right, f32 y)
+void GSprimDraw2DHLine(GSgfxColAu8 color, f32 left, f32 right, f32 y)
 {
-    GSgfxColAu8 rightColor = *color;
-    GSgfxColAu8 leftColor = *color;
+    GSgfxColAu8 rightColor = color;
+    GSgfxColAu8 leftColor = color;
 
     if (primData.linePushMode != 1) {
         GSprimLayerLineWidth(primData.layer, (u8)(6.0f * primData.lineWidth));

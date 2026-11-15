@@ -8,6 +8,7 @@
 #include <GSvec.h>
 #include <GStexture.h>
 #include <dolphin/gx/GXStruct.h>
+#include <dolphin/gx/GXVert.h>
 
 struct _GScamera;
 typedef struct _GScamera GScamera;
@@ -128,21 +129,9 @@ enum GSgfxLayerPass {
     GSGFX_LAYER_PASS_XLU = 1, GS_GFX_PASS_OPAQUE = 0, GS_GFX_PASS_TRANSLUCENT = 1 };
 struct GSgfxDrawPass { void *mFifoBuffer; u8 _04[0xB8]; };
 
-// Write-gather FIFO the GS layers emit their primitives into.
-typedef union {
-    u8 u8;
-    u16 u16;
-    u32 u32;
-    s8 s8;
-    s16 s16;
-    s32 s32;
-    f32 f32;
-} PPCWGPipe;
-
 enum { GSGFX_FIFO_LOAD_XF = 0x10, GSGFX_XF_CLIP_DISABLE = 0x1005 };
 
 #define GSgfxFifo (*(PPCWGPipe *)0xCC008000)
-#define GXWGFifo (*(volatile PPCWGPipe *)0xCC008000)
 
 // Render mode selected by the GS graphics layer.
 enum GSgfxRenderMode { GSGFX_RENDER_MODE_NORMAL = 0, GSGFX_RENDER_MODE_BLUE_CHANNEL = 1 };
@@ -932,6 +921,7 @@ void GSgfxTokenAbortFrame(void);
 void GSgfxTokenInit(void);
 void GSgfxGPUSetDrawSyncCallback(void (*callback)(u16));
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);
+extern "C" void GSgfxTokenWaitForClearAndReset(u16 *token);
 void GSgfxRenderWaitForDrawComplete();
 typedef void (*GSgfxParseVertexCB)(unsigned long attributeFlags, void *attributeData, void *userContext);
 typedef void (*GSgfxParseSurfaceCB)(GSgfxPrimType type, u16 count, unsigned long attributeMask, void *userContext);
@@ -1000,4 +990,12 @@ void GSgfxVFSetElement(GSgfxVF *vf, s32 attribute, u32 componentCount, u32 compo
 void GSgfxVFSetArray(GSgfxVF *vf, s32 attribute, u32 inputType, void *arrayBase, u32 byteStride, s32 arrayBytes);
 }
 void GSgfxShutdown(void);
+void GSgfxGPUGetBPTick(long *gpTick, long *bpTick);
+void GSgfxPerfbarRender(GSgfxLayer *layer);
+u32 GSgfxPerfbarGPUEntry(u32 color);
+void GSgfxPerfbarGPUEnd(void);
+void GSgfxPerfbarGPUStart(void);
+void GSgfxPerfbarCPUEnd(void);
+void GSgfxPerfbarCPUStart(void);
+void GSgfxPerfbarInit(u8 frameCount);
 #endif
