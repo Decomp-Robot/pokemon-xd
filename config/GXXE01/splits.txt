@@ -426,7 +426,7 @@ game/menuPdaMemoListXD.cpp:
 	.sbss       start:0x804EA868 end:0x804EA86C
 
 game/menuPdaMemoListXDSort.cpp:
-	.text       start:0x80055BC0 end:0x80055C94
+	.text       start:0x80055BC0 end:0x80055D6C
 
 game/menuPcBoxPokemon.cpp:
 	.text       start:0x80057890 end:0x80057C44
