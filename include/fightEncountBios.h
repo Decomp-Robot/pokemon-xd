@@ -70,6 +70,9 @@ u32 fightEncountDataBiosGetFightName(void *data);
 
 extern u32 *fight_encount_data_number;
 
+void fightEncountDataBiosSetSyoukaiWzxDataId(void* data, u32 value);
+void fightEncountDataBiosSetBgmSndId(void* data, u32 value);
+void fightEncountDataBiosSetFightType(void* data, u8 value);
 #ifdef __cplusplus
 }
 #endif

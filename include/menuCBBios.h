@@ -19,7 +19,8 @@ struct _MENUCBTRAINER {
     s32 mVersusBattleId;
     Hero mHero;
     Hero mBattleHero;
-    u8 _131C[0x1320 - 0x131C];
+    u16 mVsTrainerIndex;
+    u8 _131E[2];
 };
 
 /* State shared by the link-battle menus. */
@@ -50,18 +51,21 @@ struct _MENUCBWORK {
                                  // opens menu 0xA4 for 1 and 0xA9 otherwise.
     /* 0x0008 */ s32 battleMode; // battle mode the connect-battle menus run in.
     /* 0x000C */ s32 ruleId; // rule set the colosseum screens act on.
-    /* 0x0010 */ s32 unk_010; // 0x10: written by the context setup only.
+    /* 0x0010 */ s32 mVsStage;
     /* 0x0014 */ s32 mStartMenuType; // 0x14: menu the battle starts in (0 or 4).
     /* 0x0018 */ _MENUCBTRAINER mTrainer[4]; // trainer record of each controller port.
     /* 0x4C98 */ _MENUCBTRAINER mTrainerImmediately[4]; // "fight immediately" records.
     /* 0x9918 */ FightRuleData mRulesetData[6]; // colosseum rule table, mirror of the save table.
     /* 0x9C78 */ FightRuleData *mEntryRule; // regulation record the entry screens show.
-    /* 0x9C7C */ u8 _9C7C[0x9C84 - 0x9C7C];
+    /* 0x9C7C */ u32 mVsBgmIndex;
+    /* 0x9C80 */ u8 _9C80[4];
     /* Flags for each entry's six Pokemon slots. */
     /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
     /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
     /* 0xA65C */ Hero mHero; // hero snapshot the entry screens work on.
-    /* 0xAFD4 */ u8 _AFD4[0xAFE0 - 0xAFD4];
+    /* 0xAFD4 */ s32 mVsBattleKind;
+    /* 0xAFD8 */ s32 mVsRank;
+    /* 0xAFDC */ u8 _AFDC[4];
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
     /* 0xAFE8 */ u8 _AFE8[0xAFEC - 0xAFE8];
@@ -163,7 +167,9 @@ struct _MENUCBWORK {
     /* 0xB488 */ s8 mPartySlotFlag[4][6]; // party slot flags of the four ports,
                                   // one byte per slot.
     /* 0xB4A0 */ u8 pageWrap; // set while the 2D list wraps around.
-    /* 0xB4A1 */ u8 _B4A1[0xB524 - 0xB4A1];
+    /* 0xB4A1 */ s8 mVsHeroNameIndex;
+    /* 0xB4A2 */ u16 mVsHeroName[8];
+    /* 0xB4B2 */ u8 _B4B2[0xB524 - 0xB4B2];
     /* 0xB524 */ Pokemon *reliveDancers[8][4]; // Relive hall stage dancers.
     /* 0xB5A4 */ u8 _B5A4[0xB5F4 - 0xB5A4];
 };
@@ -193,7 +199,7 @@ s32 menuCBTrainerBios_GetControlerID(_MENUCBTRAINER *trainer);
 void menuCBTrainerBios_SetControlerID(_MENUCBTRAINER *trainer, s32 controlerID);
 void menuCBBios_InitVersusTrainer(_MENUCBTRAINER *trainer, Hero *hero);
 void menuCBBios_InitTrainerFromHero(_MENUCBTRAINER *trainer, Hero *hero, u16 dataId);
-void menuCBBios_InitTrainerFromDataID(_MENUCBTRAINER *trainer, u16 dataId, u32 battleId);
+void menuCBBios_InitTrainerFromDataID(_MENUCBTRAINER *trainer, u16 dataId, u16 battleId);
 void menuCBBios_ClearTrainer(_MENUCBTRAINER *trainer);
 void menuCBBios_InitTrainer(_MENUCBTRAINER *trainer, u16 dataId);
 s32 menuCBBios_FightTrainerDataIDToHomePlace(u16 dataId);

@@ -173,7 +173,7 @@ u16 fightTrainerGetTemotiNormalItemDataIdAry(FIGHT_TRAINER *trainer,
 u8 fightTrainerIsUsedItem(FIGHT_TRAINER *trainer);
 FightPokemon *fightTrainerSearchInvalidFightPokemonPtr(FIGHT_TRAINER *trainer,
                                                        u16 entryPokemonNum);
-void fightTrainerCreateFightTrainerDataIdToHero(u16 trainerDataId, s32 controllerId, Hero *hero, u32 battleId);
+void fightTrainerCreateFightTrainerDataIdToHero(u16 trainerDataId, s32 controllerId, Hero *hero, u16 battleId);
 u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 extern u32 *fight_trainer_pokemon_part_data_number;
 extern u32 *fight_trainer_ai_value_addsub_data_number;

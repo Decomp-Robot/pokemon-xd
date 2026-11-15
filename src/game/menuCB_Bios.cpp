@@ -132,7 +132,7 @@ void menuCBBios_InitTrainerFromHero(_MENUCBTRAINER *trainer,
 }
 
 void menuCBBios_InitTrainerFromDataID(_MENUCBTRAINER *trainer,
-                                                 u16 dataId, u32 battleId)
+                                                 u16 dataId, u16 battleId)
 {
     Hero work;
 

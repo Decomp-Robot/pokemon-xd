@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+void menuTitleReadWazaSelectMenu(void);
 void menuTitleBattleSelectFree(void);
 void menuTitleUnloadMapModels(void);
 void menuTitleCursorAnime(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);

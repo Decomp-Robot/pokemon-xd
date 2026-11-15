@@ -18,6 +18,11 @@ completed = true
 extra_cflags = ["-inline auto,deferred,level=1"]
 
 [[lib.object]]
+name = "game/menuCB_Battle.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/gamedata/gamedatasaveBios.cpp"
 completed = true
 
