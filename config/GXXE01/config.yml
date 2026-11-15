@@ -8,6 +8,8 @@ block_relocations:
   # Extracted consumer of the compiler-local pokecolo zero literal.
   # Retain its original SDA2 displacement until the consumer is recovered.
   - source: ".text:0x8005C768"
+  # Shared sqrtf helper retains the camera TU's compiler-local zero literal.
+  - source: ".text:0x801249C8"
   # Extracted consumers of the compiler-local menuShop conversion literals.
   # Retain the original SDA2 displacements until these consumers are recovered.
   - source: ".text:0x80061E4C"

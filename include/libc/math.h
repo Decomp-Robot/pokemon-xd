@@ -14,6 +14,8 @@ double fmod(double numerator, double denominator);
 namespace std {
 float sinf(float angle);
 float cosf(float angle);
+float pow(float base, float exponent);
+float atan2f(float y, float x);
 }
 #endif
 

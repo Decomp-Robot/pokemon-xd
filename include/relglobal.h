@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <ribbon.h>
+#include <roomData.h>
 
 struct RelivehallData {
     u8 mHologramAlpha;
@@ -18,23 +19,6 @@ struct DbgMenuItem;
 
 extern u32 (*debugMenuDataGetNum)(void);
 extern struct DbgMenuItem *(*debugMenuDataGetPtr)(long itemNo);
-
-struct FloorOffscreenResources;
-struct FloorFieldCameraList;
-
-struct GSfloor_dd_ {
-    u8 unknown;
-    u8 kind;
-    u16 floorID;
-    u8 unknownData[16];
-    struct FloorFieldCameraList **fieldCameraList;
-    u8 unknownMid[16];
-    struct FloorOffscreenResources **offscreen;
-    u8 unknownTail[20];
-};
-
-// Usable from C as well as C++.
-typedef struct GSfloor_dd_ GSfloor_dd_;
 
 struct FloorListHeader {
     u32 floorCount;

@@ -15,15 +15,23 @@ typedef struct FloorMapResourceTable {
     FloorMapResourceData *resources;
 } FloorMapResourceTable;
 
-typedef struct RoomData {
-    u8 unknown0[2];
+struct FloorFieldCameraList;
+struct FloorOffscreenResources;
+
+typedef struct GSfloor_dd_ {
+    u8 unknown;
+    u8 kind;
     u16 floorID;
     u32 mapResID;
     FloorMapResourceTable *resourceTable;
-    u8 unknown12[52];
-} RoomData;
+    u8 unknownData[8];
+    struct FloorFieldCameraList **fieldCameraList;
+    u8 unknownMid[16];
+    struct FloorOffscreenResources **offscreen;
+    u8 unknownTail[20];
+} GSfloor_dd_;
 
-typedef struct GSfloor_dd_ GSfloor_dd_;
+typedef GSfloor_dd_ RoomData;
 
 #ifdef __cplusplus
 extern "C" {

@@ -27,9 +27,14 @@ typedef struct FloorFieldCameraList {
 } FloorFieldCameraList;
 
 enum FloorFieldCameraMode {
+    FIELD_CAMERA_MODE_BLEND = 0,
     FIELD_CAMERA_MODE_AREA = 1
 };
 
+void floorFieldCameraInit(void);
+void floorUpdateFieldCamera(void);
+void floorFieldCameraUnpause(void);
+void floorFieldCameraPause(void);
 u8 floorFieldCameraGetMode(void);
 u8 floorFieldCameraDataExist(void);
 u8 floorFieldCameraGetEnabled(void);
