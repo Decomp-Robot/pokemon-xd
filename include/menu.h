@@ -29,6 +29,7 @@ u8 menuCursorCmp(CURSOR previous, CURSOR current);
 void menuCursorNormal(struct tagWINDOW_WORK *window, s32 mode);
 u8 menuIsCheck(s32 menuID);
 f32 menuGetTotalTime(void);
+f32 menuGetLastTime(void);
 void menuButtonNormal(struct tagWINDOW_WORK *window);
 u8 menuFaceCheckLoading(void);
 void menuDataBiosSetXY(s32 id, s16 x, s16 y);

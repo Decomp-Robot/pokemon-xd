@@ -116,7 +116,7 @@ struct tagSPRITE_WORK {
     };
     f32 mScaleX;            // horizontal scale.
     f32 mScaleY;            // vertical scale.
-    u8 _70[4];
+    f32 mYaw;               // rotation about the Y axis, in radians.
     u8 mUseFloorMenuLayer;
 };
 
