@@ -367,13 +367,13 @@ extern "C" void GSmodelSetBlendAnimFrameForce(_GSmodel *model, f32 fromFrame, f3
 
 extern "C" void GSmodelAllUnpauseAnimation(void)
 {
-    for (_GSmodel *model = gsModelList; model; model = model->mNext)
+    for (_GSmodel *model = _modelTopPtr; model; model = model->mNext)
     model->mFlags &= ~MODEL_FLAG_ANIM_PAUSED;
 }
 
 extern "C" void GSmodelAllPauseAnimation(void)
 {
-    for (_GSmodel *model = gsModelList; model; model = model->mNext)
+    for (_GSmodel *model = _modelTopPtr; model; model = model->mNext)
     model->mFlags |= MODEL_FLAG_ANIM_PAUSED;
 }
 

@@ -84,7 +84,7 @@ void _modelRender(GSgfxLayer *layer, GSgfxLayerPass pass)
         HSD_InitColorSwapTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
         HSD_InitColorSwapTable(GX_TEV_SWAP2, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
         HSD_InitColorSwapTable(GX_TEV_SWAP3, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
-        model = gsModelList;
+        model = _modelTopPtr;
         fog = layer->mFog != 0;
         for (; model != 0; model = model->mNext) {
             GSgfxTokenIfClearedReset(&model->mRenderToken);
@@ -221,7 +221,7 @@ void _modelPostUpdate60fps(void)
 {
     u32 perfbarEntry = GSgfxPerfbarCPUEntry(GSGFX_PERFBAR_MODEL_ANIMATION);
     _GSmodel *model;
-    for (model = gsModelList; model != 0; model = model->mNext) {
+    for (model = _modelTopPtr; model != 0; model = model->mNext) {
         if (modelProcessAt60fps(model) == 1)
             GSmodelAdvanceAnimation(model, 1.0f);
     }
@@ -232,7 +232,7 @@ void _modelPostUpdate(f32 delta)
 {
     u32 perfbarEntry = GSgfxPerfbarCPUEntry(GSGFX_PERFBAR_MODEL_ANIMATION);
     _GSmodel *model;
-    for (model = gsModelList; model != 0; model = model->mNext) {
+    for (model = _modelTopPtr; model != 0; model = model->mNext) {
         if (modelProcessAt60fps(model) == 0)
             GSmodelAdvanceAnimation(model, delta);
         modelDustUpdate(model);
@@ -248,7 +248,7 @@ void _modelPreUpdate(f32)
 
     GSgfxProjectSetupParameters();
     perfbarEntry = GSgfxPerfbarCPUEntry(GSGFX_PERFBAR_MODEL_ANIMATION);
-    for (model = gsModelList; model != 0; model = model->mNext) {
+    for (model = _modelTopPtr; model != 0; model = model->mNext) {
         model->mFlags &= ~MODEL_FLAG_FRAME_START_CLEAR_MASK;
         if (model->mFlags & MODEL_FLAG_VISIBLE) {
             if (model->mRenderCamera == 0 &&
@@ -263,13 +263,13 @@ void _modelPreUpdate(f32)
                 GSmodelUpdateAnimation(model);
         }
     }
-    for (updateModel = gsModelList; updateModel != 0; updateModel = updateModel->mNext) {
+    for (updateModel = _modelTopPtr; updateModel != 0; updateModel = updateModel->mNext) {
         if (updateModel->mFlags & MODEL_FLAG_VISIBLE) {
             modelUpdateAttachments(updateModel);
             modelUpdateTransform(updateModel);
         }
     }
-    for (updateModel = gsModelList; updateModel != 0; updateModel = updateModel->mNext) {
+    for (updateModel = _modelTopPtr; updateModel != 0; updateModel = updateModel->mNext) {
         if (updateModel->mFlags & MODEL_FLAG_FRAME_VISIBLE)
             modelApplyPartAnimMixes(updateModel);
     }
@@ -280,7 +280,7 @@ void _modelPreUpdate(f32)
 extern "C" void GSmodelIterateList(void (*callback)(GSmodel *, void *),
                                    void *userContext)
 {
-    for (GSmodel *model = (GSmodel *)gsModelList; model != 0;
+    for (GSmodel *model = (GSmodel *)_modelTopPtr; model != 0;
          model = model->mNext)
         callback(model, userContext);
 }
@@ -288,7 +288,7 @@ extern "C" void GSmodelIterateList(void (*callback)(GSmodel *, void *),
 extern "C" _GSmodel *GSmodelSearchModelList(_HSD_JObj *root)
 {
     _GSmodel *model;
-    for (model = gsModelList; model != 0; model = model->mNext) {
+    for (model = _modelTopPtr; model != 0; model = model->mNext) {
         _HSD_JObj *modelRoot = (model->mFlags & MODEL_FLAG_BLEND_ACTIVE)
                                    ? model->mBlendJObjTo : model->mJObj;
         if (modelRoot == root) return model;

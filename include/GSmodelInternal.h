@@ -94,7 +94,7 @@ void modelMaterialInit(GSmaterial *material);
 extern s32 _modelInUseCount;
 extern s32 _modelMaxUsedCount;
 
-extern _GSmodel *gsModelList;
+extern _GSmodel *_modelTopPtr;
 u8 modelProcessAt60fps(_GSmodel *model);
 void _modelResetPartAnimMixes(_GSmodel *model);
 inline void _modelRecalcMatrixAll(_HSD_JObj *joint);

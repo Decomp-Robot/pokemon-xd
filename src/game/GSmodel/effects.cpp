@@ -18,7 +18,7 @@ extern u8 gsDistortionUserCount;
 u8 gsDistortionUserCount;
 
 /* Live models, linked through mNext. */
-extern _GSmodel *gsModelList;
+extern _GSmodel *_modelTopPtr;
 
 /* Sets up the distortion layer for one frame: builds a light-perspective
  * camera, configures the render state, the texture environment and the
@@ -59,7 +59,7 @@ void modelDistortionRender(void)
     /* Nothing to draw unless some model still holds the distortion class;
      * the pass is skipped entirely in that case, timing included. */
     wanted = 0;
-    for (m = (_GSmodel *)gsModelList; m != NULL;
+    for (m = (_GSmodel *)_modelTopPtr; m != NULL;
          m = m->mNext) {
         if ((m->mFlags & MODEL_FLAG_FRAME_VISIBLE) != 0 &&
             (m->mFlags & MODEL_FLAG_DISTORTION_CLASS) == MODEL_FLAG_DISTORTION_CLASS) {
@@ -131,7 +131,7 @@ void modelDistortionRender(void)
     layer->mPassState[1].mGroupAFlags |= GS_GFX_TEXCOORD_ZERO_MASK;
     layer->mPassState[1].mFlags |= GS_GFX_DIRTY_GEOMETRY;
     /* Every model that still holds the distortion class draws its pass. */
-    for (m = (_GSmodel *)gsModelList; m != NULL;
+    for (m = (_GSmodel *)_modelTopPtr; m != NULL;
          m = m->mNext) {
         if ((m->mFlags & MODEL_FLAG_FRAME_VISIBLE) != 0 &&
             (m->mFlags & MODEL_FLAG_DISTORTION_CLASS) == MODEL_FLAG_DISTORTION_CLASS) {

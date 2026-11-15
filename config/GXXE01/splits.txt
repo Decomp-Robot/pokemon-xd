@@ -2111,6 +2111,10 @@ game/GSAPI/GSmodel/GSmodel.cpp:
 game/GSmodelRender.cpp:
 	.text       start:0x800F8998 end:0x800F9058
 
+game/GSAPI/GSmodel/bank.cpp:
+	.text       start:0x800FEEE0 end:0x800FF560
+	.sbss       start:0x804EAF68 end:0x804EAF70
+
 game/GSAPI/GSpart/GSpart.cpp:
 	.text       start:0x800FF560 end:0x801010B4
 	.rodata     start:0x802ED1A0 end:0x802ED1D0
