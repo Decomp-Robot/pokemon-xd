@@ -24,6 +24,7 @@ public:
 private:
     GSdvdFile *mFile;
     long mPosition;
+    u8 _08[4];
 };
 
 #endif

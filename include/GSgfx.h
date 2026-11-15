@@ -298,7 +298,7 @@ struct GSgfxProjectionState {
     f32 mViewportCentreX;
     f32 mViewportCentreY;
 };
-enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_PROJECTION = 0x20 };
+enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_LINE_WIDTH = 0x4, GSGFX_GEOMETRY_POINT_SIZE = 0x8, GSGFX_GEOMETRY_PROJECTION = 0x20 };
 
 enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2 };
 
@@ -462,6 +462,24 @@ public:
         mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_PROJECTION;
         mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
     }
+    void lineWidth(u8 width, GXTexOffset texOffset) {
+        mLineWidth = width;
+        mLineWidthTexOffset = texOffset;
+        mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_LINE_WIDTH;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
+        mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_LINE_WIDTH;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
+    }
+
+    void pointSize(u8 size, GXTexOffset texOffset) {
+        mPointSize = size;
+        mPointSizeTexOffset = texOffset;
+        mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_POINT_SIZE;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
+        mPassState[1].mGeometryFlags |= GSGFX_GEOMETRY_POINT_SIZE;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_GEOMETRY;
+    }
+
     void texCoordGeneratorCount(u8 count) {
         mTexGenCount = count;
         mPassState[0].mGeometryFlags |= GSGFX_GEOMETRY_TEXGEN_COUNT;
@@ -777,7 +795,12 @@ public:
     u8 mTexGenCount;
     u8 _0C71[3];
     GSgfxTexGenState mTexGen[8];
-    u8 _0D34[0x10];
+    u8 mLineWidth;
+    u8 _0D35[3];
+    GXTexOffset mLineWidthTexOffset;
+    u8 mPointSize;
+    u8 _0D3D[3];
+    GXTexOffset mPointSizeTexOffset;
     u8 mTexCoordLineOffset0;
     u8 mTexCoordPointOffset0;
     u8 _0D46[0x0E];

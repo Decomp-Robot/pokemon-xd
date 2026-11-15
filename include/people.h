@@ -104,6 +104,11 @@ struct tagPeopleInfoBios {
     char blinkParts[4];
     u8 unknown33;
 };
+enum PeopleBiosStateFlags {
+    PEOPLE_BIOS_STATE_ACTIVE = 0x1,
+    PEOPLE_BIOS_STATE_MODEL_VISIBLE = 0x2
+};
+
 extern "C" {
 tagPeopleWork* peopleGet(unsigned long group, unsigned long id);
 unsigned long peopleGetHumanID(unsigned long group, unsigned long id);
@@ -115,6 +120,7 @@ bool peopleWaitSyncMotion(unsigned long group, unsigned long id, bool wait);
 void peopleStopMotion(unsigned long group, unsigned long id);
 void peopleSetMotionForce(unsigned long group, unsigned long id, long motion, long frame, bool loop);
 s32 peopleBiosGetMaxNum();
+unsigned long peopleBiosGetState(tagPeopleWork *people);
 tagPeopleWork* peopleBiosGetWorkPtr(s32 index);
 u8 peopleBiosCheckFlag(tagPeopleWork* people, unsigned long flag);
 tagPeopleInfoBios* peopleInfoBiosGetPtr(unsigned long id);

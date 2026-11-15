@@ -11,6 +11,7 @@ void scriptLightSetMotion(int, int, int, int);
 void scriptLightStopMotion(int);
 int scriptLighgtWaitMotion(int, int);
 GSlight* lightGetLight(int);
+int lightGetLightSize(void);
 void GSlightSetType(GSlight*, int);
 void GSlightSetPosition(GSlight*, GSvec*);
 void GSlightSetColor(GSlight*, GXColor);

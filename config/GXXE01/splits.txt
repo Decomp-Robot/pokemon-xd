@@ -3406,6 +3406,12 @@ game/app/ribbon/ribbon.cpp:
 game/app/exribbon/exribbon.cpp:
 	.text       start:0x802922FC end:0x8029245C
 
+game/app/light/lightEditor.cpp:
+	.text       start:0x8029245C end:0x80294190
+	.rodata     start:0x802FAE18 end:0x802FAE98
+	.data       start:0x8041A890 end:0x8041A8B0
+	.sdata2     start:0x804EF6D8 end:0x804EF790
+
 game/app/bingo/bingoBios.cpp:
 	.text       start:0x80296B3C end:0x80296CB0
 

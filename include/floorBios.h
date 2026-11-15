@@ -11,6 +11,7 @@ u8 floorDataBiosGetFloorKind(void*);
 RoomData* floorDataBiosGetCurrentPtr();
 u32 floorDataBiosGetMapResID(RoomData* floor);
 void floorDataBiosSetMapResID(RoomData* floor, u32 res);
+void floorGetLightInfo(u32 *resource, long *count);
 FloorTreasure* floorEventGetTresureList(u32 id);
 #ifdef __cplusplus
 }
