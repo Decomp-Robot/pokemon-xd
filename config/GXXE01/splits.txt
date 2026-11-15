@@ -2379,6 +2379,9 @@ game/app/pokemon/pokemonEvolution.cpp:
 	.data       start:0x80404460 end:0x804044A4
 	.sdata2     start:0x804EDB80 end:0x804EDB88
 
+game/app/hero/heroBios.cpp:
+	.text       start:0x8014DC28 end:0x8014E174
+
 game/app/hero/heroMove.cpp:
 	.text       start:0x8015215C end:0x8015224C
 	.ctors      start:0x802E9FD0 end:0x802E9FD4

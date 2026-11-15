@@ -6138,6 +6138,10 @@ progress_category = "game"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/hero/heroBios.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/hero/heroMove.cpp"
 source = "game/app/hero/heroMove.cpp"
 completed = true

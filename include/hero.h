@@ -103,7 +103,7 @@ public:
     void setMeetDarkPokemonCount(u8 count);
     void *getDisk();
 
-private:
+public:
     u16 mName[11]; // 0x00: hero name.
     u8 _16[0x16];
     unsigned long mRandomIdentity; // 0x2C
@@ -126,6 +126,7 @@ private:
     ItemSlot mHizukiItems[10]; // 0x8FA
     u16 mHizukiName[11]; // 0x922
     u8 mMeetDarkPokemonCount;
+private:
     u8 mFollowerID;
     s16 mRestertAngle;
     f32 mRestertX;
