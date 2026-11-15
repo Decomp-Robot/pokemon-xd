@@ -5,7 +5,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-bool wazaDB_GetHidenFlag(u16);
+u8 wazaDB_GetHidenFlag(u16);
 #ifdef __cplusplus
 }
 #endif

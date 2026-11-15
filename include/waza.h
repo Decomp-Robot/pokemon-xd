@@ -182,7 +182,7 @@ enum {
 
 // An entry of the move database: everything the fight reads about one move.
 struct WazaData {
-    s8 mPri; // 0x00
+    u8 mPri; // 0x00
     u8 mPp; // 0x01
     u8 mZokuseiDataId; // 0x02
     u8 mRangeId; // 0x03
@@ -194,20 +194,25 @@ struct WazaData {
     u8 mYokodori; // 0x09
     u8 mOumugaesi; // 0x0A
     u8 mOujanosirusi; // 0x0B
-    u8 _0C[4];
+    u8 mYubiwohuru;
+    u8 mMonomane;
+    u8 mNekonote;
+    u8 mNegoto;
     u8 mBouon; // 0x10
-    u8 _11[1];
-    bool mHidenFlag; // 0x12
+    u8 mPressure;
+    u8 mHidenFlag; // 0x12
     u8 mZokuseiKindData; // 0x13
     u8 mRiskFlag; // 0x14
     u8 mCompatible; // 0x15
     u8 _16[2];
     s16 mIryoku; // 0x18
-    u8 _1A[2];
+    u16 mFightKoukaDataId;
     u16 mSeqId; // 0x1C
     u16 mWazaFuncDataId; // 0x1E
     u32 mNameID; // 0x20
-    u32 _24[3];
+    u32 mFightAttackTunagiMsgId;
+    u32 mFightAttackMsgId;
+    u32 mDoc;
     u32 mWazawzxdataId; // 0x30
     u8 mTypeId[WAZA_DATA_TYPE_ID_COUNT]; // 0x34
     u8 _37[1];
@@ -279,8 +284,8 @@ void wazaDataBiosSetAvg(struct WazaData *data, u8 value);
 void wazaDataBiosSetIryoku(struct WazaData *data, s16 value);
 void wazaDataBiosSetFightKoukaDataId(struct WazaData *data, u16 value);
 void wazaDataBiosSetSeqId(struct WazaData *data, u16 value);
-void wazaDataBiosSetFightAttackTunagiMsgId(struct WazaData *data, u16 value);
-void wazaDataBiosSetFightAttackMsgId(struct WazaData *data, u16 value);
+void wazaDataBiosSetFightAttackTunagiMsgId(struct WazaData *data, u32 value);
+void wazaDataBiosSetFightAttackMsgId(struct WazaData *data, u32 value);
 void wazaDataBiosSetAddFightKoukaAvg(struct WazaData *data, u8 value);
 void wazaDataBiosSetDageki(struct WazaData *data, u8 value);
 void wazaDataBiosSetMamoru(struct WazaData *data, u8 value);

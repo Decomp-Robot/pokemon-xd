@@ -365,7 +365,7 @@ u8 wazaDB_GetTypeId(u16 move, u16 index)
     return data->mTypeId[index];
 }
 
-bool wazaDB_GetHidenFlag(u16 move)
+u8 wazaDB_GetHidenFlag(u16 move)
 {
     struct WazaData *data;
 
