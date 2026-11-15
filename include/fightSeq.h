@@ -20,6 +20,8 @@ typedef void (*FightSeqWazaFunc)(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOu
 extern "C" {
 #endif
 
+void fightSeqFightOutPokemonEffect(u16 effectId, FightOutPokemon *pokemon, u8 wait, u8 statusMenu);
+
 struct ModelSequence;
 
 // Sequence the battle floor event plays its scene with.
@@ -73,6 +75,7 @@ enum {
     JOUTAI_ID_GRUDGE = 40,
     JOUTAI_ID_ENCORE = 42,
     JOUTAI_ID_FURY_CUTTER = 46,
+    JOUTAI_ID_ROLLOUT = 47,
     JOUTAI_ID_HELPING_HAND = 50,
     JOUTAI_ID_SNATCH = 51,
     JOUTAI_ID_MAGIC_COAT = 55,

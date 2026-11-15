@@ -10,6 +10,15 @@
 
 typedef struct FIGHT_WAZA FIGHT_WAZA;
 
+enum FightWeather {
+    FIGHT_WEATHER_NONE = 0,
+    FIGHT_WEATHER_SUNLIGHT = 1,
+    FIGHT_WEATHER_RAIN = 2,
+    FIGHT_WEATHER_SANDSTORM = 3,
+    FIGHT_WEATHER_HAIL = 4,
+    FIGHT_WEATHER_SHADOW_SKY = 5
+};
+
 /* Status selectors for battle floor records. */
 enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_FIGHT_FLOOR_PTR = 0,

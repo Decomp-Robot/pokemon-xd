@@ -6,6 +6,7 @@
 #include <fightAction.h>
 #include <joutai.h>
 #include <types.h>
+#include <bool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -74,8 +75,8 @@ void fightOutPokemonResetSeqStatus(FightOutPokemon *pokemon, u16 status);
 u8 fightOutPokemonIsNokoriHpFollowing(FightOutPokemon *pokemon, u16 divisor);
 s8 fightOutPokemonGetTasteLike(FightOutPokemon *pokemon, u16 taste);
 void fightOutPokemonSetKaisuuJoutaiDataId(FightOutPokemon *pokemon, u16 status, u32 count);
-void fightOutPokemonLoadWazaEffect(FightOutPokemon *pokemon, u32 effect, u32 slot, u32 mode);
-void fightOutPokemonWazaEffect(FightOutPokemon *pokemon, u32 effect, u32 slot, u32 mode, s32 statusMenuSelector);
+void fightOutPokemonLoadWazaEffect(FightOutPokemon *pokemon, u16 wazaId, u8 slot, u8 variation);
+void fightOutPokemonWazaEffect(FightOutPokemon *pokemon, u16 wazaId, u8 slot, bool wait, s32 statusMenuSelector);
 void fightOutPokemonFreeWazaEffect(FightOutPokemon *pokemon, u32 effect, u32 slot);
 u8 fightOutPokemonGetFightOutPokemonEnemyOumuWazaDataIdAry(FightOutPokemon *pokemon, u16 *moves);
 
@@ -85,6 +86,10 @@ void fightOutPokemonSetZokuseiDataId(FightOutPokemon *pokemon, u8 index, u16 typ
 void fightOutPokemonInitJoutaiDataId(FightOutPokemon *pokemon, u16 statusId);
 u32 fightOutPokemonGetBuffJoutaiDataId(FightOutPokemon *pokemon, u16 id);
 
+s16 fightOutPokemonGetCountAsJoutaiDataId(FightOutPokemon *pokemon, u16 statusId);
+u8 figthOutPokemonGetLevel(FightOutPokemon *pokemon);
+enum { FIGHT_POKEMON_RARE_AUTO = -1 };
+struct NullSequence *fightOutPokemonCreateSequence(FightOutPokemon *pokemon, u16 tenkou, s8 rare);
 u16 figthOutPokemonGetPokemonDataId(FightOutPokemon *pokemon);
 FIGHT_ACTION *fightOutPokemonCreateFightActionAttackWaza(FightOutPokemon *pokemon, struct FIGHT_ACTION_DATA_dd_ *motoActionData, u16 actionKind, s32 bufferSelector, struct FIGHT_ACTION_DATA_dd_ *wazaActionData, u32 wazaId, u16 targetId, s8 stockWaza, u8 autoMakeFlag);
 void fightOutPokemonDarkPokemonKaijoEffect(FightOutPokemon *pokemon, u8 wokeFromSleep, u8 endedHyperMode, u8 raisedAccuracy, s32 msgId, s32 mode);

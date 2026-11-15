@@ -47,9 +47,6 @@ enum { FIGHT_BATTLE_TYPE_ESCAPE = 12 };
  */
 
 
-// Weather codes used by the fight floor.
-enum FightWeatherId { FIGHT_WEATHER_SUNLIGHT = 1 };
-
 // Operations accepted by the move-sequence helpers.
 enum FightSequenceOperation {
     FIGHT_SEQUENCE_OPERATION_LOAD = 0,
