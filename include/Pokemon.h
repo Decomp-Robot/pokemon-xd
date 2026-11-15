@@ -26,7 +26,12 @@ struct Pokemon {
     u8 mConditionCount; // 0x17
     u8 mConditionTurn; // 0x18
     u8 mConditionTurnNow; // 0x19
-    u8 _1A[6];
+    u8 _1A[3];
+    u8 mTamagoFlag : 1;
+    u8 mTokuseiFlag : 1;
+    u8 mFuseiFlag : 1;
+    u8 : 5;
+    u8 _1E[2];
     u32 mExp; // 0x20: total experience.
     unsigned long mCatchTrainerRnd; // 0x24: catch trainer random identity value.
     unsigned long mPersonality; // 0x28: personality value.
@@ -69,7 +74,18 @@ struct Pokemon {
     void setCatchTrainerSex(unsigned char sex);
     void clear();
     bool checkValid() const;
+    void setPoolFriendLevel(u16 level);
+    void setPoolExp(unsigned long exp);
     void setDarkPoint(float point);
+    void setDarkPointDirect(long point);
+    u16 getPoolFriendLevel() const;
+    unsigned long getPoolExp() const;
+    float getDarkPoint() const;
+    long getDarkPointDirect() const;
+    u16 getDarkpokemonDataID() const;
+    u8 getSex() const;
+    u8 isTokuseiFlag() const;
+    static bool isRareParam(unsigned long trainerRnd, unsigned long pokemonRnd);
     u16 getPokemonDataId() const;
     u16 getHp() const;
     u8 getLevel() const;
@@ -79,7 +95,7 @@ struct Pokemon {
     PokemonData* getPokemonDataPtr() const;
     u16 getItemDataId() const;
     bool isLegend() const;
-    u8 isDarkPokemon() const;
+    bool isDarkPokemon() const;
     unsigned long getCatchTrainerRnd() const;
     void setCatchTrainerRnd(unsigned long rnd);
 #endif

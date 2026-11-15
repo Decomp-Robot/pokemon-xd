@@ -34,6 +34,12 @@ public:
     u32 getRnd() const;
     u16 getCatchFloorId() const;
     u16 getOrgTrainer() const;
+    void setPoolFriendLevel(u16 level);
+    u16 getPoolFriendLevel() const;
+    void setPoolExp(u32 exp);
+    u32 getPoolExp() const;
+    void setDarkPoint(float point);
+    void setDarkPointDirect(s32 point);
     s32 getDarkPointDirect() const;
     s32 getInitDarkPointDirect() const;
     float getDarkPoint() const;
