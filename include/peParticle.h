@@ -174,28 +174,6 @@ enum peNodeFlags {
     PE_NODE_REVERSE_ROTATION = 1,
 };
 
-class peRenderContainer : public peContainer {
-public:
-    peRenderContainer(peEmitterNode *parent, unsigned long nodeSize, u16 maxNodes,
-                      GSgfxVF *format, GSgfxPrimType primitive, u8 vertices,
-                      u8 renderStride, bool doubleBuffer);
-    virtual ~peRenderContainer();
-    void InitSwap();
-    void ResolveMultipleSwap();
-    void MarkForSwap();
-    void StopSwap();
-    virtual void PreUpdate();
-    virtual void Start() = 0;
-
-    u8 mSwapState;
-    u8 mBufferIndex;
-    u16 mReserved;
-    u32 mRenderDataSize;
-    GSgfxDL mDisplayLists[2];
-    char *mRenderData[2];
-    u16 mRenderTokens[2];
-};
-
 class peParticleContainer : public peRenderContainer {
 public:
     peParticleContainer(peEmitterNode *parent, _peParticle *particle, u16 maxNodes);

@@ -2331,6 +2331,10 @@ game/GSAPI/GSparticle/peModel.cpp:
 	.sbss       start:0x804EB1A0 end:0x804EB1A8
 	.sdata2     start:0x804EDA68 end:0x804EDAB0
 
+game/GSAPI/GSparticle/peContainer.cpp:
+	.text       start:0x801357BC end:0x80136154
+	.data       start:0x803FC2E0 end:0x803FC328
+
 game/GSAPI/GSparticle/peDistortion.cpp:
 	.text       start:0x80136154 end:0x80137628
 	.data       start:0x803FC328 end:0x803FC350

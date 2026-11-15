@@ -271,6 +271,11 @@ struct GSgfxDL {
             return mData + vertex * mVertexStride + GS_DISPLAY_LIST_HEADER_BYTES;
         return 0;
     }
+    u16 VertexStride() {
+        if (mFlags & GS_DISPLAY_LIST_ALLOCATED)
+            return mVertexStride;
+        return 0;
+    }
     GSgfxVF *VertexFormat() {
         if (mFlags & GS_DISPLAY_LIST_ALLOCATED)
             return mVertexFormat;
@@ -983,6 +988,7 @@ void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
 void GSgfxTokenAbortFrame(void);
 void GSgfxTokenInit(void);
 extern "C" void GSgfxTokenIfClearedReset(u16 *token);
+extern "C" void GSgfxTokenWaitForClear(u16 token);
 extern "C" void GSgfxTokenWaitForClearAndReset(u16 *token);
 void GSgfxRenderAbortFrame(void);
 void GSgfxRenderWaitForDrawComplete();

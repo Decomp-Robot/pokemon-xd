@@ -149,7 +149,7 @@ void peParticleContainer::Stop()
          node = (peParticleNode *)node->next)
         node->Stop(mParticle, &mDisplayLists[mBufferIndex]);
     RemoveAll();
-    StopSwap();
+    ResetSwap();
 }
 
 void peParticleContainer::Render()

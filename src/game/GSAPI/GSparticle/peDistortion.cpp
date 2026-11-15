@@ -39,7 +39,7 @@ void peDistortionContainer::Stop()
         node->Stop(&mDisplayLists[mBufferIndex]);
 
     RemoveAll();
-    StopSwap();
+    ResetSwap();
 }
 
 void peDistortionContainer::Render()
