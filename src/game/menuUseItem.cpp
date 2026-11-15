@@ -1146,9 +1146,9 @@ extern "C" int menuUseItemListLVUp(unsigned long itemID, int *consumed)
             dispMsg(MSG_ITEM_USE_LEVEL_UP);
             getPokemonLvupStatus(&after, pokemon);
             getDifLvupStatus(&diff, &after, &before);
-            diff.mFlag = 1;
+            diff.mShowPlus = true;
             winMsgOpenLevelUpFiledStatus(&diff, 1);
-            after.mFlag = 0;
+            after.mShowPlus = false;
             winMsgOpenLevelUpFiledStatus(&after, 1);
             winMsgCloseLevelUpStatus(1);
             level = pokemonBiosGetLevel(pokemon);

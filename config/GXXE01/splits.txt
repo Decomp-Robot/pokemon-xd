@@ -549,8 +549,10 @@ game/menuDataBios.cpp:
 	.text       start:0x8007C9B8 end:0x8007CD64
 
 game/menuPanel.cpp:
-	.text       start:0x8007CD64 end:0x8007D088
+	.text       start:0x8007CD64 end:0x8007E350
+	.data       start:0x803C7248 end:0x803C7264
 	.bss        start:0x80435C38 end:0x80435C48
+	.sdata      start:0x804E7FE8 end:0x804E8000
 
 game/floorLayerConfig.cpp:
 	.text       start:0x8007E350 end:0x8007E5AC

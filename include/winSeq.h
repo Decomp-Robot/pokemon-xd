@@ -9,6 +9,7 @@ extern "C" {
 
 void winSeqSetMenu(long menuID, s32 seq);
 u8 winSeqCheckMove(s32 id);
+u8 winSeqIsCheck(long menuID, s32 sequenceID);
 
 #ifdef __cplusplus
 }

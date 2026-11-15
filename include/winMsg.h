@@ -33,7 +33,7 @@ u8 winMsgCloseCheckFight(void);
 }
 #endif
 struct MENU_LVUP_STATUS {
-    u8 mFlag;
+    WinMsgBool mShowPlus;
     u8 _01;
     s16 mHp;
     s16 mAttack;

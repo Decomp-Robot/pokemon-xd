@@ -68,6 +68,7 @@ void windowCloseMain(tagWINDOW_WORK *window);
 struct WINDOW_FREE_WORK *windowGetFreeWork(tagWINDOW_WORK *window);
 // Work area the window allocates for its item hooks, or NULL when it has none.
 void *windowGetAllocPtr(tagWINDOW_WORK *window);
+void *windowAllocMemory(tagWINDOW_WORK *window, long size);
 #ifdef __cplusplus
 }
 #endif
