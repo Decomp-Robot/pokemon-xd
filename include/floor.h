@@ -11,6 +11,11 @@ struct GStexture;
 // stage; the length of an archive is rounded up to it.
 #define FLOOR_READ_ALIGN 0x20
 
+enum FloorMapResourceKind {
+    FLOOR_MAP_RESOURCE_MODEL = 1,
+    FLOOR_MAP_RESOURCE_LIGHT = 2
+};
+
 struct GSfloor_dd_;
 struct _GSmodel;
 

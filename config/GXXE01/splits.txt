@@ -2226,6 +2226,9 @@ game/GScolsys2Sun.cpp:
 	.text       start:0x8011D940 end:0x8011DDB0
 	.sdata2     start:0x804ED808 end:0x804ED818
 
+game/app/floor/floor.cpp:
+	.text       start:0x8011DE40 end:0x8011DEB8
+
 game/app/floor/floorDataBios.cpp:
 	.text       start:0x80122AB0 end:0x80122DFC
 

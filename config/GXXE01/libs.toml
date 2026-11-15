@@ -51,6 +51,11 @@ name = "game/app/deck/deck.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/floor/floor.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/app/floor/floorStack.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole"]
