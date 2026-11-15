@@ -6771,3 +6771,15 @@ cflags_extra = ["-use_lmw_stmw on"]
 name = "game/GSAPI/GSbound/GSbound.cpp"
 completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib]]
+name = "GSmovie"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on", "-str reuse,readonly", "-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include", "-i src/ext/musyx_sdk/include"]
+
+[[lib.object]]
+name = "game/GSAPI/GSmovie/movieStream.cpp"
+extra_cflags = ["-O4,s"]
+completed = true

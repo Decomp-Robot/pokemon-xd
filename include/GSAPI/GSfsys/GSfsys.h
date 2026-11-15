@@ -8,6 +8,10 @@ extern "C" {
 #endif
 
 typedef void (*GSfsysReadCallback)(long fileMode, void* context, long argument);
+u8 GSfsysStreamGetData(u32 groupID, u32 resourceID, void* buffer,
+                       u32 size, u32 offset,
+                       GSfsysReadCallback callback, void* context, long argument);
+u32 GSfsysStreamGetCacheSize(void);
 
 /*! What GSfsysGetStatus reports about the work filed on a group. */
 #define GSFSYS_STATUS_ERROR (-2) /* file system uninitialized, or the work failed */

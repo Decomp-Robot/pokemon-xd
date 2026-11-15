@@ -3024,6 +3024,11 @@ game/GSAPI/GSvtr/GSvtr.cpp:
 	.sbss       start:0x804EB730 end:0x804EB750
 	.sdata2     start:0x804EE930 end:0x804EE984
 
+game/GSAPI/GSmovie/movieStream.cpp:
+	.text       start:0x801E07B8 end:0x801E21E0
+	.rodata     start:0x802F8880 end:0x802F88A0
+	.sdata2     start:0x804EE988 end:0x804EE998
+
 game/app/sodateya/sodateya.cpp:
 	.text       start:0x801ECBB0 end:0x801ED098
 
