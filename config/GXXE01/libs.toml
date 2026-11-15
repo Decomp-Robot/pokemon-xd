@@ -9,6 +9,11 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/app/gamedata/gamedata.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred,level=1"]
+
+[[lib.object]]
 name = "game/app/gamedata/gamedatasaveBios.cpp"
 completed = true
 

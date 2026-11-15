@@ -45,7 +45,8 @@ enum GAMEDATA_STATUS_FIELD {
     GAMEDATA_STATUS_ORIGIN = 2,
     GAMEDATA_STATUS_GENERATION = 3,
     GAMEDATA_STATUS_REGION = 4,
-    GAMEDATA_STATUS_LANGUAGE = 5
+    GAMEDATA_STATUS_LANGUAGE = 5,
+    GAMEDATA_STATUS_LIMIT = 7
 };
 /* Version and generation of the game that wrote a save's attest block. */
 enum {
@@ -68,14 +69,20 @@ enum GamedataAttestLangarea {
 };
 
 enum GAMEDATASAVE_FIELD {
+    GAMEDATASAVE_FIELD_METADATA = 1,
+    GAMEDATASAVE_FIELD_SAVE_RANDOM = 2,
+    GAMEDATASAVE_FIELD_SAVE_COUNT = 4,
     GAMEDATASAVE_FIELD_WORLD_MAP_FLOOR = 5,
-    GAMEDATASAVE_FIELD_OPTION_NO_VIBRATION = 9
-};
-
-/* Word-valued fields in the save block's system metadata. */
-enum SaveMetadataField {
-    SAVE_METADATA_SAVE_COUNT = 4,
-    SAVE_METADATA_MAP = 5
+    GAMEDATASAVE_FIELD_PLAYTIME = 6,
+    GAMEDATASAVE_FIELD_PREVIOUS_FLOOR = 7,
+    GAMEDATASAVE_FIELD_FLOOR_POSITION = 8,
+    GAMEDATASAVE_FIELD_OPTION_NO_VIBRATION = 9,
+    GAMEDATASAVE_FIELD_OPTION_AUDIO_BYTE = 10,
+    GAMEDATASAVE_FIELD_PAR_CHECKSUM = 11,
+    GAMEDATASAVE_FIELD_OPTION_AUDIO_WORD = 12,
+    GAMEDATASAVE_FIELD_SYSTEM_CHECKSUM = 13,
+    GAMEDATASAVE_FIELD_ZUKAN_FLAG = 14,
+    GAMEDATASAVE_FIELD_LIMIT = 16
 };
 
 #ifdef __cplusplus
@@ -112,10 +119,21 @@ u32 gamedatasaveBiosGetSavernd(GamedataSaveMetadata *metadata);
 void gamedatasaveBiosSetPtr(GamedataSave *save, GamedataSaveMetadata *metadata);
 GamedataSaveMetadata *gamedatasaveBiosGetPtr(GamedataSave *save);
 void gamedatasaveInit(GamedataSave *save);
+u8 gamedataBiosGetFlag(GamedataSave *save, u16 field, u16 index);
+void gamedataBiosSetFlag(GamedataSave *save, u16 field, u16 index, u8 value);
+void gamedataCreate(GamedataSave *gamedata, u8 versionId, u8 generationId, u8 areaId, u8 langareaId);
+void gamedataInit(GamedataSave *gamedata);
+void gamedataAttestInit(GamedataAttest *attest);
+void gamedataBiosSetGamedataAtttestPtr(void *gamedata, GamedataAttest *attest);
+void gamedataAttestBiosSetVerId(GamedataAttest *attest, u8 value);
+void gamedataAttestBiosSetGenId(GamedataAttest *attest, u8 value);
+void gamedataAttestBiosSetAreaId(GamedataAttest *attest, u8 value);
+void gamedataAttestBiosSetLangareaId(GamedataAttest *attest, u8 value);
+u8 gamedataAttestBiosGetGenId(GamedataAttest *attest);
+u8 gamedataAttestBiosGetAreaId(GamedataAttest *attest);
 // A null save selects the current game data.
-unsigned long gamedatasaveGetStatus(void *save, int field);
-void gamedatasaveSetStatus(void *save, int field, unsigned long value);
-void gamedatasaveSetDataByIndex(void *save, s32 field, u32 value);
+unsigned long gamedatasaveGetStatus(void *save, u16 field);
+void gamedatasaveSetStatus(void *save, u16 field, unsigned long value);
 void *gamedataGetStatus(void *gamedata, u16 field);
 // Fields 2 to 5 replace one byte of the attest block, field 1 the whole block.
 void gamedataSetStatus(void *gamedata, u16 field, u32 status);
