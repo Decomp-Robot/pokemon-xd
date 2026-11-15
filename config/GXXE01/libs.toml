@@ -446,6 +446,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/fight/fightSideBios.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fightSideDB.cpp"
 completed = true
 cflags = [
