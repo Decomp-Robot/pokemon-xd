@@ -3,6 +3,7 @@
 #include <camera.h>
 #include <GScamera.h>
 #include <GSvec.h>
+#include <sound.h>
 
 /*
  * The camera of the evolution demo: the demo stores the camera the player left
@@ -62,4 +63,71 @@ void storeCamera(CAM_STORE *store) {
     store->targetOfs.y = targetOfs.y;
     store->targetOfs.z = targetOfs.z;
     store->fov = fov;
+}
+
+class ModelSequence;
+
+enum STEP {
+    STEP_EVOLUTION = 0,
+    STEP_EVOLUTION_COMPLETE = 1,
+    STEP_CANCEL_EARLY = 2,
+    STEP_CANCEL_MIDDLE = 3,
+    STEP_CANCEL_LATE = 4
+};
+
+struct WORK {
+    ModelSequence *sequenceBefore;
+    ModelSequence *sequenceAfter;
+    STEP step;
+    u32 bgmID;
+    u32 envID;
+    u32 bgmVolume;
+    u32 envVolume;
+    GSsndVolumeStack bgmStack;
+    GSsndVolumeStack envStack;
+};
+
+enum {
+    EVOLUTION_SOUND_FADE_TIME = 50
+};
+
+void restoreSound(WORK *work) {
+    if (work->bgmID != 0) {
+        soundOpenPlay(work->bgmID, EVOLUTION_SOUND_FADE_TIME, work->bgmVolume);
+        GSsndSetPushVolumeID(work->bgmID, &work->bgmStack);
+    }
+    if (work->envID != 0) {
+        soundOpenPlayEnv(work->envID, EVOLUTION_SOUND_FADE_TIME, work->envVolume);
+        GSsndSetPushVolumeID(work->envID, &work->envStack);
+    }
+}
+
+void stopSound(WORK *work) {
+    s32 bgmID;
+    s32 envID;
+    u32 bgmVolume;
+    u32 envVolume;
+
+    bgmID = soundGetBGMID();
+    if (bgmID != 0) {
+        GSsndGetPushVolumeID(bgmID, &work->bgmStack);
+        bgmVolume = soundGetVolume(bgmID);
+        soundOpenPlay(SOUND_SILENT_BGM, EVOLUTION_SOUND_FADE_TIME, SOUND_VOLUME_MAX);
+    } else {
+        bgmVolume = 0;
+    }
+
+    envID = soundGetEnvID();
+    if (envID != 0) {
+        GSsndGetPushVolumeID(envID, &work->envStack);
+        envVolume = soundGetVolume(envID);
+        soundStopEnv(EVOLUTION_SOUND_FADE_TIME);
+    } else {
+        envVolume = 0;
+    }
+
+    work->bgmID = bgmID;
+    work->envID = envID;
+    work->bgmVolume = bgmVolume;
+    work->envVolume = envVolume;
 }

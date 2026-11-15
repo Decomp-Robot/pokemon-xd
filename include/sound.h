@@ -10,6 +10,10 @@ enum {
     SOUND_SILENT_BGM = 8
 };
 
+enum {
+    SOUND_VOLUME_MAX = 255
+};
+
 /* Sound currently playing in the environment slot and in the BGM slot. Both
    hold 0 while idle and are cleared when their sound is stopped or replaced. */
 extern s32 soundPlayEnvID;
