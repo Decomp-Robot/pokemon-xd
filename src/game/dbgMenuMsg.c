@@ -48,7 +48,7 @@ s32 dbgMenuMsgTest(s32 menuID, s32 state)
 
 s32 dbgMenuMsgCheck(void)
 {
-    s32 msg;
+    u32 msg;
 
     if (GSinputButtonsPressed(GS_INPUT_PORT_1) & MSG_PAD_TRIGGER_R) {
         if (!menuSubOpenNumberInputDigit(0, &msg)) {

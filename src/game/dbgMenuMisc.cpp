@@ -369,7 +369,7 @@ extern "C" s32 dbgMenuScriptDispLine(void)
 
 extern "C" s32 dbgMenuScriptMsgTest(void)
 {
-    static s32 msg_id = 0;
+    static u32 msg_id = 0;
     while (menuSubOpenNumberInputDigit(msg_id, &msg_id) == 1) {
         winMsgOpenField(msg_id, 1, 0);
         winMsgClose(1);
@@ -379,7 +379,7 @@ extern "C" s32 dbgMenuScriptMsgTest(void)
 
 extern "C" s32 dbgMenuScriptYesNoMsgTest(void)
 {
-    static s32 msg_id = 0;
+    static u32 msg_id = 0;
     while (menuSubOpenNumberInputDigit(msg_id, &msg_id) == 1) {
         winMsgOpenField(msg_id, 1, 0);
         menuSubOpenYesNoField();
@@ -390,7 +390,7 @@ extern "C" s32 dbgMenuScriptYesNoMsgTest(void)
 
 extern "C" s32 dbgMenuScriptSoundTest(void)
 {
-    static s32 snd_id = 0;
+    static u32 snd_id = 0;
     while (menuSubOpenNumberInputDigit(snd_id, &snd_id) == 1) {
         if (snd_id == soundGetBGMID() || snd_id == soundGetEnvID()) {
             soundStop(snd_id, 1000);

@@ -7,6 +7,7 @@
 #include <menu.h>
 #include <menuCBCommon.h>
 #include <menuSub.h>
+#include <menuItemBios.h>
 #include <GSmsg.h>
 #include <Pokemon.h>
 #include <PokemonData.h>
@@ -29,6 +30,12 @@ enum MenuSubSelectItem {
     MENU_SUB_SELECT_SECOND = 58,
     MENU_SUB_SELECT_FIRST_ALT = 75,
     MENU_SUB_SELECT_SECOND_ALT = 76
+};
+
+enum MenuSubColosseumItem {
+    MENU_SUB_COLOSSEUM_ITEM_FIRST = 52,
+    MENU_SUB_COLOSSEUM_ITEM_SECOND = 53,
+    MENU_SUB_COLOSSEUM_ITEM_THIRD = 54
 };
 
 u8 menuSubAnimAlpha(void)
@@ -105,14 +112,14 @@ u32 menuSubCalcColor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 extern "C" {
 // Opens the select menu on the GBA screen and waits for the selection. If the
 // GBA is disconnected midway the menu is force-closed and the wait returns -2.
-s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s16 x, s16 y,
-                          s32 work, s32 cursor, u8 a, u8 b)
+s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s32 x, s32 y,
+                          s32 initialCursor, s32 displayedCount, u8 wrapCursor, u8 allowCancel)
 {
     s32 result = 0;
 
     menuSubCursorAnimeInit();
-    menuOpenCustom(0xAE, windowGetActiveID(), &work, 0, false, 6, type, selectList, listNum,
-                   cursor, a, b);
+    menuOpenCustom(0xAE, windowGetActiveID(), &initialCursor, 0, false, 6, type, selectList, listNum,
+                   displayedCount, wrapCursor, allowCancel);
     menuSetPosition(0xAE, x, y);
     while (true) {
         GSthreadSwitch();
@@ -132,14 +139,14 @@ s32 menuSubOpenSelect_gba(u8 type, const u32 *selectList, s32 listNum, s16 x, s1
 }
 
 // Opens the select menu and waits for the selection.
-s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s16 x, s16 y, s32 work,
-                       s32 cursor, u8 a, u8 b)
+s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s32 x, s32 y, s32 initialCursor,
+                       s32 displayedCount, u8 wrapCursor, u8 allowCancel)
 {
     s32 result;
 
     menuSubCursorAnimeInit();
-    menuOpenCustom(0xAE, windowGetActiveID(), &work, 0, false, 6, type, selectList, listNum,
-                   cursor, a, b);
+    menuOpenCustom(0xAE, windowGetActiveID(), &initialCursor, 0, false, 6, type, selectList, listNum,
+                   displayedCount, wrapCursor, allowCancel);
     menuSetPosition(0xAE, x, y);
     windowCheckCursor(0xAE, 1);
     result = windowGetValue(0xAE);
@@ -310,4 +317,100 @@ u8 menuSubGetPokemonSexForDisp(Pokemon *pokemon)
     if (species == POKEMON_DATA_ID_NIDORAN_F || species == POKEMON_DATA_ID_NIDORAN_M)
         return POKEMON_SEX_NONE;
     return pokemonGetSex(pokemon);
+}
+
+// Use the colosseum menu's three choice messages.
+s32 menuSubOpenColosseumEnter(s32 type)
+{
+    u32 messageIDs[3];
+
+    messageIDs[0] = menuItemBiosGetPtr(MENU_ID_COLOSSEUM_ENTRY, MENU_SUB_COLOSSEUM_ITEM_FIRST)->mMessageID;
+    messageIDs[1] = menuItemBiosGetPtr(MENU_ID_COLOSSEUM_ENTRY, MENU_SUB_COLOSSEUM_ITEM_SECOND)->mMessageID;
+    messageIDs[2] = menuItemBiosGetPtr(MENU_ID_COLOSSEUM_ENTRY, MENU_SUB_COLOSSEUM_ITEM_THIRD)->mMessageID;
+    return menuSubOpenSelect2(0, messageIDs, 3, 50, 50, 0, 3, 1);
+}
+
+s8 menuSubOpenYesNo(u8 type, s16 x, s16 y, s32 answer)
+{
+    s8 result;
+    s16 menuID;
+
+    if (answer != 0)
+        answer = 1;
+    switch (type) {
+    case MENU_SUB_YES_NO_DIALOG:
+        menuID = MENU_ID_YES_NO;
+        break;
+    case MENU_SUB_YES_NO_FIELD_DIALOG:
+        menuID = MENU_ID_YES_NO;
+        break;
+    case MENU_SUB_YES_NO_DEBUG_DIALOG:
+    default:
+        menuID = MENU_ID_DEBUG_EDIT_CONFIRMATION;
+        break;
+    }
+    menuOpenCustom(menuID, windowGetActiveID(), &answer, 0, false, 0);
+    if (x >= 0 && y >= 0)
+        menuSetPosition(menuID, x, y);
+    windowCheckCursor(menuID, 1);
+    result = windowGetValue(menuID);
+    menuCloseCustom(menuID, 0, true);
+    return result;
+}
+
+s8 menuSubOpenYesNoField(void)
+{
+    return menuSubOpenYesNo(MENU_SUB_YES_NO_FIELD_DIALOG, -1, -1, 0);
+}
+
+void menuSubCloseNumberInputWait(void)
+{
+    menuCloseSync(MENU_ID_NUMBER_INPUT, true);
+}
+
+void menuSubCloseNumberInput(void)
+{
+    menuClose(MENU_ID_NUMBER_INPUT);
+}
+
+u8 menuSubOpenNumberInputSub(u32 initialValue, u32 *result, u8 mode,
+                              s16 x, s16 y, bool closeOnExit,
+                              u16 *(*getName)(u32))
+{
+    u8 accepted = 0;
+    tagWINDOW_WORK *window;
+
+    menuOpenCustom(MENU_ID_NUMBER_INPUT, windowGetActiveID(), NULL, 0, false,
+                   3, initialValue, mode, getName);
+    menuSetPosition(MENU_ID_NUMBER_INPUT, x, y);
+    windowCheckCursor(MENU_ID_NUMBER_INPUT, 1);
+    windowGetValue(MENU_ID_NUMBER_INPUT);
+    window = windowSearchID(MENU_ID_NUMBER_INPUT);
+    if (window != NULL) {
+        if (result != NULL)
+            *result = window->mCursorIndex;
+        if (window->mCancel == 0)
+            accepted = 1;
+        if (closeOnExit)
+            menuSubCloseNumberInput();
+    }
+    return accepted;
+}
+
+u8 menuSubOpenNumberInput(u32 initialValue, u32 *result, u8 mode,
+                           s16 x, s16 y, MENU_SUB_CLOSE_ON_EXIT closeOnExit)
+{
+    return menuSubOpenNumberInputSub(initialValue, result, mode, x, y, closeOnExit, NULL);
+}
+
+u8 menuSubOpenNumberInputID(u32 initialValue, u32 *result, u16 *(*getName)(u32))
+{
+    return menuSubOpenNumberInputSub(initialValue, result, MENU_SUB_NUMBER_UNSIGNED_DECIMAL,
+                                    50, 60, true, getName);
+}
+
+u8 menuSubOpenNumberInputDigit(u32 initialValue, u32 *result)
+{
+    return menuSubOpenNumberInputSub(initialValue, result, MENU_SUB_NUMBER_UNSIGNED_DECIMAL,
+                                    50, 60, true, NULL);
 }

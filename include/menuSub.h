@@ -15,6 +15,12 @@ typedef s32 MENU_SUB_ANSWER;
 typedef s32 MENU_SUB_CLOSE_ON_EXIT;
 #endif
 
+enum MenuSubNumberInputMode {
+    MENU_SUB_NUMBER_SIGNED_DECIMAL = 0,
+    MENU_SUB_NUMBER_UNSIGNED_DECIMAL = 1,
+    MENU_SUB_NUMBER_HEXADECIMAL = 2
+};
+
 struct tagWINDOW_WORK;
 struct tagSPRITE_WORK;
 
@@ -29,11 +35,16 @@ enum MenuSubCursorBackStyle {
 #ifdef __cplusplus
 extern "C" {
 #endif
-s8 menuSubOpenYesNoField();
+s32 menuSubOpenColosseumEnter(s32 type);
+s8 menuSubOpenYesNoField(void);
 
 u8 menuSubGetPokemonSexForFightDisp(struct Pokemon *pokemon);
 u8 menuSubGetPokemonSexForDisp(struct Pokemon *pokemon);
 void menuSubCursorAnimeValGet(f32 *values, s32 *animation);
+s32 menuSubOpenSelect_gba(u8 type, const u32 *messages, s32 count, s32 x, s32 y,
+                          s32 initialCursor, s32 displayedCount, u8 wrapCursor, u8 allowCancel);
+s32 menuSubOpenSelect3(u8 type, const u32 *messages, s32 count, s32 x, s32 y,
+                       s32 initialCursor, s32 displayedCount, u8 wrapCursor, u8 allowCancel);
 s32 menuSubOpenSelect2(u8 type, u32 *messageIDs, s32 count, s32 x, s32 y,
                        s32 initialCursor, s32 displayedCount, u8 selectMode);
 void menuSubSleep(f32 seconds);
@@ -42,14 +53,15 @@ s32 menuSubOpenSelect(u8 type, u32 *messages, int count,
 
 // Yes/No sub dialog: type selects the dialog, x/y position it.
 s8 menuSubOpenYesNo(u8 type, s16 x, s16 y, s32 answer);
-// Number entry sub dialog; value is both the initial value and the result.
-u8 menuSubOpenNumberInputDigit(s32 kind, s32 *value);
-// Number entry sub dialog with an explicit key mode and screen position;
-// closeOnExit makes the dialog close once the entry is committed.
+// Unsigned decimal entry; result receives the edited value even on cancel.
+u8 menuSubOpenNumberInputDigit(u32 initialValue, u32 *result);
+// Number entry sub dialog with an explicit numeric mode and screen position;
+// closeOnExit closes the dialog after either confirmation or cancellation.
 u8 menuSubOpenNumberInput(u32 value, u32 *out, u8 mode, s16 x, s16 y,
                           MENU_SUB_CLOSE_ON_EXIT closeOnExit);
 // Closes the number entry sub dialog.
 void menuSubCloseNumberInput(void);
+void menuSubCloseNumberInputWait(void);
 // Waits for a menu key press on controller one.
 void menuSubKeyWait(void);
 u8 menuSubOpenNumberInputID(u32 value, u32 *out, u16 *(*getName)(u32));

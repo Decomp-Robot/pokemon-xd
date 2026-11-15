@@ -101,7 +101,7 @@ s32 dbgMenuFlagCheck(void)
 {
     s32 no;
     u32 flagNo;
-    s32 digit;
+    u32 digit;
     u32 i;
 
     if (GSfloorIsFloorPushed()) {

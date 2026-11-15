@@ -18,7 +18,7 @@ extern "C" {
 // Suppress the window daemon's default confirm/cancel key handling.
 enum { MENU_STATUS_NO_DEFAULT_INPUT = 0x10 };
 s32 menuSetStatus(s32 menuID, s32 status);
-void menuSetPosition(s32 menuID, s32 x, s32 y);
+void menuSetPosition(s32 menuID, s16 x, s16 y);
 void menuPlaySe(s32 menuID, s32 soundID);
 u8 menuSetEnablePort(u8 portMask);
 u8 menuGetEnablePort(void);

@@ -16,7 +16,9 @@ struct MENU_ITEM_dd_ {
     s16 mY;
     s16 mWidth;
     s16 mHeight;
-    u8 _0E[10];
+    u8 _0E[2];
+    u32 mMessageID;
+    u8 _14[4];
     s16 mNextID; // Next row of the item chain.
     u8 _1A[2];
 };

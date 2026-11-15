@@ -80,7 +80,7 @@ static FloorChangeEntry floorChangeTable[247] = {
 // cached resources before the change is made.
 s32 dbgMenuFloorChange(s32 floorID)
 {
-    s32 mode;
+    u32 mode;
     s32 i;
 
     mode = 0;
@@ -108,7 +108,7 @@ s32 dbgMenuFloorChange(s32 floorID)
 // R or Y is pressed, asks for a floor number and links to that floor.
 s32 dbgMenuFloorCheck(void)
 {
-    s32 floorID;
+    u32 floorID;
     s32 i;
 
     if (GSfloorIsFloorPushed()) {
