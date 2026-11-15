@@ -3250,6 +3250,9 @@ game/app/ribbon/ribbon.cpp:
 game/app/exribbon/exribbon.cpp:
 	.text       start:0x802922FC end:0x8029245C
 
+game/app/bingo/bingoBios.cpp:
+	.text       start:0x80296B3C end:0x80296CB0
+
 game/app/people/peoplePartAnimation.cpp:
 	.text       start:0x802A1644 end:0x802A1A74
 	.sdata2     start:0x804EF908 end:0x804EF928
