@@ -3026,6 +3026,11 @@ game/GSAPI/GSsysdolphin_baselib/particle/particle.c:
 	.text       start:0x80189564 end:0x801896CC
 	.sbss       start:0x804EB550 end:0x804EB560
 
+game/GSAPI/GSsysdolphin_baselib/particle/psappsrt.c:
+	.text       start:0x8018A868 end:0x8018ADB8
+	.sbss       start:0x804EB560 end:0x804EB568
+	.sdata2     start:0x804EDFD8 end:0x804EDFE0
+
 game/GSAPI/GSspline/GSspline.c:
 	.text       start:0x801964F4 end:0x80196A14
 	.rodata     start:0x802F40F0 end:0x802F4478

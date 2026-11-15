@@ -6053,6 +6053,11 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-use_lmw_stmw on", "-str
 name = "game/GSAPI/GSsysdolphin_baselib/particle/particle.c"
 completed = true
 
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/particle/psappsrt.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "GSScript.a"
 mw_version = "GC/2.6"

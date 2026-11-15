@@ -25,13 +25,16 @@ enum {
 #define PS_FLAG_Z_WRITE 0x00000008U
 #define PS_SORT_ORDER_MASK 0x0E000000U
 
+struct _psAppSRT;
+
 typedef struct _psParticle _psParticle;
 struct _psParticle {
     _psParticle *next;
     u32 flags;
     u8 _08[21];
     u8 linkNo;
-    u8 _1E[118];
+    u8 _1E[114];
+    struct _psAppSRT *appSRT;
 };
 
 /* Generator records shared by the particle-system modules. */
@@ -46,7 +49,9 @@ struct _psGenerator {
     u16 mFamilyID;       // 0x18: particle family the generator spawns.
     u8 _1A[6];
     GSvec mPosition;     // 0x20: base position of every particle it spawns.
-    u8 _2C[92];
+    u8 _2C[36];
+    struct _psAppSRT *mAppSRT;
+    u8 _54[52];
     _GScamera *mCamera;  // 0x88: camera the generator is interpreted with.
     u16 mOptionFlags;    // 0x8C: bits the psSet*Scaling setters toggle.
     u16 mIndex;          // 0x8E: index psCreateGeneratorID was called with.
