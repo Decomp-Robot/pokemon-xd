@@ -11,14 +11,6 @@
 #include <pokemonDB.h>
 #include <waza.h>
 
-// Flags that select how the trainer AI checks a stat-stage change.
-enum {
-    FIGHT_TRAINER_AI_CHG_KIND_MASK = 0x1F,
-    FIGHT_TRAINER_AI_CHG_SKIP_GUARD = 0x20,
-    FIGHT_TRAINER_AI_CHG_ON_ATTACKER = 0x40,
-    FIGHT_TRAINER_AI_CHG_IGNORE_MIST_AND_STAT_DOWN_PREVENTION = 0x80
-};
-
 // Opponents that Perish Song can still be sung on, counted by the fight-out
 // traversal below.  The trainer supplies the AI data the eligibility queries
 // are answered with.

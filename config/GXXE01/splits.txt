@@ -3207,6 +3207,9 @@ game/app/fight/fightSeq/fightWazaWzx.cpp:
 game/app/fight/fightTrainerAi2.cpp:
 	.text       start:0x8022C628 end:0x8022CD24
 
+game/app/fight/fightTrainerAiWazaHit.cpp:
+	.text       start:0x8022CD24 end:0x8022D400
+
 game/app/tableRes/tableResBios.cpp:
 	.text       start:0x80232774 end:0x802327CC
 	.rodata     start:0x802F9270 end:0x802F9298
