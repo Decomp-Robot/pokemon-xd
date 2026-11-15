@@ -4,15 +4,17 @@
 #include <types.h>
 #include <dolphin/gx/GXStruct.h>
 #include <hsd/cobjtypes.h>
+#include <hsd/class.h>
 
-struct _HSD_ClassInfo;
-struct _HSD_LObj;
-struct _HSD_LObjAnimAll;
-struct _HSD_WObj;
+typedef struct _HSD_LObj _HSD_LObj;
+typedef struct _HSD_LObjDesc _HSD_LObjDesc;
+typedef struct _HSD_LObjAnimAll _HSD_LObjAnimAll;
+typedef struct _HSD_WObj _HSD_WObj;
 
 enum HSD_LObjFlags {
     HSD_LOBJ_TYPE_MASK = 0x3,
-    HSD_LOBJ_DIFFUSE = 0x4
+    HSD_LOBJ_DIFFUSE = 0x4,
+    HSD_LOBJ_ALPHA = 0x10
 };
 
 struct _HSD_LObjDesc {

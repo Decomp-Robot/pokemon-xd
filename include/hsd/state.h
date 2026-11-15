@@ -2,6 +2,34 @@
 #define HSD_STATE_H
 
 #include <types.h>
+#include <dolphin/gx/GXEnum.h>
+#include <dolphin/gx/GXStruct.h>
+
+enum HSD_StateInvalidateFlags {
+    HSD_STATE_PRIMITIVE = 0x01,
+    HSD_STATE_VTX_ATTR = 0x02,
+    HSD_STATE_COLOR_CHANNEL = 0x04,
+    HSD_STATE_TEV_STAGE = 0x08,
+    HSD_STATE_TEV_REGISTER = 0x10,
+    HSD_STATE_TEXCOORD_GEN = 0x20,
+    HSD_STATE_RENDER_MODE = 0x40
+};
+
+enum HSD_RenderModeFlags {
+    RENDER_DIFFUSE_MAT = 0x01,
+    RENDER_DIFFUSE_VTX = 0x02,
+    RENDER_DIFFUSE_BOTH = 0x03,
+    RENDER_DIFFUSE_MASK = 0x03,
+    RENDER_DIFFUSE = 0x04,
+    RENDER_SPECULAR = 0x08,
+    RENDER_ALPHA_MAT = 0x2000,
+    RENDER_ALPHA_VTX = 0x4000,
+    RENDER_ALPHA_MASK = 0x6000,
+    RENDER_ALPHA_SHIFT = 13,
+    RENDER_NO_ZTEST = 0x08000000,
+    RENDER_NO_ZUPDATE = 0x20000000,
+    RENDER_XLU = 0x40000000
+};
 
 enum {
     HSD_PE_COLOR_UPDATE = 0x01,
@@ -34,6 +62,15 @@ extern "C" {
 void HSD_InitColorSwapTable(u32 table, u32 red, u32 green, u32 blue, u32 alpha);
 void HSD_ResetColorSwapTables(void);
 void HSD_StateInvalidate(u32 flags);
+void _HSD_StateInvalidateRenderMode(void);
+void _HSD_StateInvalidateVtxAttr(void);
+void _HSD_StateInvalidatePrimitive(void);
+void HSD_StateSetCullMode(GXCullMode mode);
+void HSD_SetMaterialShininess(f32 shininess);
+void HSD_SetMaterialColor(GXColor ambient, GXColor diffuse, GXColor specular, f32 alpha);
+void HSD_SetupRenderModeWithCustomPE(u32 rendermode, HSD_PEDesc *pe);
+void HSD_SetupPEMode(u32 rendermode, HSD_PEDesc *pe);
+void HSD_SetupChannelMode(u32 rendermode);
 #ifdef __cplusplus
 }
 #endif

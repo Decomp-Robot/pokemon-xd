@@ -3339,6 +3339,14 @@ game/GSAPI/GSsysdolphin_baselib/baselib/spline.c:
 	.text       start:0x802601F8 end:0x80260E38
 	.sdata2     start:0x804EF258 end:0x804EF2A4
 
+game/GSAPI/GSsysdolphin_baselib/baselib/state.c:
+	.text       start:0x80260E38 end:0x80261790
+	.data       start:0x80419198 end:0x804192F8
+	.bss        start:0x804B2420 end:0x804B2438
+	.sdata      start:0x804E8618 end:0x804E8620
+	.sbss       start:0x804EBAB0 end:0x804EBAF0
+	.sdata2     start:0x804EF2A8 end:0x804EF2B8
+
 game/GSAPI/GSsysdolphin_baselib/baselib/util.c:
 	.text       start:0x8026CA60 end:0x8026CC2C
 	.data       start:0x80419AA8 end:0x80419AD0

@@ -6,11 +6,18 @@
 #include <hsd/class.h>
 #include <hsd/lobjtypes.h>
 
-struct _HSD_CObj;
+typedef struct _HSD_CObj _HSD_CObj;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+_HSD_LObj *HSD_LObjGetActiveByIndex(int index);
+_HSD_LObj *HSD_LObjGetActiveByID(GXLightID light_id);
+int HSD_LObjGetNbActive(void);
+u32 HSD_LObjGetLightMaskSpecular(void);
+u32 HSD_LObjGetLightMaskAlpha(void);
+u32 HSD_LObjGetLightMaskDiffuse(void);
+void HSD_LObjSetup(_HSD_LObj *lobj, GXColor color, f32 shininess);
 _HSD_LObj *HSD_LObjLoadDesc(_HSD_LObjDesc *ldesc);
 void HSD_LObjDeleteCurrentAll(_HSD_LObj *lobj);
 void HSD_LObjAddCurrentAll(_HSD_LObj *lobj);

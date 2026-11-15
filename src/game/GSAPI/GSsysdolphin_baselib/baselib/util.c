@@ -1,4 +1,4 @@
-#include <dolphin/gx/GXStruct.h>
+#include <hsd/util.h>
 #include <hsd/assert.h>
 
 GXPosNrmMtx HSD_Index2PosNrmMtx(u32 idx)
