@@ -18,6 +18,7 @@ void GSmsgKill(u32 messageID);
 s32 GSmsgExec(u32 messageID, s32 arg1, s32 arg2);
 s32 GSmsgMain(s32 layer, u32 messageID, u32 keyTrigger, bool paused);
 s32 GScharCmp(const u16 *a, const u16 *b);
+u16 *GScharLenCpy(u16 *destination, const u16 *source, s32 capacity);
 u16* GScharCpy(u16* destination, const u16* source);
 u16 *GScharCat(u16 *destination, const u16 *source);
 u32 GScharMakeFromSJIS(u16 *destination, char *source);

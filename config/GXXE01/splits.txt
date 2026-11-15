@@ -2164,6 +2164,9 @@ game/GSAPI/GSres/GSres.cpp:
 	.rodata     start:0x802ED2A0 end:0x802ED348
 	.sbss       start:0x804EB008 end:0x804EB010
 
+game/GSAPI/GSmsg/GSmsg.cpp:
+	.text       start:0x80106C8C end:0x80107050
+
 game/GSAPI/GSgapp/GSgapp.cpp:
 	.text       start:0x8010BD24 end:0x8010C320
 	.sbss       start:0x804EB028 end:0x804EB050

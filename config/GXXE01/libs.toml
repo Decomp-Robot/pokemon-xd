@@ -6899,3 +6899,14 @@ cflags_extra = ["-use_lmw_stmw on"]
 name = "game/GSAPI/GSdvd/GSdvd.c"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-str reuse,readonly", "-W error"]
+
+[[lib]]
+name = "GSmsg"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on", "-opt nopeephole", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
+name = "game/GSAPI/GSmsg/GSmsg.cpp"
+completed = true
