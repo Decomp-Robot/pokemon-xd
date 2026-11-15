@@ -7094,3 +7094,7 @@ cflags_extra = ["-use_lmw_stmw on", "-str reuse,readonly", "-i src/ext/dolphin_s
 [[lib.object]]
 name = "game/app/light/lightEditor.cpp"
 completed = true
+
+[[lib.object]]
+name = "game/app/light/light.cpp"
+completed = true

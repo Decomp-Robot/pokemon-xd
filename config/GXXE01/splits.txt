@@ -3489,6 +3489,12 @@ game/app/light/lightEditor.cpp:
 	.data       start:0x8041A890 end:0x8041A8B0
 	.sdata2     start:0x804EF6D8 end:0x804EF790
 
+game/app/light/light.cpp:
+	.text       start:0x80294190 end:0x80294414
+	.bss        start:0x804E0A38 end:0x804E0A68
+	.sbss       start:0x804EBB90 end:0x804EBBA8
+	.sdata2     start:0x804EF790 end:0x804EF798
+
 game/app/esaba/esaba.cpp:
 	.text       start:0x80294414 end:0x80295BE0
 	.rodata     start:0x802FAE98 end:0x802FAEA8
