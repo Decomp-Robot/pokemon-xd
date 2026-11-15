@@ -117,6 +117,7 @@ struct FsysHeader {
     u32 tableOffset; /* header-relative offset of the u32 offset table */
     u8 pad44[28];
 };
+#define FSYS_HEADER_KEEP_CACHE 0x40000000
 
 /*! One resource of an open file. */
 struct FsysResHeader {
@@ -391,7 +392,11 @@ u8 _fsysInitCacheHeap(u32 size);
 void _fsysSetLockCacheFlagGroup(u32 groupId, u8 lockFlag);
 void _fsysSetLockCacheFlag(u32 groupId, u32 cacheIndex, u8 lockFlag);
 FsysCacheManage* _fsysGetFreshCacheManage(u32 groupId, u8 preferTail);
-
+FsysCacheManage* _fsysGetCacheManageGroup(u32 groupID);
+FsysCacheManage* _fsysGetCacheManageAddr(u32 cacheAddress);
+FsysCacheManage* _fsysGetNewCacheManage(u32 groupID, u32 cacheIndex, u8 inUse,
+                                       u8 lockFlag, u32 priority);
+void _fsysDelCacheManage(FsysCacheManage* cache);
 /* fsysTOC */
 void _fsysHeaderSizeReadDvdCallback(s32 result, GSdvdFile* file);
 void _fsysOffTOCFlag(u32 groupID, u32 flags);
@@ -415,7 +420,7 @@ void _fsysReadRequest(FsysFile* work);
 u32 _fsysGetTransLength(u32 total, u32 offset);
 FsysDataType* _fsysGetDataType(u32 type);
 void* _fsysGetResource(u32 size, u32 groupID, u32 resourceID);
-void _fsysFree(void* memory);
+u8 _fsysFree(void* memory);
 void* _fsysAlloc(u32 size);
 
 /* Work-pool and expand-engine routines the TOC catalog callbacks drive. */
@@ -440,6 +445,16 @@ void _fsysDelTAG(void* entry, void* listRoot);
 u8 _fsysReadDataExec(FsysFile* file, FsysResHeader* header);
 u8 _fsysExpandFileExec(FsysFile* file, FsysResHeader* header);
 
+/* fsysAlloc */
+u8 _fsysMemFreeCacheGroup(u32 groupID);
+void* _fsysMemAllocCache(FsysFile* file, u32 cacheIndex, u32 size, u32 priority);
+u8 _fsysFreeFreshCacheGroup(u32 groupID);
+u8 _fsysFreeFreshCache(u32 groupID, u32 size);
+u8 _fsysFreeCacheAddr(u32 cacheAddress);
+u8 _fsysFreeCache(FsysCacheManage* cache);
+void* _fsysAllocCache(FsysFile* file, u32 cacheIndex, u32 size, u32 priority);
+u8 _fsysMemAllocHeader(FsysFile* file);
+u8 GSfsysCreateLocalHeap(void);
 /* Remaining file-system routines, including additional fsysCache functions. */
 FsysResHeader* _fsysGetResHeader(FsysFile* file, u32 index);
 FsysHeader* _fsysGetHeader(FsysFile* file);
