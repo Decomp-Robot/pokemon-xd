@@ -6649,6 +6649,36 @@ name = "game/app/kouka/koukaBios.cpp"
 completed = true
 
 [[lib]]
+name = "tenkou"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/tenkou/tenkouBios.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/tenkou/tenkouData.cpp"
+completed = true
+
+[[lib]]
+name = "tikei"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/tikei/tikeiBios.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/tikei/tikeiData.cpp"
+completed = true
+
+[[lib]]
 name = "dbgMenu"
 mw_version = "GC/2.6"
 cflags_preset = "game"

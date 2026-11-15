@@ -2,12 +2,12 @@
 #include <fightFloor.h>
 #include <fightPokemon.h>
 #include <fightSeq.h>
+#include "app/tenkou/tenkouBios.h"
 
 enum { FIGHT_KOUKA_ID_INITIAL_WEATHER = 1 };
 
 extern "C" {
 void fightKoukaDoFightKoukaJoukenAndKouka(void *target, u16 fightKoukaId);
-u32 tenkouDataBiosGetFightInitMsgId(u16 weatherId);
 }
 
 extern "C" u8 fightActionFlowHeijou(FIGHT_ACTION *action)

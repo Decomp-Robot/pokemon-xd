@@ -3,6 +3,15 @@
 
 #include <types.h>
 
+enum {
+    JOUTAI_DATA_ID_WEATHER_CLEAR = 78,
+    JOUTAI_DATA_ID_WEATHER_SUNLIGHT = 79,
+    JOUTAI_DATA_ID_WEATHER_RAIN = 80,
+    JOUTAI_DATA_ID_WEATHER_SANDSTORM = 81,
+    JOUTAI_DATA_ID_WEATHER_SHADOW_SKY = 82,
+    JOUTAI_DATA_ID_WEATHER_HAIL = 83
+};
+
 typedef struct JoutaiData JoutaiData;
 
 struct JoutaiData {

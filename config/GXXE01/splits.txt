@@ -2363,8 +2363,22 @@ game/app/gamedata/gamedata.cpp:
 	.data       start:0x80404C68 end:0x80404CD8
 	.sdata2     start:0x804EDC90 end:0x804EDC98
 
+game/app/tenkou/tenkouData.cpp:
+	.data       start:0x80404D98 end:0x80404E28
+	.sdata      start:0x804E8400 end:0x804E8408
+
+game/app/tikei/tikeiData.cpp:
+	.data       start:0x80404E28 end:0x80404E98
+	.sdata      start:0x804E8408 end:0x804E8410
+
 game/app/kouka/koukaBios.cpp:
 	.text       start:0x80158BF8 end:0x80158D18
+
+game/app/tenkou/tenkouBios.cpp:
+	.text       start:0x80158D18 end:0x80158DA4
+
+game/app/tikei/tikeiBios.cpp:
+	.text       start:0x80158DA4 end:0x80158E64
 
 game/app/effects/filter.cpp:
 	.text       start:0x80158E64 end:0x801594C0
