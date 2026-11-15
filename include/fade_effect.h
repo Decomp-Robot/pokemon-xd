@@ -3,6 +3,9 @@
 
 #include <types.h>
 
+extern "C" void fadeEffectInit(void);
+extern "C" void fadeEffectHookFunction_Doku_Init(void);
+
 class FADE_EFFECT_BALL {
 public:
     FADE_EFFECT_BALL() {}

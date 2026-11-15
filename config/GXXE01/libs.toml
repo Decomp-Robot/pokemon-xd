@@ -3356,6 +3356,11 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/app/fade/fade.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline noauto"]
+
+[[lib.object]]
 name = "game/app/fade/fade_effect.cpp"
 completed = true
 cflags = [
