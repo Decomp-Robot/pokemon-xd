@@ -15,7 +15,7 @@ void gamedataBiosSetZukanFLag(GamedataPlayData *playdata, u16 index, u16 value)
     }
 }
 
-u8 gamedataBiosGetZukanFlag(GamedataPlayData *playdata, u16 index)
+u16 gamedataBiosGetZukanFlag(GamedataPlayData *playdata, u16 index)
 {
     if (playdata != NULL) {
         if (index > GAMEDATA_ZUKAN_FLAG_BITS) {

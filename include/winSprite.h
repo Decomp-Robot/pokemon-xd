@@ -13,6 +13,7 @@ typedef struct NAME_ENTRY_ARG NAME_ENTRY_ARG;
 
 enum WINDOW_STATE {
     WINDOW_STATE_INIT = 0,
+    WINDOW_STATE_WAITING = 1,
     WINDOW_STATE_ACTIVE = 2,
     WINDOW_STATE_CLOSING = 3,
     WINDOW_STATE_DELETE = 5,
@@ -162,6 +163,7 @@ struct tagWINDOW_KEY *windowGetKeyInfo2(void);
 tagWINDOW_WORK *windowSearchID(s32 windowID);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 #ifdef __cplusplus
+u8 winSpriteGetDisp(tagSPRITE_WORK* sprite);
 void winSpriteSetDisp(tagSPRITE_WORK* sprite, bool visible);
 #endif
 

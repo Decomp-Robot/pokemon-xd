@@ -90,7 +90,7 @@ extern "C" {
 #endif
 GamedataAttest *gamedataBiosGetGamedataAtttestPtr(GamedataSave *gamedata);
 void gamedataBiosSetZukanFLag(GamedataPlayData *playdata, u16 index, u16 value);
-u8 gamedataBiosGetZukanFlag(GamedataPlayData *playdata, u16 index);
+u16 gamedataBiosGetZukanFlag(GamedataPlayData *playdata, u16 index);
 GamedataPlayData *gamedatasaveBiosGetplaydata(GamedataSave *save);
 void gamedatasaveBiosSetSysHeadChecksum(GamedataSaveMetadata *metadata, u32 checksum);
 u32 gamedatasaveBiosGetSysHeadChecksum(GamedataSaveMetadata *metadata);
@@ -119,7 +119,7 @@ u32 gamedatasaveBiosGetSavernd(GamedataSaveMetadata *metadata);
 void gamedatasaveBiosSetPtr(GamedataSave *save, GamedataSaveMetadata *metadata);
 GamedataSaveMetadata *gamedatasaveBiosGetPtr(GamedataSave *save);
 void gamedatasaveInit(GamedataSave *save);
-u8 gamedataBiosGetFlag(GamedataSave *save, u16 field, u16 index);
+u16 gamedataBiosGetFlag(GamedataSave *save, u16 field, u16 index);
 void gamedataBiosSetFlag(GamedataSave *save, u16 field, u16 index, u8 value);
 void gamedataCreate(GamedataSave *gamedata, u8 versionId, u8 generationId, u8 areaId, u8 langareaId);
 void gamedataInit(GamedataSave *gamedata);

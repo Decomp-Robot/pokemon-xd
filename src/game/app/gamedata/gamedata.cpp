@@ -284,7 +284,7 @@ void gamedatasaveSetStatus(void *save, u16 field, unsigned long value)
     }
 }
 
-u8 gamedataBiosGetFlag(GamedataSave *save, u16 field, u16 index)
+u16 gamedataBiosGetFlag(GamedataSave *save, u16 field, u16 index)
 {
     if (field == 0 || field >= GAMEDATASAVE_FIELD_LIMIT) {
         return 0;

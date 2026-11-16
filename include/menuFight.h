@@ -28,6 +28,15 @@ extern "C" {
 
 void menuFightCloseAll(void);
 
+// Status-panel sequence notifications shared with the battle menu.
+enum MenuFightStatusSequence {
+    MENU_SEQ_FIGHT_STATUS_LEFT_DOWN_IN = 421,
+    MENU_SEQ_FIGHT_STATUS_UP_RIGHT_IN = 425
+};
+s32 menuFightGetStatus(void);
+void menuFightSetStatus(u32 status);
+void menuFightSetSeq(void);
+
 // Reports whether the ball panel may be opened for the given status menu.
 s32 menuFightChkOpenBall(s32 menuId);
 

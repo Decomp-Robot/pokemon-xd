@@ -38,14 +38,12 @@
 // Message templates the fight menu windows print.
 enum {
     MSG_NO_VALUE_TEXT = 15094,
-    MSG_TEXT_IN_RECT = 17017,
     MSG_SLASH_TEXT = 17092,
     MSG_PP_LABEL = 17105,
     MSG_LEVEL_LABEL = 17108,
     MSG_HP_LABEL = 17109,
     MSG_ABILITY_LABEL = 17242,
     MSG_KANE = 17230,
-    MSG_PP_SLASH = 17090,
     MSG_PP_NUMBER = 17240,
 };
 

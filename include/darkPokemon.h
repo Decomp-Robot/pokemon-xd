@@ -27,6 +27,7 @@ class DarkPokemon {
 public:
     u8 getReversPattern() const;
     void setDarkPokemonID(u16 darkID);
+    u16 getDarkPokemonID() const;
     u8 getCatchBallID() const;
     u16 getPokemonID() const;
     bool isSnach() const;
@@ -82,7 +83,8 @@ private:
     u32 mSnatchTimeState; // 0x20: escape/snatch timing state.
     s32 mDarkPoint; // 0x24
     u16 mTrainerName[11]; // 0x28: ten characters and terminator.
-    u8 _3E[0x0A];
+    u16 mDarkPokemonID; // 0x3E: shadow Pokemon id in the shadow data table.
+    u8 _40[8];
 };
 #else
 typedef struct DarkPokemon DarkPokemon;

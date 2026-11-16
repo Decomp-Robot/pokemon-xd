@@ -188,7 +188,7 @@ struct MenuPokemonWork {
 // pokemonToMenuPokemonStatus.
 struct MENU_POKEMON_STATUS {
     u16 mName[11];        // 0x00: pokemon name, empty slot when cleared.
-    u8 _16;               // 0x16: unknown.
+    u8 mHideSubbar;       // 0x16: hides the status subbar for special battles.
     u8 mLevel;            // 0x17: level.
     s16 mMaxHp;           // 0x18: max HP.
     s16 mHp;              // 0x1A: current HP.
@@ -205,7 +205,9 @@ struct MENU_POKEMON_STATUS {
     u8 mSex;              // 0x28: gender mark id.
     u8 mBallType;         // 0x29: 0 normal, 1 shadow, 2 hyper shadow.
     u16 mHeldItem;        // 0x2A: held item id.
-    u8 _2C[4];              // 0x2C-0x2F: unknown.
+    u8 _2C;               // 0x2C: unknown.
+    u8 mHideLevelInfo;    // 0x2D: hides the level line on the fight status panel.
+    u8 _2E[2];            // 0x2E-0x2F: unknown.
 };
 
 // The six party panel records, indexed by party slot.

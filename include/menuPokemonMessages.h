@@ -2,15 +2,21 @@
 #define MENU_POKEMON_MESSAGES_H
 
 // Message templates and gender strings shared by the Pokemon and fight panels.
-enum {
+enum MenuPokemonMessage {
     MSG_PRINT_NUMBER = 17233,
     MSG_PRINT_NUMBER_WIDE = 17239,
+    MSG_FIGHT_STATUS_NUMBER = 17010,
+    MSG_TEXT_IN_RECT = 17017,
+    MSG_PP_SLASH = 17090,
     MSG_STATUS_NUMBER = 17031,
     MSG_PRINT_STRING = 17013,
     MSG_PRINT_TEXT = 17014,
     MSG_POKEMON_NAME = 17015,
+    MSG_FIGHT_STATUS_TEXT = 17016,
+    MSG_SHADOW_LEVEL_TEXT = 17475,
     MSG_SEX_MALE = 2501,
     MSG_SEX_FEMALE = 2502,
+    MSG_NONE = 0,
 };
 
 #endif

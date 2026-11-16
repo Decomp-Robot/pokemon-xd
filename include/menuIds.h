@@ -172,11 +172,12 @@ enum MenuSubYesNoType {
     MENU_SUB_YES_NO_DEBUG_DIALOG = 127
 };
 
-enum {
+enum MenuSoundEffect {
     MENU_SE_CURSOR = 16,
     MENU_SE_CONFIRM = 17,
     MENU_SE_CANCEL = 18,
-    MENU_SE_ERROR = 19
+    MENU_SE_ERROR = 19,
+    MENU_SE_EXP_GAUGE_ANIM = 36
 };
 
 #endif

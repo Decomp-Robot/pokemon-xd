@@ -1,4 +1,6 @@
 #include <menuFightStatus.h>
+#include <menuFightStatusInternal.h>
+#include <menuIds.h>
 #include <winSprite.h>
 #include <GSthread.h>
 #include <GSsndPlayback.h>
@@ -18,24 +20,6 @@ struct MENU_FIGHT_STATUS_ALLOC {
     s16 curHP;
     u32 maxEXP;
     u32 curEXP;
-};
-
-// Sound played while the EXP gauge animates; the status controller stops
-// this same sound when the EXP animation finishes.
-enum { MENU_SE_EXP_GAUGE_ANIM = 36 };
-
-// Animation timers kept in the window's free work area. Each gauge records
-// the value it started from, how many frames the animation takes, and how
-// many frames have elapsed since it started (advanced by the status
-// controller and used to interpolate the gauge).
-struct MENU_FIGHT_STATUS_ANIM {
-    s16 hpStart;
-    s16 hpFrames;
-    s16 hpElapsed;
-    s16 expDone;
-    u32 expStart;
-    s16 expFrames;
-    s16 expElapsed;
 };
 
 s32 menuFightStatusWaitAnimeEXP(u32 menuId, u8 wait)
