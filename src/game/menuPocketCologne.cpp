@@ -9,6 +9,7 @@
 #include <menuItemBios.h>
 #include <msgctrl.h>
 #include <menuSub.h>
+#include <menu.h>
 #include <menuIds.h>
 
 enum PocketCologneMenuID {
@@ -31,6 +32,13 @@ enum PocketCologneMessageID {
 
 enum { POCKET_COLOGNE_ROW_COUNT = 4 };
 
+enum PocketCologneWindowSequence {
+    POCKET_COLOGNE_SEQUENCE_OPEN = 96,
+    POCKET_COLOGNE_SEQUENCE_CLOSE = 100
+};
+
+f32 ActMenuCursorBlinkTime;
+
 struct PocketCologneItem {
     u16 mItemID;
     u16 mUnknown;
@@ -45,11 +53,76 @@ struct POCKET_COLOGNE_ARG {
 int getItemNum(u16 itemID);
 int getStockMax(u16 itemID);
 int getItemName(u32 itemID);
+void makePocketCologneArg(POCKET_COLOGNE_ARG *arg, u32 initialSelection);
 extern "C" s32 menuPocketColognDrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 s32 getLineHeight(tagWINDOW_WORK *window);
 extern "C" s32 menuPocketColognDrawCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 extern "C" s32 menuPocketColognDrawItemText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 extern "C" s32 menuPocketColognCursor(tagWINDOW_WORK *window);
+
+// Opens the cologne picker and returns the item the player chose, or zero for
+// cancel, an invalid row, or an item that is not in stock.
+extern "C" u16 menuPocketCologne(int initialSelection) {
+    static int first = 1;
+    if (first) {
+        first = 0;
+    }
+
+    POCKET_COLOGNE_ARG arg;
+    makePocketCologneArg(&arg, initialSelection);
+
+    s32 selected = menuOpenCustom(MENU_ID_POCKET_COLOGNE, windowGetActiveID(),
+                                  0, 0, true, 1, &arg);
+    menuClose(MENU_ID_POCKET_COLOGNE);
+    menuCloseSync(MENU_ID_POCKET_COLOGNE, true);
+
+    if (selected >= 0 && selected < arg.mItemCount) {
+        u16 itemID = arg.mItems[selected].mItemID;
+        if (getItemNum(itemID) != 0) {
+            return itemID;
+        }
+        return 0;
+    }
+    return 0;
+}
+
+void makePocketCologneArg(POCKET_COLOGNE_ARG *arg, u32 initialSelection) {
+    arg->mUnknown00 = initialSelection;
+    arg->mItems[0].mItemID = ITEM_JOY_SCENT;
+    arg->mItems[1].mItemID = ITEM_EXCITE_SCENT;
+    arg->mItems[2].mItemID = ITEM_VIVID_SCENT;
+    arg->mItems[3].mItemID = 0;
+    arg->mItemCount = POCKET_COLOGNE_ROW_COUNT;
+}
+
+// Window sequence callback: starts and advances the cursor animation while the
+// cologne menu is open, and plays the close sequence once on the way out.
+extern "C" s32 menuPocketColognCtrl(tagWINDOW_WORK *window) {
+    switch (window->mState) {
+    case WINDOW_SEQUENCE_OPEN:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(MENU_ID_POCKET_COLOGNE, POCKET_COLOGNE_SEQUENCE_OPEN);
+            ActMenuCursorBlinkTime = 0.0f;
+            window->mFlag = 1;
+            menuSubCursorAnimeInit();
+        }
+        break;
+    case WINDOW_STATE_ACTIVE:
+        ActMenuCursorBlinkTime += 1.0f / 30.0f;
+        if (ActMenuCursorBlinkTime > 1.0f) {
+            ActMenuCursorBlinkTime = 0.0f;
+        }
+        menuSubCursorAnimeMain();
+        break;
+    case WINDOW_SEQUENCE_CLOSE:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(MENU_ID_POCKET_COLOGNE, POCKET_COLOGNE_SEQUENCE_CLOSE);
+            window->mFlag = 1;
+        }
+        break;
+    }
+    return 0;
+}
 
 extern "C" s32 menuPocketColognCursor(tagWINDOW_WORK *window) {
     POCKET_COLOGNE_ARG *arg = (POCKET_COLOGNE_ARG *)window->mArg;
