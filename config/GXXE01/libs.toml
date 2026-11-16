@@ -6008,6 +6008,11 @@ completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-inline auto,deferred"]
 
 [[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/memory.c"
+completed = true
+extra_cflags = ["-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/random.c"
 completed = true
 
