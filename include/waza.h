@@ -240,6 +240,9 @@ struct WazaFuncData {
 extern "C" {
 #endif
 
+extern struct WazaFuncData waza_func_data[];
+extern u32 waza_func_data_number;
+
 struct WazaData *wazaDataBiosGetPtr(u16 wazaID);
 u32 wazaDataBiosGetName(struct WazaData *data);
 u16 wazaDataBiosGetWazaFuncDataId(struct WazaData *data);
