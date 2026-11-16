@@ -23,6 +23,11 @@ completed = true
 extra_cflags = ["-inline off", "-O4,s"]
 
 [[lib.object]]
+name = "game/app/fight/fightTrainerAiWazaValue.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
+[[lib.object]]
 name = "game/app/esaba/esaba.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

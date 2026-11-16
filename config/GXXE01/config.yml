@@ -11,6 +11,14 @@ block_relocations:
   - source: ".text:0x8018F10C"
   - source: ".text:0x8018F184"
   - source: ".text:0x8018F194"
+  # Extracted WazaValue consumers retain the original SDA2 displacement of
+  # the compiler-local 0.5f literal supplied by fightTrainerAiWazaValue.cpp.
+  - source: ".text:0x802E1868"
+  - source: ".text:0x802E1D08"
+  - source: ".text:0x802E25E8"
+  - source: ".text:0x802E2828"
+  - source: ".text:0x802E3930"
+  - source: ".text:0x802E39D0"
   # Extracted consumers retain the pokemon TU's compiler-local literals.
   - source: ".text:0x8013F298"
   - source: ".text:0x80141B40"

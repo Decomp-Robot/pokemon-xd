@@ -57,6 +57,18 @@ void fightAi_AllWazaValid_DelComboList(FIGHT_TRAINER *trainer, AI_ALLWAZA_VALID_
 void fightAi_AllWazaValid_DelListFromSpeed(FIGHT_TRAINER *trainer, AI_ALLWAZA_VALID_TBL *records,
     u8 *count, u16 wazaDataId, u8 requireMoveFirst);
 s32 fightTrainerAiAddValueByAddsubDataId(s32 value, FIGHT_TRAINER *trainer, u16 addsubDataId);
+s32 fightTrainerAiAddValue(s32 value, s32 addValue);
+u16 fightTrainerAiGetFightOutPokemonWazaDataIdAry(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    u16 *wazaDataIdAry, s16 *wazaBanmeAry, u8 checkCanUse);
+u8 fightTrainerAiIsFightOutPokemonNokoriHp(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    f32 rate, s8 comparison);
+
+bool fightTrainerAiIsFightOutPokemonAvoidCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonNimblenessCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonSpeDefCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonSpeAtkCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonPhyDefCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonPhyAtkCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 
 s32 fightTrainerAiWazaDamage000(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 s32 fightTrainerAiWazaDamage001(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
@@ -822,6 +834,7 @@ u8 fightTrainerAiGetFightOutPokemonAbiCntPhyDef(FIGHT_TRAINER *trainer, FightOut
 u8 fightTrainerAiGetFightOutPokemonAbiCntSpeAtk(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiGetFightOutPokemonAbiCntSpeDef(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiGetFightOutPokemonAbiCntSubayasa(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u8 fightTrainerAiGetFightOutPokemonAbiCntAvd(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiIsFightOutPokemonZokuseiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 typeId);
 s16 fightTrainerAiGetWazaIryoku(FIGHT_TRAINER *trainer, u16 wazaDataId);
 u16 fightTrainerAiGetFightOutPokemonZokuseiDataIdWazaJoutaiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 typeId, s16 power);
