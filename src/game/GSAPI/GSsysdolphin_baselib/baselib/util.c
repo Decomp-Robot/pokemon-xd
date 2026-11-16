@@ -29,7 +29,7 @@ GXPosNrmMtx HSD_Index2PosNrmMtx(u32 idx)
     return GX_PNMTX0;
 }
 
-u32 HSD_GetNbBits(u32 value)
+s32 HSD_GetNbBits(u32 value)
 {
     u32 nbits = 0;
     u32 i;

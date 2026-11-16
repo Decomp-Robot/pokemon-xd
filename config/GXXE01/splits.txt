@@ -3511,6 +3511,13 @@ game/GSAPI/GSsysdolphin_baselib/baselib/mtx.c:
 	.text       start:0x802579A8 end:0x802594C0
 	.sdata2     start:0x804EF0B8 end:0x804EF0F8
 
+game/GSAPI/GSsysdolphin_baselib/baselib/objalloc.c:
+	.text       start:0x802594C0 end:0x802596A4
+	.rodata     start:0x802FA080 end:0x802FA0B8
+	.data       start:0x80418F60 end:0x80418F70
+	.sbss       start:0x804EBA78 end:0x804EBA80
+	.sdata2     start:0x804EF0F8 end:0x804EF100
+
 game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.text       start:0x8025C940 end:0x8025CA38
 	.sdata      start:0x804E8610 end:0x804E8618

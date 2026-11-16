@@ -3,6 +3,9 @@
 
 #include <types.h>
 
+/* Bit position in flags that enables allocation_limit enforcement. */
+#define HSD_OBJALLOC_FLAG_LIMIT_BIT 7
+
 typedef struct HSD_ObjAllocData {
     u8 flags;
     u8 unknown_01[7];
@@ -21,9 +24,11 @@ typedef struct HSD_ObjAllocData {
 extern "C" {
 #endif
 
-void HSD_ObjAllocInit(HSD_ObjAllocData *data, u32 object_size, u32 alignment);
+void HSD_ObjAllocInit(HSD_ObjAllocData *data, u32 size, u32 align);
 void *HSD_ObjAlloc(HSD_ObjAllocData *data);
 void HSD_ObjFree(HSD_ObjAllocData *data, void *object);
+void HSD_ObjSetHeap(u32 heap_size, u32 heap_start);
+void _HSD_ObjAllocForgetMemory(void);
 
 #ifdef __cplusplus
 }
