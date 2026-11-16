@@ -225,15 +225,35 @@ struct WazaData {
     u8 _37[1];
 };
 
+struct FIGHT_TRAINER;
+struct FightOutPokemon;
+struct FightPokemon;
+
+// Handlers a move is fought through: the trainer AI weighs the move up, asks
+// whether it lands and how hard it hits, and the fight plays its animation.
+typedef s32 (*FightTrainerAiWazaValueFunc)(struct FIGHT_TRAINER *trainer, struct FightOutPokemon *attacker,
+                                           u16 wazaDataId, struct FightOutPokemon *defender);
+typedef u8 (*FightTrainerAiWazaHitFunc)(struct FIGHT_TRAINER *trainer, struct FightOutPokemon *attacker,
+                                        u16 wazaDataId, struct FightOutPokemon *defender);
+typedef s32 (*FightTrainerAiWazaDamageFunc)(struct FIGHT_TRAINER *trainer, struct FightOutPokemon *attacker,
+                                            u16 wazaDataId, struct FightOutPokemon *defender);
+typedef s32 (*FightTrainerAiWazaDamageFightPokemonFunc)(struct FIGHT_TRAINER *trainer,
+                                                        struct FightOutPokemon *attacker, u16 wazaDataId,
+                                                        struct FightPokemon *defender);
+typedef void (*FightWazaWzxTypeFunc)(u16 wazaId, struct FightOutPokemon *attacker,
+                                     struct FightOutPokemon *defender, u16 invocation, u8 variation);
+typedef u8 (*FightWazaWzxVariationFunc)(u16 wazaId, struct FightOutPokemon *attacker,
+                                        struct FightOutPokemon *defender, u16 invocation);
+
 // Function table the fight dispatches a move through, looked up by the
 // function data id of the move.
 struct WazaFuncData {
-    void *mFightTrainerAiWazaValueFunc; // 0x00
-    void *mFightTrainerAiWazaHitFunc; // 0x04
-    void *mFightTrainerAiWazaDamageFunc; // 0x08
-    void *mFightTrainerAiWazaDamageFightPokemonFunc; // 0x0C
-    void *mFightWazaWzxTypeFunc; // 0x10
-    void *mFightWazaWzxVariationFunc; // 0x14
+    FightTrainerAiWazaValueFunc mFightTrainerAiWazaValueFunc; // 0x00
+    FightTrainerAiWazaHitFunc mFightTrainerAiWazaHitFunc; // 0x04
+    FightTrainerAiWazaDamageFunc mFightTrainerAiWazaDamageFunc; // 0x08
+    FightTrainerAiWazaDamageFightPokemonFunc mFightTrainerAiWazaDamageFightPokemonFunc; // 0x0C
+    FightWazaWzxTypeFunc mFightWazaWzxTypeFunc; // 0x10
+    FightWazaWzxVariationFunc mFightWazaWzxVariationFunc; // 0x14
 };
 
 #ifdef __cplusplus
