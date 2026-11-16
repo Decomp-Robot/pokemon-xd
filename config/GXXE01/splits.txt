@@ -2450,6 +2450,9 @@ game/GSAPI/GSeffect/GSeffect.cpp:
 	.sbss       start:0x804EB1E8 end:0x804EB1F0
 	.sdata2     start:0x804EDC68 end:0x804EDC70
 
+game/app/msgctrl/msgctrl.cpp:
+	.text       start:0x80154A50 end:0x80154E60
+
 game/app/dbgMenu/dbgMenu.cpp:
 	.text       start:0x801553A0 end:0x801560EC
 	.sdata      start:0x804E83E8 end:0x804E83F0

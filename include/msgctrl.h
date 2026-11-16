@@ -38,10 +38,21 @@ enum {
     MSG_VALUE_REPORT_MET_POKEMON_COUNT = 0x35
 };
 
+struct MSG_TASK_WORK;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+s32 msgctrlColor(struct MSG_TASK_WORK *task);
+s32 msgctrlFont(struct MSG_TASK_WORK *task);
+s32 msgctrlRubyEnd(struct MSG_TASK_WORK *task);
+s32 msgctrlRubyTop(struct MSG_TASK_WORK *task);
+s32 msgctrlRubyStart(struct MSG_TASK_WORK *task);
+s32 msgctrlKeyWait(struct MSG_TASK_WORK *task);
+s32 msgctrlCheckWait(struct MSG_TASK_WORK *task);
+s32 msgctrlCheckEnd(struct MSG_TASK_WORK *task);
+s32 msgctrlKeyEnd(struct MSG_TASK_WORK *task);
 void msgctrlSetValue(s32 selector, unsigned long value);
 
 #ifdef __cplusplus

@@ -3384,6 +3384,11 @@ name = "game/menuGBAC.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-opt nopeephole", "-str reuse,readonly"]
 
+[[lib.object]]
+name = "game/app/msgctrl/msgctrl.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole"]
+
 [[lib]]
 name = "fade.a"
 mw_version = "GC/2.6"
