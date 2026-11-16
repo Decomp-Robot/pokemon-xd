@@ -26,7 +26,6 @@ s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
 {
     GXColor color = { 0, 0, 0, 128 };
     struct tagWINDOW_KEY *pad = windowGetKeyInfo();
-    GXColor tile;
     long i;
     long y;
     long lines;
@@ -61,8 +60,7 @@ s32 dbgMenuLogDraw(struct tagWINDOW_WORK *window)
     }
 
     GSgfxZCompare(0, 7);
-    tile = color;
-    menuSubDrawTile(window->mLayerID, 0xF, y - 5, 0x25D, height + 0x12, &tile);
+    menuSubDrawTile(window->mLayerID, 15, y - 5, 605, height + 18, color);
 
     if (_viewStartLineInit) {
         _viewStartLine = GSlogGetLineCount() - lines;

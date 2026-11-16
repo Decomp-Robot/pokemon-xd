@@ -477,7 +477,7 @@ game/menuPocketCologne.cpp:
 	.sbss2      start:0x804EFCC8 end:0x804EFCD0
 
 game/menuSub.cpp:
-	.text       start:0x80064644 end:0x80065474
+	.text       start:0x80064644 end:0x80065854
 	.sdata      start:0x804E7FC0 end:0x804E7FD0
 	.sbss       start:0x804EA938 end:0x804EA940
 	.sdata2     start:0x804EC5D0 end:0x804EC600

@@ -4,6 +4,7 @@
 #include <GSthread.h>
 #include <winSprite.h>
 #include <window.h>
+#include <GSgfx.h>
 #include <menu.h>
 #include <menuCBCommon.h>
 #include <menuSub.h>
@@ -413,4 +414,109 @@ u8 menuSubOpenNumberInputDigit(u32 initialValue, u32 *result)
 {
     return menuSubOpenNumberInputSub(initialValue, result, MENU_SUB_NUMBER_UNSIGNED_DECIMAL,
                                     50, 60, true, NULL);
+}
+
+// White filled triangle through the vertices x1/y1, x2/y2 and x3/y3.
+void menuSubDrawTriangle(s32 layerID, s32 x1, s32 y1, s32 x2, s32 y2,
+                         s32 x3, s32 y3)
+{
+    GSgfxLayer *layer = GSgfxLayerFindByID((GSgfxLayerID)layerID);
+    if (layer == 0) {
+        return;
+    }
+    layer->mPrimitiveType = GSGFX_PRIM_TRIANGLES;
+    layer->setRenderStateAndSelect(GSgfxVFBuildTemp(GX_POS_XY, GX_S16, 0, GX_NRM_XYZ, 1, GX_RGBA8, 0, 0, 0));
+    layer->beginSurface(3);
+    GSgfxFifo.s16 = (s16)x1;
+    GSgfxFifo.s16 = (s16)y1;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.s16 = (s16)x2;
+    GSgfxFifo.s16 = (s16)y2;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.s16 = (s16)x3;
+    GSgfxFifo.s16 = (s16)y3;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    GSgfxFifo.u8 = 255;
+    layer->endSurface();
+}
+
+// Fills the rectangle between the near corner x/y and the far corner
+// x+width/y+height on a GSgfx layer.
+void menuSubDrawTile(s32 layerID, s32 x, s32 y, s32 width, s32 height, GXColor color)
+{
+    GSgfxLayer *layer = GSgfxLayerFindByID((GSgfxLayerID)layerID);
+    if (layer == 0) {
+        return;
+    }
+    layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
+    layer->setRenderStateAndSelect(GSgfxVFBuildTemp(GX_POS_XY, GX_S16, 0, GX_NRM_XYZ, 1, GX_RGBA8, 0, 0, 0));
+    width += x;
+    height += y;
+    layer->beginSurface(4);
+    GSgfxFifo.s16 = (s16)x;
+    GSgfxFifo.s16 = (s16)y;
+    GXColor4u8(color.r, color.g, color.b, color.a);
+    GSgfxFifo.s16 = (s16)width;
+    GSgfxFifo.s16 = (s16)y;
+    GXColor4u8(color.r, color.g, color.b, color.a);
+    GSgfxFifo.s16 = (s16)x;
+    GSgfxFifo.s16 = (s16)height;
+    GXColor4u8(color.r, color.g, color.b, color.a);
+    GSgfxFifo.s16 = (s16)width;
+    GSgfxFifo.s16 = (s16)height;
+    GXColor4u8(color.r, color.g, color.b, color.a);
+    layer->endSurface();
+}
+
+// Translucent black fill with a white outline ten pixels outside the
+// rectangle.
+void menuSubDrawSimpleWindow(s32 layerID, s32 x, s32 y, s32 width, s32 height)
+{
+    GSgfxLayer *layer = GSgfxLayerFindByID((GSgfxLayerID)layerID);
+    if (layer == 0) {
+        return;
+    }
+    layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
+    layer->setRenderStateAndSelect(GSgfxVFBuildTemp(GX_POS_XY, GX_S16, 0, GX_NRM_XYZ, 1, GX_RGBA8, 0, 0, 0));
+    layer->beginSurface(4);
+    GSgfxFifo.s16 = (s16)(x - 10);
+    GSgfxFifo.s16 = (s16)(y - 10);
+    GSgfxFifo.u32 = 0x000000C0;
+    GSgfxFifo.s16 = (s16)(x + width + 10);
+    GSgfxFifo.s16 = (s16)(y - 10);
+    GSgfxFifo.u32 = 0x000000C0;
+    GSgfxFifo.s16 = (s16)(x - 10);
+    GSgfxFifo.s16 = (s16)(y + height + 10);
+    GSgfxFifo.u32 = 0x000000C0;
+    GSgfxFifo.s16 = (s16)(x + width + 10);
+    GSgfxFifo.s16 = (s16)(y + height + 10);
+    GSgfxFifo.u32 = 0x000000C0;
+    layer->endSurface();
+    layer->lineWidth(6, GX_TO_ZERO);
+    layer->mPrimitiveType = GSGFX_PRIM_LINE_STRIP;
+    layer->beginSurface(5);
+    GSgfxFifo.s16 = (s16)(x - 10);
+    GSgfxFifo.s16 = (s16)(y - 10);
+    GSgfxFifo.u32 = 0xFFFFFFFF;
+    GSgfxFifo.s16 = (s16)(x + width + 10);
+    GSgfxFifo.s16 = (s16)(y - 10);
+    GSgfxFifo.u32 = 0xFFFFFFFF;
+    GSgfxFifo.s16 = (s16)(x + width + 10);
+    GSgfxFifo.s16 = (s16)(y + height + 10);
+    GSgfxFifo.u32 = 0xFFFFFFFF;
+    GSgfxFifo.s16 = (s16)(x - 10);
+    GSgfxFifo.s16 = (s16)(y + height + 10);
+    GSgfxFifo.u32 = 0xFFFFFFFF;
+    GSgfxFifo.s16 = (s16)(x - 10);
+    GSgfxFifo.s16 = (s16)(y - 10);
+    GSgfxFifo.u32 = 0xFFFFFFFF;
+    layer->endSurface();
 }

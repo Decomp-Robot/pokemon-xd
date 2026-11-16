@@ -66,9 +66,9 @@ void menuSubCloseNumberInputWait(void);
 void menuSubKeyWait(void);
 u8 menuSubOpenNumberInputID(u32 value, u32 *out, u16 *(*getName)(u32));
 // Filled rectangle on a GSgfx layer.
-void menuSubDrawTile(s32 layerID, s32 x, s32 y, s32 width, s32 height, GXColor *color);
+void menuSubDrawTile(s32 layerID, s32 x, s32 y, s32 width, s32 height, GXColor color);
 // Framed window the list screens draw their rows in.
-void menuSubDrawSimpleWindow(long layerID, long x, long y, long width, long height);
+void menuSubDrawSimpleWindow(s32 layerID, s32 x, s32 y, s32 width, s32 height);
 // Normal window frame.
 void menuSubDrawNormalWindow2(s32 layer, s32 x, s32 y, s32 width, s32 height,
                               u8 alpha);
@@ -76,8 +76,8 @@ void menuSubDrawNormalWindow2(s32 layer, s32 x, s32 y, s32 width, s32 height,
 void menuSubDrawMsgWindow2(s32 layer, s32 x, s32 y, s32 width, s32 height,
                            u8 alpha, s32 mode);
 // Scroll marker the list screens draw above and below the rows.
-void menuSubDrawTriangle(long layerID, long x1, long y1, long x2, long y2,
-                         long x3, long y3);
+void menuSubDrawTriangle(s32 layerID, s32 x1, s32 y1, s32 x2, s32 y2,
+                         s32 x3, s32 y3);
 // Blended sprite color of a menu window item.
 u32 menuSubCalcColor(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
 
