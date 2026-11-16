@@ -135,7 +135,7 @@ s32 dbgMenuFightFightTrainerSerihuTest(void)
 s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
 {
     FightEncountRecord backup;
-    u8* data;
+    FightEncountRecord* data;
     s32 result;
     s32 id;
     u32 floorDataId;
@@ -148,13 +148,13 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
         return 1;
     }
     data = fightEncountDataBiosGetPtr(encountNo);
-    backup = *(FightEncountRecord*)data;
+    backup = *data;
 
     for (;;) {
         result = menuOpenCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 0, 0, 1, 1, encountNo);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 1);
-            *(FightEncountRecord*)data = backup;
+            *data = backup;
             return -1;
         }
         if (result == -2) {

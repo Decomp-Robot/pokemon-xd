@@ -29,7 +29,7 @@ FightPokemon *fightTrainerCheckTemotiPokemonFightEntry(FIGHT_TRAINER *trainer,
 // Record the heard-name flag for the trainer in this encounter.
 void fightTrainerSetNameHearFlag(u16 encountNo)
 {
-    u8 *encountData = fightEncountDataBiosGetPtr(encountNo);
+    FightEncountRecord *encountData = fightEncountDataBiosGetPtr(encountNo);
     u8 fightKind = (u8)fightEncountDataBiosGetFightKind(encountData);
     void *fightKindData = fightKindDataBiosGetPtr(fightKind);
 

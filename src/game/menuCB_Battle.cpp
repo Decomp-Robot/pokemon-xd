@@ -140,7 +140,7 @@ s32 menuCB_Battle(_MENUCBWORK *work)
 s32 menuCB_InitBattle(_MENUCBWORK *work)
 {
     Hero hero;
-    u8 *encountData;
+    FightEncountRecord *encountData;
     u16 encountId = 0;
     u16 trainerIndex;
     int opponentTrainerDataId;

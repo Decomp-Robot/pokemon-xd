@@ -248,7 +248,7 @@ extern "C" u8 EscapeNGCheck(FightOutPokemon *fightOutPokemon)
     u8 cnt;
     s32 i;
     Pokemon *pokemon;
-    void *fightData;
+    FightEncountRecord *fightData;
     FightOutPokemon *ary[2];
 
     pokemon = fightOutPokemonGetPokemonPtr(fightOutPokemon);

@@ -685,7 +685,7 @@ extern "C" void menuTitleMain(void)
  * and start the loader thread that prereads the fight data. */
 extern "C" void menuTitleStartBattleSelect(void)
 {
-    void *encounter;
+    FightEncountRecord *encounter;
 
     _menuTitleDiskCoverOpen = 0;
     _menuTitleAutoDemoCount = 0.0f;

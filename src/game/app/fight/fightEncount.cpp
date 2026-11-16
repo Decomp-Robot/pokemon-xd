@@ -47,7 +47,7 @@ FIGHT_ENCOUNT *fightEncountGetStrObj()
 
 u8 fightEncountCheckZenmetu()
 {
-    void *encountData = fightEncountDataBiosGetPtr(fightGetFightEncountDataId());
+    FightEncountRecord *encountData = fightEncountDataBiosGetPtr(fightGetFightEncountDataId());
     Hero *hero = Hero::getHeroPtr();
     if (!hero->getBattleResumeFloorID()) {
         return 0;
@@ -75,9 +75,9 @@ u8 fightEncountCheckZenmetu()
 u16 fightEncount(u16 encountId)
 {
     u16 floorId;
-    void *encountData;
+    FightEncountRecord *encountData;
     u32 encountFloor;
-    void *wipe;
+    FightEncountWipeData *wipe;
     Hero *hero;
     u8 message;
     FIGHT_ENCOUNT *encount;
@@ -172,7 +172,7 @@ u32 fightEncountGetEnvSndDataId(u16 encountId)
 
 u32 fightEncountGetBgmSndDataId(u16 encountId)
 {
-    void *encountData = fightEncountDataBiosGetPtr(encountId);
+    FightEncountRecord *encountData = fightEncountDataBiosGetPtr(encountId);
     u32 bgm = fightEncountDataBiosGetBgmSndId(encountData);
     if (bgm) {
         return bgm;

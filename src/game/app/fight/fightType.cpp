@@ -1,15 +1,5 @@
 #include <app/fight/fightType.h>
 
-// One entry of the fight type table: the number of trainers a side fields, the
-// number of Pokemon it enters the fight with, the number of Pokemon it keeps
-// out at once and the name the fight type is displayed with.
-typedef struct FIGHT_TYPE_DATA {
-    u8 mTrainerNum;
-    u8 mEntryPokemonNum;
-    u8 mFightoutPokemonNum;
-    u32 mName;
-} FIGHT_TYPE_DATA;
-
 extern "C" {
 // The fight type table loaded for the running fight and the number of records
 // it holds.
@@ -77,7 +67,7 @@ u32 fightTypeDataBiosGetName(void *fightTypeData) {
 }
 
 // Record of a fight type, or null when the fight has no such type.
-void *fightTypeDataBiosGetPtr(u16 type) {
+FIGHT_TYPE_DATA *fightTypeDataBiosGetPtr(u16 type) {
     if (type > *fight_type_data_number) {
         return 0;
     }
