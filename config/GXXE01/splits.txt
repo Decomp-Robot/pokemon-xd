@@ -2282,7 +2282,7 @@ game/app/floor/floorDataBios.cpp:
 	.text       start:0x80122AB0 end:0x80122DFC
 
 game/app/floor/floorFieldCamera.cpp:
-	.text       start:0x8012324C end:0x801243BC
+	.text       start:0x8012324C end:0x8012476C
 	.rodata     start:0x802F3250 end:0x802F32A8
 	.bss        start:0x80447000 end:0x80447030
 	.sdata      start:0x804E8388 end:0x804E8398

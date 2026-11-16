@@ -1,4 +1,5 @@
 #include "peopleSave.h"
+#include <GSBinStreamImpl.h>
 
 enum {
     PEOPLE_SAVE_SIGNATURE = 0x103,

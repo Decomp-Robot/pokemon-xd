@@ -458,3 +458,5 @@ void _floorFieldCameraDetectMode()
     }
     gFieldCameraMode = FIELD_CAMERA_MODE_AREA;
 }
+
+#include <GSBinStreamImpl.h>
