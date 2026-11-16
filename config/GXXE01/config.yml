@@ -120,3 +120,4 @@ force_active:
   - menuToolBattleInit
   - menuToolBattleMain
   - menuToolBattleExit
+  - psNumTexGroup

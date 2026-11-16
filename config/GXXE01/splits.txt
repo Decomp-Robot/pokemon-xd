@@ -3029,8 +3029,11 @@ game/GSAPI/GSsysdolphin_baselib/particle/pslist.c:
 	.sbss       start:0x804EB548 end:0x804EB550
 
 game/GSAPI/GSsysdolphin_baselib/particle/particle.c:
-	.text       start:0x80189564 end:0x801896CC
+	.text       start:0x80189250 end:0x801896CC
+	.data       start:0x8040AFE0 end:0x8040B004
+	.bss        start:0x80475180 end:0x80475380
 	.sbss       start:0x804EB550 end:0x804EB560
+	.sdata2     start:0x804EDFC8 end:0x804EDFCC
 
 game/GSAPI/GSsysdolphin_baselib/particle/psappsrt.c:
 	.text       start:0x8018A868 end:0x8018ADB8

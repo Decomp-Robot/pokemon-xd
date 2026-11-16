@@ -22,6 +22,10 @@ enum {
     PS_SORT_ORDER_SHIFT = 25,
     PS_SORT_ORDER_COUNT = 8
 };
+
+enum psBankCount { PS_NUM_BANK = 64 };
+#define PS_FLAG_HIDDEN 0x20000000U
+#define PS_EMISSION_SHAPE_MASK 0xF
 #define PS_FLAG_Z_WRITE 0x00000008U
 #define PS_SORT_ORDER_MASK 0x0E000000U
 
@@ -33,37 +37,92 @@ struct _psParticle {
     u32 flags;
     u8 _08[21];
     u8 linkNo;
-    u8 _1E[114];
+    u16 familyID;
+    u8 _20[112];
     struct _psAppSRT *appSRT;
 };
+
+enum psEmissionShape {
+    PS_EMIT_RADIAL = 0,
+    PS_EMIT_LINE = 1,
+    PS_EMIT_TORNADO = 2,
+    PS_EMIT_DISK_RADIAL_SPEED = 3,
+    PS_EMIT_DISK = 4,
+    PS_EMIT_BOX = 5,
+    PS_EMIT_CONE = 6,
+    PS_EMIT_CYLINDER = 7,
+    PS_EMIT_SPHERE = 8
+};
+
+typedef struct _psCommandList {
+    u8 _00[32];
+    f32 radius;
+    u8 _24[12];
+    f32 emissionParameters[3];
+    u8 commands[1];
+} _psCommandList;
+
+typedef union _psEmission {
+    struct {
+        f32 azimuthStart;
+        f32 azimuthEnd;
+        f32 height;
+    } radial;
+    GSvec line;
+    f32 axialSpeed;
+    struct {
+        GSvec dimensions;
+        f32 basis[3][3];
+    } box;
+    struct {
+        f32 radialVelocity;
+        f32 velocityElevation;
+        f32 polarRange;
+        f32 velocityAzimuth;
+        f32 angle;
+    } sphere;
+} _psEmission;
 
 /* Generator records shared by the particle-system modules. */
 typedef struct _psGenerator _psGenerator;
 struct _psGenerator {
-    u8 _00[16];
+    _psGenerator *next;
+    u32 flags;
+    u8 _08[8];
     u16 mRemainFrames;   // 0x10: frames the generator still runs; 0: never ends.
-    u8 _12[3];
+    u16 mType;
+    u8 mBankID;
     u8 mListGroup;       // 0x15: particle-list group.
     u8 _16;
     u8 mLoop;            // 0x17: generator restarts when its frames run out.
     u16 mFamilyID;       // 0x18: particle family the generator spawns.
     u8 _1A[6];
     GSvec mPosition;     // 0x20: base position of every particle it spawns.
-    u8 _2C[36];
+    u8 _2C[12];
+    f32 mGravity;
+    f32 mVelocityMultiplier;
+    u8 _40[4];
+    f32 mEmissionRadius;
+    u8 _48[8];
     struct _psAppSRT *mAppSRT;
-    u8 _54[52];
+    _psEmission mEmission;
+    u8 _84[4];
     _GScamera *mCamera;  // 0x88: camera the generator is interpreted with.
     u16 mOptionFlags;    // 0x8C: bits the psSet*Scaling setters toggle.
     u16 mIndex;          // 0x8E: index psCreateGeneratorID was called with.
     GSvec mRotation;     // 0x90: Euler radians.
     GSvec mScale;        // 0x9C
     _HSD_JObj *mJObj;    // 0xA8: joint the linked child generators follow.
-    u8 _AC[12];
+    GSvec mEmissionScale;
 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern _psGenerator *activeGenerator;
+extern _psCommandList **psCmdListArray[PS_NUM_BANK];
+extern u32 psNumTexGroup[PS_NUM_BANK];
 
 extern u16 g_ps_token;
 extern u16 numPeakPSAppSRT;
@@ -99,7 +158,7 @@ void psSetTornadoScaling(_psGenerator *gen, u8 enable, u8 mode);
 void psSetParticleTexScaling(_psGenerator *gen, u8 enable);
 void psSetOffsetRotationInLocal(_psGenerator *gen, u8 enable, u8 mode);
 void psSetVelocityRotationInLocal(_psGenerator *gen, u8 enable);
-void psSetGeneratorAngleRadiusScale(_psGenerator *gen, f32 *scale, u8 flag);
+void psSetGeneratorAngleRadiusScale(_psGenerator *gen, f32 *scale, u8 scaleDynamics);
 void psLinkChildGensToJObj(_psGenerator *gen, _HSD_JObj *jobj);
 void psUnlinkChildGensFromJObj(_psGenerator *gen);
 void psSetBillboardCamera(_HSD_CObj *cobj);
