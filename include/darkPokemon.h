@@ -2,13 +2,14 @@
 #define DARK_POKEMON_H
 
 #include <types.h>
+#include <bool.h>
 
 #ifdef __cplusplus
 enum darkPokemonStatus {
     DARK_POKEMON_STATUS_NONE = 0,
     DARK_POKEMON_STATUS_FIGHT = 1,
     DARK_POKEMON_STATUS_UNKNOWN = 2,
-    DARK_POKEMON_SNATCHED = 3,
+    DARK_POKEMON_STATUS_SNATCHED = 3,
     DARK_POKEMON_STATUS_RELIVED = 4
 };
 enum darkPokemonWhere {
@@ -17,10 +18,11 @@ enum darkPokemonWhere {
     DARK_POKEMON_WHERE_PCBOX = 2,
     DARK_POKEMON_WHERE_RELIVE_HALL = 3,
     DARK_POKEMON_WHERE_SODATEYA = 4,
-    DARK_POKEMON_EXCHANGED = 5,
+    DARK_POKEMON_WHERE_EXCHANGED = 5,
     DARK_POKEMON_WHERE_RELEASED = 6
 };
 enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HERO = 1 };
+
 class DarkPokemon {
 public:
     u8 getReversPattern() const;
@@ -51,6 +53,14 @@ public:
     void setStatus(darkPokemonStatus status);
     void setCatchFloorId(u16 floorID);
     void setUpdate(bool update);
+    u8 isInformation() const;
+    void setInformation(bool information);
+    void setRnd(u32 rnd);
+    void setSnatchInfoLevel(u8 level);
+    u32 getWalkCount() const;
+    void setWalkCount(u32 count);
+    s8 getStatusRnd(u8 status) const;
+    void setStatusRnd(u8 status, u8 rnd);
     void getPlace(darkPokemonWhere &where, u8 &index) const;
     void setPlace(darkPokemonWhere where, u8 index);
     void addStatus(darkPokemonStatus status);
@@ -68,7 +78,7 @@ private:
     u16 mCatchFloorId; // 0x16: floor where it was caught.
     u16 mPoolFriendLevel; // 0x18
     u16 mPokemonID; // 0x1A: associated Pokemon data ID.
-    unsigned long mRandom; // 0x1C
+    u32 mRandom; // 0x1C
     u32 mSnatchTimeState; // 0x20: escape/snatch timing state.
     s32 mDarkPoint; // 0x24
     u16 mTrainerName[11]; // 0x28: ten characters and terminator.
@@ -77,6 +87,9 @@ private:
 #else
 typedef struct DarkPokemon DarkPokemon;
 #endif
+
+/* Pokemon data IDs indexed by dark Pokemon ID. */
+extern u16 darkPokemonList[];
 
 /* Number of entries in the dark pokemon list. */
 extern u32 darkPokemonList_number;
@@ -95,7 +108,22 @@ u8 darkPokemonBiosGetReliveFlag(u16 darkID);
 u16 darkPokemonBiosGetSteps(u16 darkID);
 void darkPokemonBiosSetSteps(u16 darkID, u16 steps);
 u8 darkPokemonBiosGetInformationFlag(u16 darkID);
-void darkPokemonBiosSetInfomation(u16 pokemonID, u16 information);
+void darkPokemonBiosSetInfomation(u16 darkID, u16 information);
+void darkPokemonBiosSetInformationFlag(u16 darkID, bool information);
+u16 darkPokemonListBiosGetPokemonID(u16 darkID);
+u16 *darkPokemonListBiosGetDPList(u16 darkID);
+u32 darkpokemonBiosGetScenarioNum(void);
+u32 darkPokemonBiosGetRnd(u16 darkID);
+void darkPokemonBiosSetRnd(u16 darkID, u32 rnd);
+s32 darkPokemonBiosGetStatusRnd(u16 darkID, u16 status);
+void darkPokemonBiosSetStatusRnd(u16 darkID, u16 status, u16 rnd);
+u8 darkPokemonBiosGetFightFlag(u16 darkID);
+void darkPokemonBiosSetFightFlag(u16 darkID);
+u8 darkPokemonBiosGetSnatchSuccessFlag(u16 darkID);
+void darkPokemonBiosSetReliveFlag(u16 darkID);
+u8 darkPokemonBiosGetLevel(u16 darkID);
+u8 darkPokemonBiosGetHokakuritu(u16 darkID);
+u16 darkPokemonBiosGetInitDarkPoint(u16 darkID);
 
 #ifdef __cplusplus
 }

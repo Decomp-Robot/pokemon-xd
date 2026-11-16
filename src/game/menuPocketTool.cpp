@@ -1043,7 +1043,7 @@ void menuPocketSetDarkPokemon(Pokemon &pokemon, float rate, unsigned short darkI
     unsigned short dp = pokemonBiosGetInitDp(&pokemon);
     pokemon.setDarkPoint(dp * rate);
     DarkPokemon *dark = darkPokemonGetDarkPokemon(darkID);
-    dark->setStatus(DARK_POKEMON_SNATCHED);
+    dark->setStatus(DARK_POKEMON_STATUS_SNATCHED);
     dark->setSnatchIndex(darkID);
 }
 

@@ -24,6 +24,7 @@ enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_FIGHT_FLOOR_PTR = 0,
     FIGHT_FLOOR_STATUS_ENCOUNT_DATA_ID = 13,
     FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
+    FIGHT_FLOOR_STATUS_ENCOUNT_FLOOR_ID = 74, /* floor ID of the running encounter. */
 };
 
 /* Menu IDs accepted by the fight status-menu count accessors. */

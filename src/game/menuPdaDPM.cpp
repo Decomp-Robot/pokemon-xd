@@ -318,7 +318,7 @@ void menuPdaDPM::DarkPokemonInfo(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
 
     if (darkPokemon->getPokemonID() == POKEMON_SPECIES_TOGEPI) {
         msgID = MSG_DPM_INFO_TOGEPI;
-    } else if (status >= DARK_POKEMON_SNATCHED) {
+    } else if (status >= DARK_POKEMON_STATUS_SNATCHED) {
         msgID = MSG_DPM_INFO_SNATCHED;
     } else {
         msgID = MSG_DPM_INFO_NOT_SNATCHED;
@@ -453,7 +453,7 @@ extern "C" long menuPdaDPMListDispRelive(tagWINDOW_WORK *window, tagSPRITE_WORK 
     case DARK_POKEMON_STATUS_FIGHT:
     case DARK_POKEMON_STATUS_UNKNOWN:
         break;
-    case DARK_POKEMON_SNATCHED: {
+    case DARK_POKEMON_STATUS_SNATCHED: {
         tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(MENU_ID_PDA_DPMON_LIST, DPM_ITEM_RELIVE);
         menuDrawReliveMeterByDarkPokemon(pokemon, x, y, item->mWidth, item->mHeight, window->mRgba.mColorA,
                                          window->mLayerID);

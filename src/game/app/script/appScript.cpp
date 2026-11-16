@@ -1446,7 +1446,7 @@ int AppScript::cmpDarkPokemon(int cmd, GSscript::tigaVariant* args, GSscript::ti
             result->setInteger(0);
         break;
     case IsSnagged:
-        if (pokemon->getStatus() >= DARK_POKEMON_SNATCHED)
+        if (pokemon->getStatus() >= DARK_POKEMON_STATUS_SNATCHED)
             result->setInteger(1);
         else
             result->setInteger(0);

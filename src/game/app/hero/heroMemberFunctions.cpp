@@ -187,7 +187,7 @@ s16 Hero::pokemonGet(HeroPokemonGetParam *param, bool allowStorageFallback)
         DarkPokemon *dark = pokemon.getDarkPokemon();
         if (dark != 0) {
             dark->setPlace(DARK_POKEMON_WHERE_PARTY, (u8)result);
-            dark->addStatus(DARK_POKEMON_SNATCHED);
+            dark->addStatus(DARK_POKEMON_STATUS_SNATCHED);
             if (dark->getSnatchFromWho() == DARK_POKEMON_SNATCH_NONE) {
                 dark->setSnatchFromWho(DARK_POKEMON_SNATCH_HERO);
             }

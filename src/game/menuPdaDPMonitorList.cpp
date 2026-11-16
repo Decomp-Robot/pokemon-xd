@@ -182,7 +182,7 @@ u32 menuPdaDPMListGetDarkPokemonPlaceMsgID(long index, u8 *outIndex)
     case DARK_POKEMON_WHERE_SODATEYA:
         msgID = MSG_DPM_PLACE_SODATEYA;
         break;
-    case DARK_POKEMON_EXCHANGED:
+    case DARK_POKEMON_WHERE_EXCHANGED:
     case DARK_POKEMON_WHERE_RELEASED:
         msgID = MSG_DPM_PLACE_NOT_OWNED;
         break;
@@ -208,7 +208,7 @@ long menuPdaDPMListGetDarkPokemonPlace(long index, darkPokemonWhere *outWhere, u
         *outWhere = DARK_POKEMON_WHERE_NONE;
         *outIndex = 0;
         break;
-    case DARK_POKEMON_SNATCHED:
+    case DARK_POKEMON_STATUS_SNATCHED:
     case DARK_POKEMON_STATUS_RELIVED:
         dp->getPlace(where, placeIndex);
         *outWhere = where;
@@ -672,7 +672,7 @@ long menuPdaDPMList::SortPlace()
         darkID = GetDarkPokemonID(i);
         dp = darkPokemonGetDarkPokemon(darkID);
         dp->getPlace(where, index);
-        if (!dp->isSnach() || (where != DARK_POKEMON_EXCHANGED && where != DARK_POKEMON_WHERE_RELEASED)) {
+        if (!dp->isSnach() || (where != DARK_POKEMON_WHERE_EXCHANGED && where != DARK_POKEMON_WHERE_RELEASED)) {
             continue;
         }
         pokemonID = dp->getPokemonID();

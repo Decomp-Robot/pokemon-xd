@@ -211,4 +211,24 @@ private:
 };
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Number of Shadow Pokemon entries the deck holds. */
+u32 deckGetDarkPokemonSize(void);
+
+/* The deck's Shadow Pokemon entry for a dark pokemon ID, or NULL when the
+ * deck has no entry with that ID. */
+#ifdef __cplusplus
+DeckDarkPokemon *deckGetDeckDarkPokemon(u32 darkID);
+#else
+struct DeckDarkPokemon;
+struct DeckDarkPokemon *deckGetDeckDarkPokemon(u32 darkID);
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

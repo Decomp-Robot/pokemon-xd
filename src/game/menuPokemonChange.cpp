@@ -1676,7 +1676,7 @@ void CMenuPokemonChange::stateFunctionExChangeMain()
         selected[player] = getPokemon(mCursor[player]);
     DarkPokemon* darkPokemon = selected[0]->getDarkPokemon();
     if (darkPokemon)
-        darkPokemon->setPlace(DARK_POKEMON_EXCHANGED, 0);
+        darkPokemon->setPlace(DARK_POKEMON_WHERE_EXCHANGED, 0);
     pokemonBiosCopy(&pokemon, selected[1]);
     pokemonBiosCopy(selected[1], selected[0]);
     pokemonBiosCopy(selected[0], &pokemon);

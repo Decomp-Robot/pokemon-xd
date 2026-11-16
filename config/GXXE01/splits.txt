@@ -2424,9 +2424,16 @@ game/app/pokemon/pokemonEvolution.cpp:
 	.data       start:0x80404460 end:0x804044A4
 	.sdata2     start:0x804EDB80 end:0x804EDB88
 
+game/app/pokemon/darkPokemonList.cpp:
+	.data       start:0x804044E8 end:0x804045E8
+	.sdata      start:0x804E83D8 end:0x804E83DC
+
 game/app/pokemon/pokemonStatusPokemon.cpp:
 	.text       start:0x8014AC54 end:0x8014AFA0
 	.sdata2     start:0x804EDB88 end:0x804EDB90
+
+game/app/pokemon/darkPokemonBios.cpp:
+	.text       start:0x8014BF4C end:0x8014C558
 
 game/app/hero/heroBios.cpp:
 	.text       start:0x8014DC28 end:0x8014E174
