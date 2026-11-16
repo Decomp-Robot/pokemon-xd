@@ -5,6 +5,12 @@ splits: config/GXXE01/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 block_relocations:
+  # psSetupTev's TEV selection masks are plain immediates; they do not
+  # reference the nearby GSpartGetTransform/GSpartRegisterAnimMix code.
+  - source: ".text:0x8018F104"
+  - source: ".text:0x8018F10C"
+  - source: ".text:0x8018F184"
+  - source: ".text:0x8018F194"
   # Extracted consumers retain the pokemon TU's compiler-local literals.
   - source: ".text:0x8013F298"
   - source: ".text:0x80141B40"
