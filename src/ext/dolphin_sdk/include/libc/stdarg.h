@@ -19,10 +19,21 @@ typedef __va_list va_list;
 extern void __builtin_va_info(va_list*);
 #endif
 
-void* __va_arg(va_list v_list, unsigned char type);
+/* Argument classes reported by the compiler's _var_arg_typeof intrinsic for
+ * the type named in va_arg.  The class selects which register bank is
+ * consumed, whether the register slot is paired, and whether the saved slot
+ * holds the argument itself or its address. */
+typedef enum {
+  ARG_CLASS_INDIRECT = 0,       /* slot holds the argument's address */
+  ARG_CLASS_GENERAL = 1,        /* one general-purpose register slot */
+  ARG_CLASS_DOUBLE_WORD = 2,    /* even-aligned pair of general registers */
+  ARG_CLASS_FLOATING_POINT = 3  /* one floating-point register slot */
+} ArgumentClass;
+
+void* __va_arg(va_list v_list, ArgumentClass type);
 
 #define va_start(ap, fmt) ((void)fmt, __builtin_va_info(&ap))
-#define va_arg(ap, t) (*((t*)__va_arg(ap, _var_arg_typeof(t))))
+#define va_arg(ap, t) (*((t*)__va_arg(ap, (ArgumentClass)_var_arg_typeof(t))))
 #define va_end(ap) (void)0
 
 #else
