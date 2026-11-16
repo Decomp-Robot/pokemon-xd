@@ -16,7 +16,7 @@ void *gamedataGetStatus(void *gamedata, u16 field)
             return NULL;
         }
     }
-    GamedataAttest *attest = gamedataBiosGetGamedataAtttestPtr(gamedata);
+    GamedataAttest *attest = gamedataBiosGetGamedataAtttestPtr((GamedataSave *)gamedata);
     if (attest == NULL) {
         return NULL;
     }
@@ -51,13 +51,13 @@ void gamedataSetStatus(void *gamedata, u16 field, u32 status)
             return;
         }
     }
-    GamedataAttest *attest = gamedataBiosGetGamedataAtttestPtr(gamedata);
+    GamedataAttest *attest = gamedataBiosGetGamedataAtttestPtr((GamedataSave *)gamedata);
     if (attest == NULL) {
         return;
     }
     switch (field) {
     case GAMEDATA_STATUS_ATTEST:
-        gamedataBiosSetGamedataAtttestPtr(gamedata, (GamedataAttest *)status);
+        gamedataBiosSetGamedataAtttestPtr((GamedataSave *)gamedata, (GamedataAttest *)status);
         break;
     case GAMEDATA_STATUS_ORIGIN:
         gamedataAttestBiosSetVerId(attest, (u8)status);

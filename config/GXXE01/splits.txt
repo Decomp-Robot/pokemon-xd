@@ -2463,6 +2463,9 @@ game/app/gamedata/gamedatasaveBios.cpp:
 	.text       start:0x801576DC end:0x80157A40
 	.sdata2     start:0x804EDC88 end:0x804EDC90
 
+game/app/gamedata/gamedataBios.cpp:
+	.text       start:0x80157A40 end:0x80157B5C
+
 game/app/gamedata/gamedata.cpp:
 	.text       start:0x80157B5C end:0x801586C0
 	.data       start:0x80404C68 end:0x80404CD8

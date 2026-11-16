@@ -32,6 +32,10 @@ name = "game/app/bingo/bingoBios.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/gamedata/gamedataBios.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/gamedata/gamedata.cpp"
 completed = true
 extra_cflags = ["-inline auto,deferred,level=1"]

@@ -233,7 +233,7 @@ s32 pokemonEvolution(Pokemon *destination, Pokemon *source, u16 species,
     }
     pokemonBiosCopy(destination, source);
     attest = pokemonBiosGetAttest(source);
-    language = gamedataAttestBiosGetLangareaId(gamedataBiosGetGamedataAtttestPtr(savedataGetStatus(0, SAVE_DATA_GAME)));
+    language = gamedataAttestBiosGetLangareaId(gamedataBiosGetGamedataAtttestPtr((GamedataSave *)savedataGetStatus(0, SAVE_DATA_GAME)));
     sourceLanguage = gamedataAttestBiosGetLangareaId(attest);
     if (sourceLanguage == language) {
         nickname = pokemon_GetNickname(destination);

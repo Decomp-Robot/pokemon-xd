@@ -88,7 +88,7 @@ enum GAMEDATASAVE_FIELD {
 #ifdef __cplusplus
 extern "C" {
 #endif
-GamedataAttest *gamedataBiosGetGamedataAtttestPtr(void *gamedata);
+GamedataAttest *gamedataBiosGetGamedataAtttestPtr(GamedataSave *gamedata);
 void gamedataBiosSetZukanFLag(GamedataPlayData *playdata, u16 index, u16 value);
 u8 gamedataBiosGetZukanFlag(GamedataPlayData *playdata, u16 index);
 GamedataPlayData *gamedatasaveBiosGetplaydata(GamedataSave *save);
@@ -124,11 +124,12 @@ void gamedataBiosSetFlag(GamedataSave *save, u16 field, u16 index, u8 value);
 void gamedataCreate(GamedataSave *gamedata, u8 versionId, u8 generationId, u8 areaId, u8 langareaId);
 void gamedataInit(GamedataSave *gamedata);
 void gamedataAttestInit(GamedataAttest *attest);
-void gamedataBiosSetGamedataAtttestPtr(void *gamedata, GamedataAttest *attest);
+void gamedataBiosSetGamedataAtttestPtr(GamedataSave *gamedata, GamedataAttest *attest);
 void gamedataAttestBiosSetVerId(GamedataAttest *attest, u8 value);
 void gamedataAttestBiosSetGenId(GamedataAttest *attest, u8 value);
 void gamedataAttestBiosSetAreaId(GamedataAttest *attest, u8 value);
 void gamedataAttestBiosSetLangareaId(GamedataAttest *attest, u8 value);
+void gamedataAttestBiosCopy(GamedataAttest *destination, GamedataAttest *source);
 u8 gamedataAttestBiosGetGenId(GamedataAttest *attest);
 u8 gamedataAttestBiosGetAreaId(GamedataAttest *attest);
 // A null save selects the current game data.

@@ -554,7 +554,7 @@ u8 _check_langarea(u8 language)
     u8 langarea;
     u8 saveLangarea;
     void *saveData;
-    void *gamedata;
+    GamedataSave *gamedata;
     GamedataAttest *attest;
 
     switch (pokecoloGetCountryCode()) {
@@ -583,7 +583,7 @@ u8 _check_langarea(u8 language)
         }
         saveData = savedataBiosGetNowSavedataPtr();
         if (saveData != NULL) {
-            gamedata = savedataBiosGetGamedataPtr(saveData);
+            gamedata = (GamedataSave *)savedataBiosGetGamedataPtr(saveData);
             if (gamedata != NULL) {
                 attest = gamedataBiosGetGamedataAtttestPtr(gamedata);
                 if (attest != NULL) {
@@ -925,13 +925,13 @@ u8 _get_langarea(void)
 {
     u8 langarea;
     void *saveData;
-    void *gamedata;
+    GamedataSave *gamedata;
     GamedataAttest *attest;
 
     langarea = LANGAREA_UNKNOWN;
     saveData = savedataBiosGetNowSavedataPtr();
     if (saveData != NULL) {
-        gamedata = savedataBiosGetGamedataPtr(saveData);
+        gamedata = (GamedataSave *)savedataBiosGetGamedataPtr(saveData);
         if (gamedata != NULL) {
             attest = gamedataBiosGetGamedataAtttestPtr(gamedata);
             if (attest != NULL) {
