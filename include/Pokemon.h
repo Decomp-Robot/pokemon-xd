@@ -85,6 +85,7 @@ struct Pokemon {
     u8 _BC[8];
 
 #ifdef __cplusplus
+    Pokemon &operator=(const Pokemon &other);
     void setReversMode(bool enabled);
     bool isHatena() const;
     bool isFuseiFlag() const;

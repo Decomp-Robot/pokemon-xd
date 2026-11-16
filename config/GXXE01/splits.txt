@@ -3380,6 +3380,10 @@ game/app/fight/fightTrainerAi2.cpp:
 game/app/fight/fightTrainerAiWazaHit.cpp:
 	.text       start:0x8022CD24 end:0x8022D400
 
+game/app/toolentry/toolentry.cpp:
+	.text       start:0x80231AB4 end:0x8023242C
+	.sbss       start:0x804EB980 end:0x804EB984
+
 game/app/tableRes/tableResBios.cpp:
 	.text       start:0x80232774 end:0x802327CC
 	.rodata     start:0x802F9270 end:0x802F9298

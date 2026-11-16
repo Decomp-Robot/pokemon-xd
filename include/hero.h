@@ -66,6 +66,7 @@ struct HeroPokemonGetParam {
 class Hero {
 public:
     Hero() {}
+    Hero &operator=(const Hero &other);
 
     // Party access.
     const Pokemon *getPokemon(long index) const;
