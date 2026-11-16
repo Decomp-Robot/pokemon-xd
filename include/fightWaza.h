@@ -43,9 +43,10 @@ void fightWaza_SetCritical(FIGHT_WAZA *waza, u32 critical);
 void fightWazaInitJoutaiDataId(FIGHT_WAZA *waza, u16 joutaiDataId);
 u8 *fightWazaCriticalDataBiosGetPtr(u16 criticalRatio);
 u8 fightWazaCriticalDataBiosGetBunbo(u8 *criticalData);
-u8 fightWazaIsJoutaiDataId(FIGHT_WAZA *waza, u16 move);
+u8 fightWazaIsJoutaiDataId(FIGHT_WAZA *waza, u16 joutaiDataId);
+void fightWazaWriteJoutaiDataId(FIGHT_WAZA *waza, u16 joutaiDataId, u16 targetId);
 
-void fightWaza_SetWazaBanme(FIGHT_WAZA *waza, u8 wazaBanme);
+void fightWaza_SetWazaBanme(FIGHT_WAZA *waza, s8 wazaBanme);
 void fightWaza_SetMotoWazaDataId(FIGHT_WAZA *waza, u16 motoWazaDataId);
 void fightWaza_SetUseWazaDataId(FIGHT_WAZA *waza, u16 useWazaDataId);
 void fightWaza_SetTargetDataId(FIGHT_WAZA *waza, u16 targetDataId);

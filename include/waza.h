@@ -5,6 +5,7 @@
 #include <bool.h>
 
 typedef struct FIGHT_WAZA FIGHT_WAZA;
+typedef struct FightOutPokemon FightOutPokemon;
 
 enum WAZA_FIELD {
     WAZA_FIELD_NONE = 0,
@@ -298,8 +299,13 @@ u8 wazaDB_GetAvg(u16 move);
 s32 wazaDB_GetPri(u16 move);
 u8 wazaDB_GetPp(u16 move);
 
-void *wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move);
-void *wazaDB_GetFightWazaWzxTypeFuncPtr(u16 move);
+FightWazaWzxVariationFunc wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move);
+FightWazaWzxTypeFunc wazaDB_GetFightWazaWzxTypeFuncPtr(u16 move);
+
+u8 fightWazaWzxVariationFuncNull(u16 move, FightOutPokemon *attackPokemon,
+    FightOutPokemon *defensePokemon, u16 invocation);
+void fightWazaWzxTypeFuncNull(u16 move, FightOutPokemon *attackPokemon,
+    FightOutPokemon *defensePokemon, u16 invocation, u8 variation);
 void *wazaDB_GetFightTrainerAiWazaDamageFightPokemonFuncPtr(u16 move);
 void *wazaDB_GetFightTrainerAiWazaDamageFuncPtr(u16 move);
 void *wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move);

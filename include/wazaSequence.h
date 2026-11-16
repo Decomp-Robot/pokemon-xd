@@ -54,6 +54,7 @@ bool Sequence_IsFlipped(NullSequence *sequence);
 void Sequence_SetFlipped(NullSequence *sequence, bool flipped);
 bool Sequence_IsRare(NullSequence *sequence);
 u32 Sequence_GetPokemonRndVal(NullSequence *sequence);
+WazaSequence *Sequence_GetWaza(NullSequence *stage, u16 sequence, u16 category);
 WazaSequence *Sequence_LoadWaza(NullSequence *model, u16 sequence, u8 category, u8 variation);
 NullSequence *Sequence_CreateNull(void);
 void Sequence_Free(NullSequence *sequence);

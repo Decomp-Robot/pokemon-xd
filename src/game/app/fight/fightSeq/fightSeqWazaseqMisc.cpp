@@ -77,7 +77,7 @@ extern "C" void WS_GUARD_SUCCESS_CHECK(void)
     } else {
         fightOutPokemon_SetSuccessCnt(attacker, 0);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 2;
-        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
+        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_RESULT_MISSED);
     }
     fightSeq_NextWazaSeq(1);
 }
@@ -256,7 +256,7 @@ extern "C" void WS_REFLEC(void)
     void *side = fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ATTACKER_SIDE, attacker);
     u16 validCount = fightFloorGetValidFightOutPokemonCount(0, 1, attacker, 1);
     if (fightSideCheckWriteJoutaiDataId(side, JOUTAI_REFLECT) != JOUTAI_WRITE_ACCEPT) {
-        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
+        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_RESULT_MISSED);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 0;
     } else {
         fightSideWriteJoutaiDataId(side, JOUTAI_REFLECT, 0);
@@ -282,11 +282,11 @@ extern "C" void WS_YADORIGI(void)
     defender = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_DEFENDER, 0);
     if (fightWazaIsHit(waza) == 0 ||
         fightOutPokemonCheckWriteJoutaiDataId(defender, JOUTAI_LEECH_SEED) != JOUTAI_WRITE_ACCEPT) {
-        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
+        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_RESULT_MISSED);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 1;
         fightSeq_NextWazaSeq(1);
     } else if (fightOutPokemonIsZokuseiDataId(defender, ZOKUSEI_GRASS) == 1) {
-        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_FAILED);
+        fightFloor_SetAttackPokemonFightWazaJoutaiDataId(0, JOUTAI_MOVE_RESULT_MISSED);
         fightSeqWazaWork[SEQ_MULTIPLE_STATUS] = 2;
         fightSeq_NextWazaSeq(1);
     } else {

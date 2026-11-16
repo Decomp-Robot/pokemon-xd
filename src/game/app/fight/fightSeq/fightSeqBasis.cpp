@@ -190,7 +190,7 @@ extern "C" void WS_WKC_ACT(void)
                 useWaza != WAZA_DATA_ID_STRUGGLE &&
                 fightOutPokemonCheckWriteJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK) == JOUTAI_WRITE_ACCEPT) {
                 if (useWaza == WAZA_DATA_ID_BATON_PASS &&
-                    fightWazaIsJoutaiDataId(waza, JOUTAI_ID_REGULATION_REJECTED_MOVE) == 1) {
+                    fightWazaIsJoutaiDataId(waza, JOUTAI_MOVE_RESULT_FAILED) == 1) {
                     fightSeqWkcActStep++;
                     break;
                 }

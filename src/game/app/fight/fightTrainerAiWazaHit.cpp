@@ -42,7 +42,7 @@ u8 fightTrainerAiWazaHit203(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
 
     hit = _fightTrainerAiWazaHitCheck(trainer, attacker, wazaDataId, defender, 0);
     if (fightTrainerAiGetFightOutPokemonZokuseiDataIdWazaJoutaiDataId(trainer, defender, typeId,
-            fightTrainerAiGetWazaIryoku(trainer, wazaDataId)) == JOUTAI_TYPE_IMMUNITY) {
+            fightTrainerAiGetWazaIryoku(trainer, wazaDataId)) == JOUTAI_MOVE_RESULT_NO_EFFECT) {
         hit = 0;
     }
     if (hit == 0) {

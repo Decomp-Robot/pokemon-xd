@@ -97,7 +97,7 @@ void fightWaza_SetMotoWazaDataId(FIGHT_WAZA *waza, u16 motoWazaDataId)
     waza->mMotoWazaDataId = motoWazaDataId;
 }
 
-void fightWaza_SetWazaBanme(FIGHT_WAZA *waza, u8 wazaBanme)
+void fightWaza_SetWazaBanme(FIGHT_WAZA *waza, s8 wazaBanme)
 {
     if (waza == 0) {
         return;
@@ -219,7 +219,7 @@ u8 fightWaza_GetWazaBanme(FIGHT_WAZA *waza)
 // function record the move points at; a move or function id the database
 // cannot resolve hands back a null handler.
 
-void *wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move)
+FightWazaWzxVariationFunc wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move)
 {
     struct WazaData *data;
     struct WazaFuncData *funcData;
@@ -235,7 +235,7 @@ void *wazaDB_GetFightWazaWzxVariationFuncPtr(u16 move)
     return funcData->mFightWazaWzxVariationFunc;
 }
 
-void *wazaDB_GetFightWazaWzxTypeFuncPtr(u16 move)
+FightWazaWzxTypeFunc wazaDB_GetFightWazaWzxTypeFuncPtr(u16 move)
 {
     struct WazaData *data;
     struct WazaFuncData *funcData;
