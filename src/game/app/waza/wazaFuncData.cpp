@@ -4,7 +4,12 @@
 
 extern "C" {
 
+// Move effect dispatch table, looked up by the function data id of a move
+// (WazaData::mWazaFuncDataId). The index is the move id: 0 is unused, 1 to
+// 354 are the normal moves, 355 marks the end of them, 356 to 373 are the
+// shadow moves and 374 is the shadow special.
 WazaFuncData waza_func_data[] = {
+    // 0 unused
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHitNull,
@@ -13,6 +18,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNull,
         fightWazaWzxVariationFuncNull
     },
+    // 1 Pound
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -21,6 +27,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 2 Karate Chop
     {
         fightTrainerAiWazaValuePhyKuritikaru,
         fightTrainerAiWazaHit043,
@@ -29,6 +36,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 3 Double Slap
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -37,6 +45,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 4 Comet Punch
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -45,6 +54,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 5 Mega Punch
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -53,6 +63,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 6 Pay Day
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit034,
@@ -61,6 +72,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 7 Fire Punch
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -69,6 +81,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 8 Ice Punch
     {
         fightTrainerAiWazaValueTuikaKoori,
         fightTrainerAiWazaHit005,
@@ -77,6 +90,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 9 Thunder Punch
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -85,6 +99,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 10 Scratch
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -93,6 +108,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 11 Vice Grip
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -101,6 +117,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 12 Guillotine
     {
         fightTrainerAiWazaValueItigekihissatu,
         fightTrainerAiWazaHit038,
@@ -109,6 +126,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 13 Razor Wind
     {
         fightTrainerAiWazaValueKamaitati,
         fightTrainerAiWazaHit039,
@@ -117,6 +135,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 14 Swords Dance
     {
         fightTrainerAiWazaValueKougekiAppu,
         fightTrainerAiWazaHit050,
@@ -125,6 +144,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 15 Cut
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -133,6 +153,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 16 Gust
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit149,
@@ -141,6 +162,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 17 Wing Attack
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -149,6 +171,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 18 Whirlwind
     {
         fightTrainerAiWazaValueKyouseikoutai,
         fightTrainerAiWazaHit028,
@@ -157,6 +180,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 19 Fly
     {
         fightTrainerAiWazaValueSorawotobu,
         fightTrainerAiWazaHit155,
@@ -165,6 +189,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 20 Bind
     {
         fightTrainerAiWazaValueSokubaku,
         fightTrainerAiWazaHit042,
@@ -173,6 +198,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 21 Slam
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -181,6 +207,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 22 Vine Whip
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -189,6 +216,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 23 Stomp
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit150,
@@ -197,6 +225,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 24 Double Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit044,
@@ -205,6 +234,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 25 Mega Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -213,6 +243,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 26 Jump Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit045,
@@ -221,6 +252,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 27 Rolling Kick
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -229,6 +261,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 28 Sand Attack
     {
         fightTrainerAiWazaValueMeityuuDaun,
         fightTrainerAiWazaHit023,
@@ -237,6 +270,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 29 Headbutt
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -245,6 +279,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 30 Horn Attack
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -253,6 +288,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 31 Fury Attack
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -261,6 +297,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 32 Horn Drill
     {
         fightTrainerAiWazaValueItigekihissatu,
         fightTrainerAiWazaHit038,
@@ -269,6 +306,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 33 Tackle
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -277,6 +315,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 34 Body Slam
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -285,6 +324,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 35 Wrap
     {
         fightTrainerAiWazaValueSokubaku,
         fightTrainerAiWazaHit042,
@@ -293,6 +333,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 36 Take Down
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit048,
@@ -301,6 +342,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 37 Thrash
     {
         fightTrainerAiWazaValueAbareru,
         fightTrainerAiWazaHit027,
@@ -309,6 +351,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 38 Double-Edge
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit198,
@@ -317,6 +360,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 39 Tail Whip
     {
         fightTrainerAiWazaValueBougyoDaun,
         fightTrainerAiWazaHit019,
@@ -325,6 +369,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 40 Poison Sting
     {
         fightTrainerAiWazaValueTuikaDoku,
         fightTrainerAiWazaHit002,
@@ -333,6 +378,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 41 Twineedle
     {
         fightTrainerAiWazaValueTuikaDoku,
         fightTrainerAiWazaHit077,
@@ -341,6 +387,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 42 Pin Missile
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -349,6 +396,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 43 Leer
     {
         fightTrainerAiWazaValueBougyoDaun,
         fightTrainerAiWazaHit019,
@@ -357,6 +405,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 44 Bite
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -365,6 +414,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 45 Growl
     {
         fightTrainerAiWazaValueKougekiDaun,
         fightTrainerAiWazaHit018,
@@ -373,6 +423,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 46 Roar
     {
         fightTrainerAiWazaValueKyouseikoutai,
         fightTrainerAiWazaHit028,
@@ -381,6 +432,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 47 Sing
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -389,6 +441,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 48 Supersonic
     {
         fightTrainerAiWazaValueKonran,
         fightTrainerAiWazaHit049,
@@ -397,6 +450,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 49 Sonic Boom
     {
         fightTrainerAiWazaValueTeiryouDameeji,
         fightTrainerAiWazaHit130,
@@ -405,6 +459,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 50 Disable
     {
         fightTrainerAiWazaValueKanasibari,
         fightTrainerAiWazaHit086,
@@ -413,6 +468,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 51 Acid
     {
         fightTrainerAiWazaValueTuikouBougyoDaun,
         fightTrainerAiWazaHit069,
@@ -421,6 +477,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 52 Ember
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -429,6 +486,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 53 Flamethrower
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -437,6 +495,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 54 Mist
     {
         fightTrainerAiWazaValueSiroikiri,
         fightTrainerAiWazaHit046,
@@ -445,6 +504,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 55 Water Gun
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -453,6 +513,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 56 Hydro Pump
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -461,6 +522,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 57 Surf
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -469,6 +531,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 58 Ice Beam
     {
         fightTrainerAiWazaValueTuikaKoori,
         fightTrainerAiWazaHit005,
@@ -477,6 +540,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 59 Blizzard
     {
         fightTrainerAiWazaValueTuikaKoori,
         fightTrainerAiWazaHit005,
@@ -485,6 +549,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 60 Psybeam
     {
         fightTrainerAiWazaValueTuikouKonran,
         fightTrainerAiWazaHit076,
@@ -493,6 +558,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 61 Bubble Beam
     {
         fightTrainerAiWazaValueTuikouSubayasaDaun,
         fightTrainerAiWazaHit070,
@@ -501,6 +567,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 62 Aurora Beam
     {
         fightTrainerAiWazaValueOororabiimu,
         fightTrainerAiWazaHit068,
@@ -509,6 +576,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 63 Hyper Beam
     {
         fightTrainerAiWazaValueHandou,
         fightTrainerAiWazaHit080,
@@ -517,6 +585,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 64 Peck
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -525,6 +594,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 65 Drill Peck
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -533,6 +603,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 66 Submission
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit048,
@@ -541,6 +612,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 67 Low Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit196,
@@ -549,6 +621,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncKetaguri
     },
+    // 68 Counter
     {
         fightTrainerAiWazaValueKauntaa,
         fightTrainerAiWazaHit089,
@@ -557,6 +630,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 69 Seismic Toss
     {
         fightTrainerAiWazaValueTeiryouDameeji,
         fightTrainerAiWazaHit087,
@@ -565,6 +639,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncTikyuunage
     },
+    // 70 Strength
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -573,6 +648,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 71 Absorb
     {
         fightTrainerAiWazaValueKyuusyuu,
         fightTrainerAiWazaHit003,
@@ -581,6 +657,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncVampire,
         fightWazaWzxVariationFuncNormal
     },
+    // 72 Mega Drain
     {
         fightTrainerAiWazaValueKyuusyuu,
         fightTrainerAiWazaHit003,
@@ -589,6 +666,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncVampire,
         fightWazaWzxVariationFuncNormal
     },
+    // 73 Leech Seed
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit084,
@@ -597,6 +675,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 74 Growth
     {
         fightTrainerAiWazaValueTokukouAppu,
         fightTrainerAiWazaHit013,
@@ -605,6 +684,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 75 Razor Leaf
     {
         fightTrainerAiWazaValueSpeKuritikaru,
         fightTrainerAiWazaHit043,
@@ -613,6 +693,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 76 Solar Beam
     {
         fightTrainerAiWazaValueSooraabiimu,
         fightTrainerAiWazaHit151,
@@ -621,6 +702,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 77 Poison Powder
     {
         fightTrainerAiWazaValueDoku,
         fightTrainerAiWazaHit066,
@@ -629,6 +711,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 78 Stun Spore
     {
         fightTrainerAiWazaValueMahi,
         fightTrainerAiWazaHit067,
@@ -637,6 +720,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 79 Sleep Powder
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -645,6 +729,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 80 Petal Dance
     {
         fightTrainerAiWazaValueAbareru,
         fightTrainerAiWazaHit027,
@@ -653,6 +738,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 81 String Shot
     {
         fightTrainerAiWazaValueSubayasaDaun,
         fightTrainerAiWazaHit020,
@@ -661,6 +747,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 82 Dragon Rage
     {
         fightTrainerAiWazaValueTeiryouDameeji,
         fightTrainerAiWazaHit041,
@@ -669,6 +756,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 83 Fire Spin
     {
         fightTrainerAiWazaValueHonoonouzu,
         fightTrainerAiWazaHit042,
@@ -677,6 +765,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 84 Thunder Shock
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -685,6 +774,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 85 Thunderbolt
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -693,6 +783,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 86 Thunder Wave
     {
         fightTrainerAiWazaValueMahi,
         fightTrainerAiWazaHit067,
@@ -701,6 +792,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 87 Thunder
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit152,
@@ -709,6 +801,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 88 Rock Throw
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -717,6 +810,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 89 Earthquake
     {
         fightTrainerAiWazaValueJisin,
         fightTrainerAiWazaHit147,
@@ -725,6 +819,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 90 Fissure
     {
         fightTrainerAiWazaValueItigekihissatu,
         fightTrainerAiWazaHit038,
@@ -733,6 +828,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 91 Dig
     {
         fightTrainerAiWazaValueSorawotobu,
         fightTrainerAiWazaHit155,
@@ -741,6 +837,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 92 Toxic
     {
         fightTrainerAiWazaValueDoku,
         fightTrainerAiWazaHit033,
@@ -749,6 +846,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 93 Confusion
     {
         fightTrainerAiWazaValueTuikouKonran,
         fightTrainerAiWazaHit076,
@@ -757,6 +855,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 94 Psychic
     {
         fightTrainerAiWazaValueTuikouTokubouDaun,
         fightTrainerAiWazaHit072,
@@ -765,6 +864,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 95 Hypnosis
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -773,6 +873,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 96 Meditate
     {
         fightTrainerAiWazaValueKougekiAppu,
         fightTrainerAiWazaHit010,
@@ -781,6 +882,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 97 Agility
     {
         fightTrainerAiWazaValueKousokuidou,
         fightTrainerAiWazaHit052,
@@ -789,6 +891,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 98 Quick Attack
     {
         fightTrainerAiWazaValueKouPuraioritii,
         fightTrainerAiWazaHit103,
@@ -797,6 +900,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 99 Rage
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit081,
@@ -805,6 +909,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 100 Teleport
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHit153,
@@ -813,6 +918,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 101 Night Shade
     {
         fightTrainerAiWazaValueTeiryouDameeji,
         fightTrainerAiWazaHit087,
@@ -821,6 +927,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 102 Mimic
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit082,
@@ -829,6 +936,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDefSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 103 Screech
     {
         fightTrainerAiWazaValueBougyoDaun,
         fightTrainerAiWazaHit059,
@@ -837,6 +945,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 104 Double Team
     {
         fightTrainerAiWazaValueKaihirituAppu,
         fightTrainerAiWazaHit016,
@@ -845,6 +954,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 105 Recover
     {
         fightTrainerAiWazaValueKaihuku2,
         fightTrainerAiWazaHit032,
@@ -853,6 +963,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 106 Harden
     {
         fightTrainerAiWazaValueBougyoAppu,
         fightTrainerAiWazaHit011,
@@ -861,6 +972,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 107 Minimize
     {
         fightTrainerAiWazaValueKaihirituAppu,
         fightTrainerAiWazaHit108,
@@ -869,6 +981,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 108 Smoke Screen
     {
         fightTrainerAiWazaValueMeityuuDaun,
         fightTrainerAiWazaHit023,
@@ -877,6 +990,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 109 Confuse Ray
     {
         fightTrainerAiWazaValueKonran,
         fightTrainerAiWazaHit049,
@@ -885,6 +999,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 110 Withdraw
     {
         fightTrainerAiWazaValueBougyoAppu,
         fightTrainerAiWazaHit011,
@@ -893,6 +1008,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 111 Defense Curl
     {
         fightTrainerAiWazaValueMarukunaru,
         fightTrainerAiWazaHit156,
@@ -901,6 +1017,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 112 Barrier
     {
         fightTrainerAiWazaValueBougyoAppu,
         fightTrainerAiWazaHit051,
@@ -909,6 +1026,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 113 Light Screen
     {
         fightTrainerAiWazaValueHikarinokabe,
         fightTrainerAiWazaHit035,
@@ -917,6 +1035,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 114 Haze
     {
         fightTrainerAiWazaValueKuroikiri,
         fightTrainerAiWazaHit025,
@@ -925,6 +1044,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 115 Reflect
     {
         fightTrainerAiWazaValueRihurekutaa,
         fightTrainerAiWazaHit065,
@@ -933,6 +1053,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 116 Focus Energy
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit047,
@@ -941,6 +1062,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 117 Bide
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit026,
@@ -949,6 +1071,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 118 Metronome
     {
         fightTrainerAiWazaValueTokubetuYuusen,
         fightTrainerAiWazaHit083,
@@ -957,6 +1080,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 119 Mirror Move
     {
         fightTrainerAiWazaValueOomugaesi,
         fightTrainerAiWazaHit009,
@@ -965,6 +1089,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNull,
         fightWazaWzxVariationFuncNull
     },
+    // 120 Self-Destruct
     {
         fightTrainerAiWazaValueJibaku,
         fightTrainerAiWazaHit007,
@@ -973,6 +1098,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDef,
         fightWazaWzxVariationFuncNormal
     },
+    // 121 Egg Bomb
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -981,6 +1107,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 122 Lick
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -989,6 +1116,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 123 Smog
     {
         fightTrainerAiWazaValueTuikaDoku,
         fightTrainerAiWazaHit002,
@@ -997,6 +1125,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 124 Sludge
     {
         fightTrainerAiWazaValueTuikaDoku,
         fightTrainerAiWazaHit002,
@@ -1005,6 +1134,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 125 Bone Club
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -1013,6 +1143,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 126 Fire Blast
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -1021,6 +1152,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 127 Waterfall
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -1029,6 +1161,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 128 Clamp
     {
         fightTrainerAiWazaValueSokubaku,
         fightTrainerAiWazaHit042,
@@ -1037,6 +1170,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 129 Swift
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -1045,6 +1179,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 130 Skull Bash
     {
         fightTrainerAiWazaValueRokettoZutuki,
         fightTrainerAiWazaHit145,
@@ -1053,6 +1188,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 131 Spike Cannon
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -1061,6 +1197,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 132 Constrict
     {
         fightTrainerAiWazaValueTuikouSubayasaDaun,
         fightTrainerAiWazaHit070,
@@ -1069,6 +1206,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 133 Amnesia
     {
         fightTrainerAiWazaValueDowasure,
         fightTrainerAiWazaHit054,
@@ -1077,6 +1215,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 134 Kinesis
     {
         fightTrainerAiWazaValueMeityuuDaun,
         fightTrainerAiWazaHit023,
@@ -1085,6 +1224,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 135 Soft-Boiled
     {
         fightTrainerAiWazaValueKaihuku2,
         fightTrainerAiWazaHit157,
@@ -1093,6 +1233,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 136 High Jump Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit045,
@@ -1101,6 +1242,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 137 Glare
     {
         fightTrainerAiWazaValueMahi,
         fightTrainerAiWazaHit067,
@@ -1109,6 +1251,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 138 Dream Eater
     {
         fightTrainerAiWazaValueYumekui,
         fightTrainerAiWazaHit008,
@@ -1117,6 +1260,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDefSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 139 Poison Gas
     {
         fightTrainerAiWazaValueDoku,
         fightTrainerAiWazaHit066,
@@ -1125,6 +1269,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 140 Barrage
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -1133,6 +1278,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 141 Leech Life
     {
         fightTrainerAiWazaValueKyuusyuu,
         fightTrainerAiWazaHit003,
@@ -1141,6 +1287,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncVampire,
         fightWazaWzxVariationFuncNormal
     },
+    // 142 Lovely Kiss
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -1149,6 +1296,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 143 Sky Attack
     {
         fightTrainerAiWazaValueGoddobaado,
         fightTrainerAiWazaHit075,
@@ -1157,6 +1305,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 144 Transform
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit057,
@@ -1165,6 +1314,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncHensin,
         fightWazaWzxVariationFuncNormal
     },
+    // 145 Bubble
     {
         fightTrainerAiWazaValueTuikouSubayasaDaun,
         fightTrainerAiWazaHit070,
@@ -1173,6 +1323,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 146 Dizzy Punch
     {
         fightTrainerAiWazaValueTuikouKonran,
         fightTrainerAiWazaHit076,
@@ -1181,6 +1332,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 147 Spore
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -1189,6 +1341,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 148 Flash
     {
         fightTrainerAiWazaValueMeityuuDaun,
         fightTrainerAiWazaHit023,
@@ -1197,6 +1350,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 149 Psywave
     {
         fightTrainerAiWazaValueTeiryouDameeji,
         fightTrainerAiWazaHit088,
@@ -1205,6 +1359,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 150 Splash
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHit085,
@@ -1213,6 +1368,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 151 Acid Armor
     {
         fightTrainerAiWazaValueBougyoAppu,
         fightTrainerAiWazaHit051,
@@ -1221,6 +1377,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 152 Crabhammer
     {
         fightTrainerAiWazaValueSpeKuritikaru,
         fightTrainerAiWazaHit043,
@@ -1229,6 +1386,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 153 Explosion
     {
         fightTrainerAiWazaValueJibaku,
         fightTrainerAiWazaHit007,
@@ -1237,6 +1395,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDef,
         fightWazaWzxVariationFuncNormal
     },
+    // 154 Fury Swipes
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -1245,6 +1404,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 155 Bonemerang
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit044,
@@ -1253,6 +1413,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 156 Rest
     {
         fightTrainerAiWazaValueNemuru,
         fightTrainerAiWazaHit037,
@@ -1261,6 +1422,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 157 Rock Slide
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -1269,6 +1431,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 158 Hyper Fang
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit031,
@@ -1277,6 +1440,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 159 Sharpen
     {
         fightTrainerAiWazaValueKougekiAppu,
         fightTrainerAiWazaHit010,
@@ -1285,6 +1449,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 160 Conversion
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit030,
@@ -1293,6 +1458,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 161 Tri Attack
     {
         fightTrainerAiWazaValueToraiatakku,
         fightTrainerAiWazaHit036,
@@ -1301,6 +1467,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 162 Super Fang
     {
         fightTrainerAiWazaValueIkarinomaeba,
         fightTrainerAiWazaHit040,
@@ -1309,6 +1476,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 163 Slash
     {
         fightTrainerAiWazaValuePhyKuritikaru,
         fightTrainerAiWazaHit043,
@@ -1317,6 +1485,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 164 Substitute
     {
         fightTrainerAiWazaValueMigawari,
         fightTrainerAiWazaHit079,
@@ -1325,6 +1494,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncMigawari,
         fightWazaWzxVariationFuncNormal
     },
+    // 165 Struggle
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHit048,
@@ -1333,6 +1503,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 166 Sketch
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHit095,
@@ -1341,6 +1512,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDefSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 167 Triple Kick
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit104,
@@ -1349,6 +1521,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncTripleKick
     },
+    // 168 Thief
     {
         fightTrainerAiWazaValueDouguUbau,
         fightTrainerAiWazaHit105,
@@ -1357,6 +1530,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 169 Spider Web
     {
         fightTrainerAiWazaValueKoukanKinsi,
         fightTrainerAiWazaHit106,
@@ -1365,6 +1539,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 170 Mind Reader
     {
         fightTrainerAiWazaValueRokkuon,
         fightTrainerAiWazaHit094,
@@ -1373,6 +1548,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 171 Nightmare
     {
         fightTrainerAiWazaValueAkumu,
         fightTrainerAiWazaHit107,
@@ -1381,6 +1557,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 172 Flame Wheel
     {
         fightTrainerAiWazaValueJikokaitou,
         fightTrainerAiWazaHit125,
@@ -1389,6 +1566,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 173 Snore
     {
         fightTrainerAiWazaValueNemuriKoudou,
         fightTrainerAiWazaHit092,
@@ -1397,6 +1575,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 174 Curse
     {
         fightTrainerAiWazaValueNoroi,
         fightTrainerAiWazaHit109,
@@ -1405,6 +1584,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDef,
         fightWazaWzxVariationFuncNormal
     },
+    // 175 Flail
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit099,
@@ -1413,6 +1593,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 176 Conversion 2
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit093,
@@ -1421,6 +1602,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 177 Aeroblast
     {
         fightTrainerAiWazaValuePhyKuritikaru,
         fightTrainerAiWazaHit043,
@@ -1429,6 +1611,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 178 Cotton Spore
     {
         fightTrainerAiWazaValueSubayasaDaun,
         fightTrainerAiWazaHit060,
@@ -1437,6 +1620,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 179 Reversal
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit099,
@@ -1445,6 +1629,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 180 Spite
     {
         fightTrainerAiWazaValueUrami,
         fightTrainerAiWazaHit100,
@@ -1453,6 +1638,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 181 Powder Snow
     {
         fightTrainerAiWazaValueTuikaKoori,
         fightTrainerAiWazaHit005,
@@ -1461,6 +1647,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 182 Protect
     {
         fightTrainerAiWazaValueMamoru,
         fightTrainerAiWazaHit111,
@@ -1469,6 +1656,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 183 Mach Punch
     {
         fightTrainerAiWazaValueKouPuraioritii,
         fightTrainerAiWazaHit103,
@@ -1477,6 +1665,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 184 Scary Face
     {
         fightTrainerAiWazaValueSubayasaDaun,
         fightTrainerAiWazaHit060,
@@ -1485,6 +1674,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 185 Faint Attack
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -1493,6 +1683,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 186 Sweet Kiss
     {
         fightTrainerAiWazaValueKonran,
         fightTrainerAiWazaHit049,
@@ -1501,6 +1692,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 187 Belly Drum
     {
         fightTrainerAiWazaValueHaradaiko,
         fightTrainerAiWazaHit142,
@@ -1509,6 +1701,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 188 Sludge Bomb
     {
         fightTrainerAiWazaValueTuikaDoku,
         fightTrainerAiWazaHit002,
@@ -1517,6 +1710,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 189 Mud-Slap
     {
         fightTrainerAiWazaValueDorokake,
         fightTrainerAiWazaHit073,
@@ -1525,6 +1719,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 190 Octazooka
     {
         fightTrainerAiWazaValueTuikouMeityuuDaun,
         fightTrainerAiWazaHit073,
@@ -1533,6 +1728,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 191 Spikes
     {
         fightTrainerAiWazaValueMakibisi,
         fightTrainerAiWazaHit112,
@@ -1541,6 +1737,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllEnemy,
         fightWazaWzxVariationFuncNormal
     },
+    // 192 Zap Cannon
     {
         fightTrainerAiWazaValueDenjihou,
         fightTrainerAiWazaHit006,
@@ -1549,6 +1746,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 193 Foresight
     {
         fightTrainerAiWazaValueMiyaburu,
         fightTrainerAiWazaHit113,
@@ -1557,6 +1755,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 194 Destiny Bond
     {
         fightTrainerAiWazaValueMitizure,
         fightTrainerAiWazaHit098,
@@ -1565,6 +1764,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 195 Perish Song
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit114,
@@ -1573,6 +1773,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDef,
         fightWazaWzxVariationFuncNormal
     },
+    // 196 Icy Wind
     {
         fightTrainerAiWazaValueKogoerukaze,
         fightTrainerAiWazaHit070,
@@ -1581,6 +1782,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 197 Detect
     {
         fightTrainerAiWazaValueMamoru,
         fightTrainerAiWazaHit111,
@@ -1589,6 +1791,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 198 Bone Rush
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -1597,6 +1800,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 199 Lock-On
     {
         fightTrainerAiWazaValueRokkuon,
         fightTrainerAiWazaHit094,
@@ -1605,6 +1809,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 200 Outrage
     {
         fightTrainerAiWazaValueAbareru,
         fightTrainerAiWazaHit027,
@@ -1613,6 +1818,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 201 Sandstorm
     {
         fightTrainerAiWazaValueSunaarasi,
         fightTrainerAiWazaHit115,
@@ -1621,6 +1827,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 202 Giga Drain
     {
         fightTrainerAiWazaValueKyuusyuu,
         fightTrainerAiWazaHit003,
@@ -1629,6 +1836,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncVampire,
         fightWazaWzxVariationFuncNormal
     },
+    // 203 Endure
     {
         fightTrainerAiWazaValueKoraeru,
         fightTrainerAiWazaHit116,
@@ -1637,6 +1845,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 204 Charm
     {
         fightTrainerAiWazaValueKougekiDaun,
         fightTrainerAiWazaHit058,
@@ -1645,6 +1854,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 205 Rollout
     {
         fightTrainerAiWazaValueKorogaru,
         fightTrainerAiWazaHit117,
@@ -1653,6 +1863,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncKorogaru
     },
+    // 206 False Swipe
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit101,
@@ -1661,6 +1872,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 207 Swagger
     {
         fightTrainerAiWazaValueIbaru,
         fightTrainerAiWazaHit118,
@@ -1669,6 +1881,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 208 Milk Drink
     {
         fightTrainerAiWazaValueKaihuku2,
         fightTrainerAiWazaHit157,
@@ -1677,6 +1890,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 209 Spark
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -1685,6 +1899,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 210 Fury Cutter
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit119,
@@ -1693,6 +1908,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncRenzokugiri
     },
+    // 211 Steel Wing
     {
         fightTrainerAiWazaValueHaganenotubasa,
         fightTrainerAiWazaHit138,
@@ -1701,6 +1917,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 212 Mean Look
     {
         fightTrainerAiWazaValueKoukanKinsi,
         fightTrainerAiWazaHit106,
@@ -1709,6 +1926,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 213 Attract
     {
         fightTrainerAiWazaValueMeromero,
         fightTrainerAiWazaHit120,
@@ -1717,6 +1935,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 214 Sleep Talk
     {
         fightTrainerAiWazaValueNemuriKoudou,
         fightTrainerAiWazaHit097,
@@ -1725,6 +1944,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 215 Heal Bell
     {
         fightTrainerAiWazaValueAroma,
         fightTrainerAiWazaHit102,
@@ -1733,6 +1953,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 216 Return
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit121,
@@ -1741,6 +1962,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncOngaesi
     },
+    // 217 Present
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit122,
@@ -1749,6 +1971,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncPresent
     },
+    // 218 Frustration
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit123,
@@ -1757,6 +1980,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncYatuatari
     },
+    // 219 Safeguard
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit124,
@@ -1765,6 +1989,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 220 Pain Split
     {
         fightTrainerAiWazaValueItamiwake,
         fightTrainerAiWazaHit091,
@@ -1773,6 +1998,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncItamiwake,
         fightWazaWzxVariationFuncNormal
     },
+    // 221 Sacred Fire
     {
         fightTrainerAiWazaValueJikokaitou,
         fightTrainerAiWazaHit125,
@@ -1781,6 +2007,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 222 Magnitude
     {
         fightTrainerAiWazaValueJisin,
         fightTrainerAiWazaHit126,
@@ -1789,6 +2016,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncMagnitude
     },
+    // 223 Dynamic Punch
     {
         fightTrainerAiWazaValueBakuretuPanti,
         fightTrainerAiWazaHit076,
@@ -1797,6 +2025,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 224 Megahorn
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -1805,6 +2034,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 225 Dragon Breath
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -1813,6 +2043,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 226 Baton Pass
     {
         fightTrainerAiWazaValueBatontatti,
         fightTrainerAiWazaHit127,
@@ -1821,6 +2052,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 227 Encore
     {
         fightTrainerAiWazaValueAnkooru,
         fightTrainerAiWazaHit090,
@@ -1829,6 +2061,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 228 Pursuit
     {
         fightTrainerAiWazaValueOiuti,
         fightTrainerAiWazaHit128,
@@ -1837,6 +2070,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal2,
         fightWazaWzxVariationFuncOiuchi
     },
+    // 229 Rapid Spin
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit129,
@@ -1845,6 +2079,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 230 Sweet Scent
     {
         fightTrainerAiWazaValueKaihiDaun,
         fightTrainerAiWazaHit024,
@@ -1853,6 +2088,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 231 Iron Tail
     {
         fightTrainerAiWazaValueTuikouBougyoDaun,
         fightTrainerAiWazaHit069,
@@ -1861,6 +2097,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 232 Metal Claw
     {
         fightTrainerAiWazaValueTuikaKougekiAppu,
         fightTrainerAiWazaHit139,
@@ -1869,6 +2106,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 233 Vital Throw
     {
         fightTrainerAiWazaValueAteminage,
         fightTrainerAiWazaHit078,
@@ -1877,6 +2115,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 234 Morning Sun
     {
         fightTrainerAiWazaValueKaihuku1,
         fightTrainerAiWazaHit132,
@@ -1885,6 +2124,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncWeatherHP
     },
+    // 235 Synthesis
     {
         fightTrainerAiWazaValueKaihuku1,
         fightTrainerAiWazaHit133,
@@ -1893,6 +2133,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncWeatherHP
     },
+    // 236 Moonlight
     {
         fightTrainerAiWazaValueKaihuku1,
         fightTrainerAiWazaHit134,
@@ -1901,6 +2142,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncWeatherHP
     },
+    // 237 Hidden Power
     {
         fightTrainerAiWazaValueTokubetuYuusen,
         fightTrainerAiWazaHit135,
@@ -1909,6 +2151,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 238 Cross Chop
     {
         fightTrainerAiWazaValuePhyKuritikaru,
         fightTrainerAiWazaHit043,
@@ -1917,6 +2160,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 239 Twister
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit146,
@@ -1925,6 +2169,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 240 Rain Dance
     {
         fightTrainerAiWazaValueAmagoi,
         fightTrainerAiWazaHit136,
@@ -1933,6 +2178,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 241 Sunny Day
     {
         fightTrainerAiWazaValueNihonbare,
         fightTrainerAiWazaHit137,
@@ -1941,6 +2187,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 242 Crunch
     {
         fightTrainerAiWazaValueTuikouTokubouDaun,
         fightTrainerAiWazaHit072,
@@ -1949,6 +2196,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 243 Mirror Coat
     {
         fightTrainerAiWazaValueMiraakooto,
         fightTrainerAiWazaHit144,
@@ -1957,6 +2205,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 244 Psych Up
     {
         fightTrainerAiWazaValueJikoanji,
         fightTrainerAiWazaHit143,
@@ -1965,6 +2214,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 245 Extreme Speed
     {
         fightTrainerAiWazaValueKouPuraioritii,
         fightTrainerAiWazaHit103,
@@ -1973,6 +2223,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 246 Ancient Power
     {
         fightTrainerAiWazaValueZennouryokuappu,
         fightTrainerAiWazaHit140,
@@ -1981,6 +2232,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 247 Shadow Ball
     {
         fightTrainerAiWazaValueTuikouTokubouDaun,
         fightTrainerAiWazaHit072,
@@ -1989,6 +2241,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 248 Future Sight
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit148,
@@ -1997,6 +2250,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 249 Rock Smash
     {
         fightTrainerAiWazaValueTuikouBougyoDaun,
         fightTrainerAiWazaHit069,
@@ -2005,6 +2259,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 250 Whirlpool
     {
         fightTrainerAiWazaValueSokubaku,
         fightTrainerAiWazaHit042,
@@ -2013,6 +2268,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 251 Beat Up
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit154,
@@ -2021,6 +2277,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 252 Fake Out
     {
         fightTrainerAiWazaValueNekodamasi,
         fightTrainerAiWazaHit158,
@@ -2029,6 +2286,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 253 Uproar
     {
         fightTrainerAiWazaValueSawagu,
         fightTrainerAiWazaHit159,
@@ -2037,6 +2295,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 254 Stockpile
     {
         fightTrainerAiWazaValueTakuwaeru,
         fightTrainerAiWazaHit160,
@@ -2045,6 +2304,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 255 Spit Up
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit161,
@@ -2053,6 +2313,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncHakidasu
     },
+    // 256 Swallow
     {
         fightTrainerAiWazaValueKaihuku2,
         fightTrainerAiWazaHit162,
@@ -2061,6 +2322,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNomikomu
     },
+    // 257 Heat Wave
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -2069,6 +2331,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 258 Hail
     {
         fightTrainerAiWazaValueArare,
         fightTrainerAiWazaHit164,
@@ -2077,6 +2340,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 259 Torment
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit165,
@@ -2085,6 +2349,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 260 Flatter
     {
         fightTrainerAiWazaValueOdareru,
         fightTrainerAiWazaHit166,
@@ -2093,6 +2358,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 261 Will-O-Wisp
     {
         fightTrainerAiWazaValueOnibi,
         fightTrainerAiWazaHit167,
@@ -2101,6 +2367,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 262 Memento
     {
         fightTrainerAiWazaValueMitizure,
         fightTrainerAiWazaHit168,
@@ -2109,6 +2376,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 263 Facade
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit169,
@@ -2117,6 +2385,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 264 Focus Punch
     {
         fightTrainerAiWazaValueKiaipanti,
         fightTrainerAiWazaHit170,
@@ -2125,6 +2394,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 265 Smelling Salt
     {
         fightTrainerAiWazaValueKituke,
         fightTrainerAiWazaHit171,
@@ -2133,6 +2403,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 266 Follow Me
     {
         fightTrainerAiWazaValueKonoyubitomare,
         fightTrainerAiWazaHit172,
@@ -2141,6 +2412,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 267 Nature Power
     {
         fightTrainerAiWazaValueSizennotikara,
         fightTrainerAiWazaHit173,
@@ -2149,6 +2421,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNull,
         fightWazaWzxVariationFuncNull
     },
+    // 268 Charge
     {
         fightTrainerAiWazaValueJyuuden,
         fightTrainerAiWazaHit174,
@@ -2157,6 +2430,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 269 Taunt
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit175,
@@ -2165,6 +2439,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 270 Helping Hand
     {
         fightTrainerAiWazaValueTedasuke,
         fightTrainerAiWazaHit176,
@@ -2173,6 +2448,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTedasuke,
         fightWazaWzxVariationFuncNormal
     },
+    // 271 Trick
     {
         fightTrainerAiWazaValuetorikku,
         fightTrainerAiWazaHit177,
@@ -2181,6 +2457,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDefSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 272 Role Play
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit178,
@@ -2189,6 +2466,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 273 Wish
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit179,
@@ -2197,6 +2475,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNegaigoto,
         fightWazaWzxVariationFuncNormal
     },
+    // 274 Assist
     {
         fightTrainerAiWazaValueTokubetuYuusen,
         fightTrainerAiWazaHit180,
@@ -2205,6 +2484,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 275 Ingrain
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit181,
@@ -2213,6 +2493,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 276 Superpower
     {
         fightTrainerAiWazaValueBakadikara,
         fightTrainerAiWazaHit182,
@@ -2221,6 +2502,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 277 Magic Coat
     {
         fightTrainerAiWazaValueMajikkukooto,
         fightTrainerAiWazaHit183,
@@ -2229,6 +2511,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncMagiccort,
         fightWazaWzxVariationFuncNormal
     },
+    // 278 Recycle
     {
         fightTrainerAiWazaValueRisaikuru,
         fightTrainerAiWazaHit184,
@@ -2237,6 +2520,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 279 Revenge
     {
         fightTrainerAiWazaValueRibenji,
         fightTrainerAiWazaHit185,
@@ -2245,6 +2529,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 280 Brick Break
     {
         fightTrainerAiWazaValueKawarawari,
         fightTrainerAiWazaHit186,
@@ -2253,6 +2538,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncKawarawari,
         fightWazaWzxVariationFuncKawarawari
     },
+    // 281 Yawn
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit187,
@@ -2261,6 +2547,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 282 Knock Off
     {
         fightTrainerAiWazaValueHatakiotosu,
         fightTrainerAiWazaHit188,
@@ -2269,6 +2556,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 283 Endeavor
     {
         fightTrainerAiWazaValueGamusyara,
         fightTrainerAiWazaHit189,
@@ -2277,6 +2565,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 284 Eruption
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit190,
@@ -2285,6 +2574,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 285 Skill Swap
     {
         fightTrainerAiWazaValueSukirusuwappu,
         fightTrainerAiWazaHit191,
@@ -2293,6 +2583,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAttDefSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 286 Imprison
     {
         fightTrainerAiWazaValueHuuin,
         fightTrainerAiWazaHit192,
@@ -2301,6 +2592,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncHuuin,
         fightWazaWzxVariationFuncNormal
     },
+    // 287 Refresh
     {
         fightTrainerAiWazaValueRihuressyu,
         fightTrainerAiWazaHit193,
@@ -2309,6 +2601,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 288 Grudge
     {
         fightTrainerAiWazaValueMitizure,
         fightTrainerAiWazaHit194,
@@ -2317,6 +2610,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 289 Snatch
     {
         fightTrainerAiWazaValueYokodori,
         fightTrainerAiWazaHit195,
@@ -2325,6 +2619,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 290 Secret Power
     {
         fightTrainerAiWazaValueHimitunotikara,
         fightTrainerAiWazaHit197,
@@ -2333,6 +2628,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 291 Dive
     {
         fightTrainerAiWazaValueSorawotobu,
         fightTrainerAiWazaHit155,
@@ -2341,6 +2637,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 292 Arm Thrust
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -2349,6 +2646,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 293 Camouflage
     {
         fightTrainerAiWazaValueRandamuSentaku,
         fightTrainerAiWazaHit213,
@@ -2357,6 +2655,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 294 Tail Glow
     {
         fightTrainerAiWazaValueTokukouAppu,
         fightTrainerAiWazaHit053,
@@ -2365,6 +2664,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 295 Luster Purge
     {
         fightTrainerAiWazaValueTuikouTokubouDaun,
         fightTrainerAiWazaHit072,
@@ -2373,6 +2673,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 296 Mist Ball
     {
         fightTrainerAiWazaValueTuikouTokukouDaun,
         fightTrainerAiWazaHit071,
@@ -2381,6 +2682,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 297 Feather Dance
     {
         fightTrainerAiWazaValueKougekiDaun,
         fightTrainerAiWazaHit058,
@@ -2389,6 +2691,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 298 Teeter Dance
     {
         fightTrainerAiWazaValueHurahuradansu,
         fightTrainerAiWazaHit199,
@@ -2397,6 +2700,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 299 Blaze Kick
     {
         fightTrainerAiWazaValueBureizukikku,
         fightTrainerAiWazaHit200,
@@ -2405,6 +2709,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 300 Mud Sport
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit201,
@@ -2413,6 +2718,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 301 Ice Ball
     {
         fightTrainerAiWazaValueKorogaru,
         fightTrainerAiWazaHit117,
@@ -2421,6 +2727,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncIceball
     },
+    // 302 Needle Arm
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit150,
@@ -2429,6 +2736,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 303 Slack Off
     {
         fightTrainerAiWazaValueKaihuku2,
         fightTrainerAiWazaHit032,
@@ -2437,6 +2745,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 304 Hyper Voice
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2445,6 +2754,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 305 Poison Fang
     {
         fightTrainerAiWazaValueDokudokunokiba,
         fightTrainerAiWazaHit202,
@@ -2453,6 +2763,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 306 Crush Claw
     {
         fightTrainerAiWazaValueTuikouBougyoDaun,
         fightTrainerAiWazaHit069,
@@ -2461,6 +2772,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 307 Blast Burn
     {
         fightTrainerAiWazaValueHandou,
         fightTrainerAiWazaHit080,
@@ -2469,6 +2781,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 308 Hydro Cannon
     {
         fightTrainerAiWazaValueHandou,
         fightTrainerAiWazaHit080,
@@ -2477,6 +2790,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 309 Meteor Mash
     {
         fightTrainerAiWazaValueTuikaKougekiAppu,
         fightTrainerAiWazaHit139,
@@ -2485,6 +2799,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 310 Astonish
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit150,
@@ -2493,6 +2808,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 311 Weather Ball
     {
         fightTrainerAiWazaValueUezaabooru,
         fightTrainerAiWazaHit203,
@@ -2501,6 +2817,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncWeatherBall
     },
+    // 312 Aromatherapy
     {
         fightTrainerAiWazaValueAroma,
         fightTrainerAiWazaHit102,
@@ -2509,6 +2826,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllAlly,
         fightWazaWzxVariationFuncNormal
     },
+    // 313 Fake Tears
     {
         fightTrainerAiWazaValueTokubouDaun,
         fightTrainerAiWazaHit062,
@@ -2517,6 +2835,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 314 Air Cutter
     {
         fightTrainerAiWazaValuePhyKuritikaru,
         fightTrainerAiWazaHit043,
@@ -2525,6 +2844,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 315 Overheat
     {
         fightTrainerAiWazaValueOobaahiito,
         fightTrainerAiWazaHit204,
@@ -2533,6 +2853,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 316 Odor Sleuth
     {
         fightTrainerAiWazaValueMiyaburu,
         fightTrainerAiWazaHit113,
@@ -2541,6 +2862,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 317 Rock Tomb
     {
         fightTrainerAiWazaValueKanarazuSubayasaDaun,
         fightTrainerAiWazaHit070,
@@ -2549,6 +2871,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 318 Silver Wind
     {
         fightTrainerAiWazaValueZennouryokuappu,
         fightTrainerAiWazaHit140,
@@ -2557,6 +2880,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 319 Metal Sound
     {
         fightTrainerAiWazaValueTokubouDaun,
         fightTrainerAiWazaHit062,
@@ -2565,6 +2889,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 320 Grass Whistle
     {
         fightTrainerAiWazaValueNemurare,
         fightTrainerAiWazaHit001,
@@ -2573,6 +2898,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 321 Tickle
     {
         fightTrainerAiWazaValueKusuguruDaun,
         fightTrainerAiWazaHit205,
@@ -2581,6 +2907,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 322 Cosmic Power
     {
         fightTrainerAiWazaValueKosumopawaa,
         fightTrainerAiWazaHit206,
@@ -2589,6 +2916,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 323 Water Spout
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit190,
@@ -2597,6 +2925,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 324 Signal Beam
     {
         fightTrainerAiWazaValueTuikouKonran,
         fightTrainerAiWazaHit076,
@@ -2605,6 +2934,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 325 Shadow Punch
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -2613,6 +2943,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 326 Extrasensory
     {
         fightTrainerAiWazaValueTuikaHirumi,
         fightTrainerAiWazaHit150,
@@ -2621,6 +2952,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 327 Sky Uppercut
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit207,
@@ -2629,6 +2961,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 328 Sand Tomb
     {
         fightTrainerAiWazaValueSokubaku,
         fightTrainerAiWazaHit042,
@@ -2637,6 +2970,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 329 Sheer Cold
     {
         fightTrainerAiWazaValueItigekihissatu,
         fightTrainerAiWazaHit038,
@@ -2645,6 +2979,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 330 Muddy Water
     {
         fightTrainerAiWazaValueTuikouMeityuuDaun,
         fightTrainerAiWazaHit073,
@@ -2653,6 +2988,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 331 Bullet Seed
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -2661,6 +2997,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 332 Aerial Ace
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -2669,6 +3006,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 333 Icicle Spear
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -2677,6 +3015,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 334 Iron Defense
     {
         fightTrainerAiWazaValueBougyoAppu,
         fightTrainerAiWazaHit051,
@@ -2685,6 +3024,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 335 Block
     {
         fightTrainerAiWazaValueKoukanKinsi,
         fightTrainerAiWazaHit106,
@@ -2693,6 +3033,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 336 Howl
     {
         fightTrainerAiWazaValueKougekiAppu,
         fightTrainerAiWazaHit010,
@@ -2701,6 +3042,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 337 Dragon Claw
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2709,6 +3051,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 338 Frenzy Plant
     {
         fightTrainerAiWazaValueHandou,
         fightTrainerAiWazaHit080,
@@ -2717,6 +3060,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 339 Bulk Up
     {
         fightTrainerAiWazaValueBirudoAppu,
         fightTrainerAiWazaHit208,
@@ -2725,6 +3069,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 340 Bounce
     {
         fightTrainerAiWazaValueTobihaneru,
         fightTrainerAiWazaHit155,
@@ -2733,6 +3078,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncTame,
         fightWazaWzxVariationFuncNormal
     },
+    // 341 Mud Shot
     {
         fightTrainerAiWazaValueKanarazuSubayasaDaun,
         fightTrainerAiWazaHit070,
@@ -2741,6 +3087,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 342 Poison Tail
     {
         fightTrainerAiWazaValuePoizunteeru,
         fightTrainerAiWazaHit209,
@@ -2749,6 +3096,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 343 Covet
     {
         fightTrainerAiWazaValueDouguUbau,
         fightTrainerAiWazaHit105,
@@ -2757,6 +3105,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 344 Volt Tackle
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit198,
@@ -2765,6 +3114,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 345 Magical Leaf
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -2773,6 +3123,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 346 Water Sport
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit210,
@@ -2781,6 +3132,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 347 Calm Mind
     {
         fightTrainerAiWazaValueMeisou,
         fightTrainerAiWazaHit211,
@@ -2789,6 +3141,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 348 Leaf Blade
     {
         fightTrainerAiWazaValueSpeKuritikaru,
         fightTrainerAiWazaHit043,
@@ -2797,6 +3150,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 349 Dragon Dance
     {
         fightTrainerAiWazaValueRyuunomai,
         fightTrainerAiWazaHit212,
@@ -2805,6 +3159,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncSpc,
         fightWazaWzxVariationFuncNormal
     },
+    // 350 Rock Blast
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit029,
@@ -2813,6 +3168,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 351 Shock Wave
     {
         fightTrainerAiWazaValueHittyuu,
         fightTrainerAiWazaHit017,
@@ -2821,6 +3177,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 352 Water Pulse
     {
         fightTrainerAiWazaValueTuikouKonran,
         fightTrainerAiWazaHit076,
@@ -2829,6 +3186,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 353 Doom Desire
     {
         fightTrainerAiWazaValueToriaezutukae,
         fightTrainerAiWazaHit148,
@@ -2837,6 +3195,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 354 Psycho Boost
     {
         fightTrainerAiWazaValueSaikobuusuto,
         fightTrainerAiWazaHit204,
@@ -2845,6 +3204,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 355 end of the normal moves
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHitNull,
@@ -2853,6 +3213,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNull,
         fightWazaWzxVariationFuncNull
     },
+    // 356 Dark Blitz
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2861,6 +3222,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 357 Dark Rush
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2869,6 +3231,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 358 Dark Break
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2877,6 +3240,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 359 Dark End
     {
         fightTrainerAiWazaValueDarkEnd,
         fightTrainerAiWazaHit048,
@@ -2885,6 +3249,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 360 Dark Wave
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2893,6 +3258,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 361 Dark Rave
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2901,6 +3267,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 362 Dark Storm
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2909,6 +3276,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 363 Dark Fire
     {
         fightTrainerAiWazaValueIryokuHonoo,
         fightTrainerAiWazaHit004,
@@ -2917,6 +3285,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 364 Dark Bolt
     {
         fightTrainerAiWazaValueTuikaMahi,
         fightTrainerAiWazaHit006,
@@ -2925,6 +3294,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 365 Dark Chill
     {
         fightTrainerAiWazaValueTuikaKoori,
         fightTrainerAiWazaHit005,
@@ -2933,6 +3303,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 366 Dark Blast
     {
         fightTrainerAiWazaValueTuujouIryoku,
         fightTrainerAiWazaHit000,
@@ -2941,6 +3312,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 367 Dark Sky
     {
         fightTrainerAiWazaValueDarkWeather,
         fightTrainerAiWazaHit215,
@@ -2949,6 +3321,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAtt,
         fightWazaWzxVariationFuncNormal
     },
+    // 368 Dark Hold
     {
         fightTrainerAiWazaValueDarkHold,
         fightTrainerAiWazaHit106,
@@ -2957,6 +3330,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 369 Dark Mist
     {
         fightTrainerAiWazaValueDarkMist,
         fightTrainerAiWazaHit214,
@@ -2965,6 +3339,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 370 Dark Panic
     {
         fightTrainerAiWazaValueDarkPanic,
         fightTrainerAiWazaHit049,
@@ -2973,6 +3348,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 371 Dark Down
     {
         fightTrainerAiWazaValueBougyoDaun,
         fightTrainerAiWazaHit059,
@@ -2981,6 +3357,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 372 Dark Shed
     {
         fightTrainerAiWazaValueDarkRemove,
         fightTrainerAiWazaHit216,
@@ -2989,6 +3366,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncAllEnemy,
         fightWazaWzxVariationFuncNormal
     },
+    // 373 Dark Half
     {
         fightTrainerAiWazaValueDarkHalf,
         fightTrainerAiWazaHit217,
@@ -2997,6 +3375,7 @@ WazaFuncData waza_func_data[] = {
         fightWazaWzxTypeFuncNormal,
         fightWazaWzxVariationFuncNormal
     },
+    // 374 shadow special
     {
         fightTrainerAiWazaValueNull,
         fightTrainerAiWazaHitNull,
