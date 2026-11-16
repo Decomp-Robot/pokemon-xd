@@ -282,7 +282,7 @@ void WS_DAMAGE_CALC(void);
 void WS_TYPE_CHECK(void);
 void WS_DAMAGE_LOSS(void);
 void fightSeqVanishOff(FightOutPokemon *pokemon);
-void fightSeqEventKurein(s32 index);
+void fightSeqEventKurein(u8 index);
 void fightSeq_ClearUserWork(void);
 
 #ifdef __cplusplus

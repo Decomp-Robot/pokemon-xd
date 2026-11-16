@@ -19,6 +19,7 @@
 #include <winSprite.h>
 #include <WorldMap.h>
 #include <fightEncountBios.h>
+#include <fight.h>
 #include <roomData.h>
 #include "GSmodel.h"
 
@@ -118,7 +119,6 @@ extern "C" {
 void dbgMenuSetOpenFlag(s32 flag);
 f32 timeGetLastFrameSec(void);
 double sin(double x);
-void fightRegWzxLoadAll(s32 id);
 s32 memcardTaskCall(s32 a, s32 b, s32 c);
 /* Records whether the mode select screen may keep running. */
 void menuTopSetInitCursor(s32 a);

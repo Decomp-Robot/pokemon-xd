@@ -309,7 +309,7 @@ extern "C" void dbgMenuSetOpenFlag(s32 flag)
     _dbgMenuOpenFlag = flag;
 }
 
-extern "C" u8 dbgMenuGetOpenFlag()
+extern "C" s32 dbgMenuGetOpenFlag()
 {
     return _dbgMenuOpenFlag;
 }

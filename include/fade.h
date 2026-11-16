@@ -5,6 +5,15 @@
 
 enum FadeKind { FADE_IN_BLACK = 2, FADE_OUT_BLACK = 3, FADE_OUT_EFFECT = 9 };
 
+// Bit flags passed to fadeSet() and fadeSetEX(). The FadeKind values above are
+// combinations of these bits.
+enum FadeFlags {
+    FADE_FLAG_OUT = 0x1,
+    FADE_FLAG_BLACK = 0x2,
+    FADE_FLAG_EFFECT = 0x8,
+    FADE_FLAG_BLACK_AFTER_EFFECT = 0x10
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

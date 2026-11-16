@@ -123,8 +123,8 @@ struct tagSPRITE_WORK {
     u8 mAlignMode;
 };
 
-// Key mask bits held in tagWINDOW_KEY: direction pad, accept/cancel, X/Z and
-// the L/R triggers.
+// Key mask bits held in tagWINDOW_KEY: direction pad, accept/cancel, X/Z,
+// START and the L/R triggers.
 enum WindowKeyMask {
     WINDOW_KEY_UP = 0x1,
     WINDOW_KEY_DOWN = 0x2,
@@ -136,6 +136,7 @@ enum WindowKeyMask {
     WINDOW_KEY_Z = 0x100,
     WINDOW_KEY_TRIGGER_L = 0x200,
     WINDOW_KEY_TRIGGER_R = 0x400,
+    WINDOW_KEY_START = 0x800,
 };
 
 // Key state read by windowGetKeyOn/windowGetKeyTrg/windowGetKeyRepeat and by the debug menus.

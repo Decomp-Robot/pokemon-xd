@@ -210,6 +210,23 @@ name = "orig/GXXE01/sys/main.dol"
 completed = false
 
 [[lib.object]]
+name = "game/app/fight/fightMain.cpp"
+completed = true
+extra_cflags = ["-O4,s", "-inline noauto"]
+
+[[lib.object]]
+name = "game/app/fight/fightActionData_kaisi.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/fight/fightActionData_turn.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/fight/fightActionData_syuuryou.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fightActionFlow.cpp"
 completed = true
 extra_cflags = ["-W error"]

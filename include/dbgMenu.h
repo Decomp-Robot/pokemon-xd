@@ -38,7 +38,7 @@ extern "C" {
 GSgfxLayerID dbgMenuGetLayerID(void);
 void dbgMenuSetLayerID(GSgfxLayerID layer);
 void dbgMenuCursor(struct tagWINDOW_WORK *window);
-u8 dbgMenuGetOpenFlag(void);
+s32 dbgMenuGetOpenFlag(void);
 u8 dbgMenuIsOpen(void);
 void dbgMenuMain(u8 loop);
 void dbgMenuClose(void);

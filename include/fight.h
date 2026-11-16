@@ -31,6 +31,7 @@ u16 fightGetFightEncountDataId(void);
 void fightSetGsthreadPtrFightMain(GSthread *thread);
 void fightSetFightFlag(u8 flag);
 void fightMain(void);
+void fightRegWzxLoadAll(s8 resourceCategory);
 #ifdef __cplusplus
 void fightSetMenuCtrlHero(Hero *hero);
 Hero *fightGetMenuCtrlHero(void);

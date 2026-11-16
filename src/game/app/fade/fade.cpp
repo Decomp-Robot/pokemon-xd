@@ -23,12 +23,6 @@ enum FadeSound {
     FADE_SOUND_DOKU = 24
 };
 
-enum FadeFlags {
-    FADE_FLAG_OUT = 0x1,
-    FADE_FLAG_BLACK = 0x2,
-    FADE_FLAG_EFFECT = 0x8,
-    FADE_FLAG_BLACK_AFTER_EFFECT = 0x10
-};
 typedef u8 (*FadeHookFunction)(GSgfxLayerID, volatile bool, f32, f32, f32, f32, void *);
 
 struct FADE_WORK {

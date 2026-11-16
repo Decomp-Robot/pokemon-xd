@@ -3238,6 +3238,14 @@ game/app/sodateya/sodateya.cpp:
 game/GSAPI/GSlensFlare/GSlensFlare.cpp:
 	.text       start:0x801ED628 end:0x801ED774
 
+game/app/fight/fightMain.cpp:
+	.text       start:0x801EEBE4 end:0x801EF640
+	.data       start:0x80413078 end:0x804130D0
+	.bss        start:0x804A16E0 end:0x804A1710
+	.sdata      start:0x804E8548 end:0x804E8550
+	.sbss       start:0x804EB8C8 end:0x804EB8D0
+	.sdata2     start:0x804EEA58 end:0x804EEA70
+
 game/app/fight/fightKind.cpp:
 	.text       start:0x801EF688 end:0x801EFA74
 
@@ -3341,6 +3349,15 @@ game/app/fight/fightEncountWipeData.cpp:
 game/app/fight/fightTargetData.cpp:
 	.data       start:0x804139B8 end:0x80413AA8
 	.sdata      start:0x804E8588 end:0x804E8590
+
+game/app/fight/fightActionData_kaisi.cpp:
+	.data       start:0x80413BB8 end:0x80413C00
+
+game/app/fight/fightActionData_turn.cpp:
+	.data       start:0x80413C20 end:0x80413C60
+
+game/app/fight/fightActionData_syuuryou.cpp:
+	.data       start:0x80413C70 end:0x80413CC0
 
 game/app/fight/fightJoukenBios.cpp:
 	.text       start:0x8020C590 end:0x8020C88C
