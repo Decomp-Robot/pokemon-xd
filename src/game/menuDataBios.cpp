@@ -1,7 +1,10 @@
 #include <menu.h>
 #include <menuDataBios.h>
 #include <menuItemBios.h>
+#include <menuSeBios.h>
+#include <menuSeqBios.h>
 #include <menuSpriteBios.h>
+#include <relglobal.h>
 #include <pokecolo.h>
 #include <dbgMenu.h>
 #include <GSgfxTypes.h>
@@ -26,6 +29,8 @@ enum {
 };
 
 extern "C" {
+extern u32 _menu_seq_number;
+extern MenuSeqData _menu_seq[];
 extern u32 _menu_sprite_number;
 extern MenuSpriteData _menu_sprite[];
 extern MenuData _menu_data[];
@@ -48,6 +53,36 @@ enum {
     LANGUAGE_ITALIAN = 5,
     LANGUAGE_SPANISH = 6,
 };
+
+extern "C" u16 menuSeBiosGetSndId(MenuSeData *data, u8 event) {
+    u16 soundID = 0;
+    switch (event) {
+    case MENU_SOUND_CURSOR: soundID = data->mCursor; break;
+    case MENU_SOUND_ACCEPT: soundID = data->mAccept; break;
+    case MENU_SOUND_CANCEL: soundID = data->mCancel; break;
+    case MENU_SOUND_OPEN: soundID = data->mOpen; break;
+    case MENU_SOUND_CLOSE: soundID = data->mClose; break;
+    case MENU_SOUND_PAGE: soundID = data->mPage; break;
+    }
+    return soundID;
+}
+
+extern "C" MenuSeData *menuSeBiosGetPtr(u32 tableID) {
+    if (menu_se == 0) {
+        return 0;
+    }
+    if (tableID >= *menu_se_number) {
+        return 0;
+    }
+    return &menu_se[tableID];
+}
+
+extern "C" MenuSeqData *menuSeqBiosGetPtr(u32 sequenceID) {
+    if (sequenceID >= _menu_seq_number) {
+        return 0;
+    }
+    return &_menu_seq[sequenceID];
+}
 
 extern "C" MenuSpriteValue *menuSpriteBiosGetValPtr(MenuSpriteData *data) {
     s32 valueIndex;

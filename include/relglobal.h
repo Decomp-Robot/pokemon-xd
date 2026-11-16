@@ -28,6 +28,14 @@ typedef struct FloorListHeader FloorListHeader;
 extern GSfloor_dd_* floordata;
 extern FloorListHeader* floordata_number;
 
+struct MenuSeData;
+
+/* Count of records in the menu sound-effect table. */
+extern u32 *menu_se_number;
+
+/* Records of the menu sound-effect table. */
+extern struct MenuSeData *menu_se;
+
 /* Count of entries in the item data index table. */
 extern u32 *item_data_index_number;
 
