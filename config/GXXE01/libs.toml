@@ -2870,7 +2870,7 @@ cflags = [
 [[lib.object]]
 name = "game/app/pokemon/pokemonBios.cpp"
 completed = true
-extra_cflags = ["-O4,s"]
+extra_cflags = ["-O4,s", "-inline noauto"]
 
 [[lib.object]]
 name = "game/app/pokemon/pokemonDB.cpp"

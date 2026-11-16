@@ -27,18 +27,6 @@ typedef struct PokemonRibbon {
     u32 amari : 8;
 } PokemonRibbon;
 
-// Contest record of a Pokemon's expand status: the five contest categories in
-// the order the status field ids select them. A Pokemon holds two of these
-// records, one with the contest values themselves and one with the medals it
-// won in each category.
-typedef struct PokemonExpandStatus {
-    u8 style; // 0x0
-    u8 beautiful; // 0x1
-    u8 cute; // 0x2
-    u8 clever; // 0x3
-    u8 strong; // 0x4
-} PokemonExpandStatus;
-
 // Move record of a Pokemon. The move data ID names the move in the slot, the
 // PP is what the slot has left and the PP count is the number of PP ups the
 // move holds. A Pokemon carries four of these records.

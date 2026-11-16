@@ -1,5 +1,7 @@
 #include <GSflag.h>
+#include <pokemonBios.h>
 #include <pokemonDataBios.h>
+#include <relglobal.h>
 #include <types.h>
 
 extern "C" {
@@ -284,4 +286,331 @@ u32 pokemonDataBiosGetName(PokemonData *data)
     return data->mNameMessageId;
 }
 
+// Species record lookup for a species ID. The pokemon data count and the
+// species table pointer live in the relglobal data area; a species ID inside
+// the count addresses the table directly.
+PokemonData *pokemonDataBiosGetPtr(u16 species)
+{
+    if (species >= *pokemon_data_number) return 0;
+    return &pokemon_data[species];
+}
+
+// Event acquisition flag of the record.
+bool pokemonBiosGetEventGetFlag(Pokemon *pokemon)
+{
+    if (pokemon == 0) return false;
+    return pokemon->mEventGetFlag;
+}
+
+// Trainer Pokemon record ID the Pokemon was created from.
+u16 pokemonBiosGetFightTrainerPokemonDataId(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mFightTrainerPokemonDataId;
+}
+
+// Spare field of the record.
+u16 pokemonBiosGetPara1Amari(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPara1Amari();
+}
+
+u16 pokemonBiosGetAmari(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getAmari();
+}
+
+// Mail the record holds.
+u8 pokemonBiosGetMailId(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mMailId;
+}
+
+// PC box mark of the record.
+u8 pokemonBiosGetPcboxMark(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mPcBoxMark;
+}
+
+// Spare flag byte of the record.
+u8 pokemonBiosGetFlagAmari(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mFlagAmari;
+}
+
+// Whether the record is marked invalid.
+u8 pokemonBiosGetFuseiFlag(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mFuseiFlag != 0;
+}
+
+// Whether the record uses the second ability of its species. A species
+// without a second ability has none to choose, so the lookup fails first.
+u8 pokemonBiosGetTokuseiFlag(Pokemon *pokemon)
+{
+    PokemonData *data;
+
+    if (pokemon == 0) return 0;
+    data = pokemonDataBiosGetPtr(pokemonBiosGetPokemonDataId(pokemon));
+    if (pokemonDataBiosGetTokuseiDataId(data, POKEMON_DATA_ABILITY_SECOND) == 0) return 0;
+    return pokemon->mTokuseiFlag != 0;
+}
+
+// Whether the record is still an egg.
+u8 pokemonBiosGetTamagoFlag(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mTamagoFlag != 0;
+}
+
+// Pokerus infection of the record.
+u8 pokemonBiosGetPokerus(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mPokerus;
+}
+
+// Spare ribbon field of the record.
+u8 pokemonBiosGetAmariRibbon(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getRibbon()->amari;
+}
+
+// Ribbon queries. Each ribbon takes one flag of the record's ribbon word,
+// read through the ribbon word accessor; a record the accessor cannot resolve
+// counts as having no ribbons.
+
+u8 pokemonBiosGetWorldRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->world != 0;
+}
+
+u8 pokemonBiosGetEarthRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->earth != 0;
+}
+
+u8 pokemonBiosGetNationalRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->national != 0;
+}
+
+u8 pokemonBiosGetCountryRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->country != 0;
+}
+
+u8 pokemonBiosGetSkyRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->sky != 0;
+}
+
+u8 pokemonBiosGetLandRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->land != 0;
+}
+
+u8 pokemonBiosGetMarineRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->marine != 0;
+}
+
+u8 pokemonBiosGetGanbaRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->ganba != 0;
+}
+
+u8 pokemonBiosGetBromideRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->bromide != 0;
+}
+
+u8 pokemonBiosGetVictoryRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->victory != 0;
+}
+
+u8 pokemonBiosGetWinningRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->winning != 0;
+}
+
+u8 pokemonBiosGetChampRibbon(Pokemon *pokemon)
+{
+    PokemonRibbon *ribbon;
+
+    ribbon = pokemonBiosGetRibbonPtr(pokemon);
+    if (ribbon == 0) return 0;
+    return ribbon->champ != 0;
+}
+
+// Ribbon word of the record.
+PokemonRibbon *pokemonBiosGetRibbonPtr(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getRibbon();
+}
+
+// Fur sheen of the record.
+u8 pokemonBiosGetFur(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mFur;
+}
+
+// Contest medal queries. The medals are the second expand status record, one
+// byte per contest category.
+
+u8 pokemonBiosGetStrongMedal(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_MEDAL);
+    if (status == 0) return 0;
+    return status->strong;
+}
+
+u8 pokemonBiosGetCleverMedal(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_MEDAL);
+    if (status == 0) return 0;
+    return status->clever;
+}
+
+u8 pokemonBiosGetCuteMedal(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_MEDAL);
+    if (status == 0) return 0;
+    return status->cute;
+}
+
+u8 pokemonBiosGetBeautifulMedal(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_MEDAL);
+    if (status == 0) return 0;
+    return status->beautiful;
+}
+
+u8 pokemonBiosGetStyleMedal(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_MEDAL);
+    if (status == 0) return 0;
+    return status->style;
+}
+
+// Contest condition queries. The contest values are the first expand status
+// record, one byte per contest category in category order.
+
+u8 pokemonBiosGetStrong(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_CONDITION);
+    if (status == 0) return 0;
+    return status->strong;
+}
+
+u8 pokemonBiosGetClever(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_CONDITION);
+    if (status == 0) return 0;
+    return status->clever;
+}
+
+u8 pokemonBiosGetCute(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_CONDITION);
+    if (status == 0) return 0;
+    return status->cute;
+}
+
+u8 pokemonBiosGetBeautiful(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_CONDITION);
+    if (status == 0) return 0;
+    return status->beautiful;
+}
+
+u8 pokemonBiosGetStyle(Pokemon *pokemon)
+{
+    PokemonExpandStatus *status;
+
+    status = pokemonBiosGetExpandStatusPtr(pokemon, POKEMON_EXPAND_STATUS_CONDITION);
+    if (status == 0) return 0;
+    return status->style;
+}
+
+// Expand status record of a Pokemon. The index selects the contest values
+// (0) or the contest medals (1); the record holds two of them.
+PokemonExpandStatus *pokemonBiosGetExpandStatusPtr(Pokemon *pokemon, u16 index)
+{
+    if (pokemon == 0) return 0;
+    if (index >= POKEMON_EXPAND_STATUS_COUNT) return 0;
+    return &pokemon->mExpandStatus[index];
+}
 }

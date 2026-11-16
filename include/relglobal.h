@@ -2,6 +2,7 @@
 #define INCLUDE_RELGLOBAL_H
 
 #include <types.h>
+#include <PokemonData.h>
 #include <ribbon.h>
 #include <roomData.h>
 
@@ -41,6 +42,9 @@ extern u32 *item_data_index_number;
 
 /* Count of entries in the pokemon data table. */
 extern u32 *pokemon_data_number;
+
+/* Pokemon species record table. */
+extern PokemonData *pokemon_data;
 
 /* Count of entries in the pokemon nature (seikaku) table. */
 extern u32 *pokemon_seikaku_data_number;

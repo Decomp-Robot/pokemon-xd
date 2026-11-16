@@ -16,6 +16,11 @@ enum PokemonDataLimits {
     POKEMON_DATA_BODY_COUNT = 2
 };
 
+enum PokemonDataAbilityIndex {
+    POKEMON_DATA_ABILITY_FIRST = 0,
+    POKEMON_DATA_ABILITY_SECOND = 1
+};
+
 enum PokemonDataStatSet {
     POKEMON_DATA_BASE_STATS = 0,
     POKEMON_DATA_EFFORT_YIELD = 1,

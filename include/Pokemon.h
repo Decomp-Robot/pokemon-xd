@@ -5,9 +5,28 @@
 #include <gamedata.h>
 #include <darkPokemon.h>
 
+enum PokemonExpandStatusIndex {
+    POKEMON_EXPAND_STATUS_CONDITION = 0,
+    POKEMON_EXPAND_STATUS_MEDAL = 1,
+    POKEMON_EXPAND_STATUS_COUNT = 2
+};
+
+// Contest record of a Pokemon's expand status: the five contest categories in
+// the order the status field ids select them. A Pokemon holds two of these
+// records, one with the contest values themselves and one with the medals it
+// won in each category.
+typedef struct PokemonExpandStatus {
+    u8 style; // 0x0
+    u8 beautiful; // 0x1
+    u8 cute; // 0x2
+    u8 clever; // 0x3
+    u8 strong; // 0x4
+} PokemonExpandStatus;
+
 // Pokemon -- party/battle pokemon record.
 typedef struct Pokemon Pokemon;
 typedef struct PokemonData PokemonData;
+typedef struct PokemonRibbon PokemonRibbon;
 struct FightPokemon;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
@@ -20,14 +39,16 @@ struct Pokemon {
     u8 mCatchBallId; // 0x0F: ball used to catch it.
     u8 mCatchTrainerSex; // 0x10: sex of the catching trainer.
     u8 mLevel; // 0x11: current level.
-    u8 _12[2];
+    u8 mFur; // 0x12: fur sheen.
+    u8 mPokerus; // 0x13: Pokerus infection.
     u8 mPcBoxMark; // 0x14
-    u8 _15;
+    u8 mMailId; // 0x15: mail held by the Pokemon.
     u8 mCondition; // 0x16
     u8 mConditionCount; // 0x17
     u8 mConditionTurn; // 0x18
     u8 mConditionTurnNow; // 0x19
-    u8 _1A[3];
+    u8 mFlagAmari; // 0x1A: spare flag byte.
+    u8 _1B[2];
     u8 mTamagoFlag : 1;
     u8 mTokuseiFlag : 1;
     u8 mFuseiFlag : 1;
@@ -36,7 +57,8 @@ struct Pokemon {
     u32 mExp; // 0x20: total experience.
     unsigned long mCatchTrainerRnd; // 0x24: catch trainer random identity value.
     unsigned long mPersonality; // 0x28: personality value.
-    u8 _2C[8];
+    u8 _2C[4];
+    u32 mEventGetFlag; // 0x30: event acquisition flag.
     GamedataAttest mAttest; // 0x34: origin/version attestation.
     u16 mTrainerName[11]; // 0x38: trainer name copy buffer.
     u16 mNickname[11]; // 0x4E: nickname copy buffer.
@@ -56,7 +78,9 @@ struct Pokemon {
     u16 mSpecialAttackEffort; // 0xA2
     u16 mSpecialDefenseEffort; // 0xA4
     u16 mSpeedEffort; // 0xA6
-    u8 _A8[18];
+    u8 _A8[6];
+    PokemonExpandStatus mExpandStatus[POKEMON_EXPAND_STATUS_COUNT]; // 0xAE: contest values and medals.
+    u16 mFightTrainerPokemonDataId; // 0xB8: trainer Pokemon record ID.
     u16 mDarkPokemonDataId; // 0xBA
     u8 _BC[8];
 
@@ -99,6 +123,9 @@ struct Pokemon {
     bool isDarkPokemon() const;
     unsigned long getCatchTrainerRnd() const;
     void setCatchTrainerRnd(unsigned long rnd);
+    u16 getPara1Amari() const;
+    u16 getAmari() const;
+    PokemonRibbon* getRibbon();
 #endif
 };
 
