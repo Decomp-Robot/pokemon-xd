@@ -37,6 +37,56 @@ struct DeckStatusDetermVal {
 };
 
 /*
+ * A trainer's authored battle-deck record: the party slots, AI selector,
+ * combo settings and presentation data used when that trainer appears.
+ */
+class DeckTrainer {
+public:
+    u8 getComboActive(u8 index) const;
+    u16 getComboID(u8 index) const;
+    u16 getFixedActionID() const;
+    void setAIID(u16 id);
+    u16 getAIID() const;
+    void setPokemonDataID(u8 index, u16 id);
+    u16 getDarkPokemonDataID(u8 index) const;
+    u16 getPokemonDataID(u8 index) const;
+    void setTrainerMsg(u8 index, u16 id);
+    u16 getTrainerMsg(u8 index) const;
+    void setIntroWZX(u16 id);
+    u16 getIntroWZX() const;
+    void setTrainerPKX(u16 id);
+    u16 getTrainerPKX() const;
+    void setTrainerItem(u8 index, u16 id);
+    u16 getTrainerItem(u8 index) const;
+    void setTrainerName(u16 id);
+    u16 getTrainerName() const;
+    void setTrainerKind(u8 kind);
+    u8 getTrainerKind() const;
+
+private:
+    bool isDarkPokemon(u8 index) const
+    {
+        if (this == NULL) return false;
+        if (index >= 6) return false;
+        return (mDarkPokemonSlotMask & (1 << index)) != 0;
+    }
+
+    u8 mUnknown[4];
+    u8 mDarkPokemonSlotMask;
+    u8 mTrainerKind;
+    u16 mTrainerName;
+    u16 mTrainerItem[4];
+    u16 mTrainerPKX;
+    u16 mIntroWZX;
+    u16 mTrainerMsg[4];
+    u16 mPokemonDataID[6];
+    u16 mAIID;
+    u16 mFixedActionID;
+    u16 mComboID[4];
+    u8 mComboActive[4];
+};
+
+/*
  * Deck trainer AI parameters: the per-trainer rates, thresholds and decision
  * flags the deck AI reads. The accessors work on the record in place and
  * accept a null record.

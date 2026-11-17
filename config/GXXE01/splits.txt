@@ -3598,7 +3598,8 @@ game/GSAPI/GSprim/text.cpp:
 	.sdata2     start:0x804EF550 end:0x804EF560
 
 game/app/deck/deck.cpp:
-	.text       start:0x8028B348 end:0x8028BC5C
+	.text       start:0x8028B348 end:0x8028BFB8
+	.sbss       start:0x804EBB60 end:0x804EBB74
 
 game/app/deck/deckDataVirtualBios.cpp:
 	.text       start:0x8028BFB8 end:0x8028C400

@@ -1,5 +1,12 @@
 #include <deck.h>
 
+/* Deck table state shared by the registration and lookup routines. */
+DeckDarkPokemon* _deckDarkPokemon;
+DeckTrainerAI* _deckTrainerAI;
+u32 _deckTrainerSize;
+u32 _deckPokemonSize;
+u32 _deckDarkPokemonSize;
+
 void DeckTrainerAI::setTotalCorrection(u8 correction)
 {
     if (this == NULL) return;
@@ -488,4 +495,145 @@ u16 DeckPokemon::getPokemonID() const
 {
     if (this == NULL) return 0;
     return mPokemonID;
+}
+
+u8 DeckTrainer::getComboActive(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 4) return 0;
+    return mComboActive[index];
+}
+
+u16 DeckTrainer::getComboID(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 4) return 0;
+    return mComboID[index];
+}
+
+u16 DeckTrainer::getFixedActionID() const
+{
+    if (this == NULL) return 0;
+    return mFixedActionID;
+}
+
+void DeckTrainer::setAIID(u16 id)
+{
+    if (this == NULL) return;
+    mAIID = id;
+}
+
+u16 DeckTrainer::getAIID() const
+{
+    if (this == NULL) return 0;
+    return mAIID;
+}
+
+void DeckTrainer::setPokemonDataID(u8 index, u16 id)
+{
+    if (this == NULL) return;
+    if (index >= 6) return;
+    mPokemonDataID[index] = id;
+}
+
+u16 DeckTrainer::getDarkPokemonDataID(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 6) return 0;
+    if (isDarkPokemon(index)) return mPokemonDataID[index];
+    return 0;
+}
+
+u16 DeckTrainer::getPokemonDataID(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 6) return 0;
+    u32 darkID = mPokemonDataID[index];
+    if (isDarkPokemon(index)) {
+        DeckDarkPokemon* record;
+        if (_deckDarkPokemonSize <= darkID) {
+            record = NULL;
+        } else {
+            record = &_deckDarkPokemon[darkID];
+        }
+        if (record == NULL) return 0;
+        return record->getDeckPokemonID();
+    }
+    return darkID;
+}
+
+void DeckTrainer::setTrainerMsg(u8 index, u16 id)
+{
+    if (this == NULL) return;
+    if (index >= 4) return;
+    mTrainerMsg[index] = id;
+}
+
+u16 DeckTrainer::getTrainerMsg(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 4) return 0;
+    return mTrainerMsg[index];
+}
+
+void DeckTrainer::setIntroWZX(u16 id)
+{
+    if (this == NULL) return;
+    mIntroWZX = id;
+}
+
+u16 DeckTrainer::getIntroWZX() const
+{
+    if (this == NULL) return 0;
+    return mIntroWZX;
+}
+
+void DeckTrainer::setTrainerPKX(u16 id)
+{
+    if (this == NULL) return;
+    mTrainerPKX = id;
+}
+
+u16 DeckTrainer::getTrainerPKX() const
+{
+    if (this == NULL) return 0;
+    return mTrainerPKX;
+}
+
+void DeckTrainer::setTrainerItem(u8 index, u16 id)
+{
+    if (this == NULL) return;
+    if (index >= 4) return;
+    mTrainerItem[index] = id;
+}
+
+u16 DeckTrainer::getTrainerItem(u8 index) const
+{
+    if (this == NULL) return 0;
+    if (index >= 4) return 0;
+    return mTrainerItem[index];
+}
+
+void DeckTrainer::setTrainerName(u16 id)
+{
+    if (this == NULL) return;
+    mTrainerName = id;
+}
+
+u16 DeckTrainer::getTrainerName() const
+{
+    if (this == NULL) return 0;
+    return mTrainerName;
+}
+
+void DeckTrainer::setTrainerKind(u8 kind)
+{
+    if (this == NULL) return;
+    mTrainerKind = kind;
+}
+
+u8 DeckTrainer::getTrainerKind() const
+{
+    if (this == NULL) return 0;
+    return mTrainerKind;
 }
