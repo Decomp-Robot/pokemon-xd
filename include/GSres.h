@@ -26,6 +26,17 @@ typedef bool (*GSresFreeFunc)(void *resource, unsigned long group,
 extern "C" {
 #endif
 
+enum {
+    RESOURCE_ID_COLLISION_DEBUG_FLAGS = 2
+};
+
+// Byte flags toggled by the collision debug menu and read before drawing
+// collision shapes and line checks.
+struct CollisionDebugFlags {
+    u8 drawCollision;
+    u8 drawLineChecks;
+};
+
 void GSresInit(u32 entryCount);
 void GSresIsUniqueID(u32 group, u32 resourceID, u8 unique);
 void GSresDumpGroup(u32 group);

@@ -37,7 +37,7 @@ inline bool checkThruPass(GSvec* start, GSvec* end, GSvec* normal, GSvec* triang
     f32 parameter;
     if (!GScolsys2UtilGetCpPlaneLine(&crossing, &parameter, normal, triangle, start, end)) return false;
     if (parameter < 0.0f || parameter > 1.0f) return false;
-    if (!GScolsy2UtilChkInTri((f32*)&crossing, (f32*)triangle, normal)) return false;
+    if (!(u8)GScolsy2UtilChkInTri((f32*)&crossing, (f32*)triangle, normal)) return false;
     return true;
 }
 inline bool checkThruFace(GSvec* normal, GSvec* triangle, GSvec* position, f32 radiusSquared)
@@ -50,7 +50,7 @@ inline bool checkThruFace(GSvec* normal, GSvec* triangle, GSvec* position, f32 r
     if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)position) >= radiusSquared) {
         return false;
     }
-    if (!GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) {
+    if (!(u8)GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) {
         return false;
     }
     return true;
@@ -144,7 +144,7 @@ s32 getMdlEventListPass(GSvec* start, GSvec* end, CCD_THRUMDL_HEAD* head,
             crossed = false;
         } else if (parameter < 0.0f || parameter > 1.0f) {
             crossed = false;
-        } else if (!GScolsy2UtilChkInTri((f32*)&crossing, (f32*)worldPoints, &worldNormal)) {
+        } else if (!(u8)GScolsy2UtilChkInTri((f32*)&crossing, (f32*)worldPoints, &worldNormal)) {
             crossed = false;
         } else {
             crossed = true;

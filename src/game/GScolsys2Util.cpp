@@ -88,7 +88,7 @@ extern "C" void GScolsy2UtilGetPointExtentionLine(GSvec* out, GSvec* start,
  * must fall inside the projected bounding box and on the inner side of all
  * three edges.
  */
-extern "C" u8 GScolsy2UtilChkInTri(f32* p, f32* tri, GSvec* normal)
+extern "C" s32 GScolsy2UtilChkInTri(f32* p, f32* tri, GSvec* normal)
 {
     f32 normalAbsZ;
     f32 normalAbsX;

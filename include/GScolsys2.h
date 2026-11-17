@@ -231,7 +231,7 @@ bool GScolsys2UtilGetCpPlaneLine(GSvec* out, f32* t, GSvec* normal,
 f32 GScolsys2UtilGetCpLinePoint(GSvec* out, GSvec* a, GSvec* b, GSvec* p);
 void GScolsy2UtilGetPointExtentionLine(GSvec* out, GSvec* start, f32 len, GSvec* end);
 void GScolsy2UtilGetCpPlanePoint(GSvec* cp, GSvec* normal, GSvec* tri, GSvec* pos);
-u8 GScolsy2UtilChkInTri(f32* p, f32* tri, GSvec* normal);
+s32 GScolsy2UtilChkInTri(f32* p, f32* tri, GSvec* normal);
 f32 GScolsy2UtilGetSidePlanePoint(GSvec* normal, void* tri, GSvec* pos);
 
 f32 GScolsys2HumanGetHumanRadius(s32 index);

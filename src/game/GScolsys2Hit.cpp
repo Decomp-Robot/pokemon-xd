@@ -18,7 +18,7 @@ inline bool checkHitFace(GSvec* hit, GSvec* normal, GSvec* triangle, GSvec* pos,
     if (GScolsy2UtilGetSidePlanePoint(normal, triangle, pos) < collisionIntervalStart) return false;
     GScolsy2UtilGetCpPlanePoint(&closest, normal, triangle, pos);
     if (PSVECSquareDistance((const Vec *)&closest, (const Vec *)pos) >= radiusSquared) return false;
-    if (!GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) return false;
+    if (!(u8)GScolsy2UtilChkInTri((f32*)&closest, (f32*)triangle, normal)) return false;
     *hit = closest;
     return true;
 }

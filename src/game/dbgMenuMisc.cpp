@@ -45,11 +45,8 @@ enum {
     FRAME_RATE_LOCK_15 = 3
 };
 
-enum {
-    MOVIE_TEST_FLOOR_ID = 406,
-    MOVIE_PLAY_LOOP = 1,
-    RESOURCE_ID_COLLISION_DEBUG_FLAGS = 2
-};
+enum { MOVIE_TEST_FLOOR_ID = 406 };
+enum { MOVIE_PLAY_LOOP = 1 };
 
 extern "C" s32 debugMenuChangePerfBar(void)
 {
@@ -119,10 +116,6 @@ enum {
 
 extern "C" s32 dbgMenuColisionDisp(s32 index)
 {
-    struct CollisionDebugFlags {
-        u8 drawCollision;
-        u8 drawLineChecks;
-    };
     CollisionDebugFlags *debugFlags;
 
     debugFlags = (CollisionDebugFlags *)GSresGetResource(0, RESOURCE_ID_COLLISION_DEBUG_FLAGS);

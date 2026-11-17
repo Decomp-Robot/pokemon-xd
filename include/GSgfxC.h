@@ -19,6 +19,8 @@ extern "C" {
 u8 GSgfxResetDisable(void);
 
 void GSgfxZCompare(s32 enable, s32 comparison);
+void GSgfxAlphaCompare(s32 enable, s32 compare0, u8 reference0, s32 operation,
+                       s32 compare1, u8 reference1);
 void GSgfxPixelMode(s32 colorUpdate, s32 alphaUpdate, s32 depthUpdate);
 void GSgfxCullMode(s32 mode);
 void GSgfxBlendMode(s32 mode, s32 sourceFactor, s32 destinationFactor);

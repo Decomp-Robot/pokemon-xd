@@ -126,6 +126,8 @@ u8 peopleBiosCheckFlag(tagPeopleWork* people, unsigned long flag);
 tagPeopleInfoBios* peopleInfoBiosGetPtr(unsigned long id);
 void peopleSetFlagOn(unsigned long group, unsigned long id, unsigned long flags);
 GSvec* peopleBiosGetPosPtr(void* people);
+GSvec* peopleBiosGetPrevPosPtr(tagPeopleWork* people);
+void peopleBiosSetPos(tagPeopleWork* people, GSvec* position);
 void peopleBiosGetRot(tagPeopleWork* people, GSvec* rotation);
 void peopleSpeakStart(u32 group, u32 id);
 u32 peopleGetFlags(u32 group, u32 id);

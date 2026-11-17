@@ -42,7 +42,7 @@ bool getMdlEventList(GSvec* start, GSvec* end, GSvec* direction, CCD_CHECKMDL_HE
             crossed = false;
         } else if (parameter < 0.0f || parameter > 1.0f) {
             crossed = false;
-        } else if (!GScolsy2UtilChkInTri((f32*)&crossing, (f32*)worldPoints, &worldNormal)) {
+        } else if (!(u8)GScolsy2UtilChkInTri((f32*)&crossing, (f32*)worldPoints, &worldNormal)) {
             crossed = false;
         } else {
             crossed = true;

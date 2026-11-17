@@ -201,6 +201,7 @@ s32 heroGetObjID(s32 heroType);
 u8 heroMoveIsMember(s32 member);
 u8 heroMoveGetResID(u32* group, u32* id, s32 member);
 void heroMoveTermEvent(void);
+void heroMoveSetLockFrame(s32 frames);
 unsigned long heroGetPokeomCount(Hero* hero);
 void heroDecPokedoru(Hero *hero, u32 amount);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);

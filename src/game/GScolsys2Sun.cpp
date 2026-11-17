@@ -37,7 +37,7 @@ s32 getCpSegPolyArray(bool* hits, GSvec* start, GSvec* ends, u32 count, GSvec* p
             allHit = false;
             continue;
         }
-        if (!GScolsy2UtilChkInTri((f32*)&crossing, (f32*)points, normal)) {
+        if (!(u8)GScolsy2UtilChkInTri((f32*)&crossing, (f32*)points, normal)) {
             allHit = false;
             continue;
         }
@@ -132,7 +132,7 @@ inline bool getCpSegPoly(GSvec* start, GSvec* end, GSvec* points, GSvec* normal)
         return false;
     } else if (parameter < 0.0f || parameter > 1.0f) {
         return false;
-    } else if (!GScolsy2UtilChkInTri((f32*)&crossing, (f32*)points, normal)) {
+    } else if (!(u8)GScolsy2UtilChkInTri((f32*)&crossing, (f32*)points, normal)) {
         return false;
     }
     return true;
