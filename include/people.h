@@ -121,6 +121,9 @@ enum PeopleBiosStateFlags {
     PEOPLE_BIOS_STATE_MODEL_VISIBLE = 0x2,
     PEOPLE_BIOS_STATE_HAS_TREASURE = 0x4
 };
+enum PeopleBehaviourFlags {
+    PEOPLE_FLAG_NO_INTERACTION = 0x1
+};
 
 extern "C" {
 tagPeopleWork* peopleGet(unsigned long group, unsigned long id);
@@ -128,6 +131,11 @@ unsigned long peopleGetHumanID(unsigned long group, unsigned long id);
 tagPeopleWork* peopleSearchID(unsigned long humanID);
 _GSmodel* peopleBiosGetModelPtr(tagPeopleWork* people);
 void peopleAttach(unsigned long group, unsigned long id, unsigned long parentGroup, unsigned long parentID, long partIndex);
+void peopleWalkTo(unsigned long group, unsigned long id, bool useAngle, GSvec* destination);
+u8 peopleMoveCheck(unsigned long group, unsigned long id, u8 wait);
+void peopleSetPosXYZ(unsigned long group, unsigned long id, float x, float y, float z);
+u8 peopleSetMotion(unsigned long group, unsigned long id, long motion, long frame, bool loop);
+void peopleSetFlags(unsigned long group, unsigned long id, unsigned long flags);
 void peopleDetach(unsigned long group, unsigned long id, bool keepTransform);
 bool peopleWaitSyncMotion(unsigned long group, unsigned long id, bool wait);
 void peopleStopMotion(unsigned long group, unsigned long id);

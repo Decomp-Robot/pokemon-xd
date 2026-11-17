@@ -23,6 +23,7 @@ struct _GSmodel;
 extern "C" {
 #endif
 struct _GSmodel *floorOpenObject(long id);
+struct _GSmodel *floorGetResource(u32 floorID, u32 resourceID);
 void floorChangePos(u32 floorID, s16 rotY, f32 x, f32 y, f32 z);
 void floorMapSetDisp(long on);
 u32 floorReadMakeFogResID(u32 resource);
@@ -33,7 +34,7 @@ u32 floorReadMakeObjResID(u32 resource);
 void floorSetLightInfo(u32 resource, long count);
 void floorInitMap(u32 group, u32 res);
 void floorExecSoundScript(void);
-long floorEventExecScript(s8 kind, u32 eventID);
+s32 floorEventExecScript(s8 kind, s32 scriptID);
 
 GSgfxLayerID floorGetMenuLayerID(void);
 s32 floorGetNextFloorID(void);
@@ -97,6 +98,7 @@ GSthread *floorCreateThreadLocal(s32 priority, u32 stackSize, s32 terminateOnExi
 namespace GSscript { class Tiga; }
 GSscript::Tiga *floorGetCommonScript(void);
 GSscript::Tiga *floorGetCurentScript(void);
+void EvlogSet(s8 kind, u32 scriptID);
 #endif
 
 #endif
