@@ -59,7 +59,7 @@ typedef struct _HSD_PEDesc {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void HSD_InitColorSwapTable(u32 table, u32 red, u32 green, u32 blue, u32 alpha);
+void HSD_InitColorSwapTable(u8 table, u8 red, u8 green, u8 blue, u8 alpha);
 void HSD_ResetColorSwapTables(void);
 void HSD_StateInvalidate(u32 flags);
 void _HSD_StateInvalidateRenderMode(void);

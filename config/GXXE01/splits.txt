@@ -3595,6 +3595,13 @@ game/GSAPI/GSsysdolphin_baselib/baselib/state.c:
 	.sbss       start:0x804EBAB0 end:0x804EBAF0
 	.sdata2     start:0x804EF2A8 end:0x804EF2B8
 
+game/GSAPI/GSsysdolphin_baselib/baselib/tev.c:
+	.text       start:0x80261790 end:0x80262808
+	.data       start:0x804192F8 end:0x80419568
+	.bss        start:0x804B2438 end:0x804B24E0
+	.sbss       start:0x804EBAF0 end:0x804EBB10
+	.sdata2     start:0x804EF2B8 end:0x804EF2C8
+
 game/GSAPI/GSsysdolphin_baselib/baselib/util.c:
 	.text       start:0x8026CA60 end:0x8026CC2C
 	.data       start:0x80419AA8 end:0x80419AD0
