@@ -3428,6 +3428,9 @@ game/app/fight/fightSeq/fightSeqBasis.cpp:
 	.text       start:0x8020FD6C end:0x802108AC
 	.data       start:0x80418248 end:0x80418290
 
+game/app/fight/fightSeq/fightSeqStatus.cpp:
+	.text       start:0x8021B8C8 end:0x8021BC10
+
 game/app/fight/fightSeq/fightSeqWazaseq.cpp:
 	.text       start:0x8021EC38 end:0x8021ED08
 
