@@ -6184,6 +6184,11 @@ completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/hash.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/mtx.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-use_lmw_stmw on"]

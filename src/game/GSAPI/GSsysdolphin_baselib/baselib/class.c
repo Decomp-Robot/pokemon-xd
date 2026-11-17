@@ -2,11 +2,8 @@
 #include <string.h>
 #include <hsd/assert.h>
 #include <hsd/class.h>
+#include <hsd/hash.h>
 #include <hsd/memory.h>
-
-typedef struct _HSD_Hash _HSD_Hash;
-
-void *HSD_HashSearch(_HSD_Hash *hash, const void *key, int *found);
 
 _HSD_ClassInfo hsdClass = { { _hsdClassInfoInit } };
 

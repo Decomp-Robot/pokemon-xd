@@ -3518,6 +3518,11 @@ game/GSAPI/GSsysdolphin_baselib/baselib/fog.c:
 	.sdata2     start:0x804EEEE8 end:0x804EEF10
 	.sbss2      start:0x804EFD30 end:0x804EFD34
 
+game/GSAPI/GSsysdolphin_baselib/baselib/hash.c:
+	.text       start:0x8024C088 end:0x8024C188
+	.rodata     start:0x802F9AC0 end:0x802F9AD8
+	.sdata2     start:0x804EEF10 end:0x804EEF18
+
 game/GSAPI/GSsysdolphin_baselib/baselib/id.c:
 	.text       start:0x8024C188 end:0x8024C43C
 	.bss        start:0x804B20C0 end:0x804B2280
