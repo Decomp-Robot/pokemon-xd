@@ -1700,6 +1700,10 @@ TRK/notify.c:
 TRK/flush_cache.c:
 	.text       start:0x800D63F8 end:0x800D6430
 
+decomp/TRKMemory.c:
+	.init       start:0x80003458 end:0x800034AC
+	.text       start:0x800D6430 end:0x800D64E8
+
 TRK/TRK_memcpy_local.c:
 	.text       start:0x800D64F8 end:0x800D7DD0
 
@@ -3816,9 +3820,6 @@ game/app/fight/fightTrainerAiWazaValue.cpp:
 
 game/app/fight/fightTrainerAiComboContinueFunc.cpp:
 	.text       start:0x802E9808 end:0x802E9F7C
-
-decomp/TRKMemory.c:
-	.init       start:0x80003458 end:0x800034AC
 
 decomp/TRKReset.c:
 	.init       start:0x800053E0 end:0x8000540C
