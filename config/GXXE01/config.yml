@@ -117,6 +117,10 @@ block_relocations:
   - source: ".text:0x8005AC6C"
   - source: ".text:0x8005AC84"
   - source: ".text:0x8005AD04"
+  # Retained field-script code uses the original absolute address of the
+  # compiler-generated thread-name literal now emitted by tiga.cpp.
+  - source: ".text:0x8023D530"
+  - source: ".text:0x8023D538"
 add_relocations:
   - source: .text:0x801265E8
     type: ha

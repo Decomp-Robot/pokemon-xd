@@ -3475,6 +3475,11 @@ game/app/fight/fightTimer/fightTimer.cpp:
 	.bss        start:0x804B0F60 end:0x804B0F80
 	.sdata2     start:0x804EEC50 end:0x804EEC70
 
+game/GSAPI/GSscript/tiga.cpp:
+	.text       start:0x80239C74 end:0x8023AACC
+	.rodata     start:0x802F9358 end:0x802F9368
+	.sbss       start:0x804EB9C0 end:0x804EB9C8
+
 game/GSAPI/GSscript/tvariant.cpp:
 	.text       start:0x80242438 end:0x802424B4
 	.ctors      start:0x802E9FE8 end:0x802E9FEC

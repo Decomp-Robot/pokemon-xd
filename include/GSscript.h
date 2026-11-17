@@ -4,16 +4,20 @@
 #include <types.h>
 #include <GSgfx.h>
 #include <GSres.h>
+#include <GSBinStream.h>
+#include <GSAPI/GSscript/chank.h>
 
 class NullSequence;
 class WazaSequence;
 
 struct ScriptResultContext;
+struct GSthread;
 
 namespace GSscript {
 void tigaErrMessage(const char*);
 class tigaArrayFixed;
 class tigaCellMemory;
+class Tiga;
 class TigaObjManager {
 public:
     GSresID* getResource(int);
@@ -109,23 +113,47 @@ struct tigaVariant {
     float getCnvSingle();
     GSvec* getCnvVector();
     char* getCnvString(char* buffer);
+
+    void restoreStateData(GSBinReadStream* stream);
+    void makeStateData(GSBinWriteStream* stream);
 };
 class TigaThread {
 public:
-    u8 unknownState[0x14c];
+    u32 mState;
+    u8 mUnknownStateAfterState[0x148];
     int lineNumber;
+    u8 mUnknownStateAfterLineNumber[0x20];
+    Tiga* mTiga;
+    long mHandle;
+    u32 mFloorGroupId;
+    GSthread* mThread;
+
+    void initTiga();
+    bool restoreStateData(GSBinReadStream* stream);
+    void makeStateData(GSBinWriteStream* stream);
 };
 class Tiga {
 public:
     Tiga();
-    u8 mUnknown[0x18];
+    CChankBlock mChank;
+    u32 mChankSize;
+    u32 mChankVersion;
     TigaObjManager mObjectManager;
-    u8 mUnknownState[0x38];
+    u32 mStateDataId;
+    u32 mRunThreadCount;
+    f32 mTimer[4];
+    TigaThread* mThreadSlots[8];
     tigaCellMemory* mCellMemory;
     ScriptResultContext* mResultContext;
-    u8 mUnknownStateAfterContext[0x1c];
+    u8 mUnknownStateAfterContext[0x10];
+    int mNextThreadHandle;
+    bool mSaveFlag;
+    u32 mUnknownStateAfterSaveFlag;
     int mLiveWaza;
-    u8 mUnknownStateAfterCounter[0x1c];
+    u8 mUnknownStateAfterCounter[0x10];
+    int mVariantCount;
+    tigaVariant* mVariants;
+    u8 mUnknownStateAfterVariants[0x4];
     char* mStringBuffer;
     u8 mUnknownStateAfterStringBuffer[0xc];
     GSresID* mPeople;
@@ -133,6 +161,10 @@ public:
     tigaArrayFixed** mArrays;
     u8 mUnknownStateAfterArrays[0x10];
     TigaThread* mCurrentThread;
+
+    unsigned long getStateSize();
+    bool restoreStateData(void* data, unsigned long size);
+    void makeStateData(GSBinWriteStream* stream);
 
     bool isMapping();
     int getNameToFuncId(const char* name);
@@ -175,7 +207,8 @@ class tigaArrayFixed {
 public:
     int mLength;
     unsigned int mCursor;
-    u8 mUnknown[8];
+    bool mOmitStateData;
+    u8 mUnknown[7];
     tigaVariant mValues[1];
 
     tigaVariant* get(int);

@@ -6207,6 +6207,11 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/GSAPI/GSscript/tiga.cpp"
+completed = true
+extra_cflags = ["-rostr", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GSscript/tvariant.cpp"
 completed = true
 
