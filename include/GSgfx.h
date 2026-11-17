@@ -341,7 +341,7 @@ struct GSgfxProjectionState {
 };
 enum GSgfxGeometryFlag { GSGFX_GEOMETRY_TEXGEN_COUNT = 1, GSGFX_GEOMETRY_LINE_WIDTH = 0x4, GSGFX_GEOMETRY_POINT_SIZE = 0x8, GSGFX_GEOMETRY_PROJECTION = 0x20 };
 
-enum GSgfxLayerOffset { GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2,
+enum GSgfxLayerOffset { GS_LAYER_INSERT_NONE = 0, GS_LAYER_INSERT_BEFORE = 1, GS_LAYER_INSERT_AFTER = 2,
                         GS_LAYER_INSERT_FIRST = 3, GS_LAYER_INSERT_LAST = 4 };
 
 
@@ -462,6 +462,9 @@ enum GSgfxCachedStateConstants {
 // Graphics state and draw commands for one layer.
 class GSgfxLayer {
 public:
+    GSgfxLayer(GSgfxLayerID id, char *name, unsigned long pass0FifoSize, unsigned long pass1FifoSize,
+               unsigned long matrixStackCapacity, GSgfxLayerType type);
+    ~GSgfxLayer();
     void SetPassRedirect(GSgfxLayerPass fromPass, bool enabled, GSgfxLayer *toLayer,
                          GSgfxLayerPass toPass, GSgfxLayerOffset offset);
     void SetClearFlags(bool color, bool alpha, bool depth);
@@ -866,6 +869,11 @@ public:
     void dlDraw(GSgfxDL *displayList);
     bool IsLayerVisible(void);
     void SetLayerVisibility(bool on);
+    static GSgfxLayer *GetLayerList(void);
+    void SetLayerType(GSgfxLayerType type);
+    void SetWantClearFlags(bool color, bool alpha, bool depth);
+    void SetPriority(GSgfxLayerOffset offset, GSgfxLayer *relative);
+    void SetPassVisibility(bool pass0, bool pass1);
     void tunitFunc(u8 stage, GSgfxTunitFunc func);
     void tgenFunc(u8 texGen, GSgfxTgenFunc func, GSgfxTgenSrc src, GSmtx *textureMatrix,
                   bool normalize, GSmtx *postMatrix);
@@ -966,9 +974,12 @@ public:
     GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
     GSgfxVF *mVertexFormat; // 0x199C
     GSgfxMatrixStack *mMatrixStack; // 0x19A0
-    u8 _19A4[0x14];
+    u8 _19A4[15];
+    u8 mVisibleHolds; // 0x19B3: holders that keep the layer on screen.
+    u8 _19B4[4];
     s8 mDistortionScale;
     f32 mDistortionMatrix[2][3];
+    u8 _19D4[64];
 };
 
 struct GSgfxLight {
