@@ -58,16 +58,20 @@ struct _peDistortion {
 
 struct _peParticleStrip {
     u32 mFlags;
-    u8 mStripParameters[4];
+    f32 mTextureAnimationRate;
     struct peColorSpline *mColorSpline;
     peColorSpline *mSecondColorSpline;
     peSpline *mAlphaSpline;
-    u8 mTextureParameters[8];
+    f32 mTexCoordTop;
+    f32 mTexCoordBottom;
     union {
         s32 mResourceID;
         GStexture *mTexture;
         peTextureList *mTextureList;
     };
+    GSvec mWidthDirection;
+    f32 mWidth;
+    f32 mWidthRandom;
 };
 
 enum peModelFlags {
@@ -89,9 +93,30 @@ enum peModelFlags {
     PE_MODEL_RANDOM_ORIENTATION_MASK = 0xE380,
 };
 enum peStripFlags {
+    PE_STRIP_BLEND_MASK = 0x7,
+    PE_STRIP_MIN_LINEAR = 0x10,
+    PE_STRIP_MAG_LINEAR = 0x20,
+    PE_STRIP_LAYER_4 = 0x40,
+    PE_STRIP_WRAP_T_SHIFT = 8,
+    PE_STRIP_WRAP_MASK = 3,
     PE_STRIP_TEXTURE_LIST = 0x400,
+    PE_STRIP_RANDOM_TEXTURE = 0x800,
+    PE_STRIP_ANIMATE_TEXTURE = 0x1000,
     PE_STRIP_DUAL_COLOR = 0x2000,
+    PE_STRIP_CENTERED = 0x4000,
+    PE_STRIP_FLIP_U = 0x8000,
+    PE_STRIP_STRETCH_TEXTURE = 0x10000,
+    PE_STRIP_REVERSE_TEXTURE = 0x20000,
     PE_STRIP_SECOND_COLOR_SPLINE = 0x40000,
+    PE_STRIP_DOUBLE_BUFFER = 0x80000,
+    PE_STRIP_LAYER_0 = 0x100000,
+    PE_STRIP_LAYER_2 = 0x200000,
+    PE_STRIP_LAYER_1 = 0x400000,
+    PE_STRIP_LAYER_3 = 0x800000,
+    PE_STRIP_LAYER_5 = 0x1000000,
+    PE_STRIP_SEQUENTIAL_WIDTH = 0x2000000,
+    PE_STRIP_TEXTURE_TIME_SECONDS = 0x4000000,
+    PE_STRIP_LAYER_MASK = 0x1F00040,
 };
 enum peBankConversion {
     PE_TEXTURE_COORDINATES_FIXED = 0x08,
