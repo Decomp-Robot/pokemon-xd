@@ -91,7 +91,7 @@ s32 darkPokemonBiosGetStatusRnd(u16 darkID, u16 status)
 {
     DarkPokemon *darkPokemon = darkPokemonGetDarkPokemon(darkID);
     if (darkPokemon != 0) {
-        return darkPokemon->getStatusRnd(status);
+        return (s8)darkPokemon->getStatusRnd(status);
     }
     return 0;
 }
@@ -174,7 +174,7 @@ void darkPokemonBiosSetReliveFlag(u16 darkID)
     darkPokemon->setStatus(DARK_POKEMON_STATUS_RELIVED);
 }
 
-u8 darkPokemonBiosGetInformationFlag(u16 darkID)
+bool darkPokemonBiosGetInformationFlag(u16 darkID)
 {
     DarkPokemon *darkPokemon = darkPokemonGetDarkPokemon(darkID);
     if (darkPokemon != 0) {

@@ -25,66 +25,88 @@ enum darkPokemonSnatchWho { DARK_POKEMON_SNATCH_NONE = 0, DARK_POKEMON_SNATCH_HE
 
 class DarkPokemon {
 public:
+    u32 getWalkCount() const;
+    void setWalkCount(u32 count);
+    void setReversPattern(u8 pattern);
     u8 getReversPattern() const;
+    s32 getInitDarkPointDirect() const;
+    void setCatchBallID(u16 ballID);
+    u8 getCatchBallID() const;
     void setDarkPokemonID(u16 darkID);
     u16 getDarkPokemonID() const;
-    u8 getCatchBallID() const;
+    void setPokemonID(u16 id);
     u16 getPokemonID() const;
     bool isSnach() const;
     bool isRelive() const;
+    void setTrainerName(const u16 *name);
     const u16 *getTrainerName() const;
-    bool isUpdate() const;
-    u32 getRnd() const;
-    u16 getCatchFloorId() const;
-    u16 getOrgTrainer() const;
-    void setPoolFriendLevel(u16 level);
-    u16 getPoolFriendLevel() const;
-    void setPoolExp(u32 exp);
-    u32 getPoolExp() const;
-    void setDarkPoint(float point);
-    void setDarkPointDirect(s32 point);
-    s32 getDarkPointDirect() const;
-    s32 getInitDarkPointDirect() const;
-    float getDarkPoint() const;
-    u8 getSnatchIndex() const;
-    void setSnatchIndex(u8 index);
-    u8 isWazaNew(u8 index) const;
-    void setWazaNew(u8 index, bool value);
-    darkPokemonStatus getStatus() const;
-    void setStatus(darkPokemonStatus status);
-    void setCatchFloorId(u16 floorID);
-    void setUpdate(bool update);
-    u8 isInformation() const;
-    void setInformation(bool information);
-    void setRnd(u32 rnd);
-    void setSnatchInfoLevel(u8 level);
-    u32 getWalkCount() const;
-    void setWalkCount(u32 count);
-    s8 getStatusRnd(u8 status) const;
     void setStatusRnd(u8 status, u8 rnd);
+    u8 getStatusRnd(u8 status) const;
+    void setInformation(bool information);
+    bool isInformation() const;
+    void setUpdate(bool update);
+    bool isUpdate() const;
+    void setEscapeTime(u32 time);
+    u32 getEscapeTime() const;
+    void setSnatchTime(u32 time);
+    void setRnd(u32 rnd);
+    u32 getRnd() const;
+    void setCatchFloorId(u16 floorID);
+    u16 getCatchFloorId() const;
+    void setOrgTrainer(u16 trainer);
+    u16 getOrgTrainer() const;
+    void setSnatchIndex(u8 index);
+    u8 getSnatchIndex() const;
     void getPlace(darkPokemonWhere &where, u8 &index) const;
     void setPlace(darkPokemonWhere where, u8 index);
-    void addStatus(darkPokemonStatus status);
-    darkPokemonSnatchWho getSnatchFromWho() const;
+    void setWazaNew(u8 index, bool value);
+    bool isWazaNew(u8 index) const;
+    void setPoolFriendLevel(u16 level);
+    u16 getPoolFriendLevel() const;
+    void setPoolExp(unsigned long exp);
+    unsigned long getPoolExp() const;
+    void setDarkPointDirect(long point);
+    long getDarkPointDirect() const;
+    void setReversMode(bool mode);
+    bool isReversMode() const;
     void setSnatchFromWho(darkPokemonSnatchWho who);
+    darkPokemonSnatchWho getSnatchFromWho() const;
+    void setSnatchInfoLevel(u8 level);
+    darkPokemonStatus getStatus() const;
+    void addStatus(darkPokemonStatus status);
+    void setStatus(darkPokemonStatus status);
+    void setDarkPoint(float point);
+    float getDarkPoint() const;
+    void init();
 private:
-    u32 mStatusPlaceSnatchState; // 0x00: packed status, place, and snatch-source state.
-    u32 mPoolExpState; // 0x04: packed pool experience value.
+    u32 mStatus : 3;
+    u32 mUnused : 1;
+    u32 mSnatchInfoLevel : 3;
+    u32 mSnatchFromWho : 2;
+    u32 mReversMode : 1;
+    u32 mUpdate : 1;
+    u32 mWazaNew : 3;
+    u32 mPlace : 3;
+    u32 mPoolExp : 20;
+    u32 mCatchBallID : 4;
+    u32 mInformation : 1;
     u8 _08[3];
-    u8 mStatusRandom[6]; // 0x0B: status random data.
-    u8 mPlaceIndex; // 0x11: party/place index.
+    u8 mStatusRandom[6];
+    u8 mPlaceIndex;
     u8 _12;
-    u8 mSnatchIndex; // 0x13: snatch party index.
-    u16 mOriginalTrainerId; // 0x14
-    u16 mCatchFloorId; // 0x16: floor where it was caught.
-    u16 mPoolFriendLevel; // 0x18
-    u16 mPokemonID; // 0x1A: associated Pokemon data ID.
-    u32 mRandom; // 0x1C
-    u32 mSnatchTimeState; // 0x20: escape/snatch timing state.
-    s32 mDarkPoint; // 0x24
-    u16 mTrainerName[11]; // 0x28: ten characters and terminator.
-    u16 mDarkPokemonID; // 0x3E: shadow Pokemon id in the shadow data table.
-    u8 _40[8];
+    u8 mSnatchIndex;
+    u16 mOrgTrainer;
+    u16 mCatchFloorId;
+    u16 mPoolFriendLevel;
+    u16 mPokemonID;
+    u32 mRandom;
+    u32 mSnatchTimeState;
+    s32 mDarkPoint;
+    u16 mTrainerName[11];
+    u16 mDarkPokemonID;
+    u8 mReversPattern;
+    u8 _41[3];
+    u32 mWalkCount;
 };
 #else
 typedef struct DarkPokemon DarkPokemon;
@@ -109,7 +131,7 @@ s32 darkPokemonGetReliveNum(void);
 u8 darkPokemonBiosGetReliveFlag(u16 darkID);
 u16 darkPokemonBiosGetSteps(u16 darkID);
 void darkPokemonBiosSetSteps(u16 darkID, u16 steps);
-u8 darkPokemonBiosGetInformationFlag(u16 darkID);
+bool darkPokemonBiosGetInformationFlag(u16 darkID);
 void darkPokemonBiosSetInfomation(u16 darkID, u16 information);
 void darkPokemonBiosSetInformationFlag(u16 darkID, bool information);
 u16 darkPokemonListBiosGetPokemonID(u16 darkID);
