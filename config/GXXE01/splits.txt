@@ -2225,6 +2225,16 @@ game/app/menu/menuFace.cpp:
 	.bss        start:0x80445918 end:0x80445A08
 	.sbss       start:0x804EB078 end:0x804EB088
 
+game/app/menu/menuModel.cpp:
+	.text       start:0x801121E8 end:0x801145EC
+	.ctors      start:0x802E9FBC end:0x802E9FC0
+	.rodata     start:0x802F2F20 end:0x802F2F80
+	.data       start:0x803FC038 end:0x803FC058
+	.bss        start:0x80445A08 end:0x80445A68
+	.sdata      start:0x804E8358 end:0x804E8378
+	.sbss       start:0x804EB088 end:0x804EB098
+	.sdata2     start:0x804ED690 end:0x804ED6E0
+
 game/app/menu/menuOffScreen.cpp:
 	.text       start:0x801145EC end:0x80114D30
 	.sdata      start:0x804E8378 end:0x804E8380

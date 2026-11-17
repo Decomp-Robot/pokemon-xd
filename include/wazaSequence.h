@@ -62,6 +62,8 @@ void Sequence_SetVisibility(NullSequence *sequence, bool visible);
 void Sequence_SetPosition(NullSequence *sequence, GSvec *position);
 void Sequence_SetRotation(NullSequence *sequence, GSvec *rotation);
 void Sequence_SetScale(NullSequence *sequence, GSvec *scale);
+bool wazaSequenceSysIsValidWaza(WazaSequence *sequence);
+void wazaSequenceSysSetVisibilityAll(bool visible);
 void WazaSequence_Start(WazaSequence *sequence, int mode);
 bool WazaSequence_IsActive(WazaSequence *sequence);
 void WazaSequence_Stop(WazaSequence *sequence);

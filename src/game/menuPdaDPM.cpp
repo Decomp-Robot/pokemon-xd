@@ -97,7 +97,7 @@ void menuPdaDPM::Release()
 void menuPdaDPM::LoadPokemon(CURSOR *cursor)
 {
     Pokemon *pokemon = GetPokemonPointer(cursor->y + cursor->x);
-    menuModelLoadPokemon(&mModel, pokemon);
+    menuModelLoad(&mModel, pokemon);
 }
 
 void menuPdaDPM::Init(CURSOR *cursor)

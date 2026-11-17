@@ -185,7 +185,7 @@ public:
     {
         for (long player = 0; player < PLAYER_COUNT; ++player) {
             menuModelInit(&mPokemonModels[player], item->mWidth, item->mHeight);
-            menuModelLoadPokemon(&mPokemonModels[player], getPokemon(mCursor[player]));
+            menuModelLoad(&mPokemonModels[player], getPokemon(mCursor[player]));
             menuModelCheck(&mPokemonModels[player], 1);
         }
     }
@@ -201,7 +201,7 @@ public:
         tagMENU_ITEM_DATA* item = menuPtItemGetByMenuIdAndItemId(menu, itemID, 0);
         for (long player = 0; player < PLAYER_COUNT; ++player) {
             menuModelInit(&mPokemonModels[player], item->mWidth, item->mHeight);
-            menuModelLoadPokemon(&mPokemonModels[player], getPokemon(mCursor[player]));
+            menuModelLoad(&mPokemonModels[player], getPokemon(mCursor[player]));
             menuModelCheck(&mPokemonModels[player], 1);
         }
     }

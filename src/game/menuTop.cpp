@@ -728,7 +728,7 @@ void _menuTopExitPokemon(void)
 void _menuTopLoadPokemon(void)
 {
     s32 heroObjectID = heroGetObjID(1);
-    menuModelLoad(&_menuTopMenuModel, heroObjectID);
+    menuModelLoadObject(&_menuTopMenuModel, heroObjectID);
     menuModelCheck(&_menuTopMenuModel, 1);
 
     PeopleInfo *peopleInfo = peopleInfoBiosGetPtr(0x16C90400);

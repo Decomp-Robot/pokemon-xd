@@ -49,6 +49,14 @@ extern PokemonData *pokemon_data;
 /* Count of entries in the pokemon nature (seikaku) table. */
 extern u32 *pokemon_seikaku_data_number;
 
+typedef struct PokemonMenuAnimationEntry {
+    u8 animationIndex;
+    u16 species;
+} PokemonMenuAnimationEntry;
+
+extern u32 *pokemon_menu_animation_number;
+extern PokemonMenuAnimationEntry *pokemon_menu_animation;
+
 struct SHOP_DATA {
     u8 mMessageSet;
     u8 mShopType;

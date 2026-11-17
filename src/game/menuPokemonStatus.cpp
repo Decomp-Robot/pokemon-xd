@@ -1298,7 +1298,7 @@ void menuPokemonStatusDispNature(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 
         menuModelSetSize(&_menuModel, item->mX, item->mY,
                          item->mWidth, item->mHeight);
-        if (menuModelSetupPokemon(&_menuModel, pokemon) != 1)
+        if (menuModelComparePokemon(&_menuModel, pokemon) != 1)
             return;
         if (menuModelCheck(&_menuModel, 0) == 0)
             menuModelAdjustCamera(&_menuModel);
@@ -1594,8 +1594,8 @@ void menuPokemonStatusCursor(tagWINDOW_WORK *window)
             break;
         if (pokemon != 0) {
             menuPlaySe(window->mMenuID, 1);
-            if (menuModelSetupPokemon(&_menuModel, pokemon) == 0)
-                menuModelLoadPokemon(&_menuModel, pokemon);
+            if (menuModelComparePokemon(&_menuModel, pokemon) == 0)
+                menuModelLoad(&_menuModel, pokemon);
         }
         _menuStatus.mPokemon = pokemon;
         for (i = 0; i < 4; i++) {
@@ -1818,7 +1818,7 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
     item = menuItemBiosGetPtr(MENU_POKEMON_STATUS_MENU_HEAD, MENU_POKEMON_STATUS_ITEM_MODEL);
     menuModelInit(&_menuModel, item->mWidth, item->mHeight);
     menuModelFree(&_menuModel);
-    menuModelLoadPokemon(&_menuModel, pokemon);
+    menuModelLoad(&_menuModel, pokemon);
 
     if (_menuStatus.mFlags & MENU_POKEMON_STATUS_FLAG_FLOOR_FADE) {
         fadeCheck(1);

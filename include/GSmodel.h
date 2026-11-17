@@ -170,6 +170,7 @@ void GSmodelDestroyLinkedParticles(_GSmodel *model);
 void GSmodelFree(_GSmodel* model);
 void GSmodelAttachToGSpart(_GSmodel* model, GSpart* part, GSattachMode mode, u8 inheritScale, u8 keepTransform);
 #endif
+u16 GSmodelCenterNull(_GSmodel *model);
 GSbound *GSmodelGetBound(_GSmodel *model);
 void GSmodelAddPosition(GSmodel *model, GSvec *position);
 void GSmodelRecalculateBound(GSmodel *model);

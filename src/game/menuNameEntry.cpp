@@ -1235,7 +1235,7 @@ int menuNameEntryBackDrawHumanModel(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
         menuModelAdjustCamera(&MenuModel);
         menuModelSetSize(&MenuModel, pos.mX, pos.mY, size.mX, size.mY);
-        menuModelSetFlag(&MenuModel, 0);
+        menuModelSetClip(&MenuModel, 0);
         menuModelSetAngle(&MenuModel, angle);
         menuModelSetZoom(&MenuModel, 1.4f);
         menuModelSetOffset(&MenuModel, offset);
@@ -1267,7 +1267,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         offset[0] = 0.0f;
         offset[1] = 0.0f;
         offset[2] = 0.0f;
-        switch (MenuModel.mSpecies) {
+        switch (MenuModel.current.id.pokemon.pkxID) {
         case 0x28:
         case 0x3E:
         case 0x47:
@@ -1302,7 +1302,7 @@ int menuNameEntryBackDrawPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
             menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
             menuModelAdjustCamera(&MenuModel);
             menuModelSetSize(&MenuModel, pos.mX, pos.mY, size.mX, size.mY);
-            menuModelSetFlag(&MenuModel, 0);
+            menuModelSetClip(&MenuModel, 0);
             menuModelSetAngle(&MenuModel, angle);
             menuModelSetZoom(&MenuModel, zoom);
             menuModelSetOffset(&MenuModel, offset);
@@ -1466,7 +1466,7 @@ void loadModel(long dataID, MENU_MODEL *model, int type, int param)
         u8 looping;
         PeopleInfo *info;
 
-        menuModelLoad(model, ids[type]);
+        menuModelLoadObject(model, ids[type]);
         info = peopleInfoBiosGetPtr(ids[type]);
         peopleInfoBiosGetMotion(info, 1, &motion, &looping);
         menuModelSetMotion(model, motion);
@@ -1476,21 +1476,21 @@ void loadModel(long dataID, MENU_MODEL *model, int type, int param)
         Pokemon *pokemon = (Pokemon *)heroGetStatus(0, HERO_STATUS_POKEMON, param);
 
         if (pokemonCheckValid(pokemon)) {
-            menuModelLoadPokemon(model, pokemon);
+            menuModelLoad(model, pokemon);
         }
         break;
     }
     case NAME_ENTRY_MODE_POKEMON:
-        menuModelLoadPokemon(model, (Pokemon *)param);
+        menuModelLoad(model, (Pokemon *)param);
         break;
     case NAME_ENTRY_MODE_PC_BOX:
-        menuModelLoad(model, ids[type]);
+        menuModelLoadObject(model, ids[type]);
         break;
     case NAME_ENTRY_MODE_FIGHT_POKEMON: {
         Pokemon *pokemon = fightFloorGetDefPokemonPtr(0);
 
         if (pokemonCheckValid(pokemon)) {
-            menuModelLoadPokemon(model, pokemon);
+            menuModelLoad(model, pokemon);
         }
         break;
     }

@@ -122,6 +122,7 @@ struct Pokemon {
     u16 getItemDataId() const;
     bool isLegend() const;
     bool isDarkPokemon() const;
+    unsigned long getRnd() const;
     unsigned long getCatchTrainerRnd() const;
     void setCatchTrainerRnd(unsigned long rnd);
     u16 getPara1Amari() const;
@@ -137,12 +138,18 @@ enum POKEMON_FRIEND_FILTER_ID {
 
 // Species the game singles out wherever it inspects a pokemon record.
 enum POKEMON_SPECIES_ID {
+    POKEMON_SPECIES_RAPIDASH = 78,
+    POKEMON_SPECIES_GYARADOS = 130,
     POKEMON_SPECIES_VAPOREON = 134,
     POKEMON_SPECIES_JOLTEON = 135,
+    POKEMON_SPECIES_ARTICUNO = 144,
+    POKEMON_SPECIES_MEWTWO = 150,
     POKEMON_SPECIES_MEW = 151,
     POKEMON_SPECIES_PICHU = 172,
     POKEMON_SPECIES_TOGEPI = 175,
     POKEMON_SPECIES_ANNON = 201,
+    POKEMON_SPECIES_STEELIX = 208,
+    POKEMON_SPECIES_RAIKOU = 243,
     POKEMON_SPECIES_RUGIA = 249,
     POKEMON_SPECIES_HOUOU = 250,
     POKEMON_SPECIES_SHEDINJA = 303,
@@ -274,6 +281,7 @@ void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
    species halfword (zero for an empty slot); POKEMON_STATUS_MOVE reads the
    move ID of the slot the fourth argument selects. */
 enum PokemonStatusQuery {
+    POKEMON_QUERY_PKX_DATA_ID = 102,
     POKEMON_STATUS_SPECIES = 110,
     POKEMON_STATUS_MOVE = 127,
     POKEMON_QUERY_LEVEL = 122,
