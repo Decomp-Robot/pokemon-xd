@@ -85,6 +85,7 @@ public:
 
     // Map state.
     u8 getFollowerID();
+    void setFollowerID(u8 followerID);
     u8 getFollowerModelLevel();
     unsigned long getFollowerGrpID();
     unsigned long getFollowerResID();

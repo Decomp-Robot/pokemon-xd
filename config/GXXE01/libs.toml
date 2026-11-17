@@ -2968,6 +2968,11 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/memcard/savedata.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/app/pokemon/pokemonBios.cpp"
 completed = true
 extra_cflags = ["-O4,s", "-inline noauto"]

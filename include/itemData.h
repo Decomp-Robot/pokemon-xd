@@ -30,6 +30,8 @@ enum ItemID {
     ITEM_PREMIER_BALL = 12,
     ITEM_POTION = 13,
     ITEM_HYPER_POTION = 21,
+    ITEM_FULL_HEAL = 23,
+    ITEM_REVIVE = 24,
 
     // Berries.
     ITEM_CHERI_BERRY = 133,

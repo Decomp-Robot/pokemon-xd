@@ -138,8 +138,11 @@ enum POKEMON_FRIEND_FILTER_ID {
 
 // Species the game singles out wherever it inspects a pokemon record.
 enum POKEMON_SPECIES_ID {
+    POKEMON_SPECIES_PARASECT = 47,
     POKEMON_SPECIES_RAPIDASH = 78,
+    POKEMON_SPECIES_ELECTRODE = 101,
     POKEMON_SPECIES_GYARADOS = 130,
+    POKEMON_SPECIES_EEVEE = 133,
     POKEMON_SPECIES_VAPOREON = 134,
     POKEMON_SPECIES_JOLTEON = 135,
     POKEMON_SPECIES_ARTICUNO = 144,
@@ -153,8 +156,10 @@ enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_RUGIA = 249,
     POKEMON_SPECIES_HOUOU = 250,
     POKEMON_SPECIES_SHEDINJA = 303,
+    POKEMON_SPECIES_SPHEAL = 341,
     POKEMON_SPECIES_PLUSLE = 353,
     POKEMON_SPECIES_MINUN = 354,
+    POKEMON_SPECIES_KIRLIA = 393,
     POKEMON_SPECIES_DEOXYS = 410,
     POKEMON_SPECIES_USOHACHI = 413,
     POKEMON_SPECIES_GONBE = 414
@@ -309,6 +314,13 @@ enum PokemonSex {
     POKEMON_SEX_NONE = 2,
 };
 
+// Natures (seikaku) of the nature table.
+enum POKEMON_NATURE_ID {
+    POKEMON_NATURE_HARDY = 0,
+    POKEMON_NATURE_SERIOUS = 12,
+    POKEMON_NATURE_BASHFUL = 18
+};
+
 enum PokemonAilment {
     POKEMON_CONDITION_NONE = 0,
     POKEMON_CONDITION_POISON = 3,
@@ -336,8 +348,8 @@ u16 battlePokemonStatusGetCurrentHp(Pokemon *pokemon);
 // The field ID may select party data or deployed fight-record data.
 s32 pokemonGetStatus(void *record, u16 speciesId, u16 field, u16 elementIndex);
 void pokemonSetStatus(void *record, u16 speciesId, u16 fieldID, u16 index, unsigned long value);
-void pokemon_SetOriginalTrainerRandom(Pokemon *pokemon, u32 rnd);
-void pokemon_SetPersonalityRandom(Pokemon *pokemon, u32 rnd);
+void pokemon_SetCatchTrainerRnd(Pokemon *pokemon, u32 rnd);
+void pokemon_SetRnd(Pokemon *pokemon, u32 rnd);
 u8 pokemonIsDarkPokemon(Pokemon *pokemon);
 u8 pokemonIsJoutaiNormal(Pokemon *pokemon);
 u16 pokemonGetJoutaiMenuSpriteId(Pokemon *pokemon);
@@ -405,6 +417,13 @@ u8 pokemon_GetSeikaku(Pokemon *pokemon);
 // Total experience the pokemon needs to reach its current level.
 s32 pokemonGetNowLevelToExp(Pokemon *pokemon);
 s32 pokemonAdjustValueBySeikaku(u8 nature, s32 fieldID, s32 value);
+// Rarity constraint for a generated personality; retries are bounded.
+enum POKEMON_RARE_FIT {
+    POKEMON_RARE_FIT_ANY = -1,      // any rarity the roll produces.
+    POKEMON_RARE_FIT_ORDINARY = 0,  // reject the rare (shiny) personalities.
+    POKEMON_RARE_FIT_RARE = 1       // require a rare personality.
+};
+
 u32 pokemonCreateRnd(void);
 u32 pokemonCreateRndFit(Pokemon *pokemon, s8 sex, s8 nature, s8 rare, u32 trainerRnd);
 void *pokemonCreateSequence(struct FightPokemon *pokemon);
