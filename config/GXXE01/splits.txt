@@ -3573,6 +3573,10 @@ game/GSAPI/GSsysdolphin_baselib/baselib/aobj.c:
 	.sbss       start:0x804EBB18 end:0x804EBB28
 	.sdata2     start:0x804EF388 end:0x804EF3A0
 
+game/app/flashmenu/flashmenu.cpp:
+	.text       start:0x8026F478 end:0x8026F684
+	.sdata2     start:0x804EF3A8 end:0x804EF3B8
+
 game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x802723FC end:0x80272BA4
 	.sdata2     start:0x804EF3D0 end:0x804EF3F8
