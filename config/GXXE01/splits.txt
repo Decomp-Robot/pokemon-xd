@@ -3216,6 +3216,10 @@ game/app/mail/mailMain.cpp:
 game/app/mail/mail.cpp:
 	.text       start:0x801CFCA8 end:0x801D0230
 
+game/app/wazaSequence/wazaSequence.cpp:
+	.text       start:0x801D1770 end:0x801D1AD4
+	.data       start:0x8040FFC8 end:0x80410008
+
 game/app/wazaSequence/nullSequence.cpp:
 	.text       start:0x801DA000 end:0x801DA0B0
 
