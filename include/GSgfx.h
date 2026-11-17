@@ -466,6 +466,7 @@ public:
                          GSgfxLayerPass toPass, GSgfxLayerOffset offset);
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool flag, u8* image);
+    void GetFifoSize(unsigned long *pass0Size, unsigned long *pass1Size);
     void textureCopy(GSgfxLayerPass pass, GStexture *texture, bool flag, u8 *image,
                      bool clearColor, bool clearAlpha, bool clearDepth);
     GStexture *GetTextureCopy(void);
@@ -1075,6 +1076,8 @@ extern "C" {
 // and param until it returns zero.
 s32 GSgfxBeginBackFBCapture(GStexture *texture, u8 (*callback)(GStexture *, u32, void *),
                             void *param);
+s32 GSgfxEndBackFBCapture(GStexture *texture);
+
 }
 
 
@@ -1125,6 +1128,7 @@ GSgfxLayer *GSgfxLayerPrerender(void);
 void GSgfxLayerRenderStats(GSgfxLayer *layer);
 void GSgfxLayerInvalidateAll(void);
 void GSgfxLayerBuildRenderList(void);
+void GSgfxBackFBInit(void);
 void GSgfxBackFBDoFrame(GSgfxLayer *layer);
 void GSgfxResetUpdate(void);
 void GSgfxSSUpdate(void);

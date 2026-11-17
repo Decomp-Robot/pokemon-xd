@@ -803,6 +803,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/GSAPI/GSgfx/backfb.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/GSAPI/GSgfx/render.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-inline auto,deferred"]
