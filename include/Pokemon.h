@@ -237,6 +237,7 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_POOL_FRIEND = 199, // friendship pooled for the pokemon while it is dark.
     POKEMON_STATUS_FIELD_REVERSE_MODE = 200,
     POKEMON_STATUS_FIELD_FIGHT_TRAINER_INDEX = 201, // fight trainer slot that owns the pokemon.
+    POKEMON_STATUS_FIELD_FIGHT_JOUTAI = 205, // status-effect record of the party pokemon.
     POKEMON_STATUS_FIELD_LEVEL_UP_FLAG = 208, // fight record: set once the pokemon has gained a level.
     POKEMON_STATUS_FIELD_IS_HIT = 224, // result of the current Pokemon's move hit check.
     POKEMON_STATUS_FIELD_ATTACK_STAGE = 230,
@@ -349,6 +350,7 @@ s8 pokemonGetKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 void pokemonSetCountAsJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s16 count);
 void pokemonSetNowKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s8 nowKaisuu);
 void pokemonSetKaisuuJoutaiDataId(Pokemon *pokemon, u16 joutaiID, s8 kaisuu);
+void pokemonCopyJoutaiDataId(Pokemon *destination, Pokemon *source, u16 dataId);
 void pokemonWriteJoutaiDataId(Pokemon *pokemon, u16 joutaiID, u16 targetID);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 // Whether the status may be written; a JoutaiWriteResult value.

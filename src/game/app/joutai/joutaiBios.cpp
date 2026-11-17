@@ -96,7 +96,7 @@ void joutaiBiosSetBuff(_JOUTAI* joutai, u32 buff)
     joutai->buff = buff;
 }
 
-void joutaiBiosSetNowKaisuu(_JOUTAI* joutai, u8 nowKaisuu)
+void joutaiBiosSetNowKaisuu(_JOUTAI* joutai, s8 nowKaisuu)
 {
     if (joutai == 0) {
         return;
@@ -128,7 +128,7 @@ u8 joutaiBiosGetCount(_JOUTAI* joutai)
     return joutai->count;
 }
 
-s32 joutaiBiosGetNowKaisuu(_JOUTAI* joutai)
+s8 joutaiBiosGetNowKaisuu(_JOUTAI* joutai)
 {
     if (joutai == 0) {
         return 0;
@@ -136,7 +136,7 @@ s32 joutaiBiosGetNowKaisuu(_JOUTAI* joutai)
     return joutai->nowKaisuu;
 }
 
-s32 joutaiBiosGetKaisuu(_JOUTAI* joutai)
+s8 joutaiBiosGetKaisuu(_JOUTAI* joutai)
 {
     if (joutai == 0) {
         return 0;

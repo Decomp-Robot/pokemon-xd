@@ -35,10 +35,10 @@ u8 fightSideCheckWriteJoutaiDataId(void *side, u16 dataId);
 void fightSideWriteJoutaiDataId(void *side, u16 dataId, u16 targetId);
 FIGHT_TRAINER *fightSideGetValidFightTrainerPtr(FIGHT_SIDE *side, u16 index);
 u16 fightSideGetJoutaiUserFightTargetId(FIGHT_SIDE *side, u16 dataId);
-void fightSideSetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId, u8 nowKaisuu);
-s32 fightSideGetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
-s32 fightSideGetKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
-s32 fightSideGetCountAsJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
+void fightSideSetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId, s8 nowKaisuu);
+s8 fightSideGetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
+s8 fightSideGetKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
+s16 fightSideGetCountAsJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
 u8 fightSideIsJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
 void fightSideInitJoutaiDataId(FIGHT_SIDE *side, u16 dataId);
 u32 fightSideGetHikaeFightPokemonNum(

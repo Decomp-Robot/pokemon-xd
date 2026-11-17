@@ -3003,6 +3003,11 @@ completed = true
 extra_cflags = ["-O4,s"]
 
 [[lib.object]]
+name = "game/app/pokemon/fightPokemon.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
+[[lib.object]]
 name = "game/app/pokemon/fightPokemonBios.cpp"
 completed = true
 

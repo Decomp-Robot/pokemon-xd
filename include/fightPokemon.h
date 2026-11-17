@@ -36,6 +36,22 @@ struct FightPokemon {
 };
 
 Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);
+void fightPokemonSetBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId, u32 buff);
+u32 fightPokemonGetBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+void fightPokemonCopyJoutaiDataId(FightPokemon *destination, FightPokemon *source, u16 dataId);
+void fightPokemonSetIdBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId, u16 idBuff);
+u16 fightPokemonGetIdBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+u16 fightPokemonGetUserFightTargetIdJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+void fightPokemonSetKaisuuJoutaiDataId(FightPokemon *pokemon, u16 dataId, s8 kaisuu);
+void fightPokemonSetNowKaisuuJoutaiDataId(FightPokemon *pokemon, u16 dataId, s8 nowKaisuu);
+s8 fightPokemonGetNowKaisuuJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+s8 fightPokemonGetKaisuuJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+void fightPokemonSetCountAsJoutaiDataId(FightPokemon *pokemon, u16 dataId, s16 count);
+s16 fightPokemonGetCountAsJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+void fightPokemonWriteJoutaiDataId(FightPokemon *pokemon, u16 dataId, u16 targetId);
+u8 fightPokemonCheckWriteJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+u8 fightPokemonIsJoutaiDataId(FightPokemon *pokemon, u16 dataId);
+void fightPokemonInitJoutaiDataId(FightPokemon *pokemon, u16 dataId);
 Pokemon *fightOutPokemonGetPokemonPtr(FightOutPokemon *pokemon);
 u8 figthPokemonGetLevel(FightPokemon *pokemon);
 u8 fightPokemonCheckValid(FightPokemon *pokemon);

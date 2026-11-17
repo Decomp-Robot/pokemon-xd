@@ -44,14 +44,14 @@ u16 fightSideGetJoutaiUserFightTargetId(FIGHT_SIDE *side, u16 dataId)
     return joutaiGetUserFightTargetId(side, dataId);
 }
 
-void fightSideSetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId, u8 nowKaisuu)
+void fightSideSetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId, s8 nowKaisuu)
 {
     if (joutaiDataBiosGetStatus(dataId) == FIGHT_SIDE_STATUS_JOUTAI_PTR) {
         joutaiSetNowKaisuuJoutaiDataId(side, dataId, nowKaisuu);
     }
 }
 
-s32 fightSideGetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
+s8 fightSideGetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
 {
     if (joutaiDataBiosGetStatus(dataId) != FIGHT_SIDE_STATUS_JOUTAI_PTR) {
         return -1;
@@ -59,7 +59,7 @@ s32 fightSideGetNowKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
     return joutaiGetNowKaisuuJoutaiDataId(side, dataId);
 }
 
-s32 fightSideGetKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
+s8 fightSideGetKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
 {
     if (joutaiDataBiosGetStatus(dataId) != FIGHT_SIDE_STATUS_JOUTAI_PTR) {
         return -1;
@@ -67,7 +67,7 @@ s32 fightSideGetKaisuuJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
     return joutaiGetKaisuuJoutaiDataId(side, dataId);
 }
 
-s32 fightSideGetCountAsJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
+s16 fightSideGetCountAsJoutaiDataId(FIGHT_SIDE *side, u16 dataId)
 {
     if (joutaiDataBiosGetStatus(dataId) != FIGHT_SIDE_STATUS_JOUTAI_PTR) {
         return -1;

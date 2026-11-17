@@ -162,7 +162,7 @@ u16 joutaiGetUserFightTargetId(void* status, u16 dataId)
     return joutaiBiosGetUserFightTargetId(joutai);
 }
 
-void joutaiSetKaisuuJoutaiDataId(void* status, u16 dataId, u8 kaisuu)
+void joutaiSetKaisuuJoutaiDataId(void* status, u16 dataId, s8 kaisuu)
 {
     if (dataId != 0 && joutaiIsJoutaiDataId(status, dataId)) {
         _JOUTAI* joutai = _joutaiGetTargetJoutaiPtrAsJoutaiDataId(status, dataId);
@@ -172,7 +172,7 @@ void joutaiSetKaisuuJoutaiDataId(void* status, u16 dataId, u8 kaisuu)
     }
 }
 
-void joutaiSetNowKaisuuJoutaiDataId(void* status, u16 dataId, u8 nowKaisuu)
+void joutaiSetNowKaisuuJoutaiDataId(void* status, u16 dataId, s8 nowKaisuu)
 {
     if (dataId != 0 && joutaiIsJoutaiDataId(status, dataId)) {
         _JOUTAI* joutai = _joutaiGetTargetJoutaiPtrAsJoutaiDataId(status, dataId);
@@ -182,7 +182,7 @@ void joutaiSetNowKaisuuJoutaiDataId(void* status, u16 dataId, u8 nowKaisuu)
     }
 }
 
-s32 joutaiGetNowKaisuuJoutaiDataId(void* status, u16 dataId)
+s8 joutaiGetNowKaisuuJoutaiDataId(void* status, u16 dataId)
 {
     if (dataId == 0) {
         return -1;
@@ -197,7 +197,7 @@ s32 joutaiGetNowKaisuuJoutaiDataId(void* status, u16 dataId)
     return joutaiBiosGetNowKaisuu(joutai);
 }
 
-s32 joutaiGetKaisuuJoutaiDataId(void* status, u16 dataId)
+s8 joutaiGetKaisuuJoutaiDataId(void* status, u16 dataId)
 {
     if (dataId == 0) {
         return -1;
@@ -212,7 +212,7 @@ s32 joutaiGetKaisuuJoutaiDataId(void* status, u16 dataId)
     return joutaiBiosGetKaisuu(joutai);
 }
 
-void joutaiSetCountAsJoutaiDataId(void* status, u16 dataId, u8 count)
+void joutaiSetCountAsJoutaiDataId(void* status, u16 dataId, s16 count)
 {
     if (dataId != 0 && joutaiIsJoutaiDataId(status, dataId)) {
         _JOUTAI* joutai = _joutaiGetTargetJoutaiPtrAsJoutaiDataId(status, dataId);
@@ -222,7 +222,7 @@ void joutaiSetCountAsJoutaiDataId(void* status, u16 dataId, u8 count)
     }
 }
 
-s32 joutaiGetCountAsJoutaiDataId(void* status, u16 dataId)
+s16 joutaiGetCountAsJoutaiDataId(void* status, u16 dataId)
 {
     if (dataId == 0) {
         return -1;
