@@ -22,6 +22,7 @@ struct FightOutPokemonEnemy {
 struct FightOutPokemon {
 #ifdef __cplusplus
     void setComboFuncId(u8 comboFuncId);
+    FightPokemon *getFightPokemonPtr();
 #endif
     FightPokemon *mOriginalPokemon;
     FightPokemon *mCurrentPokemon;

@@ -64,6 +64,8 @@ u8 fightTrainerAiIsFightOutPokemonNokoriHp(FIGHT_TRAINER *trainer, FightOutPokem
     f32 rate, s8 comparison);
 
 bool fightTrainerAiIsFightOutPokemonAvoidCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+bool fightTrainerAiIsFightOutPokemonAvoidCntHikui(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightOutPokemonLastUseWazaDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 bool fightTrainerAiIsFightOutPokemonNimblenessCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 bool fightTrainerAiIsFightOutPokemonSpeDefCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 bool fightTrainerAiIsFightOutPokemonSpeAtkCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
@@ -859,6 +861,7 @@ u8 fightTrainerAiCheckSimerike(FIGHT_TRAINER *trainer);
 u8 fightTrainerAiCheckSawagu(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiIsFightOutPokemonJoutaiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 joutaiDataId);
 u8 fightTrainerAiIsFightOutPokemonTokuseiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 tokuseiDataId);
+u8 fightTrainerAiIsFightPokemonTokuseiDataId(FIGHT_TRAINER *trainer, FightPokemon *pokemon, u16 tokuseiDataId);
 
 #ifdef __cplusplus
 }

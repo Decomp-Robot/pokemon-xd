@@ -44,8 +44,31 @@ u8 fightAiCombo_null(FIGHT_TRAINER *trainer, FightOutPokemon **allies,
     AI_ALLWAZA_VALID_TBL *output, u8 activation);
 s8 fightAi_getAnotherPokeNo(u8 pokeNo);
 
+u8 fightAiCombo_Batontatti_Zikoanzi_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount);
+u8 fightAiCombo_Batontatti_Nekodamasi_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount);
+u8 fightAiCombo_Sukirusuwappu_Irekae_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount);
+u8 fightAiCombo_Amaikaori_Hubuki_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount);
+u8 fightAiCombo_null_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, FightOutPokemon **enemies,
+    u16 enemyCount);
+
+s16 fightTrainerAiSelectIrekaeDasuFightPokemon(FIGHT_TRAINER *trainer, u8 fightType, u8 selectType, FightOutPokemon *pokemon);
+
+u8 fightAi_CanMoveAppointWaza(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 wazaDataId);
+u8 fightAi_CreateFightActionAttckWaza(FightOutPokemon *pokemon, FightOutPokemon *target,
+    u16 wazaDataId, s16 wazaBanme);
+u8 fightAi_CreateFightActionAttckIrekae(FightOutPokemon *pokemon, s16 pokemonIndex);
+FightOutPokemon *fightAi_SelectDefPoke(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount, u16 wazaDataId, s8 wazaBanme);
+
+
 #ifdef __cplusplus
 }
 #endif
+
+s8 _getWazaMaxValueIndex(u8 *valueAry, s16 *banmeAry, u16 wazaCount, u8 comparisonValue);
 
 #endif
