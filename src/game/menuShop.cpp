@@ -1,11 +1,16 @@
 #include <relglobal.h>
 #include <types.h>
 #include <GSgfxVideo.h>
+#include <GSmsg.h>
 #include <GSthread.h>
 #include <hero.h>
 #include <item.h>
 #include <itemDataBios.h>
 #include <menuPocketTool.h>
+#include <menu.h>
+#include <winSprite.h>
+#include <winSeq.h>
+#include <window.h>
 #include <menuIds.h>
 #include <msgctrl.h>
 #include <stdarg.h>
@@ -359,4 +364,165 @@ void openMsgWin(int shopID, MENU_SHOP_MSG_CODE messageCode, int valueCode, ...)
     va_end(args);
     winMsgOpenWithSE(WINMSG_WINDOW_MENU, msgID, true, false, soundEffect);
     winMsgClose(true);
+}
+
+// Menu items of the two digit quantity window and the matching cursor sprites.
+enum ShopNumItemID {
+    SHOP_NUM_ITEM_DIGIT_TENS = 148,
+    SHOP_NUM_ITEM_DIGIT_ONES = 422,
+    SHOP_NUM_ITEM_CURSOR_TENS = 146,
+    SHOP_NUM_ITEM_CURSOR_ONES = 147
+};
+enum { SHOP_NUM_DIGIT_COUNT = 2 };
+
+// Messages the quantity window prints.
+enum ShopNumMessageID {
+    SHOP_NUM_MESSAGE_DIGIT = 17008,
+    SHOP_NUM_MESSAGE_PRICE = 17231,
+    SHOP_NUM_MESSAGE_COUPON_PRICE = 17241
+};
+
+enum { SHOP_NUM_MENU_ID = 61 };
+enum ShopNumSequenceID {
+    SHOP_NUM_SEQUENCE_OPEN = 112,
+    SHOP_NUM_SEQUENCE_CLOSE = 116
+};
+enum ShopNumSoundID {
+    SHOP_NUM_SOUND_CURSOR = 16,
+    SHOP_NUM_SOUND_UNUSED_CURSOR = 1101
+};
+
+// Argument block the quantity window receives from inputBuyNum.
+struct ShopNumWinArg {
+    int mMax;             // highest quantity the player may enter.
+    int mUnitPrice;       // price of one item.
+    int *mValue;          // quantity being edited, shared with inputBuyNum.
+    int mCouponPrice;     // nonzero when the price is paid in coupons.
+};
+
+// Menu item IDs of each quantity digit and of the cursor that selects it.
+struct ShopNumWinItem {
+    ShopNumItemID mDigitItemID;
+    ShopNumItemID mCursorItemID;
+};
+
+extern const ShopNumWinItem NumWinItem[SHOP_NUM_DIGIT_COUNT] = {
+    { SHOP_NUM_ITEM_DIGIT_TENS, SHOP_NUM_ITEM_CURSOR_TENS },
+    { SHOP_NUM_ITEM_DIGIT_ONES, SHOP_NUM_ITEM_CURSOR_ONES }
+};
+
+extern "C" int menuPocketInputNumber(tagWINDOW_WORK *window, int value, int max,
+                                     u16 repeatKeys, int digits, int sound,
+                                     int unusedCursorSound);
+
+// Prints the total price, right-aligned in the price sprite. Money and coupon
+// exchanges use different message templates.
+extern "C" s32 menuShopNumDrawPriceText(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    ShopNumWinArg *arg = (ShopNumWinArg *)window->mArg;
+    msgctrlSetValue(MSG_VAR_KANE, arg->mUnitPrice * *arg->mValue);
+    ShopNumMessageID messageID = arg->mCouponPrice ? SHOP_NUM_MESSAGE_COUPON_PRICE : SHOP_NUM_MESSAGE_PRICE;
+    int width = GSmsgGetMessageSize(messageID) >> 16;
+    GSmsgPrint2(window->mLayerID, sprite->mWidth - width, 0, -1, messageID);
+    return 0;
+}
+
+// Prints the digit of the current quantity that this sprite represents.
+extern "C" s32 menuShopNumDrawBuyNum(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    ShopNumWinArg *arg = (ShopNumWinArg *)window->mArg;
+    const ShopNumWinItem *item = NumWinItem;
+    s32 index;
+    for (index = 0; index < SHOP_NUM_DIGIT_COUNT; index++, item++) {
+        if (sprite->mItemID == item->mDigitItemID) {
+            break;
+        }
+    }
+    if (index >= SHOP_NUM_DIGIT_COUNT) {
+        return 0;
+    }
+
+    int i;
+    int divisor = 1;
+    for (i = 0; SHOP_NUM_DIGIT_COUNT - index - 1 > i; i++) {
+        divisor *= 10;
+    }
+    int digit = *arg->mValue / divisor;
+    digit %= 10;
+    msgctrlSetValue(MSGCTRL_VALUE_NUMBER, digit);
+    GSmsgPrintRight(window->mLayerID, 0, 0, sprite->mWidth, sprite->mHeight,
+                    -1, SHOP_NUM_MESSAGE_DIGIT);
+    return 0;
+}
+
+// Shows the cursor on the sprite of the digit being edited.
+extern "C" s32 menuShopNumDrawCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    s32 cursor = window->mCursor.y;
+    if (cursor < 0 || cursor >= SHOP_NUM_DIGIT_COUNT) {
+        return 0;
+    }
+    int itemID = NumWinItem[cursor].mCursorItemID;
+    if (itemID == sprite->mItemID) {
+        sprite->mRgba.mAlpha = 255;
+    } else {
+        sprite->mRgba.mAlpha = 0;
+    }
+    return 0;
+}
+
+// Changes the active digit with the shared pocket number editor.
+extern "C" s32 menuShopNumCursor(tagWINDOW_WORK *window)
+{
+    ShopNumWinArg *arg = (ShopNumWinArg *)window->mArg;
+    u16 keys = windowGetKeyRepeat();
+    *arg->mValue = menuPocketInputNumber(window, *arg->mValue, arg->mMax, keys,
+                                         SHOP_NUM_DIGIT_COUNT, SHOP_NUM_SOUND_CURSOR,
+                                         SHOP_NUM_SOUND_UNUSED_CURSOR);
+    return 0;
+}
+
+// Starts and stops the quantity window's animations.
+extern "C" s32 menuShopNumCtrl(tagWINDOW_WORK *window)
+{
+    switch (window->mState) {
+    case WINDOW_SEQUENCE_OPEN:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(SHOP_NUM_MENU_ID, SHOP_NUM_SEQUENCE_OPEN);
+            window->mFlag = 1;
+        }
+        break;
+    case WINDOW_SEQUENCE_CLOSE:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(SHOP_NUM_MENU_ID, SHOP_NUM_SEQUENCE_CLOSE);
+            window->mFlag = 1;
+        }
+        break;
+    }
+    return 0;
+}
+
+// Opens the quantity window, then returns the chosen quantity, zero when the
+// caller supplied no usable range, or -1 when the player cancelled or left
+// with an empty quantity.
+int inputBuyNum(int initialValue, int max, int unitPrice, int couponPrice)
+{
+    if (max < 0) {
+        return 0;
+    }
+    ShopNumWinArg arg;
+    arg.mMax = max;
+    arg.mUnitPrice = unitPrice;
+    NumValue = initialValue;
+    arg.mValue = &NumValue;
+    arg.mCouponPrice = couponPrice;
+    int startDigit = 1;
+    s32 selected = menuOpenCustom(SHOP_NUM_MENU_ID, windowGetActiveID(), &startDigit,
+                                  0, true, 1, &arg);
+    menuClose(SHOP_NUM_MENU_ID);
+    menuCloseSync(SHOP_NUM_MENU_ID, true);
+    if (selected == -1 || NumValue == 0) {
+        return -1;
+    }
+    return NumValue;
 }

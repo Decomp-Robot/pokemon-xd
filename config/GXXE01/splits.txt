@@ -467,7 +467,8 @@ game/menuReliveMeter.cpp:
 	.sdata2     start:0x804EC578 end:0x804EC588
 
 game/menuShop.cpp:
-	.text       start:0x800605B8 end:0x80060F88
+	.text       start:0x800605B8 end:0x8006135C
+	.rodata     start:0x802EB320 end:0x802EB330
 	.sbss       start:0x804EA910 end:0x804EA91C
 	.sdata2     start:0x804EC588 end:0x804EC598
 
