@@ -590,8 +590,9 @@ game/menuNintendoWarningSeq.cpp:
 	.sdata2     start:0x804EC768 end:0x804EC76C
 
 game/menuLogoDemo.cpp:
-	.text       start:0x80087658 end:0x80087768
+	.text       start:0x80087658 end:0x800877A4
 	.bss        start:0x80438390 end:0x804396A8
+	.sdata      start:0x804E8020 end:0x804E8038
 	.sbss       start:0x804EA9D8 end:0x804EA9E0
 
 game/menuHologram.cpp:
