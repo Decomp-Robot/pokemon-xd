@@ -3539,8 +3539,9 @@ game/GSAPI/GSsysdolphin_baselib/baselib/memory.c:
 	.bss        start:0x804B2318 end:0x804B2330
 
 game/GSAPI/GSsysdolphin_baselib/baselib/mtx.c:
-	.text       start:0x802579A8 end:0x802594C0
-	.sdata2     start:0x804EF0B8 end:0x804EF0F8
+	.text       start:0x80257830 end:0x802594C0
+	.bss        start:0x804B2330 end:0x804B2388
+	.sdata2     start:0x804EF0A8 end:0x804EF0F8
 
 game/GSAPI/GSsysdolphin_baselib/baselib/objalloc.c:
 	.text       start:0x802594C0 end:0x802596A4

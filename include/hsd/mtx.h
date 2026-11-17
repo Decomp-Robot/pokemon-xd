@@ -2,10 +2,20 @@
 #define HSD_MTX_H
 
 #include <dolphin/mtx.h>
+#include <hsd/objalloc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void HSD_MtxInitAllocData(void);
+HSD_ObjAllocData *HSD_MtxGetAllocData(void);
+Mtx *HSD_MtxAlloc(void);
+void HSD_MtxFree(Mtx mtx);
+void HSD_VecInitAllocData(void);
+HSD_ObjAllocData *HSD_VecGetAllocData(void);
+Vec *HSD_VecAlloc(void);
+void HSD_VecFree(Vec* vec);
 
 void HSD_VecGetOrthogonal(Vec* v, Vec* orthogonal);
 void HSD_MtxScaledAdd(Mtx a, Mtx b, Mtx result, f32 scale);

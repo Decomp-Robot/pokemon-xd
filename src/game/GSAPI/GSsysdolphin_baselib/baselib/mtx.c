@@ -1,9 +1,64 @@
 #include <hsd/mtx.h>
+#include <hsd/objalloc.h>
+#include <hsd/assert.h>
 #include <math.h>
 #include <float.h>
 
 #define HSD_MTX_EPSILON 1e-10f
 #define HSD_HALF_PI 1.5707964f
+
+static HSD_ObjAllocData mtx_alloc_data;
+static HSD_ObjAllocData vec_alloc_data;
+
+void HSD_MtxInitAllocData(void)
+{
+    HSD_ObjAllocInit(&mtx_alloc_data, sizeof(Mtx), 4);
+}
+
+HSD_ObjAllocData *HSD_MtxGetAllocData(void)
+{
+    return &mtx_alloc_data;
+}
+
+void HSD_VecInitAllocData(void)
+{
+    HSD_ObjAllocInit(&vec_alloc_data, sizeof(Vec), 4);
+}
+
+HSD_ObjAllocData *HSD_VecGetAllocData(void)
+{
+    return &vec_alloc_data;
+}
+
+void HSD_MtxFree(Mtx mtx)
+{
+    if (mtx != NULL) {
+        HSD_ObjFree(&mtx_alloc_data, mtx);
+    }
+}
+
+Mtx *HSD_MtxAlloc(void)
+{
+    Mtx *mtx = HSD_ObjAlloc(&mtx_alloc_data);
+
+    HSD_ASSERTLINE(939, mtx);
+    return mtx;
+}
+
+void HSD_VecFree(Vec *vec)
+{
+    if (vec != NULL) {
+        HSD_ObjFree(&vec_alloc_data, vec);
+    }
+}
+
+Vec *HSD_VecAlloc(void)
+{
+    Vec *vec = HSD_ObjAlloc(&vec_alloc_data);
+
+    HSD_ASSERTLINE(908, vec);
+    return vec;
+}
 
 static inline f32 HSD_SafeAsin(f32 x)
 {
