@@ -2431,7 +2431,7 @@ game/app/waza/wazaFuncData.cpp:
 	.sdata      start:0x804E83A8 end:0x804E83B0
 
 game/app/waza/wazaBios.cpp:
-	.text       start:0x8013DB50 end:0x8013DFEC
+	.text       start:0x8013D7B0 end:0x8013DFEC
 
 game/app/waza/wazaDB.cpp:
 	.text       start:0x8013E044 end:0x8013E90C

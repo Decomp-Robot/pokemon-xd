@@ -119,11 +119,11 @@ extern "C" void wazaSetStatus(void *data, u16 wazaID, u16 fieldID, u16 index, s3
     case WAZA_FIELD_HIDEN_FLAG: wazaDataBiosSetHidenFlag(wazaData, (u8)value); break;
     case WAZA_FIELD_CATEGORY: wazaDataBiosSetTypeId(wazaData, index, (u8)value); break;
     case WAZA_FIELD_RISK_FLAG: wazaDataBiosSetRiskFlag(wazaData, (u8)value); break;
-    case WAZA_FIELD_TRAINER_AI_VALUE_FUNC: wazaDataBiosSetFightTrainerAiWazaValueFuncPtr(wazaData, (void *)value); break;
-    case WAZA_FIELD_TRAINER_AI_HIT_FUNC: wazaDataBiosSetFightTrainerAiWazaHitFuncPtr(wazaData, (void *)value); break;
-    case WAZA_FIELD_TRAINER_AI_DAMAGE_FUNC: wazaDataBiosSetFightTrainerAiWazaDamageFuncPtr(wazaData, (void *)value); break;
-    case WAZA_FIELD_WAZA_WZX_TYPE_FUNC: wazaDataBiosSetFightWazaWzxTypeFuncPtr(wazaData, (void *)value); break;
-    case WAZA_FIELD_WAZA_WZX_VARIATION_FUNC: wazaDataBiosSetFightWazaWzxVariationFuncPtr(wazaData, (void *)value); break;
+    case WAZA_FIELD_TRAINER_AI_VALUE_FUNC: wazaDataBiosSetFightTrainerAiWazaValueFuncPtr(wazaData, (FightTrainerAiWazaValueFunc)value); break;
+    case WAZA_FIELD_TRAINER_AI_HIT_FUNC: wazaDataBiosSetFightTrainerAiWazaHitFuncPtr(wazaData, (FightTrainerAiWazaHitFunc)value); break;
+    case WAZA_FIELD_TRAINER_AI_DAMAGE_FUNC: wazaDataBiosSetFightTrainerAiWazaDamageFuncPtr(wazaData, (FightTrainerAiWazaDamageFunc)value); break;
+    case WAZA_FIELD_WAZA_WZX_TYPE_FUNC: wazaDataBiosSetFightWazaWzxTypeFuncPtr(wazaData, (FightWazaWzxTypeFunc)value); break;
+    case WAZA_FIELD_WAZA_WZX_VARIATION_FUNC: wazaDataBiosSetFightWazaWzxVariationFuncPtr(wazaData, (FightWazaWzxVariationFunc)value); break;
     case WAZA_FIELD_WAZA_WZX_ID: wazaDataBiosSetWazawzxdataId(wazaData, (u32)value); break;
     case WAZA_FIELD_DESCRIPTION: wazaDataBiosSetDoc(wazaData, (u32)value); break;
     case WAZA_FIELD_MOVE_SLOT: fightWazaBiosSetWazaBanme((FIGHT_WAZA *)wazaData, (s8)value); break;

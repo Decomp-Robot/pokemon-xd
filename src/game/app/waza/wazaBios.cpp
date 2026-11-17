@@ -2,12 +2,188 @@
 
 extern "C" {
 
-u16 wazaDataBiosGetWazaFuncDataId(struct WazaData *data)
+static inline u16 getWazaFuncDataId(struct WazaData *data)
 {
     if (data == 0) {
         return 0;
     }
     return data->mWazaFuncDataId;
+}
+
+static inline struct WazaFuncData *getFuncData(u16 funcDataId)
+{
+    if (funcDataId >= waza_func_data_number) {
+        return 0;
+    }
+    return &waza_func_data[funcDataId];
+}
+
+// Handler configuration. A move points at a record in the shared function
+// table; handlers are written through that record, and a move or table entry
+// the game cannot resolve is skipped.
+
+void wazaDataBiosSetFightWazaWzxVariationFuncPtr(struct WazaData *data, FightWazaWzxVariationFunc func)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return;
+    }
+    funcData->mFightWazaWzxVariationFunc = func;
+}
+
+void wazaDataBiosSetFightWazaWzxTypeFuncPtr(struct WazaData *data, FightWazaWzxTypeFunc func)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return;
+    }
+    funcData->mFightWazaWzxTypeFunc = func;
+}
+
+FightWazaWzxVariationFunc wazaDataBiosGetFightWazaWzxVariationFuncPtr(struct WazaData *data)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return 0;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return 0;
+    }
+    return funcData->mFightWazaWzxVariationFunc;
+}
+
+FightWazaWzxTypeFunc wazaDataBiosGetFightWazaWzxTypeFuncPtr(struct WazaData *data)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return 0;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return 0;
+    }
+    return funcData->mFightWazaWzxTypeFunc;
+}
+
+void wazaDataBiosSetFightTrainerAiWazaDamageFuncPtr(struct WazaData *data, FightTrainerAiWazaDamageFunc func)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return;
+    }
+    funcData->mFightTrainerAiWazaDamageFunc = func;
+}
+
+void wazaDataBiosSetFightTrainerAiWazaHitFuncPtr(struct WazaData *data, FightTrainerAiWazaHitFunc func)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return;
+    }
+    funcData->mFightTrainerAiWazaHitFunc = func;
+}
+
+void wazaDataBiosSetFightTrainerAiWazaValueFuncPtr(struct WazaData *data, FightTrainerAiWazaValueFunc func)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return;
+    }
+    funcData->mFightTrainerAiWazaValueFunc = func;
+}
+
+void wazaDataBiosSetRiskFlag(struct WazaData *data, u8 value)
+{
+    if (data == 0) {
+        return;
+    }
+    data->mRiskFlag = value;
+}
+
+void wazaDataBiosSetTypeId(struct WazaData *data, u16 index, u8 typeId)
+{
+    if (data == 0) {
+        return;
+    }
+    if (index >= WAZA_DATA_TYPE_ID_COUNT) {
+        return;
+    }
+    data->mTypeId[index] = typeId;
+}
+
+FightTrainerAiWazaDamageFunc wazaDataBiosGetFightTrainerAiWazaDamageFuncPtr(struct WazaData *data)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return 0;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return 0;
+    }
+    return funcData->mFightTrainerAiWazaDamageFunc;
+}
+
+FightTrainerAiWazaHitFunc wazaDataBiosGetFightTrainerAiWazaHitFuncPtr(struct WazaData *data)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return 0;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return 0;
+    }
+    return funcData->mFightTrainerAiWazaHitFunc;
+}
+
+FightTrainerAiWazaValueFunc wazaDataBiosGetFightTrainerAiWazaValueFuncPtr(struct WazaData *data)
+{
+    struct WazaFuncData *funcData;
+
+    if (data == 0) {
+        return 0;
+    }
+    funcData = getFuncData(getWazaFuncDataId(data));
+    if (funcData == 0) {
+        return 0;
+    }
+    return funcData->mFightTrainerAiWazaValueFunc;
+}
+
+u16 wazaDataBiosGetWazaFuncDataId(struct WazaData *data)
+{
+    return getWazaFuncDataId(data);
 }
 
 u8 wazaDataBiosGetRiskFlag(struct WazaData *data)
