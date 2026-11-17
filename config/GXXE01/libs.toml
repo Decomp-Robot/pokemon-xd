@@ -133,6 +133,11 @@ completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/effects/blur.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GSfilter/GSfilter.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

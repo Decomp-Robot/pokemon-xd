@@ -2549,6 +2549,11 @@ game/app/effects/filter.cpp:
 	.data       start:0x80404E98 end:0x80404EC8
 	.sdata2     start:0x804EDC98 end:0x804EDCB0
 
+game/app/effects/blur.cpp:
+	.text       start:0x8015960C end:0x80159E94
+	.data       start:0x80404EE8 end:0x80404F14
+	.sdata2     start:0x804EDCB0 end:0x804EDCDC
+
 game/app/item/item.cpp:
 	.text       start:0x8015D75C end:0x8015D960
 	.data       start:0x804059F8 end:0x80405A80
