@@ -3700,6 +3700,11 @@ game/GSAPI/GSgfx/project.cpp:
 	.sbss       start:0x804EBD08 end:0x804EBD18
 	.sdata2     start:0x804EFB10 end:0x804EFB28
 
+game/GSAPI/GSgfx/halt.cpp:
+	.text       start:0x802ADCC8 end:0x802AE160
+	.bss        start:0x804E6710 end:0x804E6BA8
+	.sbss       start:0x804EBD18 end:0x804EBD20
+
 game/GSAPI/GSgfx/gpu.cpp:
 	.text       start:0x802AF8B0 end:0x802AFF40
 	.bss        start:0x804E6C68 end:0x804E6D68
