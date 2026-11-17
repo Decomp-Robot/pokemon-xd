@@ -5902,6 +5902,10 @@ extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
 name = "libc/e_log.c"
 completed = true
 [[lib.object]]
+name = "libc/e_sqrt.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include"]
+[[lib.object]]
 name = "libc/w_atan2.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include/libc"]
