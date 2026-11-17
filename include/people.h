@@ -34,7 +34,8 @@ struct PeopleState {
     u8 unknown2C[0x14];
     float yaw;
     float targetYaw;
-    u8 unknown48[0x0C];
+    u8 unknown48[8];
+    s32 collisionIndex;
     u8 moveType;
     u8 moveState;
     u8 rotating;
@@ -46,40 +47,51 @@ struct PeopleState {
     u16 walkListIndex;
     GSvec* walkList;
     u8 strictWalkList;
-    u8 unknown7D[0x23];
+    u8 unknown7D[31];
+    u32 motionType;
     u8 savedFacing;
     u8 neckHold;
     u8 unknownA2[2];
     float savedYaw;
     GSvec previousPosition;
-    u8 unknownB4[0x10];
+    u8 unknownB4[16];
     u8 neckMode;
     u8 unknownC5[3];
     GSvec neckVector;
-    u8 unknownD4[0x18];
+    u8 unknownD4[24];
     GSvec savedVector;
     unsigned long targetGroup;
     unsigned long targetId;
-    u8 unknown100[0x48];
+    u8 unknown100[12];
+    u8 unknown10C;
+    u8 unknown10D[15];
+    s32 attachGroup;
+    s32 attachId;
+    s32 attachPartIndex;
+    u8 unknown128[32];
     float blinkTimer;
     u8 blinkEnabled;
     u8 speaking;
-    u8 unknown14E[0x0E];
+    u8 unknown14E[6];
+    u8 animBlendEnabled;
+    u8 unknown155[7];
     bool walkRunMotion;
     u8 unknown15D[3];
 };
 struct tagPeopleWork {
     bool isHero() const;
     bool isFollower() const;
+    u8 isAnimBlend() const;
     bool active;
     u8 restoreFlags;
     u8 unknown02[2];
     int handle;
     _GSmodel* model;
     PeopleState state;
-    u8 unknown160[0x18];
+    u8 unknown160[24];
     float talkDistance;
-    u8 unknown17C[0x14];
+    u16 treasureId;
+    u8 unknown17E[18];
     s32 speechAnimations[7];
     float speechTimer;
 };
@@ -106,7 +118,8 @@ struct tagPeopleInfoBios {
 };
 enum PeopleBiosStateFlags {
     PEOPLE_BIOS_STATE_ACTIVE = 0x1,
-    PEOPLE_BIOS_STATE_MODEL_VISIBLE = 0x2
+    PEOPLE_BIOS_STATE_MODEL_VISIBLE = 0x2,
+    PEOPLE_BIOS_STATE_HAS_TREASURE = 0x4
 };
 
 extern "C" {
@@ -119,16 +132,35 @@ void peopleDetach(unsigned long group, unsigned long id, bool keepTransform);
 bool peopleWaitSyncMotion(unsigned long group, unsigned long id, bool wait);
 void peopleStopMotion(unsigned long group, unsigned long id);
 void peopleSetMotionForce(unsigned long group, unsigned long id, long motion, long frame, bool loop);
+unsigned long peopleBiosGetPushDataSize();
+void peopleBiosPushData(void* data, unsigned long bufferSize);
+void peopleBiosPopData(void* data, unsigned long bufferSize);
+s32 peopleBiosGetUseObjIDSize(unsigned long objectId);
+tagPeopleWork* peopleBiosGetTresureIDToPeopleWork(u16 treasureId);
+void peopleBiosSetTresureID(tagPeopleWork* people, u16 treasureId);
+void peopleBiosSetCollision(tagPeopleWork* people, bool enable);
+void peopleBiosSetDispFlag(tagPeopleWork* people, bool visible);
+void peopleBiosSetFlagOff(tagPeopleWork* people, unsigned long flags);
+void peopleBiosSetFlagOn(tagPeopleWork* people, unsigned long flags);
+void peopleBiosSetFlags(tagPeopleWork* people, unsigned long flags);
 s32 peopleBiosGetMaxNum();
 unsigned long peopleBiosGetState(tagPeopleWork *people);
 tagPeopleWork* peopleBiosGetWorkPtr(s32 index);
 u8 peopleBiosCheckFlag(tagPeopleWork* people, unsigned long flag);
 tagPeopleInfoBios* peopleInfoBiosGetPtr(unsigned long id);
 void peopleSetFlagOn(unsigned long group, unsigned long id, unsigned long flags);
-GSvec* peopleBiosGetPosPtr(void* people);
+GSvec* peopleBiosGetPosPtr(tagPeopleWork* people);
 GSvec* peopleBiosGetPrevPosPtr(tagPeopleWork* people);
 void peopleBiosSetPos(tagPeopleWork* people, GSvec* position);
 void peopleBiosGetRot(tagPeopleWork* people, GSvec* rotation);
+void peopleBiosSetPrevPos(tagPeopleWork* people, GSvec* position);
+void peopleBiosSetRot(tagPeopleWork* people, GSvec* rotation);
+GSvec* peopleBiosGetRotPtr(tagPeopleWork* people);
+void peopleBiosGetPos(tagPeopleWork* people, GSvec* position);
+tagPeopleWork* peopleBiosGetNewWork();
+tagPeopleWork* peopleBiosGetPeopleWork(unsigned long group, unsigned long id);
+bool peopleBiosFreeWork(tagPeopleWork* people);
+tagPeopleWork* peopleBiosAllocWork(s32 maxNum);
 void peopleSpeakStart(u32 group, u32 id);
 u32 peopleGetFlags(u32 group, u32 id);
 void peopleRotateToAngle(u32 group, u32 id, float angle, float speed);

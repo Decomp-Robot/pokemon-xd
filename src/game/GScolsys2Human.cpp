@@ -13,7 +13,7 @@ extern "C" {
 extern "C" {
 bool gimmickBoxFixDistanceForPushBox(f32* reach, void* work, f32 dx, f32 dz);
 u8 gimmickBoxIsBox(void* work);
-GSvec* peopleBiosGetPosPtr(void* work);
+GSvec* peopleBiosGetPosPtr(tagPeopleWork* work);
 }
 
 static const s32 kCollisionCircleSectors = 16;
@@ -304,7 +304,7 @@ extern "C" s32 GScolsys2HumanCollision(int index, GSvec* a, GSvec* b, GSvec* out
     return GSCOLSYS2_NO_COLLISION;
 }
 
-extern "C" s32 GScolsys2HumanEnable(s32 index, s32 enable)
+extern "C" s32 GScolsys2HumanEnable(s32 index, bool enable)
 {
     GSCOLSYS2_HUMAN* human;
     GSCOLSYS2_HUMAN* h;
@@ -331,7 +331,7 @@ extern "C" s32 GScolsys2HumanEnable(s32 index, s32 enable)
     if (ret != 0) {
         return ret;
     }
-    if ((u8)enable) {
+    if (enable) {
         human->mFlags = human->mFlags & ~GSCOLSYS2_HUMAN_DISABLED;
     } else {
         human->mFlags = human->mFlags | GSCOLSYS2_HUMAN_DISABLED;

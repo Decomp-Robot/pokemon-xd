@@ -273,6 +273,7 @@ void GSmodelDisableEnvMap(_GSmodel *model);
 void GSmodelSetEnvMapBlendValue(_GSmodel *model, f32 blend);
 void GSmodelEnableEnvMap(_GSmodel *model, s32 envMapMode, s32 envMapType, f32 blend);
 
+void GSmodelEnableAnimBlend(_GSmodel *model);
 void GSmodelDisableAnimBlend(_GSmodel *model);
 void GSmodelFreeDistortion(_GSmodel *model);
 s32 GSmodelGetPartCount(_GSmodel *model);

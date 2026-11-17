@@ -3386,6 +3386,11 @@ extra_cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/people/peopleBios.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/people/peoplePartAnimation.cpp"
 completed = true
 extra_cflags = ["-inline noauto", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-i src/ext/msl/include"]

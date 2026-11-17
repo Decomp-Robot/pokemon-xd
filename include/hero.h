@@ -40,6 +40,7 @@ HERO_STYLE_SNATCH = 2 };
 struct GSvec;
 
 enum HERO_RESOURCE_ID {
+    HERO_RESOURCE_HERO = 100,
     HERO_RESOURCE_MANA = 101,
     HERO_RESOURCE_FOLLOWER_SLOT_2 = 104,
     HERO_RESOURCE_FOLLOWER_SLOT_3 = 105
@@ -85,6 +86,8 @@ public:
     // Map state.
     u8 getFollowerID();
     u8 getFollowerModelLevel();
+    unsigned long getFollowerGrpID();
+    unsigned long getFollowerResID();
     u8 getHeroStyle() const;
     void setHeroStyle(u8 style, bool readObject);
     long getHeroObjID(long followerModelLevel, long heroStyle);
