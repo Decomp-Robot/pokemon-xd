@@ -2469,6 +2469,10 @@ game/app/pokemon/pokemonStatusPokemon.cpp:
 game/app/pokemon/darkPokemonBios.cpp:
 	.text       start:0x8014BF4C end:0x8014C558
 
+game/app/hero/hero.cpp:
+	.text       start:0x8014C5F8 end:0x8014CE04
+	.data       start:0x804045E8 end:0x80404608
+
 game/app/hero/heroBios.cpp:
 	.text       start:0x8014DC28 end:0x8014E174
 

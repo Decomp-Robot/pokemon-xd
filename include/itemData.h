@@ -4,7 +4,15 @@
 #include <types.h>
 #include <bool.h>
 
-enum ItemKind { ITEM_KIND_WAZA_MACHINE = 4, ITEM_KIND_COLOGNE = 6 };
+enum ItemKind {
+    ITEM_KIND_POKEMON_BALL = 1,
+    ITEM_KIND_NORMAL = 2,
+    ITEM_KIND_SEED = 3,
+    ITEM_KIND_WAZA_MACHINE = 4,
+    ITEM_KIND_EXTRA = 5,
+    ITEM_KIND_COLOGNE = 6,
+    ITEM_KIND_BATTLE_DISK = 7
+};
 
 // Item IDs used by the inventory routines.
 enum ItemID {

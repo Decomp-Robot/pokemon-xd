@@ -105,7 +105,7 @@ public:
 
     u8 getMeetDarkPokemonCount() const;
     void setMeetDarkPokemonCount(u8 count);
-    void *getDisk();
+    ItemSlot *getDisk();
 
 public:
     u16 mName[11]; // 0x00: hero name.
@@ -205,7 +205,7 @@ u8 heroMoveIsMember(s32 member);
 u8 heroMoveGetResID(u32* group, u32* id, s32 member);
 void heroMoveTermEvent(void);
 void heroMoveSetLockFrame(s32 frames);
-unsigned long heroGetPokeomCount(Hero* hero);
+u32 heroGetPokeomCount(Hero* hero);
 void heroDecPokedoru(Hero *hero, u32 amount);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
 u8 heroAddPokemon(Hero *hero, const Pokemon *pokemon);

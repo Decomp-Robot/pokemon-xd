@@ -337,7 +337,7 @@ u8 Hero::getMeetDarkPokemonCount() const
     return mMeetDarkPokemonCount;
 }
 
-void *Hero::getDisk()
+ItemSlot *Hero::getDisk()
 {
     return mDisk;
 }

@@ -6405,6 +6405,12 @@ progress_category = "game"
 cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/hero/hero.cpp"
+source = "game/app/hero/hero.cpp"
+completed = true
+extra_cflags = ["-use_lmw_stmw on"]
+
+[[lib.object]]
 name = "game/app/hero/heroBios.cpp"
 completed = true
 

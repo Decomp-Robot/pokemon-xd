@@ -5,6 +5,7 @@
 #include <bool.h>
 #include <fightPokemon.h>
 #include <fightAction.h>
+#include <itemData.h>
 
 struct FIGHT_TRAINER;
 typedef struct FIGHT_SIDE FIGHT_SIDE;
@@ -115,7 +116,7 @@ enum {
     WAZA_SEQUENCE_ID_SOLAR_BEAM = 151,
     WAZA_SEQUENCE_ID_RETURN = 121
 };
-enum { ITEM_KIND_POKEMON_BALL = 1, WAZA_RANGE_OTHER_POKEMON_ON_SIDE = 4 };
+enum { WAZA_RANGE_OTHER_POKEMON_ON_SIDE = 4 };
 enum {
     JOUTAI_ID_CHOICE_ITEM_LOCK = 54,
     JOUTAI_PARTIAL_TRAPPING = 14,

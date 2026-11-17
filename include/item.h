@@ -48,6 +48,8 @@ enum ItemStatusKind {
 s32 itemGetStatus(ItemSlot* item, u16 itemID, u16 kind, u16 index);
 void itemSetStatus(ItemSlot* item, u16 itemID, u16 kind, u16 index, s32 value);
 void itemReplace(ItemSlot* first, ItemSlot* second);
+s32 itemCheckAddItemDataIdAry(ItemSlot* items, u16 count, u16 itemID,
+                              u16 maxQuantity, u8 insertionMode);
 s32 itemDecItemDataIdAry(ItemSlot* items, u16 count, u16 itemID, u16 quantity,
                          s16 firstSlot, u16 maxQuantity, u8 sort);
 s32 itemAddItemDataIdAry(ItemSlot* items, u16 count, u16 itemID, u16 quantity,
@@ -60,6 +62,13 @@ u16 item_GetNum(ItemSlot *item);
 u16 item_GetItemDataId(ItemSlot *item);
 void itemSortAryByPriority(void *ary, u16 num, long kind);
 int itemGetQuantityInAry(const void *ary, u16 num, u16 itemID, u16 max);
+enum ItemSearchMode {
+    ITEM_SEARCH_MATCH = 0,
+    ITEM_SEARCH_MATCH_WITH_ROOM = 1,
+    ITEM_SEARCH_EMPTY = 2
+};
+ItemSlot* itemSearchItemDataIdAry(ItemSlot* items, u16 count, u16 itemID,
+                                  u8 searchMode, u16 maxQuantity);
 #ifdef __cplusplus
 }
 #endif
