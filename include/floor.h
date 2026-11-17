@@ -33,6 +33,7 @@ u32 floorReadMakeObjResID(u32 resource);
 void floorSetLightInfo(u32 resource, long count);
 void floorInitMap(u32 group, u32 res);
 void floorExecSoundScript(void);
+long floorEventExecScript(s8 kind, u32 eventID);
 
 GSgfxLayerID floorGetMenuLayerID(void);
 s32 floorGetNextFloorID(void);

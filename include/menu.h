@@ -23,6 +23,11 @@ enum MenuStatusFlags {
 s32 menuSetStatus(s32 menuID, s32 status);
 void menuSetPosition(s32 menuID, s16 x, s16 y);
 void menuPlaySe(s32 menuID, s32 soundID);
+s32 menuFieldMain(u8 mode);
+void menuPdaOpen(void);
+void menuReport(void);
+void menuIntUnderTakerDispIconOff2(void);
+void menuIntUnderTakerDispIconRestore2(void);
 u8 menuSetEnablePort(u8 portMask);
 u8 menuGetEnablePort(void);
 s32 menuGetLastError(void);

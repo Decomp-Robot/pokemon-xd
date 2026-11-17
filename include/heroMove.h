@@ -86,6 +86,8 @@ extern "C" {
 #endif
 
 void heroMoveInitEvent(void);
+long heroMoveCheckEvent(HeroMoveEventList eventList);
+void heroMoveAddAutoEvent(s32 scriptID, s32 scriptArgument1, s32 scriptArgument2, s32 scriptArgument3, s32 scriptArgument4);
 void heroMoveSetColision(u8 enabled);
 long heroMoveAddStepCallback(void (*callback)(long, FootStepCounter, long), long context);
 /* Add steps to a counter for dispatch with the next movement update. */

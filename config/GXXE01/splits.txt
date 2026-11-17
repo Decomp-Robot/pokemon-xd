@@ -445,11 +445,11 @@ game/menuPcBoxPokemon.cpp:
 	.text       start:0x80057240 end:0x80057C44
 
 game/menuField.cpp:
-	.text       start:0x8005B3D8 end:0x8005BA28
+	.text       start:0x8005B3D8 end:0x8005C060
 	.bss        start:0x80435510 end:0x80435528 align:4
 	.sdata      start:0x804E7F88 end:0x804E7F98 align:4
 	.sbss       start:0x804EA878 end:0x804EA890 align:4
-	.sdata2     start:0x804EC4F8 end:0x804EC518
+	.sdata2     start:0x804EC4F8 end:0x804EC528
 
 game/pokecolo.cpp:
 	.text       start:0x8005C084 end:0x8005C264

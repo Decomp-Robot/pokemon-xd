@@ -4,6 +4,24 @@
 #include <time.h>
 #include <menu.h>
 #include <libc/math.h>
+#include <fade.h>
+#include <floor.h>
+#include <floorFieldCamera.h>
+#include <GSflag.h>
+#include <GSgfxVideo.h>
+#include <GSmodel.h>
+#include <GSsndPlayback.h>
+#include <GSthread.h>
+#include <hero.h>
+#include <heroMove.h>
+#include <mailMain.h>
+#include <menuPokemon.h>
+#include <menuPocket2.h>
+#include <pokecolo.h>
+#include <pokemonRelive.h>
+#include <script.h>
+#include <sound.h>
+#include <menuOffScreen.h>
 
 // Field menu item drawing, cursor effects and selection-bar animation.
 
@@ -274,4 +292,247 @@ f32 _animAlpha(long row)
     }
     _menuFiledAlpha[row] = alpha;
     return alpha;
+}
+
+// Window sequence steps played when the field menu opens and closes.
+enum FieldMenuSequence {
+    FIELD_MENU_SEQUENCE_OPEN = 1,
+    FIELD_MENU_SEQUENCE_CLOSE = 7,
+};
+
+// Values of tagWINDOW_WORK::mState handled here.
+enum FieldMenuWindowState {
+    FIELD_MENU_WINDOW_STATE_INIT = WINDOW_STATE_INIT,
+    FIELD_MENU_WINDOW_STATE_CLOSING = WINDOW_STATE_CLOSING,
+};
+
+// Ways the field menu can be entered.
+enum FieldMenuMode {
+    FIELD_MENU_MODE_NORMAL = 0,
+    FIELD_MENU_MODE_DIRECT_ITEM = 1,
+};
+
+// Event scripts queued for the hero's nearby collision before the menu opens.
+enum FloorEventScriptKind {
+    FLOOR_EVENT_SCRIPT_KIND_PRE_MENU = 4,
+};
+
+// Shared flags consulted by the field menu and the PDA availability check.
+enum FieldMenuFlag {
+    FIELD_MENU_FLAG_NON_STORY_MODE = 781,
+    FIELD_MENU_FLAG_PDA = 1009,
+};
+
+enum FieldMenuSelection {
+    FIELD_MENU_SELECT_PARTY = 0,
+    FIELD_MENU_SELECT_PDA = 1,
+    FIELD_MENU_SELECT_POCKET = 2,
+    FIELD_MENU_SELECT_REPORT = 3,
+};
+
+// Window step control: start the opening/closing sprite sequence once, and
+// initialize the selection bars to the row the cursor starts on.
+extern "C" s32 menuFieldMainCtrl(tagWINDOW_WORK *window)
+{
+    s32 row;
+    s32 selectedRow;
+
+    switch (window->mState) {
+    case FIELD_MENU_WINDOW_STATE_INIT:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(window->mMenuID, FIELD_MENU_SEQUENCE_OPEN);
+            selectedRow = window->mCursor.y;
+            _fieldMenuTimer = 0.0f;
+
+            for (row = 0; row < FIELD_MENU_ROW_COUNT; row++) {
+                if (selectedRow == row)
+                    _menuFiledAlpha[row] = 255.0f;
+                else
+                    _menuFiledAlpha[row] = 0.0f;
+            }
+
+            window->mFlag = 1;
+        }
+        break;
+
+    case FIELD_MENU_WINDOW_STATE_CLOSING:
+        if (window->mFlag == 0) {
+            winSeqSetMenu(window->mMenuID, FIELD_MENU_SEQUENCE_CLOSE);
+            window->mFlag = 1;
+        }
+        break;
+    }
+
+    return 0;
+}
+
+s32 _menuFieldCheckCursor(s32 cursor);
+bool _menuFieldCheckPDA(void);
+
+// Run one field-menu session. The session repeatedly opens the menu until an
+// entry is chosen, then tears down the camera, model, sound and off-screen
+// state it installed on entry.
+s32 menuFieldMain(u8 mode)
+{
+    HeroMoveEventList eventList;
+    s32 slot;
+    u16 itemID;
+    u32 scriptID;
+    FieldMenuSelection selection;
+    s32 i;
+    s32 menuID;
+    s32 eventCount;
+
+    if (fadeCheck(0) != 0)
+        return 0;
+
+    eventCount = heroMoveCheckEvent(eventList);
+    for (i = 0; i < eventCount; i++) {
+        floorEventExecScript(FLOOR_EVENT_SCRIPT_KIND_PRE_MENU, eventList[i].eventId);
+    }
+
+    menuIntUnderTakerDispIconOff2();
+    heroMoveInitEvent();
+    mailMainReceiveTerminate();
+    GSthreadSwitch();
+    floorFieldCameraPause();
+    GSmodelAllPauseAnimation();
+    menuFieldOpen = 1;
+    GSthreadSwitch();
+
+    f32 offScreenFrames = 20.0f / GSgfxVideoGetVsyncRate();
+    menuCreateOffScreen(offScreenFrames, 50.0f);
+    while (menuDisableOffScreenCheck() == 0)
+        GSthreadSwitch();
+
+    _soundEnvID = soundGetEnvID();
+    if (_soundEnvID != 0)
+        _soundEnvVol = soundGetVolume(_soundEnvID);
+    GSsndPushVolumeALL(85, 500, 1, 1);
+    GSgfxVideoSetLockFrameRate(0);
+
+    if (GSflagGet(FIELD_MENU_FLAG_NON_STORY_MODE) == 0) {
+        if (_menuFieldCheckPDA() != 0)
+            menuID = MENU_ID_FIELD_PDA;
+        else
+            menuID = MENU_ID_FIELD_NO_PDA;
+    } else {
+        menuID = MENU_ID_FIELD_NON_STORY_MODE;
+    }
+    preReliveExit();
+
+    switch (mode) {
+    case FIELD_MENU_MODE_NORMAL:
+        if (GSflagGet(FIELD_MENU_FLAG_NON_STORY_MODE) == 0) {
+            f32* alphaPtr = _menuFiledAlpha;
+            f32 alpha = 255.0f;
+            while (true) {
+                GSgfxVideoSetLockFrameRate(0);
+                for (i = 0; i < FIELD_MENU_ROW_COUNT; i++)
+                    alphaPtr[i] = alpha;
+
+                selection = (FieldMenuSelection)_menuFieldCheckCursor(menuOpen(menuID, 1));
+                if (selection == FIELD_MENU_SELECT_PARTY) {
+                    menuCloseCustom(menuID, 0, true);
+                    menuPokemonOpen(1, 0, 0);
+                    GSmodelAllPauseAnimation();
+                } else if (selection == FIELD_MENU_SELECT_PDA) {
+                    menuCloseCustom(menuID, 0, true);
+                    menuPdaOpen();
+                    GSmodelAllPauseAnimation();
+                } else if (selection == FIELD_MENU_SELECT_POCKET) {
+                    menuCloseCustom(menuID, 0, true);
+                    itemID = menuPocket2Open(POCKET_MODE_FIELD, &slot, 0);
+                    GSmodelAllPauseAnimation();
+                    if (itemID != 0) {
+                        scriptID = menuPocket2GetItemScript(itemID);
+                        if (scriptID != -1)
+                            heroMoveAddAutoEvent(scriptID, itemID, slot, 0, 0);
+                        goto cleanup;
+                    }
+                    continue;
+                } else if (selection == FIELD_MENU_SELECT_REPORT) {
+                    menuCloseCustom(menuID, 0, true);
+                    menuReport();
+                } else {
+                    goto cleanup;
+                }
+                GSthreadSwitch();
+            }
+        } else {
+            while (true) {
+                GSgfxVideoSetLockFrameRate(0);
+                selection = (FieldMenuSelection)menuOpen(menuID, 1);
+                if (selection == FIELD_MENU_SELECT_PARTY) {
+                    menuClose(menuID);
+                    menuPokemonOpen(1, 0, 0);
+                } else if (selection == FIELD_MENU_SELECT_PDA) {
+                    if (scriptContinueSave() != 1)
+                        continue;
+                    menuOffScreenRelease();
+                    menuFieldOpen = 0;
+                    GSthreadSwitch();
+                } else {
+                    goto cleanup;
+                }
+            }
+        }
+        break;
+
+    case FIELD_MENU_MODE_DIRECT_ITEM:
+        itemID = menuPocket2Open(POCKET_MODE_FIELD, &slot, 0);
+        if (itemID != 0) {
+            scriptID = menuPocket2GetItemScript(itemID);
+            if (scriptID != -1)
+                heroMoveAddAutoEvent(scriptID, itemID, slot, 0, 0);
+        }
+        break;
+
+    case 2:
+    case 3:
+        break;
+    }
+
+cleanup:
+    menuPocket2GetItemScript(itemID);
+    GSsndPopVolumeALL(500, 1, 1);
+    if (_soundEnvID == soundGetEnvID())
+        soundSetVolumeID(_soundEnvID, 500, _soundEnvVol);
+    GSthreadSwitch();
+    menuClose(menuID);
+    menuReleaseOffScreen(20.0f / GSgfxVideoGetVsyncRate());
+    menuCloseSync(menuID, true);
+    GSgfxVideoSetLockFrameRate(1);
+    heroMoveTermEvent();
+    GSmodelAllUnpauseAnimation();
+    floorFieldCameraUnpause();
+    menuFieldOpen = 0;
+    menuIntUnderTakerDispIconRestore2();
+    return 0;
+}
+
+extern "C" u8 menuFieldIsOpen(void)
+{
+    return menuFieldOpen;
+}
+
+s32 _menuFieldCheckCursor(s32 cursor)
+{
+    if (_menuFieldCheckPDA()) {
+        return cursor;
+    }
+
+    s32 result = cursor;
+    if (cursor >= 1) {
+        result = cursor + 1;
+    }
+    return result;
+}
+
+bool _menuFieldCheckPDA(void)
+{
+    if (pokecoloGetRomVersion() == 1) {
+        return true;
+    }
+    return GSflagGet(FIELD_MENU_FLAG_PDA) != 0;
 }
