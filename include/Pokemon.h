@@ -238,6 +238,7 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_REVERSE_MODE = 200,
     POKEMON_STATUS_FIELD_FIGHT_TRAINER_INDEX = 201, // fight trainer slot that owns the pokemon.
     POKEMON_STATUS_FIELD_LEVEL_UP_FLAG = 208, // fight record: set once the pokemon has gained a level.
+    POKEMON_STATUS_FIELD_IS_HIT = 224, // result of the current Pokemon's move hit check.
     POKEMON_STATUS_FIELD_ATTACK_STAGE = 230,
     POKEMON_STATUS_FIELD_ACCURACY_STAGE = 235,
 };

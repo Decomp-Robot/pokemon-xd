@@ -324,7 +324,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
     long i, j;
     u16 banOut;
     u32 battleStatus;
-    void *layout;
+    FIGHT_TYPE_DATA *layout;
     u32 partyDataIds;
     u8 kind;
     long n;

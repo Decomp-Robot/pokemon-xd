@@ -7,7 +7,7 @@ extern u32 *fight_type_data_number;
 extern FIGHT_TYPE_DATA *fight_type_data;
 
 u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType);
-u32 fightTypeDataBiosGetName(void *fightTypeData);
+u32 fightTypeDataBiosGetName(FIGHT_TYPE_DATA *fightTypeData);
 }
 
 // How many Pokemon one side of the fight keeps out at once: every trainer of
@@ -19,8 +19,8 @@ u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType) {
 }
 
 // Number of Pokemon the fight type keeps out at once.
-u8 fightTypeDataBiosGetFightoutPokemonNum(void *fightTypeData) {
-    FIGHT_TYPE_DATA *fightTypeDataRecord = static_cast<FIGHT_TYPE_DATA *>(fightTypeData);
+u8 fightTypeDataBiosGetFightoutPokemonNum(FIGHT_TYPE_DATA *fightTypeData) {
+    FIGHT_TYPE_DATA *fightTypeDataRecord = fightTypeData;
 
     if (fightTypeDataRecord == 0) {
         return 0;
@@ -29,8 +29,8 @@ u8 fightTypeDataBiosGetFightoutPokemonNum(void *fightTypeData) {
 }
 
 // Number of Pokemon a side enters the fight with.
-u8 fightTypeDataBiosGetEntryPokemonNum(void *fightTypeData) {
-    FIGHT_TYPE_DATA *fightTypeDataRecord = static_cast<FIGHT_TYPE_DATA *>(fightTypeData);
+u8 fightTypeDataBiosGetEntryPokemonNum(FIGHT_TYPE_DATA *fightTypeData) {
+    FIGHT_TYPE_DATA *fightTypeDataRecord = fightTypeData;
 
     if (fightTypeDataRecord == 0) {
         return 0;
@@ -39,8 +39,8 @@ u8 fightTypeDataBiosGetEntryPokemonNum(void *fightTypeData) {
 }
 
 // Number of trainers one side of the fight fields.
-u8 fightTypeDataBiosGetTrainerNum(void *fightTypeData) {
-    FIGHT_TYPE_DATA *fightTypeDataRecord = static_cast<FIGHT_TYPE_DATA *>(fightTypeData);
+u8 fightTypeDataBiosGetTrainerNum(FIGHT_TYPE_DATA *fightTypeData) {
+    FIGHT_TYPE_DATA *fightTypeDataRecord = fightTypeData;
 
     if (fightTypeDataRecord == 0) {
         return 0;
@@ -57,8 +57,8 @@ u8 fightTypeDataBiosGetTrainerNum(void *fightTypeData) {
 }
 
 // Name the fight type is displayed with.
-u32 fightTypeDataBiosGetName(void *fightTypeData) {
-    FIGHT_TYPE_DATA *fightTypeDataRecord = static_cast<FIGHT_TYPE_DATA *>(fightTypeData);
+u32 fightTypeDataBiosGetName(FIGHT_TYPE_DATA *fightTypeData) {
+    FIGHT_TYPE_DATA *fightTypeDataRecord = fightTypeData;
 
     if (fightTypeDataRecord == 0) {
         return 0;

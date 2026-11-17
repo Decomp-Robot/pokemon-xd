@@ -105,7 +105,7 @@ void *fightTargetGetPtr(u16 kind, void *target, u16 fightType) {
     FIGHT_FLOOR *floor;
     FightOutPokemon *pokemons[FIGHT_OUT_POKEMON_COUNT];
     FIGHT_TRAINER *trainers[FIGHT_FLOOR_SIDE_COUNT * FIGHT_SIDE_TRAINER_COUNT];
-    void *fightTypeData;
+    FIGHT_TYPE_DATA *fightTypeData;
     u16 trainer;
     u16 side;
     u16 trainerCount;
@@ -245,7 +245,7 @@ void *fightTargetGetPtr(u16 kind, void *target, u16 fightType) {
 // pointer is not part of the fight.
 void *_fightTargetGetTargetPtrToFightSidePtr(void *target, u16 fightType) {
     FIGHT_FLOOR *floor;
-    void *fightTypeData;
+    FIGHT_TYPE_DATA *fightTypeData;
     u8 trainerNum;
     u8 fightoutPokemonNum;
     u8 entryPokemonNum;

@@ -19,14 +19,115 @@ enum FightWeather {
     FIGHT_WEATHER_SHADOW_SKY = 5
 };
 
-/* Status selectors for battle floor records. */
+/* Status selectors for battle floor records. Selectors below the data limit
+ * address the floor data table record passed as floorDataId; the rest address
+ * the running floor, which is resolved through the current fight when the
+ * caller passes none. */
 enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_FIGHT_FLOOR_PTR = 0,
+    /* Floor data table record fields. */
+    FIGHT_FLOOR_STATUS_NAME = 1,
+    FIGHT_FLOOR_STATUS_FLOOR_DATA_ID = 2,
+    FIGHT_FLOOR_STATUS_FIGHT_SIDE_DATA_ID = 3,
+    FIGHT_FLOOR_STATUS_TIKEI_DATA_ID = 4,
+    FIGHT_FLOOR_STATUS_SYOUKAI_WZX_DATA_ID = 5,
+    FIGHT_FLOOR_STATUS_BGM_SND_ID = 6,
+    FIGHT_FLOOR_STATUS_ENV_SND_ID = 7,
+    FIGHT_FLOOR_STATUS_FIGHT_FLOOR_DATA_LIMIT = 8,
+    /* Running floor state. */
+    FIGHT_FLOOR_STATUS_JOUTAI_PTR = 9,
+    FIGHT_FLOOR_STATUS_JOUTAI_DATA_ID = 10,
+    FIGHT_FLOOR_STATUS_CHECK_WRITE_JOUTAI_DATA_ID = 11,
+    FIGHT_FLOOR_STATUS_TURN_COUNT = 12,
     FIGHT_FLOOR_STATUS_ENCOUNT_DATA_ID = 13,
+    FIGHT_FLOOR_STATUS_ENCOUNT_FLOOR_DATA_ID = 14,
+    FIGHT_FLOOR_STATUS_NOW_TIKEI_DATA_ID = 15,
+    FIGHT_FLOOR_STATUS_NOW_SYOUKAI_WZX_DATA_ID = 16,
+    FIGHT_FLOOR_STATUS_NOW_BGM_SND_DATA_ID = 17,
+    FIGHT_FLOOR_STATUS_NOW_ENV_SND_DATA_ID = 18,
+    FIGHT_FLOOR_STATUS_NOW_TENKOU_DATA_ID = 19, /* weather of the running encounter. */
     FIGHT_FLOOR_STATUS_FIGHT_TYPE = 20, /* fight type of the running encounter. */
+    FIGHT_FLOOR_STATUS_FIGHT_TYPE_NAME = 21,
+    FIGHT_FLOOR_STATUS_FIGHT_TYPE_TRAINER_NUM = 22,
+    FIGHT_FLOOR_STATUS_FIGHT_TYPE_ENTRY_POKEMON_NUM = 23,
+    FIGHT_FLOOR_STATUS_FIGHT_TYPE_FIGHTOUT_POKEMON_NUM = 24,
+    FIGHT_FLOOR_STATUS_FIGHT_SIDE_FIGHTOUT_POKEMON_MAX = 25,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND = 26, /* fight kind of the running encounter. */
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_NAME = 27,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_BACK_SAVE_DATA_FLAG = 28,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_BADGE_CHECK_FLAG = 29,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_ZUKAN_MITA_FLAG = 30,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_ZUKAN_TUKAMAETA_FLAG = 31,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_USE_ITEM_FLAG = 32,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_CALL_FLAG = 33,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_NIGERU_FLAG = 34,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DRAW_FLAG = 35,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_GET_EXP_FLAG = 36,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_GET_OKANE_FLAG = 37,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_OKANE_POOL_FLAG = 38,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_GET_FRIEND_FLAG = 39,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_GET_INFECT_POKERUS_FLAG = 40,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_CRITICAL_ATTACK_FLAG = 41,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_HIZUKI_AI_FLAG = 42,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_HIZUKI_MIYABURI_FLAG = 43,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DO_ITEM_SOUBI_TOKUKOUTOKUBOUP_FLAG = 44,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_KEIKENTIHUERU_FLAG = 45,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_BOSS_FLAG = 46,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DOROBOU_FLAG = 47,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_MONOHIROI_FLAG = 48,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_DARKPOKEMON_HYPERMODE_FLAG = 49,
     FIGHT_FLOOR_STATUS_POKEMON_STATUS_MENU_SUBBAR_FLAG = 50, /* whether the
         running battle shows the party status subbar. */
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_HOST_ENEMY_MSG_FLAG = 51,
+    FIGHT_FLOOR_STATUS_FIGHT_KIND_REGULATION_FLAG = 52,
+    /* Combatants, appointed targets and battle messages. */
+    FIGHT_FLOOR_STATUS_FIGHT_SIDE_PTR = 53,
+    FIGHT_FLOOR_STATUS_ATTACK_POKEMON_PTR = 54,
+    FIGHT_FLOOR_STATUS_USE_WAZA_DATA_ID = 55,
+    FIGHT_FLOOR_STATUS_MOTO_WAZA_DATA_ID = 56,
+    FIGHT_FLOOR_STATUS_WAZA_DAMAGE_VALUE = 57,
+    FIGHT_FLOOR_STATUS_WAZA_CRITICAL = 58,
+    FIGHT_FLOOR_STATUS_WAZA_JOUTAI_DATA_ID = 59,
+    FIGHT_FLOOR_STATUS_WAZA_INIT_JOUTAI_DATA_ID = 60,
+    FIGHT_FLOOR_STATUS_IS_HIT = 61,
+    FIGHT_FLOOR_STATUS_WAZA_DAMAGE = 62,
+    FIGHT_FLOOR_STATUS_WAZA_IRYOKU = 63,
+    FIGHT_FLOOR_STATUS_WAZA_TARGET_ID = 64,
+    FIGHT_FLOOR_STATUS_WAZA_HIT_DAMAGE = 65,
+    FIGHT_FLOOR_STATUS_DEFENSE_POKEMON_PTR = 66,
+    FIGHT_FLOOR_STATUS_DEFENSE_POKEMON_PTR_AND_WAZA_TARGET = 67, /* like the
+        plain pointer, but also recomputes the attack waza target. */
+    FIGHT_FLOOR_STATUS_ESCAPE_POKEMON_PTR = 68,
+    FIGHT_FLOOR_STATUS_IREKAE_POKEMON_PTR = 69,
+    FIGHT_FLOOR_STATUS_KIZETU_POKEMON_PTR = 70,
+    FIGHT_FLOOR_STATUS_TUIKAKOUKA_POKEMON_PTR = 71,
+    FIGHT_FLOOR_STATUS_TOKUSEI_POKEMON_PTR = 72,
+    FIGHT_FLOOR_STATUS_ITEM_POKEMON_PTR = 73,
     FIGHT_FLOOR_STATUS_ENCOUNT_FLOOR_ID = 74, /* floor ID of the running encounter. */
+    FIGHT_FLOOR_STATUS_APPOINT_POKEMON_PTR = 75,
+    FIGHT_FLOOR_STATUS_APPOINT_TRAINER_PTR = 76,
+    FIGHT_FLOOR_STATUS_APPOINT_WAZA_PTR = 77,
+    FIGHT_FLOOR_STATUS_APPOINT_SIDE_PTR = 78,
+    FIGHT_FLOOR_STATUS_APPOINT_ITEM_PTR = 79,
+    FIGHT_FLOOR_STATUS_APPOINT_MSG_ID = 80,
+    FIGHT_FLOOR_STATUS_ATTACK_MSG_ID = 81,
+    FIGHT_FLOOR_STATUS_CRITICAL_MSG_ID = 82,
+    FIGHT_FLOOR_STATUS_WAZAKOUKA_MSG_ID = 83,
+    FIGHT_FLOOR_STATUS_APPOINT_POKEMON_DATA_ID = 84,
+    FIGHT_FLOOR_STATUS_APPOINT_WAZA_DATA_ID = 85,
+    FIGHT_FLOOR_STATUS_APPOINT_ITEM_DATA_ID = 86,
+    FIGHT_FLOOR_STATUS_APPOINT_TOKUSEI_DATA_ID = 87,
+    FIGHT_FLOOR_STATUS_FIGHT_POKEMON_ENTRY_CNT = 88,
+    FIGHT_FLOOR_STATUS_FIGHT_OUT_POKEMON_PTR = 89,
+    FIGHT_FLOOR_STATUS_FIGHT_OUT_POKEMON_PTR_ARY_PTR = 90,
+    FIGHT_FLOOR_STATUS_FIRST_ATTACK_RND = 91,
+    FIGHT_FLOOR_STATUS_FIGHT_RESULT_ID = 92,
+    FIGHT_FLOOR_STATUS_FIGHT_OUT_BANME_POKEMON_PTR = 93,
+    FIGHT_FLOOR_STATUS_ITEM_QUANTITY_MSG_VALUE = 94, /* fills the item
+        quantity message value without touching floor state. */
+    FIGHT_FLOOR_STATUS_RESERVED = 95, /* needs the caller's floor; not resolved
+        through the current fight. */
+    FIGHT_FLOOR_STATUS_SELECTOR_LIMIT = 96
 };
 
 /* Menu IDs accepted by the fight status-menu count accessors. */
@@ -171,6 +272,14 @@ void fightFloorBiosSetIrekaePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *poke
 void fightFloorBiosSetEscapePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloorBiosSetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloorBiosSetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+FightOutPokemon *fightFloorBiosGetAttackPokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloorBiosGetDefensePokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloorBiosGetEscapePokemonPtr(FIGHT_FLOOR *floor);
+FightOutPokemon *fightFloorBiosGetIrekaePokemonPtr(FIGHT_FLOOR *floor);
+FIGHT_SIDE *fightFloorBiosGetFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex);
+_JOUTAI *fightFloorBiosGetJoutaiPtr(FIGHT_FLOOR *floor, u16 index);
+u16 fightFloorBiosGetEncountDataId(FIGHT_FLOOR *floor);
+u16 fightFloorBiosGetTurnCount(FIGHT_FLOOR *floor);
 void fightFloorBiosSetEncountDataId(FIGHT_FLOOR *floor, u16 dataId);
 void fightFloorBiosSetTurnCount(FIGHT_FLOOR *floor, u16 count);
 void fightFloorDataBiosSetName(FIGHT_FLOOR_DATA *data, u32 name);
@@ -190,7 +299,7 @@ u16 fightFloorDataBiosGetFloorDataId(FIGHT_FLOOR_DATA *data);
 FIGHT_FLOOR_DATA *fightFloorDataBiosGetPtr(u16 index);
 u8 fightFloorIsGcHeroWin(FIGHT_FLOOR *floor, u16 result);
 void fightFloor_SetEncountFloorId(FIGHT_FLOOR *floor, u32 floorID);
-s32 fightFloorSetStatus(FIGHT_FLOOR *floor, u16 floorDataId, u16 status, u16 index, u32 value);
+u32 fightFloorSetStatus(FIGHT_FLOOR *floor, u16 floorDataId, u16 status, u16 index, u32 value);
 u32 fightFloorDB_GetEnvSndId(u16 floorDataId);
 u32 fightFloorGetBgmSndDataId(FIGHT_FLOOR *floor);
 u32 fightFloorDB_GetBgmSndId(u16 floorDataId);
@@ -254,6 +363,15 @@ void fightFloor_SetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon
 void fightFloor_SetItemPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAppointItemDataId(FIGHT_FLOOR *floor, u16 item);
+void fightFloor_SetAppointPokemonDataId(FIGHT_FLOOR *floor, u16 dataId);
+void fightFloor_SetAppointPokemonWazaDataId(FIGHT_FLOOR *floor, u16 dataId);
+void fightFloor_SetAppointTokuseiDataId(FIGHT_FLOOR *floor, u16 dataId);
+void fightFloor_SetAttackPokemonFightWazaTargetId(FIGHT_FLOOR *floor, u16 targetId);
+void fightFloorInitFightTarget(FIGHT_FLOOR *floor);
+u8 fightFloorCheckWriteJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId);
+void fightFloorWriteJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId, u16 value);
+void fightFloorSetFightResultId(FIGHT_FLOOR *floor, u16 resultId);
+FightOutPokemon *fightFloorGetFightOutBanmeToValidFightOutPokemon(FIGHT_FLOOR *floor, u16 banme);
 FIGHT_TRAINER *fightFloorGetFightOutPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 u8 fightFloorLoopValidFightOutPokemon(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
 void fightFloor_SetAttackPokemonFightWazaJoutaiDataId(FIGHT_FLOOR *floor, u16 status);

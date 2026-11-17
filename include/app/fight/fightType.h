@@ -19,11 +19,12 @@ typedef struct FIGHT_TYPE_DATA {
 extern "C" {
 #endif
 
-u8 fightTypeDataBiosGetEntryPokemonNum(void *fightTypeData);
-u8 fightTypeDataBiosGetFightoutPokemonNum(void *fightTypeData);
+u8 fightTypeDataBiosGetEntryPokemonNum(FIGHT_TYPE_DATA *fightTypeData);
+u8 fightTypeDataBiosGetFightoutPokemonNum(FIGHT_TYPE_DATA *fightTypeData);
 FIGHT_TYPE_DATA *fightTypeDataBiosGetPtr(u16 type);
-u8 fightTypeDataBiosGetTrainerNum(void *fightTypeData);
+u8 fightTypeDataBiosGetTrainerNum(FIGHT_TYPE_DATA *fightTypeData);
 u16 fightTypeGetFightSideFightOutPokemonMax(u16 fightType);
+u32 fightTypeDataBiosGetName(FIGHT_TYPE_DATA *fightTypeData);
 
 #ifdef __cplusplus
 }
