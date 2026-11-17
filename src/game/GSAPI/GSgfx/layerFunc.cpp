@@ -1,5 +1,9 @@
 #include <GSgfx.h>
+#include <dolphin/gx/GXCommandList.h>
+#include <dolphin/gx/GXDraw.h>
+#include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTransform.h>
+#include <dolphin/os/OSCache.h>
 
 void GSgfxLayer::SetDistortionParams(f32 (*matrix)[3], signed char scaleExponent)
 {
@@ -231,4 +235,96 @@ void GSgfxLayer::cunitChannelGen(u8 channel, GSgfxCunitAlpha alpha,
     }
     mPassState[0].mFlags |= GSGFX_PASS_FLAG_LIGHT;
     mPassState[1].mFlags |= GSGFX_PASS_FLAG_LIGHT;
+}
+
+void GSgfxLayer::drawSphere(u8 slices)
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawSphere1(slices);
+    InvalidateState();
+}
+
+void GSgfxLayer::drawSphere(u8 stacks, u8 slices)
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawSphere(slices, stacks);
+    InvalidateState();
+}
+
+void GSgfxLayer::drawTorus(f32 radius, u8 stacks, u8 slices)
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawTorus(radius, stacks, slices);
+    InvalidateState();
+}
+
+void GSgfxLayer::drawOctahedron()
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawOctahedron();
+    InvalidateState();
+}
+
+void GSgfxLayer::drawIcosahedron()
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawIcosahedron();
+    InvalidateState();
+}
+
+void GSgfxLayer::drawDodecaedron()
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawDodeca();
+    InvalidateState();
+}
+
+void GSgfxLayer::drawCylinder(u8 slices)
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawCylinder(slices);
+    InvalidateState();
+}
+
+void GSgfxLayer::drawCube()
+{
+    FlushState();
+    GXSetVtxDescv(mVertexFormat->desc);
+    GXDrawCube();
+    InvalidateState();
+}
+
+void GSgfxLayer::dlDraw(GSgfxDL *displayList)
+{
+    if (displayList->mFlags & GS_DISPLAY_LIST_DIRTY) {
+        DCStoreRange(displayList->mData, displayList->mSize);
+        displayList->mFlags &= ~GS_DISPLAY_LIST_DIRTY;
+    }
+    GSgfxVF *format = mVertexFormat;
+    mVertexFormat = displayList->mVertexFormat;
+    FlushState();
+    char *data;
+    u32 size;
+    size = displayList->mSize;
+    data = displayList->mData;
+    GSgfxFifo.u8 = GX_CMD_CALL_DL;
+    GSgfxFifo.u32 = (u32)data;
+    GSgfxFifo.u32 = size;
+    mVertexFormat = format;
+}
+
+void GSgfxLayer::dlDrawExt(u8 *dl, u32 size)
+{
+    mVertexFormat->fmtIndex = GX_VTXFMT0;
+    FlushState();
+    GSgfxFifo.u8 = GX_CMD_CALL_DL;
+    GSgfxFifo.u32 = (u32)dl;
+    GSgfxFifo.u32 = size;
 }

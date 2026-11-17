@@ -870,7 +870,7 @@ public:
     void tgenFunc(u8 texGen, GSgfxTgenFunc func, GSgfxTgenSrc src, GSmtx *textureMatrix,
                   bool normalize, GSmtx *postMatrix);
     void tunitIndTexMtx(GSgfxIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
-    void dlDrawExt(u8 *dl, unsigned long size);
+    void dlDrawExt(u8 *dl, u32 size);
 
 /* Layer registry entry and cached render state. */
     GSgfxLayer *mNext;
