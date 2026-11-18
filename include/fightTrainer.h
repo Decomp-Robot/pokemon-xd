@@ -184,6 +184,19 @@ u16 *fightTrainerGetNamePtr(FIGHT_TRAINER *trainer);
 void fightTrainerCallEffect(FIGHT_TRAINER *trainer, u8 operation);
 u8 fightTrainerIsAllyFightTargetPtr(FIGHT_TRAINER *trainer, FightOutPokemon *target, u16 fightType);
 void fightTrainerToMenuBallStatus(FIGHT_TRAINER *trainer, u8 *ballStatus);
+void fightTrainerInitEnemyPokemonFightOutStatus(FIGHT_TRAINER *trainer, u8 validOnly);
+FightOutPokemon *fightTrainerGetNoActionFightOutPokemonPtr(FIGHT_TRAINER *trainer, u16 slot);
+s16 fightTrainerGetFightOutPokemonToTemotiBanme(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+s16 fightTrainerGetFightPokemonToTemotiBanme(FIGHT_TRAINER *trainer, FightPokemon *pokemon);
+void fightTrainerBackFightPokemonToTemotiPokemon(FIGHT_TRAINER *trainer, u8 setItem);
+/* pokemonAry must provide six writable entries. Results are in party order;
+   unused entries are set to null. */
+u16 fightTrainerGetIrekaeFightPokemonAry(FIGHT_TRAINER *trainer, FightPokemon **pokemonAry);
+FightPokemon *fightTrainerSearchIrekaeFightPokemon(FIGHT_TRAINER *trainer, u16 *index);
+u8 fightTrainerCheckIrekaeReserveFightPokemon(FIGHT_TRAINER *trainer, FightPokemon *pokemon);
+FightOutPokemon *fightTrainerCheckFightPokemonFightOut(FIGHT_TRAINER *trainer,
+                                                       FightPokemon *pokemon);
+FightPokemon *fightTrainerGetEntryIdToFightPokemonPtr(FIGHT_TRAINER *trainer, s16 entryId);
 
 /* Field queries of one battle-side trainer record.  A missing record reads as
    an empty value. */

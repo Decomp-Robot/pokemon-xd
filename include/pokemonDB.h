@@ -73,7 +73,7 @@ void fightOutPokemon_SetSequencePtr(FightOutPokemon *pokemon, struct NullSequenc
 FightPokemon *fightOutPokemon_GetMotoFightPokemonPtr(FightOutPokemon *pokemon);
 FIGHT_WAZA *fightOutPokemon_GetFightWazaPtr(FightOutPokemon *pokemon);
 FIGHT_ITEM *fightOutPokemon_GetFightItemPtr(FightOutPokemon *pokemon);
-void *fightOutPokemon_GetFightActionBuffPtr(FightOutPokemon *pokemon);
+FIGHT_ACTION *fightOutPokemon_GetFightActionBuffPtr(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetUseWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemonGetUseWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemonGetMotoWazaDataId(FightOutPokemon *pokemon);
@@ -169,8 +169,10 @@ void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
 u32 pokemon_GetTokuseiFlag(void *pokemonData);
 u8 pokemonDB_GetTokuseiDataId(u16 species, u16 index);
 s16 fightPokemon_GetEntryId(FightPokemon *pokemon);
+Pokemon *fightPokemon_GetMotoPokemonPtr(FightPokemon *pokemon);
 Pokemon *fightPokemon_GetPokemonBuffPtr(FightPokemon *pokemon);
 u8 fightPokemon_GetCatchEntryFlag(FightPokemon *pokemon);
+void pokemon_SetItemDataId(Pokemon *pokemon, u16 itemDataId);
 
 #ifdef __cplusplus
 }

@@ -572,7 +572,7 @@ name = "game/app/fight/fightTrainer.cpp"
 completed = true
 cflags = [
     "-W error", "-nodefaults", "-proc gekko", "-align powerpc", "-enum int",
-    "-fp hardware", "-Cpp_exceptions off", "-O4,s", "-inline auto",
+    "-fp hardware", "-Cpp_exceptions off", "-O4,s", "-inline noauto",
     "-pragma \"cats off\"", "-pragma \"warn_notinlined off\"", "-maxerrors 1",
     "-nosyspath", "-RTTI off", "-fp_contract on", "-str reuse", "-multibyte",
     "-i include", "-i build/$VERSION/include", "-DBUILD_VERSION=$VERSION_NUM",

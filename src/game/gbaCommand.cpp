@@ -320,7 +320,7 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
     u16 species;
     FightOutPokemon *targetPokemon;
     u8 entryPokemonNum;
-    void *player;
+    FIGHT_TRAINER *player;
     long i, j;
     u16 banOut;
     u32 battleStatus;
@@ -340,33 +340,33 @@ extern "C" long gbaCommandRequestAction(u32 chan, void *target, u32 slot, long f
     entryPokemonNum = fightTypeDataBiosGetEntryPokemonNum(layout);
     fightoutPokemonNum = fightTypeDataBiosGetFightoutPokemonNum(layout);
     count = (trainerNum * fightoutPokemonNum) * 2;
-    player = fightTargetGetPtr(FIGHT_TARGET_ID_HOST_TRAINER_1, target, fightType);
+    player = static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_HOST_TRAINER_1, target, fightType));
     selection[0] = fightTrainerGetValidFightOutPokemonPtr(player, 0);
     controllers[0] = CONTROLLER_ID_FIRST;
     if (trainerNum == 2) {
-        void *trainer = fightTargetGetPtr(FIGHT_TARGET_ID_OWN_SIDE_TRAINER_2, player, fightType);
+        FIGHT_TRAINER *trainer = static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_OWN_SIDE_TRAINER_2, player, fightType));
         selection[1] = fightTrainerGetValidFightOutPokemonPtr(trainer, 0);
         controllers[1] = fightTrainerBiosGetControllerId(trainer);
-        trainer = fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType);
+        trainer = static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType));
         selection[2] = fightTrainerGetValidFightOutPokemonPtr(trainer, 0);
         controllers[2] = fightTrainerBiosGetControllerId(trainer);
-        trainer = fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_2, player, fightType);
+        trainer = static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_2, player, fightType));
         selection[3] = fightTrainerGetValidFightOutPokemonPtr(trainer, 0);
         controllers[3] = fightTrainerBiosGetControllerId(trainer);
     } else if (fightoutPokemonNum == 2) {
-        void *trainer;
+        FIGHT_TRAINER *trainer;
         selection[1] = fightTrainerGetValidFightOutPokemonPtr(player, 1);
-        trainer = fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType);
+        trainer = static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType));
         selection[2] = fightTrainerGetValidFightOutPokemonPtr(trainer, 0);
         selection[3] = fightTrainerGetValidFightOutPokemonPtr(trainer, 1);
         controllers[1] = CONTROLLER_ID_FIRST;
         controllers[2] = CONTROLLER_ID_SECOND;
         controllers[3] = CONTROLLER_ID_SECOND;
     } else {
-        selection[1] = fightTrainerGetValidFightOutPokemonPtr(fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType), 0);
+        selection[1] = fightTrainerGetValidFightOutPokemonPtr(static_cast<FIGHT_TRAINER *>(fightTargetGetPtr(FIGHT_TARGET_ID_OPPONENT_TRAINER_1, player, fightType)), 0);
         controllers[1] = CONTROLLER_ID_FIRST;
     }
-    targetPokemon = fightTrainerGetValidFightOutPokemonPtr(target, slot);
+    targetPokemon = fightTrainerGetValidFightOutPokemonPtr(static_cast<FIGHT_TRAINER *>(target), slot);
     packet.header.mode = (fightoutPokemonNum == 2) ? slot + 1 : 0;
     packet.header.flag = flag;
     packet.header.pokemonCount = count;

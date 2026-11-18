@@ -13,9 +13,10 @@ extern "C" {
 #endif
 u8 fightTrainerBiosGetControllerId(void *trainer);
 
-// Pokemon the trainer has out in the given slot, and the Pokemon record it
-// keeps in the given slot; null when the slot holds none.
-FightOutPokemon *fightTrainerGetValidFightOutPokemonPtr(void *trainerData, u16 index);
+// Valid Pokemon the trainer has sent out in the given slot, or null when the
+// record is absent or invalid. The party-record accessor returns a valid
+// record, which may still be a Pokemon that cannot fight.
+FightOutPokemon *fightTrainerGetValidFightOutPokemonPtr(FIGHT_TRAINER *trainerData, u16 index);
 FightPokemon *fightTrainerGetValidFightPokemonPtr(FIGHT_TRAINER *trainerData, u16 index);
 
 
