@@ -280,6 +280,9 @@ extern "C" {
 u16 pokemon_GetHp(Pokemon *pokemon);
 u16 pokemon_GetMaxHp(Pokemon *pokemon);
 u16 pokemon_GetFriend(Pokemon *pokemon);
+u8 pokemon_GetLevel(Pokemon *pokemon);
+u32 pokemon_GetExp(Pokemon *pokemon);
+u16 pokemon_GetItemDataId(Pokemon *pokemon);
 void pokemon_SetHp(Pokemon *pokemon, u16 hp);
 void pokemonInitJoutai(Pokemon *pokemon);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
@@ -432,6 +435,8 @@ void pokemonSetSequenceStatus(Pokemon *pokemon, void *sequence);
 u8 pokemonWazaCheckValid(Pokemon *pokemon, u16 slot);
 
 u8 pokemonWazaGetMaxPP(Pokemon *pokemon, u16 slot);
+
+u8 pokemonWazaGetZokusei(Pokemon *pokemon, u16 slot);
 
 void pokemonWazaReplace(Pokemon *pokemon, s32 prev, s32 slot);
 

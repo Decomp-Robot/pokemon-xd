@@ -242,9 +242,10 @@ extern "C" {
 extern MenuPokemonWork _menuPokemon;
 extern MENU_INFO menu_info[2][6];
 
-// faceSelection is forwarded to the Pokemon face selector.
+// A negative rare override preserves the Pokemon's computed rarity.
 void pokemonToMenuPokemonStatus(Pokemon *pokemon, FightPokemon *fightPokemon,
-                                MENU_POKEMON_STATUS *status, s32 faceSelection);
+                                MENU_POKEMON_STATUS *status, s8 rareOverride);
+void pokemonToMenuPokemonStatusSubBar(Pokemon *pokemon, MENU_POKEMON_STATUS *status);
 
 void menuPokemonInitWork(void);
 s32 menuPokemonOpenItemGive(u8 bagPocket, u8 bagSlot, u16 itemId, FIGHT_TRAINER *trainer);

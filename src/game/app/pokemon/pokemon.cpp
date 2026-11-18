@@ -1,3 +1,4 @@
+#include <libc/memory.h>
 #include <types.h>
 #include <Pokemon.h>
 #include <pokemonBios.h>
@@ -5,6 +6,13 @@
 #include <itemDataBios.h>
 #include <GSsndPlayback.h>
 #include <waza.h>
+#include <zokusei.h>
+#include <GSmsg.h>
+#include <fightSeq.h>
+#include <menuFace.h>
+#include <menuSub.h>
+#include <menuPokemon.h>
+#include <menuWazaStatus.h>
 
 extern "C" {
 
@@ -254,6 +262,83 @@ void pokemonSetDarkPokemonStatus(Pokemon *pokemon, u16 shadowID)
     DarkPokemon *dark = pokemon->getDarkPokemon();
     if (dark != 0) {
         dark->setDarkPokemonID(shadowID);
+    }
+}
+
+// Party and fight status panel records. A record carries what the panel draws:
+// the name, the level, the HP pair, the status texture, the face, the gender
+// mark, the ball that tells a normal Pokemon from a Shadow one, and the held
+// item. The sub bar under the HP pair shows either the EXP made inside the
+// current level or, for a Shadow Pokemon, the heart gauge. The move record
+// carries the name of the Pokemon and its four move rows.
+void pokemonToMenuPokemonStatus(Pokemon *pokemon, FightPokemon *fightPokemon,
+                                MENU_POKEMON_STATUS *status, s8 rareOverride)
+{
+    pokemon_GetPokemonDataId(pokemon);
+    GScharCpy(status->mName, pokemon_GetName(pokemon));
+    status->mLevel = pokemon_GetLevel(pokemon);
+    status->mMaxHp = pokemon_GetMaxHp(pokemon);
+    status->mHp = pokemon_GetHp(pokemon);
+    pokemonToMenuPokemonStatusSubBar(pokemon, status);
+    status->mJoutaiId = pokemonGetJoutaiMenuSpriteId(pokemon);
+    if (fightPokemon == 0) {
+        status->mFaceId = menuFaceGetID(pokemon);
+    } else {
+        status->mFaceId = menuFaceGetID3(pokemon, pokemonGetFightPokemonDeoxysSel(fightPokemon), rareOverride);
+    }
+    status->mSex = menuSubGetPokemonSexForFightDisp(pokemon);
+    if (!pokemonIsDarkPokemon(pokemon)) {
+        status->mBallType = POKEMON_BALL_TYPE_NORMAL;
+    } else if (!pokemonIsJoutaiDataId(pokemon, JOUTAI_DARK_HYPER_MODE)) {
+        status->mBallType = POKEMON_BALL_TYPE_SHADOW;
+    } else {
+        status->mBallType = POKEMON_BALL_TYPE_HYPER;
+    }
+    status->mHeldItem = pokemon_GetItemDataId(pokemon);
+}
+
+void pokemonToMenuPokemonStatusSubBar(Pokemon *pokemon, MENU_POKEMON_STATUS *status)
+{
+    u8 level;
+    s32 levelExp;
+
+    level = pokemon_GetLevel(pokemon);
+    levelExp = pokemonGetLevelToExp(pokemon, level);
+    if (!pokemonIsDarkPokemon(pokemon)) {
+        status->mProgressRange.mLevelExpSpan = pokemonGetLevelToExp(pokemon, level + 1) - levelExp;
+        status->mProgressValue.mExpIntoLevel = pokemon_GetExp(pokemon) - levelExp;
+    } else {
+        status->mProgressRange.mShadowGauge = darkPokemonBiosGetDarkPoint(pokemon_GetDarkpokemonDataId(pokemon));
+        status->mProgressValue.mPurification = pokemonGetDp(pokemon);
+    }
+}
+
+void pokemonToMenuWazaStatus(Pokemon *pokemon, MENU_WAZA_STATUS *status)
+{
+    u16 waza;
+    u16 type;
+    u8 slot;
+    MENU_WAZA_ENTRY *entry;
+
+    memset(status, 0, sizeof(MENU_WAZA_STATUS));
+    status->pokemonName = pokemon_GetName(pokemon);
+    for (slot = 0; slot < sizeof(status->moves) / sizeof(status->moves[0]); slot++) {
+        entry = &status->moves[slot];
+        if (!pokemonWazaCheckValid(pokemon, slot)) {
+            entry->moveName = 0;
+            entry->typeName = 0;
+            entry->type = 0;
+            entry->maxPP = 0;
+            entry->currentPP = 0;
+            continue;
+        }
+        waza = pokemon_GetPokemonWazaDataId(pokemon, slot);
+        type = wazaDB_GetZokuseiDataId(waza);
+        entry->moveName = GSmsgGetStringPtr(wazaDB_GetName(waza));
+        entry->typeName = GSmsgGetStringPtr(zokuseiBiosGetName(type));
+        entry->type = pokemonWazaGetZokusei(pokemon, slot);
+        entry->maxPP = pokemonWazaGetMaxPP(pokemon, slot);
+        entry->currentPP = pokemon_GetPokemonWazaPp(pokemon, slot);
     }
 }
 

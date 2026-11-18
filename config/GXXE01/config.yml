@@ -30,7 +30,6 @@ block_relocations:
   - source: ".text:0x802E3930"
   - source: ".text:0x802E39D0"
   # Extracted consumers retain the pokemon TU's compiler-local literals.
-  - source: ".text:0x8013F298"
   - source: ".text:0x80141B40"
   # Extracted consumer of the compiler-local pokecolo zero literal.
   # Retain its original SDA2 displacement until the consumer is recovered.

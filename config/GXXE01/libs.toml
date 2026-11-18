@@ -2966,6 +2966,9 @@ cflags = [
     "-i include", "-i build/$VERSION/include", "-DBUILD_VERSION=$VERSION_NUM",
     "-DVERSION_$VERSION", "-DNDEBUG=1", "-use_lmw_stmw on"
 ]
+# The menu status records are filled through the menu face and sub menu
+# interfaces, whose headers reach the GX structures those menus draw with.
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
 name = "game/app/memcard/savedata.cpp"
