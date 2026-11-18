@@ -2446,6 +2446,13 @@ game/app/waza/wazaFuncData.cpp:
 	.data       start:0x803FCC88 end:0x803FEFB0
 	.sdata      start:0x804E83A8 end:0x804E83B0
 
+game/app/pokemon/pokemonNakigoeData.cpp:
+	.data       start:0x80400018 end:0x80400630
+	.sdata      start:0x804E83C8 end:0x804E83D0
+
+game/app/pokemon/pokemonWaveDispData.cpp:
+	.data       start:0x80400630 end:0x80403B00
+
 game/app/waza/wazaBios.cpp:
 	.text       start:0x8013D7B0 end:0x8013DFEC
 

@@ -2981,6 +2981,14 @@ completed = true
 extra_cflags = ["-O4,s", "-inline noauto"]
 
 [[lib.object]]
+name = "game/app/pokemon/pokemonNakigoeData.cpp"
+completed = true
+
+[[lib.object]]
+name = "game/app/pokemon/pokemonWaveDispData.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/pokemon/darkPokemonBios.cpp"
 completed = true
 extra_cflags = ["-O4,s", "-inline noauto"]
