@@ -131,6 +131,37 @@ void pokemon_SetVictoryRibbon(Pokemon *pokemon, bool flag);
 void pokemon_SetWinningRibbon(Pokemon *pokemon, bool flag);
 void pokemon_SetChampRibbon(Pokemon *pokemon, bool flag);
 
+// Contest condition of a Pokemon: the fur sheen and the five contest
+// categories of the condition record.
+void pokemon_SetFur(Pokemon *pokemon, u8 value);
+void pokemon_SetStrong(Pokemon *pokemon, u8 value);
+void pokemon_SetClever(Pokemon *pokemon, u8 value);
+void pokemon_SetCute(Pokemon *pokemon, u8 value);
+void pokemon_SetBeautiful(Pokemon *pokemon, u8 value);
+void pokemon_SetStyle(Pokemon *pokemon, u8 value);
+void pokemon_SetFriend(Pokemon *pokemon, u16 value);
+
+// Individual values, effort values and calculated battle stats of a Pokemon,
+// one setter per stat.
+void pokemon_SetNimblenessRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeDefRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeAtkRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyDefRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyAtkRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetMaxHpRnd(Pokemon *pokemon, u16 value);
+void pokemon_SetNimblenessEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeDefEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeAtkEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyDefEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyAtkEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetMaxHpEffort(Pokemon *pokemon, u16 value);
+void pokemon_SetNimbleness(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeDef(Pokemon *pokemon, u16 value);
+void pokemon_SetSpeAtk(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyDef(Pokemon *pokemon, u16 value);
+void pokemon_SetPhyAtk(Pokemon *pokemon, u16 value);
+void pokemon_SetMaxHp(Pokemon *pokemon, u16 value);
+
 u16 pokemon_GetPokemonWazaDataId(Pokemon *pokemon, u16 slot);
 u8 pokemon_GetPokemonWazaPp(Pokemon *pokemon, u16 slot);
 void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);

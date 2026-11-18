@@ -2468,7 +2468,7 @@ game/app/pokemon/pokemonBios.cpp:
 	.text       start:0x80145928 end:0x8014686C
 
 game/app/pokemon/pokemonDB.cpp:
-	.text       start:0x801479CC end:0x80147EC8
+	.text       start:0x801479CC end:0x801482D4
 
 game/app/pokemon/pokemonEvolution.cpp:
 	.text       start:0x80149C0C end:0x8014AA60
