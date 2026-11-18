@@ -7,8 +7,6 @@
 
 #include <GSAPI/GSfsys/fsys.h>
 #include <GSAPI/GSmemman/GSmemman.h>
-void _fsysAddCacheManage(FsysCacheManage* cache);
-void _fsysAddArq(FsysArq* arq);
 
 /* Cache heap sizes, cursors and tables, with the ARAM range and heap they
  * are allocated from. */
@@ -329,4 +327,122 @@ FsysCacheManage* _fsysGetCacheManage(u32 groupId, u32 cacheIndex)
 void _fsysDelCacheManage(FsysCacheManage* cache)
 {
     _fsysDelTAG(cache, &_fsysCACHEManageRoot);
+}
+
+/*! Hand out a free cache descriptor and put it on the live list. */
+FsysCacheManage* _fsysGetNewCacheManage(u32 groupID, u32 cacheIndex, u8 inUse,
+                                       u8 lockFlag, u32 priority)
+{
+    BOOL intr;
+    FsysCacheManage* cache;
+    FsysCacheManage* found = 0;
+    u32 index;
+
+    intr = OSDisableInterrupts();
+    index = _fsysCACHEManageIndex;
+
+    while (found == 0) {
+        cache = &_fsysCACHEManage[index];
+
+        if (cache->allocated == 0) {
+            cache->prev = 0;
+            cache->next = 0;
+            cache->allocated = 1;
+            cache->inUse = inUse;
+            cache->lockFlag = lockFlag;
+            cache->groupId = groupID;
+            cache->cacheIndex = cacheIndex;
+            cache->aramAddress = 0;
+            cache->size = 0;
+            cache->priority = priority;
+            cache->creationID = _fsysCACHEuniqueID;
+            _fsysCACHEuniqueID++;
+            found = cache;
+        }
+        index++;
+        if (index >= _fsysCACHEManageSize) {
+            index = 0;
+        }
+        if (index == _fsysCACHEManageIndex) {
+            FSYS_RETURN_IF_FALSE(index != _fsysCACHEManageIndex);
+        }
+    }
+
+    _fsysCACHEManageIndex = index;
+    _fsysAddCacheManage(found);
+    OSRestoreInterrupts(intr);
+    return found;
+}
+
+/*! Link a cache descriptor into the live list. */
+void _fsysAddCacheManage(FsysCacheManage* cache)
+{
+    _fsysAddTAG(cache, &_fsysCACHEManageRoot);
+}
+
+/*! Find the transfer that owns an ARQ request. */
+FsysArq* _fsysArq2ArqTrans(ARQRequest* request)
+{
+    FsysArq* arq = _fsysARQTransRoot;
+
+    while (arq != 0) {
+        if (&arq->request == request) {
+            return arq;
+        }
+        arq = arq->next;
+    }
+    return 0;
+}
+
+/*! Unlink a completed transfer from the live list. */
+void _fsysDelARQTrans(FsysArq* trans)
+{
+    _fsysDelTAG(trans, &_fsysARQTransRoot);
+}
+
+/*! Hand out a free ARQ transfer descriptor and put it on the live list. */
+FsysArq* _fsysGetNewArq(void)
+{
+    BOOL intr;
+    FsysArq* found = 0;
+    FsysArq* arq;
+    u32 index;
+    intr = OSDisableInterrupts();
+    index = _fsysARQTransIndex;
+
+    while (found == 0) {
+        arq = &_fsysARQTrans[index];
+
+        if (arq->inUse == 0) {
+            arq->prev = 0;
+            arq->next = 0;
+            arq->inUse = 1;
+            arq->callback = 0;
+            arq->file = 0;
+            arq->header = 0;
+            arq->userCallback = 0;
+            arq->context = 0;
+            arq->argument = 0;
+            arq->buffer = 0;
+            arq->length = 0;
+            found = arq;
+        }
+        index++;
+        if (index >= _fsysARQTransSize) {
+            index = 0;
+        }
+        if (index == _fsysARQTransIndex) {
+            break;
+        }
+    }
+    _fsysARQTransIndex = index;
+    _fsysAddArq(found);
+    OSRestoreInterrupts(intr);
+    return found;
+}
+
+/*! Link a transfer descriptor into the live list. */
+void _fsysAddArq(FsysArq* arq)
+{
+    _fsysAddTAG(arq, &_fsysARQTransRoot);
 }

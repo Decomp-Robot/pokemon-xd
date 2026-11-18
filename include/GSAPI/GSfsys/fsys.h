@@ -396,6 +396,7 @@ FsysCacheManage* _fsysGetCacheManageGroup(u32 groupID);
 FsysCacheManage* _fsysGetCacheManageAddr(u32 cacheAddress);
 FsysCacheManage* _fsysGetNewCacheManage(u32 groupID, u32 cacheIndex, u8 inUse,
                                        u8 lockFlag, u32 priority);
+void _fsysAddCacheManage(FsysCacheManage* cache);
 void _fsysDelCacheManage(FsysCacheManage* cache);
 /* fsysTOC */
 void _fsysHeaderSizeReadDvdCallback(s32 result, GSdvdFile* file);
@@ -462,6 +463,7 @@ u32 _fsysID2Index(FsysFile* file, u32 id);
 void _fsysMemSet(void* buffer, int value, u32 size);
 FsysCacheManage* _fsysGetCacheManage(u32 groupId, u32 cacheIndex);
 FsysArq* _fsysGetNewArq(void);
+void _fsysAddArq(FsysArq* arq);
 FsysArq* _fsysArq2ArqTrans(ARQRequest* request);
 void* _fsysDoMalloc(u32 size);
 void _fsysMemFreeCache(u32 cacheAddress);
