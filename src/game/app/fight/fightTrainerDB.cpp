@@ -1,4 +1,5 @@
 #include <fightTrainer.h>
+#include <fightTrainerDB.h>
 #include <deck.h>
 #include <app/fight/fightTrainerEnemy.h>
 
@@ -824,6 +825,416 @@ u8 fightTrainerAiDB_GetIrekaeValue(u16 aiDataId)
         return 0;
     }
     return ai->getPokeChgRate();
+}
+
+void fightTrainerAiDB_SetAbicntMinValue(u16 aiDataId, u8 value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setStatusDetermValTotalMin(value);
+}
+
+u8 fightTrainerAiDB_GetAbicntMinValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValTotalMin();
+}
+
+void fightTrainerAiDB_SetAbicntMaxValue(u16 aiDataId, u8 value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setStatusDetermValTotalMax(value);
+}
+
+u8 fightTrainerAiDB_GetAbicntMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValTotalMax();
+}
+
+u8 fightTrainerAiDB_GetAvoidMinValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMin(DECK_STATUS_DETERM_AVOID);
+}
+
+u8 fightTrainerAiDB_GetAvoidMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_AVOID);
+}
+
+u8 fightTrainerAiDB_GetNimblenessMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_NIMBLENESS);
+}
+
+u8 fightTrainerAiDB_GetSpeDefMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_SPE_DEF);
+}
+
+u8 fightTrainerAiDB_GetSpeAtkMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_SPE_ATK);
+}
+
+u8 fightTrainerAiDB_GetPhyDefMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_PHY_DEF);
+}
+
+u8 fightTrainerAiDB_GetPhyAtkMaxValue(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return 0;
+    }
+    return ai->getStatusDetermValMax(DECK_STATUS_DETERM_PHY_ATK);
+}
+
+void fightTrainerAiDB_SetPokemonJoutaiFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectPokemonCondJuge(value);
+}
+
+bool fightTrainerAiDB_GetPokemonJoutaiFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectPokemonCondJuge();
+}
+
+void fightTrainerAiDB_SetWazaRiskFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectWazaRiskJudge(value);
+}
+
+bool fightTrainerAiDB_GetWazaRiskFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectWazaRiskJudge();
+}
+
+void fightTrainerAiDB_SetWazaHitFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectWazaHit(value);
+}
+
+bool fightTrainerAiDB_GetWazaHitFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectWazaHit();
+}
+
+void fightTrainerAiDB_SetPartFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectRole(value);
+}
+
+bool fightTrainerAiDB_GetPartFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectRole();
+}
+
+void fightTrainerAiDB_SetWazaInitValueFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectWazaAssmntVal(value);
+}
+
+bool fightTrainerAiDB_GetWazaInitValueFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectWazaAssmntVal();
+}
+
+void fightTrainerAiDB_SetWazaRndSelectFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setSelectRandomWaza(value);
+}
+
+bool fightTrainerAiDB_GetWazaRndSelectFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getSelectRandomWaza();
+}
+
+void fightTrainerAiDB_SetDefensePokemonRndSelectFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setSelectRandomDefence(value);
+}
+
+bool fightTrainerAiDB_GetDefensePokemonRndSelectFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getSelectRandomDefence();
+}
+
+void fightTrainerAiDB_SetWazaDamageFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setCalcWazaDamage(value);
+}
+
+bool fightTrainerAiDB_GetWazaDamageFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getCalcWazaDamage();
+}
+
+void fightTrainerAiDB_SetTokuseiCheckFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setAbilityDetermination(value);
+}
+
+bool fightTrainerAiDB_GetTokuseiCheckFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getAbilityDetermination();
+}
+
+void fightTrainerAiDB_SetZokuseiCheckFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setAttrDetermination(value);
+}
+
+bool fightTrainerAiDB_GetZokuseiCheckFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getAttrDetermination();
+}
+
+void fightTrainerAiDB_SetKeyPlayerFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setRespectKeyPlayer(value);
+}
+
+bool fightTrainerAiDB_GetKeyPlayerFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getRespectKeyPlayer();
+}
+
+void fightTrainerAiDB_SetPokemonDataOrderAceBossFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setSelectAceBoss(value);
+}
+
+bool fightTrainerAiDB_GetPokemonDataOrderAceBossFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getSelectAceBoss();
+}
+
+void fightTrainerAiDB_SetPokemonDataOrderOutFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setOrder(value);
+}
+
+bool fightTrainerAiDB_GetPokemonDataOrderOutFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getOrder();
+}
+
+void fightTrainerAiDB_SetPokemonSelectWeakPointFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setNotSameWeekPoint(value);
+}
+
+bool fightTrainerAiDB_GetPokemonSelectWeakPointFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getNotSameWeekPoint();
+}
+
+void fightTrainerAiDB_SetPokemonSelectRandomFlag(u16 aiDataId, bool value)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return;
+    }
+    ai->setSelectRandomPokemon(value);
+}
+
+bool fightTrainerAiDB_GetPokemonSelectRandomFlag(u16 aiDataId)
+{
+    DeckTrainerAI *ai = DeckTrainerAI::getDeckTrainerAIObj(aiDataId);
+
+    if (ai == 0) {
+        return false;
+    }
+    return ai->getSelectRandomPokemon();
 }
 
 }

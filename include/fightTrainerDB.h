@@ -2,6 +2,7 @@
 #define FIGHT_TRAINER_DB_H
 
 #include <types.h>
+#include <bool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,8 +11,6 @@ extern "C" {
 u16 fightTrainerDB_GetName(u16 trainerDataId);
 u8 fightTrainerDB_GetKindDataId(u16 trainerDataId);
 u16 fightTrainerDB_GetAiDataId(u16 trainerDataId);
-u8 fightTrainerAiDB_GetPokemonJoutaiFlag(u16 aiDataId);
-u8 fightTrainerAiDB_GetZokuseiCheckFlag(u16 aiDataId);
 
 #ifdef __cplusplus
 }

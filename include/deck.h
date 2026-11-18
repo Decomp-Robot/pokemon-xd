@@ -28,6 +28,16 @@ extern u32 deck_group_data[];
 #ifdef __cplusplus
 }
 
+/* Stat categories addressed in mStatusDetermVal, in table order. */
+enum DeckStatusDetermIndex {
+    DECK_STATUS_DETERM_PHY_ATK = 0,
+    DECK_STATUS_DETERM_PHY_DEF = 1,
+    DECK_STATUS_DETERM_SPE_ATK = 2,
+    DECK_STATUS_DETERM_SPE_DEF = 3,
+    DECK_STATUS_DETERM_NIMBLENESS = 4,
+    DECK_STATUS_DETERM_AVOID = 6
+};
+
 /* One entry of the status determination table: the upper and lower bounds of
  * a single category share one byte, the maximum in the high nibble and the
  * minimum in the low nibble. */
