@@ -7,6 +7,9 @@
 extern "C" {
 #endif
 
+u8 fightAiCombo_Kinokonohousi_Kiaipanti_2(FIGHT_TRAINER *trainer, FightOutPokemon **allies,
+    u16 allyCount, FightOutPokemon **enemies, u16 enemyCount,
+    AI_ALLWAZA_VALID_TBL *output, u8 activation);
 s16 fightAiCombo_GetValidValue(FightOutPokemon **allies, u16 allyCount, FightOutPokemon **enemies, u16 enemyCount);
 s16 fightAiCombo_GetAllWazaMaxValueTable(AI_ALLWAZA_VALID_TBL *records, u8 count, s16 value,
     FIGHT_TRAINER *trainer, FightOutPokemon **allies, FightOutPokemon **enemies,

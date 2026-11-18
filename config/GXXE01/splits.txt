@@ -3826,7 +3826,7 @@ game/app/fight/fightTrainerAi.cpp:
 	.sbss       start:0x804EBDB0 end:0x804EBDB4
 
 game/app/fight/fightTrainerAiComboFunc.cpp:
-	.text       start:0x802D6E3C end:0x802D8AA8
+	.text       start:0x802D6C68 end:0x802D8AA8
 
 game/app/fight/fightTrainerAiWazaValue.cpp:
 	.text       start:0x802DEFE4 end:0x802DF948

@@ -1,9 +1,60 @@
 #include <fightTrainerAiCombo.h>
 #include <fightFloor.h>
 #include <fightPokemon.h>
+#include <fightSeq.h>
 #include <hsdRandom.h>
 #include <pokemonDB.h>
 #include <waza.h>
+
+u8 fightAiCombo_Kinokonohousi_Kiaipanti_2(FIGHT_TRAINER *trainer, FightOutPokemon **allies,
+    u16 allyCount, FightOutPokemon **enemies, u16 enemyCount,
+    AI_ALLWAZA_VALID_TBL *output, u8 activation)
+{
+    AI_ALLWAZA_VALID_TBL records[FIGHT_AI_MAX_COMBINATIONS];
+    u8 count = 0;
+    u8 i;
+    s16 value;
+    s16 score;
+
+    for (i = 0; i < FIGHT_AI_MAX_COMBINATIONS; i++) {
+        fightAi_InitAllWazaValidSub(&records[i]);
+    }
+    if (ai_allwaza_valid_work.mPokemonCount < 2) {
+        return 0;
+    }
+    if (allyCount < 2) {
+        return 0;
+    }
+    u8 awakeCount = 0;
+    for (i = 0; i < enemyCount; i++) {
+        if (enemies[i] != 0) {
+            if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_SLEEP) == 0) {
+                awakeCount++;
+            }
+        }
+    }
+    if (awakeCount == 0) {
+        return 0;
+    }
+    fightAi_AllWazaValid_AddComboList(trainer, records, &count,
+        FIGHT_AI_COMBO_MATCH_WAZA, WAZA_DATA_ID_SPORE, FIGHT_AI_COMBO_MATCH_WAZA, WAZA_DATA_ID_FOCUS_PUNCH);
+    if (count == 0) {
+        return 0;
+    }
+    value = fightAiCombo_GetValidValue(allies, allyCount, enemies, enemyCount);
+    score = fightAiCombo_GetAllWazaMaxValueTable(records, count, value,
+        trainer, allies, enemies, output, -1);
+    if (score > 0) {
+        u16 randomValue = HSD_Rand();
+        if (score + activation > (u8)(randomValue % 100)) {
+            for (i = 0; i < allyCount; i++) {
+                allies[i]->setComboFuncId(FIGHT_AI_COMBO_ID_NONE);
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
 
 enum FIGHT_AI_WEATHER_COMBO_ADDSUB_DATA_ID {
     AI_ADDSUB_SUN_SOLAR_BEAM_ENEMY_FIRE = 668,
