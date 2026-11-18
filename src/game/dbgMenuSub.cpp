@@ -1,4 +1,6 @@
 #include <types.h>
+#include <dbgMenu.h>
+#include <pokecolo.h>
 #include <floorBgmMask.h>
 #include <GSres.h>
 #include <gamedata.h>
@@ -9,6 +11,27 @@
 #include <savedata.h>
 
 #pragma force_active on
+
+// The root menu list differs between ROM versions.
+extern "C" long dbgMenuGetRootMenu(void)
+{
+    enum {
+        DBG_MENU_ROM_VERSION_ALT_ROOT = 2,
+        DBG_MENU_ROM_VERSION_DEFAULT = 0
+    };
+    enum {
+        DBG_MENU_ROOT_ITEM_ALT = 497,
+        DBG_MENU_ROOT_ITEM_DEFAULT = 2
+    };
+
+    switch (pokecoloGetRomVersion()) {
+    case DBG_MENU_ROM_VERSION_ALT_ROOT:
+        return DBG_MENU_ROOT_ITEM_ALT;
+    case DBG_MENU_ROM_VERSION_DEFAULT:
+    default:
+        return DBG_MENU_ROOT_ITEM_DEFAULT;
+    }
+}
 
 // Debug menu entries for the people viewer, the floor sound volume display,
 // the resource dump and the starter kit.
