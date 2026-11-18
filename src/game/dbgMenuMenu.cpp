@@ -11,6 +11,7 @@
 #include <menuSub.h>
 #include <menuOrre.h>
 #include <menuScript.h>
+#include <menuMewWaza.h>
 
 // Debug menu entries for the world map, the Pokespot ("esaba") and the Under
 // ("undertaker"), and the cursor hooks of the windows those entries open.
@@ -81,13 +82,8 @@ u8 menuIsCheck(s32 menuID);
 // flags
 
 // menu scripts
-void menuScriptOpenWorldMap(u16 mapIndex);
-void menuScriptUsohachi(void);
 void menuScriptInfoEsa(void);
-void menuScriptTutorial(void);
-void menuScriptEevee(void);
 void menuMoveDemo(s32 demo);
-void mewWazaSequence(void);
 void menuOrreColosseum(u16 encountID);
 void menuIntUnderTakerOpenIcon(void);
 
@@ -106,8 +102,6 @@ long undertakerGetStartFlagID(void);
 // Menu scripts.
 extern "C" void menuScriptUsohachi2(void);
 extern "C" void menuNintendoWarning(void);
-extern "C" void menuScriptWazaMeijin(s32 value);
-extern "C" void menuScriptWazaBasan(s32 *value);
 
 // Helpers defined further down the unit.
 void _pokemonCreate(Pokemon *pokemon, unsigned short species, unsigned long rnd);
@@ -499,9 +493,9 @@ extern "C" s32 dbgMenuMenuTestOrreColosseumMenu(void)
 // Test entry: run the Basan move-tutor menu over the whole move table.
 extern "C" s32 dbgMenuMenuTestWazaOshieBasanMenu(void)
 {
-    s32 selected;
+    bool tutorFlag;
 
-    menuScriptWazaBasan(&selected);
+    menuScriptWazaBasan(&tutorFlag);
     return 0;
 }
 

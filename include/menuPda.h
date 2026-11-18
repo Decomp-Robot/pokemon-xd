@@ -106,6 +106,7 @@ void menuPdaSetSubres(s32 res, s32 subres);
 void menuPdaDrawDirectModel(void);
 void menuPdaReleaseModelPointer(void);
 void menuPdaSetModelPointer(void);
+void menuPda(void);
 s32 menuPdaGetRes(void);
 s32 menuPdaGetSubres(void);
 }

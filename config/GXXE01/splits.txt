@@ -3223,6 +3223,12 @@ game/app/script/objCamera.cpp:
 	.data       start:0x8040BCD0 end:0x8040BD90
 	.sdata2     start:0x804EE700 end:0x804EE708
 
+game/app/script/objMenu.cpp:
+	.text       start:0x801C2928 end:0x801C3EA8
+	.rodata     start:0x802F4CA8 end:0x802F4CC0
+	.data       start:0x8040BF38 end:0x8040C038
+	.sdata2     start:0x804EE710 end:0x804EE718
+
 game/app/script/scriptModel.cpp:
 	.text       start:0x801C9018 end:0x801C986C
 	.sbss       start:0x804EB6D8 end:0x804EB6E0

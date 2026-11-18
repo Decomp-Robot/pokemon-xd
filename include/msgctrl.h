@@ -27,6 +27,9 @@ enum MSGCTRL_VALUE_SELECTOR {
     MSGCTRL_VALUE_WAZA_ID = 57,
     MSGCTRL_VALUE_PLAY_TIME = 0x4C,
     MSGCTRL_VALUE_MONEY = 75,
+    // Slot holding a string pointer that msgctrlString substitutes into
+    // messages; the script supplies message text through this slot.
+    MSGCTRL_VALUE_MESSAGE_STRING = 77,
     MSGCTRL_VALUE_NATURE_MESSAGE = 0x55,
     MSGCTRL_VALUE_NATURE_SUFFIX_MESSAGE = 0x56,
     MSGCTRL_VALUE_LEVEL = 0x5F,

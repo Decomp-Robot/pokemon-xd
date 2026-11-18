@@ -8,6 +8,7 @@ struct Pokemon;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void scriptOpenItemMenu(void);
 void scriptLightSetDisp(unsigned long resourceId, int display);
 void scriptPlayPokemonNakigoe(u16);
 long scriptContinueSave(void);

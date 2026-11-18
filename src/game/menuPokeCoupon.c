@@ -1,5 +1,6 @@
 #include <types.h>
 #include <floorManager.h>
+#include <menuShop.h>
 
 /* PokeCoupon exchange menu. menuPokeCouponMain opens the exchange the coupon
  * work refers to, and menuPokeCouponInit checks that the work was set up by
@@ -27,7 +28,6 @@ struct MenuPokeCouponWork {
 
 extern struct MenuPokeCouponWork _menuPokeCouponWork;
 
-extern void menuShopOpen(s32 menuID);
 extern void __assert(const char *file, s32 line, const char *expr);
 
 /* No shipped table registers these entry points, so the linker has to be told

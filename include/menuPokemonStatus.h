@@ -225,7 +225,7 @@ typedef Pokemon *(*MENU_POKEMON_CB)(Pokemon *, MENU_POKEMON_CB_TYPE, long);
 
 extern "C" {
 
-void menuPokemonStatus(void);
+long menuPokemonStatus(void);
 void menuPokemonStatusClose(void);
 // Refresh the party status table after an item changes a Pokemon.
 void menuPokemonUpdate(void);

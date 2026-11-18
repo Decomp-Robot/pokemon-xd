@@ -15,6 +15,22 @@ void menuScriptReadMail(long mailID);
 void menuScriptReciveMail(void);
 u8 menuScriptCheckMailOpen(void);
 
+// Menu interfaces script commands call into. The tutorial, Eevee and
+// move-tutor routines report a result to the calling script.
+long menuScriptTutorial(void);
+long menuScriptEevee(void);
+void menuScriptOpenWorldMap(u16 mapID);
+long menuScriptWazaMeijin(long wazaID);
+long menuScriptWazaBasan(bool* tutorFlag);
+u8 menuScriptWazaBasanCheck(void);
+void menuScriptSetWazaOboetaFlag(u16 wazaID);
+void menuScriptMoneyOpen(s16 x, s16 y);
+void menuScriptMoneyClose(void);
+void menuScriptUsohachi(void);
+void menuScriptPdaAddFunc(u32 func);
+void menuScriptCouponOpen(s16 x, s16 y);
+void menuScriptCouponClose(void);
+
 #ifdef __cplusplus
 }
 #endif

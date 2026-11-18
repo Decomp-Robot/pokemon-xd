@@ -91,7 +91,6 @@ s32 menuPdaDrawTitle(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuPdaButton(tagWINDOW_WORK *window);
 void menuPdaInit(void);
 void menuPdaMain(void);
-void menuPda(void);
 s32 menuPdaBackDrawBackXD(void);
 }
 

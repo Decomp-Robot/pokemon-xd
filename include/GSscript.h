@@ -131,6 +131,7 @@ public:
     void initTiga();
     bool restoreStateData(GSBinReadStream* stream);
     void makeStateData(GSBinWriteStream* stream);
+    void setSaveFlag(bool flag);
 };
 class Tiga {
 public:

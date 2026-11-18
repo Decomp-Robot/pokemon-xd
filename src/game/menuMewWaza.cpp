@@ -5,6 +5,7 @@
 #include "msgctrl.h"
 #include "menuIds.h"
 #include "menuSub.h"
+#include "menuMewWaza.h"
 #include "waza.h"
 
 // Menu data id of the move list this window draws.
@@ -30,8 +31,6 @@ enum {
     MSG_MOVE_NAME_3 = 0xC730,
     MSG_MOVE_LIST = 0xC722,
 };
-
-extern "C" u16 mewWazaGet(long index);
 
 u32 _GetMewWazaName(long index);
 

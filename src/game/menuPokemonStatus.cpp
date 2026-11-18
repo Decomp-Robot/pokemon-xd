@@ -1972,9 +1972,9 @@ void menuPokemonStatusClose(void)
 
 // Sequence hook of the status menu: runs the menu loop of the page the window
 // is on.
-void menuPokemonStatus(void)
+long menuPokemonStatus(void)
 {
-    _menuStatus.mResult = menuPokemonStatusExecute(_menuStatus.mFlags,
+    return _menuStatus.mResult = menuPokemonStatusExecute(_menuStatus.mFlags,
                                                 _menuStatus.mTrainer,
                                                 _menuStatus.mPokemon,
                                                 _menuStatus.mWazaId,

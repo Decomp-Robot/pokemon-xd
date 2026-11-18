@@ -17,6 +17,8 @@ enum MENU_SHOP_MSG_CODE {
 extern "C" {
 #endif
 
+void menuShopOpen(s32 shop);
+
 // Build the shop message and select the sound effect it should play.
 u32 menuShopGetMsgID(u8 *soundEffect, s32 shopID, s32 messageCode, s32 valueCode, ...);
 

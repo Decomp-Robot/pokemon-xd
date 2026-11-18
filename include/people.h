@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 void peopleAllBlockMoveScript(void);
+void peopleBlock(void);
+void peopleUnblock(void);
 
 void peopleSetTresureSearchDistance(u16 treasureId, float distance);
 void peopleTalkMessageBgmMask(bool enabled);

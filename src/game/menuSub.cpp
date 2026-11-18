@@ -157,13 +157,13 @@ s32 menuSubOpenSelect3(u8 type, const u32 *selectList, s32 listNum, s32 x, s32 y
 
 // Opens a message select menu and waits for the selection.
 s32 menuSubOpenSelect2(u8 type, u32 *messageIDs, s32 count, s32 x, s32 y, s32 initialCursor,
-                       s32 displayedCount, u8 selectMode)
+                       s32 displayedCount, bool wrapCursor)
 {
     s32 result;
 
     menuSubCursorAnimeInit();
     menuOpenCustom(0xAE, windowGetActiveID(), &initialCursor, 0, false, 6, type, messageIDs,
-                   count, displayedCount, selectMode, 1);
+                   count, displayedCount, wrapCursor, 1);
     menuSetPosition(0xAE, (s16)x, (s16)y);
     windowCheckCursor(0xAE, 1);
     result = windowGetValue(0xAE);

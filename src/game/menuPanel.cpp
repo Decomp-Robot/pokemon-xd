@@ -6,6 +6,7 @@
 #include <winMsg.h>
 #include <string.h>
 #include <menu.h>
+#include <menuPanel.h>
 #include <menuIds.h>
 #include <msgctrl.h>
 #include <winSeq.h>
@@ -169,12 +170,6 @@ static long _addwidth = 8;
 static long _cursorOffset = 5;
 static long _lsizecursorYoffset = 2;
 static long _backWidth = 5;
-
-enum SelectWindowStyle {
-    SELECT_WINDOW_NORMAL = 0,
-    SELECT_WINDOW_MESSAGE = 1,
-    SELECT_WINDOW_SIMPLE = 127
-};
 
 enum SelectParam {
     SELECT_PARAM_WINDOW_STYLE = 0,

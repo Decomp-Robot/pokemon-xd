@@ -46,7 +46,7 @@ s32 menuSubOpenSelect_gba(u8 type, const u32 *messages, s32 count, s32 x, s32 y,
 s32 menuSubOpenSelect3(u8 type, const u32 *messages, s32 count, s32 x, s32 y,
                        s32 initialCursor, s32 displayedCount, u8 wrapCursor, u8 allowCancel);
 s32 menuSubOpenSelect2(u8 type, u32 *messageIDs, s32 count, s32 x, s32 y,
-                       s32 initialCursor, s32 displayedCount, u8 selectMode);
+                       s32 initialCursor, s32 displayedCount, bool wrapCursor);
 void menuSubSleep(f32 seconds);
 s32 menuSubOpenSelect(u8 type, u32 *messages, int count,
                       s32 x, s32 y, s32 cursor);
