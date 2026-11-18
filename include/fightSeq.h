@@ -16,12 +16,16 @@ typedef struct FIGHT_ACTION FIGHT_ACTION;
 typedef u8 (*FightSeqCallback)(void *pokemon, u16 index, void *arg);
 typedef void (*FightSeqWazaFunc)(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOutPokemon *attackPokemon,
                                  FightPokemon *defensePokemon);
+typedef void (*FightSeqNormalWazaFunc)(FIGHT_TRAINER *, u16, FightOutPokemon *, FightOutPokemon *);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 void fightSeqFightOutPokemonEffect(u16 effectId, FightOutPokemon *pokemon, u8 wait, u8 statusMenu);
+s32 fightSeqGetNromalWazaDamage(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOutPokemon *attackPokemon,
+                                FightOutPokemon *defensePokemon, u8 criticalCheckFlag, u8 damageLossFlag,
+                                FightSeqNormalWazaFunc preFunc, FightSeqNormalWazaFunc postFunc);
 
 struct ModelSequence;
 

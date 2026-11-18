@@ -924,8 +924,6 @@ extern "C" bool fightSeqGetEffectAminFlag(void) {
     return !(ServerStatusFlag & FIGHT_SEQ_EFFECT_ANIMATION_FLAG);
 }
 
-typedef void (*FightSeqNormalWazaFunc)(FIGHT_TRAINER *, u16, FightOutPokemon *, FightOutPokemon *);
-
 extern "C" s32 fightSeqGetNromalWazaDamage(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOutPokemon *attackPokemon,
                                            FightOutPokemon *defensePokemon, u8 criticalCheckFlag, u8 damageLossFlag,
                                            FightSeqNormalWazaFunc preFunc, FightSeqNormalWazaFunc postFunc)

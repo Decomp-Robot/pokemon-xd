@@ -18,6 +18,11 @@ name = "game/app/fight/fightTrainerAi.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/fight/fightTrainerAiWazaDamage.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
+[[lib.object]]
 name = "game/app/toolentry/toolentry.cpp"
 completed = true
 extra_cflags = ["-inline off", "-O4,s"]
