@@ -2567,6 +2567,10 @@ game/app/effects/filter.cpp:
 	.data       start:0x80404E98 end:0x80404EC8
 	.sdata2     start:0x804EDC98 end:0x804EDCB0
 
+game/app/effects/envMap.cpp:
+	.text       start:0x801594C0 end:0x8015960C
+	.data       start:0x80404EC8 end:0x80404EE8
+
 game/app/effects/blur.cpp:
 	.text       start:0x8015960C end:0x80159E94
 	.data       start:0x80404EE8 end:0x80404F14
