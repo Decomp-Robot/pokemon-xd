@@ -37,6 +37,22 @@ block_relocations:
   - source: ".text:0x8005C768"
   # Shared sqrtf helper retains the camera TU's compiler-local zero literal.
   - source: ".text:0x801249C8"
+  # Retained camera routines (roll2upvec, HSD_CObjSetupViewingMtx,
+  # HSD_CObjGetEyeDistance, HSD_CObjSetUpVector, HSD_CObjSetRoll, upvec2roll)
+  # retain the original SDA2 displacements of the cobj.c compiler-local zero
+  # literal until those routines are recovered.
+  - source: ".text:0x802463A8"
+  - source: ".text:0x80246470"
+  - source: ".text:0x80246A98"
+  - source: ".text:0x80246ACC"
+  - source: ".text:0x80246B08"
+  - source: ".text:0x80246D34"
+  - source: ".text:0x80246E50"
+  - source: ".text:0x802470E0"
+  - source: ".text:0x80247114"
+  - source: ".text:0x80247150"
+  - source: ".text:0x802471B4"
+  - source: ".text:0x802475F4"
   # Extracted consumers of the compiler-local menuShop conversion literals.
   # Retain the original SDA2 displacements until these consumers are recovered.
   - source: ".text:0x80061E4C"
