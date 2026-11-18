@@ -3643,6 +3643,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/script/objCamera.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-O4,s", "-inline deferred", "-opt nopeephole", "-str reuse,readonly"]
+[[lib.object]]
 name = "game/app/script/scriptModel.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-O4,s", "-inline noauto", "-opt nopeephole"]
