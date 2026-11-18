@@ -111,3 +111,19 @@ void menuFightStatusStartAnimHP(u32 menuId, s16 hp)
     status->curHP = hp;
     anim->hpElapsed = 0;
 }
+
+void menuFightStatusSetActive(u32 menuId, u32 active)
+{
+}
+
+void menuFightStatusSetHP(u32 menuId, s16 hp)
+{
+    tagWINDOW_WORK *window;
+    struct MENU_FIGHT_STATUS_ALLOC *status;
+
+    window = windowSearchID(menuId);
+    if (window == NULL)
+        return;
+    status = (struct MENU_FIGHT_STATUS_ALLOC *)windowGetAllocPtr(window);
+    status->curHP = hp;
+}

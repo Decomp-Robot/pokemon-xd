@@ -7,7 +7,8 @@
 extern "C" {
 #endif
 
-void menuFightStatusSetHP(u32 menuId, u32 hp);
+void menuFightStatusSetActive(u32 menuId, u32 active);
+void menuFightStatusSetHP(u32 menuId, s16 hp);
 s32 menuFightStatusWaitAnimeEXP(u32 menuId, u8 wait);
 void menuFightStatusStartAnimEXP(u32 menuId, u32 exp);
 s32 menuFightStatusWaitAnimeHP(u32 menuId, u8 wait);
