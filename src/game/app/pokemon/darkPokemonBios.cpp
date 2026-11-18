@@ -165,7 +165,7 @@ u8 darkPokemonBiosGetReliveFlag(u16 darkID)
     return 0;
 }
 
-void darkPokemonBiosSetReliveFlag(u16 darkID)
+void darkPokemonBiosSetReliveFlag(u16 darkID, u8 reliveFlag)
 {
     DarkPokemon *darkPokemon = darkPokemonGetDarkPokemon(darkID);
     if (darkPokemon == 0) {

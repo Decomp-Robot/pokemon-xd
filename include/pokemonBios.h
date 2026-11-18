@@ -40,6 +40,9 @@ typedef struct PokemonWaza {
 extern "C" {
 #endif
 void pokemonBiosSetFriend(Pokemon* pokemon, unsigned short level);
+u32 pokemonBiosGetPoolExp(Pokemon *pokemon);
+u16 pokemonBiosGetPoolFriend(Pokemon *pokemon);
+void pokemonBiosSetPoolFriend(Pokemon *pokemon, u16 level);
 void pokemonBiosCopy(Pokemon* dst, const Pokemon* src);
 
 u16 pokemonBiosGetInitDp(Pokemon *pokemon);

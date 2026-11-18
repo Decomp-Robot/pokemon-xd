@@ -197,6 +197,7 @@ private:
 /* Shadow Pokemon parameters stored in the Dark Pokemon deck. */
 class DeckDarkPokemon {
 public:
+    static DeckDarkPokemon *getDeckDarkPokemonObj(unsigned long darkID);
     u8 getUnderTakerFlag() const;
     u8 getRevers() const;
     bool isScenarioPokemon() const;

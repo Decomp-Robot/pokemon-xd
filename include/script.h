@@ -30,6 +30,7 @@ int scriptIsTrigerPush(void);
 void scriptGlowStart(float, u8, u8, u8, u8, u8);
 void scriptGlowEnd(void);
 void scriptSetLensFlare(int, u8, float, float, float);
+int scriptGetDarkPointZeroPokemonNum(void);
 #ifdef __cplusplus
 }
 #endif

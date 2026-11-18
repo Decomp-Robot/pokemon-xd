@@ -144,7 +144,7 @@ void darkPokemonBiosSetStatusRnd(u16 darkID, u16 status, u16 rnd);
 u8 darkPokemonBiosGetFightFlag(u16 darkID);
 void darkPokemonBiosSetFightFlag(u16 darkID);
 u8 darkPokemonBiosGetSnatchSuccessFlag(u16 darkID);
-void darkPokemonBiosSetReliveFlag(u16 darkID);
+void darkPokemonBiosSetReliveFlag(u16 darkID, u8 reliveFlag);
 u8 darkPokemonBiosGetLevel(u16 darkID);
 u8 darkPokemonBiosGetHokakuritu(u16 darkID);
 u16 darkPokemonBiosGetInitDarkPoint(u16 darkID);

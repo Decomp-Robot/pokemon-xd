@@ -9,7 +9,8 @@ extern "C" {
 #endif
 
 enum PreReliveMode {
-    PRE_RELIVE_MODE_START_PURIFICATION = 0,
+    PRE_RELIVE_MODE_START_PURIFICATION = 0, // the ceremony runs on the Relive Hall floor
+    PRE_RELIVE_MODE_START_HOLOGRAM = 1, // the ceremony runs on the hologram stage
 };
 
 void preReliveSetParameter(int mode, int parameter, bool wait);

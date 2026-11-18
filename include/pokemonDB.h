@@ -41,6 +41,7 @@ void pokemon_SetDarkpokemonDataId(Pokemon *pokemon, u16 darkID);
 u8 pokemon_GetDarkFlag(Pokemon *pokemon);
 
 enum PokemonDataID {
+    POKEMON_DATA_ID_PIDGEOTTO = 17,
     POKEMON_DATA_ID_BUTTERFREE = 12,
     POKEMON_DATA_ID_BEEDRILL = 15,
     POKEMON_DATA_ID_SPEAROW = 21,
@@ -55,6 +56,7 @@ enum PokemonDataID {
     POKEMON_DATA_ID_CARVANHA = 330,
     POKEMON_DATA_ID_SHARPEDO = 331,
     POKEMON_DATA_ID_SOLROCK = 349,
+    POKEMON_DATA_ID_LUNATONE = 348,
     POKEMON_DATA_ID_DUSKULL = 361,
     POKEMON_DATA_ID_DUSCLOPS = 362,
     POKEMON_DATA_ID_FARFETCHD = 83,

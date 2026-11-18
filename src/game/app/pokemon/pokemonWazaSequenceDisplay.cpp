@@ -5,6 +5,7 @@
 #include <pokemonBios.h>
 #include <pokecolo.h>
 #include <wazaSequence.h>
+#include <pokemonWazaSequenceDisplay.h>
 
 extern "C" {
 
@@ -18,13 +19,6 @@ extern "C" {
  * lists; the entries of the list are the sequence (the id of the sequence data)
  * and the move that is played back with it.
  */
-
-// Entry of the list a caller hands loadSequence: the sequence-data id and
-// the resource category used to select its sequence resources.
-typedef struct LoadSequenceEntry {
-    u16 sequence; // id of the sequence data of the move
-    u16 category; // sequence resource category
-} LoadSequenceEntry;
 
 // Status words of a Pokemon record the model of the sequence display is built
 // from: the species the record holds, the model of the species and the word the

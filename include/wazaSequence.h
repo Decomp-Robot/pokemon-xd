@@ -59,6 +59,9 @@ WazaSequence *Sequence_LoadWaza(NullSequence *model, u16 sequence, u8 category, 
 NullSequence *Sequence_CreateNull(void);
 void Sequence_Free(NullSequence *sequence);
 void Sequence_SetVisibility(NullSequence *sequence, bool visible);
+void Sequence_GetPosition(NullSequence *sequence, GSvec *position);
+void Sequence_GetRotation(NullSequence *sequence, GSvec *rotation);
+void Sequence_GetScale(NullSequence *sequence, GSvec *scale);
 void Sequence_SetPosition(NullSequence *sequence, GSvec *position);
 void Sequence_SetRotation(NullSequence *sequence, GSvec *rotation);
 void Sequence_SetScale(NullSequence *sequence, GSvec *scale);

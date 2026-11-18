@@ -52,6 +52,7 @@ void winMsgOpenField(u32 message, WinMsgBool wait, WinMsgBool flags);
 void winMsgCloseField(WinMsgBool wait);
 #ifdef __cplusplus
 void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, bool wait);
+void winMsgOpenLevelUpStatus(struct MENU_LVUP_STATUS *status, bool wait);
 void winMsgCloseLevelUpStatus(bool wait);
 #else
 void winMsgOpenLevelUpFiledStatus(struct MENU_LVUP_STATUS *status, u8 wait);
