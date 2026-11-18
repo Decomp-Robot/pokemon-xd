@@ -26,6 +26,9 @@ void fightSeqFightOutPokemonEffect(u16 effectId, FightOutPokemon *pokemon, u8 wa
 s32 fightSeqGetNromalWazaDamage(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOutPokemon *attackPokemon,
                                 FightOutPokemon *defensePokemon, u8 criticalCheckFlag, u8 damageLossFlag,
                                 FightSeqNormalWazaFunc preFunc, FightSeqNormalWazaFunc postFunc);
+s32 fightSeqGetWazaDamageHikaePokemon(FIGHT_TRAINER *trainer, u16 wazaDataId,
+                                                 FightOutPokemon *fightOutPokemon, FightPokemon *fightPokemon,
+                                                 u8 criticalFlag, FightSeqWazaFunc preFunc, FightSeqWazaFunc postFunc);
 
 struct ModelSequence;
 

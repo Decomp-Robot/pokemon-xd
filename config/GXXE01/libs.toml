@@ -28,6 +28,11 @@ completed = true
 extra_cflags = ["-inline off", "-O4,s"]
 
 [[lib.object]]
+name = "game/app/fight/fightTrainerAiWazaDamageFightPokemon.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
+[[lib.object]]
 name = "game/app/fight/fightTrainerAiWazaValue.cpp"
 completed = true
 extra_cflags = ["-O4,s"]
