@@ -40,7 +40,8 @@ extern "C" {
 extern u32 *fight_trainer_kind_data_number;
 extern FIGHT_TRAINER_KIND_DATA *fight_trainer_kind_data;
 
-void *fightTrainerDataBiosGetPtr(u16 trainerDataId);
+typedef struct DeckTrainer DeckTrainer;
+DeckTrainer *fightTrainerDataBiosGetPtr(u16 trainerDataId);
 
 u32 fightTrainerKindDataBiosGetBgmSndId(void *kindData);
 u32 fightTrainerKindDataBiosGetPrefixName(void *kindData);

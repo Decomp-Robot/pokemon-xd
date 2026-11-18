@@ -3374,7 +3374,8 @@ game/app/fight/fightTrainer.cpp:
 	.text       start:0x801F8DDC end:0x801F9BD0
 
 game/app/fight/fightTrainerBios.cpp:
-	.text       start:0x801FD794 end:0x801FD808
+	.text       start:0x801FD794 end:0x801FDA48
+	.data       start:0x80413710 end:0x8041372C
 
 game/app/fight/fightTrainerDB.cpp:
 	.text       start:0x801FDA48 end:0x801FF374

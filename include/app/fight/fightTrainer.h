@@ -11,7 +11,7 @@ typedef struct FightPokemon FightPokemon;
 #ifdef __cplusplus
 extern "C" {
 #endif
-u8 fightTrainerBiosGetControllerId(void *trainer);
+u8 fightTrainerBiosGetControllerId(FIGHT_TRAINER *trainer);
 
 // Valid Pokemon the trainer has sent out in the given slot, or null when the
 // record is absent or invalid. The party-record accessor returns a valid

@@ -177,7 +177,9 @@ void fightTrainerCreateFightTrainerDataIdToHero(u16 trainerDataId, s32 controlle
 u8 fightTrainerIsSelectedItemBall(FIGHT_TRAINER *trainer);
 u8 fightTrainerIsGcHero(FIGHT_TRAINER *trainer);
 extern u32 *fight_trainer_pokemon_part_data_number;
+extern FIGHT_TRAINER_POKEMON_PART_DATA *fight_trainer_pokemon_part_data;
 extern u32 *fight_trainer_ai_value_addsub_data_number;
+extern FIGHT_TRAINER_AI_VALUE_ADDSUB_DATA *fight_trainer_ai_value_addsub_data;
 
 u16 *fightTrainerGetPrefixNamePtr(FIGHT_TRAINER *trainer);
 u16 *fightTrainerGetNamePtr(FIGHT_TRAINER *trainer);

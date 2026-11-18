@@ -52,6 +52,7 @@ struct DeckStatusDetermVal {
  */
 class DeckTrainer {
 public:
+    static DeckTrainer *getDeckTrainerObj(u32 index);
     u8 getComboActive(u8 index) const;
     u16 getComboID(u8 index) const;
     u16 getFixedActionID() const;
