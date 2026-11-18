@@ -7,10 +7,10 @@ typedef struct GSgfxDL GSgfxDL;
 typedef struct GSgfxVF GSgfxVF;
 
 /* Storage the movie capture writes its frames to. */
-enum {
+typedef enum GSgfxCaptureTarget {
     GSGFX_CAPTURE_TARGET_BBA = 0,
     GSGFX_CAPTURE_TARGET_SD = 1
-};
+} GSgfxCaptureTarget;
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +30,7 @@ void GSgfxLayerSetStatsRenderMode(u8 mode);
 /* Movie capture API */
 void GSgfxCaptureMovieStart(s32 frames);
 void GSgfxCaptureMovieStop(void);
-void GSgfxCaptureSetTarget(s32 target);
+void GSgfxCaptureSetTarget(GSgfxCaptureTarget target);
 
 /* Graphics display-list and vertex-format API */
 void GSgfxDLBegin(GSgfxDL* list, GSgfxVF* vf, u16 blockCount, u16 vertexCount);

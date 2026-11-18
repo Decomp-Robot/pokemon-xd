@@ -1143,6 +1143,7 @@ void GSgfxBackFBInit(void);
 void GSgfxBackFBDoFrame(GSgfxLayer *layer);
 void GSgfxResetUpdate(void);
 void GSgfxSSUpdate(void);
+void GSgfxSSGetViewportOffset(f32 *xOffset, f32 *yOffset);
 void GSgfxCaptureRenderFrameNumber(GSgfxLayer *layer);
 void GSgfxCaptureUpdate(void *xfb);
 extern "C" bool GSgfxTokenCleared(u16 token);

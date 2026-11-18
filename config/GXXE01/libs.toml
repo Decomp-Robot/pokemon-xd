@@ -888,6 +888,16 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
 
 [[lib.object]]
+name = "game/GSAPI/GSgfx/screenshot.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
+[[lib.object]]
+name = "game/GSAPI/GSgfx/capture.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/GSAPI/GSgfx/reset.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
