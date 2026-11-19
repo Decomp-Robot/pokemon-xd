@@ -22,6 +22,11 @@ typedef u8 WinMsgBool;
 void winMsgOpenWithSE(s8 kind, u32 message, WinMsgBool wait, WinMsgBool flags, u8 sound);
 
 s32 winMsgDraw(struct tagWINDOW_WORK *window, struct tagSPRITE_WORK *sprite);
+s32 winMsgCtrl(struct tagWINDOW_WORK *window);
+s32 winMsgCtrlYesNo(struct tagWINDOW_WORK *window);
+void winMsgButton(struct tagWINDOW_WORK *window);
+void winMsgOpenFightNoWait(u32 message, WinMsgBool wait, WinMsgBool flags);
+void winMsgOpenFight2(u32 message, WinMsgBool wait, WinMsgBool flags, WinMsgBool fixedPriority);
 s32 winMsgOpen(s8 kind, u32 message, WinMsgBool wait, WinMsgBool flags);
 void winMsgClose(WinMsgBool wait);
 void winMsgOpenError(u32 message, WinMsgBool wait, WinMsgBool flags);

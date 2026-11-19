@@ -26,8 +26,12 @@ extern WINDOW_SYS_WORK winSysWork2;
 // window object, so the accessor below returns a pointer into the window.
 struct WINDOW_FREE_WORK {
     u32 mMessageID;          // message the window's text printer is running.
-    u8 mUnknown04[4];
+    u8 mKeyWait;             // key wait the window passes to GSmsgExec().
+    u8 mSound;               // sound effect the window passes to GSmsgExec().
+    u8 mUnknown06[2];
     u32 mKeyTrigger;         // key trigger handed to the text printer.
+    s16 mMessageWidth;       // message text size the window draws its
+    s16 mMessageHeight;      // background at.
 };
 
 #ifdef __cplusplus

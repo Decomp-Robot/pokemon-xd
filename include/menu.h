@@ -62,7 +62,10 @@ bool menuPanelInputNumber(long initial, long *output, long lower, long upper,
 
 s32 menuOpen(s32 menuID, s32 mode);
 u16 windowGetKeyTrg(void);
-enum { MENU_OPEN_FLAG_NO_ACTIVATE = 4 };
+enum {
+    MENU_OPEN_FLAG_FIXED_PRIORITY = 2,
+    MENU_OPEN_FLAG_NO_ACTIVATE = 4
+};
 s32 menuOpenCustom(s32 menuID, s32 parentID, void *result, u32 flags,
                    bool wait,
                    s32 argCount, ...);
