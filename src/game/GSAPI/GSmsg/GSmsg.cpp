@@ -69,3 +69,23 @@ s32 GScharCmp(const u16 *a, const u16 *b)
         return -1;
     }
 }
+
+void GSmsgAdjustAlign(MSG_TASK_WORK *task)
+{
+    if (task->width == 0) {
+        return;
+    }
+
+    s16 messageWidth = GSmsgGetMessageSize(task->messageId) >> 16;
+    switch (task->align) {
+    case MSG_ALIGN_LEFT:
+        task->cursorX = task->originX;
+        break;
+    case MSG_ALIGN_CENTER:
+        task->cursorX = task->originX + (task->width - messageWidth) / 2;
+        break;
+    case MSG_ALIGN_RIGHT:
+        task->cursorX = task->originX + task->width - messageWidth;
+        break;
+    }
+}

@@ -146,6 +146,24 @@ block_relocations:
   # compiler-generated thread-name literal now emitted by tiga.cpp.
   - source: ".text:0x8023D530"
   - source: ".text:0x8023D538"
+  - source: ".text:0x80107834"
+  - source: ".text:0x80107A20"
+  - source: ".text:0x80107A60"
+  - source: ".text:0x80107B40"
+  - source: ".text:0x80107B78"
+  - source: ".text:0x80107BCC"
+  - source: ".text:0x80107F14"
+  - source: ".text:0x80107F70"
+  - source: ".text:0x8010800C"
+  - source: ".text:0x801081A4"
+  - source: ".text:0x80108660"
+  - source: ".text:0x80109BA8"
+  - source: ".text:0x80109D10"
+  - source: ".text:0x80109E20"
+  - source: ".text:0x8010A174"
+  - source: ".text:0x8010A224"
+  - source: ".text:0x8010A3C8"
+  - source: ".text:0x8010A7E4"
 add_relocations:
   - source: .text:0x801265E8
     type: ha

@@ -2212,7 +2212,8 @@ game/GSAPI/GSres/GSres.cpp:
 	.sbss       start:0x804EB008 end:0x804EB010
 
 game/GSAPI/GSmsg/GSmsg.cpp:
-	.text       start:0x80106C8C end:0x80107050
+	.text       start:0x80106C8C end:0x8010714C
+	.sdata2     start:0x804ED5D8 end:0x804ED5E0
 
 game/GSAPI/GSmsg/sprite.cpp:
 	.text       start:0x8010B458 end:0x8010BD24

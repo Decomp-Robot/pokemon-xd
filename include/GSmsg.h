@@ -7,6 +7,12 @@ class GSgfxLayer;
 extern "C" {
 extern GSgfxLayer *_TargetLayer;
 #endif
+enum MSG_ALIGN {
+    MSG_ALIGN_LEFT,
+    MSG_ALIGN_CENTER,
+    MSG_ALIGN_RIGHT
+};
+
 typedef struct MSG_TASK_WORK {
     u8 active;
     u8 renderPass;
@@ -77,6 +83,7 @@ s32 GSmsgPrint2(s32 layer, s32 x, s32 y, u32 color, u32 messageID);
 u16 *GSmsgGetStringPtr(u32 messageID);
 s32 GSmsgGetLength(u32 messageID);
 u32 GSmsgGetMessageSize(s32 messageID);
+void GSmsgAdjustAlign(MSG_TASK_WORK *task);
 s32 GSmsgPrintRight(s32 layer, s32 x, s32 y, s32 width, s32 height, u32 color, u32 messageID);
 s32 GSmsgPrintRect(GSgfxLayerID layer, s32 x, s32 y, s16 width, s16 height, u32 color, u32 msgID);
 
