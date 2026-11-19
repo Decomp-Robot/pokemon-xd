@@ -32,12 +32,7 @@ enum {
 };
 enum { GSDVD_READ_PRIORITY = 2, GSDVD_ERROR_TASK_PRIORITY = 19, GSDVD_ERROR_TASK_CLASS = 1 };
 enum { GSDVD_MESSAGE_NONE = 1 };
-enum {
-    GSDVD_COUNTRY_JAPAN = 0,
-    GSDVD_COUNTRY_USA = 1,
-    GSDVD_COUNTRY_EUROPE = 2,
-    GSDVD_ROM_VERSION_EX = 4
-};
+enum { GSDVD_ROM_VERSION_EX = 4 };
 
 static u8 _DvdServerAddr[4] = {0};
 static u8 _ReportServerAddr[4] = {0};
@@ -267,9 +262,9 @@ u8 GSdvdInit(u32 maxFiles)
     DVDInit();
     if (pokecoloGetRomVersion() != GSDVD_ROM_VERSION_EX) {
         switch (pokecoloGetCountryCode()) {
-        case GSDVD_COUNTRY_JAPAN: _diskid_gameName = "GXXJ"; break;
-        case GSDVD_COUNTRY_USA: _diskid_gameName = "GXXE"; break;
-        case GSDVD_COUNTRY_EUROPE: _diskid_gameName = "GXXP"; break;
+        case POKECOLO_COUNTRY_CODE_JAPAN: _diskid_gameName = "GXXJ"; break;
+        case POKECOLO_COUNTRY_CODE_USA: _diskid_gameName = "GXXE"; break;
+        case POKECOLO_COUNTRY_CODE_EUROPE: _diskid_gameName = "GXXP"; break;
         }
         id = DVDGetCurrentDiskID();
         id->gameName[0] = _diskid_gameName[0];

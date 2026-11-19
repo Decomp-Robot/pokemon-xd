@@ -3426,6 +3426,21 @@ game/app/fight/fightJouken.cpp:
 	.text       start:0x8020C1F0 end:0x8020C590
 	.data       start:0x80413760 end:0x8041377C
 
+game/app/fight/fightJoukenBios.cpp:
+	.text       start:0x8020C590 end:0x8020C88C
+
+game/app/fight/fightAbicnt.cpp:
+	.text       start:0x8020C88C end:0x8020C9B0
+
+game/app/fight/fight.cpp:
+	.text       start:0x8020CCD4 end:0x8020D858
+	.ctors      start:0x802E9FE0 end:0x802E9FE4
+	.rodata     start:0x802F8A98 end:0x802F8AF4
+	.data       start:0x80413780 end:0x804137C0
+	.bss        start:0x804B0048 end:0x804B0A20
+	.sbss       start:0x804EB908 end:0x804EB918
+	.sdata2     start:0x804EEAD0 end:0x804EEADC
+
 game/app/fight/fightEncountWipeData.cpp:
 	.data       start:0x804137C0 end:0x804138F8
 	.sdata      start:0x804E8568 end:0x804E8570
@@ -3442,20 +3457,6 @@ game/app/fight/fightActionData_turn.cpp:
 
 game/app/fight/fightActionData_syuuryou.cpp:
 	.data       start:0x80413C70 end:0x80413CC0
-
-game/app/fight/fightJoukenBios.cpp:
-	.text       start:0x8020C590 end:0x8020C88C
-
-game/app/fight/fightAbicnt.cpp:
-	.text       start:0x8020C88C end:0x8020C9B0
-
-game/app/fight/fight.cpp:
-	.text       start:0x8020D2AC end:0x8020D858
-	.ctors      start:0x802E9FE0 end:0x802E9FE4
-	.rodata     start:0x802F8A98 end:0x802F8AF4
-	.bss        start:0x804B0048 end:0x804B0A20
-	.sbss       start:0x804EB908 end:0x804EB918
-	.sdata2     start:0x804EEAD0 end:0x804EEADC
 
 game/app/fight/fightSeq/fightSeqWSWaza.cpp:
 	.text       start:0x8020D858 end:0x8020FD6C

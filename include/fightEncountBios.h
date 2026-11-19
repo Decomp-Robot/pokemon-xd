@@ -69,9 +69,17 @@ typedef struct {
     FadeFunction mFunction;
 } FightEncountWipeData;
 
-/* Deck group the two sides of a battle disk fight with. */
+/* Deck groups the two sides of a battle fight with; zero selects no deck. */
 enum FIGHT_DECK_GRP_ID {
-    FIGHT_DECK_GRP_ID_BATTLE_DISK = 4
+    FIGHT_DECK_GRP_ID_NONE = 0,
+    FIGHT_DECK_GRP_ID_STORY = 1,
+    FIGHT_DECK_GRP_ID_HUNDRED = 2,
+    FIGHT_DECK_GRP_ID_IMASUGU = 3,
+    FIGHT_DECK_GRP_ID_VIRTUAL = 4,
+    FIGHT_DECK_GRP_ID_BATTLE_DISK = FIGHT_DECK_GRP_ID_VIRTUAL,
+    FIGHT_DECK_GRP_ID_BINGO = 5,
+    FIGHT_DECK_GRP_ID_COLOSSEUM = 6,
+    FIGHT_DECK_GRP_ID_SAMPLE = 7
 };
 
 /* Fight type an encounter record is reported as when no fight type record

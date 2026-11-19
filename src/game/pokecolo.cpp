@@ -14,11 +14,6 @@ static const f64 PLAY_TIME_MAX = 3599940.0;
 static const f32 MICROSECONDS_PER_MILLISECOND = 1000.0f;
 static const f32 MILLISECONDS_PER_SECOND = 1000.0f;
 
-/* Country code this build reports; main() picks the display region from it. */
-enum {
-    POKECOLO_COUNTRY_CODE_USA = 1
-};
-
 /* ROM versions this build knows about: the one a normal configuration starts
    with and the one an expanded-disc build reports. */
 enum {

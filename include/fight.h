@@ -2,6 +2,7 @@
 #define FIGHT_H
 
 #include <types.h>
+#include <fightResource.h>
 #include <GSthread.h>
 
 #ifdef __cplusplus
@@ -13,8 +14,6 @@ struct FloorModuleInterface;
 extern "C" {
 #endif
 
-u8 fightReadResource(unsigned long groupID, unsigned long resourceID);
-void fightFreeResource(unsigned long groupID, unsigned long resourceID);
 void fightSoundOpenPlayInit(void);
 extern s8 fightColosseumTrainerIndex;
 u8 fightIsFight(void);

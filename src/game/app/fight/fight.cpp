@@ -2,7 +2,13 @@
 #include <camera.h>
 #include <app/floor/floorModule.h>
 #include <dbgMenu.h>
+#include <deck.h>
 #include <fight.h>
+#include <fightEncountBios.h>
+#include <fightResource.h>
+#include <GSAPI/GSfsys/GSfsys.h>
+#include <GSres.h>
+#include <pokecolo.h>
 #include <fightAction.h>
 #include <fightFloor.h>
 #include <fightGSfloor.h>
@@ -63,6 +69,145 @@ struct FightStatusMenuTable {
 static const FightStatusMenuTable statusMenuTable = {
     {FIGHT_STATUS_MENU_LEFT, FIGHT_STATUS_MENU_UP, FIGHT_STATUS_MENU_DOWN, FIGHT_STATUS_MENU_RIGHT}
 };
+
+void _fsysLoadCallbak(long fileMode, void *context, long argument);
+
+void fightFreeResourceDeclArchive(void)
+{
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_STORY);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_HUNDRED);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_IMASUGU);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_VIRTUAL);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_BINGO);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_COLOSSEUM);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_SAMPLE);
+    fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_DARK_POKEMON);
+}
+
+void fightFreeResource(u32 groupID, u32 resourceID)
+{
+    u32 freeResourceID;
+
+    if (pokecoloGetCountryCode() == POKECOLO_COUNTRY_CODE_EUROPE) {
+        switch (resourceID) {
+        case DECK_RESOURCE_BINGO: freeResourceID = DECK_RESOURCE_BINGO_EU; break;
+        case DECK_RESOURCE_COLOSSEUM: freeResourceID = DECK_RESOURCE_COLOSSEUM_EU; break;
+        case DECK_RESOURCE_DARK_POKEMON: freeResourceID = DECK_RESOURCE_DARK_POKEMON_EU; break;
+        case DECK_RESOURCE_HUNDRED: freeResourceID = DECK_RESOURCE_HUNDRED_EU; break;
+        case DECK_RESOURCE_IMASUGU: freeResourceID = DECK_RESOURCE_IMASUGU_EU; break;
+        case DECK_RESOURCE_STORY: freeResourceID = DECK_RESOURCE_STORY_EU; break;
+        case DECK_RESOURCE_VIRTUAL: freeResourceID = DECK_RESOURCE_VIRTUAL_EU; break;
+        case DECK_RESOURCE_SAMPLE: freeResourceID = DECK_RESOURCE_SAMPLE_EU; break;
+        default: return;
+        }
+    } else {
+        freeResourceID = resourceID;
+    }
+    GSresFreeResource(groupID, freeResourceID);
+}
+
+bool fightReadResource(u32 groupID, u32 resourceID)
+{
+    if (groupID == 0) {
+        groupID = DECK_RESOURCE_GROUP;
+    }
+    if (pokecoloGetCountryCode() == POKECOLO_COUNTRY_CODE_EUROPE) {
+        switch (resourceID) {
+        case DECK_RESOURCE_BINGO: resourceID = DECK_RESOURCE_BINGO_EU; break;
+        case DECK_RESOURCE_COLOSSEUM: resourceID = DECK_RESOURCE_COLOSSEUM_EU; break;
+        case DECK_RESOURCE_DARK_POKEMON: resourceID = DECK_RESOURCE_DARK_POKEMON_EU; break;
+        case DECK_RESOURCE_HUNDRED: resourceID = DECK_RESOURCE_HUNDRED_EU; break;
+        case DECK_RESOURCE_IMASUGU: resourceID = DECK_RESOURCE_IMASUGU_EU; break;
+        case DECK_RESOURCE_STORY: resourceID = DECK_RESOURCE_STORY_EU; break;
+        case DECK_RESOURCE_VIRTUAL: resourceID = DECK_RESOURCE_VIRTUAL_EU; break;
+        case DECK_RESOURCE_SAMPLE: resourceID = DECK_RESOURCE_SAMPLE_EU; break;
+        default: return 0;
+        }
+        GSresFreeResource(groupID, DECK_RESOURCE_VIRTUAL_EU);
+    } else {
+        GSresFreeResource(groupID, DECK_RESOURCE_VIRTUAL);
+    }
+    GSfsysFreeCache(groupID);
+    if (GSresGetResource(groupID, resourceID) != NULL) {
+        return 0;
+    }
+    GSfsysReadIDEXWait(groupID, resourceID, _fsysLoadCallbak, NULL, resourceID);
+    GSfsysFree(groupID);
+    return GSresGetResource(groupID, resourceID) != NULL;
+}
+
+void fightFreeDeck(u16 encountNo)
+{
+    FightEncountRecord *encount = fightEncountDataBiosGetPtr(encountNo);
+    for (u8 i = 0; i < sizeof(encount->mTrainerInfo) / sizeof(encount->mTrainerInfo[0]); i++) {
+        switch (fightEncountDataBiosGetFightDeckGrpId(encount, i)) {
+        case FIGHT_DECK_GRP_ID_NONE:
+            break;
+        case FIGHT_DECK_GRP_ID_STORY:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_STORY);
+            break;
+        case FIGHT_DECK_GRP_ID_HUNDRED:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_HUNDRED);
+            break;
+        case FIGHT_DECK_GRP_ID_IMASUGU:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_IMASUGU);
+            break;
+        case FIGHT_DECK_GRP_ID_VIRTUAL:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_VIRTUAL);
+            break;
+        case FIGHT_DECK_GRP_ID_BINGO:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_BINGO);
+            break;
+        case FIGHT_DECK_GRP_ID_COLOSSEUM:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_COLOSSEUM);
+            break;
+        case FIGHT_DECK_GRP_ID_SAMPLE:
+            fightFreeResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_SAMPLE);
+            break;
+        }
+    }
+}
+
+u8 fightReadDeck(u16 encountNo)
+{
+    FightEncountRecord *encount;
+    u8 i;
+    u8 loaded = 0;
+    bool result;
+
+    encount = fightEncountDataBiosGetPtr(encountNo);
+    for (i = 0; i < sizeof(encount->mTrainerInfo) / sizeof(encount->mTrainerInfo[0]); i++) {
+        switch (fightEncountDataBiosGetFightDeckGrpId(encount, i)) {
+        case FIGHT_DECK_GRP_ID_NONE:
+            break;
+        case FIGHT_DECK_GRP_ID_STORY:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_STORY);
+            break;
+        case FIGHT_DECK_GRP_ID_HUNDRED:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_HUNDRED);
+            break;
+        case FIGHT_DECK_GRP_ID_IMASUGU:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_IMASUGU);
+            break;
+        case FIGHT_DECK_GRP_ID_VIRTUAL:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_VIRTUAL);
+            break;
+        case FIGHT_DECK_GRP_ID_BINGO:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_BINGO);
+            break;
+        case FIGHT_DECK_GRP_ID_COLOSSEUM:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_COLOSSEUM);
+            break;
+        case FIGHT_DECK_GRP_ID_SAMPLE:
+            result = fightReadResource(DECK_RESOURCE_GROUP, DECK_RESOURCE_SAMPLE);
+            break;
+        }
+        if (result == 1) {
+            loaded = 1;
+        }
+    }
+    return loaded;
+}
 
 void fightSetMenuCtrlHero(Hero *hero)
 {

@@ -3,6 +3,13 @@
 
 #include <types.h>
 
+/* Regional builds reported by pokecoloGetCountryCode(). */
+enum PokeColoCountryCode {
+    POKECOLO_COUNTRY_CODE_JAPAN = 0,
+    POKECOLO_COUNTRY_CODE_USA = 1,
+    POKECOLO_COUNTRY_CODE_EUROPE = 2
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
