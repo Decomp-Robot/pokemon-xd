@@ -1,10 +1,262 @@
 #include <GSflag.h>
+#include <GSmsg.h>
 #include <pokemonBios.h>
 #include <pokemonDataBios.h>
 #include <relglobal.h>
 #include <types.h>
+#include <waza.h>
+
+static const u8 POKEMON_PP_UP_COUNT_MAX = 3;
+static const u8 POKEMON_PP_UP_BASE_PP_CUTOFF = 4;
+static const u8 POKEMON_LEVEL_MAX = 100;
 
 extern "C" {
+
+void pokemonBiosSetNimblenessEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setNimblenessEffort(effort);
+}
+
+void pokemonBiosSetSpeDefEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setSpeDefEffort(effort);
+}
+
+void pokemonBiosSetSpeAtkEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setSpeAtkEffort(effort);
+}
+
+void pokemonBiosSetPhyDefEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setPhyDefEffort(effort);
+}
+
+void pokemonBiosSetPhyAtkEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setPhyAtkEffort(effort);
+}
+
+void pokemonBiosSetMaxHpEffort(Pokemon *pokemon, u16 effort)
+{
+    if (pokemon == 0) return;
+    pokemon->setMaxHpEffort(effort);
+}
+
+void pokemonBiosSetNimbleness(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setNimbleness(stat);
+}
+
+void pokemonBiosSetSpeDef(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setSpeDef(stat);
+}
+
+void pokemonBiosSetSpeAtk(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setSpeAtk(stat);
+}
+
+void pokemonBiosSetPhyDef(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setPhyDef(stat);
+}
+
+void pokemonBiosSetPhyAtk(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setPhyAtk(stat);
+}
+
+void pokemonBiosSetMaxHp(Pokemon *pokemon, u16 stat)
+{
+    if (pokemon == 0) return;
+    pokemon->setMaxHp(stat);
+}
+
+void pokemonBiosSetHp(Pokemon *pokemon, u16 hp)
+{
+    if (pokemon == 0) return;
+    pokemon->mHp = hp;
+    u16 maxHp = pokemonBiosGetMaxHp(pokemon);
+    if (maxHp < pokemon->mHp) {
+        pokemon->mHp = maxHp;
+    }
+}
+
+void pokemonBiosSetItemDataId(Pokemon *pokemon, u16 itemDataId)
+{
+    if (pokemon == 0) return;
+    pokemon->mItemDataId = itemDataId;
+}
+
+void pokemonBiosSetPokemonWazaPpCount(Pokemon *pokemon, u16 slot, u8 count)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza == 0) return;
+    if (count > POKEMON_PP_UP_COUNT_MAX) {
+        count = POKEMON_PP_UP_COUNT_MAX;
+    }
+    // Leave the stored count alone for a valid move with four or fewer base PP.
+    if (pokemonWazaCheckValid(pokemon, slot) == 1) {
+        WazaData *data = wazaDataBiosGetPtr(pokemonBiosGetPokemonWazaDataId(pokemon, slot));
+        if (wazaDataBiosGetPp(data) <= POKEMON_PP_UP_BASE_PP_CUTOFF) {
+            return;
+        }
+    }
+    waza->ppCount = count;
+}
+
+void pokemonBiosSetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza == 0) return;
+    u8 maxPp = pokemonWazaGetMaxPP(pokemon, slot);
+    if (maxPp < pp) {
+        pp = maxPp;
+    }
+    waza->pp = pp;
+}
+
+void pokemonBiosSetPokemonWazaDataId(Pokemon *pokemon, u16 slot, u16 wazaDataId)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza != 0) {
+        waza->dataId = wazaDataId;
+    }
+}
+
+void pokemonBiosSetConditionAmari(Pokemon *pokemon, u32 amari)
+{
+    if (pokemon == 0) return;
+    pokemon->mConditionAmari = amari;
+}
+
+void pokemonBiosSetLevel(Pokemon *pokemon, u8 level)
+{
+    if (pokemon == 0) return;
+    if (level > POKEMON_LEVEL_MAX) {
+        level = POKEMON_LEVEL_MAX;
+    }
+    pokemon->mLevel = level;
+}
+
+void pokemonBiosSetPoolFriend(Pokemon *pokemon, u16 friendLevel)
+{
+    if (pokemon == 0) return;
+    pokemon->setPoolFriendLevel(friendLevel);
+}
+
+void pokemonBiosSetPoolExp(Pokemon *pokemon, u32 exp)
+{
+    if (pokemon == 0) return;
+    pokemon->setPoolExp(exp);
+}
+
+void pokemonBiosSetExp(Pokemon *pokemon, u32 exp)
+{
+    if (pokemon == 0) return;
+    pokemon->mExp = exp;
+}
+
+void pokemonBiosSetNicknameOrgPtr(Pokemon *pokemon, const u16 *name)
+{
+    if (pokemon == 0 || name == 0) return;
+    GScharLenCpy(pokemon->mOriginalNickname, name,
+                 sizeof(pokemon->mOriginalNickname) / sizeof(pokemon->mOriginalNickname[0]));
+}
+
+void pokemonBiosSetNicknamePtr(Pokemon *pokemon, const u16 *name)
+{
+    if (pokemon == 0 || name == 0) return;
+    GScharLenCpy(pokemon->mNickname, name,
+                 sizeof(pokemon->mNickname) / sizeof(pokemon->mNickname[0]));
+    pokemonBiosSetNicknameOrgPtr(pokemon, name);
+}
+
+void pokemonBiosSetCatchTrainerNamePtr(Pokemon *pokemon, const u16 *name)
+{
+    if (pokemon == 0 || name == 0) return;
+    GScharLenCpy(pokemon->mTrainerName, name,
+                 sizeof(pokemon->mTrainerName) / sizeof(pokemon->mTrainerName[0]));
+}
+
+void pokemonBiosSetCatchTrainerRnd(Pokemon *pokemon, u32 rnd)
+{
+    if (pokemon == 0) return;
+    pokemon->mCatchTrainerRnd = rnd;
+}
+
+void pokemonBiosSetCatchTrainerSex(Pokemon *pokemon, u8 sex)
+{
+    if (pokemon == 0) return;
+    pokemon->mCatchTrainerSex = sex;
+}
+
+void pokemonBiosSetCatchBallId(Pokemon *pokemon, u8 ballId)
+{
+    if (pokemon == 0) return;
+    pokemon->mCatchBallId = ballId;
+}
+
+void pokemonBiosSetCatchLevel(Pokemon *pokemon, u8 catchLevel)
+{
+    if (pokemon == 0) return;
+    pokemon->mCatchLevel = catchLevel;
+}
+
+void pokemonBiosSetCatchFloorId(Pokemon *pokemon, u16 catchFloorId)
+{
+    if (pokemon == 0) return;
+    pokemon->mCatchFloorId = catchFloorId;
+}
+
+void pokemonBiosSetRnd(Pokemon *pokemon, u32 rnd)
+{
+    if (pokemon == 0) return;
+    pokemon->mPersonality = rnd;
+}
+
+void pokemonBiosSetPokemonDataId(Pokemon *pokemon, u16 pokemonDataId)
+{
+    if (pokemon == 0) return;
+    pokemon->mPokemonDataId = pokemonDataId;
+}
+
+u16 pokemonDataBiosGetKowaza(PokemonData *data, u16 index)
+{
+    if (data == 0) return 0;
+    if (index >= POKEMON_DATA_KOWAZA_COUNT) return 0;
+    return data->mKowaza[index];
+}
+
+u32 pokemonDataBiosGetPkxDataId(PokemonData *data)
+{
+    if (data == 0) return 0;
+    return data->mPkxDataId;
+}
+
+u16 pokemonDataBiosGetNumPokemon(PokemonData *data)
+{
+    if (data == 0) return 0;
+    return data->mNumPokemon;
+}
+
+u16 pokemonDataBiosGetNumZukan(PokemonData *data)
+{
+    if (data == 0) return 0;
+    return data->mNumZukan;
+}
 
 // Whether the species has been caught, as its zukan caught flag reads.
 u32 pokemonDataBiosGetTukamaetaFlag(PokemonData *data)

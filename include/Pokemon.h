@@ -27,6 +27,16 @@ typedef struct PokemonExpandStatus {
 typedef struct Pokemon Pokemon;
 typedef struct PokemonData PokemonData;
 typedef struct PokemonRibbon PokemonRibbon;
+
+// Move record of a Pokemon. The move data ID names the move in the slot, the
+// PP is what the slot has left and the PP count is the number of PP ups the
+// move holds. A Pokemon carries four of these records.
+typedef struct PokemonWaza {
+    u16 dataId; // 0x0
+    u8 pp; // 0x2
+    u8 ppCount; // 0x3
+} PokemonWaza;
+
 struct FightPokemon;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
@@ -57,7 +67,7 @@ struct Pokemon {
     u32 mExp; // 0x20: total experience.
     unsigned long mCatchTrainerRnd; // 0x24: catch trainer random identity value.
     unsigned long mPersonality; // 0x28: personality value.
-    u8 _2C[4];
+    u32 mConditionAmari; // 0x2C: spare status-condition bits kept for GBA link conversion.
     u32 mEventGetFlag; // 0x30: event acquisition flag.
     GamedataAttest mAttest; // 0x34: origin/version attestation.
     u16 mTrainerName[11]; // 0x38: trainer name copy buffer.
@@ -65,7 +75,7 @@ struct Pokemon {
     u16 mOriginalNickname[11]; // 0x64: original nickname copy buffer.
     u8 _7A[2];
     u32 mRibbonData; // 0x7C
-    u32 mWaza[4]; // 0x80: four move records.
+    PokemonWaza mWaza[4]; // 0x80: four move records.
     u16 mHpStat; // 0x90
     u16 mAttackStat; // 0x92
     u16 mDefenseStat; // 0x94
@@ -92,6 +102,18 @@ struct Pokemon {
     GamedataAttest *getAttest();
     void setFriendLevel(u16 level);
     void setExp(unsigned long exp);
+    void setMaxHpEffort(u16 value);
+    void setPhyAtkEffort(u16 value);
+    void setPhyDefEffort(u16 value);
+    void setSpeAtkEffort(u16 value);
+    void setSpeDefEffort(u16 value);
+    void setNimblenessEffort(u16 value);
+    void setMaxHp(u16 value);
+    void setPhyAtk(u16 value);
+    void setPhyDef(u16 value);
+    void setSpeAtk(u16 value);
+    void setSpeDef(u16 value);
+    void setNimbleness(u16 value);
     void setNicknamePtr(u16 *name);
     void setCatchTrainerNamePtr(u16 *name);
     void setCatchFloorId(u16 catchFloorId);

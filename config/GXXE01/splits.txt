@@ -2475,7 +2475,7 @@ game/app/pokemon/pokemon.cpp:
 	.sdata2     start:0x804EDB48 end:0x804EDB80
 
 game/app/pokemon/pokemonBios.cpp:
-	.text       start:0x80145928 end:0x8014686C
+	.text       start:0x8014537C end:0x8014686C
 
 game/app/pokemon/pokemonDB.cpp:
 	.text       start:0x801479CC end:0x801482D4

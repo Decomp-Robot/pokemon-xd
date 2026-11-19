@@ -13,7 +13,8 @@ enum PokemonDataLimits {
     POKEMON_DATA_MACHINE_COUNT = 58,
     POKEMON_DATA_EVOLUTION_COUNT = 5,
     POKEMON_DATA_LEVEL_UP_MOVE_COUNT = 20,
-    POKEMON_DATA_BODY_COUNT = 2
+    POKEMON_DATA_BODY_COUNT = 2,
+    POKEMON_DATA_KOWAZA_COUNT = 8
 };
 
 enum PokemonDataAbilityIndex {
@@ -66,7 +67,10 @@ struct PokemonData {
     u16 mHeight;
     u16 mWeight;
     u16 mVoice;
-    u8 _0E[10];
+    u8 _0E[4];
+    u16 mNumPokemon; // 0x12
+    u16 mNumZukan; // 0x14
+    u8 _16[2];
     u32 mNameMessageId;
     u32 mTypeNameMessageId;
     u32 mDescriptionMessageId;
@@ -74,13 +78,13 @@ struct PokemonData {
     s32 mMitaFlagId;
     // id of the zukan caught flag.
     s32 mTukamaetaFlagId;
-    u8 _2C[4];
+    u32 mPkxDataId; // 0x2C
     u8 mZokuseiDataId[POKEMON_DATA_TYPE_COUNT];
     u8 mTokuseiDataId[POKEMON_DATA_ABILITY_COUNT];
     u8 mWazaMachineCompatibility[POKEMON_DATA_MACHINE_COUNT];
     u8 _6E[12];
     u16 mItemDataId[POKEMON_DATA_ITEM_COUNT];
-    u8 _7E[16];
+    u16 mKowaza[POKEMON_DATA_KOWAZA_COUNT]; // 0x7E
     PokemonBaseStats mBaseStatsAndEffortYield[POKEMON_DATA_STAT_SET_COUNT];
     PokemonEvolution mSinka[POKEMON_DATA_EVOLUTION_COUNT];
     PokemonLevelUpMove mGetWaza[POKEMON_DATA_LEVEL_UP_MOVE_COUNT];

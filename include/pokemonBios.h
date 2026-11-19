@@ -27,15 +27,6 @@ typedef struct PokemonRibbon {
     u32 amari : 8;
 } PokemonRibbon;
 
-// Move record of a Pokemon. The move data ID names the move in the slot, the
-// PP is what the slot has left and the PP count is the number of PP ups the
-// move holds. A Pokemon carries four of these records.
-typedef struct PokemonWaza {
-    u16 dataId; // 0x0
-    u8 pp; // 0x2
-    u8 ppCount; // 0x3
-} PokemonWaza;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -43,6 +34,7 @@ void pokemonBiosSetFriend(Pokemon* pokemon, unsigned short level);
 u32 pokemonBiosGetPoolExp(Pokemon *pokemon);
 u16 pokemonBiosGetPoolFriend(Pokemon *pokemon);
 void pokemonBiosSetPoolFriend(Pokemon *pokemon, u16 level);
+void pokemonBiosSetPoolExp(Pokemon *pokemon, u32 value);
 void pokemonBiosCopy(Pokemon* dst, const Pokemon* src);
 
 u16 pokemonBiosGetInitDp(Pokemon *pokemon);
@@ -83,6 +75,8 @@ u16 pokemon_GetPokemonDataId(Pokemon *pokemon);
 u32 pokemonDB_GetName(u16 dataID);
 u8 pokemonBiosGetTamagoFlag(Pokemon *pokemon);
 void pokemonBiosSetNicknamePtr(Pokemon *pokemon, const u16 *name);
+void pokemonBiosSetNicknameOrgPtr(Pokemon *pokemon, const u16 *name);
+void pokemonBiosSetCatchTrainerNamePtr(Pokemon *pokemon, const u16 *name);
 
 u8 pokemonBiosGetLevel(Pokemon *pokemon);
 u16 pokemonGetSoubiItemDataId(Pokemon *pokemon);
@@ -197,7 +191,7 @@ void pokemonBiosSetConditionAmari(Pokemon *pokemon, u32 value);
 void pokemonBiosSetPcboxMark(Pokemon *pokemon, u8 value);
 void pokemonBiosSetFlagAmari(Pokemon *pokemon, u8 value);
 void pokemonBiosSetPokerus(Pokemon *pokemon, u8 value);
-void pokemonBiosSetCatchFloorId(Pokemon *pokemon, u8 value);
+void pokemonBiosSetCatchFloorId(Pokemon *pokemon, u16 value);
 void pokemonBiosSetCatchLevel(Pokemon *pokemon, u8 value);
 void pokemonBiosSetCatchBallId(Pokemon *pokemon, u8 value);
 void pokemonBiosSetCatchTrainerSex(Pokemon *pokemon, u8 value);
