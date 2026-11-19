@@ -144,8 +144,7 @@ void blurEffect::RenderFB(GSgfxLayer *layer)
     layer->zCompare(false, GSGFX_Z_COMPARE_ALWAYS);
     layer->pixelMode(true, true, false);
     layer->cullMode(GSGFX_CULL_NONE);
-    enum { BLUR_VERTEX_FORMAT_POSITION_RGBA8_TEXCOORD = 5 };
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(BLUR_VERTEX_FORMAT_POSITION_RGBA8_TEXCOORD));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_POSITION_COLOR_TEXCOORD));
     layer->texSelect(0, mCapture);
     layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
     layer->beginSurface(4);

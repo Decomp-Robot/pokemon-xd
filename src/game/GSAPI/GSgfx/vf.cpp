@@ -415,7 +415,7 @@ BOOL GSgfxVFIsUsed(GSgfxVF *vf)
     return vf->flags & VF_FLAG_USED;
 }
 
-GSgfxVF *GSgfxVFGetPredef(u32 format)
+GSgfxVF *GSgfxVFGetPredef(GSgfxVFPredef format)
 {
     return &_vfPredefFmt[format];
 }

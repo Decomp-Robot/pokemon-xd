@@ -753,7 +753,7 @@ void _SelectCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, s8 select)
                 vertices[i].y -= item->mY;
             }
             layer->blendMode(GSGFX_BLEND_BLEND, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_ONE, true);
-            layer->beginSurface(GSGFX_PRIM_TRIANGLE_FAN, GSgfxVFGetPredef(3), count);
+            layer->beginSurface(GSGFX_PRIM_TRIANGLE_FAN, GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR), count);
             for (i = 0; i < count; i++) {
                 GXWGFifo.s16 = (s16)vertices[i].x;
                 GXWGFifo.s16 = (s16)vertices[i].y;

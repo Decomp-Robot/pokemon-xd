@@ -69,11 +69,6 @@ enum StatusItem {
     STATUS_ITEM_JOUTAI_MIRRORED = 248,
 };
 
-// Vertex format the gauge and flash quads are built with.
-enum StatusVertexFormat {
-    STATUS_VERTEX_FORMAT_XY_S16_RGBA8 = 3,
-};
-
 enum MenuFightTargetItem {
     TARGET_ITEM_LEFT = 312,
     TARGET_ITEM_DOWN = 313,
@@ -419,7 +414,7 @@ extern "C" void menuFightDrawParam(tagWINDOW_WORK *window, tagSPRITE_WORK *sprit
                 u8 flash = 255.0f - 254.0f * cFlash;
                 layer->mPrimitiveType = GSGFX_QUADS;
                 GSprimLayerLineWidth(layer, 6);
-                layer->setRenderStateAndSelect(GSgfxVFGetPredef(STATUS_VERTEX_FORMAT_XY_S16_RGBA8));
+                layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR));
                 layer->beginSurface(4);
                 statusVertexPosition(0, 0);
                 GSgfxFifo.u8 = flash;

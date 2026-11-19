@@ -57,10 +57,7 @@ void _menuDrawReliveMeterSub(DarkPokemon *pokemon, long x, long y, long width, l
     _menuDrawReliveMeterSubDpValue(initPoint, darkPoint, x, y, width, height, alpha, layer);
 }
 
-enum {
-    METER_VERTEX_FORMAT_XY_S16_RGBA8 = 3,
-    METER_LINE_WIDTH_ONE_PIXEL = 6
-};
+enum { METER_LINE_WIDTH_ONE_PIXEL = 6 };
 
 static f32 max_alpha = 255.0f;
 
@@ -69,7 +66,7 @@ static inline void meterRect(long left, long top, long width, long height, GSgfx
 {
     layer->mPrimitiveType = GSGFX_QUADS;
     GSprimLayerLineWidth(layer, METER_LINE_WIDTH_ONE_PIXEL);
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(METER_VERTEX_FORMAT_XY_S16_RGBA8));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR));
     layer->beginSurface(4);
     GXWGFifo.s16 = left;
     GXWGFifo.s16 = top;
@@ -103,7 +100,7 @@ static inline void meterLine(long left, long top, long deltaX, long deltaY, GSgf
 {
     layer->mPrimitiveType = GSGFX_PRIM_LINES;
     GSprimLayerLineWidth(layer, METER_LINE_WIDTH_ONE_PIXEL);
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(METER_VERTEX_FORMAT_XY_S16_RGBA8));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR));
     layer->beginSurface(2);
     GXWGFifo.s16 = left;
     GXWGFifo.s16 = top;

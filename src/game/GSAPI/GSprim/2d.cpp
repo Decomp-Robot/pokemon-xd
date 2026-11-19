@@ -57,7 +57,7 @@ static inline void primDrawTexCoord(f32 x, f32 y)
 void GSprimDraw2DTexQuad4VCA(GSvec2 *vertices, GSvec2 *texCoords, GStexture *texture,
                              const GSgfxColAu8 *color, GSrectS *clipArea)
 {
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(6));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR_TEXCOORD));
     primData.layer->texSelect(0, texture);
     GSprimLayerClipRect(primData.layer, *clipArea);
     primData.layer->tunitColorOp(0, GSGFX_TUNIT_OP_ADD, GSGFX_TUNIT_BIAS_ZERO, GSGFX_TUNIT_SCALE_ONE, true,
@@ -82,7 +82,7 @@ void GSprimDraw2DTexQuad4VCA(GSvec2 *vertices, GSvec2 *texCoords, GStexture *tex
 
 void GSprimDraw2DTexQuad4V(GSvec2 *vertices, GSvec2 *texCoords, GStexture *texture, GSgfxColAu8 color)
 {
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(6));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR_TEXCOORD));
     primData.layer->texSelect(0, texture);
     primData.layer->mPrimitiveType = primData.primitiveType;
     primData.layer->beginSurface(4);
@@ -100,7 +100,7 @@ void GSprimDraw2DTexQuad4V(GSvec2 *vertices, GSvec2 *texCoords, GStexture *textu
 
 extern "C" void GSprimDraw2DTexQuad(GStexture *texture, const GSgfxColAu8 *color, f32 x1, f32 y1, f32 x2, f32 y2)
 {
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(6));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR_TEXCOORD));
     primData.layer->texSelect(0, texture);
     primData.layer->mPrimitiveType = primData.primitiveType;
     primData.layer->beginSurface(4);
@@ -122,7 +122,7 @@ extern "C" void GSprimDraw2DTexQuad(GStexture *texture, const GSgfxColAu8 *color
 
 void GSprimDraw2DQuad4V(GSvec2 *vertices, GSgfxColAu8 color)
 {
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = primData.primitiveType;
     primData.layer->beginSurface(4);
 
@@ -137,7 +137,7 @@ void GSprimDraw2DQuadWH(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height)
 {
     GSgfxColAu8 col = color;
 
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = primData.primitiveType;
     primData.layer->beginSurface(4);
 
@@ -147,7 +147,7 @@ void GSprimDraw2DQuadWH(GSgfxColAu8 color, f32 x, f32 y, f32 width, f32 height)
 
 void GSprimDraw2DQuad(GSgfxColAu8 color, f32 x1, f32 y1, f32 x2, f32 y2)
 {
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = primData.primitiveType;
     primData.layer->beginSurface(4);
 
@@ -166,7 +166,7 @@ void GSprimDraw2DPixelListC(GSivec2 *positions, u32 count, GSgfxColAu8 *colors)
         return;
 
     GSprimLayerPointSize(primData.layer, 6);
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(3));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimPoints;
     primData.layer->beginSurface((u16)count);
 
@@ -194,7 +194,7 @@ void GSprimDraw2DLineListC(GSvec2 *positions, u32 count, GSgfxColAu8 *colors)
         primData.linePushMode = 1;
     }
 
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     primData.layer->beginSurface((u16)(count * 2));
 
@@ -234,7 +234,7 @@ void GSprimDraw2DVLine(GSgfxColAu8 color, f32 x, f32 top, f32 bottom)
         primData.linePushMode = 1;
     }
 
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     primData.layer->beginSurface(2);
 
@@ -252,7 +252,7 @@ void GSprimDraw2DHLine(GSgfxColAu8 color, f32 left, f32 right, f32 y)
         primData.linePushMode = 1;
     }
 
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     primData.layer->beginSurface(2);
 
@@ -267,7 +267,7 @@ void GSprimDraw2DLine(const GSgfxColAu8 *startColor, const GSgfxColAu8 *endColor
         primData.linePushMode = 1;
     }
 
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     primData.layer->beginSurface(2);
 

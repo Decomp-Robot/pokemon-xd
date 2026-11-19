@@ -84,7 +84,7 @@ void GSprimWriteStr(f32 x, f32 y, const char *format, ...)
         GSprimLayerLineWidth(primData.layer, (u8)(6.0f * primData.textWidth));
         primData.linePushMode = 2;
     }
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     u32 n = _primRenderBuf(x, y, buf, len, false);
     primData.layer->beginSurface((u16)(n * 2));
@@ -98,7 +98,7 @@ void GSprimWriteChar(f32 x, f32 y, char c)
         GSprimLayerLineWidth(primData.layer, (u8)(6.0f * primData.textWidth));
         primData.linePushMode = 2;
     }
-    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(2));
+    primData.layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_F32_COLOR));
     primData.layer->mPrimitiveType = (GSgfxPrimType)GSprimPrimLines;
     u32 n = _primRenderBuf(x, y, &c, 1, false);
     primData.layer->beginSurface((u16)(n * 2));

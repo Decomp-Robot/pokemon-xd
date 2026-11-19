@@ -75,7 +75,6 @@ void menuPdaSubCalcPositon(f32 *pos, f32 target, f32 speed)
 void menuPdaSubScrollBar(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long menuID, long itemID, u32 color,
                          long count, long visibleCount, GSivec2 *scroll)
 {
-    enum { SCROLL_BAR_VERTEX_FORMAT_XY_COLOR = 3 };
     GSgfxLayer *layer = GSgfxLayerFindByID(winSpriteGetLayerID(window, sprite));
     tagMENU_ITEM_DATA *item;
     f32 ratio;
@@ -97,7 +96,7 @@ void menuPdaSubScrollBar(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long me
     barBottom = ratio * (f32)(scroll->x + visibleCount);
     layer->blendMode(GSGFX_BLEND_BLEND, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_INV_SRC_ALPHA, true);
     layer->mPrimitiveType = GSGFX_QUADS;
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(SCROLL_BAR_VERTEX_FORMAT_XY_COLOR));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR));
     layer->beginSurface(4);
     GSgfxFifo.s16 = 1;
     GSgfxFifo.s16 = (s16)barTop;

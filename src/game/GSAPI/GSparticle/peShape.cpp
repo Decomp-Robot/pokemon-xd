@@ -354,7 +354,7 @@ void peShapeContainer::Render()
                 g_current_layer->tunitAlphaArg(0, GSGFX_TUNIT_A_ZERO, GSGFX_TUNIT_A_KONST,
                                                         GSGFX_TUNIT_A_TEXA, GSGFX_TUNIT_A_ZERO);
             }
-            g_current_layer->mVertexFormat = GSgfxVFGetPredef(4);
+            g_current_layer->mVertexFormat = GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_POSITION_TEXCOORD);
             for (peShapeNode *node = (peShapeNode *)nodes; node; node = (peShapeNode *)node->next)
                 node->Render(shape);
             particleEngineSetDefaultRenderState(true);

@@ -88,7 +88,7 @@ u8 _resetDoFade(void *argument)
     layer->alphaCompare(false, GSGFX_A_COMPARE_ALWAYS, 0, GSGFX_ALPHA_AND, GSGFX_A_COMPARE_ALWAYS, 0);
     layer->cullMode(GSGFX_CULL_NONE);
     layer->clipMode(GSGFX_CLIP_DISABLED);
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(0));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_POSITION_COLOR));
     layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
     layer->beginSurface(4);
     GSgfxFifo.f32 = 0.0f; GSgfxFifo.f32 = 0.0f; GSgfxFifo.f32 = 0.0f;

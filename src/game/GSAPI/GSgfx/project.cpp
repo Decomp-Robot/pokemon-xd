@@ -5,13 +5,6 @@
 
 
 enum {
-    GSGFX_PROJECT_RESULT_UNAVAILABLE = 0,
-    GSGFX_PROJECT_RESULT_REJECTED = 1,
-    GSGFX_PROJECT_RESULT_SUCCESS = 2,
-    GSGFX_PROJECT_RESULT_MIXED = 3,
-};
-
-enum {
     GSGFX_MATRIX_VIEW = 2,
     GSGFX_MATRIX_VIEW_INVERSE = 3,
     GSGFX_MATRIX_PROJECTION = 4,
@@ -24,7 +17,7 @@ f32 (*g_projCameraMatrix)[4];
 f32 (*g_projInvCameraMatrix)[4];
 f32 (*g_projProjectMatrix)[4];
 
-static s32 projectPoint(GSvec *src, GSvec *dst)
+static GSgfxProjectResult projectPoint(GSvec *src, GSvec *dst)
 {
     f32 z, y, x;
     x = g_projInvCameraMatrix[0][2];
@@ -51,9 +44,9 @@ static s32 projectPoint(GSvec *src, GSvec *dst)
     return GSGFX_PROJECT_RESULT_SUCCESS;
 }
 
-extern "C" s32 GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count)
+extern "C" GSgfxProjectResult GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count)
 {
-    s32 status;
+    GSgfxProjectResult status;
     GSvec *output = dst;
     GSvec *input = src;
     u32 remaining;
@@ -79,7 +72,7 @@ extern "C" s32 GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count)
     return status;
 }
 
-extern "C" s32 GSgfxProjectFast(GSvec *src, GSvec *dst)
+extern "C" GSgfxProjectResult GSgfxProjectFast(GSvec *src, GSvec *dst)
 {
     if (g_projCameraMatrix == 0 || g_projProjectMatrix == 0)
         return GSGFX_PROJECT_RESULT_UNAVAILABLE;

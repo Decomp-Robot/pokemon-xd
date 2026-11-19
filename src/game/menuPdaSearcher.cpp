@@ -61,8 +61,7 @@ enum { SEARCHER_SPRITE_CURSOR_TEXTURE = 734 };
 enum {
     SEARCHER_MAP_SPOT0 = 15,
     SEARCHER_MAP_SPOT1 = 16,
-    SEARCHER_MAP_SPOT2 = 17,
-    SEARCHER_VERTEX_XY16_RGBA8_ST = 7,
+    SEARCHER_MAP_SPOT2 = 17
 };
 
 static s32 _esaMeterIndex0[SEARCHER_METER_MAX] = {
@@ -337,7 +336,7 @@ static void _animCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, u16 inde
     layer->tunitAlphaArg(0, GSGFX_TUNIT_A_ZERO, GSGFX_TUNIT_A_RASA, GSGFX_TUNIT_A_TEXA,
                          GSGFX_TUNIT_A_ZERO);
     layer->mPrimitiveType = GSGFX_QUADS;
-    vf = GSgfxVFGetPredef(SEARCHER_VERTEX_XY16_RGBA8_ST);
+    vf = GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR_TEXCOORD);
     layer->mPrimitiveType = GSGFX_PRIM_TRIANGLE_FAN;
     layer->setRenderStateAndSelect(vf);
     layer->texSelect(0, texture);

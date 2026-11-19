@@ -6,8 +6,6 @@
 
 static GSgfxLayer *thpLayer;
 
-enum { THP_VERTEX_FORMAT = 8 };
-
 void THPGXSetRenderLayer(GSgfxLayer *layer)
 {
     thpLayer = layer;
@@ -95,7 +93,7 @@ u16 THPGXYuv2RgbDraw(void *yImage, void *uImage, void *vImage, s16 x, s16 y,
                               GS_TEXTURE_FORMAT_I8, GS_TEXTURE_TLUT_FORMAT_NONE, 0);
     thpLayer->texSelect(2, &vTexture);
 
-    thpLayer->mVertexFormat = GSgfxVFGetPredef(THP_VERTEX_FORMAT);
+    thpLayer->mVertexFormat = GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_TEXCOORD_U8);
     thpLayer->mPrimitiveType = GSGFX_QUADS;
     thpLayer->beginSurface(4);
     GSgfxFifo.s16 = x;

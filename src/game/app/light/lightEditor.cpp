@@ -50,10 +50,6 @@ enum LightEditPeopleFocus {
     LIGHT_EDIT_PEOPLE_FOCUS_ID = 100
 };
 
-enum LightModelVertexFormat {
-    LIGHT_MODEL_VERTEX_FORMAT = 0
-};
-
 #define LIGHT_EDIT_COLOR_NORMAL 0xFFFFFFFF
 #define LIGHT_EDIT_COLOR_SELECT 0xFFFF80FF
 
@@ -391,7 +387,7 @@ void LightEditor::dispLightModel(GSlight *light, bool selected)
     layer->alphaCompare(false, GSGFX_A_COMPARE_ALWAYS, 0, GSGFX_ALPHA_AND, GSGFX_A_COMPARE_ALWAYS, 0);
     layer->cullMode(GSGFX_CULL_NONE);
     layer->blendMode(GSGFX_BLEND_BLEND, GSGFX_BLEND_SRC_ALPHA, GSGFX_BLEND_INV_SRC_ALPHA, true);
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(LIGHT_MODEL_VERTEX_FORMAT));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_POSITION_COLOR));
     layer->mPrimitiveType = GSGFX_QUADS;
     layer->beginSurface(24);
     for (i = 0; i < 4; i++) {

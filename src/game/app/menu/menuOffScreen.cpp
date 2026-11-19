@@ -64,8 +64,7 @@ void menuOffScreenDraw(void)
     layer->zCompare(false, GSGFX_Z_COMPARE_LEQUAL);
     layer->cullMode(GSGFX_CULL_NONE);
     layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
-    enum { OFFSCREEN_VERTEX_FORMAT_POSITION_RGBA_TEXCOORD = 7 };
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(OFFSCREEN_VERTEX_FORMAT_POSITION_RGBA_TEXCOORD));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR_TEXCOORD));
     layer->texSelect(0, _menuOffScreenTex);
     layer->beginSurface(4);
     // Position, colour and texture coordinate of each corner of the captured

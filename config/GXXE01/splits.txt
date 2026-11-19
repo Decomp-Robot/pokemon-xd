@@ -3324,7 +3324,11 @@ game/app/sodateya/sodateya.cpp:
 	.sdata2     start:0x804EEA00 end:0x804EEA04
 
 game/GSAPI/GSlensFlare/GSlensFlare.cpp:
-	.text       start:0x801ED628 end:0x801ED774
+	.text       start:0x801ED628 end:0x801EEBE4
+	.rodata     start:0x802F8960 end:0x802F8980
+	.bss        start:0x804A16D0 end:0x804A16E0
+	.sbss       start:0x804EB8C0 end:0x804EB8C8
+	.sdata2     start:0x804EEA08 end:0x804EEA58
 
 game/app/fight/fightMain.cpp:
 	.text       start:0x801EEBE4 end:0x801EF640

@@ -236,7 +236,7 @@ void menuPdaDPM::DispPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
         return;
     }
     layer->mPrimitiveType = GS_GFX_PRIM_TRIANGLE_STRIP;
-    layer->setRenderStateAndSelect(GSgfxVFGetPredef(7));
+    layer->setRenderStateAndSelect(GSgfxVFGetPredef(GSGFX_VF_PREDEFINED_XY_S16_COLOR_TEXCOORD));
     layer->texSelect(0, texture);
     layer->beginSurface(4);
     // The model texture is drawn as a texture mapped quad: position, colour

@@ -1033,7 +1033,21 @@ struct GSgfxLight {
     }
 };
 extern "C" GSgfxLayer *GSgfxLayerGetLayerList(void);
-extern "C" GSgfxVF *GSgfxVFGetPredef(u32 format);
+
+// Indices into the graphics library's table of predefined vertex formats.
+enum GSgfxVFPredef {
+    GSGFX_VF_PREDEFINED_POSITION_COLOR = 0,
+    GSGFX_VF_PREDEFINED_POSITION_S16_COLOR = 1,
+    GSGFX_VF_PREDEFINED_XY_F32_COLOR = 2,
+    GSGFX_VF_PREDEFINED_XY_S16_COLOR = 3,
+    GSGFX_VF_PREDEFINED_POSITION_TEXCOORD = 4,
+    GSGFX_VF_PREDEFINED_POSITION_COLOR_TEXCOORD = 5,
+    GSGFX_VF_PREDEFINED_XY_F32_COLOR_TEXCOORD = 6,
+    GSGFX_VF_PREDEFINED_XY_S16_COLOR_TEXCOORD = 7,
+    GSGFX_VF_PREDEFINED_XY_S16_TEXCOORD_U8 = 8
+};
+
+extern "C" GSgfxVF *GSgfxVFGetPredef(GSgfxVFPredef format);
 void GSprimSetup2DRender(GSgfxLayer *layer);
 extern "C" GSgfxLayer *GSgfxLayerFindByID(GSgfxLayerID id);
 
@@ -1093,8 +1107,17 @@ s32 GSgfxEndBackFBCapture(GStexture *texture);
 
 
 extern "C" f32 GSgfxVideoGetLastRenderTime(void);
-extern "C" s32 GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count);
-extern "C" s32 GSgfxProjectFast(GSvec *src, GSvec *dst);
+
+// Result codes returned by the projection helpers below.
+enum GSgfxProjectResult {
+    GSGFX_PROJECT_RESULT_UNAVAILABLE = 0,
+    GSGFX_PROJECT_RESULT_REJECTED = 1,
+    GSGFX_PROJECT_RESULT_SUCCESS = 2,
+    GSGFX_PROJECT_RESULT_MIXED = 3
+};
+
+extern "C" GSgfxProjectResult GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 count);
+extern "C" GSgfxProjectResult GSgfxProjectFast(GSvec *src, GSvec *dst);
 extern "C" void GSgfxProjectSetupCameraParameters(GScamera *camera);
 extern "C" void GSgfxProjectSetupParameters(void);
 extern "C" f32 (*GSgfxMatrixGetPtr(u32 matrix))[4];
