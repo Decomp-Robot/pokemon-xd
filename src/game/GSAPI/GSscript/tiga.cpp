@@ -79,8 +79,8 @@ bool Tiga::restoreStateData(void* data, unsigned long size)
         conv.word = stream.readU32();
         mTimer[i] = conv.value;
     }
-    for (i = 0; i < 16; i++) {
-        mUnknownStateAfterContext[i] = stream.readU8();
+    for (i = 0; i < LocalFlagCount; i++) {
+        mLocalFlags[i] = stream.readU8();
     }
 
     mNextThreadHandle = stream.readU32();
@@ -149,8 +149,8 @@ void Tiga::makeStateData(GSBinWriteStream* stream)
     for (i = 0; i < 4; i++) {
         stream->writeFloat(mTimer[i]);
     }
-    for (i = 0; i < 16; i++) {
-        stream->writeU8(mUnknownStateAfterContext[i]);
+    for (i = 0; i < LocalFlagCount; i++) {
+        stream->writeU8(mLocalFlags[i]);
     }
 
     stream->writeU32(mNextThreadHandle);

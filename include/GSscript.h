@@ -12,6 +12,11 @@ class WazaSequence;
 
 struct ScriptResultContext;
 struct GSthread;
+struct TPCCode {
+    u8 opcode;
+    u8 operand;
+    u16 immediate;
+};
 
 namespace GSscript {
 void tigaErrMessage(const char*);
@@ -33,6 +38,7 @@ public:
 
 namespace GSscript {
 enum VariantKind {
+    VariantEmpty = 0,
     VariantInteger = 1,
     VariantSingle = 2,
     VariantString = 3,
@@ -109,6 +115,11 @@ struct tigaVariant {
         kind = VariantPeople;
         this->people = people;
     }
+    void setSingle(float single)
+    {
+        kind = VariantSingle;
+        this->single = single;
+    }
     long getCnvInteger();
     float getCnvSingle();
     GSvec* getCnvVector();
@@ -122,7 +133,11 @@ public:
     u32 mState;
     u8 mUnknownStateAfterState[0x148];
     int lineNumber;
-    u8 mUnknownStateAfterLineNumber[0x20];
+    u8 mUnknownStateAfterLineNumber[0x18];
+    u8 mWaitFlagKind;
+    u8 mWaitFlagIndex;
+    u8 mUnknownWaitFlag[2];
+    long mWaitFlagValue;
     Tiga* mTiga;
     long mHandle;
     u32 mFloorGroupId;
@@ -135,6 +150,7 @@ public:
 };
 class Tiga {
 public:
+    enum { LocalFlagCount = 16 };
     Tiga();
     CChankBlock mChank;
     u32 mChankSize;
@@ -146,12 +162,13 @@ public:
     TigaThread* mThreadSlots[8];
     tigaCellMemory* mCellMemory;
     ScriptResultContext* mResultContext;
-    u8 mUnknownStateAfterContext[0x10];
+    u8 mLocalFlags[LocalFlagCount];
     int mNextThreadHandle;
     bool mSaveFlag;
     u32 mUnknownStateAfterSaveFlag;
     int mLiveWaza;
-    u8 mUnknownStateAfterCounter[0x10];
+    u8 mUnknownStateAfterCounter[0xC];
+    TPCCode* mCodeSection;
     int mVariantCount;
     tigaVariant* mVariants;
     u8 mUnknownStateAfterVariants[0x4];
@@ -177,6 +194,11 @@ public:
     void unblockThread(long threadHandle);
     void setRpVec(const GSvec*);
     bool runParamsWait(int, tigaVariant*, int, tigaVariant*);
+    int cmpArray(int, tigaVariant*, tigaVariant*);
+    int cmpVector(int, tigaVariant*, tigaVariant*);
+    bool cmpThread(int, tigaVariant*, tigaVariant*);
+    bool makeThread(TPCCode*, int&, long&);
+    void deleteThread(long);
     virtual int execExtendMethod(int, int, tigaVariant*, tigaVariant*);
     virtual int execExtendGlobalFunction(int, tigaVariant*, tigaVariant*);
     virtual int getExtendVariable(tigaVariant*, int, int);
@@ -190,9 +212,11 @@ public:
 
 
 struct ScriptResultContext {
+    enum { StringBufferSize = 256 };
     u8 executionState[0x10];
     GSscript::tigaVariant result;
-    u8 variableState[0x120];
+    u8 variableState[0x20];
+    char stringBuffer[StringBufferSize];
     GSvec vectorResult;
 };
 
@@ -213,6 +237,10 @@ public:
     tigaVariant mValues[1];
 
     tigaVariant* get(int);
+    void set(int, const tigaVariant*);
+    void push_back(tigaVariant*);
+    void resize(int);
+    tigaVariant* fe_get();
 };
 class tigaCellMemory {
 public:

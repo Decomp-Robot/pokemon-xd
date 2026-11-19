@@ -3562,6 +3562,12 @@ game/GSAPI/GSscript/tvariant.cpp:
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
 
+game/GSAPI/GSscript/defobj.cpp:
+	.text       start:0x802426B4 end:0x802434E8
+	.rodata     start:0x802F9748 end:0x802F9770
+	.data       start:0x80418A10 end:0x80418B08
+	.sdata2     start:0x804EED60 end:0x804EED80
+
 game/GSAPI/GSsysdolphin_baselib/baselib/wobj.c:
 	.text       start:0x802434FC end:0x80243E38
 	.rodata     start:0x802F9770 end:0x802F97B0

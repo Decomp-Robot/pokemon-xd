@@ -11,6 +11,7 @@
 extern "C" {
 #endif
 
+double acos(double x);
 double fabs(double x);
 double sin(double x);
 double cos(double x);

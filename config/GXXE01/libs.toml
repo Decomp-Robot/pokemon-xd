@@ -6329,6 +6329,11 @@ name = "game/GSAPI/GSscript/chank.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
+[[lib.object]]
+name = "game/GSAPI/GSscript/defobj.cpp"
+completed = true
+extra_cflags = ["-rostr", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "joutai"
 mw_version = "GC/2.6"
