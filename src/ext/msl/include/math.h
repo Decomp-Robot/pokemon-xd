@@ -15,6 +15,8 @@ extern float __float_nan[];
 double fabs(double x);
 double sin(double x);
 double cos(double x);
+double tan(double x);
+double acos(double x);
 double fmod(double x, double y);
 double atan2(double y, double x);
 double asin(double x);
@@ -32,7 +34,7 @@ double scalbn(double x, int n);
 double copysign(double x, double y);
 double sqrt(double value);
 
-#ifdef __MWERKS__
+#if defined(__MWERKS__) && !defined(MSL_MATH_IMPLEMENTATION)
 #pragma cplusplus on
 #endif
 
@@ -44,6 +46,7 @@ double floor(double x);
 #define FP_NORMAL    4
 #define FP_SUBNORMAL 5
 
+#ifndef MSL_MATH_IMPLEMENTATION
 extern inline long __fpclassifyf(float value)
 {
     const long exponentMask = 0x7F800000;
@@ -79,11 +82,18 @@ extern inline float sqrtf(float value)
     }
 }
 
-#ifdef __MWERKS__
+#else
+long __fpclassifyf(float value);
+float sqrtf(float value);
+#endif
+
+#if defined(__MWERKS__) && !defined(MSL_MATH_IMPLEMENTATION)
 #define fabs(x) __fabs(x)
+#endif
+
+#if defined(__MWERKS__)
 #define fabsf(x) __fabsf(x)
 #else
-double fabs(double x);
 float fabsf(float x);
 #endif
 
@@ -92,7 +102,7 @@ long __fpclassifyd(double x);
 #define fpclassify(x) (sizeof(x) == sizeof(float) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)))
 #define isfinite(x) ((fpclassify(x) > FP_INFINITE))
 
-#ifdef __MWERKS__
+#if defined(__MWERKS__) && !defined(MSL_MATH_IMPLEMENTATION)
 #pragma cplusplus reset
 #endif
 
