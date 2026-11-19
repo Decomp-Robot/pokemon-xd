@@ -139,8 +139,8 @@ u8 *_dlParseSurface(GSgfxPrimType type, _HSD_VtxDescList *vtxAttr, u8 *data, u16
     _HSD_VtxDescList *desc;
     unsigned long attributeMask = 0;
 
-    for (desc = vtxAttr; desc->mAttribute != GX_VA_NULL; desc++) {
-        switch (desc->mAttribute) {
+    for (desc = vtxAttr; desc->attr != GX_VA_NULL; desc++) {
+        switch (desc->attr) {
         case GX_VA_PNMTXIDX: attributeMask |= GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX; break;
         case GX_VA_TEX0MTXIDX: attributeMask |= GS_GFX_PARSE_ATTRIBUTE_TEXMTXIDX; break;
         case GX_VA_POS: attributeMask |= GS_GFX_PARSE_ATTRIBUTE_POSITION; break;
@@ -166,7 +166,7 @@ u8 *_dlParseSurface(GSgfxPrimType type, _HSD_VtxDescList *vtxAttr, u8 *data, u16
         if (callbacks->mBeginVertex) {
             callbacks->mBeginVertex(userContext);
         }
-        for (desc = vtxAttr; desc->mAttribute != GX_VA_NULL; desc++) {
+        for (desc = vtxAttr; desc->attr != GX_VA_NULL; desc++) {
             data = _dlParseVertex(desc, data, callbacks, userContext);
         }
         if (callbacks->mEndVertex) {
@@ -189,7 +189,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
     u16 index;
     void *attributeData;
 
-    switch (desc->mAttribute) {
+    switch (desc->attr) {
     case GX_VA_PNMTXIDX:
     case GX_VA_TEX0MTXIDX:
     case GX_VA_TEX1MTXIDX:
@@ -202,7 +202,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
         attributeData = data;
         formatFlag = GS_GFX_PARSE_FORMAT_U8;
         componentFlag = GS_GFX_PARSE_COMPONENTS_1;
-        switch (desc->mAttribute) {
+        switch (desc->attr) {
         case GX_VA_PNMTXIDX: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_PNMTXIDX; break;
         case GX_VA_TEX0MTXIDX: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEXMTXIDX; break;
         case GX_VA_TEX1MTXIDX: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEXMTXIDX; break;
@@ -228,10 +228,10 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
     case GX_VA_TEX6:
     case GX_VA_TEX7:
     case GX_VA_NBT:
-        if (desc->mAttribute == GX_VA_CLR0 || desc->mAttribute == GX_VA_CLR1) {
-            attributeFlag = (desc->mAttribute == GX_VA_CLR0) ? GS_GFX_PARSE_ATTRIBUTE_COLOR0
+        if (desc->attr == GX_VA_CLR0 || desc->attr == GX_VA_CLR1) {
+            attributeFlag = (desc->attr == GX_VA_CLR0) ? GS_GFX_PARSE_ATTRIBUTE_COLOR0
                                                                  : GS_GFX_PARSE_ATTRIBUTE_COLOR1;
-            componentFormat = desc->mComponentFormat;
+            componentFormat = desc->comp_type;
             componentFlag = GS_GFX_PARSE_COMPONENTS_1;
             switch (componentFormat) {
             case GX_RGB565: formatFlag = GS_GFX_PARSE_FORMAT_RGB565; break;
@@ -243,7 +243,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
             }
         } else {
             unsigned long scalarFormatFlag;
-            GXCompType rawComponentFormat = desc->mComponentFormat;
+            GXCompType rawComponentFormat = desc->comp_type;
             switch (rawComponentFormat) {
             case GX_U8: scalarFormatFlag = GS_GFX_PARSE_FORMAT_U8; break;
             case GX_S8: scalarFormatFlag = GS_GFX_PARSE_FORMAT_S8; break;
@@ -252,10 +252,10 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
             case GX_F32: scalarFormatFlag = GS_GFX_PARSE_FORMAT_F32; break;
             }
             formatFlag = (GSgfxParseFlags)scalarFormatFlag;
-            switch (desc->mAttribute) {
+            switch (desc->attr) {
             case GX_VA_POS:
                 attributeFlag = GS_GFX_PARSE_ATTRIBUTE_POSITION;
-                if (desc->mComponentCount == GX_POS_XY) {
+                if (desc->comp_cnt == GX_POS_XY) {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_2;
                 } else {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_3;
@@ -263,13 +263,13 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
                 break;
             case GX_VA_NRM:
                 attributeFlag = GS_GFX_PARSE_ATTRIBUTE_NORMAL;
-                if (desc->mComponentCount == GX_NRM_XYZ) {
+                if (desc->comp_cnt == GX_NRM_XYZ) {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_3;
                 }
                 break;
             case GX_VA_NBT:
                 attributeFlag = GS_GFX_PARSE_ATTRIBUTE_NBT;
-                if (desc->mComponentCount == GX_NRM_NBT) {
+                if (desc->comp_cnt == GX_NRM_NBT) {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_3;
                 }
                 break;
@@ -281,7 +281,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
             case GX_VA_TEX5:
             case GX_VA_TEX6:
             case GX_VA_TEX7:
-                switch (desc->mAttribute) {
+                switch (desc->attr) {
                 case GX_VA_TEX0: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEX0; break;
                 case GX_VA_TEX1: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEX1; break;
                 case GX_VA_TEX2: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEX2; break;
@@ -291,7 +291,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
                 case GX_VA_TEX6: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEX6; break;
                 case GX_VA_TEX7: attributeFlag = GS_GFX_PARSE_ATTRIBUTE_TEX7; break;
                 }
-                if (desc->mComponentCount == GX_TEX_S) {
+                if (desc->comp_cnt == GX_TEX_S) {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_1;
                 } else {
                     componentFlag = GS_GFX_PARSE_COMPONENTS_2;
@@ -300,7 +300,7 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
             }
         }
 
-        if (desc->mInputType == GX_DIRECT) {
+        if (desc->type == GX_DIRECT) {
             attributeData = data;
             switch (formatFlag) {
             case GS_GFX_PARSE_FORMAT_U8:
@@ -338,14 +338,14 @@ u8 *_dlParseVertex(_HSD_VtxDescList *desc, u8 *data, GSgfxParseCallbackList *cal
             }
             data += size;
         } else {
-            if (desc->mInputType == GX_INDEX8) {
+            if (desc->type == GX_INDEX8) {
                 index = *data;
                 data += 1;
             } else {
                 index = *(u16 *)data;
                 data += 2;
             }
-            attributeData = (u8 *)desc->mArrayBase + index * desc->mStride;
+            attributeData = (u8 *)desc->base + index * desc->stride;
         }
         break;
     }

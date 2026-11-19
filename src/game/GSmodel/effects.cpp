@@ -349,14 +349,14 @@ extern "C" void GSmodelCreateDistortion(_GSmodel *model, u16 part, u8 material,
     GSgfxVFInit(model->mDistortionVF);
     GSgfxVFCreate(model->mDistortionVF);
     vtx = distortionPrimitive->mVtxAttr;
-    while (vtx->mAttribute != HSD_VTX_ATTR_NULL) {
-        if (vtx->mAttribute >= HSD_VTX_ATTR_POSITION || vtx->mAttribute < 0) {
-            GSgfxVFSetElement(model->mDistortionVF, vtx->mAttribute, vtx->mComponentCount,
-                              vtx->mComponentFormat, vtx->mFractionalBits);
+    while (vtx->attr != GX_VA_NULL) {
+        if (vtx->attr >= GX_VA_POS || vtx->attr < 0) {
+            GSgfxVFSetElement(model->mDistortionVF, vtx->attr, vtx->comp_cnt,
+                              vtx->comp_type, vtx->frac);
         }
-        if (vtx->mInputType != HSD_VTX_INPUT_DIRECT) {
-            GSgfxVFSetArray(model->mDistortionVF, vtx->mAttribute, vtx->mInputType,
-                            vtx->mArrayBase, vtx->mStride & 0xFF, 0);
+        if (vtx->type != GX_DIRECT) {
+            GSgfxVFSetArray(model->mDistortionVF, vtx->attr, vtx->type,
+                            vtx->base, (u8)vtx->stride, 0);
         }
         vtx++;
     }
