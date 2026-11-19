@@ -840,6 +840,8 @@ u8 fightTrainerAiGetFightOutPokemonAbiCntAvd(FIGHT_TRAINER *trainer, FightOutPok
 u8 fightTrainerAiIsFightOutPokemonZokuseiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 typeId);
 s16 fightTrainerAiGetWazaIryoku(FIGHT_TRAINER *trainer, u16 wazaDataId);
 u16 fightTrainerAiGetFightOutPokemonZokuseiDataIdWazaJoutaiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 typeId, s16 power);
+u16 fightTrainerAiGetFightOutPokemonNowHp(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetWazaZokuseiDataId(FIGHT_TRAINER *trainer, u16 wazaDataId, FightOutPokemon *attacker);
 
 u8 fightTrainerAiCheckJoutaiKieWazaHitWazaDataId(FIGHT_TRAINER *trainer, u16 joutaiDataId, u16 wazaDataId);
 u16 fightTrainerAiCheckHorobinouta(FIGHT_TRAINER *trainer);
@@ -860,6 +862,9 @@ u16 fightTrainerAiCheckOumu(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiCheckSimerike(FIGHT_TRAINER *trainer);
 u8 fightTrainerAiCheckSawagu(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiIsFightOutPokemonJoutaiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 joutaiDataId);
+u8 fightTrainerAiIsFightOutPokemonJoutaiKaragenki(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u8 fightTrainerAiIsFightOutPokemonJoutaiNormal(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightOutPokemonUsedItemDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiIsFightOutPokemonTokuseiDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 tokuseiDataId);
 u8 fightTrainerAiIsFightPokemonTokuseiDataId(FIGHT_TRAINER *trainer, FightPokemon *pokemon, u16 tokuseiDataId);
 

@@ -3498,7 +3498,7 @@ game/app/fight/fightTrainerAi2.cpp:
 	.text       start:0x8022C628 end:0x8022CD24
 
 game/app/fight/fightTrainerAiWazaHit.cpp:
-	.text       start:0x8022CD24 end:0x8022D400
+	.text       start:0x8022CD24 end:0x8022DB2C
 
 game/app/toolentry/toolentry.cpp:
 	.text       start:0x80231AB4 end:0x8023242C

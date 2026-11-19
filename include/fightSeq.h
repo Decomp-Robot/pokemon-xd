@@ -94,7 +94,10 @@ enum {
     JOUTAI_ID_DIGGING = 32,
     JOUTAI_ID_DIVING = 33,
     JOUTAI_ID_MIST = 76,
-    JOUTAI_ID_UPROAR = 11
+    JOUTAI_ID_UPROAR = 11,
+    JOUTAI_ID_DROWSY = 38,
+    JOUTAI_ID_IMPRISON = 39,
+    JOUTAI_ID_MUD_SPORT = 56
 };
 enum {
     FIGHT_SEQ_FLAG_ATTACKER_DEFENDER_SWAPPED = 0x1000,
@@ -279,6 +282,10 @@ void fightSeqTuikaAct(u8 action, u8 mode);
 bool fightSeqGetEffectAminFlag(void);
 void fightSeqSetEffectAminFlag(u8 enabled);
 u8 fightSeqCheckYubiwohuruWazaDataId(u16 wazaId);
+u8 fightSeqRegulationCheck(u16 wazaDataId, FightOutPokemon *attacker, FightOutPokemon *defender);
+u8 fightSeqRegulationOverTwoCheck(u16 joutaiDataId, FightOutPokemon *defender);
+s32 fightSeqGetTemotiPokemonNekonoteWazaDataAry(FIGHT_TRAINER *trainer, u16 *wazaDataIdAry, u16 count,
+                                                FightOutPokemon *attacker);
 
 FightOutPokemon *fightSeqSelectDefensePokemonPtr(FightOutPokemon *pokemon,
     u16 waza, u16 fightType, FightPokemonSelectCallback selectCallback,
