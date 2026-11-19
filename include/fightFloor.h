@@ -130,12 +130,23 @@ enum FightFloorStatus {
     FIGHT_FLOOR_STATUS_SELECTOR_LIMIT = 96
 };
 
+/* Sentinel returned when no status panel is selected; zero is not a panel. */
+enum {
+    FIGHT_STATUS_MENU_NONE = 0
+};
+
 /* Menu IDs accepted by the fight status-menu count accessors. */
 enum FightStatusMenuId {
     FIGHT_STATUS_MENU_LEFT = 55,
     FIGHT_STATUS_MENU_UP = 56,
     FIGHT_STATUS_MENU_DOWN = 64,
     FIGHT_STATUS_MENU_RIGHT = 65
+};
+
+/* Values stored in the fight status-menu counters. */
+enum FightStatusMenuCount {
+    FIGHT_STATUS_MENU_INACTIVE = -1,
+    FIGHT_STATUS_MENU_CLOSE_DELAY = 15
 };
 
 enum FightFloorSwitchResult {

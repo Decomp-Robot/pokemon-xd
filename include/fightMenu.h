@@ -14,17 +14,20 @@ void fightMenuAllFightTrainerCloseStatusMenu(u8 waitForClose);
 void fightMenuAllFightOutPokemonCloseStatusMenu(u8 waitForClose);
 u8 fightMenuOpenMsg(s32 msgId);
 void fightMenuFightOutPokemonCloseStatusMenu(FightOutPokemon *pokemon, u16 fightType, bool unused);
-u32 fightMenuGetFightOutPokemonPtrToStatusMenuId(FightOutPokemon *pokemon, u16 fightType, u32 lookupMode);
+u32 fightMenuGetFightOutPokemonPtrToStatusMenuId(FightOutPokemon *pokemon, u16 fightType, bool unused);
 
 void fightMenuFightOutPokemonRenewStatusMenu(FightOutPokemon *pokemon,
-    u16 fightType, u8 update);
+    u16 fightType, bool showDarkStatus);
 void fightMenuFightTrainerRenewStatusMenu(FIGHT_TRAINER *trainer, u16 fightType);
 void fightMenuFightTrainerOpenStatusMenu(FIGHT_TRAINER *trainer, u16 fightType);
 void fightMenuFightTrainerCloseStatusMenu(FIGHT_TRAINER *trainer, u16 fightType, bool waitForClose);
 u32 fightMenuGetFightTrainerPtrToStatusMenuId(FIGHT_TRAINER *trainer, u16 fightType);
 
 void fightMenuFightOutPokemonOpenStatusMenu(FightOutPokemon *pokemon, u16 fightType, bool showDarkStatus);
-void fightMenuFightOutPokemonCloseStatusMenuAnotherMine(u32 statusMenuId, FightOutPokemon *pokemon, u16 fightType, u8 waitForClose, s32 lookupMode);
+void fightMenuFightOutPokemonOpenStatusMenuStart(FightOutPokemon *pokemon, u16 fightType, bool showDarkStatus);
+void fightMenuFightStatusStartAnimHP(u32 menuId, s16 hp);
+void fightMenuFightOutPokemonSetStatusMenuActiveFlag(FightOutPokemon *pokemon, u16 fightType, bool active);
+void fightMenuFightOutPokemonCloseStatusMenuAnotherMine(u32 statusMenuId, FightOutPokemon *pokemon, u16 fightType, bool waitForClose, bool unusedLookupFlag);
 
 #ifdef __cplusplus
 }

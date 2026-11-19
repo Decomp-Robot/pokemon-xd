@@ -15,6 +15,7 @@ extern "C" {
 typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
 struct NullSequence;
+struct MENU_POKEMON_STATUS;
 
 // A Pokemon of a trainer's party: the Pokemon the record was made from, the
 // working copy the fight runs on, the status it carries into the fight, the
@@ -137,6 +138,8 @@ u16 fightOutPokemon_GetStockItemDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetStockItemDataId(FightOutPokemon *pokemon, u16 item);
 u16 fightOutPokemonDoItemSoubi(FightOutPokemon *pokemon, u16 item, u8 equip, u8 recordUsedItem);
 struct NullSequence *fightOutPokemon_GetSequencePtr(FightOutPokemon *pokemon);
+void fightOutPokemonToMenuPokemonStatus(FightOutPokemon *pokemon,
+                                        struct MENU_POKEMON_STATUS *status);
 
 #ifdef __cplusplus
 }

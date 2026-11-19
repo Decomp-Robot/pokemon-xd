@@ -112,7 +112,7 @@ void menuFightStatusStartAnimHP(u32 menuId, s16 hp)
     anim->hpElapsed = 0;
 }
 
-void menuFightStatusSetActive(u32 menuId, u32 active)
+void menuFightStatusSetActive(u32 menuId, bool active)
 {
 }
 

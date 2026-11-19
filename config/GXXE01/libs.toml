@@ -532,6 +532,7 @@ cflags = [
 [[lib.object]]
 name = "game/app/fight/fightMenu.cpp"
 completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 cflags = [
     "-W error", "-nodefaults", "-proc gekko", "-align powerpc", "-enum int",
     "-fp hardware", "-Cpp_exceptions off", "-O4,s", "-inline auto",

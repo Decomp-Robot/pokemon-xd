@@ -43,7 +43,8 @@ enum {
     SOUBI_STICK = 66,
     SOUBI_CHOICE_BAND = 29
 };
-enum {
+enum FightTargetId {
+    FIGHT_TARGET_ID_NONE = 0,
     FIGHT_TARGET_ID_FLOOR = 1,
     FIGHT_TARGET_ID_OWN_SIDE = 2,
     FIGHT_TARGET_ID_OPPOSING_SIDE = 3,
