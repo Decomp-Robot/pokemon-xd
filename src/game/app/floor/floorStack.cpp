@@ -47,7 +47,6 @@ GSfloor_dd_* FloorStackList::getGSfloor()
 
 FloorStateMode FloorStackList::getStateMode()
 {
-    enum { FLOOR_KIND_FIELD = 1, FLOOR_KIND_FIGHT = 2 };
     u8 kind = floorDataBiosGetFloorKind(floorDataBiosGetPtr(getCurrentStack()->getFloorID()));
     if (kind == FLOOR_KIND_FIELD) {
         return FLOOR_STATE_MODE_FIELD;

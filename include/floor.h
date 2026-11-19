@@ -42,7 +42,7 @@ s32 floorGetPrevFloorID(void);
 u32 floorGetCurrentGroupID(void);
 void floorLink(s32 floorID, s32 mode);
 void floorSetFadeScript(s32 scriptID, s32 fadeID);
-GSfloor_dd_* floorDataBiosGetPtr(s32 floorID);
+GSfloor_dd_* floorDataBiosGetPtr(u32 floorID);
 void GSfloorPop(void);
 void floorSetFloorChangeInfo(u32 floorID, u32 index);
 void floorPopAndChange(u32 floorID);
@@ -87,7 +87,7 @@ bool floorGetHumanColision(void);
 #else
 u8 floorGetHumanColision(void);
 #endif
-int floorTresureGetResID(u16 treasureID);
+u32 floorTresureGetResID(u16 tableIndex);
 GSthread *floorCreateThread(s32 priority, u32 stackSize, s32 terminateOnExit, GSthreadEntry entry);
 GSthread *floorCreateThreadLocal(s32 priority, u32 stackSize, s32 terminateOnExit, GSthreadEntry entry);
 #ifdef __cplusplus

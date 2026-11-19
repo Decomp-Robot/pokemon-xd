@@ -21,6 +21,8 @@ struct DbgMenuItem;
 extern u32 (*debugMenuDataGetNum)(void);
 extern struct DbgMenuItem *(*debugMenuDataGetPtr)(long itemNo);
 
+struct FloorTreasure;
+
 struct FloorListHeader {
     u32 floorCount;
 };
@@ -28,6 +30,7 @@ typedef struct FloorListHeader FloorListHeader;
 
 extern GSfloor_dd_* floordata;
 extern FloorListHeader* floordata_number;
+extern struct FloorTreasure* floor_tresure_list;
 
 struct MenuSeData;
 

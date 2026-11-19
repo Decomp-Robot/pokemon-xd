@@ -23,8 +23,7 @@ enum {
     TALK_HERO_ID = 100,
     TALK_START_DISABLED = 3,
     PEOPLE_NO_INTERACTION = 1,
-    HERO_PARTNER_MEMBER = 1,
-    FLOOR_KIND_FIELD = 1
+    HERO_PARTNER_MEMBER = 1
 };
 static float _talkWindowCloseDelay;
 static u32 _peopleTalkRes[2];

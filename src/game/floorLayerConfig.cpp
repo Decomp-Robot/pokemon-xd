@@ -1,7 +1,6 @@
 #include <floorLayerConfig.h>
 #include <dbgMenu.h>
-
-enum { FLOOR_KIND_FIELD = 1, FLOOR_KIND_FIGHT = 2, FLOOR_KIND_FIGHT_ALT = 4, FLOOR_KIND_MENU_EXTRA_A = 5, FLOOR_KIND_MENU_EXTRA_B = 6, FLOOR_KIND_MENU = 7 };
+#include <roomData.h>
 
 static char *g_layer_names[8] = {
     "background",

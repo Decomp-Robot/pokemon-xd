@@ -9,10 +9,6 @@
 #include <floor.h>
 #include <floorBios.h>
 
-enum {
-    FLOOR_KIND_FIELD = 1
-};
-
 #include <floorManager.h>
 #include <place.h>
 #include <time.h>

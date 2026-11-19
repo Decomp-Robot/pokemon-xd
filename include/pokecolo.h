@@ -10,6 +10,24 @@ enum PokeColoCountryCode {
     POKECOLO_COUNTRY_CODE_EUROPE = 2
 };
 
+/* Text languages reported by pokecoloGetLanguage(). */
+enum PokeColoLanguage {
+    POKECOLO_LANGUAGE_ENGLISH = 2,
+    POKECOLO_LANGUAGE_GERMAN = 3,
+    POKECOLO_LANGUAGE_FRENCH = 4,
+    POKECOLO_LANGUAGE_ITALIAN = 5,
+    POKECOLO_LANGUAGE_SPANISH = 6
+};
+
+/* ROM versions reported by pokecoloGetRomVersion(). Version 2 is the one
+   whose encounter-less fight rooms use the alternate fight kind and whose
+   floors select the effect viewer. */
+enum PokeColoRomVersion {
+    POKECOLO_ROM_VERSION_DEFAULT = 0,
+    POKECOLO_ROM_VERSION_ENCOUNTERLESS_FIGHT = 2,
+    POKECOLO_ROM_VERSION_EX = 4
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

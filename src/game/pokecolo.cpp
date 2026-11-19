@@ -14,13 +14,6 @@ static const f64 PLAY_TIME_MAX = 3599940.0;
 static const f32 MICROSECONDS_PER_MILLISECOND = 1000.0f;
 static const f32 MILLISECONDS_PER_SECOND = 1000.0f;
 
-/* ROM versions this build knows about: the one a normal configuration starts
-   with and the one an expanded-disc build reports. */
-enum {
-    POKECOLO_ROM_VERSION_DEFAULT = 0,
-    POKECOLO_ROM_VERSION_EX = 4
-};
-
 /* Play-time accounting state: the play-time gate only advances the timer once
    counting has been started. */
 u8 _playTimeCountStarted;

@@ -154,10 +154,6 @@ enum {
 #define MEMO_SIZE_COLOR_B 51
 
 enum {
-    LANGUAGE_ENGLISH = 2,
-};
-
-enum {
     MEMO_MENU_DATA_PAGE = 124,
     MEMO_MENU_DATA_TOKUSEI = 126,
 };
@@ -849,7 +845,7 @@ void menuPdaMemoXD::PokemonWeight(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     GSgfxLayerID layer = winSpriteGetLayerID(window, sprite);
     u16 weight = pokemonDataBiosGetWeight(data);
 
-    if (pokecoloGetLanguage() == LANGUAGE_ENGLISH) {
+    if (pokecoloGetLanguage() == POKECOLO_LANGUAGE_ENGLISH) {
         u32 pound = 2.2045856f * weight + 0.5f;
         msgctrlSetValue(MEMO_MSG_SIZE_WHOLE, pound / 10);
         msgctrlSetValue(MEMO_MSG_SIZE_FRACTION, pound % 10);
@@ -867,7 +863,7 @@ void menuPdaMemoXD::PokemonHeight(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
     GSgfxLayerID layer = winSpriteGetLayerID(window, sprite);
     u16 height = pokemonDataBiosGetHeight(data);
 
-    if (pokecoloGetLanguage() == LANGUAGE_ENGLISH) {
+    if (pokecoloGetLanguage() == POKECOLO_LANGUAGE_ENGLISH) {
         // height is stored in tenths of a metre; show it as feet'inches''
         f32 meter = height / 10.0f;
         f32 fInch = 39.37f * meter;

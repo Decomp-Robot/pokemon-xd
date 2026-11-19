@@ -2330,7 +2330,8 @@ game/app/floor/floorCharacterBios.cpp:
 	.sdata2     start:0x804ED8C0 end:0x804ED8D0
 
 game/app/floor/floorDataBios.cpp:
-	.text       start:0x80122AB0 end:0x80122DFC
+	.text       start:0x80122A44 end:0x8012324C
+	.sdata2     start:0x804ED8D0 end:0x804ED8E0
 
 game/app/floor/floorFieldCamera.cpp:
 	.text       start:0x8012324C end:0x8012476C

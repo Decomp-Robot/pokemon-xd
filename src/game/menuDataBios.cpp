@@ -43,16 +43,8 @@ extern tagMENU_ITEM_DATA _menu_itembt[];
 extern tagMENU_ITEM_DATA _menu_item_xd[];
 }
 
-// The game's text language, as returned by pokecoloGetLanguage. Sprite value
-// blocks are stored per language in this order; every other language keeps
-// the English block.
-enum {
-    LANGUAGE_ENGLISH = 2,
-    LANGUAGE_GERMAN = 3,
-    LANGUAGE_FRENCH = 4,
-    LANGUAGE_ITALIAN = 5,
-    LANGUAGE_SPANISH = 6,
-};
+// Sprite value blocks are stored per language in the order reported by
+// pokecoloGetLanguage; every other language keeps the English block.
 
 extern "C" u16 menuSeBiosGetSndId(MenuSeData *data, u8 event) {
     u16 soundID = 0;
@@ -87,11 +79,11 @@ extern "C" MenuSeqData *menuSeqBiosGetPtr(u32 sequenceID) {
 extern "C" MenuSpriteValue *menuSpriteBiosGetValPtr(MenuSpriteData *data) {
     s32 valueIndex;
     switch (pokecoloGetLanguage()) {
-    case LANGUAGE_ENGLISH: valueIndex = 0; break;
-    case LANGUAGE_GERMAN: valueIndex = 1; break;
-    case LANGUAGE_FRENCH: valueIndex = 2; break;
-    case LANGUAGE_ITALIAN: valueIndex = 3; break;
-    case LANGUAGE_SPANISH: valueIndex = 4; break;
+    case POKECOLO_LANGUAGE_ENGLISH: valueIndex = 0; break;
+    case POKECOLO_LANGUAGE_GERMAN: valueIndex = 1; break;
+    case POKECOLO_LANGUAGE_FRENCH: valueIndex = 2; break;
+    case POKECOLO_LANGUAGE_ITALIAN: valueIndex = 3; break;
+    case POKECOLO_LANGUAGE_SPANISH: valueIndex = 4; break;
     default: valueIndex = 0; break;
     }
     return &data->mValue[valueIndex];

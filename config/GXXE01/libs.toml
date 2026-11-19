@@ -7270,6 +7270,7 @@ extra_cflags = ["-inline off", "-opt nopeephole", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "game/app/floor/floorDataBios.cpp"
 completed = true
+extra_cflags = ["-inline off", "-opt nopeephole"]
 
 [[lib.object]]
 name = "game/app/floor/floorFieldCameraEditor.cpp"
