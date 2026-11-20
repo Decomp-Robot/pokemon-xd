@@ -1,7 +1,7 @@
 #include <peParticle.h>
 #include <peNodeMath.h>
 
-extern "C" f32 (*GSgfxMatrixGetPtr(u32))[4];
+extern "C" f32 (*GSgfxMatrixGetPtr(GSgfxMatrixSelector))[4];
 
 void peNodeTransformsConcat(peNodeTransform *result, peNodeTransform *parent, peNodeTransform *local,
                              bool cameraRotation)
@@ -10,7 +10,7 @@ void peNodeTransformsConcat(peNodeTransform *result, peNodeTransform *parent, pe
     Rotate(result->position, parent->rotation);
     result->position += parent->position;
     if (cameraRotation) {
-        C_QUATMtx(SDKQuaternion(result->rotation), GSgfxMatrixGetPtr(PE_CAMERA_INVERSE_MATRIX));
+        C_QUATMtx(SDKQuaternion(result->rotation), GSgfxMatrixGetPtr((GSgfxMatrixSelector)PE_CAMERA_INVERSE_MATRIX));
     } else {
         *(peQuaternion *)result->rotation = Multiply(parent->rotation, local->rotation);
     }

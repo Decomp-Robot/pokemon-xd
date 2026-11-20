@@ -3,13 +3,6 @@
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXTransform.h>
 
-
-enum {
-    GSGFX_MATRIX_VIEW = 2,
-    GSGFX_MATRIX_VIEW_INVERSE = 3,
-    GSGFX_MATRIX_PROJECTION = 4,
-};
-
 f32 g_projProjectParams[7];
 f32 g_projViewPort[6] = { 0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 1.0f };
 

@@ -3885,6 +3885,10 @@ game/GSAPI/GSgfx/renderModule.cpp:
 	.bss        start:0x804E71A8 end:0x804E72EC
 	.sbss       start:0x804EBD68 end:0x804EBD70
 
+game/GSAPI/GSgfx/c_func.cpp:
+	.text       start:0x802B7464 end:0x802B7B98
+	.sdata2     start:0x804EFB58 end:0x804EFB5C
+
 game/GSAPI/GSgfx/layerConfig.cpp:
 	.text       start:0x802B7B98 end:0x802B814C
 	.bss        start:0x804E72F0 end:0x804E7310

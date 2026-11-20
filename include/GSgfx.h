@@ -86,12 +86,23 @@ struct GSgfxVF {
 };
 
 struct GSgfxLight;
+
+// Selector for the matrices returned by GSgfxMatrixGetPtr. The first two come
+// from the active layer; the camera matrices come from the active camera.
+enum GSgfxMatrixSelector {
+    GSGFX_MATRIX_CURRENT = 0,
+    GSGFX_MATRIX_CURRENT_INVERSE_TRANSPOSE = 1,
+    GSGFX_MATRIX_VIEW = 2,
+    GSGFX_MATRIX_VIEW_INVERSE = 3,
+    GSGFX_MATRIX_PROJECTION = 4
+};
+
 enum GSgfxMatrixFlags { GS_MATRIX_INVERSE_TRANSPOSE_DIRTY = 1 };
 
 struct GSgfxMatrixStackEntry {
     u32 mFlags;
     GSmtx mMatrix;
-    u8 reserved[48];
+    GSmtx mInverseTranspose;
 };
 class GSgfxMatrixStack {
 public:
@@ -251,6 +262,8 @@ enum GSgfxTunitCountFlag { GSGFX_TUNIT_COUNT_DIRTY = 1 };
 // Dirty bits of the GPU state group (GSgfxPassState +0x64).
 enum GSgfxGpuFlag {
     GSGFX_GPU_BLEND = 0x1,
+    GSGFX_GPU_PIXEL_MODE = 0x4,
+    GSGFX_GPU_Z_COMPARE = 0x8,
     GSGFX_GPU_FOG = 0x40,
     GSGFX_GPU_FOG_ADJ_TABLE = 0x100,
     GSGFX_GPU_FOG_RANGE_ADJ = 0x200,
@@ -1120,7 +1133,7 @@ extern "C" GSgfxProjectResult GSgfxProjectFastList(GSvec *src, GSvec *dst, u32 c
 extern "C" GSgfxProjectResult GSgfxProjectFast(GSvec *src, GSvec *dst);
 extern "C" void GSgfxProjectSetupCameraParameters(GScamera *camera);
 extern "C" void GSgfxProjectSetupParameters(void);
-extern "C" f32 (*GSgfxMatrixGetPtr(u32 matrix))[4];
+extern "C" f32 (*GSgfxMatrixGetPtr(GSgfxMatrixSelector matrix))[4];
 extern u16 _tokenCurrent;
 extern u16 _tokenFrameStart;
 extern u16 _tokenFrameEnd;
