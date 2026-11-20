@@ -3397,10 +3397,10 @@ game/app/fight/fightFloor.cpp:
 	.sbss       start:0x804EB8D0 end:0x804EB8D4
 
 game/app/fight/fightFloorBios.cpp:
-	.text       start:0x801F5B38 end:0x801F6170
+	.text       start:0x801F5B38 end:0x801F6280
 
 game/app/fight/fightFloorDB.cpp:
-	.text       start:0x801F6EF4 end:0x801F8018
+	.text       start:0x801F6280 end:0x801F8018
 
 game/app/fight/fightSideBios.cpp:
 	.text       start:0x801F8018 end:0x801F80F0

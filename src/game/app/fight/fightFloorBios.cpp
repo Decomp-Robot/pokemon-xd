@@ -527,3 +527,78 @@ extern "C" FightOutPokemon *fightFloorBiosGetAppointPokemonPtr(FIGHT_FLOOR *floo
     }
     return floor->mAppointPokemon;
 }
+
+extern "C" FightOutPokemon *fightFloorBiosGetIrekaePokemonPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mIrekaePokemon;
+}
+
+extern "C" FightOutPokemon *fightFloorBiosGetEscapePokemonPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mEscapePokemon;
+}
+
+extern "C" FightOutPokemon *fightFloorBiosGetDefensePokemonPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mDefensePokemon;
+}
+
+extern "C" FightOutPokemon *fightFloorBiosGetAttackPokemonPtr(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mAttackPokemon;
+}
+
+extern "C" FIGHT_SIDE *fightFloorBiosGetFightSidePtr(FIGHT_FLOOR *floor, u16 sideIndex)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    if (sideIndex >= FIGHT_FLOOR_SIDE_COUNT) {
+        return 0;
+    }
+    return &floor->mSideAry[sideIndex];
+}
+
+extern "C" u16 fightFloorBiosGetEncountDataId(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mEncountDataId;
+}
+
+extern "C" u16 fightFloorBiosGetTurnCount(FIGHT_FLOOR *floor)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    return floor->mTurnCount;
+}
+
+extern "C" _JOUTAI *fightFloorBiosGetJoutaiPtr(FIGHT_FLOOR *floor, u16 index)
+{
+    if (floor == 0) {
+        return 0;
+    }
+    if (index >= FIGHT_FLOOR_JOUTAI_COUNT) {
+        return 0;
+    }
+    return &floor->mJoutaiAry[index];
+}
+
+extern "C" FIGHT_FLOOR *fightFloorBiosGetFightFloorPtr(void)
+{
+    return &fight_floor;
+}

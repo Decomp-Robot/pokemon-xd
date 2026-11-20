@@ -163,6 +163,10 @@ enum {
     FIGHT_FLOOR_JOUTAI_COUNT = 1
 };
 
+enum FightFloorStockPokemonCount {
+    FIGHT_FLOOR_STOCK_POKEMON_COUNT = 6
+};
+
 typedef struct FIGHT_SIDE FIGHT_SIDE;
 
 struct FIGHT_SIDE {
@@ -176,6 +180,14 @@ struct FIGHT_SIDE {
     FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT];
     u8 mMakibisiCheckFlag;
     u8 mPadding[3];
+};
+
+typedef struct FIGHT_FLOOR_STOCK_POKEMON FIGHT_FLOOR_STOCK_POKEMON;
+
+struct FIGHT_FLOOR_STOCK_POKEMON {
+    Pokemon mPokemon;
+    u8 mBallId;
+    u8 mReserved[3];
 };
 
 typedef struct FIGHT_FLOOR FIGHT_FLOOR;
@@ -210,7 +222,9 @@ struct FIGHT_FLOOR {
     u16 mReserved;
     FightOutPokemon *mFightOutPokemonPtrAry[FIGHT_OUT_POKEMON_COUNT];
     u16 mFirstAttackRnd;
-    u8 mUnknownTail[1202];
+    u8 mStockPokemonNum;
+    u8 mStockPokemonPadding;
+    FIGHT_FLOOR_STOCK_POKEMON mStockPokemonAry[FIGHT_FLOOR_STOCK_POKEMON_COUNT];
 };
 
 typedef struct FIGHT_FLOOR_DATA FIGHT_FLOOR_DATA;
@@ -229,6 +243,7 @@ struct FIGHT_FLOOR_DATA {
 extern u32 encount_floor_id;
 extern u32 *fight_floor_data_number;
 extern FIGHT_FLOOR_DATA *fight_floor_data;
+extern FIGHT_FLOOR fight_floor;
 
 #ifdef __cplusplus
 extern "C" {
@@ -320,10 +335,17 @@ u16 fightFloorDB_GetFightSideDataId(u16 floorDataId, u8 side);
 u16 fightFloorDB_GetFloorDataId(u16 floorDataId);
 FIGHT_TRAINER *fightFloorGetGcHeroFightTrainerPtr(FIGHT_FLOOR *floor);
 FIGHT_TRAINER *fightFloorGetFightPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightPokemon *pokemon);
-void *fightFloorBiosGetFightFloorPtr(void);
+FIGHT_FLOOR *fightFloorBiosGetFightFloorPtr(void);
 void *fightFloorGetNowPtr(void);
 void fightFloorSetTimeOutAllFightResult(void *floor);
+void fightFloor_SetStockPokemonBallID(FIGHT_FLOOR *floor, u8 slot, u8 ballId);
+u8 fightFloor_GetStockPokemonBallID(FIGHT_FLOOR *floor, u8 slot);
+void fightFloor_SetStockPokemonPtr(FIGHT_FLOOR *floor, u8 slot, Pokemon *pokemon);
+Pokemon *fightFloor_GetStockPokemonPtr(FIGHT_FLOOR *floor, u8 slot);
+void fightFloor_SetStockPokemonNum(FIGHT_FLOOR *floor, u8 count);
 s32 fightFloor_GetStockPokemonNum(FIGHT_FLOOR *floor);
+void fightFloor_SetfightoutPokemonPtrAryPtr(FIGHT_FLOOR *floor, FightOutPokemon **pokemonAry);
+void fightFloor_SetfightPokemonEntryCnt(FIGHT_FLOOR *floor, s16 count);
 u32 fightFloor_GetFightKind(void *floor);
 u8 fightFloor_GetFightKindRegulationFlag(FIGHT_FLOOR *floor);
 u8 fightFloor_GetFightKindHostEnemyMsgFlag(FIGHT_FLOOR *floor);
@@ -372,6 +394,11 @@ void fightFloor_SetDefPokemonAndAtkFightWazaTargetId(FIGHT_FLOOR *floor, FightOu
 void fightFloor_SetDefensePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAttackPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetItemPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetTokuseiPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetTuikakoukaPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetKizetuPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetIrekaePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
+void fightFloor_SetEscapePokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAppointPokemonPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 void fightFloor_SetAppointItemDataId(FIGHT_FLOOR *floor, u16 item);
 void fightFloor_SetAppointPokemonDataId(FIGHT_FLOOR *floor, u16 dataId);
@@ -408,6 +435,8 @@ u8 fightFloorGetNowTenkouDataId(FIGHT_FLOOR *floor, s32 checkWeatherSuppressingA
 u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightOutPokemon **pokemonArray, u8 allies, u8 deployedOnly);
 u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
 void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
+void fightFloor_SetEncountDataId(FIGHT_FLOOR *floor, u16 dataId);
+u32 fightFloor_GetEncountFloorId(void);
 u8 fightFloor_GetFightTypeFightoutPokemonNum(FIGHT_FLOOR *floor);
 void fightFloor_SetFisstAttackRnd(FIGHT_FLOOR *floor, u16 value);
 u16 fightFloor_GetEncountDataId(FIGHT_FLOOR *floor);

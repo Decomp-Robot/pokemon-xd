@@ -3,12 +3,14 @@
 
 #include <types.h>
 
+typedef struct FIGHT_FLOOR FIGHT_FLOOR;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Record of the fight floor that is running.
-void *fightFloorBiosGetFightFloorPtr(void);
+FIGHT_FLOOR *fightFloorBiosGetFightFloorPtr(void);
 
 #ifdef __cplusplus
 }
