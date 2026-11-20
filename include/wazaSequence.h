@@ -45,6 +45,9 @@ public:
 };
 
 extern "C" {
+__declspec(section ".sdata2") extern const f32 wazaSequenceUnitScale;
+__declspec(section ".sdata2") extern const f32 wazaSequenceZeroTransform;
+
 ModelSequence *Sequence_LoadPokemon(u16 species, u32 rnd, bool shiny);
 ModelSequence *Sequence_LoadTrainer(u16 trainerDataId);
 u16 Sequence_GetID(NullSequence *sequence);
@@ -65,6 +68,7 @@ void Sequence_GetScale(NullSequence *sequence, GSvec *scale);
 void Sequence_SetPosition(NullSequence *sequence, GSvec *position);
 void Sequence_SetRotation(NullSequence *sequence, GSvec *rotation);
 void Sequence_SetScale(NullSequence *sequence, GSvec *scale);
+bool wazaSequenceSysIsValidSequence(NullSequence *sequence);
 bool wazaSequenceSysIsValidWaza(WazaSequence *sequence);
 void wazaSequenceSysSetVisibilityAll(bool visible);
 void WazaSequence_Start(WazaSequence *sequence, int mode);

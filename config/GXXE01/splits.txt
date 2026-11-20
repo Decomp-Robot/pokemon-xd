@@ -3279,6 +3279,11 @@ game/app/wazaSequence/wazaSequence.cpp:
 	.text       start:0x801D1770 end:0x801D1AD4
 	.data       start:0x8040FFC8 end:0x80410008
 
+game/app/wazaSequence/wazaSequenceSys.cpp:
+	.text       start:0x801D1C20 end:0x801D1EFC
+	.sbss       start:0x804EB700 end:0x804EB704
+	.sdata2     start:0x804EE818 end:0x804EE820
+
 game/app/wazaSequence/nullSequence.cpp:
 	.text       start:0x801DA000 end:0x801DA0B0
 

@@ -6856,6 +6856,10 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 name = "game/app/wazaSequence/nullSequence.cpp"
 completed = true
 [[lib.object]]
+name = "game/app/wazaSequence/wazaSequenceSys.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+[[lib.object]]
 name = "game/app/wazaSequence/leaffx.cpp"
 completed = true
 extra_cflags = ["-str reuse,readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
