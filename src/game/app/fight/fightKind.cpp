@@ -1,4 +1,14 @@
+#include <fight.h>
+#include <fightEncountBios.h>
 #include <fightKindDataBios.h>
+#include <app/fight/fightKind.h>
+
+// Reports whether the running encounter uses the requested fight kind.
+u8 fightKind_CheckFightKind(u8 kind) {
+    FightEncountRecord *encount = fightEncountDataBiosGetPtr(fightGetFightEncountDataId());
+
+    return (u8)fightEncountDataBiosGetFightKind(encount) == kind;
+}
 
 extern "C" {
 u8 fightKindDataBiosGetRegulationFlag(FIGHT_KIND *fightKindData);

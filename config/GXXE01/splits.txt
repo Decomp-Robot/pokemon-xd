@@ -3350,7 +3350,7 @@ game/app/fight/fightMain.cpp:
 	.sdata2     start:0x804EEA58 end:0x804EEA70
 
 game/app/fight/fightKind.cpp:
-	.text       start:0x801EF688 end:0x801EFA74
+	.text       start:0x801EF640 end:0x801EFA74
 
 game/app/fight/fightTarget.cpp:
 	.text       start:0x801EFA74 end:0x801F0208
