@@ -54,7 +54,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 
 [[lib.object]]
 name = "game/app/underTaker/undertakerBios.cpp"
-completed = false
+completed = true
 
 [[lib.object]]
 name = "game/app/people/peopleInfoBios.cpp"
