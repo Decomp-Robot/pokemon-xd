@@ -6512,7 +6512,7 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 [[lib.object]]
 name = "game/app/evolution/evolution.cpp"
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-pragma \"force_active on\""]
 completed = true
 
 [[lib]]

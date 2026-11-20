@@ -8,6 +8,7 @@ extern "C" {
 #endif
 void wazaSequenceSysFreeAllWaza(void);
 unsigned long wazaSequenceSysGetResID(void);
+void wazaSequenceSysEnableLayerChange(void);
 #ifdef __cplusplus
 }
 #endif

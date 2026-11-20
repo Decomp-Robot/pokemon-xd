@@ -50,7 +50,6 @@ enum {
 #define EVOLUTION_SPECIES_INVALID 0xFFFF
 
 #define EVOLUTION_MAX_WAZA 20
-#define EVOLUTION_WAZA_NOT_LEARNED 255
 
 PokemonData *getPokemonData(Pokemon *pokemon);
 

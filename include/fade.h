@@ -3,15 +3,22 @@
 
 #include <types.h>
 
-enum FadeKind { FADE_IN_BLACK = 2, FADE_OUT_BLACK = 3, FADE_OUT_EFFECT = 9 };
-
-// Bit flags passed to fadeSet() and fadeSetEX(). The FadeKind values above are
-// combinations of these bits.
+// Bit flags passed to fadeSet() and fadeSetEX().
 enum FadeFlags {
     FADE_FLAG_OUT = 0x1,
     FADE_FLAG_BLACK = 0x2,
     FADE_FLAG_EFFECT = 0x8,
     FADE_FLAG_BLACK_AFTER_EFFECT = 0x10
+};
+
+// Kinds accepted by fadeSet(). The black kinds carry FADE_FLAG_BLACK; the
+// white kinds are selected by leaving that flag clear.
+enum FadeKind {
+    FADE_IN_BLACK = 2,
+    FADE_OUT_BLACK = 3,
+    FADE_IN_WHITE = 4,
+    FADE_OUT_WHITE = FADE_IN_WHITE | FADE_FLAG_OUT,
+    FADE_OUT_EFFECT = 9
 };
 
 #ifdef __cplusplus

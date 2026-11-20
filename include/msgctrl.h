@@ -33,6 +33,10 @@ enum MSGCTRL_VALUE_SELECTOR {
     MSGCTRL_VALUE_NATURE_MESSAGE = 0x55,
     MSGCTRL_VALUE_NATURE_SUFFIX_MESSAGE = 0x56,
     MSGCTRL_VALUE_LEVEL = 0x5F,
+    // Species ID that the Pokemon-name value renders.
+    MSGCTRL_VALUE_POKEMON_ID = 78,
+    // Sound ID read by msgctrlSndPlay when it handles the sound command.
+    MSGCTRL_VALUE_SOUND_ID = 93,
 };
 
 // Message-value slots used by the save report templates.

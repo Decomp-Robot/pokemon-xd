@@ -3554,7 +3554,10 @@ game/app/memo/memo.c:
 	.sdata2     start:0x804EEBE8 end:0x804EEC20
 
 game/app/evolution/evolution.cpp:
-	.text       start:0x80234E58 end:0x80235098
+	.text       start:0x80234E58 end:0x80236114
+	.rodata     start:0x802F9298 end:0x802F92D8
+	.bss        start:0x804B0F40 end:0x804B0F60
+	.sdata2     start:0x804EEC20 end:0x804EEC38
 
 game/app/charName/charNameBios.cpp:
 	.text       start:0x80236114 end:0x80236240
