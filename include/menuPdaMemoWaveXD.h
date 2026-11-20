@@ -4,6 +4,20 @@
 #include <types.h>
 #include <winSprite.h>
 
+// One pending waveform request. The cry samples are drawn through a window
+// that fills in, then scrolls once the whole cry has become visible.
+struct NakigoeDispWork {
+    s8 *m_waveData;
+    f32 m_pointCount;
+    u32 m_soundID;
+    f32 m_startPoint;
+    s32 m_scrollCount;
+    f32 m_endPoint;
+    s32 m_drawCount;
+    f32 m_opacity;
+    f32 m_pointStep;
+};
+
 // Voice playback for the Pokemon whose memo is open, and the waveform request
 // that shows the sound being played.
 class pdaMemoNakigoe {
@@ -13,7 +27,26 @@ public:
     s32 GetVocie(long index);
     s8 *GetWaveDispDataAddress(long index);
     void DispRequest(s8 *data, unsigned long soundID);
+    void DispInit();
+    void NakigoeDispFunc(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+    bool NakigoeCheck();
+
+    pdaMemoNakigoe() { Init(); }
+
+    // Clear the pending requests and start a fresh display cycle.
+    void Init() {
+        for (int i = 0; i < 8; i++) {
+            m_work[i].m_waveData = NULL;
+        }
+        m_workIndex = 0;
+        DispInit();
+    }
+
+    NakigoeDispWork m_work[8];
+    u32 m_workIndex;
 };
+
+extern pdaMemoNakigoe *_nakigoe;
 
 extern "C" {
 void menuPdaMemoWave(long index);
