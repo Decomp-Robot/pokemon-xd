@@ -3611,6 +3611,13 @@ game/GSAPI/GSsysdolphin_baselib/baselib/cobj.c:
 	.text       start:0x802460F0 end:0x802462DC
 	.sdata2     start:0x804EEE20 end:0x804EEE24
 
+game/GSAPI/GSsysdolphin_baselib/baselib/debug.c:
+	.text       start:0x80247D08 end:0x80247EDC
+	.rodata     start:0x802F9988 end:0x802F99B8
+	.bss        start:0x804B1DC8 end:0x804B2090
+	.sbss       start:0x804EB9F8 end:0x804EBA00
+	.sdata2     start:0x804EEE60 end:0x804EEE68
+
 game/GSAPI/GSsysdolphin_baselib/baselib/fobj.c:
 	.text       start:0x80249CDC end:0x8024BDC4
 	.rodata     start:0x802F9A40 end:0x802F9AA0
