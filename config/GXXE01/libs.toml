@@ -6889,6 +6889,17 @@ completed = true
 extra_cflags = ["-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib]]
+name = "etctools"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/etctools/etctools.cpp"
+completed = true
+
+[[lib]]
 name = "sodateya"
 mw_version = "GC/2.6"
 cflags_preset = "game"
