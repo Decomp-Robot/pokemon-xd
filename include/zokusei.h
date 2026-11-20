@@ -5,17 +5,29 @@
 
 struct PokemonData;
 
+enum { ZOKUSEI_DATA_ID_COUNT = 18 };
+
+typedef struct ZokuseiData {
+    u8 wazaKind;
+    u16 spriteID;
+    u16 smallSpriteID;
+    u32 nameMessageId;
+    u16 joutai[ZOKUSEI_DATA_ID_COUNT];
+} ZokuseiData;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 u16 zokuseiGetPokemonSpriteID(struct PokemonData *data, u16 index);
 u8 zokuseiBiosGetWazaKind(u16 zokuseiDataId);
+u16 zokuseiBiosGetWazaJoutai(u32 zokuseiDataId, u32 defenseZokuseiDataId);
 u16 zokuseiGetWazaJoutai_PokemonId(u16 zokusei, u16 pokemonID);
 u16 zokuseiGetWazaJoutaiAsDefenseZokuseiAry(u16 zokusei, u16 *defense, u16 count);
-u16 zokuseiBiosGetSpriteID(u16 moveID);
-u32 zokuseiBiosGetSmallSpriteID(u16 dataID);
-u32 zokuseiBiosGetName(u16 dataID);
+u16 zokuseiBiosGetSpriteID(u16 zokuseiDataId);
+u32 zokuseiBiosGetSmallSpriteID(u16 zokuseiDataId);
+u32 zokuseiBiosGetName(u16 zokuseiDataId);
 extern u32 *zokusei_data_number;
+extern ZokuseiData *zokusei_data;
 #ifdef __cplusplus
 }
 #endif

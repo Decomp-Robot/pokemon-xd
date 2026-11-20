@@ -3538,6 +3538,11 @@ completed = true
 extra_cflags = ["-opt nopeephole", "-inline noauto", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/zokusei/zokuseiBios.cpp"
+completed = true
+extra_cflags = ["-O0,p", "-opt peephole", "-schedule on", "-inline auto,deferred"]
+
+[[lib.object]]
 name = "game/menu/window.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline deferred"]

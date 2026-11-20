@@ -32,6 +32,7 @@
 #include <floorManager.h>
 #include <menuSub.h>
 #include <app/fight/fightKind.h>
+#include <fightSeq.h>
 #include <zokusei.h>
 #include <libc/memory.h>
 
@@ -39,11 +40,17 @@ extern "C" {
 void menuDrawReliveUpdate(void);
 void menuDrawReliveMeter(Pokemon *pokemon, long width, long height, GSgfxLayerID layer);
 void menuPlaySe(s32 p1, s32 p2);
-u16 zokuseiBiosGetSpriteID(u16 type);
-u16 zokuseiBiosGetWazaJoutai(u16 type, u16 state);
 u16 mballBiosGetSpriteID(u8 ball);
 u32 floorGetPlaceName(u32 place);
 }
+
+// Sprites showing how a move's type matches up against a defending type.
+enum {
+    MENU_POKEMON_STATUS_SPRITE_MATCHUP_NORMAL = 861,
+    MENU_POKEMON_STATUS_SPRITE_MATCHUP_SUPER_EFFECTIVE = 863,
+    MENU_POKEMON_STATUS_SPRITE_MATCHUP_NOT_VERY_EFFECTIVE = 864,
+    MENU_POKEMON_STATUS_SPRITE_MATCHUP_NO_EFFECT = 862,
+};
 
 // Menus hidden while the waza pages are up.
 extern "C" const unsigned long wazaLearnHideMenuIDs[4] = { 0x37, 0x40, 0x38, 0x41 };
@@ -330,7 +337,7 @@ static inline u32 menuPokemonStatusGetSlotIcon(tagWINDOW_WORK *window, tagSPRITE
 // hook, selected by the item id of the sprite.
 void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
-    s32 color;
+    s32 colorOrSpriteID;
     Pokemon *pokemon = _menuStatus.mPokemon;
     s16 x;
     u16 waza;
@@ -344,7 +351,7 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     if ((u8)_menuPokemonStatusCheckWazaItem(window, sprite) == 0)
         return;
 
-    color = window->mRgba.mColorA | 0xFFFFFF00;
+    colorOrSpriteID = window->mRgba.mColorA | 0xFFFFFF00;
 
     switch (sprite->mItemID) {
     case MENU_POKEMON_STATUS_ITEM_WAZA_CURSOR:
@@ -435,14 +442,14 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         waza = menuPokemonStatusGetWazaId(pokemon, slot);
         if ((u16)waza == 0) {
-            GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF4);
+            GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x3AF4);
             return;
         }
         u32 nameID = wazaGetStatus(0, waza, WAZA_FIELD_NAME, 0);
         if (nameID == 0)
             return;
         msgctrlSetValue(0x37, (unsigned long)GSmsgGetStringPtr(nameID));
-        GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4277);
+        GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x4277);
         return;
 
     case 0x254:
@@ -470,16 +477,16 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         waza = menuPokemonStatusGetWazaId(pokemon, slot);
         x = (s16)(((s16)sprite->mWidth - (s16)(GSmsgGetMessageSize(0x3AE8) >> 16)) / 2);
-        GSmsgPrint2(winSpriteGetLayerID(window, sprite), x, 0, color, 0x3AE8);
+        GSmsgPrint2(winSpriteGetLayerID(window, sprite), x, 0, colorOrSpriteID, 0x3AE8);
         msg = (s32)NotDarkWaza(waza);
         switch (msg) {
         case 0:
-            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, color, 0x3AF5);
-            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF5);
+            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, colorOrSpriteID, 0x3AF5);
+            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x3AF5);
             return;
         case WAZA_SHADOW_SPECIAL:
-            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, color, 0x3AD1);
-            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AD1);
+            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, colorOrSpriteID, 0x3AD1);
+            GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x3AD1);
             return;
         default:
             break;
@@ -489,18 +496,18 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         else
             msg = pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_WAZA_PP, slot);
         msgctrlSetValue(0x34, msg);
-        GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, color, 0x427B);
+        GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, x, sprite->mHeight, colorOrSpriteID, 0x427B);
         if (slot == 4)
             msg = wazaGetStatus(0, waza, WAZA_FIELD_PP, 0);
         else
             msg = pokemonWazaGetMaxPP(pokemon, slot);
         msgctrlSetValue(0x34, msg);
-        GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x427B);
+        GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x427B);
         return;
 
     case 0x24C:
         waza = menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot);
-        GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color,
+        GSmsgPrintRect(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID,
                     wazaGetStatus(0, waza, WAZA_FIELD_DESCRIPTION, 0));
         return;
 
@@ -511,10 +518,10 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
             u32 accuracy = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot), WAZA_FIELD_ACCURACY, 0);
             if (accuracy <= 1) {
-                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF6);
+                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x3AF6);
             } else {
                 msgctrlSetValue(0x34, accuracy);
-                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4270);
+                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x4270);
             }
             winSpriteSetDisp(sprite, 1);
             break;
@@ -532,10 +539,10 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         case MENU_POKEMON_STATUS_PAGE_WAZA_LEARN:
             u32 power = wazaGetStatus(0, menuPokemonStatusGetWazaId(pokemon, (u16)_menuStatus.mWazaSlot), WAZA_FIELD_POWER, 0);
             if (power <= 1) {
-                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x3AF6);
+                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x3AF6);
             } else {
                 msgctrlSetValue(0x34, power);
-                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, color, 0x4270);
+                GSmsgPrintRight(winSpriteGetLayerID(window, sprite), 0, 0, sprite->mWidth, sprite->mHeight, colorOrSpriteID, 0x4270);
             }
             winSpriteSetDisp(sprite, 1);
             break;
@@ -587,16 +594,16 @@ void menuPokemonStatusDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         case 3:
             break;
         case 1: {
-            s32 state = zokuseiBiosGetWazaJoutai(wazaGetStatus(0, selectedMoveID, WAZA_FIELD_TYPE, 0), i);
+            s32 state = zokuseiBiosGetWazaJoutai((u16)wazaGetStatus(0, selectedMoveID, WAZA_FIELD_TYPE, 0), (u16)i);
 
             switch (state) {
-            case 0x3F: color = 0x35D; break;
-            case 0x41: color = 0x35F; break;
-            case 0x42: color = 0x360; break;
-            case 0x43: color = 0x35E; break;
+            case JOUTAI_MOVE_RESULT_NORMAL: colorOrSpriteID = MENU_POKEMON_STATUS_SPRITE_MATCHUP_NORMAL; break;
+            case JOUTAI_MOVE_RESULT_SUPER_EFFECTIVE: colorOrSpriteID = MENU_POKEMON_STATUS_SPRITE_MATCHUP_SUPER_EFFECTIVE; break;
+            case JOUTAI_MOVE_RESULT_NOT_VERY_EFFECTIVE: colorOrSpriteID = MENU_POKEMON_STATUS_SPRITE_MATCHUP_NOT_VERY_EFFECTIVE; break;
+            case JOUTAI_MOVE_RESULT_NO_EFFECT: colorOrSpriteID = MENU_POKEMON_STATUS_SPRITE_MATCHUP_NO_EFFECT; break;
             default: break;
             }
-            windowDrawSprite(0, 0, window, (u16)color, 0, winSpriteGetLayerID(window, sprite));
+            windowDrawSprite(0, 0, window, (u16)colorOrSpriteID, 0, winSpriteGetLayerID(window, sprite));
             return;
         }
         case 4:
