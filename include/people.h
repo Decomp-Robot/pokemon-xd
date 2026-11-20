@@ -81,6 +81,19 @@ struct PeopleState {
     u8 unknown15D[3];
 };
 struct tagPeopleWork {
+    u8 getMoveType();
+    int getRunMotion();
+    int getWalkMotion();
+    void setAnimType(GSmodelAnimType type);
+    void setAnimFrame(float frame);
+    void setAnimBlend(int baseIndex, int blendIndex);
+    void setAnimIndex(int index);
+    void setAnimRate(float rate, bool scaleByPlaySpeed);
+    u8 isAnimLast() const;
+    unsigned long getFlags() const;
+    u8 checkFlags(unsigned long flags) const;
+    bool isWalkStartMotion() const;
+    bool isAlwayBlendChara() const;
     bool isHero() const;
     bool isFollower() const;
     u8 isAnimBlend() const;
@@ -90,7 +103,12 @@ struct tagPeopleWork {
     int handle;
     _GSmodel* model;
     PeopleState state;
-    u8 unknown160[24];
+    float moveSpeed;
+    s32 waitMotionIndex;
+    s32 walkMotionIndex;
+    s32 runMotionIndex;
+    s32 walkStartMotionIndex;
+    s32 runStartMotionIndex;
     float talkDistance;
     u16 treasureId;
     u8 unknown17E[18];
@@ -101,7 +119,8 @@ struct tagPeopleInfoBios {
     u8 talkSe : 3;
     u8 boundCheck : 1;
     u8 colType : 2;
-    u8 unknownFlags : 2;
+    u8 noWalkStartMotion : 1;
+    u8 unknownFlag : 1;
     char neckIndex;
     char chestIndex;
     u8 unknown03;
@@ -124,7 +143,8 @@ enum PeopleBiosStateFlags {
     PEOPLE_BIOS_STATE_HAS_TREASURE = 0x4
 };
 enum PeopleBehaviourFlags {
-    PEOPLE_FLAG_NO_INTERACTION = 0x1
+    PEOPLE_FLAG_NO_INTERACTION = 0x1,
+    PEOPLE_FLAG_DISABLE_ANIM_RATE_UPDATE = 0x8000
 };
 
 extern "C" {

@@ -3815,6 +3815,10 @@ game/app/people/peopleTalk.cpp:
 game/app/people/peopleWalkList.cpp:
 	.text       start:0x802A3820 end:0x802A3B40
 
+game/app/people/peopleMemberFunc.cpp:
+	.text       start:0x802A3B40 end:0x802A3F8C
+	.sdata2     start:0x804EF950 end:0x804EF958
+
 game/app/people/peopleColision.cpp:
 	.text       start:0x802A3F8C end:0x802A49F0
 	.sdata2     start:0x804EF958 end:0x804EF970
