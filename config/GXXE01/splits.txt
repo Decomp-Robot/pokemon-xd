@@ -1967,6 +1967,9 @@ libc/s_tan.c:
 	.text       start:0x800E6A00 end:0x800E6A78
 	.sdata2     start:0x804ED2C0 end:0x804ED2C8
 
+libc/w_asin.c:
+	.text       start:0x800E6A98 end:0x800E6AB8
+
 libc/w_atan2.c:
 	.text       start:0x800E6AB8 end:0x800E6AD8
 

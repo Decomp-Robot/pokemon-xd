@@ -1,4 +1,5 @@
 #include <math.h>
+#include "e_asin.h"
 
 static const double
     one = 1.00000000000000000000e+00,
