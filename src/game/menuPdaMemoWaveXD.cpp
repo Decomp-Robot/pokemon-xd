@@ -29,7 +29,7 @@ void menuPdaMemoWave(long index) {
     _nakigoe->Init();
     _nakigoe->SetNakigoe(index);
     pdaMemoNakigoe *wave = _nakigoe;
-    for (;;) {
+    while (true) {
         if (!wave->NakigoeCheck()) {
             break;
         }

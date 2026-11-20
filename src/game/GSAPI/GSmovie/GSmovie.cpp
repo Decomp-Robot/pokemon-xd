@@ -547,7 +547,7 @@ void GSmoviePlayWait(u32 movieID)
     if (!_movieInitialized) {
         return;
     }
-    for (;;) {
+    while (true) {
         stream = _movieSearchStreaming(movieID);
         if (stream == 0) {
             return;

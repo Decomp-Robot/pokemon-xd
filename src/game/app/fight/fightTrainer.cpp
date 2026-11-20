@@ -309,7 +309,7 @@ s32 fightTrainerGetHikaeFightPokemonNum(
             hikaeNum++;
         }
     }
-    for (;;) {
+    while (true) {
         if (fightoutNum >= fightoutPokemonNum || (u16)hikaeNum < 1) {
             break;
         }

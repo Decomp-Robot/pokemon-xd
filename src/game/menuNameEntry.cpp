@@ -1177,7 +1177,7 @@ int selectName(u16 *name, const unsigned long *nameIDs, int param)
     int accepted = 0;
     u16 *chosen;
 
-    for (;;) {
+    while (true) {
         unsigned long id;
 
         argp->table = nameIDs;

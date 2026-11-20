@@ -287,7 +287,7 @@ void CmenuPcBox::loop()
     long *work = mState.mWork;
     MenuInfo *reliveHallMenu = &menuInfo[1];
     MenuInfo *itemMenu = &menuInfo[2];
-    for (;;) {
+    while (true) {
         mState.update();
         switch (mState.mCurrent) {
         case PCBOX_OPEN:

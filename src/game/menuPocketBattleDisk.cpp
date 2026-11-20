@@ -202,7 +202,7 @@ extern "C" u16 menuPocketBattleDiskMain(s32 unused, FIGHT_TRAINER *trainer, Hero
     Data.mItemCount = getNbItemSlot();
 
     u16 itemID;
-    for (;;) {
+    while (true) {
         Data.mActive = 1;
         itemID = selectItem();
         Data.mActive = 0;

@@ -113,7 +113,7 @@ f32 HSD_ByteCodeEval(u8 *bytecode, f32 *args, s32 nb_args)
         return 0.0F;
     }
 
-    for (;;) {
+    while (1) {
         /* The operand bytes of the previous instruction are collected here. */
         if (operand_bytes > 0) {
             operand = operand << 8 | *bytecode++;

@@ -65,7 +65,7 @@ s32 soundPlayME(s32 sndID, s32 time, u8 volume)
 
 void soundPlayWait(s32 sndID)
 {
-    for (;;) {
+    while (1) {
         if (GSsndGetStatus(sndID) != 2) {
             break;
         }

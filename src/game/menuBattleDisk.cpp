@@ -239,13 +239,13 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
     searchDown = (u16)repeatKeys & kDirectionDown;
     searchLeft = (u16)repeatKeys & kDirectionLeft;
     searchRight = (u16)repeatKeys & kDirectionRight;
-    for (;;) {
+    while (true) {
         traversal.origin = traversal.current;
         selectableIndex = 0;
         traversal.current = menuItemBiosGetPtr(window->mMenuID, *(s16*)(menuData + kMenuFirstItemOffset));
         if (searchUp) {
             closestDistance = kCursorLimitUpDown;
-            for (;;) {
+            while (true) {
                 if (traversal.current->mShownFlag) {
                     s32 dy = traversal.origin->mY - traversal.current->mY;
                     if (dy > 0) {
@@ -267,7 +267,7 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             }
         } else if (searchDown) {
             closestDistance = kCursorLimitUpDown;
-            for (;;) {
+            while (true) {
                 if (traversal.current->mShownFlag) {
                     s32 dy = traversal.current->mY - traversal.origin->mY;
                     if (dy > 0) {
@@ -289,7 +289,7 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             }
         } else if (searchLeft) {
             closestDistance = kCursorLimitLeftRight;
-            for (;;) {
+            while (true) {
                 if (traversal.current->mShownFlag) {
                     s32 dx = traversal.origin->mX - traversal.current->mX;
                     if (dx > kMinimumHorizontalSeparation) {
@@ -311,7 +311,7 @@ extern "C" void menuBattleDiskPokemonCursorMove(tagWINDOW_WORK* window, u8 move)
             }
         } else if (searchRight) {
             closestDistance = kCursorLimitLeftRight;
-            for (;;) {
+            while (true) {
                 if (traversal.current->mShownFlag) {
                     s32 dx = traversal.current->mX - traversal.origin->mX;
                     if (dx > kMinimumHorizontalSeparation) {
@@ -1469,7 +1469,7 @@ extern "C" void menuBattleDiskMain(void)
                     if (windowGetKeyInfo()->mKeyTrg & kKeyPokemonInfo) {
                         gBDisk.mSelectedPokemonIndex = windowSearchID(kMenuDiskPokemonPanels)->mCursor.y;
                         menuOpen(kMenuBattleDiskPokemonInfo, 0);
-                        for (;;) {
+                        while (true) {
                             s32 selectedPokemon = gBDisk.mSelectedPokemonIndex;
                             if ((unsigned long)selectedPokemon < heroGetPokeomCount(&gBDisk.mHeroes[0])) {
                                 gBDisk.mRequestedX = kAllyInfoWindowX;
@@ -1512,7 +1512,7 @@ extern "C" void menuBattleDiskMain(void)
     case kBattleDiskFight:
         gBDisk.mBattleResult = 0;
         menuOpen(kMenuDiskBattleResult, 0);
-        for (;;) {
+        while (true) {
             GSthreadSwitch();
             if (windowGetKeyInfo()->mKeyTrg == kKeyDiskExplanation) {
                 winMsgOpen(2, deckDataVirtualDB_GetExplanetion1(gBDisk.mBattleDiskID), 1, 1);

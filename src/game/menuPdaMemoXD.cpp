@@ -684,7 +684,7 @@ static inline unsigned long CopyMemoWords(u16 *destination, u16 *source, long la
     long space = 0;
     unsigned long n = 0;
 
-    for (;;) {
+    while (true) {
         if (source[n] == MEMO_CHAR_SPACE || source[n] == MEMO_CHAR_WIDE_SPACE) {
             if (space == lastWord) {
                 break;

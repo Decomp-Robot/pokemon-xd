@@ -567,7 +567,7 @@ void WorldMap::moveDemo(long from, long to)
     } else {
         GSsndPlayNow(worldMapScooterSeID);
     }
-    for (;;) {
+    while (true) {
         f32 dt = GetLastTime() / _testFadeTime;
 
         MainControl(to);

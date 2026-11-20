@@ -216,7 +216,7 @@ long _dbgMenuSub(long level)
     long result = DBG_MENU_RESULT_BACK;
     long menuID = _menu_data_number + DBG_MENU_WINDOW_OFFSET + level;
 
-    for (;;)
+    while (true)
     {
         long parentID = level < 0 ? 0 : _menu_data_number + level;
         long *cursor = &_pCursor[_dbgMenuGetMenuNo(parentID)];

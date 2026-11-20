@@ -93,7 +93,7 @@ extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
 
     menuSetEnablePort(0);
 
-    for (;;) {
+    while (true) {
         switch (battleResult) {
         case 1: {
             menuSetEnablePort(1);

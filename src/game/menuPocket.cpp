@@ -1534,7 +1534,7 @@ u16 _menuPocketLoop(void)
     u16 item = 0;
     int menuPos = 0;
 
-    for (;;) {
+    while (true) {
         Data.mListActive = 1;
         item = _selectItem(menuPos, pSlotID);
         Data.mListActive = 0;

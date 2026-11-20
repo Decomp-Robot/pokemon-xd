@@ -202,7 +202,7 @@ extern "C" s32 menuCB_PokemonEntry(_MENUCBWORK *work)
         menuCBBattleStartTrainerFaceFree();
         return 0xA9;
     }
-    for (;;) {
+    while (true) {
         GSthreadSwitch();
         pending = 0;
 

@@ -282,7 +282,7 @@ extern "C" u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *a
 u8 _fightSeqFightOutPokemonTokuseiCheckWazaHitAfterAllSub(void *target, u16, void *)
 {
     FightOutPokemon *pokemon = (FightOutPokemon *)target;
-    for (;;) {
+    while (true) {
         if (!fightOutPokemonCheckFightOut(pokemon)) return 1;
         u16 ability = fightOutPokemonGetTokuseiDataId(pokemon);
         Pokemon *record = fightOutPokemonGetPokemonPtr(pokemon);

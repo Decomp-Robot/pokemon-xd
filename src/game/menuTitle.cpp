@@ -558,7 +558,7 @@ extern "C" long menuTitlePlayBGMWait(u8 wait)
         return GSsndIsPlayingStream(TITLE_BGM_ID);
     }
     elapsed = 0.0f;
-    for (;;) {
+    while (true) {
         if ((u8)GSsndIsPlayingStream(TITLE_BGM_ID) != 1) {
             elapsed = elapsed + timeGetLastFrameSec();
             if (elapsed >= 2.0f) {
@@ -670,7 +670,7 @@ extern "C" void menuTitlePreReadWait(void)
  * asked for it. */
 extern "C" void menuTitleMain(void)
 {
-    for (;;) {
+    while (true) {
         if ((s32)_menuTitleStatus == (s32)TITLE_STATE_MAP) {
             soundOpenPlayFadeOutIn(TITLE_BGM_ID, TITLE_BGM_FADE_TIME, 0, 127);
             floorLink(TITLE_UNLINK_ROOM_ID, 0);
@@ -737,7 +737,7 @@ void _CreateThread(void)
  * streamed in, then load the fight registry and clear the thread id. */
 void _menuTitlePreReadFightRegWzxData(void)
 {
-    for (;;) {
+    while (true) {
         if (soundGetBGMID() == TITLE_BGM_ID) {
             break;
         }

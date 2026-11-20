@@ -107,7 +107,7 @@ u8 fightRegWzxLoadGenric(u16 wazaNo)
     if (!GSfsysPreReadKeepCache(groupID)) {
         return 0;
     }
-    for (;;) {
+    while (true) {
         s32 status = GSfsysGetStatus(groupID);
         if (status == 0 || status < 0) {
             break;
@@ -326,7 +326,7 @@ void fightMain(void)
             }
             fightActionDispFifoAll();
             fightActionCreateAndFlowFifo(&fight_action, 0, 0, FIGHT_ACTION_KIND_ALL_FIGHT_TRAINER_SELECT_FIGHT_ACTION, 0, fight_action_data_turn);
-            for (;;) {
+            while (true) {
                 if (menuFightChkSeq() == 0) {
                     break;
                 }

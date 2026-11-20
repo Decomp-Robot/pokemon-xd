@@ -405,7 +405,7 @@ static inline void _StreamFillBuffer(__GSmovieStreaming *stream, s16 *leftBuffer
     right = rightBuffer;
     position = player->audioSampleState.sampleAccumulator;
 
-    for (;;) {
+    while (true) {
         long status;
         u32 samplesRead = GetAudioSample(stream, left, right, remaining, &status);
         position += samplesRead;

@@ -780,7 +780,7 @@ long CMetaMenu::calcAnimationTimeRate0toX(float time, long count)
 void CMetaMenu::waitAtTime(float time)
 {
     float elapsed = 0.0f;
-    for (;;) {
+    while (true) {
         updateAll();
         if (elapsed > time) break;
         elapsed += timeGetLastFrameSec();

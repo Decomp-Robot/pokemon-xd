@@ -349,7 +349,7 @@ unsigned long _PKJBUpGenerateKeyA(void)
     int bit;
     unsigned long ones;
 
-    for (;;) {
+    while (true) {
         if (tries > PKJB_KEY_A_FALLBACK_TRIES) {
             key = PKJB_KEY_A_FALLBACK;
         }
@@ -604,7 +604,7 @@ long _AGB_EntryRequest(long chan, unsigned long data)
     GBAWrite(chan, &request, &status);
     timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
     start = OSGetTick();
-    for (;;) {
+    while (true) {
         if (OSGetTick() - start > timeout) {
             return AGB_LINK_WAIT_TIMEOUT;
         }
@@ -729,7 +729,7 @@ long _AGB_ReturnTitle(long chan)
     }
     timeout = OSSecondsToTicks(AGB_RETURN_TITLE_SECS);
     start = OSGetTick();
-    for (;;) {
+    while (true) {
         if (OSGetTick() - start > timeout) {
             return AGB_LINK_WAIT_TIMEOUT;
         }
@@ -770,7 +770,7 @@ long _InitialExchange(long chan)
     }
     timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
     start = OSGetTick();
-    for (;;) {
+    while (true) {
         if (OSGetTick() - start > timeout) {
             return AGB_LINK_READY_TIMEOUT;
         }
@@ -789,7 +789,7 @@ long _GBATimerRead(long chan, u8 *dst, u8 *status, int msec)
     u32 start = OSGetTick();
     u8 pollStatus;
 
-    for (;;) {
+    while (true) {
         if (OSGetTick() - start > timeout) {
             return AGB_LINK_READ_TIMEOUT;
         }
@@ -837,7 +837,7 @@ long _BulkSend(long chan, const u8 *data, int size)
         }
         timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
         start = OSGetTick();
-        for (;;) {
+        while (true) {
             if (OSGetTick() - start > timeout) {
                 return AGB_LINK_BLOCK_TAKEN;
             }
@@ -867,7 +867,7 @@ long _BulkSend2(long chan, const u8 *data, int size)
         }
         timeout = OSMillisecondsToTicks(AGB_EXCHANGE_MSEC);
         start = OSGetTick();
-        for (;;) {
+        while (true) {
             if (OSGetTick() - start > timeout) {
                 return AGB_LINK_BLOCK_TAKEN;
             }
@@ -915,7 +915,7 @@ long _AGB_ExchangeStart(long chan, u8 *data)
     long result;
 
     start = OSGetTick();
-    for (;;) {
+    while (true) {
         if (OSGetTick() - start > timeout) {
             return AGB_LINK_NO_GBA;
         }

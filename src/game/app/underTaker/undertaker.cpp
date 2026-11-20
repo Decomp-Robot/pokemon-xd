@@ -222,7 +222,7 @@ void _appearMirabo(void)
     int i;
 
     i = 0;
-    for (;;) {
+    while (true) {
         point = _underTakerGetPoint(i);
         if (point == NULL) {
             break;
@@ -233,7 +233,7 @@ void _appearMirabo(void)
     roll = (u16)HSD_Rand() % (u16)total;
     sum = 0;
     i = 0;
-    for (;;) {
+    while (true) {
         point = _underTakerGetPoint(i);
         if (point == NULL) {
             break;
@@ -290,7 +290,7 @@ u32 undertakerGetPlace(u32 *places)
     if (GSflagTest(gPlaceWork->mStartFlag) && !GSflagTest(gPlaceWork->mStopFlag) &&
         darkpokemonCheckUnderTaker()) {
         i = 0;
-        for (;;) {
+        while (true) {
             point = _underTakerGetPoint(i);
             if (point == NULL) {
                 break;
