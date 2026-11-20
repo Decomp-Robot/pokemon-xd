@@ -865,4 +865,163 @@ PokemonExpandStatus *pokemonBiosGetExpandStatusPtr(Pokemon *pokemon, u16 index)
     if (index >= POKEMON_EXPAND_STATUS_COUNT) return 0;
     return &pokemon->mExpandStatus[index];
 }
+
+// Shadow points. The initial value comes from the deck's Dark Pokemon
+// record for this Pokemon's Dark Pokemon data ID; the current value is
+// held by the Pokemon's live Dark Pokemon.
+
+u16 pokemonBiosGetInitDp(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    u16 darkID = pokemonBiosGetDarkpokemonDataId(pokemon);
+    if (darkID == 0) return 0;
+    return darkPokemonBiosGetDarkPoint(darkID);
+}
+
+bool pokemonBiosGetDarkFlag(Pokemon *pokemon)
+{
+    if (pokemon == 0) return false;
+    if (pokemonBiosGetDarkpokemonDataId(pokemon) == 0) return false;
+    return !darkPokemonBiosGetReliveFlag(pokemonBiosGetDarkpokemonDataId(pokemon));
+}
+
+u16 pokemonBiosGetPoolFriend(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPoolFriendLevel();
+}
+
+u32 pokemonBiosGetPoolExp(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPoolExp();
+}
+
+int pokemonBiosGetDp(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getDarkPointDirect();
+}
+
+u16 pokemonBiosGetDarkpokemonDataId(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mDarkPokemonDataId;
+}
+
+u16 pokemonBiosGetFriend(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getFriendLevel();
+}
+
+// Individual values, effort values and calculated battle stats, each stored
+// in the Pokemon record and queried through its corresponding getter.
+u16 pokemonBiosGetNimblenessRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getNimblenessRnd();
+}
+
+u16 pokemonBiosGetSpeDefRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeDefRnd();
+}
+
+u16 pokemonBiosGetSpeAtkRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeAtkRnd();
+}
+
+u16 pokemonBiosGetPhyDefRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyDefRnd();
+}
+
+u16 pokemonBiosGetPhyAtkRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyAtkRnd();
+}
+
+u16 pokemonBiosGetMaxHpRnd(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getMaxHpRnd();
+}
+
+u16 pokemonBiosGetNimblenessEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getNimblenessEffort();
+}
+
+u16 pokemonBiosGetSpeDefEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeDefEffort();
+}
+
+u16 pokemonBiosGetSpeAtkEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeAtkEffort();
+}
+
+u16 pokemonBiosGetPhyDefEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyDefEffort();
+}
+
+u16 pokemonBiosGetPhyAtkEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyAtkEffort();
+}
+
+u16 pokemonBiosGetMaxHpEffort(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getMaxHpEffort();
+}
+
+u16 pokemonBiosGetNimbleness(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getNimbleness();
+}
+
+u16 pokemonBiosGetSpeDef(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeDef();
+}
+
+u16 pokemonBiosGetSpeAtk(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getSpeAtk();
+}
+
+u16 pokemonBiosGetPhyDef(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyDef();
+}
+
+u16 pokemonBiosGetPhyAtk(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getPhyAtk();
+}
+
+u16 pokemonBiosGetMaxHp(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->getMaxHp();
+}
 }
