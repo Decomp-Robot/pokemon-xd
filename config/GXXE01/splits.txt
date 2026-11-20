@@ -3600,6 +3600,11 @@ game/GSAPI/GSsysdolphin_baselib/baselib/archive.c:
 	.text       start:0x80243E38 end:0x80244048
 	.rodata     start:0x802F97B0 end:0x802F97F4
 
+game/GSAPI/GSsysdolphin_baselib/baselib/bytecode.c:
+	.text       start:0x80244048 end:0x80245688
+	.rodata     start:0x802F97F8 end:0x802F9898
+	.sdata2     start:0x804EEDB0 end:0x804EEDF8
+
 game/GSAPI/GSsysdolphin_baselib/baselib/class.c:
 	.text       start:0x80245688 end:0x80245AB8
 	.rodata     start:0x802F9898 end:0x802F9930

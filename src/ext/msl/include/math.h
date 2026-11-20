@@ -20,6 +20,10 @@ double acos(double x);
 double fmod(double x, double y);
 double atan2(double y, double x);
 double asin(double x);
+double atan(double x);
+double exp(double x);
+double log(double x);
+double pow(double x, double y);
 
 float sinf(float x);
 float cosf(float x);
