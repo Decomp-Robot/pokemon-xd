@@ -2529,6 +2529,13 @@ game/GSAPI/GSeffect/GSeffect.cpp:
 	.sbss       start:0x804EB1E8 end:0x804EB1F0
 	.sdata2     start:0x804EDC68 end:0x804EDC70
 
+game/app/sex/sexdata.cpp:
+	.data       start:0x804046F8 end:0x80404710
+	.sdata      start:0x804E83E0 end:0x804E83E4
+
+game/app/sex/sex.cpp:
+	.text       start:0x80153550 end:0x80153564
+
 game/app/msgctrl/msgctrl.cpp:
 	.text       start:0x80154A50 end:0x80154E60
 
