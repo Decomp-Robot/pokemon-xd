@@ -3786,6 +3786,13 @@ game/app/esaba/esaba.cpp:
 	.rodata     start:0x802FAE98 end:0x802FAEA8
 	.sbss       start:0x804EBBA8 end:0x804EBBAC
 
+game/app/underTaker/undertaker.cpp:
+	.text       start:0x80295BE0 end:0x802966C0
+	.rodata     start:0x802FAEA8 end:0x802FAEB8
+
+game/app/underTaker/undertakerBios.cpp:
+	.text       start:0x802966C0 end:0x8029677C
+
 game/app/bingo/bingoBios.cpp:
 	.text       start:0x80296B3C end:0x80296CB0
 

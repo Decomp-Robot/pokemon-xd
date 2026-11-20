@@ -134,6 +134,7 @@ void darkPokemonBiosSetSteps(u16 darkID, u16 steps);
 bool darkPokemonBiosGetInformationFlag(u16 darkID);
 void darkPokemonBiosSetInfomation(u16 darkID, u16 information);
 void darkPokemonBiosSetInformationFlag(u16 darkID, bool information);
+u8 darkpokemonCheckUnderTaker(void);
 u16 darkPokemonListBiosGetPokemonID(u16 darkID);
 u16 *darkPokemonListBiosGetDPList(u16 darkID);
 u32 darkpokemonBiosGetScenarioNum(void);

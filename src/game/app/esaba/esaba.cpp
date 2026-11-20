@@ -80,16 +80,8 @@ enum EsabaMessage {
     ESABA_MSG_RETURN_PC = 51507
 };
 
-#define ESABA_PROGRESS_FLAG 964 // story progress GS flag
-
 // Same shiny threshold as Pokemon::isRareParam.
 #define ESABA_RARE_PARAM_LIMIT 8
-
-enum EsabaSpotArea {
-    ESABA_FIRST_SPOT_AREA = 90,
-    ESABA_SECOND_SPOT_AREA = 91,
-    ESABA_THIRD_SPOT_AREA = 92
-};
 
 static long _esabaHandle;
 

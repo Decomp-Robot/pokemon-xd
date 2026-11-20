@@ -158,6 +158,12 @@ struct WorldMapMapData {
     u32 mNpcMsgID;
 };
 
+/* Landmarks of the places the roaming Miror B moves between. */
+enum WorldMapDataIndex {
+    WORLD_MAP_DATA_INDEX_PYRITE_TOWN = 4,
+    WORLD_MAP_DATA_INDEX_REALGAM_TOWER = 11
+};
+
 extern s32* worldmapXD_data_number;
 extern WorldMapMapData* worldmapXD_data;
 
