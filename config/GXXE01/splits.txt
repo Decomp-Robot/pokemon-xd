@@ -1983,6 +1983,9 @@ libc/w_fmod.c:
 libc/w_log.c:
 	.text       start:0x800E6B18 end:0x800E6B38
 
+libc/w_pow.c:
+	.text       start:0x800E6B38 end:0x800E6B58
+
 libc/e_sqrt.c:
 	.text       start:0x800E6B58 end:0x800E6D7C
 	.sdata2     start:0x804ED2C8 end:0x804ED2D0
