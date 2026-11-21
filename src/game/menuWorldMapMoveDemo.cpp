@@ -66,7 +66,7 @@ void WorldMapMoveDemo::Main(void)
     cameraPlayAnime(group, anime->cameraResourceId, 0, 0.0f);
     SetMotion(kMoveDemoAnimatedModelResource, anime->animationIndex, 0.0f, false);
     f32 count = GetAnimeFrameCount(kMoveDemoAnimatedModelResource, anime->animationIndex);
-    for (;;) {
+    while (true) {
         f32 endFrame = count - 30.0f;
         if (endFrame < GetAnimeFrame(kMoveDemoAnimatedModelResource)) {
             break;

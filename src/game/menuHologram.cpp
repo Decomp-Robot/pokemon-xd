@@ -279,7 +279,7 @@ void CMenuHologram::loop()
     static unsigned long msgTbl[] = { MSG_RELIVE_HALL, MSG_MOVE_STAGE, MSG_CANCEL };
     long *work = mState.mWork;
     setState(STATE_START, work);
-    for (;;) {
+    while (true) {
         mState.update();
         switch (mState.mCurrent) {
         case STATE_START:
@@ -920,7 +920,7 @@ void CMenuHologram::stateReliveCeremony()
     const unsigned long ceremonyCamera = HOLOGRAM_CEREMONY_CAMERA;
     GSflagSet(FLAG_RELIVE_CEREMONY, 1);
     mStageTurning = false;
-    for (;;) {
+    while (true) {
         if (getModelAnimation(mModels[MODEL_SCRIPT_PLATE].mModel) == SCRIPT_ANIMATION_WAIT) {
             break;
         }

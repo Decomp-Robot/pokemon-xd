@@ -33,7 +33,7 @@ void* _fsysMemAllocCache(FsysFile* file, u32 cacheIndex, u32 size, u32 priority)
     void* address;
     u32 alignedSize = (size + FSYS_ALLOC_ALIGNMENT - 1) & ~(FSYS_ALLOC_ALIGNMENT - 1);
     _fsysFreeFreshCache(file->groupId, alignedSize);
-    for (;;) {
+    while (1) {
         address = _fsysAllocCache(file, cacheIndex, alignedSize, priority);
         if (address != NULL) {
             break;
@@ -50,7 +50,7 @@ u8 _fsysFreeFreshCacheGroup(u32 groupID)
     u32 priority;
     u8 freed = FALSE;
     FsysCacheManage* cache;
-    for (;;) {
+    while (1) {
         cache = _fsysGetFreshCacheManage(groupID, TRUE);
         if (cache == NULL) {
             return freed;
@@ -70,7 +70,7 @@ u8 _fsysFreeFreshCacheGroup(u32 groupID)
 u8 _fsysFreeFreshCache(u32 groupID, u32 size)
 {
     FsysCacheManage* cache;
-    for (;;) {
+    while (1) {
         if (size < _fsysGetFreeCacheHeapSize() - FSYS_CACHE_FREE_MARGIN) {
             break;
         }

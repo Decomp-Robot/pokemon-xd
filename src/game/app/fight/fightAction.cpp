@@ -204,7 +204,7 @@ u8 fightActionCreateAndFlowFifo(FIGHT_ACTION *action, FIGHT_ACTION_DATA_dd_ *mot
 void fightActionDispFifoAll(void) {
     u8 result;
 
-    for (;;) {
+    while (true) {
         result = fightActionDispFifo();
         if (result == 3) {
             break;

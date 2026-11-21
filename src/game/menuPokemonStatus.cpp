@@ -1838,7 +1838,7 @@ long menuPokemonStatusExecute(u8 flags, FIGHT_TRAINER *trainer, Pokemon *pokemon
     result = 0;
     cursor = 0;
     menuOffScreenSetPriority(0);
-    for (;;) {
+    while (true) {
         result = menuOpenCustom(MENU_POKEMON_STATUS_MENU_HEAD, 0, &cursor, 0, 1, 0);
         if (result == -1) {
             _menuStatus.mResult = (s32)result;

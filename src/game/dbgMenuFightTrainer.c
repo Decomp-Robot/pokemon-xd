@@ -27,7 +27,7 @@ s32 dbgMenuFightTrainerAiAddsubDataComboEditSub(void)
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_COMBO_EDITOR, 0, 1);
@@ -59,7 +59,7 @@ s32 dbgMenuFightTrainerAiAddsubDataItemEditSub(void)
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_ITEM_EDITOR, 0, 1);
@@ -91,7 +91,7 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaUsewazaEditSub(void)
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_USE_EDITOR, 0, 1);
@@ -176,7 +176,7 @@ s32 dbgMenuFightTrainerAiAddsubDataWazaDefpokemonEditSub(void)
         _old_fight_trainer_ai_value_addsub_data[i] = *fightTrainerAiValueAddsubDataBiosGetPtr(i);
     }
 
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 0, 0, 1, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_MOVE_TARGET_EDITOR, 0, 1);
@@ -410,7 +410,7 @@ s32 dbgMenuFightTrainerPokemonPartDataEditSub(u16 index)
     }
     data = fightTrainerPokemonPartDataBiosGetPtr(index);
     savedData = *data;
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 0, 0, 1, 1, index);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_POKEMON_PART_EDITOR, 0, 1);
@@ -488,7 +488,7 @@ s32 dbgMenuFightTrainerAiDataEditSub(u16 index)
     }
     data = fightTrainerAiDataBiosGetPtr(index);
     savedData = *data;
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 0, 0, 1, 1, index);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_TRAINER_AI_EDITOR, 0, 1);

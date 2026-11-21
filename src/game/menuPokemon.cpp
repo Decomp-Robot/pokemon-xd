@@ -1045,7 +1045,7 @@ s32 _menuPokemonSub(unsigned char mode, unsigned long itemId, FIGHT_TRAINER *tra
     if (i <= _menuPokemon.mCursorIndex)
         _menuPokemon.mCursorIndex = i - 1;
 
-    for (;;) {
+    while (true) {
         s8 selected;
 
         _menuPokemon.mSubMenu = PARTY_SUBMENU_LIST;
@@ -1348,7 +1348,7 @@ s32 _menuPokemonActionFight(signed char index)
 
     _menuPokemon.mSubMenu = PARTY_SUBMENU_COMMAND;
 
-    for (;;) {
+    while (true) {
         if (_menuPokemon.mFightFlag != 0) {
             step = menuOpen(MENU_ID_PARTY_FIGHT_A, 1);
             menuClose(MENU_ID_PARTY_FIGHT_A);
@@ -1401,7 +1401,7 @@ s32 _menuPokemonActionField(signed char index)
     Pokemon *from;
     Pokemon *to;
 
-    for (;;) {
+    while (true) {
         _menuPokemon.mSubMenu = PARTY_SUBMENU_COMMAND;
 
         command = GSflagGet(HERO_PTR_FLAG) == 0 ? fieldMenuOpenClose(MENU_ID_PARTY_FIELD_A)

@@ -150,7 +150,7 @@ s32 dbgMenuFightEncountDataEditSub(u16 encountNo)
     data = fightEncountDataBiosGetPtr(encountNo);
     backup = *data;
 
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 0, 0, 1, 1, encountNo);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_ENCOUNTER_EDITOR, 0, 1);
@@ -440,7 +440,7 @@ s32 _dbgMenuFightFightPokemonSelectSub(FightPokemon *fightPokemon)
 s32 dbgMenuFightFightTrainerPokemonPartDataEdit(void)
 {
     if (fightIsFight() == 0) return -1;
-    for (;;) {
+    while (1) {
         s32 id = dbgMenuFightGetFightTrainerPokemonPartDataId(_dbgmenu_fight_trainer_pokemon_part_data_id);
         if (id < 0) return 1;
         _dbgmenu_fight_trainer_pokemon_part_data_id = id;
@@ -488,7 +488,7 @@ s32 dbgMenuFightFightTrainerAiAddsubIrekae(void)
 }
 s32 dbgMenuFightFightTrainerAiAddsubDataEdit(void)
 {
-    for (;;) {
+    while (1) {
         s32 id = dbgMenuFightGetFightTrainerAiAddsubValueDataId(_dbgmenu_fight_trainer_ai_addsub_data_id, 1);
         if (id < 0) return 1;
         _dbgmenu_fight_trainer_ai_addsub_data_id = id;
@@ -531,7 +531,7 @@ s32 dbgMenuFightFightFloorEditTenkou(void)
 s32 dbgMenuFightWazaEdit(void)
 {
     if (fightIsFight() == 0) return -1;
-    for (;;) {
+    while (1) {
         s32 id = dbgMenuFightGetWazaDataId(_dbgmenu_fight_waza_edit_waza_data_id);
         if (id < 0) return 1;
         _dbgmenu_fight_waza_edit_waza_data_id = id;
@@ -579,7 +579,7 @@ s32 dbgMenuFightFlagEdit(void)
     yubiwohuru = dbgMenuFightGetYubiwohuruWazaDataId();
     aiLastValue = dbgMenuFightGetFightTrainerAiLastValueReviseFlag();
     dbgMenuFightGetFightPokeStMenuOpenFlag();
-    for (;;) {
+    while (1) {
         result = menuOpenCustom(MENU_ID_DEBUG_FIGHT_FLAGS, 0, 0, 0, 1, 0, 0);
         if (result == -1) {
             menuCloseCustom(MENU_ID_DEBUG_FIGHT_FLAGS, 0, 1);
@@ -679,7 +679,7 @@ s32 dbgMenuFightFlagEdit(void)
         else if (result == FIGHT_FLAG_EDIT_ITEM_YUBIWO_HURU_WAZA) {
             if (fightIsFight() == 0) continue;
             result = dbgMenuFightGetYubiwohuruWazaDataId();
-            for (;;) {
+            while (1) {
                 result = dbgMenuFightGetWazaDataId((u16)result);
                 if (result < 0) break;
                 if (fightSeqCheckYubiwohuruWazaDataId((u16)result) == 1) {
@@ -730,7 +730,7 @@ s32 dbgMenuFightEncountSelect(void)
     u16 encounter;
     _readEncountDataName = (u32 *)GSmemAlloc(4608);
     _readEncountDataID = (u16 *)GSmemAlloc(1536);
-    for (;;) {
+    while (1) {
         result = dbgMenuFightGetFightDeckDataId(_dbgmenu_fight_deck_data_id);
         if (result < 0) break;
         _dbgmenu_fight_deck_data_id = result;
@@ -750,7 +750,7 @@ s32 dbgMenuFightEncountSelect(void)
                 }
             }
         }
-        for (;;) {
+        while (1) {
             switch (loadedDeck) {
             case 1: encounter = _dbgmenu_fight_story_encount_data_id; break;
             case 2: encounter = _dbgmenu_fight_hundred_encount_data_id; break;
@@ -835,7 +835,7 @@ u32 dbgMenuFightGetMsgSpeedToFrame(u32 frame)
         frame = frame * percent[speed] / 100;
         if (dbgMenuFightGetMsgKeyWaitFlag() == 1) {
             frame = 0;
-            for (;;) {
+            while (1) {
                 if ((GSinputButtonsPressed(GS_INPUT_PORT_1) & GSinputButtonsChanged(GS_INPUT_PORT_1) & 0x100) != 0) break;
                 GSthreadSwitch();
             }

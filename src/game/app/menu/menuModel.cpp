@@ -611,7 +611,7 @@ s32 _menuModelTerm(MENU_MODEL *model)
     model->loadRequest = 0;
     model->initialized = 0;
     if (GSthreadGetCurrentThread() != NULL) {
-        for (;;) {
+        while (true) {
             if (model->thread == NULL) break;
             if (GSthreadIsRunning(model->thread) == false) {
                 GSthreadClose(model->thread);
@@ -793,7 +793,7 @@ bool menuModelCheck(MENU_MODEL *model, u8 wait)
 {
     if (model == NULL) return false;
     if (wait) {
-        for (;;) {
+        while (true) {
             if (model->thread == NULL && model->state != MENU_MODEL_STATE_LOADING) break;
             GSthreadSwitch();
         }

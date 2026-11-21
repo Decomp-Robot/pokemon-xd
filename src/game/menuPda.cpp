@@ -271,11 +271,11 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
     up = keys & 1;
     work = &_menuPdaStatus;
     down = keys & 2;
-    for (;;) {
+    while (true) {
         count = 0;
         item = menuItemBiosGetPtr(window->mMenuID, menuData->mFirstItemID);
         if (up != 0) {
-            for (;;) {
+            while (true) {
                 if (item->mShownFlag) {
                     count++;
                 }
@@ -292,7 +292,7 @@ s32 menuPdaCursorCtrl(tagWINDOW_WORK *window)
                 work->mCursorMoved = 1;
             }
         } else if (down != 0) {
-            for (;;) {
+            while (true) {
                 if (item->mShownFlag) {
                     count++;
                 }
@@ -564,7 +564,7 @@ void menuPdaReset(void)
 // Idle thread of the PDA screen.
 __declspec(export) void menuPdaMain(void)
 {
-    for (;;) {
+    while (true) {
         GSthreadSwitch();
     }
 }

@@ -136,7 +136,7 @@ s32 dbgMenuPokemonEditSub(Pokemon *pokemon, u8 inFight, u8 *appearanceChanged,
     }
     trainerIndex = pokemonGetStatus(pokemon, 0, POKEMON_STATUS_FIELD_FIGHT_TRAINER_INDEX, 0);
 
-    for (;;) {
+    while (1) {
         pokemon_edit_value = 0;
         menuId = menuOpenCustom(MENU_ID_DEBUG_POKEMON_EDITOR, 0, NULL, 0, 1, 2, pokemon,
                                 &pokemon_edit_value);

@@ -131,7 +131,7 @@ void kyogreMoveDemo::Release()
 void kyogreMoveDemo::Main()
 {
     if (pMDemo) {
-        for (;;) {
+        while (true) {
             if (moveDemoWaitForEnd) {
                 if (mWork->frameCount - _fadeFrame < GetAnimeFrame(mWork->mapModel))
                     break;

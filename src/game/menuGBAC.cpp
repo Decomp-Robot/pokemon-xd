@@ -321,7 +321,7 @@ u8 _mainFlow(_MENU_GBAC_TYPE type, unsigned long flags, Hero **heroes)
             }
         }
 
-        for (;;) {
+        while (true) {
             menuSetEnablePort(menuGetEnablePort() & ~_menu_ports[port]);
 
             if (work->mResult != GBA_CONNECT_RESULT_INSERTED) {
@@ -842,7 +842,7 @@ u8 _waitAction(_GBA_Connect_WORK *work, _GBA_WAIT_FLAG flag)
         unplugged = FALSE;
     }
 
-    for (;;) {
+    while (true) {
         if (menuIsCheck(MENU_ID_PAD_ERROR)) {
             GSthreadSwitch();
             continue;

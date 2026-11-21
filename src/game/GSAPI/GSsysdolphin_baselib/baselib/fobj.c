@@ -325,7 +325,7 @@ void HSD_FObjInterpretAnim(HSD_FObj* fobj, void* object, HSD_AnimUpdate update,
         return;
     }
 
-    for (;;) {
+    while (1) {
         switch (st) {
         case FOBJ_LOAD_END: {
             HSD_ObjData value;

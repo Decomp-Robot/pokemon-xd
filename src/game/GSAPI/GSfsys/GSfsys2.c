@@ -171,7 +171,7 @@ u8 GSfsysPreReadWait(unsigned long groupID)
     if (!_fsysInitialized) {
         return 0;
     }
-    for (;;) {
+    while (1) {
         if (GSfsysPreRead(groupID) == 1) {
             break;
         }
@@ -213,7 +213,7 @@ u8 GSfsysReadWait(unsigned long groupID)
     if (work != NULL && work->fileMode == FSYS_FILE_TYPE_PREREAD) {
         GSfsysCancelWait(groupID);
     }
-    for (;;) {
+    while (1) {
         if (GSfsysRead(groupID) == 1) {
             break;
         }
@@ -236,7 +236,7 @@ u8 _fsysWait(unsigned long groupID, u8 waitPolicy)
     if (!_fsysInitialized) {
         return 0;
     }
-    for (;;) {
+    while (1) {
         status = GSfsysGetStatus(groupID);
         if (status == GSFSYS_STATUS_DONE) {
             return 1;
@@ -829,12 +829,12 @@ void _fsysBackgroundTaskCompressType(FsysBGWork* task)
     window = task->window;
     state = task->state;
 
-    for (;;) {
+    while (1) {
         data = block->data;
         switch (state) {
         default:
         case FSYS_LZ_STATE_FLAGS:
-            for (;;) {
+            while (1) {
                 flags >>= 1;
                 if (!(flags & 0x100)) {
         case FSYS_LZ_STATE_FLAG_BYTE:

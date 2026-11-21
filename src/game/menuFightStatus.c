@@ -27,7 +27,7 @@ s32 menuFightStatusWaitAnimeEXP(u32 menuId, u8 wait)
     tagWINDOW_WORK *window;
     struct MENU_FIGHT_STATUS_ANIM *anim;
 
-    for (;;) {
+    while (1) {
         window = windowSearchID(menuId);
         if (window == NULL)
             return 0;
@@ -74,7 +74,7 @@ s32 menuFightStatusWaitAnimeHP(u32 menuId, u8 wait)
     tagWINDOW_WORK *window;
     struct MENU_FIGHT_STATUS_ANIM *anim;
 
-    for (;;) {
+    while (1) {
         window = windowSearchID(menuId);
         if (window == NULL)
             return 0;

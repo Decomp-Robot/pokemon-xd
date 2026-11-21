@@ -399,7 +399,7 @@ extern "C" s32 evolutionWazaLearn(Pokemon *pokemon, u16 wazaID, u8 *outIndex,
         u16 *nickname = pokemon_GetNickname(pokemon);
         msgctrlSetValue(MSGCTRL_POKEMON_NAME, (unsigned long)nickname);
         msgctrlSetValue(MSGCTRL_VALUE_WAZA_ID, wazaID);
-        for (;;) {
+        while (true) {
             if (dispMsgYesNo(EVOLUTION_LEARN_MESSAGE_ID_FORGET_PROMPT, windowType) == EVOLUTION_DIALOG_ANSWER_YES) {
                 slot = forgetWazaSelect != 0 ? (s8)forgetWazaSelect(pokemon, wazaID, context) : 0;
                 if (slot >= 0) break;

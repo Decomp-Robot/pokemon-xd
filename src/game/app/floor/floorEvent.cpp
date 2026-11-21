@@ -246,7 +246,7 @@ s32 floorEventGetTresureEx(u8 kind, u32 item, s32 count, u8 mode) {
     s32 result;
     TreasureMessage message = TREASURE_MSG_NONE;
     u8 boxOverflow = 0;
-    for (;;) {
+    while (true) {
         if (GSsndGetStatus(TREASURE_SOUND_ME) != GSSND_PLAYING) break;
         GSthreadSwitch();
     }

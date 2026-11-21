@@ -630,7 +630,7 @@ void CMenuPokemonChange::main()
 void CMenuPokemonChange::loop()
 {
     u8* stateWork = mState.mWork;
-    for (;;) {
+    while (true) {
         mState.update();
         switch (mState.mState) {
         case STATE_START:
@@ -715,7 +715,7 @@ long CMenuPokemonChange::pokemonStatusSearch(long, long step)
 {
     long count = getQuantityAllPokemon();
     long slot = mStatusIndex;
-    for (;;) {
+    while (true) {
         slot += step;
         if (slot < 0 || slot >= count)
             return mStatusIndex;

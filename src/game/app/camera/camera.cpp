@@ -272,7 +272,7 @@ void cameraReturn(f32 duration, u8 wait)
 
 u8 cameraMoveEndCheck(u8 wait)
 {
-    for (;;) {
+    while (true) {
         if (!pCamWork->targetPositionAnimation.isMove() &&
             !pCamWork->targetOffsetAnimation.isMove() &&
             !pCamWork->positionAnimation.isMove() &&
@@ -286,7 +286,7 @@ u8 cameraMoveEndCheck(u8 wait)
 
 u8 cameraMoveEndCheckSpecial(u8 wait)
 {
-    for (;;) {
+    while (true) {
         if (!pCamWork->targetPositionAnimation.isMove() &&
             !pCamWork->positionAnimation.isMove() &&
             !pCamWork->rotationAnimation.isMove())
@@ -352,7 +352,7 @@ u8 cameraWaitSyncAnime(u8 wait)
     _GScamera* camera = cameraGetAnimationCamera();
     if (!camera) return 0;
     if (wait) {
-        for (;;) {
+        while (true) {
             if (GScameraHasAnimationEnded(camera)) break;
             if (!GSthreadGetCurrentThread()) {
                 GSlogWrite("cameraWaitSyncAnime()  スレッドから呼ぶようにしてください\n");

@@ -109,7 +109,7 @@ void menuDbgItemCreate(void)
         initFlag = 1;
     }
     Num = 1;
-    for (;;) {
+    while (1) {
         if (menuOpen(MENU_ID_DEBUG_ITEM_CREATE, 1) == -1) {
             break;
         }
