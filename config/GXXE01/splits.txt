@@ -2282,6 +2282,9 @@ game/app/menu/winMsg.cpp:
 	.sdata      start:0x804E8380 end:0x804E8388
 	.sbss       start:0x804EB0B8 end:0x804EB0C0
 
+game/app/zokusei/zokusei.cpp:
+	.text       start:0x80117614 end:0x80117A5C
+
 game/app/zokusei/zokuseiBios.cpp:
 	.text       start:0x80117A5C end:0x80117B6C
 
