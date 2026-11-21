@@ -5,11 +5,32 @@
 #include <joutai.h>
 #include <types.h>
 
+enum FightSideTrainerCount {
+    FIGHT_SIDE_TRAINER_COUNT = 2
+};
+
+enum FightSideJoutaiCount {
+    FIGHT_SIDE_JOUTAI_COUNT = 6
+};
+
+typedef struct FIGHT_SIDE FIGHT_SIDE;
+
+struct FIGHT_SIDE {
+#ifdef __cplusplus
+    FIGHT_SIDE() {}
+#endif
+
+    u16 mFightSideDataId;
+    u16 mReserved;
+    _JOUTAI mJoutaiAry[FIGHT_SIDE_JOUTAI_COUNT];
+    FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT];
+    u8 mMakibisiCheckFlag;
+    u8 mPadding[3];
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct FIGHT_SIDE FIGHT_SIDE;
 
 typedef struct FIGHT_SIDE_DATA {
     u16 mYrot;
@@ -17,6 +38,9 @@ typedef struct FIGHT_SIDE_DATA {
     u32 mFightTrainerStatusMenuDataId[2];
     u32 mFightoutPokemonStatusMenuDataId[2];
 } FIGHT_SIDE_DATA;
+
+extern u32 *fight_side_data_number;
+extern FIGHT_SIDE_DATA *fight_side_data;
 
 enum FightSideStatusSelector {
     FIGHT_SIDE_STATUS_NONE = 0,

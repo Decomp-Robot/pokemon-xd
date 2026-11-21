@@ -4,6 +4,7 @@
 #include <fightEncountData.h>
 
 #include <fightPokemon.h>
+#include <fightSide.h>
 #include <fightTrainer.h>
 #include <joutai.h>
 #include <types.h>
@@ -157,29 +158,12 @@ enum FightFloorSwitchResult {
 
 enum {
     FIGHT_FLOOR_SIDE_COUNT = 2,
-    FIGHT_SIDE_TRAINER_COUNT = 2,
-    FIGHT_SIDE_JOUTAI_COUNT = 6,
     FIGHT_OUT_POKEMON_COUNT = 8,
     FIGHT_FLOOR_JOUTAI_COUNT = 1
 };
 
 enum FightFloorStockPokemonCount {
     FIGHT_FLOOR_STOCK_POKEMON_COUNT = 6
-};
-
-typedef struct FIGHT_SIDE FIGHT_SIDE;
-
-struct FIGHT_SIDE {
-#ifdef __cplusplus
-    FIGHT_SIDE() {}
-#endif
-
-    u16 mFightSideDataId;
-    u16 mReserved;
-    _JOUTAI mJoutaiAry[FIGHT_SIDE_JOUTAI_COUNT];
-    FIGHT_TRAINER mTrainerAry[FIGHT_SIDE_TRAINER_COUNT];
-    u8 mMakibisiCheckFlag;
-    u8 mPadding[3];
 };
 
 typedef struct FIGHT_FLOOR_STOCK_POKEMON FIGHT_FLOOR_STOCK_POKEMON;

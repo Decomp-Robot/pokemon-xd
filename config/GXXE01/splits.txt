@@ -3411,7 +3411,7 @@ game/app/fight/fightFloorDB.cpp:
 	.text       start:0x801F6280 end:0x801F8018
 
 game/app/fight/fightSideBios.cpp:
-	.text       start:0x801F8018 end:0x801F80F0
+	.text       start:0x801F8018 end:0x801F81D4
 
 game/app/fight/fightSide.cpp:
 	.text       start:0x801F81D4 end:0x801F8CF0
