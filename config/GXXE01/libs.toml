@@ -565,6 +565,10 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/d2present/d2present.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fightSide.cpp"
 completed = true
 cflags = [
