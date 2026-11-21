@@ -2546,7 +2546,9 @@ game/app/sex/sex.cpp:
 	.text       start:0x80153550 end:0x80153564
 
 game/app/msgctrl/msgctrl.cpp:
-	.text       start:0x80154A50 end:0x80154E60
+	.text       start:0x80154A50 end:0x80155144
+	.data       start:0x80404A88 end:0x80404AF4
+	.sdata2     start:0x804EDC70 end:0x804EDC78
 
 game/app/dbgMenu/dbgMenu.cpp:
 	.text       start:0x801553A0 end:0x801560EC

@@ -61,6 +61,7 @@ s32 msgctrlKeyWait(struct MSG_TASK_WORK *task);
 s32 msgctrlCheckWait(struct MSG_TASK_WORK *task);
 s32 msgctrlCheckEnd(struct MSG_TASK_WORK *task);
 s32 msgctrlKeyEnd(struct MSG_TASK_WORK *task);
+s32 msgctrlCR(struct MSG_TASK_WORK *task);
 void msgctrlSetValue(s32 selector, unsigned long value);
 
 #ifdef __cplusplus
