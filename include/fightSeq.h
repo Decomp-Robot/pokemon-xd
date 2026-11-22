@@ -153,8 +153,9 @@ enum JOUTAI_MOVE_RESULT {
     JOUTAI_MOVE_RESULT_FIRST = JOUTAI_MOVE_RESULT_NORMAL,
     JOUTAI_MOVE_RESULT_LAST = JOUTAI_MOVE_RESULT_ENDURED_BY_ITEM
 };
-enum JOUTAI_ID { JOUTAI_POISON=3, JOUTAI_BAD_POISON=4, JOUTAI_PARALYSIS=5, JOUTAI_BURN=6, JOUTAI_FREEZE=7, JOUTAI_SLEEP=8, JOUTAI_CONFUSION=9, JOUTAI_INFATUATION=10, JOUTAI_FOCUS_ENERGY=15, JOUTAI_AKUMU=23, JOUTAI_LEECH_SEED=28, JOUTAI_GUARD=43, JOUTAI_ENDURE=44, JOUTAI_SUBSTITUTE=20, JOUTAI_REFLECT=72, JOUTAI_LIGHT_SCREEN=73, JOUTAI_SAFEGUARD=75, JOUTAI_WATER_SPORT=57 };
-enum {
+enum JOUTAI_ID { JOUTAI_POISON=3, JOUTAI_BAD_POISON=4, JOUTAI_PARALYSIS=5, JOUTAI_BURN=6, JOUTAI_FREEZE=7, JOUTAI_SLEEP=8, JOUTAI_CONFUSION=9, JOUTAI_INFATUATION=10, JOUTAI_FOCUS_ENERGY=15, JOUTAI_AKUMU=23, JOUTAI_CURSE=24, JOUTAI_FORESIGHT=25, JOUTAI_DEFENSE_CURL=26, JOUTAI_LEECH_SEED=28, JOUTAI_MINIMIZE=35, JOUTAI_FUTURE_SIGHT=52, JOUTAI_GUARD=43, JOUTAI_ENDURE=44, JOUTAI_SUBSTITUTE=20, JOUTAI_REFLECT=72, JOUTAI_LIGHT_SCREEN=73, JOUTAI_SAFEGUARD=75, JOUTAI_WATER_SPORT=57, JOUTAI_SPIKES=74 };
+enum FIGHT_SEQ_WORK_SLOT {
+    SEQ_HUKURO_DATAKI_SLOT = 0,
     SEQ_STATUS_PARAMETER = 3,
     SEQ_MULTIPLE_STATUS = 5,
     SEQ_MESSAGE_SHOWN = 7,
@@ -191,6 +192,7 @@ enum FIGHT_MSG_SLOT {
     FIGHT_MSG_SLOT_ITEM_TRAINER_NAME = 35,
     FIGHT_MSG_SLOT_MOVE_NAME = 40,
     FIGHT_MSG_SLOT_ITEM_NAME = 41,
+    FIGHT_MSG_SLOT_MAGNITUDE = 47,
     FIGHT_MSG_SLOT_DEFENSE_POKEMON_SECOND = 66,
     FIGHT_MSG_SLOT_DEFENSE_POKEMON_THIRD = 67,
     FIGHT_MSG_SLOT_DEFENSE_POKEMON_FOURTH = 68
@@ -208,6 +210,13 @@ extern u8 fightSeqWazaWork[8];
 extern u8 *UserWork;
 extern u8 *_wazaSeqAdrs;
 extern u32 ServerStatusFlag;
+extern u8 fightSeqJibakuIndex;
+extern u8 fightSeqJibakuCount;
+s32 fightSeqWazaDamageCalc(FightOutPokemon *attacker, FightOutPokemon *defender,
+                           FIGHT_SIDE *defenderSide, u16 wazaDataId, u16 iryoku, s32 zokusei);
+void fightSeqPressurePpdecCheckHorobinouta(FightOutPokemon *attacker);
+u16 fightSeqGetOngaesiIryoku(u16 friendship);
+u16 fightSeqGetYatuatariIryoku(u16 friendship);
 void fightWazaWzxTypeFuncAllAlly(u16 wazaId, FightOutPokemon *attacker, FightOutPokemon *defender, u16 invocation, u8 variation);
 void fightWazaWzxTypeFuncAllEnemy(u16 wazaId, FightOutPokemon *attacker, FightOutPokemon *defender, u16 invocation, u8 variation);
 void fightWazaWzxTypeFuncAtt(u16 wazaId, FightOutPokemon *attacker, FightOutPokemon *defender, u16 invocation, u8 variation);

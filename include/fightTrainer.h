@@ -122,6 +122,8 @@ typedef struct FIGHT_TRAINER_AI_DATA {
 #ifdef __cplusplus
 extern "C" {
 #endif
+FightPokemon *fightTrainerCheckTemotiPokemonFightEntry(FIGHT_TRAINER *trainer,
+                                                       Pokemon *pokemon);
 u8 fightTrainerCheckValid(FIGHT_TRAINER *trainer);
 u8 fightTrainerCheckDoFight(FIGHT_TRAINER *trainer);
 s32 fightTrainerGetHikaeFightPokemonNum(

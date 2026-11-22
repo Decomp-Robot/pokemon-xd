@@ -138,6 +138,9 @@ u16 fightOutPokemon_GetStockItemDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetStockItemDataId(FightOutPokemon *pokemon, u16 item);
 u16 fightOutPokemonDoItemSoubi(FightOutPokemon *pokemon, u16 item, u8 equip, u8 recordUsedItem);
 struct NullSequence *fightOutPokemon_GetSequencePtr(FightOutPokemon *pokemon);
+void fightOutPokemonCopyAllAbiCnt(FightOutPokemon *copy, FightOutPokemon *source);
+void fightOutPokemonSetBuffJoutaiDataId(FightOutPokemon *pokemon, u16 dataId, u32 buff);
+u16 fightOutPokemonGetUserFightTargetIdJoutaiDataId(FightOutPokemon *pokemon, u16 status);
 void fightOutPokemonToMenuPokemonStatus(FightOutPokemon *pokemon,
                                         struct MENU_POKEMON_STATUS *status);
 

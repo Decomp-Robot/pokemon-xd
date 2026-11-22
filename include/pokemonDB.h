@@ -105,6 +105,7 @@ s32 fightOutPokemon_GetKaigaraDamageValue(FightOutPokemon *pokemon);
 void fightOutPokemon_SetKaigaraDamageValue(FightOutPokemon *pokemon, s32 damage);
 u16 fightOutPokemon_GetFightoutTurnCount(FightOutPokemon *pokemon);
 void fightOutPokemon_SetFightoutTurnCount(FightOutPokemon *pokemon, u16 count);
+FIGHT_WAZA *fightOutPokemon_GetKeepFightWazaPtr(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetNamakeFlag(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetMotoWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetOumuWazaDataId(FightOutPokemon *pokemon);
@@ -171,6 +172,8 @@ u8 pokemon_GetPokemonWazaPp(Pokemon *pokemon, u16 slot);
 void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
 
 u32 pokemon_GetTokuseiFlag(void *pokemonData);
+u16 pokemonDB_GetBasisPhyAtk(u16 pokemonDataId);
+u16 pokemonDB_GetBasisPhyDef(u16 pokemonDataId);
 u8 pokemonDB_GetTokuseiDataId(u16 species, u16 index);
 s16 fightPokemon_GetEntryId(FightPokemon *pokemon);
 Pokemon *fightPokemon_GetMotoPokemonPtr(FightPokemon *pokemon);

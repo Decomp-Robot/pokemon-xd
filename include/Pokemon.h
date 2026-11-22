@@ -384,6 +384,8 @@ u8 pokemonCheckValid(Pokemon *pokemon);
 u8 pokemonDataCheckValid(Pokemon *pokemon, u16 species);
 u8 pokemonCheckSetMonohiroi(Pokemon *pokemon);
 #endif
+u8 pokemonCheckFightOut(Pokemon *pokemon);
+void pokemonGetMezamerupower(Pokemon *pokemon, u16 *iryoku, u16 *zokusei);
 u16 pokemonGetTokuseiDataId(Pokemon *pokemon);
 // Selects which of the species' two abilities the pokemon uses.
 void pokemonSetTokuseiFlag(Pokemon *pokemon, s32 abilitySlot);
