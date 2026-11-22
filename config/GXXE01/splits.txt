@@ -2528,7 +2528,7 @@ game/app/hero/heroPokemonGet.cpp:
 	.text       start:0x8015224C end:0x801528C4
 
 game/app/hero/heroMemberFunctions.cpp:
-	.text       start:0x801528C4 end:0x80153138
+	.text       start:0x801528C4 end:0x80153188
 	.sdata2     start:0x804EDC60 end:0x804EDC64
 
 game/GSAPI/GSeffect/GSeffect.cpp:

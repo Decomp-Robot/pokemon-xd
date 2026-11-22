@@ -87,8 +87,12 @@ public:
     u8 getFollowerID();
     void setFollowerID(u8 followerID);
     u8 getFollowerModelLevel();
-    unsigned long getFollowerGrpID();
-    unsigned long getFollowerResID();
+    void setFollowerModelLevel(u8 level);
+    u32 getFollowerGrpID();
+    u32 getFollowerResID();
+    void setFollowerObjID(u32 objID);
+    void setFollowerGrpID(u32 grpID);
+    void setFollowerResID(u32 resID);
     u8 getHeroStyle() const;
     void setHeroStyle(u8 style, bool readObject);
     long getHeroObjID(long followerModelLevel, long heroStyle);
@@ -97,6 +101,9 @@ public:
     void setRestertPos();
     void addFootStep(unsigned long step);
     u32 getFootStep() const;
+
+    // Persistent trainer identity (save data).
+    u32 getHeroRnd() const;
 
     // Where a suspended battle is resumed.
     unsigned int getBattleResumeFloorID() const;
@@ -111,7 +118,7 @@ public:
 public:
     u16 mName[11]; // 0x00: hero name.
     u8 _16[0x16];
-    unsigned long mRandomIdentity; // 0x2C
+    u32 mRandomIdentity; // 0x2C
     Pokemon mPokemon[6];
     ItemSlot mNormalItems[30]; // 0x4C8
     ItemSlot mExtraItems[43]; // 0x540
@@ -153,7 +160,7 @@ private:
 typedef struct Hero {
     u16 mName[11];
     u8 _16[0x16];
-    unsigned long mRandomIdentity;
+    u32 mRandomIdentity;
     Pokemon mPokemon[6];
     ItemSlot mNormalItems[30];
     ItemSlot mExtraItems[43];

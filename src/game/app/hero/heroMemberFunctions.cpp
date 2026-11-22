@@ -353,3 +353,53 @@ u32 Hero::getFootStep() const
 {
     return mFootStep;
 }
+
+u8 Hero::getFollowerModelLevel()
+{
+    return mFollowerModelLevel;
+}
+
+void Hero::setFollowerModelLevel(u8 level)
+{
+    mFollowerModelLevel = level;
+}
+
+u8 Hero::getFollowerID()
+{
+    return mFollowerID;
+}
+
+void Hero::setFollowerID(u8 followerID)
+{
+    mFollowerID = followerID;
+}
+
+u32 Hero::getFollowerGrpID()
+{
+    return mFollowerGroup;
+}
+
+u32 Hero::getFollowerResID()
+{
+    return mFollowerResource;
+}
+
+void Hero::setFollowerObjID(u32 objID)
+{
+    mFollowerObject = objID;
+}
+
+void Hero::setFollowerGrpID(u32 grpID)
+{
+    mFollowerGroup = grpID;
+}
+
+void Hero::setFollowerResID(u32 resID)
+{
+    mFollowerResource = resID;
+}
+
+u32 Hero::getHeroRnd() const
+{
+    return mRandomIdentity;
+}
