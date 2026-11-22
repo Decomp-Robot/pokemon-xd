@@ -5,6 +5,11 @@ splits: config/GXXE01/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 block_relocations:
+  # Extracted fade distortion consumers retain the original SDA2 displacement
+  # of the compiler-local 3.0f literal supplied by fade_effect.cpp.
+  - source: ".text:0x801AD94C"
+  - source: ".text:0x801AE3EC"
+  - source: ".text:0x801AEDE8"
   # Extracted FlashMenu methods retain the original SDA2 displacements of the
   # flashmenu.cpp compiler-local zero and unsigned-conversion literals.
   - source: ".text:0x8026F6B8"

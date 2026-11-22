@@ -20,6 +20,13 @@ FADE_EFFECT_BALL _fadeEffectBall[24];
 
 u8 _fadeEffectFirstFrame;
 
+void _fadeEffect_AdjustParms()
+{
+    _fadeEffectWork.motionIncrement /= 3;
+    _fadeEffectWork.currentMotion /= 3;
+    _fadeEffectWork.motionLimit /= 3;
+}
+
 u32 _fadeEffectGetRandom(u32 limit)
 {
     return ((HSD_Rand() << 16) | HSD_Rand()) % limit;

@@ -3243,10 +3243,11 @@ game/app/fade/fade.cpp:
 	.sdata2     start:0x804EE418 end:0x804EE448
 
 game/app/fade/fade_effect.cpp:
-	.text       start:0x801B70C0 end:0x801B715C
+	.text       start:0x801B708C end:0x801B715C
 	.ctors      start:0x802E9FD8 end:0x802E9FDC
 	.bss        start:0x80478210 end:0x8047840C
 	.sbss       start:0x804EB6A0 end:0x804EB6A4
+	.sdata2     start:0x804EE510 end:0x804EE514
 
 game/app/fade/fade_fluid.cpp:
 	.text       start:0x801B715C end:0x801B8474
