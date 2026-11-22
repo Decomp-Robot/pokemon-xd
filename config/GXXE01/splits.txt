@@ -3973,6 +3973,13 @@ game/GSAPI/GSgfx/light.cpp:
 	.text       start:0x802B814C end:0x802B8504
 	.sdata2     start:0x804EFB60 end:0x804EFB70
 
+game/GSAPI/GSgfx/layerEffect.cpp:
+	.text       start:0x802B8504 end:0x802B96D8
+	.sdata      start:0x804E86F8 end:0x804E8700
+	.sbss       start:0x804EBD70 end:0x804EBD80
+	.sdata2     start:0x804EFB70 end:0x804EFB88
+	.sbss2      start:0x804EFD58 end:0x804EFD60
+
 game/GSAPI/GSgfx/screenshot.cpp:
 	.text       start:0x802C0084 end:0x802C0098
 	.sdata2     start:0x804EFBD8 end:0x804EFBE0

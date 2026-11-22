@@ -2,11 +2,6 @@
 #include <GStexture.h>
 #include <libc/memory.h>
 
-// The framebuffer-copy texture is shared by all layers that request the
-// shared-copy sentinel.
-extern GStexture *gSharedFramebufferCopyTexture;
-extern u16 gSharedFramebufferCopyHoldCount;
-
 void GSgfxLayer::GetFifoSize(u32 *pass0Size, u32 *pass1Size)
 {
     if (pass0Size != NULL) {
@@ -31,25 +26,25 @@ void GSgfxLayer::SetTextureCopy(GStexture *texture, bool enableCopy, u8 *copyCon
     // A NULL texture disables the copy and releases a shared texture hold.
     if (texture == NULL) {
         mRenderFlags &= ~GSGFX_RENDER_FLAG_TEXTURE_COPY;
-        if (gSharedFramebufferCopyTexture != NULL && mTextureCopy == gSharedFramebufferCopyTexture) {
-            if (--gSharedFramebufferCopyHoldCount == 0) {
-                GStextureFree(gSharedFramebufferCopyTexture);
-                gSharedFramebufferCopyTexture = NULL;
+        if (GSgfxLayer::fbTexPtr != NULL && mTextureCopy == GSgfxLayer::fbTexPtr) {
+            if (--GSgfxLayer::fbTexRefCount == 0) {
+                GStextureFree(GSgfxLayer::fbTexPtr);
+                GSgfxLayer::fbTexPtr = NULL;
             }
         }
         mTextureCopy = NULL;
     } else {
         // Several layers may ask for the same framebuffer-copy texture.
         if (texture == GS_GFX_LAYER_SHARED_TEXTURE_COPY) {
-            if (++gSharedFramebufferCopyHoldCount == 1) {
-                gSharedFramebufferCopyTexture =
+            if (++GSgfxLayer::fbTexRefCount == 1) {
+                GSgfxLayer::fbTexPtr =
                     GStextureCreate(0, 0, GS_TEXTURE_FORMAT_32BIT, GS_TEXTURE_TLUT_FORMAT_NONE, 0);
-                if (gSharedFramebufferCopyTexture == NULL) {
-                    gSharedFramebufferCopyHoldCount = 0;
+                if (GSgfxLayer::fbTexPtr == NULL) {
+                    GSgfxLayer::fbTexRefCount = 0;
                     return;
                 }
             }
-            texture = gSharedFramebufferCopyTexture;
+            texture = GSgfxLayer::fbTexPtr;
         }
         mRenderFlags |= GSGFX_RENDER_FLAG_TEXTURE_COPY;
         mTextureCopy = texture;

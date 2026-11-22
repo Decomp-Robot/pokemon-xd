@@ -500,9 +500,15 @@ public:
     void SetClearFlags(bool color, bool alpha, bool depth);
     void SetTextureCopy(GStexture* texture, bool enableCopy, u8* copyConfig);
     void GetFifoSize(u32 *pass0Size, u32 *pass1Size);
-    void textureCopy(GSgfxLayerPass pass, GStexture *texture, bool flag, u8 *image,
-                     bool clearColor, bool clearAlpha, bool clearDepth);
+    void textureCopy(GSgfxLayerPass pass, GStexture *texture, bool enableCopy,
+                     u8 *copyConfig, bool clearColor, bool clearAlpha, bool clearDepth);
     GStexture *GetTextureCopy(void);
+    void EffectTextureCopy(GStexture *texture, bool enableCopy, u8 *copyConfig,
+                           bool clearColor, bool clearAlpha, bool clearDepth);
+    void EffectScreenClear(bool color, bool alpha, bool depth);
+    void EffectDistortion();
+    void PrepareDistortion();
+    void PrepareFBCopy();
     void perspectiveProjection(const f32 matrix[4][4])
     {
         mProjectionState.mType = GS_PROJECTION_PERSPECTIVE;
@@ -908,6 +914,34 @@ public:
     void tgenFunc(u8 texGen, GSgfxTgenFunc func, GSgfxTgenSrc src, GSmtx *textureMatrix,
                   bool normalize, GSmtx *postMatrix);
     void tunitIndTexMtx(GSgfxIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
+    void tunitIndirect(u8 stage, u32 operation, u8 indirectStage, u8 signedOffset,
+                       u8 replaceMode, GSgfxIndTexMtxID matrix) {
+        mTevIndirectOperation0 = operation;
+        mTevIndirectStage0 = indirectStage;
+        mTevWarpSignedOffset0 = signedOffset;
+        mTevWarpReplaceMode0 = replaceMode;
+        mTevWarpMatrix0 = matrix;
+        mPassState[0].mIndirectOperationFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+        mPassState[1].mIndirectOperationFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_TUNIT;
+    }
+    void indTexOrder(u8 stage, u8 coord, u8 map) {
+        mIndirectTexCoord0 = coord;
+        mIndirectTextureMap0 = map;
+        mPassState[0].mIndirectOrderFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+        mPassState[1].mIndirectOrderFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+    }
+    void indTexCoordScale(u8 stage, u16 scaleS, u16 scaleT) {
+        mIndirectCoordScaleS0 = scaleS;
+        mIndirectCoordScaleT0 = scaleT;
+        mPassState[0].mIndirectScaleFlags |= 1 << stage;
+        mPassState[0].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+        mPassState[1].mIndirectScaleFlags |= 1 << stage;
+        mPassState[1].mFlags |= GSGFX_PASS_FLAG_INDIRECT;
+    }
     void dlDrawExt(u8 *dl, u32 size);
 
 /* Layer registry entry and cached render state. */
@@ -1008,8 +1042,13 @@ public:
     u32 mTextureCopyMode; // selects the copy configuration source.
     u8 mTextureCopyConfig[7]; // caller-supplied copy configuration.
     u8 mVisibleHolds; // 0x19B3: holders that keep the layer on screen.
-    u8 _19B4[4];
+    GScolor mSavedClearColor; // 0x19B4
     s8 mDistortionScale;
+
+    static GStexture *fbTexPtr;
+    static GStexture *distTexPtr;
+    static u16 fbTexRefCount;
+    static u16 distTexRefCount;
     f32 mDistortionMatrix[2][3];
     u8 _19D4[64];
 };
@@ -1162,6 +1201,22 @@ extern u16 _tokenMaximum;
 u16 GSgfxTokenMark_Sub(void);
 extern "C" void GSgfx_GCReset(void);
 extern "C" void GSgfx_GCWriteIndTexMtx(GXIndTexMtxID id, f32 (*matrix)[3], signed char scaleExponent);
+
+// EFB-to-texture copy parameters used by the GameCube copy writer.
+struct GSgfxCopyTexParams {
+    s16 mLeft;
+    s16 mTop;
+    u16 mWidth;
+    u16 mHeight;
+    u16 mDestWidth;
+    s32 mFormat;
+    s32 mMode;
+    u8 mMipmap;
+    u8 mClear;
+};
+extern "C" void GSgfx_GCWriteCopyFilter(u8 aa, u8 *samplePattern, bool enable, u8 *vfilter);
+extern "C" void GSgfx_GCWriteCopyTex(const GSgfxCopyTexParams *params, void *buffer);
+
 void GSgfxTokenMarkFrame(void);
 void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
 void GSgfxTokenAbortFrame(void);
