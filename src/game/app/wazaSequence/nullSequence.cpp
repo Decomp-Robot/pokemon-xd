@@ -1,4 +1,18 @@
 #include <NullSequence.h>
+#include <new.h>
+#include <wazaSequence.h>
+
+// Stop and free every sequence still loaded on this stage.
+void NullSequence::FreeAllWaza()
+{
+    WazaSequence *waza = this->waza;
+    while (waza != NULL) {
+        WazaSequence *next = waza->next;
+        delete waza;
+        waza = next;
+    }
+    this->waza = NULL;
+}
 
 // A stage stands where its sequences are placed, and how it is turned and
 // scaled: the sequence system reads and writes that placement through these
@@ -51,4 +65,52 @@ void NullSequence::GetPosition(GSvec *position)
     position->x = this->position.x;
     position->y = this->position.y;
     position->z = this->position.z;
+}
+
+/*
+ * A stage owns the sequences loaded on it, so destroying one stops and frees
+ * every sequence still attached to its stage. The stage is then unlinked from
+ * the list of live stages.
+ */
+NullSequence::~NullSequence()
+{
+    NullSequence *head = g_Sequences;
+    FreeAllWaza();
+
+    if (head == NULL) {
+        return;
+    }
+    if (head == this) {
+        g_Sequences = this->next;
+    } else {
+        while (head->next != NULL) {
+            if (head->next == this) {
+                head->next = this->next;
+                break;
+            }
+            head = head->next;
+        }
+    }
+}
+
+// A plain stage rests at the origin and is drawn at unit scale until the
+// sequence system places it.
+NullSequence::NullSequence()
+    : modelID(0), visible(true), loadFailed(false), isModel(0),
+      position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1),
+      waza(NULL), renderCamera(NULL), next(NULL)
+{
+}
+
+// Create a stage and put it on the list of live stages so that the sequence
+// system can find it and place it. A failed allocation leaves the list alone.
+NullSequence *New_NullSequence()
+{
+    NullSequence *stage = new NullSequence;
+    if (stage == NULL) {
+        return NULL;
+    }
+    stage->next = g_Sequences;
+    g_Sequences = stage;
+    return stage;
 }

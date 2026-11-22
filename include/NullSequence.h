@@ -51,7 +51,7 @@ public:
     u16 modelID;             // 0x04: id the resource of the stage is looked up
                              //       with (the species of the Pokemon model).
     bool visible;            // 0x06: set while the stage is drawn.
-    u8 _07;                  // 0x07: unknown.
+    bool loadFailed;         // 0x07: set when a model stage fails to load its model.
     s32 isModel;             // 0x08: 1 while the stage is a model: the
                              //       sequence code only hands a ModelSequence
                              //       to the resource lookup.
@@ -62,5 +62,11 @@ public:
     _GScamera *renderCamera; // 0x34: camera the sequences are rendered with.
     NullSequence *next;      // 0x38: next stage of the list of live stages.
 };
+
+// Head of the list of live stages, linked through next (wazaSequenceSys.cpp).
+extern NullSequence *g_Sequences;
+
+// Create a stage and put it on the list of live stages.
+NullSequence *New_NullSequence();
 
 #endif

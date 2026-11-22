@@ -6925,6 +6925,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "game/app/wazaSequence/nullSequence.cpp"
 completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 [[lib.object]]
 name = "game/app/wazaSequence/wazaSequenceSys.cpp"
 completed = true
