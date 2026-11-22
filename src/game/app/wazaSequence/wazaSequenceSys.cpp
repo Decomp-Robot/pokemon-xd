@@ -8,8 +8,10 @@
 // reads as a neutral placement, and requests to place it are ignored.
 
 NullSequence *g_Sequences;
+// Move that was started most recently, read back by the impact-point check.
+WazaSequence *g_LastStartedWaza;
 
-extern "C" inline bool wazaSequenceSysIsValidSequence(NullSequence *sequence)
+static inline bool isStageOnList(NullSequence *sequence)
 {
     NullSequence *seq = g_Sequences;
     if (sequence == NULL) {
@@ -29,7 +31,7 @@ void Sequence_GetScale(NullSequence *sequence, GSvec *scale)
     if (sequence == NULL) {
         return;
     }
-    if (!wazaSequenceSysIsValidSequence(sequence)) {
+    if (!isStageOnList(sequence)) {
         scale->x = scale->y = scale->z = wazaSequenceUnitScale;
     } else {
         sequence->GetScale(scale);
@@ -41,7 +43,7 @@ void Sequence_GetRotation(NullSequence *sequence, GSvec *rotation)
     if (sequence == NULL) {
         return;
     }
-    if (!wazaSequenceSysIsValidSequence(sequence)) {
+    if (!isStageOnList(sequence)) {
         rotation->x = wazaSequenceZeroTransform;
         rotation->y = wazaSequenceZeroTransform;
         rotation->z = wazaSequenceZeroTransform;
@@ -55,7 +57,7 @@ void Sequence_GetPosition(NullSequence *sequence, GSvec *position)
     if (sequence == NULL) {
         return;
     }
-    if (!wazaSequenceSysIsValidSequence(sequence)) {
+    if (!isStageOnList(sequence)) {
         position->x = wazaSequenceZeroTransform;
         position->y = wazaSequenceZeroTransform;
         position->z = wazaSequenceZeroTransform;
@@ -69,7 +71,7 @@ void Sequence_SetScale(NullSequence *sequence, GSvec *scale)
     if (sequence == NULL) {
         return;
     }
-    if (wazaSequenceSysIsValidSequence(sequence)) {
+    if (isStageOnList(sequence)) {
         sequence->SetScale(scale);
     }
 }
@@ -79,7 +81,7 @@ void Sequence_SetRotation(NullSequence *sequence, GSvec *rotation)
     if (sequence == NULL) {
         return;
     }
-    if (wazaSequenceSysIsValidSequence(sequence)) {
+    if (isStageOnList(sequence)) {
         sequence->SetRotation(rotation);
     }
 }
@@ -89,7 +91,7 @@ void Sequence_SetPosition(NullSequence *sequence, GSvec *position)
     if (sequence == NULL) {
         return;
     }
-    if (wazaSequenceSysIsValidSequence(sequence)) {
+    if (isStageOnList(sequence)) {
         sequence->SetPosition(position);
     }
 }

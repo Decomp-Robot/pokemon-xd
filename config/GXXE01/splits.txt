@@ -3309,8 +3309,15 @@ game/app/wazaSequence/wazaSequence.cpp:
 
 game/app/wazaSequence/wazaSequenceSys.cpp:
 	.text       start:0x801D1C20 end:0x801D1EFC
-	.sbss       start:0x804EB700 end:0x804EB704
+	.sbss       start:0x804EB700 end:0x804EB708
 	.sdata2     start:0x804EE818 end:0x804EE820
+
+game/app/wazaSequence/wazaSequenceSysMoves.cpp:
+	.text       start:0x801D2EC4 end:0x801D3258
+	.data       start:0x80410008 end:0x8041002C
+	.bss        start:0x804A1538 end:0x804A1578
+	.sbss       start:0x804EB708 end:0x804EB725
+	.sbss       start:0x804EB725 end:0x804EB728 skip
 
 game/app/wazaSequence/nullSequence.cpp:
 	.text       start:0x801D9FA8 end:0x801DA28C

@@ -19,6 +19,8 @@ public:
     WazaSequence(NullSequence *stage, u16 sequence, u8 category, u8 variation);
     ~WazaSequence();
 
+    bool IsImpactPoint(u8 variation);
+
     static bool Load(u8 *data, u32 group, u32 res);
     static void Unload(u8 *data);
 
