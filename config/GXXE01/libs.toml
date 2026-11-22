@@ -6949,6 +6949,11 @@ name = "game/app/wazaSequence/billboard.cpp"
 completed = true
 extra_cflags = ["-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
+[[lib.object]]
+name = "game/app/wazaSequence/boneFill.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
 [[lib]]
 name = "etctools"
 mw_version = "GC/2.6"
