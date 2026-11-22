@@ -681,6 +681,8 @@ u8 fightTrainerAiWazaHit215(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
 u8 fightTrainerAiWazaHit216(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 u8 fightTrainerAiWazaHit217(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 u8 fightTrainerAiWazaHitNull(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
+s32 fightTrainerAiWazaDoWazaDamageFunc(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender, u8 isSimulation);
+u8 fightTrainerAiWazaDoWazaHitFunc(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 s32 fightTrainerAiWazaValueAbareru(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 s32 fightTrainerAiWazaValueAkumu(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 s32 fightTrainerAiWazaValueAmagoi(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
@@ -831,6 +833,13 @@ s32 fightTrainerAiWazaValueZennouryokuappu(FIGHT_TRAINER *trainer, FightOutPokem
 s32 fightTrainerAiWazaValuetorikku(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender);
 
 u8 fightTrainerAiGetFightFloorNowTenkouDataId(FIGHT_TRAINER *trainer, FIGHT_FLOOR *floor, u8 checkAbilities);
+u16 fightTrainerAiGetFightOutPokemonMaxHp(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightOutPokemonPokemonDataId(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightOutPokemonSpeAtk(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightOutPokemonPhyAtk(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u16 fightTrainerAiGetFightPokemonPokemonDataId(FIGHT_TRAINER *trainer, FightPokemon *pokemon);
+u8 fightTrainerAiIsFightOutPokemonAllAbiCntTakai(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
+u8 fightTrainerAiCheckFightFloorCheckFightActionFightOutPokemonIrekaeSelect(FIGHT_TRAINER *trainer, FIGHT_FLOOR *floor, FightOutPokemon *pokemon, FightOutPokemon **selected);
 u8 fightTrainerAiGetFightOutPokemonAbiCntPhyAtk(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiGetFightOutPokemonAbiCntPhyDef(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);
 u8 fightTrainerAiGetFightOutPokemonAbiCntSpeAtk(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon);

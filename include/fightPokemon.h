@@ -65,6 +65,7 @@ u8 fightOutPokemonCheckCanOutOkWazaBanme(FightOutPokemon *pokemon, u16 wazaIndex
 u8 fightOutPokemonCheckFightActionWazaSelect(FightOutPokemon *pokemon, u8 checkFlag);
 void fightOutPokemonGetRndStatus(FightOutPokemon *pokemon, u32 *random1, u32 *random2);
 u16 fightOutPokemonMaxHpWaruValue(FightOutPokemon *pokemon, u16 divisor);
+u16 fightOutPokemonNowHpWaruValue(FightOutPokemon *pokemon, u16 divisor);
 u8 fightOutPokemonIsJoutaiDataId(FightOutPokemon *pokemon, u16 status);
 void fightOutPokemonInitOneTurn(FightOutPokemon *pokemon);
 void fightOutPokemonInitOneSelfTurn(FightOutPokemon *pokemon);

@@ -1,10 +1,23 @@
 #include <fightFloor.h>
+#include <fightSeq.h>
+#include <fightTarget.h>
 #include <fightTrainerAi.h>
+#include <fightTrainerStatus.h>
+#include <pokemonDB.h>
 #include <waza.h>
 
 // AI scoring adjustments stored in the trainer AI add/sub database.
 enum AI_ADDSUB_ID {
     AI_ADDSUB_NONE = 0,
+
+    AI_ADDSUB_ALLY_STATUS_MOVE_PLANNED = 397,
+
+    AI_ADDSUB_DARK_WEATHER_NOT_ACTIVE = 410,
+    AI_ADDSUB_DARK_WEATHER_DARK_ALLY = 411,
+    AI_ADDSUB_DARK_WEATHER_CASTFORM = 412,
+    AI_ADDSUB_DARK_WEATHER_ALREADY_ACTIVE = 413,
+    AI_ADDSUB_DARK_WEATHER_ALLY_DARK_SKY = 414,
+
     AI_ADDSUB_ATTACK_UP_STAT_ATTACK_LOW = 556,
     AI_ADDSUB_ATTACK_UP_ALLY_FOLLOW_ME = 557,
     AI_ADDSUB_ATTACK_UP_STAT_ATTACK_HIGH = 558,
@@ -64,8 +77,58 @@ enum AI_ADDSUB_ID {
     AI_ADDSUB_BELLY_DRUM_ALLY_FOLLOW_ME = 601,
     AI_ADDSUB_BELLY_DRUM_STAT_ATTACK_HIGH = 602,
     AI_ADDSUB_BELLY_DRUM_LOW_HP = 603,
+
+    AI_ADDSUB_BATON_PASS_ALL_STATS_HIGH = 604,
+    AI_ADDSUB_POISON_STALL_TARGET = 605,
+    AI_ADDSUB_POISON_TARGET_REFRESH = 606,
+    AI_ADDSUB_BURN_STALL_TARGET = 608,
+    AI_ADDSUB_BURN_PHYSICAL_TARGET = 609,
+    AI_ADDSUB_BURN_TARGET_REFRESH = 610,
+    AI_ADDSUB_BURN_ALLY_STATUS_MOVE = 611,
+    AI_ADDSUB_REFLECT_HIT = 612,
+    AI_ADDSUB_REFLECT_PHYSICAL_TARGET = 613,
+    AI_ADDSUB_REFLECT_TARGET_BRICK_BREAK = 614,
+    AI_ADDSUB_LIGHT_SCREEN_HIT = 615,
+    AI_ADDSUB_LIGHT_SCREEN_SPECIAL_TARGET = 616,
+    AI_ADDSUB_LIGHT_SCREEN_TARGET_BRICK_BREAK = 617,
+    AI_ADDSUB_FIXED_DAMAGE_SHUCKLE = 618,
+    AI_ADDSUB_BRICK_BREAK_SCREEN_UP = 619,
+    AI_ADDSUB_BRICK_BREAK_ALLY_HELPING_HAND = 620,
+    AI_ADDSUB_SHED_SCREEN_UP = 621,
+    AI_ADDSUB_DREAM_EATER_HP_DIVISOR = 622,
+    AI_ADDSUB_DREAM_EATER_ALLY_HELPING_HAND = 623,
+
+    AI_ADDSUB_SHADOW_HOLD_POISON = 626,
+    AI_ADDSUB_SHADOW_HOLD_BAD_POISON = 627,
+    AI_ADDSUB_SHADOW_HOLD_BURN = 628,
+    AI_ADDSUB_SHADOW_HOLD_PARALYSIS = 629,
+    AI_ADDSUB_SHADOW_HOLD_CONFUSION = 630,
+    AI_ADDSUB_SHADOW_HOLD_INFATUATION = 631,
+    AI_ADDSUB_SHADOW_HOLD_CURSE = 632,
+    AI_ADDSUB_SHADOW_HOLD_PERISH_SONG = 633,
+    AI_ADDSUB_SHADOW_HOLD_LEECH_SEED = 634,
+    AI_ADDSUB_SHADOW_HOLD_NON_DARK_ENEMY = 635,
+    AI_ADDSUB_SHADOW_HOLD_SWITCH_ELIGIBLE = 636,
+    AI_ADDSUB_SHADOW_END_HP_RATIO = 637,
+    AI_ADDSUB_SHADOW_END_AVOID_DOWN = 638,
+    AI_ADDSUB_SHADOW_HALF_HP_RATIO = 639,
+    AI_ADDSUB_SHADOW_HALF_BASE = 640,
+    AI_ADDSUB_SHADOW_HALF_AVOID_DOWN = 641,
+    AI_ADDSUB_SHADOW_MIST_WEAK_ALLY_MOVE = 642,
+    AI_ADDSUB_SHADOW_MIST_AVOID_DOWN = 643,
+    AI_ADDSUB_SHADOW_PANIC_AVOID_DOWN = 644,
+    AI_ADDSUB_IMPRISON_SELF_ACTED = 645,
+    AI_ADDSUB_IMPRISON_ENEMY_ACTED = 646,
+    AI_ADDSUB_ATTRACT_ALLY_ATTRACT = 647
 };
 
+enum { FIGHT_AI_HP_RATE_MAX = 100 };
+
+// Moves that can inflict a status or confusion, scanned when scoring protective moves.
+extern const u16 joutaiIzyouWazaTbl[];
+extern const u16 konranWazaTbl[];
+
+static const u8 FIGHT_ABICNT_EVASION_LIMIT = 5;
 static const u8 FIGHT_ABICNT_NEUTRAL = 6;
 static const s8 FIGHT_AI_HP_COMPARE_AT_MOST = -1;
 
@@ -77,6 +140,532 @@ s32 _fightTrainerAiWazaValueSubNouryokuKyouka(FIGHT_TRAINER *trainer, FightOutPo
     FightAiStatPredicate predicate);
 bool _fightTrainerAiWazaValueIsAllyHaveWazaDataId(FIGHT_TRAINER *trainer,
     FightOutPokemon *pokemon, u16 wazaDataId);
+
+s32 fightTrainerAiWazaValueMeromero(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+
+    value = 0;
+    if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(0, trainer, 1, 1,
+            WAZA_DATA_ID_ATTRACT, defender) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(0, trainer, AI_ADDSUB_ATTRACT_ALLY_ATTRACT);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkPanic(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+
+    value = 0;
+    if (fightTrainerAiGetFightOutPokemonAbiCntAvd(trainer, defender) <= FIGHT_ABICNT_EVASION_LIMIT) {
+        value = fightTrainerAiAddValueByAddsubDataId(0, trainer, AI_ADDSUB_SHADOW_PANIC_AVOID_DOWN);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkMist(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    FightOutPokemon *allies[8];
+    u16 wazaDataIdAry[8];
+    u16 allyCount;
+    u16 wazaCount;
+    u16 i;
+    u16 j;
+    u8 wazaAvgValue;
+    u8 foundWeakWaza;
+
+    value = 0;
+    allyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, allies, 1, 1);
+    wazaAvgValue = fightTrainerAiDB_GetWazaAvgValue(fightTrainer_GetFightTrainerDataId(trainer));
+    foundWeakWaza = 0;
+    for (i = 0; i < allyCount; i++) {
+        wazaCount = fightTrainerAiGetFightOutPokemonWazaDataIdAry(trainer, allies[i], wazaDataIdAry, 0, 1);
+        if (wazaCount != 0) {
+            for (j = 0; j < wazaCount; j++) {
+                if (wazaDB_GetAvg(wazaDataIdAry[j]) < wazaAvgValue) {
+                    foundWeakWaza = 1;
+                    break;
+                }
+            }
+        }
+    }
+    if (foundWeakWaza) {
+        value = fightTrainerAiAddValueByAddsubDataId(0, trainer, AI_ADDSUB_SHADOW_MIST_WEAK_ALLY_MOVE);
+    }
+    if (fightTrainerAiGetFightOutPokemonAbiCntAvd(trainer, defender) <= FIGHT_ABICNT_EVASION_LIMIT) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_MIST_AVOID_DOWN);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkHalf(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightOutPokemon *allies[8];
+    FightOutPokemon *enemies[8];
+    u16 allyCount;
+    u16 enemyCount;
+    u16 allyHpTotal;
+    u16 enemyHpTotal;
+    u16 maxHp;
+    u16 nowHp;
+    u8 i;
+    s32 value;
+
+    allyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, allies, 1, 1);
+    enemyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, enemies, 0, 1);
+    enemyHpTotal = 0;
+    for (i = 0; i < enemyCount; i++) {
+        maxHp = fightOutPokemonMaxHpWaruValue(enemies[i], 1);
+        nowHp = fightOutPokemonNowHpWaruValue(enemies[i], 2);
+        enemyHpTotal += maxHp * nowHp / 100;
+    }
+    allyHpTotal = 0;
+    for (i = 0; i < allyCount; i++) {
+        maxHp = fightOutPokemonMaxHpWaruValue(allies[i], 1);
+        nowHp = fightOutPokemonNowHpWaruValue(allies[i], 2);
+        allyHpTotal += maxHp * nowHp / 100;
+    }
+    value = fightTrainerAiAddValue(0, (enemyHpTotal / allyHpTotal - 1)
+        * fightTrainerGetStatus(0, AI_ADDSUB_SHADOW_HALF_HP_RATIO,
+            FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0));
+    value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HALF_BASE);
+    if (fightTrainerAiGetFightOutPokemonAbiCntAvd(trainer, defender) <= FIGHT_ABICNT_EVASION_LIMIT) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HALF_AVOID_DOWN);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkEnd(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    u16 maxHp;
+    s32 nowHp;
+    s32 value;
+    u16 damageToDefender;
+    u16 attackerHp;
+
+    maxHp = fightOutPokemonMaxHpWaruValue(defender, 1);
+    damageToDefender = maxHp
+        * fightTrainerAiWazaDoWazaDamageFunc(trainer, attacker, wazaDataId, defender, 1) / 100;
+    maxHp = fightOutPokemonMaxHpWaruValue(attacker, 1);
+    nowHp = fightOutPokemonNowHpWaruValue(attacker, 2);
+    attackerHp = maxHp * nowHp / 100;
+    value = fightTrainerAiAddValue(0,
+        (damageToDefender / attackerHp - 1)
+        * fightTrainerGetStatus(0, AI_ADDSUB_SHADOW_END_HP_RATIO,
+            FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0));
+    if (fightTrainerAiGetFightOutPokemonAbiCntAvd(trainer, defender) <= FIGHT_ABICNT_EVASION_LIMIT) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_END_AVOID_DOWN);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkRemove(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    FIGHT_SIDE *side;
+
+    value = 0;
+    side = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_OWN_SIDE, defender);
+    if (fightSideIsJoutaiDataId(side, JOUTAI_LIGHT_SCREEN) == 1
+        || fightSideIsJoutaiDataId(side, JOUTAI_REFLECT) == 1
+        || fightSideIsJoutaiDataId(side, JOUTAI_SAFEGUARD) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(0, trainer, AI_ADDSUB_SHED_SCREEN_UP);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkHold(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightOutPokemon *enemies[8];
+    s32 value = 0;
+    u8 irekae;
+    u8 i;
+    u16 enemyCount;
+
+    irekae = fightTrainerAiCheckFightFloorCheckFightActionFightOutPokemonIrekaeSelect(
+        trainer, 0, defender, 0);
+    enemyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, enemies, 0, 1);
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_POISON) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_POISON);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_BAD_POISON) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_BAD_POISON);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_BURN) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_BURN);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_PARALYSIS) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_PARALYSIS);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_CONFUSION) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_CONFUSION);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_INFATUATION) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_INFATUATION);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_CURSE) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_CURSE);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_ID_PERISH_SONG) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_PERISH_SONG);
+        }
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, enemies[i], JOUTAI_LEECH_SEED) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_SHADOW_HOLD_LEECH_SEED);
+        }
+    }
+    if (fightTrainerAiGetFightFloorNowTenkouDataId(trainer, 0, 1) == FIGHT_WEATHER_SHADOW_SKY) {
+        for (i = 0; i < enemyCount; i++) {
+            if (!pokemonIsDarkPokemon(fightOutPokemonGetPokemonPtr(enemies[i]))) {
+                value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                    AI_ADDSUB_SHADOW_HOLD_NON_DARK_ENEMY);
+            }
+        }
+    }
+    if (irekae) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_SHADOW_HOLD_SWITCH_ELIGIBLE);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDarkWeather(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightPokemon *party[24];
+    s32 value;
+    u8 tenkou;
+    u16 count;
+    u16 i;
+
+    value = 0;
+    tenkou = fightTrainerAiGetFightFloorNowTenkouDataId(trainer, 0, 0);
+    count = fightFloorGetFightTrainerFightPokemonPtrAry(0, trainer, party, 1, 1);
+    if (tenkou != FIGHT_WEATHER_SHADOW_SKY) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_DARK_WEATHER_NOT_ACTIVE);
+    }
+    for (i = 0; i < count; i++) {
+        if (pokemonIsDarkPokemon(fightPokemonGetPokemonPtr(party[i])) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_DARK_WEATHER_DARK_ALLY);
+            break;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        if (fightTrainerAiGetFightPokemonPokemonDataId(trainer, party[i]) == POKEMON_DATA_ID_CASTFORM) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_DARK_WEATHER_CASTFORM);
+            break;
+        }
+    }
+    if (tenkou == FIGHT_WEATHER_SHADOW_SKY) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_DARK_WEATHER_ALREADY_ACTIVE);
+    }
+    if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+            0, trainer, 1, 1, WAZA_DATA_ID_DARK_SKY, 0) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_DARK_WEATHER_ALLY_DARK_SKY);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueHuuin(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightOutPokemon *enemies[8];
+    s32 value;
+    u16 enemyCount;
+    s32 i;
+
+    value = 0;
+    enemyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, enemies, 0, 1);
+    if (fightOutPokemon_GetFightoutTurnCount(attacker) != 0) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_IMPRISON_SELF_ACTED);
+    }
+    for (i = 0; i < enemyCount; i++) {
+        if (fightOutPokemon_GetFightoutTurnCount(enemies[i]) != 0) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_IMPRISON_ENEMY_ACTED);
+        }
+        break;
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueMahi(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    u8 i;
+
+    value = 0;
+    for (i = 0; i < 18; i++) {
+        if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+                0, trainer, 1, 1, joutaiIzyouWazaTbl[i], defender) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_ALLY_STATUS_MOVE_PLANNED);
+            break;
+        }
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueKonran(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    u8 i;
+
+    value = 0;
+    for (i = 0; i < 5; i++) {
+        if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+                0, trainer, 1, 1, konranWazaTbl[i], defender) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_ALLY_STATUS_MOVE_PLANNED);
+            break;
+        }
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueYumekui(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    u16 maxHp;
+    s32 damage;
+    s32 hpRate;
+    s32 value;
+
+    fightTrainerAiGetFightOutPokemonNowHp(trainer, attacker);
+    maxHp = fightTrainerAiGetFightOutPokemonMaxHp(trainer, attacker);
+    damage = fightTrainerAiWazaDoWazaDamageFunc(trainer, attacker, wazaDataId, defender, 1);
+    hpRate = damage / 2 * 100 / maxHp;
+    if (hpRate > FIGHT_AI_HP_RATE_MAX) {
+        hpRate = FIGHT_AI_HP_RATE_MAX;
+    }
+    value = fightTrainerAiAddValue(0,
+        hpRate / fightTrainerGetStatus(0, AI_ADDSUB_DREAM_EATER_HP_DIVISOR,
+                                       FIGHT_TRAINER_QUERY_AI_VALUE_ADDSUB_VALUE, 0));
+    if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+            0, trainer, 1, 1, WAZA_DATA_ID_HELPING_HAND, attacker) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_DREAM_EATER_ALLY_HELPING_HAND);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueKawarawari(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    FIGHT_SIDE *side;
+
+    value = 0;
+    side = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_OWN_SIDE, defender);
+    if (fightSideIsJoutaiDataId(side, JOUTAI_LIGHT_SCREEN) == 1
+        || fightSideIsJoutaiDataId(side, JOUTAI_REFLECT) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_BRICK_BREAK_SCREEN_UP);
+    }
+    if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+            0, trainer, 1, 1, WAZA_DATA_ID_HELPING_HAND, attacker) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_BRICK_BREAK_ALLY_HELPING_HAND);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueTeiryouDameeji(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+
+    value = 0;
+    if (fightTrainerAiGetFightOutPokemonPokemonDataId(trainer, defender) == POKEMON_DATA_ID_SHUCKLE) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_FIXED_DAMAGE_SHUCKLE);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueHikarinokabe(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    u16 speAtk;
+    u16 phyAtk;
+    u16 lastUseWazaDataId;
+
+    value = 0;
+    speAtk = fightTrainerAiGetFightOutPokemonSpeAtk(trainer, defender);
+    phyAtk = fightTrainerAiGetFightOutPokemonPhyAtk(trainer, defender);
+    lastUseWazaDataId = fightTrainerAiGetFightOutPokemonLastUseWazaDataId(trainer, defender);
+    if (fightTrainerAiWazaDoWazaHitFunc(trainer, attacker, wazaDataId, defender) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_LIGHT_SCREEN_HIT);
+    }
+    if (phyAtk < speAtk) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_LIGHT_SCREEN_SPECIAL_TARGET);
+    }
+    if (lastUseWazaDataId == WAZA_DATA_ID_BRICK_BREAK) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_LIGHT_SCREEN_TARGET_BRICK_BREAK);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueRihurekutaa(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+    u16 speAtk;
+    u16 phyAtk;
+    u16 lastUseWazaDataId;
+
+    value = 0;
+    speAtk = fightTrainerAiGetFightOutPokemonSpeAtk(trainer, defender);
+    phyAtk = fightTrainerAiGetFightOutPokemonPhyAtk(trainer, defender);
+    lastUseWazaDataId = fightTrainerAiGetFightOutPokemonLastUseWazaDataId(trainer, defender);
+    if (fightTrainerAiWazaDoWazaHitFunc(trainer, attacker, wazaDataId, defender) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer, AI_ADDSUB_REFLECT_HIT);
+    }
+    if (phyAtk > speAtk) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_REFLECT_PHYSICAL_TARGET);
+    }
+    if (lastUseWazaDataId == WAZA_DATA_ID_BRICK_BREAK) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_REFLECT_TARGET_BRICK_BREAK);
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueOnibi(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightOutPokemon *enemies[8];
+    s32 value = 0;
+    u16 speAtk;
+    u16 phyAtk;
+    u16 lastUseWazaDataId;
+    u16 enemyCount;
+    u16 j;
+    u16 i;
+    u16 species;
+
+    speAtk = fightTrainerAiGetFightOutPokemonSpeAtk(trainer, defender);
+    phyAtk = fightTrainerAiGetFightOutPokemonPhyAtk(trainer, defender);
+    lastUseWazaDataId = fightTrainerAiGetFightOutPokemonLastUseWazaDataId(trainer, defender);
+    enemyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, enemies, 0, 1);
+    for (i = 0; i < enemyCount; i++) {
+        species = fightTrainerAiGetFightOutPokemonPokemonDataId(trainer, enemies[i]);
+        if (species == POKEMON_DATA_ID_WOBBUFFET
+            || species == POKEMON_DATA_ID_WYNAUT
+            || species == POKEMON_DATA_ID_SHEDINJA
+            || species == POKEMON_DATA_ID_SHUCKLE) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_BURN_STALL_TARGET);
+            break;
+        }
+    }
+    if (phyAtk > speAtk) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_BURN_PHYSICAL_TARGET);
+    }
+    if (lastUseWazaDataId == WAZA_DATA_ID_REFRESH) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_BURN_TARGET_REFRESH);
+    }
+    for (j = 0; j < 18; j++) {
+        if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+                0, trainer, 1, 1, joutaiIzyouWazaTbl[j], defender) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_BURN_ALLY_STATUS_MOVE);
+            break;
+        }
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueDoku(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    FightOutPokemon *enemies[8];
+    s32 value = 0;
+    u16 lastUseWazaDataId;
+    u16 enemyCount;
+    u16 j;
+    u16 i;
+    u16 species;
+
+    enemyCount = fightFloorGetFightTrainerFightOutPokemonPtrAry(0, trainer, enemies, 0, 1);
+    lastUseWazaDataId = fightTrainerAiGetFightOutPokemonLastUseWazaDataId(trainer, defender);
+    for (i = 0; i < enemyCount; i++) {
+        species = fightTrainerAiGetFightOutPokemonPokemonDataId(trainer, enemies[i]);
+        if (species == POKEMON_DATA_ID_WOBBUFFET
+            || species == POKEMON_DATA_ID_WYNAUT
+            || species == POKEMON_DATA_ID_SHEDINJA
+            || species == POKEMON_DATA_ID_SHUCKLE) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_POISON_STALL_TARGET);
+            break;
+        }
+    }
+    if (lastUseWazaDataId == WAZA_DATA_ID_REFRESH) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_POISON_TARGET_REFRESH);
+    }
+    for (j = 0; j < 18; j++) {
+        if (fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(
+                0, trainer, 1, 1, joutaiIzyouWazaTbl[j], defender) == 1) {
+            value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+                AI_ADDSUB_ALLY_STATUS_MOVE_PLANNED);
+            break;
+        }
+    }
+    return value;
+}
+
+s32 fightTrainerAiWazaValueBatontatti(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
+    u16 wazaDataId, FightOutPokemon *defender)
+{
+    s32 value;
+
+    value = 0;
+    if (fightTrainerAiIsFightOutPokemonAllAbiCntTakai(trainer, attacker) == 1) {
+        value = fightTrainerAiAddValueByAddsubDataId(value, trainer,
+            AI_ADDSUB_BATON_PASS_ALL_STATS_HIGH);
+    }
+    return value;
+}
 
 s32 fightTrainerAiWazaValueHaradaiko(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
     u16 wazaDataId, FightOutPokemon *defender)

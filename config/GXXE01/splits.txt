@@ -3980,7 +3980,7 @@ game/app/fight/fightTrainerAiWazaDamageFightPokemon.cpp:
 	.text       start:0x802DDB64 end:0x802DDCD0
 
 game/app/fight/fightTrainerAiWazaValue.cpp:
-	.text       start:0x802DEFE4 end:0x802DF948
+	.text       start:0x802DDCD0 end:0x802DF948
 	.sdata2     start:0x804EFC60 end:0x804EFC64
 
 game/app/fight/fightTrainerAiComboContinueFunc.cpp:

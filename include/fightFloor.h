@@ -417,6 +417,8 @@ FIGHT_SIDE *fightFloor_GetAppointSidePtr(FIGHT_FLOOR *floor);
 void *fightFloor_GetAppointItemPtr(FIGHT_FLOOR *floor);
 u8 fightFloorGetNowTenkouDataId(FIGHT_FLOOR *floor, s32 checkWeatherSuppressingAbilities);
 u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightOutPokemon **pokemonArray, u8 allies, u8 deployedOnly);
+u8 fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(FIGHT_FLOOR *floor, void *trainer, u8 allies, u8 deployedOnly, u16 wazaDataId, FightOutPokemon *target);
+u16 fightFloorGetFightTrainerFightPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightPokemon **pokemonArray, u8 allies, u8 deployedOnly);
 u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
 void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
 void fightFloor_SetEncountDataId(FIGHT_FLOOR *floor, u16 dataId);
