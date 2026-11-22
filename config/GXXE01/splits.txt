@@ -3777,6 +3777,14 @@ game/app/deck/deck.cpp:
 game/app/deck/deckDataVirtualBios.cpp:
 	.text       start:0x8028BFB8 end:0x8028C400
 
+game/app/ant/ant.cpp:
+	.text       start:0x8028E7E4 end:0x80292298
+	.rodata     start:0x802FAD38 end:0x802FAE18
+	.bss        start:0x804DFEF0 end:0x804E0A38
+	.sdata      start:0x804E86A0 end:0x804E86B0
+	.sbss       start:0x804EBB88 end:0x804EBB90
+	.sdata2     start:0x804EF6A0 end:0x804EF6D8
+
 game/app/ribbon/ribbon.cpp:
 	.text       start:0x802922C4 end:0x802922FC
 

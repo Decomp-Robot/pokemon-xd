@@ -162,6 +162,7 @@ struct Pokemon {
     u16 getPhyAtk() const;
     u16 getMaxHp() const;
     bool isLegend() const;
+    bool isRare() const;
     bool isDarkPokemon() const;
     unsigned long getRnd() const;
     unsigned long getCatchTrainerRnd() const;

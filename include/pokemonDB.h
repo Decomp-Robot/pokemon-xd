@@ -72,6 +72,7 @@ enum PokemonDataID {
 };
 u32 pokemonDB_GetName(u16);
 bool pokemonDB_GetTeachWaza(u16, u16);
+u32 pokemonDB_GetPokebodyId(u16 species, u8 shiny);
 
 void fightOutPokemon_SetSequencePtr(FightOutPokemon *pokemon, struct NullSequence *sequence);
 FightPokemon *fightOutPokemon_GetMotoFightPokemonPtr(FightOutPokemon *pokemon);

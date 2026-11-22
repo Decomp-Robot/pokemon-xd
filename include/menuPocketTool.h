@@ -11,6 +11,9 @@
 // Move a value toward zero by the specified step.
 void menuPocketToolFloatToZero(f32 &value, f32 step);
 
+// Sprite drawn in place of a Pokemon animation when no animation data is loaded.
+extern u16 menuRelivehallPcBoxDefaultPokemonSprite;
+
 // Angle helpers the pocket menus share. The refresh helpers wrap a value
 // into a fixed range and the subtraction helpers wrap the difference of two
 // values, so callers can normalise a heading before comparing or drawing it.
