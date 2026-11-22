@@ -2520,8 +2520,9 @@ game/app/hero/heroBios.cpp:
 	.text       start:0x8014DC28 end:0x8014E174
 
 game/app/hero/heroMove.cpp:
-	.text       start:0x8015215C end:0x8015224C
+	.text       start:0x801520F4 end:0x8015224C
 	.ctors      start:0x802E9FD0 end:0x802E9FD4
+	.rodata     start:0x802F3800 end:0x802F3810
 	.bss        start:0x804479F0 end:0x80448050
 
 game/app/hero/heroPokemonGet.cpp:

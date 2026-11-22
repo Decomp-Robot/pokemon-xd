@@ -37,7 +37,8 @@ enum HEROMOVE_MEMBER {
     HERO_MOVE_HERO = 0,
     HERO_MOVE_COMPANION_1 = 1,
     HERO_MOVE_COMPANION_2 = 2,
-    HERO_MOVE_COMPANION_3 = 3
+    HERO_MOVE_COMPANION_3 = 3,
+    HERO_MOVE_MEMBER_COUNT
 };
 
 struct FOOTWORK {
@@ -54,7 +55,7 @@ struct HeroMoveMember {
 
 struct HeroMoveState {
     HEROMOVE_MEMBER leader;
-    HeroMoveMember members[4];
+    HeroMoveMember members[HERO_MOVE_MEMBER_COUNT];
     long leaderLogTimer; // 0x84: frames since the leader position was last logged.
     long leaderLogCount; // 0x88: positions the leader log holds, up to 60.
     GSvec leaderLog[60]; // 0x8C: past leader positions, newest first.
@@ -80,6 +81,9 @@ struct HeroMoveState {
 };
 
 extern HeroMoveState HeroMove;
+
+/* Resolve the people group and resource ID of a hero or follower member. */
+bool getResID(u32* group, u32* resource, HEROMOVE_MEMBER member);
 
 #ifdef __cplusplus
 extern "C" {
