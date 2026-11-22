@@ -28,6 +28,8 @@ public:
     GSresID* getResource(int);
     int getResourceIdx(GSresID*);
     GSresID* newResource();
+    GSvec* newVector();
+    void deleteVector(GSvec* vector);
     u8 mVectorReferences[128];
     u8 mResourceReferences[64];
     GSvec mVectors[128];
@@ -245,7 +247,7 @@ public:
 class tigaCellMemory {
 public:
     int mStringCount;
-    u32 mUnknown;
+    int mUnknown;
 
     tigaCellMemory();
     virtual ~tigaCellMemory();

@@ -3608,9 +3608,11 @@ game/GSAPI/GSscript/tiga.cpp:
 	.sbss       start:0x804EB9C0 end:0x804EB9C8
 
 game/GSAPI/GSscript/tvariant.cpp:
-	.text       start:0x80242438 end:0x802424B4
+	.text       start:0x8024217C end:0x802424B4
 	.ctors      start:0x802E9FE8 end:0x802E9FEC
-	.bss        start:0x804B0F80 end:0x804B0F8C
+	.data       start:0x80418A00 end:0x80418A10
+	.bss        start:0x804B0F80 end:0x804B178C
+	.sdata2     start:0x804EED30 end:0x804EED34
 
 game/GSAPI/GSscript/chank.cpp:
 	.text       start:0x802424B4 end:0x802426B4
