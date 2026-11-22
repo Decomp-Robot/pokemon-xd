@@ -3878,6 +3878,9 @@ game/GSAPI/GSgfx/GSgfx.cpp:
 	.sbss       start:0x804EBC98 end:0x804EBCA0
 	.sdata2     start:0x804EF988 end:0x804EF990
 
+game/GSAPI/GSgfx/layer.cpp:
+	.text       start:0x802A9F18 end:0x802AA1C4
+
 game/GSAPI/GSgfx/render.cpp:
 	.text       start:0x802AAF90 end:0x802ABFE4
 	.bss        start:0x804E1B60 end:0x804E2240

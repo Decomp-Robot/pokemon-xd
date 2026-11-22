@@ -223,6 +223,16 @@ enum GSgfxRenderMode { GSGFX_RENDER_MODE_NORMAL = 0, GSGFX_RENDER_MODE_BLUE_CHAN
 // Layer commands of the frame (GSgfxLayer +0x04): the bits the render modules
 // set and the layer's own setup pass consumes one by one.
 enum GSgfxRenderFlag {
+    GSGFX_RENDER_FLAG_VISIBLE = 0x1,
+    GSGFX_RENDER_FLAG_PASS0_VISIBLE = 0x2,
+    GSGFX_RENDER_FLAG_PASS1_VISIBLE = 0x4,
+    GSGFX_RENDER_FLAG_CLEAR_COLOR = 0x8,
+    GSGFX_RENDER_FLAG_CLEAR_ALPHA = 0x10,
+    GSGFX_RENDER_FLAG_CLEAR_DEPTH = 0x20,
+    GSGFX_RENDER_FLAG_WANT_CLEAR_COLOR = 0x40,
+    GSGFX_RENDER_FLAG_WANT_CLEAR_ALPHA = 0x80,
+    GSGFX_RENDER_FLAG_WANT_CLEAR_DEPTH = 0x100,
+    GSGFX_RENDER_FLAG_TEXTURE_COPY = 0x200,
     GSGFX_RENDER_FLAG_ZDRAW_BANK = 0x08000000,      // particle bank started
     GSGFX_RENDER_FLAG_INVALIDATE_TEXTURE_CACHE = 0x10000000, // invalidate all textures before drawing
 };
@@ -469,6 +479,13 @@ enum GSgfxCachedStateConstants {
     GS_GFX_COLOR_CHANNEL_NULL = 0xFF,
 };
 
+// How a layer's framebuffer copy is configured (mTextureCopyMode).
+enum GSgfxTextureCopyMode {
+    GSGFX_TEXTURE_COPY_DISABLED = 0,
+    GSGFX_TEXTURE_COPY_NO_CONFIG = 1,
+    GSGFX_TEXTURE_COPY_CUSTOM_CONFIG = 2,
+};
+
 /* Selects the layer-owned, shared framebuffer copy in SetTextureCopy. */
 #define GS_GFX_LAYER_SHARED_TEXTURE_COPY ((GStexture *)0xFEFEFEFE)
 
@@ -481,8 +498,8 @@ public:
     void SetPassRedirect(GSgfxLayerPass fromPass, bool enabled, GSgfxLayer *toLayer,
                          GSgfxLayerPass toPass, GSgfxLayerOffset offset);
     void SetClearFlags(bool color, bool alpha, bool depth);
-    void SetTextureCopy(GStexture* texture, bool flag, u8* image);
-    void GetFifoSize(unsigned long *pass0Size, unsigned long *pass1Size);
+    void SetTextureCopy(GStexture* texture, bool enableCopy, u8* copyConfig);
+    void GetFifoSize(u32 *pass0Size, u32 *pass1Size);
     void textureCopy(GSgfxLayerPass pass, GStexture *texture, bool flag, u8 *image,
                      bool clearColor, bool clearAlpha, bool clearDepth);
     GStexture *GetTextureCopy(void);
@@ -987,7 +1004,9 @@ public:
     GSgfxPrimType mPrimitiveType; // 0x1998: primitive op the surface emits.
     GSgfxVF *mVertexFormat; // 0x199C
     GSgfxMatrixStack *mMatrixStack; // 0x19A0
-    u8 _19A4[15];
+    GStexture *mTextureCopy; // texture used for the layer's framebuffer copy.
+    u32 mTextureCopyMode; // selects the copy configuration source.
+    u8 mTextureCopyConfig[7]; // caller-supplied copy configuration.
     u8 mVisibleHolds; // 0x19B3: holders that keep the layer on screen.
     u8 _19B4[4];
     s8 mDistortionScale;
