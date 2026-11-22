@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 void menuTopJumpVSMode(void);
+void menuTopSetBattleSelectMode(s32 mode);
 void menuTopSelectCtrl(tagWINDOW_WORK *control);
 void menuTopLoadHook(void);
 void menuTopSelectMessageHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);

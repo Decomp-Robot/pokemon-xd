@@ -19,7 +19,6 @@ enum {
     ENTRY_STATE_CONFIRM = 1,
     ENTRY_STATE_READY = 2,
     ENTRY_STATE_DONE = 0x7FFFFFFF,
-    ENTRY_ORDER_UNUSED = 0xF,
     ENTRY_POKEMON_DEOXYS = 0x19A
 };
 
@@ -149,48 +148,48 @@ extern "C" s32 menuCB_PokemonEntry(_MENUCBWORK *work)
     soundOpenPlay(0x5DB, 0, 0xFF);
     _menuCBPokemonEntryWorkInit();
     gba_SIProbe_ErrorCntClear(-1);
-    _CB.mAbortRequest = -1;
-    _CB.mEntryState = ENTRY_STATE_SELECT;
-    _CB.selectResult = 0;
-    _CB.confirmationComplete = 0;
-    _CB.confirmationInputDelay = 2;
-    _CB.mPlayerLeftEntry = 0;
+    _CB.mEntry.mAbortRequest = -1;
+    _CB.mEntry.mEntryState = ENTRY_STATE_SELECT;
+    _CB.mVersus.selectResult = 0;
+    _CB.mMenuResult.confirmationComplete = 0;
+    _CB.mEntry.confirmationInputDelay = 2;
+    _CB.mGba.mPlayerLeftEntry = 0;
     menuCB_SE_Play(0x14);
     menuOpen(0xC6, 0);
     menuOpen(0xC5, 0);
     opened = 0;
     do {
-        if (_CB.mEntryState == ENTRY_STATE_CONFIRM) {
+        if (_CB.mEntry.mEntryState == ENTRY_STATE_CONFIRM) {
             if (!opened) {
-                menuOpenCustom(0xE2, windowGetActiveID(), &_CB.selectResult, 0, 0, 0);
+                menuOpenCustom(0xE2, windowGetActiveID(), &_CB.mVersus.selectResult, 0, 0, 0);
                 opened = 1;
             }
-            if (_CB.confirmationComplete != 0) {
-                if (_CB.selectResult == 0) {
+            if (_CB.mMenuResult.confirmationComplete != 0) {
+                if (_CB.mVersus.selectResult == 0) {
                     _menuCBPokemonEntrySetEntryFlag(0, 1);
-                    _CB.mEntryState = ENTRY_STATE_READY;
+                    _CB.mEntry.mEntryState = ENTRY_STATE_READY;
                 } else {
                     toolentryTaisenInitPokemonOrder(0);
-                    _CB.mEntryState = ENTRY_STATE_SELECT;
-                    _CB.selectResult = 0;
-                    _CB.confirmationComplete = 0;
-                    _CB.confirmationInputDelay = 2;
+                    _CB.mEntry.mEntryState = ENTRY_STATE_SELECT;
+                    _CB.mVersus.selectResult = 0;
+                    _CB.mMenuResult.confirmationComplete = 0;
+                    _CB.mEntry.confirmationInputDelay = 2;
                     menuCloseCustom(0xE2, 0, 0);
                     opened = 0;
                 }
             }
         }
-        if (_CB.mPlayerLeftEntry == 1) {
+        if (_CB.mGba.mPlayerLeftEntry == 1) {
             _menuCBPokemonWork.mConnectionOK = 0;
         }
         if (_menuCBPokemonEntryAllPlayer() != 0) {
-            _CB.mEntryState = ENTRY_STATE_DONE;
+            _CB.mEntry.mEntryState = ENTRY_STATE_DONE;
         }
         if (_menuCBPokemonWork.mConnectionOK == 0) {
-            _CB.mEntryState = ENTRY_STATE_DONE;
+            _CB.mEntry.mEntryState = ENTRY_STATE_DONE;
         }
         GSthreadSwitch();
-    } while (_CB.mEntryState != ENTRY_STATE_DONE);
+    } while (_CB.mEntry.mEntryState != ENTRY_STATE_DONE);
 
     if (_menuCBPokemonWork.mConnectionOK == 0) {
         menuCB_SE_Play(0x15);
@@ -476,8 +475,8 @@ extern "C" u16 menuCBPokemonEntryPokemonNumMin(long port)
     u16 limit;
     u16 num;
 
-    if (menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].mPokemonCountMode == 0) {
-        limit = menuCBTaisenWorkActive->mRulesetData[menuCBTaisenWorkActive->ruleId].mPokemonCount;
+    if (pGCB->mRulesetData[pGCB->ruleId].mPokemonCountMode == 0) {
+        limit = pGCB->mRulesetData[pGCB->ruleId].mPokemonCount;
     } else {
         limit = 1;
     }

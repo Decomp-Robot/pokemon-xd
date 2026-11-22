@@ -15,7 +15,8 @@ enum MemcardTaskRequest {
     MEMCARD_TASK_WRITE = 4,
     MEMCARD_TASK_SAVE_OPTIONS = 7,
     MEMCARD_TASK_SAVE = 11,
-    MEMCARD_TASK_DELETE = 12
+    MEMCARD_TASK_DELETE = 12,
+    MEMCARD_TASK_SAVE_RULES = 13
 };
 
 enum MemcardTaskResult {

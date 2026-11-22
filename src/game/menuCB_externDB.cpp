@@ -1061,7 +1061,7 @@ extern "C" void menuTool_BattleBA03_Ctrl(tagWINDOW_WORK *window)
     menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
     if (_CB.connectMode == 0 && menuCBBattleStartGetStatus() == 0 &&
         menuCB_GetDisconnectedGBA() != 0) {
-        _CB.battleDisconnected = 1;
+        _CB.mGba.battleDisconnected = 1;
         window->mAccept = 1;
         window->mCancel = 1;
     }
@@ -1299,10 +1299,10 @@ extern "C" void menuCB_error01_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         break;
     }
     case ERROR01_ITEM_LEFT_COLUMN:
-        menuCBPokemon_ErrorListDisp(window, sprite, _CB.error00Cursor, 0);
+        menuCBPokemon_ErrorListDisp(window, sprite, _CB.mVersus.error00Cursor, 0);
         break;
     case ERROR01_ITEM_RIGHT_COLUMN:
-        menuCBPokemon_ErrorListDisp(window, sprite, _CB.error00Cursor, 1);
+        menuCBPokemon_ErrorListDisp(window, sprite, _CB.mVersus.error00Cursor, 1);
         break;
     case ERROR01_ITEM_TITLE:
         sprite->mMsgID = MSG_CB_ERROR01_TITLE;
@@ -1312,12 +1312,12 @@ extern "C" void menuCB_error01_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
 
 extern "C" void menuTool_error01_Button(tagWINDOW_WORK *window)
 {
-    _CB.error01SelectedItem = window->mCursor.y;
+    _CB.mVersus.error01SelectedItem = window->mCursor.y;
     if (pauseIsPause() == 0) {
         if ((windowGetKeyInfo()->mKeyTrg & WINDOW_KEY_ACCEPT) != 0) {
             window->mAccept = 1;
         } else if ((windowGetKeyInfo()->mKeyTrg & WINDOW_KEY_CANCEL) != 0) {
-            _CB.error01Confirmed = 1;
+            _CB.mMenuResult.error01Confirmed = 1;
             window->mAccept = 1;
             window->mCancel = 1;
         }
@@ -1328,7 +1328,7 @@ extern "C" void menuTool_error01_Ctrl(tagWINDOW_WORK *window)
 {
     if (window->mState == WINDOW_STATE_ACTIVE) {
         s32 i;
-        for (i = 0; i <= _CB.error01LastItem; ++i) {
+        for (i = 0; i <= _CB.mEntry.error01LastItem; ++i) {
             menuItemBiosSetSelectFlag(MENU_ID_CB_ERROR01, error01MenuItemIds[i], true);
         }
         for (; i < ERROR01_ITEM_COUNT; ++i) {
@@ -1349,19 +1349,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_0:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 0);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 0);
         break;
     case ERROR00_ITEM_CURSOR_0_A:
     case ERROR00_ITEM_CURSOR_0_B:
     case ERROR00_ITEM_CURSOR_0_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 0);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 0 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 0);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 0 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_0:
-        menuCBPokemonLevel(window, _CB.entryNo, 0, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 0, 1);
         break;
     case ERROR00_ITEM_NAME_0:
-        menuCBPokemonName(window, _CB.entryNo, 0, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 0, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_0:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 0);
@@ -1377,19 +1377,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_1:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 1);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 1);
         break;
     case ERROR00_ITEM_CURSOR_1_A:
     case ERROR00_ITEM_CURSOR_1_B:
     case ERROR00_ITEM_CURSOR_1_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 1);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 1 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 1);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 1 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_1:
-        menuCBPokemonLevel(window, _CB.entryNo, 1, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 1, 1);
         break;
     case ERROR00_ITEM_NAME_1:
-        menuCBPokemonName(window, _CB.entryNo, 1, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 1, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_1:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 1);
@@ -1405,19 +1405,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_2:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 2);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 2);
         break;
     case ERROR00_ITEM_CURSOR_2_A:
     case ERROR00_ITEM_CURSOR_2_B:
     case ERROR00_ITEM_CURSOR_2_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 2);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 2 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 2);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 2 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_2:
-        menuCBPokemonLevel(window, _CB.entryNo, 2, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 2, 1);
         break;
     case ERROR00_ITEM_NAME_2:
-        menuCBPokemonName(window, _CB.entryNo, 2, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 2, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_2:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 2);
@@ -1433,19 +1433,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_3:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 3);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 3);
         break;
     case ERROR00_ITEM_CURSOR_3_A:
     case ERROR00_ITEM_CURSOR_3_B:
     case ERROR00_ITEM_CURSOR_3_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 3);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 3 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 3);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 3 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_3:
-        menuCBPokemonLevel(window, _CB.entryNo, 3, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 3, 1);
         break;
     case ERROR00_ITEM_NAME_3:
-        menuCBPokemonName(window, _CB.entryNo, 3, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 3, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_3:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 3);
@@ -1461,19 +1461,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_4:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 4);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 4);
         break;
     case ERROR00_ITEM_CURSOR_4_A:
     case ERROR00_ITEM_CURSOR_4_B:
     case ERROR00_ITEM_CURSOR_4_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 4);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 4 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 4);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 4 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_4:
-        menuCBPokemonLevel(window, _CB.entryNo, 4, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 4, 1);
         break;
     case ERROR00_ITEM_NAME_4:
-        menuCBPokemonName(window, _CB.entryNo, 4, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 4, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_4:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 4);
@@ -1489,19 +1489,19 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         winSpriteSetDisp(sprite, false);
         break;
     case ERROR00_ITEM_FACE_5:
-        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.entryNo, 5);
+        menuCBPokemonEntryDispPokemonFace(window, sprite, _CB.mEntry.entryNo, 5);
         break;
     case ERROR00_ITEM_CURSOR_5_A:
     case ERROR00_ITEM_CURSOR_5_B:
     case ERROR00_ITEM_CURSOR_5_C:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == 5);
-        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.error00Cursor == 5 && !window->mAccept);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == 5);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mVersus.error00Cursor == 5 && !window->mAccept);
         break;
     case ERROR00_ITEM_LEVEL_5:
-        menuCBPokemonLevel(window, _CB.entryNo, 5, 1);
+        menuCBPokemonLevel(window, _CB.mEntry.entryNo, 5, 1);
         break;
     case ERROR00_ITEM_NAME_5:
-        menuCBPokemonName(window, _CB.entryNo, 5, 1);
+        menuCBPokemonName(window, _CB.mEntry.entryNo, 5, 1);
         break;
     case ERROR00_ITEM_MARU_WAKU_5:
         menuCBPokemonMaruWaku_ErrorSet(sprite, 5);
@@ -1511,9 +1511,9 @@ extern "C" void menuCB_error00_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
         break;
 
     case ERROR00_ITEM_OK_CURSOR:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.error00Cursor == ERROR00_CURSOR_OK);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.error00Cursor == ERROR00_CURSOR_OK);
         menuCB_Cursol_Disp_AlphaSet(window, sprite,
-                                    _CB.error00Cursor == ERROR00_CURSOR_OK && !window->mAccept);
+                                    _CB.mVersus.error00Cursor == ERROR00_CURSOR_OK && !window->mAccept);
         break;
     case ERROR00_ITEM_GUIDE:
         if (windowSearchID(MENU_ID_CB_ERROR01) != NULL) {
@@ -1543,41 +1543,41 @@ extern "C" void menuTool_error00_Button(tagWINDOW_WORK *window)
     }
     if ((windowGetKeyInfo()->mKeyTrg & WINDOW_KEY_CANCEL) != 0) {
         window->mAccept = 1;
-        _CB.error00Confirmed = 1;
+        _CB.mMenuResult.error00Confirmed = 1;
         menuCB_SE_Play(MENU_SE_CANCEL);
         return;
     }
-    if (_CB.error00LastCursor != -1) {
+    if (_CB.mEntry.error00LastCursor != -1) {
         if ((windowGetKeyRepeat() & WINDOW_KEY_UP) != 0) {
-            if (_CB.error00Cursor == ERROR00_CURSOR_OK) {
-                _CB.error00Cursor = _CB.error00LastCursor;
+            if (_CB.mVersus.error00Cursor == ERROR00_CURSOR_OK) {
+                _CB.mVersus.error00Cursor = _CB.mEntry.error00LastCursor;
                 menuCB_SE_Play(MENU_SE_CURSOR);
                 return;
-            } else if (_CB.error00Cursor != 0) {
-                --_CB.error00Cursor;
+            } else if (_CB.mVersus.error00Cursor != 0) {
+                --_CB.mVersus.error00Cursor;
                 menuCB_SE_Play(MENU_SE_CURSOR);
                 return;
             }
         }
         if ((windowGetKeyRepeat() & WINDOW_KEY_DOWN) != 0) {
-            if (_CB.error00Cursor < _CB.error00LastCursor) {
-                ++_CB.error00Cursor;
+            if (_CB.mVersus.error00Cursor < _CB.mEntry.error00LastCursor) {
+                ++_CB.mVersus.error00Cursor;
                 menuCB_SE_Play(MENU_SE_CURSOR);
                 return;
             }
         }
         if (((windowGetKeyInfo()->mKeyTrg | windowGetKeyInfo2()->mKeyTrg) &
              (WINDOW_KEY_LEFT | WINDOW_KEY_RIGHT)) != 0) {
-            if (_CB.error00Cursor == ERROR00_CURSOR_OK) {
-                _CB.error00Cursor = 0;
+            if (_CB.mVersus.error00Cursor == ERROR00_CURSOR_OK) {
+                _CB.mVersus.error00Cursor = 0;
                 menuCB_SE_Play(MENU_SE_CURSOR);
             } else {
-                _CB.error00Cursor = ERROR00_CURSOR_OK;
+                _CB.mVersus.error00Cursor = ERROR00_CURSOR_OK;
                 menuCB_SE_Play(MENU_SE_CURSOR);
             }
         }
     } else {
-        _CB.error00Cursor = ERROR00_CURSOR_OK;
+        _CB.mVersus.error00Cursor = ERROR00_CURSOR_OK;
     }
 }
 
@@ -1629,22 +1629,22 @@ extern "C" void menuCB_Tunaide03_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
     case ITEM_TEAM_LAYOUT_0_B:
     case ITEM_TEAM_LAYOUT_0_C:
     case ITEM_TEAM_LAYOUT_0_D:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mTeamSelect == 0);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTeamSelect == 0);
         break;
     case ITEM_TEAM_LAYOUT_1_A:
     case ITEM_TEAM_LAYOUT_1_B:
     case ITEM_TEAM_LAYOUT_1_C:
     case ITEM_TEAM_LAYOUT_1_D:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mTeamSelect == 1);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTeamSelect == 1);
         break;
     case ITEM_TEAM_LAYOUT_2_A:
     case ITEM_TEAM_LAYOUT_2_B:
     case ITEM_TEAM_LAYOUT_2_C:
     case ITEM_TEAM_LAYOUT_2_D:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mTeamSelect == 2);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTeamSelect == 2);
         break;
     case ITEM_TEAM_LAYOUT_3:
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mTeamSelect == 3);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTeamSelect == 3);
         menuCB_Cursol_Disp_AlphaSet(window, sprite, true);
         break;
     case ITEM_TRAINER_NAME_0_A:
@@ -1682,39 +1682,39 @@ extern "C" void menuTool_tunaide03_Button(tagWINDOW_WORK *window)
     } else if (windowGetKeyInfo()->mKeyTrg & WINDOW_KEY_CANCEL) {
         window->mAccept = 1;
         window->mCancel = 1;
-        _CB.mTeamSelectCancel = 1;
+        _CB.mMenuResult.mTeamSelectCancel = 1;
         menuCB_SE_Play(MENU_SE_CANCEL);
     } else {
         if ((windowGetKeyInfo()->mKeyTrg | windowGetKeyInfo2()->mKeyTrg) & (WINDOW_KEY_UP | WINDOW_KEY_DOWN)) {
-            switch (_CB.mTeamSelect) {
+            switch (_CB.mVersus.mTeamSelect) {
             case 0:
-                _CB.mTeamSelect = 2;
+                _CB.mVersus.mTeamSelect = 2;
                 break;
             case 1:
-                _CB.mTeamSelect = 3;
+                _CB.mVersus.mTeamSelect = 3;
                 break;
             case 2:
-                _CB.mTeamSelect = 0;
+                _CB.mVersus.mTeamSelect = 0;
                 break;
             case 3:
-                _CB.mTeamSelect = 1;
+                _CB.mVersus.mTeamSelect = 1;
                 break;
             }
             menuCB_SE_Play(MENU_SE_CURSOR);
         }
         if ((windowGetKeyInfo()->mKeyTrg | windowGetKeyInfo2()->mKeyTrg) & (WINDOW_KEY_LEFT | WINDOW_KEY_RIGHT)) {
-            switch (_CB.mTeamSelect) {
+            switch (_CB.mVersus.mTeamSelect) {
             case 0:
-                _CB.mTeamSelect = 1;
+                _CB.mVersus.mTeamSelect = 1;
                 break;
             case 1:
-                _CB.mTeamSelect = 0;
+                _CB.mVersus.mTeamSelect = 0;
                 break;
             case 2:
-                _CB.mTeamSelect = 3;
+                _CB.mVersus.mTeamSelect = 3;
                 break;
             case 3:
-                _CB.mTeamSelect = 2;
+                _CB.mVersus.mTeamSelect = 2;
                 break;
             }
             menuCB_SE_Play(MENU_SE_CURSOR);
@@ -1727,7 +1727,7 @@ extern "C" void menuTool_tunaide03_Ctrl(tagWINDOW_WORK *window)
     menuCB_DispEffect(window);
     menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
     if (menuCB_GetDisconnectedGBA() != 0) {
-        _CB.mTeamSelectGbaDisconnected = 1;
+        _CB.mGba.mTeamSelectGbaDisconnected = 1;
         window->mAccept = 1;
         window->mCancel = 1;
     }
@@ -1753,7 +1753,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 
     // slot 0: used in multi battles or when trainer 0 has no face.
     case TUNAIDE02_SLOT0_READY:
-        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) && tunaide02_last_kakunin_flag != 1);
+        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) && tunaide02_last_kakunin_flag != 1);
         break;
     case TUNAIDE02_SLOT0_EMPTY_0:
     case TUNAIDE02_SLOT0_EMPTY_1:
@@ -1772,7 +1772,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
             if (tunaide02_last_kakunin_flag == 1) {
                 winSpriteSetDisp(sprite, true);
             } else {
-                menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) == 0);
+                menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) == 0);
             }
         } else {
             winSpriteSetDisp(sprite, false);
@@ -1780,7 +1780,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         break;
     case TUNAIDE02_SLOT0_WAIT_1:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI || toolbattle_trainerFace(0) == 0) {
-            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) == 0);
+            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) == 0);
         } else {
             winSpriteSetDisp(sprite, false);
         }
@@ -1789,7 +1789,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         if (tunaide02_last_kakunin_flag == 1) {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_START;
         } else if (toolbattle_trainerFace(0) == 0 || _CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_WAIT;
@@ -1802,7 +1802,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         if (tunaide02_last_kakunin_flag == 1) {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_START;
         } else if (toolbattle_trainerFace(0) == 0 || _CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT0_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_WAIT;
@@ -1846,22 +1846,22 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 
     // slot 1: always used.
     case TUNAIDE02_SLOT1_READY:
-        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) && tunaide02_last_kakunin_flag != 2);
+        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) && tunaide02_last_kakunin_flag != 2);
         break;
     case TUNAIDE02_SLOT1_WAIT_0:
         if (tunaide02_last_kakunin_flag == 2) {
             winSpriteSetDisp(sprite, true);
         } else {
-            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) == 0);
+            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) == 0);
         }
         break;
     case TUNAIDE02_SLOT1_WAIT_1:
-        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) == 0);
+        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) == 0);
         break;
     case TUNAIDE02_SLOT1_PROMPT:
         if (tunaide02_last_kakunin_flag == 2) {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_START;
-        } else if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) {
+        } else if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) {
             sprite->mMsgID = 0;
         } else {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_WAIT;
@@ -1870,7 +1870,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
     case TUNAIDE02_SLOT1_PROMPT_SHADOW:
         if (tunaide02_last_kakunin_flag == 2) {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_START;
-        } else if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) {
+        } else if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT1_BIT) {
             sprite->mMsgID = 0;
         } else {
             sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_WAIT;
@@ -1910,7 +1910,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 
     // slot 2: used in multi battles or when trainer 0 has a face.
     case TUNAIDE02_SLOT2_READY:
-        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) != 0);
+        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) != 0);
         break;
     case TUNAIDE02_SLOT2_FRAME_0:
     case TUNAIDE02_SLOT2_FRAME_1:
@@ -1923,14 +1923,14 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
     case TUNAIDE02_SLOT2_WAIT_0:
     case TUNAIDE02_SLOT2_WAIT_1:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI || toolbattle_trainerFace(0) != 0) {
-            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) == 0);
+            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) == 0);
         } else {
             winSpriteSetDisp(sprite, false);
         }
         break;
     case TUNAIDE02_SLOT2_PROMPT:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI || toolbattle_trainerFace(0) != 0) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_WAIT;
@@ -1941,7 +1941,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         break;
     case TUNAIDE02_SLOT2_PROMPT_SHADOW:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI || toolbattle_trainerFace(0) != 0) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT2_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_WAIT;
@@ -1992,7 +1992,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
 
     // slot 3: multi battles only.
     case TUNAIDE02_SLOT3_READY:
-        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) != 0);
+        menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) != 0);
         break;
     case TUNAIDE02_SLOT3_FRAME_0:
     case TUNAIDE02_SLOT3_FRAME_1:
@@ -2006,14 +2006,14 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
     case TUNAIDE02_SLOT3_WAIT_0:
     case TUNAIDE02_SLOT3_WAIT_1:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI) {
-            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) == 0);
+            menuCB_SpriteDispCheckONorOFF(sprite, (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) == 0);
         } else {
             winSpriteSetDisp(sprite, false);
         }
         break;
     case TUNAIDE02_SLOT3_PROMPT:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_WAIT;
@@ -2024,7 +2024,7 @@ extern "C" void menuCB_Tunaide02_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sp
         break;
     case TUNAIDE02_SLOT3_PROMPT_SHADOW:
         if (_CB.battleMode == TUNAIDE02_BATTLE_MODE_MULTI) {
-            if (_CB.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) {
+            if (_CB.mEntry.mTunaide02TempBuff & TUNAIDE02_SLOT3_BIT) {
                 sprite->mMsgID = 0;
             } else {
                 sprite->mMsgID = TUNAIDE02_MSG_PROMPT_SHADOW_WAIT;
@@ -2070,12 +2070,12 @@ extern "C" void menuTool_tunaide02_Button(tagWINDOW_WORK *window)
         for (i = 0; i < 4; i++) {
             trg[i] = windowGetPortKeyInfo(ports[toolentryTaisenGetControlerType(i) - 1])->mKeyTrg;
         }
-        if (_CB.mTunaide02TempBuff == TUNAIDE02_SLOT_ALL) {
+        if (_CB.mEntry.mTunaide02TempBuff == TUNAIDE02_SLOT_ALL) {
             tunaide02_last_kakunin_flag = 1;
             if (trg[0] & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             } else if (trg[0] & TUNAIDE02_KEY_START) {
                 window->mAccept = 1;
@@ -2102,19 +2102,19 @@ extern "C" void menuTool_tunaide02_Button(tagWINDOW_WORK *window)
             if ((trg[0] | trg[1] | trg[2] | trg[3]) & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             }
         }
     } else if (toolbattle_trainerFace(0) != 0) {
         trg[1] = windowGetPortKeyInfo(ports[toolentryTaisenGetControlerType(1) - 1])->mKeyTrg;
         trg[2] = windowGetPortKeyInfo(ports[toolentryTaisenGetControlerType(2) - 1])->mKeyTrg;
-        if (_CB.mTunaide02TempBuff == (TUNAIDE02_SLOT1_BIT | TUNAIDE02_SLOT2_BIT)) {
+        if (_CB.mEntry.mTunaide02TempBuff == (TUNAIDE02_SLOT1_BIT | TUNAIDE02_SLOT2_BIT)) {
             tunaide02_last_kakunin_flag = 2;
             if (trg[1] & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             } else if (trg[1] & TUNAIDE02_KEY_START) {
                 window->mAccept = 1;
@@ -2133,19 +2133,19 @@ extern "C" void menuTool_tunaide02_Button(tagWINDOW_WORK *window)
             if ((trg[1] | trg[2]) & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             }
         }
     } else {
         trg[0] = windowGetPortKeyInfo(ports[toolentryTaisenGetControlerType(0) - 1])->mKeyTrg;
         trg[1] = windowGetPortKeyInfo(ports[toolentryTaisenGetControlerType(1) - 1])->mKeyTrg;
-        if (_CB.mTunaide02TempBuff == (TUNAIDE02_SLOT0_BIT | TUNAIDE02_SLOT1_BIT)) {
+        if (_CB.mEntry.mTunaide02TempBuff == (TUNAIDE02_SLOT0_BIT | TUNAIDE02_SLOT1_BIT)) {
             tunaide02_last_kakunin_flag = 1;
             if (trg[0] & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             } else if (trg[0] & TUNAIDE02_KEY_START) {
                 window->mAccept = 1;
@@ -2164,7 +2164,7 @@ extern "C" void menuTool_tunaide02_Button(tagWINDOW_WORK *window)
             if ((trg[0] | trg[1]) & WINDOW_KEY_CANCEL) {
                 window->mAccept = 1;
                 window->mCancel = 1;
-                _CB.mTunaide02Cancel = 1;
+                _CB.mMenuResult.mTunaide02Cancel = 1;
                 menuCB_SE_Play(MENU_SE_CANCEL);
             }
         }
@@ -2176,7 +2176,7 @@ extern "C" void menuTool_tunaide02_Ctrl(tagWINDOW_WORK *window)
     menuCB_DispEffect(window);
     menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
     if (menuCB_GetDisconnectedGBA() != 0) {
-        _CB.mGbaDisconnected = 1;
+        _CB.mGba.mGbaDisconnected = 1;
         window->mAccept = 1;
         window->mCancel = 1;
     }
@@ -2185,40 +2185,40 @@ extern "C" void menuTool_tunaide02_Ctrl(tagWINDOW_WORK *window)
 extern "C" void menuCB_Tunaide01_4_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     switch (sprite->mItemID) {
-    case RULE_SECOND_OPTION_CHECK_0: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 0); break;
-    case RULE_SECOND_OPTION_CHECK_1: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 1); break;
-    case RULE_SECOND_OPTION_CHECK_2: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 2); break;
-    case RULE_SECOND_OPTION_CHECK_3: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 3); break;
-    case RULE_SECOND_OPTION_CHECK_4: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 4); break;
-    case RULE_SECOND_OPTION_CHECK_5: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect == RULE_SECOND_OPTION && _CB.mRuleNo == 5); break;
-    case RULE_FIRST_OPTION_CHECK_0: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 0); break;
-    case RULE_FIRST_OPTION_CHECK_1: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 1); break;
-    case RULE_FIRST_OPTION_CHECK_2: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 2); break;
-    case RULE_FIRST_OPTION_CHECK_3: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 3); break;
-    case RULE_FIRST_OPTION_CHECK_4: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 4); break;
-    case RULE_FIRST_OPTION_CHECK_5: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mRuleSelect != RULE_SECOND_OPTION && _CB.mRuleNo == 5); break;
+    case RULE_SECOND_OPTION_CHECK_0: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 0); break;
+    case RULE_SECOND_OPTION_CHECK_1: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 1); break;
+    case RULE_SECOND_OPTION_CHECK_2: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 2); break;
+    case RULE_SECOND_OPTION_CHECK_3: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 3); break;
+    case RULE_SECOND_OPTION_CHECK_4: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 4); break;
+    case RULE_SECOND_OPTION_CHECK_5: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect == RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 5); break;
+    case RULE_FIRST_OPTION_CHECK_0: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 0); break;
+    case RULE_FIRST_OPTION_CHECK_1: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 1); break;
+    case RULE_FIRST_OPTION_CHECK_2: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 2); break;
+    case RULE_FIRST_OPTION_CHECK_3: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 3); break;
+    case RULE_FIRST_OPTION_CHECK_4: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 4); break;
+    case RULE_FIRST_OPTION_CHECK_5: menuCB_SpriteDispCheckONorOFF(sprite, _CB.mEntry.mRuleSelect != RULE_SECOND_OPTION && _CB.mVersus.mRuleNo == 5); break;
     case RULE_TRAINER_NAME_0:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 0);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 0);
         menuCBTrainerNameDraw(window, sprite, 0);
         break;
     case RULE_TRAINER_NAME_1:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 1);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 1);
         menuCBTrainerNameDraw(window, sprite, 1);
         break;
     case RULE_TRAINER_NAME_2:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 2);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 2);
         menuCBTrainerNameDraw(window, sprite, 2);
         break;
     case RULE_TRAINER_NAME_3:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 3);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 3);
         menuCBTrainerNameDraw(window, sprite, 3);
         break;
     case RULE_TRAINER_NAME_4:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 4);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 4);
         menuCBTrainerNameDraw(window, sprite, 4);
         break;
     case RULE_TRAINER_NAME_5:
-        menuCBRuleSetSpriteColor(sprite, _CB.mRuleNo == 5);
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mRuleNo == 5);
         menuCBTrainerNameDraw(window, sprite, 5);
         break;
     }
@@ -2241,19 +2241,19 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 
 // Disp callback of the tunaide carousel. The window shows one entry of
 // the field sprite table; when the selection moves, the two panels are slid past each
-// other by _CB.tunaideSlide before the new entry is shown.
+// other by _CB.mEntry.tunaideSlide before the new entry is shown.
 void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     switch (sprite->mItemID) {
     case TUNAIDE_FIELD_ITEM:
-        if (_CB.tunaideSlide == FIELD_SLIDE_IDLE) {
+        if (_CB.mEntry.tunaideSlide == FIELD_SLIDE_IDLE) {
             menuCBSpriteSetData(
-                sprite, menuSpriteBiosGetPtr(field_sprite[_CB.tunaideSelect]));
+                sprite, menuSpriteBiosGetPtr(field_sprite[_CB.mVersus.mStageMode.tunaideSelect]));
             break;
         }
         winSpriteSetDisp(sprite, false);
-        if (_CB.tunaideSlide != FIELD_SLIDE_IDLE) {
-            switch (_CB.tunaideSlide) {
+        if (_CB.mEntry.tunaideSlide != FIELD_SLIDE_IDLE) {
+            switch (_CB.mEntry.tunaideSlide) {
             case FIELD_SLIDE_FROM_TOP_START:
                 field_anime.mPanel.mX = 0;
                 field_anime.mPanel.mY = 0;
@@ -2261,7 +2261,7 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 field_anime.mPanel.mHeight = 0;
                 field_anime.mPanel.mColor = 0xFFFFFFFF;
                 field_anime.mPanel.mSpriteID =
-                    (u16)field_sprite[_CB.tunaideSelect];
+                    (u16)field_sprite[_CB.mVersus.mStageMode.tunaideSelect];
                 field_anime.mPanel.mSpriteX = 0;
                 field_anime.mPanel.mSpriteY = 167;
                 field_anime.mPanel.mFlags = 0;
@@ -2271,11 +2271,11 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 field_anime.mOutgoing.mHeight = 167;
                 field_anime.mOutgoing.mColor = 0xFFFFFFFF;
                 field_anime.mOutgoing.mSpriteID =
-                    (u16)field_sprite[_CB.tunaideSelectPrev];
+                    (u16)field_sprite[_CB.mVersus.tunaideSelectPrev];
                 field_anime.mOutgoing.mSpriteX = 0;
                 field_anime.mOutgoing.mSpriteY = 0;
                 field_anime.mOutgoing.mFlags = 0;
-                _CB.tunaideSlide = FIELD_SLIDE_FROM_TOP;
+                _CB.mEntry.tunaideSlide = FIELD_SLIDE_FROM_TOP;
                 break;
             case FIELD_SLIDE_FROM_BOTTOM_START:
                 field_anime.mPanel.mX = 0;
@@ -2284,7 +2284,7 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 field_anime.mPanel.mHeight = 0;
                 field_anime.mPanel.mColor = 0xFFFFFFFF;
                 field_anime.mPanel.mSpriteID =
-                    (u16)field_sprite[_CB.tunaideSelect];
+                    (u16)field_sprite[_CB.mVersus.mStageMode.tunaideSelect];
                 field_anime.mPanel.mSpriteX = 0;
                 field_anime.mPanel.mSpriteY = 0;
                 field_anime.mPanel.mFlags = 0;
@@ -2294,21 +2294,21 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 field_anime.mOutgoing.mHeight = 167;
                 field_anime.mOutgoing.mColor = 0xFFFFFFFF;
                 field_anime.mOutgoing.mSpriteID =
-                    (u16)field_sprite[_CB.tunaideSelectPrev];
+                    (u16)field_sprite[_CB.mVersus.tunaideSelectPrev];
                 field_anime.mOutgoing.mSpriteX = 0;
                 field_anime.mOutgoing.mSpriteY = 0;
                 field_anime.mOutgoing.mFlags = 0;
-                _CB.tunaideSlide = FIELD_SLIDE_FROM_BOTTOM;
+                _CB.mEntry.tunaideSlide = FIELD_SLIDE_FROM_BOTTOM;
                 break;
             case FIELD_SLIDE_FROM_TOP:
                 field_anime.mPanel.mHeight += 15;
                 if (field_anime.mPanel.mHeight >= 167) {
                     field_anime.mPanel.mHeight = 0;
-                    _CB.tunaideSlide = FIELD_SLIDE_IDLE;
+                    _CB.mEntry.tunaideSlide = FIELD_SLIDE_IDLE;
                     winSpriteSetDisp(sprite, true);
                     menuCBSpriteSetData(
                         sprite,
-                        menuSpriteBiosGetPtr(field_sprite[_CB.tunaideSelect]));
+                        menuSpriteBiosGetPtr(field_sprite[_CB.mVersus.mStageMode.tunaideSelect]));
                 }
                 {
                     FIELD_ANIME_PANEL *panel = &field_anime.mPanel;
@@ -2321,11 +2321,11 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
                 field_anime.mPanel.mHeight += 15;
                 if (field_anime.mPanel.mHeight >= 167) {
                     field_anime.mPanel.mHeight = 0;
-                    _CB.tunaideSlide = FIELD_SLIDE_IDLE;
+                    _CB.mEntry.tunaideSlide = FIELD_SLIDE_IDLE;
                     winSpriteSetDisp(sprite, true);
                     menuCBSpriteSetData(
                         sprite,
-                        menuSpriteBiosGetPtr(field_sprite[_CB.tunaideSelect]));
+                        menuSpriteBiosGetPtr(field_sprite[_CB.mVersus.mStageMode.tunaideSelect]));
                 }
                 {
                     FIELD_ANIME_PANEL *panel = &field_anime.mPanel;
@@ -2338,7 +2338,7 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         break;
     case TUNAIDE_FIELD_INCOMING_ITEM:
-        if (_CB.tunaideSlide != FIELD_SLIDE_IDLE) {
+        if (_CB.mEntry.tunaideSlide != FIELD_SLIDE_IDLE) {
             windowDrawSprite3(field_anime.mPanel.mX, field_anime.mPanel.mY,
                         field_anime.mPanel.mWidth, field_anime.mPanel.mHeight,
                         field_anime.mPanel.mColor, window,
@@ -2351,7 +2351,7 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         break;
     case TUNAIDE_FIELD_OUTGOING_ITEM:
-        if (_CB.tunaideSlide != FIELD_SLIDE_IDLE) {
+        if (_CB.mEntry.tunaideSlide != FIELD_SLIDE_IDLE) {
             windowDrawSprite3(field_anime.mOutgoing.mX,
                         field_anime.mOutgoing.mY,
                         field_anime.mOutgoing.mWidth,
@@ -2366,25 +2366,25 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         break;
     case TUNAIDE_FIELD_NEXT_ARROW_ITEM:
-        if (_CB.mRuleSelect != TUNAIDE_RULE_SELECT_LAST) {
+        if (_CB.mEntry.mRuleSelect != TUNAIDE_RULE_SELECT_LAST) {
             sprite->mRgba.mAlpha = 127;
         }
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.tunaideSelect != TUNAIDE_FIELD_LAST);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mStageMode.tunaideSelect != TUNAIDE_FIELD_LAST);
         break;
     case TUNAIDE_FIELD_PREVIOUS_ARROW_ITEM:
-        if (_CB.mRuleSelect != TUNAIDE_RULE_SELECT_LAST) {
+        if (_CB.mEntry.mRuleSelect != TUNAIDE_RULE_SELECT_LAST) {
             sprite->mRgba.mAlpha = 127;
         }
-        menuCB_SpriteDispCheckONorOFF(sprite, _CB.tunaideSelect != TUNAIDE_FIELD_FIRST);
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mStageMode.tunaideSelect != TUNAIDE_FIELD_FIRST);
         break;
     case TUNAIDE_CURSOR_ITEM_FIRST:
     case TUNAIDE_CURSOR_ITEM_SECOND:
     case TUNAIDE_CURSOR_ITEM_THIRD:
-        if (_CB.tunaideSlide != FIELD_SLIDE_IDLE) {
+        if (_CB.mEntry.tunaideSlide != FIELD_SLIDE_IDLE) {
             winSpriteSetDisp(sprite, false);
         } else {
             winSpriteSetDisp(sprite, true);
-            menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+            menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
         }
         break;
     }

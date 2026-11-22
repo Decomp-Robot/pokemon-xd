@@ -22,6 +22,7 @@ typedef struct GameSetupEntry {
 // Known entries of the setup table, named by what their progress gates.
 enum GameSetupEntryID {
     GAME_SETUP_ENTRY_REPORT_POKEMON = 10, // dark-pokemon progress the save report needs
+    GAME_SETUP_ENTRY_COLOSSEUM_BATTLE = 33, // progress the colosseum battle menu needs
     GAME_SETUP_ENTRY_SCOOTER_UNLOCK = 68, // progress the special scooters need
 };
 

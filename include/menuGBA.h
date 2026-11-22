@@ -17,6 +17,24 @@ enum GBA_ROM_VERSION {
 enum { GBA_ROM_ENTRY_ALL = 0xFFFF };
 
 extern "C" u16 menuGBACGetRomVer(u16 entry);
+
+// How many GBAs the connect menu links; the player on port 1 links last.
+enum _MENU_GBAC_TYPE {
+    MENU_GBAC_TYPE_1GBA = 0,
+    MENU_GBAC_TYPE_2GBA = 1,
+    MENU_GBAC_TYPE_3GBA = 2,
+    MENU_GBAC_TYPE_4GBA = 3
+};
+
+// Options openMenuGBA is called with.
+enum MenuGBACFlags {
+    MENU_GBAC_FLAG_CHANGE = 0x1,        // read the party for a trade.
+    MENU_GBAC_FLAG_BATTLE = 0x2,        // read the party for a battle.
+    MENU_GBAC_FLAG_RETRY = 0x8,         // a failed port may be linked again.
+    MENU_GBAC_FLAG_LOAD_SAVE = 0x10,    // port 1 plays with the GameCube save.
+    MENU_GBAC_FLAG_NO_CONNECT_MSG = 0x40
+};
+
 extern "C" long openMenuGBA(long menu, long mode, Hero** heroes);
 extern "C" void menuGBACSetRomVer(unsigned short version, unsigned short entry);
 // Link progress of one controller port while menuGBAC talks to the GBAs.

@@ -199,6 +199,7 @@ typedef struct Hero {
 
 #ifdef __cplusplus
 extern "C" {
+void heroInit(Hero *hero);
 #endif
 enum HeroStatusID {
     HERO_STATUS_NAME = 1,

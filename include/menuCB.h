@@ -8,8 +8,8 @@
 extern "C" {
 #endif
 
-void menuCB_FlashStart(s32 playFromStart);
-void menuCB_FlashEnd(s32 close);
+void menuCB_FlashStart(bool playFromStart);
+void menuCB_FlashEnd(bool closeFlag);
 
 #ifdef __cplusplus
 }

@@ -33,16 +33,11 @@ enum {
     CB_MENU_FLASH = 261,
     CB_MENU_WINLOSE = 272,
     CB_MENU_VS_END = 275,
-    CB_RESOURCE_GROUP = 20,
-    CB_BATTLE_RESOURCE_GROUP = 2114,
-    CB_SOUND_RESULT = 1504,
-    CB_SOUND_MENU_TRANSITION = 20
+    CB_SOUND_RESULT = 1504
 };
 const u32 CB_FLASH = 0x20093000;
 const u32 CB_FLASH_VS = 0x21533000;
 const u32 CB_FLASH_WINLOSE = 0x21543000;
-const u32 CB_BATTLE_GC_RESOURCE = 0x184F3400;
-const u32 CB_BATTLE_GBA_RESOURCE = 0x195F3400;
 
 void _menuCB_FlashEnd_WINLOSE(void)
 {
@@ -72,7 +67,7 @@ void _menuCB_FlashStart_WINLOSE(void)
         break;
     }
     FlashSystemSetLoopFlag(CB_FLASH_WINLOSE, 0);
-    _CB.flashStartWinLose = 1;
+    _CB.mEntry.flashStartWinLose = 1;
     menuOpen(CB_MENU_WINLOSE, 0);
     menuCB_SE_Play(CB_SOUND_RESULT);
     do {
@@ -98,7 +93,7 @@ void _menuCB_FlashEnd_VS(bool wait)
             GSthreadSwitch();
         } while (winSeqCheckMove(CB_MENU_VS_END));
     } else {
-        _CB.flashEndVS = 1;
+        _CB.mEntry.flashEndVS = 1;
     }
 }
 
@@ -111,8 +106,8 @@ void _menuCB_FlashStart_VS(bool play)
         FlashSystemSetPlayFrameLabel(CB_FLASH_VS, "end_keep", "end_keep");
         FlashSystemSetNowFrameLabel(CB_FLASH_VS, "end_keep");
     }
-    _CB.flashStartVS = 1;
-    _CB.flashEndVS = 0;
+    _CB.mEntry.flashStartVS = 1;
+    _CB.mEntry.flashEndVS = 0;
 }
 
 void _menuCB_FlashEnd(void)
@@ -131,7 +126,7 @@ void _menuCB_FlashStart(bool play)
         FlashSystemSetPlayFrameLabel(CB_FLASH, "end", "end");
         FlashSystemSetNowFrameLabel(CB_FLASH, "end");
     }
-    _CB.flashStart = 1;
+    _CB.mEntry.flashStart = 1;
     menuOpen(CB_MENU_FLASH, 0);
     do {
         GSthreadSwitch();
@@ -164,7 +159,7 @@ extern "C" void menuToolBattleMain(void)
     while (repeat) {
         menuCBBios_CurrentlyWorkingToolBattleSet(1);
         menuCBBattleStartInit(&_CB, MENU_CB_BATTLE_START_PARTY);
-        _CB.battleDisconnected = 0;
+        _CB.mGba.battleDisconnected = 0;
         _CB.battleStartWait = 15;
         menuCBPokemonEntryPokemonFaceFree();
         menuCBPokemonEntryLoadTex();
@@ -202,7 +197,7 @@ extern "C" void menuToolBattleMain(void)
                 menuCloseCustom(CB_MENU_BATTLE, 0, true);
             }
         }
-        if (_CB.battleDisconnected) {
+        if (_CB.mGba.battleDisconnected) {
             menuCB_GBADisconnectedErrorJob();
             menuCB_MenuRollback(CB_MENU_ROOT);
             break;
@@ -218,13 +213,13 @@ extern "C" void menuToolBattleMain(void)
         }
         GSfsysFree(CB_RESOURCE_GROUP);
         GSresFreeGroup(CB_RESOURCE_GROUP);
-        _CB.skipBattleEffect = 1;
+        _CB.mEntry.skipBattleEffect = 1;
         _CB.battleResult = menuCB_Battle(&_CB);
-        _CB.skipBattleEffect = 0;
+        _CB.mEntry.skipBattleEffect = 0;
         _menuCB_FlashStart(false);
         menuCBBattleEndSetPokemonHP();
         menuCBBattleStartInit(&_CB, MENU_CB_BATTLE_START_ENTERED_PARTY);
-        _CB.battleDisconnected = 0;
+        _CB.mGba.battleDisconnected = 0;
         _CB.battleStartWait = 180;
         menuCBPokemonEntryPokemonFaceFree();
         menuCBPokemonEntryLoadTex();
@@ -281,13 +276,13 @@ extern "C" void menuToolBattleMain(void)
         }
         if (nextMenu == CB_MENU_BATTLE || nextMenu == CB_MENU_RESULT) {
             if (_CB.connectMode != CB_CONNECT_SKIP_ENTRY) {
-                if (_CB.battleStageMode == CB_BATTLE_RANDOM_STAGE) {
+                if (_CB.mVersus.mStageMode.battleStageMode == CB_BATTLE_RANDOM_STAGE) {
                     menuCB_InitBattle(&_CB);
                 }
             } else {
                 menuCB_InitBattle(&_CB);
             }
-            if (_CB.battleDisconnected) {
+            if (_CB.mGba.battleDisconnected) {
                 menuCB_GBADisconnectedErrorJob();
                 menuCB_MenuRollback(CB_MENU_ROOT);
                 break;

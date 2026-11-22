@@ -26,7 +26,7 @@ s32 menuCB_GetToolBattleModeFlag(void)
 
 s32 menuCB_GetBattleController2P(void)
 {
-    return _CB.nameEntryMode;
+    return _CB.mEntry.nameEntryMode;
 }
 
 u16 *menuCB_RuleTitleNameGet(s32 ruleId)
@@ -409,7 +409,7 @@ void menuCBBios_InitContext(_MENUCBWORK *work)
     static const u16 sta[4] = { 1, 2, 3, 4 };
     u32 i;
 
-    menuCBTaisenWorkActive = &_CB;
+    pGCB = &_CB;
     if (!menuCBBios_ContextIsLocked()) {
         for (i = 0; i < 4; i++) {
             menuCBBios_InitTrainerFromDataID(&work->mTrainer[i], sta[i], 0);

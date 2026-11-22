@@ -40,6 +40,8 @@ enum TrainerRegulation {
 
 #ifdef __cplusplus
 extern "C" {
+void menuCBRule_CopyRuleData(FightRuleData *dst, const FightRuleData *src);
+bool menuCBRule_CompareRuleData(const FightRuleData *lhs, const FightRuleData *rhs);
 #endif
 
 FightRuleData *menuCB_OreRule(void);

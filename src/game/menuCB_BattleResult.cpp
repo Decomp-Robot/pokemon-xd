@@ -119,33 +119,33 @@ extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
             return 0xA9;
         }
 
-        _CB.selectResult = 0;
-        _CB.confirmationComplete = 0;
+        _CB.mVersus.selectResult = 0;
+        _CB.mMenuResult.confirmationComplete = 0;
         menuSetEnablePort(1);
         winMsgOpen(2, 0x42FF, 1, 1);
 
         if (work->battleMode != 2) {
             switch (pokecoloGetCountryCode()) {
             case 0:
-                _CB.selectResult = menuSubOpenSelect_gba(
+                _CB.mVersus.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg2, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             case 1:
             case 2:
-                _CB.selectResult = menuSubOpenSelect_gba(
+                _CB.mVersus.selectResult = menuSubOpenSelect_gba(
                     0, &menuCBRegionalResultChoices[0], 2, 0x3E, 0x89, 0, 2, 1, 1);
                 break;
             }
-            if (_CB.selectResult == -2) {
+            if (_CB.mVersus.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (_CB.selectResult == -1) {
-                _CB.selectResult = 2;
+            if (_CB.mVersus.selectResult == -1) {
+                _CB.mVersus.selectResult = 2;
             }
             switch (pokecoloGetCountryCode()) {
             case 0:
-                switch (_CB.selectResult) {
+                switch (_CB.mVersus.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -159,7 +159,7 @@ extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
                 break;
             case 1:
             case 2:
-                switch (_CB.selectResult) {
+                switch (_CB.mVersus.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -174,25 +174,25 @@ extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
             /* Four players: as many choices as there are players. */
             switch (pokecoloGetCountryCode()) {
             case 0:
-                _CB.selectResult = menuSubOpenSelect_gba(
+                _CB.mVersus.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg3, 4, 0x3E, 0x89, 0, 4, 1, 1);
                 break;
             case 1:
             case 2:
-                _CB.selectResult = menuSubOpenSelect_gba(
+                _CB.mVersus.selectResult = menuSubOpenSelect_gba(
                     0, submenu_msg1, 3, 0x3E, 0x89, 0, 3, 1, 1);
                 break;
             }
-            if (_CB.selectResult == -2) {
+            if (_CB.mVersus.selectResult == -2) {
                 battleResult = 1;
                 continue;
             }
-            if (_CB.selectResult == -1) {
-                _CB.selectResult = 3;
+            if (_CB.mVersus.selectResult == -1) {
+                _CB.mVersus.selectResult = 3;
             }
             switch (pokecoloGetCountryCode()) {
             case 0:
-                switch (_CB.selectResult) {
+                switch (_CB.mVersus.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -210,7 +210,7 @@ extern "C" s32 menuCBResultMain(_MENUCBWORK *work)
                 break;
             case 1:
             case 2:
-                switch (_CB.selectResult) {
+                switch (_CB.mVersus.selectResult) {
                 case 0:
                     homePlace = 0;
                     break;
@@ -306,16 +306,16 @@ u16 _menuCB_BattleResultGetHomePlace(void)
    hero into the battle entries and goes to the battle; no leaves the screen. */
 s32 _menuCB_BattleResultTonikaku(_MENUCBWORK *work)
 {
-    _CB.selectResult = 0;
-    _CB.confirmationComplete = 0;
+    _CB.mVersus.selectResult = 0;
+    _CB.mMenuResult.confirmationComplete = 0;
 
-    _CB.selectResult =
+    _CB.mVersus.selectResult =
         menuSubOpenSelect3(0, menuCBHeroTransferChoices, 2, 0x3E, 0x89, 0, 2, 1, 1);
-    if (_CB.selectResult == -1) {
-        _CB.selectResult = 1;
+    if (_CB.mVersus.selectResult == -1) {
+        _CB.mVersus.selectResult = 1;
     }
 
-    switch (_CB.selectResult) {
+    switch (_CB.mVersus.selectResult) {
     case 0:
         toolentryCopyHero();
         return 0xB1;

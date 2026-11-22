@@ -24,23 +24,6 @@ void heroInit(Hero *hero);
 void heroBiosCopy(Hero *dst, Hero *src);
 }
 
-// How many GBAs the connect menu links; the player on port 1 links last.
-enum _MENU_GBAC_TYPE {
-    MENU_GBAC_TYPE_1GBA = 0,
-    MENU_GBAC_TYPE_2GBA = 1,
-    MENU_GBAC_TYPE_3GBA = 2,
-    MENU_GBAC_TYPE_4GBA = 3
-};
-
-// Options openMenuGBA is called with.
-enum {
-    MENU_GBAC_FLAG_CHANGE = 0x1,        // read the party for a trade.
-    MENU_GBAC_FLAG_BATTLE = 0x2,        // read the party for a battle.
-    MENU_GBAC_FLAG_RETRY = 0x8,         // a failed port may be linked again.
-    MENU_GBAC_FLAG_LOAD_SAVE = 0x10,    // port 1 plays with the GameCube save.
-    MENU_GBAC_FLAG_NO_CONNECT_MSG = 0x40
-};
-
 // What _waitAction waits for.
 enum _GBA_WAIT_FLAG {
     GBA_WAIT_MESSAGE = 1,        // the message to be read.
@@ -334,8 +317,8 @@ u8 _mainFlow(_MENU_GBAC_TYPE type, unsigned long flags, Hero **heroes)
 
             _message(MSG_GBAC_UPLOAD, port);
             work->mPhase[port] = GBA_PHASE_UPLOAD;
-            _CB.gbaConnectPort = port;
-            _CB.gbaConnectMode = 2;
+            _CB.mEntry.gbaConnectPort = port;
+            _CB.mEntry.gbaConnectMode = 2;
 
             if (!uploaded) {
                 if (_waitComplete(work) == AGB_STATUS_TERMINATED) {
@@ -678,8 +661,8 @@ _GBA_Connect_WORK *_open_menu(_MENU_GBAC_TYPE type, unsigned long flags, long st
     menuCB_SE_Play(SE_GBAC_OPEN);
     menuOpen(MENU_ID_GBA_CONNECT, 0);
     menuCB_MessageDispOn(MSG_GBAC_NONE, false);
-    _CB.gbaConnectPort = -1;
-    _CB.gbaConnectMode = 2;
+    _CB.mEntry.gbaConnectPort = -1;
+    _CB.mEntry.gbaConnectMode = 2;
     return work;
 }
 

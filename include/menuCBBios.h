@@ -6,6 +6,45 @@
 #include <hero.h>
 #include <types.h>
 
+/* Resource groups and IDs shared by the versus-menu translation units. */
+enum CbResourceGroup {
+    CB_RESOURCE_GROUP = 20,
+    CB_BATTLE_RESOURCE_GROUP = 2114,
+    CB_BATTLE_MENU_RESOURCE_GROUP = 2188
+};
+
+enum CbBattleResource {
+    CB_BATTLE_GC_RESOURCE = 0x184F3400,
+    CB_BATTLE_GBA_RESOURCE = 0x195F3400
+};
+
+enum CbSoundId {
+    CB_SOUND_MENU_TRANSITION = 20,
+    CB_SOUND_MENU_CLOSE = 21
+};
+
+/* Indices of the rule-select entry lists. */
+enum RuleRowIndex {
+    RULE_ROW_ENTRY = 0,
+    RULE_ROW_LIST_SCROLL = 5,
+    RULE_ROW_COUNT = 7
+};
+
+/* Byte size of the SAVE_DATA_IMAGE block. */
+#define MENU_CB_SAVE_IMAGE_SIZE 163792
+
+/* Numbers of 32-bit words in the transient menu state blocks. */
+enum MenuCBStateWordCount {
+    CB_MENU_RESULT_WORDS = 32,
+    CB_MENU_ENTRY_WORDS = 48,
+    CB_MENU_GBA_WORDS = 16
+};
+
+/* Entry-order value of a party slot that holds no entry. */
+enum MenuCBEntryOrder {
+    ENTRY_ORDER_UNUSED = 15
+};
+
 // Trainer records entered through the link-battle menus.
 struct _MENUCBTRAINER {
     _MENUCBTRAINER() {}
@@ -23,7 +62,6 @@ struct _MENUCBTRAINER {
     u8 _131E[2];
 };
 
-/* State shared by the link-battle menus. */
 /* Entry restrictions for one Pokemon. Only the first failed check is reported. */
 typedef struct MenuCBEntrySlotFlags {
     u8 legendPokemon : 1;
@@ -45,56 +83,52 @@ typedef struct MenuCBEntrySlotFlags {
     u16 pad;
 } MenuCBEntrySlotFlags;
 
-struct _MENUCBWORK {
-    /* 0x0000 */ s32 battleResult;
-    /* 0x0004 */ s32 connectMode; // GBA connect-battle flow variant; menuCBBios_InitContext
-                                 // opens menu 0xA4 for 1 and 0xA9 otherwise.
-    /* 0x0008 */ s32 battleMode; // battle mode the connect-battle menus run in.
-    /* 0x000C */ s32 ruleId; // rule set the colosseum screens act on.
-    /* 0x0010 */ s32 mVsStage;
-    /* 0x0014 */ s32 mStartMenuType; // 0x14: menu the battle starts in (0 or 4).
-    /* 0x0018 */ _MENUCBTRAINER mTrainer[4]; // trainer record of each controller port.
-    /* 0x4C98 */ _MENUCBTRAINER mTrainerImmediately[4]; // "fight immediately" records.
-    /* 0x9918 */ FightRuleData mRulesetData[6]; // colosseum rule table, mirror of the save table.
-    /* 0x9C78 */ FightRuleData *mEntryRule; // regulation record the entry screens show.
-    /* 0x9C7C */ u32 mVsBgmIndex;
-    /* 0x9C80 */ u8 _9C80[4];
-    /* Flags for each entry's six Pokemon slots. */
-    /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
-    /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
-    /* 0xA65C */ Hero mHero; // hero snapshot the entry screens work on.
+struct _MENUCBVersusState {
     /* 0xAFD4 */ s32 mVsBattleKind;
     /* 0xAFD8 */ s32 mVsRank;
-    /* 0xAFDC */ u8 _AFDC[4];
+    /* 0xAFDC */ s32 mBattleStartResult;
     /* 0xAFE0 */ s32 selectResult; // result of the battle-result selection dialogue.
     /* 0xAFE4 */ s32 mEntryCursor; // entry row the entry screens' cursor is on.
-    /* 0xAFE8 */ u8 _AFE8[0xAFEC - 0xAFE8];
+    s32 mReserved0[1];
     /* 0xAFEC */ s32 mTeamSelect;
     /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
-    /* 0xAFF4 */ u8 _AFF4[0xAFFC - 0xAFF4];
+    /* 0xAFF4 */ s32 mTunaideRow;
+    /* 0xAFF8 */ s32 mTunaideDoubleBattle;
     union {
-        /* These fields share storage as the menu context is reused. */
         /* 0xAFFC */ s32 battleStageMode;
         /* 0xAFFC */ s32 tunaideSelect;
-    };
+    } mStageMode;
     /* 0xB000 */ s32 tunaideSelectPrev;
     /* 0xB004 */ s32 mRuleNo; // rule record (mRulesetData) the entry screens work on.
     /* 0xB008 */ s32 error00Cursor;
     /* 0xB00C */ s32 error01SelectedItem;
-    /* 0xB010 */ u8 _B010[0xB014 - 0xB010];
-    /* 0xB014 */ s32 mEntrySelect; // entry the trainer rows are drawn for; -1 for the
-                                  // rule row.
-    /* 0xB018 */ u8 _B018[0xB028 - 0xB018];
-    /* 0xB028 */ s32 listRow; // top row of the scrolled entry lists.
-    /* 0xB02C */ u8 _B02C[0xB060 - 0xB02C];
+    /* 0xB010 */ s32 ruleExitRequest; // 1 = back out, 2 = leave from the rule row.
+    /* 0xB014 */ s32 mRuleRowSelect[7]; // selections of the seven rule rows.
+    /* 0xB030 */ s32 standardRuleButton;
+    /* 0xB034 */ s32 savedRuleButton;
+    s32 mReserved1[7];
+};
+
+struct _MENUCBMenuResult {
+    /* 0xB054 */ s32 mVsModeCancel;
+    /* 0xB058 */ s32 mVsSelectCancel;
+    /* 0xB05C */ s32 mBattleStartCancel;
     /* 0xB060 */ s32 confirmationComplete; // confirmation callback has finished.
-    /* 0xB064 */ u8 _B064[0xB068 - 0xB064];
+    /* 0xB064 */ s32 mEntryDecision;
     /* 0xB068 */ s32 mTunaide02Cancel;
     /* 0xB06C */ s32 mTeamSelectCancel;
-    /* 0xB070 */ u8 _B070[0xB088 - 0xB070];
+    /* 0xB070 */ s32 mGCEntryCancel;
+    s32 mReserved0[5];
     /* 0xB088 */ s32 error00Confirmed;
     /* 0xB08C */ s32 error01Confirmed;
-    /* 0xB090 */ u8 _B090[0xB0D4 - 0xB090];
+    /* 0xB090 */ s32 ruleResult; // 0 while editing, 1 saved, 2 drop the edits.
+    /* 0xB094 */ s32 mRuleRowSelectPrev[7]; // selections before the current edit.
+    /* 0xB0B0 */ s32 standardRuleRequest;
+    /* 0xB0B4 */ s32 savedRuleRequest;
+    s32 mReserved1[7];
+};
+
+struct _MENUCBEntryState {
     /* 0xB0D4 */ s32 mTunaide02TempBuff;
     /* 0xB0D8 */ s32 entryNo; // entry the entry screens work on.
     /* 0xB0DC */ s32 error00LastCursor;
@@ -103,7 +137,7 @@ struct _MENUCBWORK {
     /* 0xB0E8 */ int page2D; // 2D Pokemon page of battle mode 1.
     /* 0xB0EC */ s32 page2DSub; // 2D Pokemon page of battle mode 2.
     /* 0xB0F0 */ s32 battleMode2D; // battle mode the 2D Pokemon pages are laid out for.
-    /* 0xB0F4 */ u8 _B0F4[0xB0F8 - 0xB0F4];
+    /* 0xB0F4 */ s32 mSubmenuRunning;
     /* 0xB0F8 */ s32 pokeSelect; // Pokemon list selection (item 0x1E..0x23).
     /* 0xB0FC */ s32 dispState; // display state handed to the menus.
     /* 0xB100 */ s32 selectCount; // number of flagged entry slots.
@@ -115,14 +149,15 @@ struct _MENUCBWORK {
     /* 0xB114 */ s32 tunaideSlide;
     /* 0xB118 */ s32 mRuleCursor; // row the rule and port windows' cursor is on.
     /* 0xB11C */ u32 selectedValue; // entry menuCB_RuleDispColorChenge compares.
-    /* 0xB120 */ u8 _B120[0xB124 - 0xB120];
+    s32 mReserved0[1];
     /* 0xB124 */ s32 mRuleCursorPrev; // row that cursor just left; -1 while no row
                                   // transition is pending.
     /* 0xB128 */ u32 mRuleCursorPrevColor; // colour that row is drawn in.
     /* 0xB12C */ u32 mRuleCursorColor; // colour the cursor row is drawn in.
-    /* 0xB130 */ u8 _B130[0xB138 - 0xB130];
+    /* 0xB130 */ s32 ruleListScrollStep;
+    /* 0xB134 */ s32 ruleListScrollY;
     /* 0xB138 */ u32 savedColor; // window colour menuCB_AlphaGet stored.
-    /* 0xB13C */ u8 _B13C[4];
+    /* 0xB13C */ s32 mFlashSpriteFrames;
     /* 0xB140 */ s32 flashStart;
     /* 0xB144 */ s32 mEntryCursorPrev; // entry row that cursor just left; -1 while no
                                   // row transition is pending.
@@ -139,15 +174,54 @@ struct _MENUCBWORK {
     /* 0xB170 */ s32 flashStartVS;
     /* 0xB174 */ s32 flashEndVS;
     /* 0xB178 */ s32 flashStartWinLose;
-    /* 0xB17C */ u8 _B17C[4];
+    /* 0xB17C */ s32 mVsSelectMenuReopen;
     /* 0xB180 */ s32 hpRecoverySound;
     /* 0xB184 */ s32 skipBattleEffect;
-    /* 0xB188 */ u8 _B188[0xB194 - 0xB188];
+    s32 mReserved1[3];
+};
+
+struct _MENUCBGbaState {
     /* 0xB194 */ s32 mGbaDisconnected; // GBA link dropped while the menu was open.
     /* 0xB198 */ s32 mTeamSelectGbaDisconnected;
     /* 0xB19C */ s32 battleDisconnected;
     /* 0xB1A0 */ s32 mPlayerLeftEntry; // set once a player left the entry.
-    /* 0xB1A4 */ u8 _B1A4[0xB1D4 - 0xB1A4];
+    s32 mReserved0[12];
+};
+
+struct _MENUCBWORK {
+    /* 0x0000 */ s32 battleResult;
+    /* 0x0004 */ s32 connectMode; // GBA connect-battle flow variant; menuCBBios_InitContext
+                                 // opens menu 0xA4 for 1 and 0xA9 otherwise.
+    /* 0x0008 */ s32 battleMode; // battle mode the connect-battle menus run in.
+    /* 0x000C */ s32 ruleId; // rule set the colosseum screens act on.
+    /* 0x0010 */ s32 mVsStage;
+    /* 0x0014 */ s32 mStartMenuType; // menu the battle starts in (3 or 4).
+    /* 0x0018 */ _MENUCBTRAINER mTrainer[4]; // trainer record of each controller port.
+    /* 0x4C98 */ _MENUCBTRAINER mTrainerImmediately[4]; // "fight immediately" records.
+    /* 0x9918 */ FightRuleData mRulesetData[6]; // colosseum rule table, mirror of the save table.
+    /* 0x9C78 */ FightRuleData *mEntryRule; // regulation record the entry screens show.
+    /* 0x9C7C */ u32 mVsBgmIndex;
+    /* 0x9C80 */ s32 mReserved0;
+    /* Flags for each entry's six Pokemon slots. */
+    /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
+    /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
+    /* 0xA65C */ Hero mHero; // hero snapshot the entry screens work on.
+    /* 0xAFD4 */ union {
+        _MENUCBVersusState mVersus;
+        s32 mVersusWords[CB_MENU_RESULT_WORDS];
+    };
+    /* 0xB054 */ union {
+        _MENUCBMenuResult mMenuResult;
+        s32 mMenuResultWords[CB_MENU_RESULT_WORDS];
+    };
+    /* 0xB0D4 */ union {
+        _MENUCBEntryState mEntry;
+        s32 mEntryWords[CB_MENU_ENTRY_WORDS];
+    };
+    /* 0xB194 */ union {
+        _MENUCBGbaState mGba;
+        s32 mGbaWords[CB_MENU_GBA_WORDS];
+    };
     /* 0xB1D4 */ s32 dstBank; // bank/index a party copy is taken from.
     /* 0xB1D8 */ s32 dstIndex;
     /* 0xB1DC */ u32 pokeMsgID; // message menuCBGCEntry_ErrorDisp selected.
@@ -170,8 +244,8 @@ struct _MENUCBWORK {
     /* 0xB4A1 */ s8 mVsHeroNameIndex;
     /* 0xB4A2 */ u16 mVsHeroName[8];
     /* 0xB4B2 */ u8 _B4B2[0xB524 - 0xB4B2];
-    /* 0xB524 */ Pokemon *reliveDancers[8][4]; // Relive hall stage dancers.
-    /* 0xB5A4 */ u8 _B5A4[0xB5F4 - 0xB5A4];
+    /* 0xB524 */ Pokemon *reliveDancers[9][4]; // Relive hall stage dancers.
+    /* 0xB5B4 */ u8 _B5B4[0xB5F4 - 0xB5B4];
 };
 
 struct _TOOL_SAVEDATA {
@@ -181,7 +255,7 @@ struct _TOOL_SAVEDATA {
 };
 
 extern _MENUCBWORK _CB;
-extern _MENUCBWORK *menuCBTaisenWorkActive;
+extern _MENUCBWORK *pGCB;
 extern u8 menuCBBiosContextLocked;
 extern u32 toolbattle_mode_flag;
 extern const s32 staControlerMap[4];
@@ -238,5 +312,6 @@ void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry);
 
 void _menuCBBios_RecoverAllPokemons(Hero *hero);
 void menuCBBios_InitContextAtFirst(_MENUCBWORK *work, _TOOL_SAVEDATA *rules);
+
 
 #endif

@@ -114,7 +114,6 @@ extern const MenuTopBattleSelectFlashData menuTopBattleSelectFlashData = {
 void menuTopInit(void);
 void menuTopExit(void);
 s32 menuTopGetBattleSelectMode(void);
-void menuTopSetBattleSelectMode(s32 mode);
 u8 menuItemBiosGetSelectFlag(s32 menuID, s32 itemID);
 void menuTitleSetSelect(s32 entry, s16 value);
 

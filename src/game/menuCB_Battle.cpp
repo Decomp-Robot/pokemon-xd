@@ -93,7 +93,7 @@ static inline u16 menuCBBattleSelectFloorDataId(_MENUCBWORK *work)
     u16 floorDataId;
 
     if (_CB.connectMode != VS_BATTLE) {
-        if (_CB.battleStageMode == RANDOM_BATTLE_FLOOR) {
+        if (_CB.mVersus.mStageMode.battleStageMode == RANDOM_BATTLE_FLOOR) {
             work->mVsStage = (u16)HSD_Rand() % 6;
         }
         floorDataId = LINK_BATTLE_FLOOR[work->mVsStage];
@@ -155,10 +155,10 @@ s32 menuCB_InitBattle(_MENUCBWORK *work)
     u16 *nameDest;
 
     if (_CB.mVsHeroNameIndex == -1) {
-        rankRange = VS_TRAINER_RANK_SELECT[work->mVsRank][work->mVsBattleKind][VS_RANK_RANGE];
-        playerRankBase = VS_TRAINER_RANK_SELECT[work->mVsRank][work->mVsBattleKind][VS_PLAYER_RANK_BASE];
-        opponentRankBase = VS_TRAINER_RANK_SELECT[work->mVsRank][work->mVsBattleKind][VS_OPPONENT_RANK_BASE];
-        if (work->mVsBattleKind == 0) {
+        rankRange = VS_TRAINER_RANK_SELECT[work->mVersus.mVsRank][work->mVersus.mVsBattleKind][VS_RANK_RANGE];
+        playerRankBase = VS_TRAINER_RANK_SELECT[work->mVersus.mVsRank][work->mVersus.mVsBattleKind][VS_PLAYER_RANK_BASE];
+        opponentRankBase = VS_TRAINER_RANK_SELECT[work->mVersus.mVsRank][work->mVersus.mVsBattleKind][VS_OPPONENT_RANK_BASE];
+        if (work->mVersus.mVsBattleKind == 0) {
             work->mTrainer[0].mVsTrainerIndex = playerRankBase + (u16)HSD_Rand() % rankRange;
             work->mTrainer[1].mVsTrainerIndex = opponentRankBase + (u16)HSD_Rand() % rankRange;
         } else {
@@ -195,7 +195,7 @@ s32 menuCB_InitBattle(_MENUCBWORK *work)
     if (_CB.connectMode == VS_BATTLE) {
         work->mVsBgmIndex %= 3;
         bgmSndId = VS_TRAINER_BGM[work->mVsBgmIndex];
-        if (work->mVsRank == 0) {
+        if (work->mVersus.mVsRank == 0) {
             bgmSndId = VS_FIRST_RANK_BGM;
         }
     } else {
@@ -214,7 +214,7 @@ s32 menuCB_InitBattle(_MENUCBWORK *work)
         break;
     case VS_BATTLE:
     default:
-        if (work->mVsBattleKind == 0) {
+        if (work->mVersus.mVsBattleKind == 0) {
             fightEncountDataBiosSetFightKind(encountData, VS_FIGHT_KIND);
         } else {
             fightEncountDataBiosSetFightKind(encountData, VS_DISTINCT_TRAINERS_FIGHT_KIND);
@@ -253,7 +253,7 @@ s32 menuCB_InitBattle(_MENUCBWORK *work)
         menuCBBios_InitTrainerFromDataID(&work->mTrainer[1], opponentTrainerDataId, encountId);
         work->mTrainer[1].mDataId = opponentTrainerDataId;
         work->mTrainer[1].mVsTrainerIndex = trainerIndex;
-        menuCBTrainerBios_SetControlerID(&work->mTrainer[1], _CB.nameEntryMode);
+        menuCBTrainerBios_SetControlerID(&work->mTrainer[1], _CB.mEntry.nameEntryMode);
         _menuCBBattle_DeleteAllItem(&work->mTrainer[1].mHero);
         _menuCBBattle_DeleteAllItem(&work->mTrainer[1].mBattleHero);
         if (_CB.mVsHeroNameIndex == -1) {
@@ -269,14 +269,14 @@ s32 menuCB_InitBattle(_MENUCBWORK *work)
         }
         fightTrainerCreateFightTrainerDataIdToHero(playerTrainerDataId,
             menuCBBios_PortIDtoControlerID(0), &hero, encountId);
-        if (_CB.nameEntryMode == 0) {
+        if (_CB.mEntry.nameEntryMode == 0) {
             heroBiosSetNamePtr(&hero, _CB.mVsHeroName);
         }
         _menuCBBattle_DeleteAllItem(&hero);
         trainerIndex = work->mTrainer[0].mVsTrainerIndex;
         menuCBBios_InitTrainerFromHero(&work->mTrainer[0], &hero, VS_PLAYER_TRAINER_DATA_ID);
         work->mTrainer[0].mVsTrainerIndex = trainerIndex;
-        if (_CB.nameEntryMode != 0) {
+        if (_CB.mEntry.nameEntryMode != 0) {
             work->mTrainer[0].mDataId = playerTrainerDataId;
         }
         menuCBTrainerBios_SetControlerID(&work->mTrainer[0],

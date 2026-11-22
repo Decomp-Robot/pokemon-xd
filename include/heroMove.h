@@ -96,6 +96,8 @@ void heroMoveSetColision(u8 enabled);
 long heroMoveAddStepCallback(void (*callback)(long, FootStepCounter, long), long context);
 /* Add steps to a counter for dispatch with the next movement update. */
 void heroMovePoolCounter(FootStepCounter counter, long amount);
+/* Clear all pending footstep counter steps. */
+void heroMoveClearPoolCounter(void);
 void heroMoveGetHeroPos(GSvec *pos);
 void heroMoveGetHeroRot(GSvec *rot);
 unsigned long heroGetFollower(void);
