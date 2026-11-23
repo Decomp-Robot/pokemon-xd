@@ -51,12 +51,7 @@ public:
     void Init();
     void InitSub();
     void Main();
-    inline bool IsSelectedPokemon(u16 id);
-    inline u8 AppendSelectedPokemon(u16 id);
-    inline u8 RemoveSelectedPokemon(u16 id);
-    inline u8 CancelSelectedPokemon();
-    inline void ClearSelectedPokemon();
-    inline void SetFightPokemon(Hero *hero);
+    inline u8 AppendSelectedPokemon();
     inline long GetPokemonStatusContext()
     {
         return (long)&mSelectID;

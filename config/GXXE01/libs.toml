@@ -2940,7 +2940,6 @@ extra_cflags = ["-opt nopeephole", "-inline deferred,noauto", "-i src/ext/dolphi
 [[lib.object]]
 name = "game/menuOrreColosseum.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 cflags = [
     "-W error",
     "-nodefaults",
