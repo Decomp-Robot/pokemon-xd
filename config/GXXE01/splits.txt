@@ -656,9 +656,12 @@ game/menuBattleDisk.cpp:
 	.sdata2     start:0x804EC960 end:0x804EC994
 
 game/menuOrreColosseum.cpp:
-	.text       start:0x800A314C end:0x800A3150
+	.text       start:0x800A1494 end:0x800A3150
 	.ctors      start:0x802E9FAC end:0x802E9FB0
+	.rodata     start:0x802EBB20 end:0x802EBBB0
 	.bss        start:0x8043C930 end:0x8043D2A8
+	.sbss       start:0x804EAA20 end:0x804EAA30
+	.sdata2     start:0x804EC998 end:0x804EC9F8
 
 game/menuTitle.cpp:
 	.text       start:0x800A3150 end:0x800A423C
