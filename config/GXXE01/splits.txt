@@ -3988,7 +3988,7 @@ game/GSAPI/GSgfx/matrixStack.cpp:
 	.text       start:0x802B5AFC end:0x802B5CB4
 
 game/GSAPI/GSgfx/layerFunc.cpp:
-	.text       start:0x802B5CB4 end:0x802B7060
+	.text       start:0x802B5CB4 end:0x802B70C8
 	.data       start:0x8041F528 end:0x8041F548
 
 game/GSAPI/GSgfx/renderModule.cpp:

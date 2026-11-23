@@ -328,3 +328,16 @@ void GSgfxLayer::dlDrawExt(u8 *dl, u32 size)
     GSgfxFifo.u32 = (u32)dl;
     GSgfxFifo.u32 = size;
 }
+
+void GSgfxLayer::endSurface()
+{
+    gsgfx_layer_surface_active = 0;
+}
+
+void GSgfxLayer::beginSurface(u16 count)
+{
+    FlushState();
+    GSgfxFifo.u8 = mPrimitiveType | mVertexFormat->fmtIndex;
+    GSgfxFifo.u16 = count;
+    gsgfx_layer_surface_active = 1;
+}
