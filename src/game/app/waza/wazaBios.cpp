@@ -1,4 +1,5 @@
 #include <waza.h>
+#include <relglobal.h>
 
 extern "C" {
 
@@ -635,6 +636,19 @@ u32 wazaDataBiosGetName(struct WazaData *data)
         return 0;
     }
     return data->mNameID;
+}
+
+struct WazaData *wazaDataBiosGetPtr(u16 wazaID)
+{
+    if (wazaID >= *waza_data_number) {
+        return waza_data;
+    }
+    return &waza_data[wazaID];
+}
+
+struct WazaFuncData *wazaFuncDataBiosGetPtr(u16 funcDataId)
+{
+    return getFuncData(funcDataId);
 }
 
 }

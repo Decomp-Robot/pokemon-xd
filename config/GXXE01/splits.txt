@@ -2487,7 +2487,7 @@ game/app/pokemon/pokemonWaveDispData.cpp:
 	.data       start:0x80400630 end:0x80403B00
 
 game/app/waza/wazaBios.cpp:
-	.text       start:0x8013D7B0 end:0x8013DFEC
+	.text       start:0x8013D7B0 end:0x8013E044
 
 game/app/waza/wazaDB.cpp:
 	.text       start:0x8013E044 end:0x8013E90C

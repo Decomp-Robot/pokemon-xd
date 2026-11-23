@@ -49,6 +49,14 @@ extern u32 *pokemon_data_number;
 /* Pokemon species record table. */
 extern PokemonData *pokemon_data;
 
+struct WazaData;
+
+/* Count of loaded move records. */
+extern u32 *waza_data_number;
+
+/* Loaded move records. */
+extern struct WazaData *waza_data;
+
 /* Count of entries in the pokemon nature (seikaku) table. */
 extern u32 *pokemon_seikaku_data_number;
 
