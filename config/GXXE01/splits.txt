@@ -3236,6 +3236,14 @@ game/app/battleGrid/battleGrid.cpp:
 	.bss        start:0x80478170 end:0x804781D0
 	.sbss       start:0x804EB680 end:0x804EB688
 
+game/app/battleGrid/wazaSequenceCamera.cpp:
+	.text       start:0x801A37DC end:0x801A57F8
+	.data       start:0x8040B528 end:0x8040B548
+	.bss        start:0x804781D0 end:0x804781F0
+	.sdata      start:0x804E84C0 end:0x804E84C8
+	.sbss       start:0x804EB688 end:0x804EB690
+	.sdata2     start:0x804EE268 end:0x804EE380
+
 game/app/battleGrid/wazaSequenceCameraData.cpp:
 	.text       start:0x801A57F8 end:0x801A594C
 	.data       start:0x8040B548 end:0x8040B990

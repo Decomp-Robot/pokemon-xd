@@ -50,9 +50,81 @@ struct wazaSequenceCameraPattern {
     wazaSequenceCameraShot shots[2];
 };
 
+struct wazaSequenceCameraFov {
+    f32 startFov;
+    f32 endFov;
+    f32 startTime;
+    f32 endTime;
+};
+
 extern wazaSequenceCameraPattern attackPatterns[];
 extern wazaSequenceCameraPattern defensePatterns[];
 
 wazaSequenceCameraPattern* wazaSequenceCameraGetPattern(bool attack, int flags);
+
+class ModelSequence;
+class WazaSequence;
+struct TemplateExpFileHeader;
+
+enum WazaCameraPosition {
+    WAZA_POSITION_DOLLY,
+    WAZA_POSITION_SWEEP,
+    WAZA_POSITION_ORBIT,
+    WAZA_POSITION_HOLD,
+    WAZA_POSITION_OVERVIEW,
+    WAZA_POSITION_MODEL_SIDE
+};
+
+/* The yaw range of the camera is held in the low three bits of its flags. */
+enum WazaCameraYawMask {
+    WAZA_CAMERA_YAW_MASK = 0x7
+};
+
+enum WazaCameraYawRange {
+    WAZA_CAMERA_YAW_DEFAULT,
+    WAZA_CAMERA_YAW_FRONT,
+    WAZA_CAMERA_YAW_FRONT_OFFSET,
+    WAZA_CAMERA_YAW_FRONT_ANGLED,
+    WAZA_CAMERA_YAW_THREE_QUARTER,
+    WAZA_CAMERA_YAW_SIDE_APPROACH,
+    WAZA_CAMERA_YAW_SIDE,
+    WAZA_CAMERA_YAW_SIDE_FULL
+};
+
+/* Stage model whose move sequence is watched from further away than the ones
+   the camera patterns frame. */
+enum WazaCameraOverviewModel {
+    WAZA_CAMERA_OVERVIEW_MODEL = 314
+};
+
+enum WazaCameraMotionFlags {
+    WAZA_CAMERA_MODEL_SIDE = 0x1,
+    WAZA_CAMERA_ALLOW_HOLD = 0x8,
+    WAZA_CAMERA_ALLOW_DOLLY = 0x10,
+    WAZA_CAMERA_ALLOW_SWEEP = 0x20,
+    WAZA_CAMERA_ALLOW_ORBIT = 0x40
+};
+
+struct wazaSequenceCameraParams {
+    WazaCameraPosition positionType;
+    f32 width, height;
+    f32 minYawOffset, maxYawOffset, yaw;
+    f32 minHeight, maxHeight;
+    f32 minDistance, maxDistance;
+    f32 distances[3];
+};
+
+void _wazaSequenceCameraDoPosition(ModelSequence *model, wazaSequenceCameraParams *params, f32 durationScale, bool reverse);
+void _wazaSequenceCameraDoDollyPosition(TemplateExpFileHeader *tmpl, wazaSequenceCameraParams *params, f32 durationScale, bool reverse);
+void _wazaSequenceCameraDoFOV(ModelSequence *model, wazaSequenceCameraParams *params, int flags, f32 duration);
+void _wazaSequenceCameraGetFOVRange(wazaSequenceCameraParams *params, f32 *minimum, f32 *maximum, f32 distance);
+f32 _wazaSequenceCameraSelectDuration(u8 mask, f32 *weights, f32 available);
+void _wazaSequenceCameraSelectMotion(ModelSequence *model, WazaSequence *waza, wazaSequenceCameraParams *params);
+void _wazaSequenceCameraCalculateParams(ModelSequence *model, int flags, wazaSequenceCameraParams *params);
+
+extern f32 gCurrentFOV;
+extern f32 gCurrentFOVTime;
+extern int gLastMotionType;
+extern wazaSequenceCameraFov gFOVlist[2];
 
 #endif
