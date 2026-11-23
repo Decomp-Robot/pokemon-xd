@@ -3724,6 +3724,12 @@ game/GSAPI/GSsysdolphin_baselib/baselib/objalloc.c:
 	.sbss       start:0x804EBA78 end:0x804EBA80
 	.sdata2     start:0x804EF0F8 end:0x804EF100
 
+game/GSAPI/GSsysdolphin_baselib/baselib/object.c:
+	.text       start:0x802596A4 end:0x802596E8
+	.rodata     start:0x802FA0B8 end:0x802FA0D0
+	.data       start:0x80418F70 end:0x80418FB0
+	.sdata2     start:0x804EF100 end:0x804EF108
+
 game/GSAPI/GSsysdolphin_baselib/baselib/pobj.c:
 	.text       start:0x8025C304 end:0x8025C54C
 	.sbss       start:0x804EBA80 end:0x804EBA94
