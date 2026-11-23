@@ -1217,6 +1217,26 @@ struct GSgfxCopyTexParams {
 extern "C" void GSgfx_GCWriteCopyFilter(u8 aa, u8 *samplePattern, bool enable, u8 *vfilter);
 extern "C" void GSgfx_GCWriteCopyTex(const GSgfxCopyTexParams *params, void *buffer);
 
+struct GSgfxCopyDispParams {
+    s16 mLeft;
+    s16 mTop;
+    u16 mWidth;
+    u16 mHeight;
+    u16 mDestWidth;
+    u32 mClamp;
+    u32 mCopyMode;
+    u32 mGamma;
+    f32 mYScale;
+    u8 mClear;
+    GXColor mClearColor;
+    u32 mClearZ;
+};
+extern "C" u8 *GSgfx_GCWriteCopyFilterDirect(u8 *buffer, u8 aa, u8 *samplePattern,
+                                             bool enable, u8 *vfilter);
+extern "C" u8 *GSgfx_GCWriteCopyDispDirect(u8 *buffer, const GSgfxCopyDispParams *params,
+                                           void *xfb, bool colorUpdate, bool alphaUpdate,
+                                           bool depthUpdate);
+
 void GSgfxTokenMarkFrame(void);
 void GSgfxTokenSetDrawSyncCBFunc(void (*callback)(void (*)(u16)));
 void GSgfxTokenAbortFrame(void);

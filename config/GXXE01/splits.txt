@@ -3953,6 +3953,10 @@ game/GSAPI/GSgfx/halt.cpp:
 	.bss        start:0x804E6710 end:0x804E6BA8
 	.sbss       start:0x804EBD18 end:0x804EBD20
 
+game/GSAPI/GSgfx/video.cpp:
+	.text       start:0x802AE160 end:0x802AE2C8
+	.bss        start:0x804E6BA8 end:0x804E6C68
+
 game/GSAPI/GSgfx/gpu.cpp:
 	.text       start:0x802AF8B0 end:0x802AFF40
 	.bss        start:0x804E6C68 end:0x804E6D68

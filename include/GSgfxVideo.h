@@ -46,6 +46,7 @@ u8 GSgfxVideoGetLockFrameActive(void);
 void GSgfxVideoSetLockFrameActive(bool active);
 void GSgfxVideoGetClearColor(GScolor *color);
 void GSgfxVideoSetClearColor(const GScolor *color);
+f32 *GSgfxVideoGetViewport(void);
 #ifdef __cplusplus
 }
 GXRenderModeObj *GSgfxVideoGetRenderMode(void);
