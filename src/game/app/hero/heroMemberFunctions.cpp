@@ -13,15 +13,6 @@ namespace {
 static const f32 kRadToDeg = 57.29577951f;
 
 enum {
-    HERO_OBJ_ID_STYLE0 = 0x16C90400,
-    HERO_OBJ_ID_STYLE1 = 0x20250400,
-    HERO_OBJ_ID_STYLE2 = 0x169F0400,
-    HERO_OBJ_ID_STYLE0_FOLLOWER = 0x169E0400,
-    HERO_OBJ_ID_STYLE1_FOLLOWER = 0x1EE20400,
-    HERO_OBJ_ID_STYLE2_FOLLOWER = 0x16A00400,
-};
-
-enum {
     GAMEDATA_OPTION_RECORD = 1,
 };
 
@@ -84,7 +75,7 @@ long Hero::getHeroObjID(long followerModelLevel, long heroStyle)
         followerModelLevel = getFollowerModelLevel();
     }
 
-    if (followerModelLevel == 1) {
+    if (followerModelLevel == HERO_MODEL_LEVEL_ALTERNATE) {
         switch (heroStyle) {
         case 0:
             objID = HERO_OBJ_ID_STYLE0_FOLLOWER;
@@ -142,7 +133,7 @@ u8 Hero::getHeroStyle() const
     return mHeroStyle;
 }
 
-s16 Hero::pokemonGet(HeroPokemonGetParam *param, bool allowStorageFallback)
+s16 Hero::pokemonGet(HeroPokemonGetParam *param, bool usePcbox)
 {
     Pokemon pokemon;
     s16 result;
@@ -181,7 +172,7 @@ s16 Hero::pokemonGet(HeroPokemonGetParam *param, bool allowStorageFallback)
     pokemonResetBasisStatus(&pokemon);
     memoDataSet(0, &pokemon);
 
-    result = heroGetPokemon(this, &pokemon, allowStorageFallback);
+    result = heroGetPokemon(this, &pokemon, usePcbox);
 
     if (param->shadowRecordId != 0 && result >= 0) {
         DarkPokemon *dark = pokemon.getDarkPokemon();

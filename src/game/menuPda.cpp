@@ -1009,7 +1009,7 @@ s32 _menPdaFadeOutWait(void)
 }
 
 void _menPdaFadeOutSet(void) { fadeSet(3, 0.8f); }
-u32 _menuPdaGetMoney(void) { return heroGetStatus(0, HERO_STATUS_MONEY, 0); }
+u32 _menuPdaGetMoney(void) { return heroGetStatus(0, HERO_STATUS_POKEDORU, 0); }
 u32 _menuPdaGetPokecoupon(void) { return heroGetStatus(0, 13, 0); }
 
 extern "C" void menuPdaSetSubres(s32 res, s32 subres)

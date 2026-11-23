@@ -568,15 +568,15 @@ s32 floorEventCtrlDoor(u32 floor, u32 index, u8 mode) {
     case DOOR_MODE_CONDITIONAL_CLOSE: {
         flags[0] = peopleGetFlags(0, HERO_RESOURCE_HERO);
         flags[1] = peopleGetFlags(0, HERO_RESOURCE_MANA);
-        flags[2] = peopleGetFlags(0, HERO_RESOURCE_FOLLOWER_SLOT_3);
-        flags[3] = peopleGetFlags(0, HERO_RESOURCE_FOLLOWER_SLOT_2);
+        flags[2] = peopleGetFlags(0, HERO_RESOURCE_KLEIN);
+        flags[3] = peopleGetFlags(0, HERO_RESOURCE_GIRL);
         heroMoveInitEvent();
         _floorEventWaitMotion(model);
         heroMoveTermEvent();
         peopleSetFlags(0, HERO_RESOURCE_HERO, flags[0]);
         peopleSetFlags(0, HERO_RESOURCE_MANA, flags[1]);
-        peopleSetFlags(0, HERO_RESOURCE_FOLLOWER_SLOT_3, flags[2]);
-        peopleSetFlags(0, HERO_RESOURCE_FOLLOWER_SLOT_2, flags[3]);
+        peopleSetFlags(0, HERO_RESOURCE_KLEIN, flags[2]);
+        peopleSetFlags(0, HERO_RESOURCE_GIRL, flags[3]);
         break;
     }
     }

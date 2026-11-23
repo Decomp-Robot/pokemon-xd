@@ -899,7 +899,7 @@ u8 _depositPC(u16 itemID, int count)
 namespace {
 u32 _getMoney(void)
 {
-    return heroGetStatus(Data.mHero, HERO_STATUS_MONEY, 0);
+    return heroGetStatus(Data.mHero, HERO_STATUS_POKEDORU, 0);
 }
 } // namespace
 

@@ -360,8 +360,8 @@ extern "C" s32 GScolsys2HumanAddCurrentFloor(s32* slotIndex, void* character)
     floor->mHuman[used].mResourceId = registration->mResourceId;
     resourceId = (u32)registration->mResourceId;
     if (resourceId == HERO_RESOURCE_MANA ||
-        resourceId == HERO_RESOURCE_FOLLOWER_SLOT_2 ||
-        resourceId == HERO_RESOURCE_FOLLOWER_SLOT_3) {
+        resourceId == HERO_RESOURCE_GIRL ||
+        resourceId == HERO_RESOURCE_KLEIN) {
         floor->mHuman[used].mRadius = (3.0f);
     } else {
         floor->mHuman[used].mRadius = registration->mRadius;

@@ -1,24 +1,8 @@
 #include <people.h>
 #include <peopleInfoBios.h>
+#include <hero.h>
 
 extern "C" float peopleViewerGetPlaySpeedRate(tagPeopleWork* people);
-
-namespace {
-
-enum {
-    HERO_OBJ_ID_STYLE0 = 0x16C90400,
-    HERO_OBJ_ID_STYLE1 = 0x20250400,
-    HERO_OBJ_ID_STYLE2 = 0x169F0400,
-    HERO_OBJ_ID_STYLE0_FOLLOWER = 0x169E0400,
-    HERO_OBJ_ID_STYLE1_FOLLOWER = 0x1EE20400,
-    HERO_OBJ_ID_STYLE2_FOLLOWER = 0x16A00400,
-    HERO_OBJ_ID_MANA = 0x16C70400,
-    HERO_OBJ_ID_GIRL_FOLLOWER = 0x195B0400,
-    HERO_OBJ_ID_KLEIN = 0x1A7C0400,
-    HERO_OBJ_ID_KLEIN_FOLLOWER = 0x19540400,
-};
-
-} // namespace
 
 u8 tagPeopleWork::getMoveType()
 {

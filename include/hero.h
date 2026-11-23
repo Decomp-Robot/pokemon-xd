@@ -4,29 +4,6 @@
 #include <types.h>
 #include <item.h>
 
-enum { HERO_STATUS_TRAINER_ID = 2,
-HERO_STATUS_ITEM_NORMAL = 4,
-HERO_STATUS_ITEM_EXTRA = 5,
-HERO_STATUS_ITEM_BALL = 6,
-HERO_STATUS_ITEM_SKILL = 7,
-HERO_STATUS_ITEM_SEED = 8,
-HERO_STATUS_ITEM_KORON = 9,
-HERO_STATUS_HIZUKI_ITEM = 10,
-HERO_STATUS_SEX = 11,
-HERO_STATUS_POKEDORU = 12,
-HERO_STATUS_POKECOUPON = 13,
-HERO_STATUS_POKECOUPON_ALL = 14,
-HERO_STATUS_BADGE_01 = 15,
-HERO_STATUS_BADGE_02 = 16,
-HERO_STATUS_BADGE_03 = 17,
-HERO_STATUS_BADGE_04 = 18,
-HERO_STATUS_BADGE_05 = 19,
-HERO_STATUS_BADGE_06 = 20,
-HERO_STATUS_BADGE_07 = 21,
-HERO_STATUS_BADGE_08 = 22,
-HERO_STATUS_HIZUKI_FLAG = 24,
-HERO_STATUS_HOME_PLACE = 25 };
-
 enum { HERO_PTR_FLAG = 0x30D };
 
 enum { HERO_STYLE_NORMAL = 0,
@@ -42,8 +19,36 @@ struct GSvec;
 enum HERO_RESOURCE_ID {
     HERO_RESOURCE_HERO = 100,
     HERO_RESOURCE_MANA = 101,
-    HERO_RESOURCE_FOLLOWER_SLOT_2 = 104,
-    HERO_RESOURCE_FOLLOWER_SLOT_3 = 105
+    HERO_RESOURCE_GIRL = 104,
+    HERO_RESOURCE_KLEIN = 105
+};
+
+enum HeroFollowerID {
+    HERO_FOLLOWER_NONE = 0,
+    HERO_FOLLOWER_MANA = 1,
+    HERO_FOLLOWER_GIRL = 2,
+    HERO_FOLLOWER_KLEIN = 3
+};
+
+// Object IDs of the hero and companion models.
+enum HeroObjID {
+    HERO_OBJ_ID_STYLE0 = 0x16C90400,
+    HERO_OBJ_ID_STYLE1 = 0x20250400,
+    HERO_OBJ_ID_STYLE2 = 0x169F0400,
+    HERO_OBJ_ID_STYLE0_FOLLOWER = 0x169E0400,
+    HERO_OBJ_ID_STYLE1_FOLLOWER = 0x1EE20400,
+    HERO_OBJ_ID_STYLE2_FOLLOWER = 0x16A00400,
+    HERO_OBJ_ID_MANA = 0x16C70400,
+    HERO_OBJ_ID_MANA_FOLLOWER = 0x16C80400,
+    HERO_OBJ_ID_GIRL_FOLLOWER = 0x195B0400,
+    HERO_OBJ_ID_KLEIN = 0x1A7C0400,
+    HERO_OBJ_ID_KLEIN_FOLLOWER = 0x19540400
+};
+
+// Model level a companion model is drawn with.
+enum HeroFollowerModelLevel {
+    HERO_MODEL_LEVEL_NORMAL = 0,
+    HERO_MODEL_LEVEL_ALTERNATE = 1
 };
 
 extern "C" void heroMoveGetHeroPos(GSvec* out);
@@ -76,7 +81,7 @@ public:
     long addPokemon(const Pokemon *pokemon);
     bool setPokemon(const Pokemon *pokemon, long index);
     bool deletePokemon(long index);
-    s16 pokemonGet(HeroPokemonGetParam *param, bool allowStorageFallback);
+    s16 pokemonGet(HeroPokemonGetParam *param, bool usePcbox);
     s32 getLegendPokemonSize() const;
 
     // Items.
@@ -202,14 +207,36 @@ extern "C" {
 void heroInit(Hero *hero);
 #endif
 enum HeroStatusID {
-    HERO_STATUS_NAME = 1,
-    HERO_STATUS_TRAINER_RND = 2,
-    HERO_STATUS_POKEMON = 3,
-    HERO_STATUS_MONEY = 12,
-    HERO_STATUS_HIZUKI_NAME = 23
+    HERO_STATUS_NONE = 0,
+    HERO_STATUS_NAME,
+    HERO_STATUS_TRAINER_RND,
+    HERO_STATUS_POKEMON,
+    HERO_STATUS_ITEM_NORMAL,
+    HERO_STATUS_ITEM_EXTRA,
+    HERO_STATUS_ITEM_BALL,
+    HERO_STATUS_ITEM_SKILL,
+    HERO_STATUS_ITEM_SEED,
+    HERO_STATUS_ITEM_KORON,
+    HERO_STATUS_HIZUKI_ITEM,
+    HERO_STATUS_SEX,
+    HERO_STATUS_POKEDORU,
+    HERO_STATUS_POKECOUPON,
+    HERO_STATUS_POKECOUPON_ALL,
+    HERO_STATUS_BADGE_01,
+    HERO_STATUS_BADGE_02,
+    HERO_STATUS_BADGE_03,
+    HERO_STATUS_BADGE_04,
+    HERO_STATUS_BADGE_05,
+    HERO_STATUS_BADGE_06,
+    HERO_STATUS_BADGE_07,
+    HERO_STATUS_BADGE_08,
+    HERO_STATUS_HIZUKI_NAME,
+    HERO_STATUS_HIZUKI_FLAG,
+    HERO_STATUS_HOME_PLACE,
+    HERO_STATUS_COUNT
 };
 
-s32 heroGetObjID(s32 heroType);
+s32 heroGetObjID(u8 heroType);
 u8 heroMoveIsMember(s32 member);
 u8 heroMoveGetResID(u32* group, u32* id, s32 member);
 void heroMoveTermEvent(void);
@@ -223,10 +250,13 @@ void heroSetStatus(Hero* hero, u16 statusID, u32 value);
 u16* heroBiosGetNamePtr(Hero* hero);
 Pokemon* heroBiosGetPokemonPtr(Hero* hero, u16 slot);
 void heroSetFollowerWithID(u8 followerID, u8 modelLevel);
+u32 heroCreateRnd(void);
+void heroSetFollower(u32 groupID, u32 resourceID, u32 objectID);
 
 #ifdef __cplusplus
-s16 heroGetPokemon(Hero *hero, const Pokemon *pokemon, bool allowStorageFallback);
-s16 heroCatchPokemon(Hero *hero, const Pokemon *pokemon, u16 catchFloorID, u8 catchBallID, bool allowStorageFallback);
+bool heroIsPlayerPeople(u32 groupID, u32 resourceID);
+s16 heroGetPokemon(Hero *hero, const Pokemon *pokemon, bool usePcbox);
+s16 heroCatchPokemon(Hero *hero, const Pokemon *pokemon, u16 catchFloorID, u8 catchBallID, bool usePcbox);
 #endif
 ItemSlot *heroItemGetItemKindToItemAryPtr(Hero *hero, u8 kind, u16 *count, u16 *maxQuantity, u8 *sortMode, u8 *insertionMode);
 ItemSlot *heroItemGetItemDataIdToItemAryPtr(Hero *hero, u16 itemID, u16 *num, u16 *max, u8 *sortMode, u8 *insertionMode);

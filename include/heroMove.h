@@ -101,6 +101,8 @@ void heroMoveClearPoolCounter(void);
 void heroMoveGetHeroPos(GSvec *pos);
 void heroMoveGetHeroRot(GSvec *rot);
 unsigned long heroGetFollower(void);
+u8 heroMoveIsSmoothFloorLink(void);
+u8 heroMoveDismissMember(s32 member);
 
 #ifdef __cplusplus
 }

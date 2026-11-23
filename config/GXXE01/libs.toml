@@ -6606,7 +6606,7 @@ cflags_extra = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 name = "game/app/hero/hero.cpp"
 source = "game/app/hero/hero.cpp"
 completed = true
-extra_cflags = ["-use_lmw_stmw on"]
+extra_cflags = ["-use_lmw_stmw on", "-rostr"]
 
 [[lib.object]]
 name = "game/app/hero/heroBios.cpp"

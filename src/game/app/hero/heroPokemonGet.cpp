@@ -149,7 +149,7 @@ void heroPokemonGetPrasle(Hero *hero, u16 catchFloorID)
 
 void heroPokemonGetEifie(Hero *hero, u16 catchFloorID)
 {
-    u32 trainerId = heroGetStatus(hero, HERO_STATUS_TRAINER_ID, 0);
+    u32 trainerId = heroGetStatus(hero, HERO_STATUS_TRAINER_RND, 0);
     Pokemon pokemon;
 
     pokemonCreate(&pokemon, SPECIES_VAPOREON, LEVEL_VAPOREON, (GamedataAttest *)gamedataGetStatus(0, GAMEDATA_OPTION_RECORD));
@@ -168,7 +168,7 @@ void heroPokemonGetEifie(Hero *hero, u16 catchFloorID)
 
 void heroPokemonGetBlacky(Hero *hero, u16 catchFloorID)
 {
-    u32 trainerId = heroGetStatus(hero, HERO_STATUS_TRAINER_ID, 0);
+    u32 trainerId = heroGetStatus(hero, HERO_STATUS_TRAINER_RND, 0);
     Pokemon pokemon;
 
     pokemonCreate(&pokemon, SPECIES_JOLTEON, LEVEL_JOLTEON, (GamedataAttest *)gamedataGetStatus(0, GAMEDATA_OPTION_RECORD));

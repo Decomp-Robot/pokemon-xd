@@ -119,8 +119,8 @@ PeopleInfo *floorCharacterBiosGetPeopleInfoPtr(FloorCharacter *character) {
 FloorCharacter *floorCharacterBiosFindByResID(u32 group, u32 id) {
     if (group == FLOOR_CHARACTER_RESOURCE_GROUP_GLOBAL) {
         if (id == HERO_RESOURCE_MANA) return &_globalCharacter[GLOBAL_CHARACTER_MANA];
-        if (id == HERO_RESOURCE_FOLLOWER_SLOT_3) return &_globalCharacter[GLOBAL_CHARACTER_KLEIN];
-        if (id == HERO_RESOURCE_FOLLOWER_SLOT_2) return &_globalCharacter[GLOBAL_CHARACTER_GIRL];
+        if (id == HERO_RESOURCE_KLEIN) return &_globalCharacter[GLOBAL_CHARACTER_KLEIN];
+        if (id == HERO_RESOURCE_GIRL) return &_globalCharacter[GLOBAL_CHARACTER_GIRL];
         return NULL;
     }
     RoomData *floor = floorDataBiosGetPtr(GSfloorGetCurrent());

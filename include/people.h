@@ -144,7 +144,13 @@ enum PeopleBiosStateFlags {
 };
 enum PeopleBehaviourFlags {
     PEOPLE_FLAG_NO_INTERACTION = 0x1,
-    PEOPLE_FLAG_DISABLE_ANIM_RATE_UPDATE = 0x8000
+    PEOPLE_FLAG_DISABLE_ANIM_RATE_UPDATE = 0x8000,
+    PEOPLE_FLAG_DISABLE_MOTION_RESET = 0x80000000
+};
+
+// Group of the characters that live outside any floor.
+enum PeopleGroupID {
+    PEOPLE_GROUP_GLOBAL = 0
 };
 
 extern "C" {
@@ -177,6 +183,9 @@ s32 peopleBiosGetMaxNum();
 unsigned long peopleBiosGetState(tagPeopleWork *people);
 tagPeopleWork* peopleBiosGetWorkPtr(s32 index);
 u8 peopleBiosCheckFlag(tagPeopleWork* people, unsigned long flag);
+u8 peopleCheckFlag(u32 group, u32 id, u32 flag);
+void peopleChangeFollower(u32 objectID);
+void peopleSetFollowerPtr(tagPeopleWork* people);
 tagPeopleInfoBios* peopleInfoBiosGetPtr(unsigned long id);
 void peopleSetFlagOn(unsigned long group, unsigned long id, unsigned long flags);
 GSvec* peopleBiosGetPosPtr(tagPeopleWork* people);
