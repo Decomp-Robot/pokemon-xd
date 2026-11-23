@@ -73,8 +73,8 @@ bool sndFXCtrl14(SND_VOICEID vid, u8 ctrl, u16 value) {
 
 
 */
-bool sndFXKeyOff(SND_VOICEID vid) {
-  bool ret;
+SND_VOICEID sndFXKeyOff(SND_VOICEID vid) {
+  SND_VOICEID ret;
   MUSY_ASSERT_MSG(sndActive != 0, "Sound system is not initialized.");
   hwDisableIrq();
   ret = synthSendKeyOff(vid);

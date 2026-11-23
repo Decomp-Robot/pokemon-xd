@@ -28,6 +28,12 @@ typedef struct {
 } GSsndSEEntry;
 
 typedef struct {
+    unsigned long fileNo;        // 0x00 streaming file the sound is read from
+    unsigned long resourceID;    // 0x04 resource read out of the file, 0 when the file is used whole
+    unsigned long argument;      // 0x08 argument passed to the file system read
+} GSsndFileEntry;
+
+typedef struct {
     unsigned char  unk00;         // 0x00: unused by the sound API
     unsigned char  open;          // 0x01: set once the engine has opened the wave
     unsigned short groupID;       // 0x02 volume group the wave's samples are pushed into
@@ -60,7 +66,7 @@ typedef struct GSsndStream {
     unsigned long playbackSamplePosition;
     unsigned long fileReadOffset;
     unsigned long fileNo;
-    unsigned char pad2C[4];
+    unsigned long argument;               // 0x2C argument handed to the file system read
     unsigned long soundID;                 // 0x30
     unsigned short time;                    // 0x34 volume fade time in ms; 0 snaps
     unsigned char  mode;                    // 0x36 fade mode handed to the stream control
@@ -121,6 +127,9 @@ unsigned long GSsndOpen(unsigned long soundID, unsigned long resourceGroup,
 extern unsigned char gSoundStreamReady;
 
 extern unsigned long* snd_rev_data_number;
+extern float* snd_rev_data;
+extern unsigned long* snd_file_number;
+extern GSsndFileEntry* snd_file;
 extern unsigned long* snd_data_number;
 extern GSsndSEEntry* snd_data;
 extern unsigned long* snd_wave_data_number;
@@ -168,6 +177,7 @@ enum {
     GSSND_VOLUME_STACK_CAPACITY = 3,
     GSSND_PAUSE_EXEMPT_SOUND = 8,
     GSSND_MAX_VOLUME = 127,
+    GSSND_DEFAULT_SE_VOLUME = 100,
     GSSND_REVERB_PRESET_MASK = 15
 };
 

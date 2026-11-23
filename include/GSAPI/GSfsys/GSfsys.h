@@ -43,6 +43,7 @@ void GSfsysStreamSetLoopFlag(unsigned long groupID, unsigned long resourceID, u8
 void GSfsysStreamSetLoopPoint(unsigned long groupID, unsigned long resourceID,
                               unsigned long loopStart, unsigned long loopEnd);
 unsigned long GSfsysCreateCacheHeap(void);
+unsigned long GSfsysGetInvalidID(void);
 
 #ifdef __cplusplus
 }

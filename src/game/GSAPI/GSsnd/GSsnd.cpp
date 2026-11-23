@@ -2,6 +2,11 @@
 #include "GSsndInternal.h"
 #include <GSfsys.h>
 #include <GSAPI/GSgapp/GSgapp.h>
+#include <GSdvd.h>
+#include <GSlog.h>
+#include <GSmem.h>
+#include <GSres.h>
+#include <dolphin/ar.h>
 #include <dolphin/dvd.h>
 #include <dolphin/os.h>
 
@@ -10,6 +15,600 @@
 #define SND_NIBBLE_BLOCK_ROUND_UP 0xFFFF
 #define SND_SAMPLES_PER_BLOCK 57344
 #define SND_BYTE_BLOCK_SHIFT 15
+
+unsigned long _SampleDataFileOffset;
+GSdvdFile* _SampleDataFileInfo;
+void* _SampleDataUploadBuffer;
+
+void* _sndDoMalloc(size_t size)
+{
+    return GSmemAllocAlign(size, GSSND_ALLOC_ALIGNMENT);
+}
+
+void _sndDoFree(void* ptr)
+{
+    GSmemFree(ptr);
+}
+
+void _sndInitParms(GSsndSEEntry* entry, GSsndWork* work)
+{
+    u32 level;
+    level = OSDisableInterrupts();
+    entry->open = 1;
+    entry->paused = 0;
+    entry->work = work;
+    work->playbackID = GSSND_INVALID_ID;
+    work->volumeCount = 0;
+    work->volume = GSSND_MAX_VOLUME;
+    work->pan = GSSND_PAN_CENTER;
+    work->unk03 = GSSND_PAN_CENTER;
+    OSRestoreInterrupts(level);
+}
+
+void _sndSetReverbParm(u32 preset)
+{
+    f32* parm = &snd_rev_data[preset * GSSND_REVERB_PARM_COUNT];
+
+    _revH.tempDisableFX = FALSE;
+    _revH.coloration = parm[0];
+    _revH.mix = parm[1];
+    _revH.time = parm[2];
+    _revH.damping = parm[3];
+    _revH.preDelay = parm[4];
+    _revH.crosstalk = parm[5];
+    _revH_now_parm_id = preset;
+}
+
+void _sndInitSndWork(void)
+{
+    u32 i;
+
+    for (i = 0; i < _maxSndWork; i++) {
+        _sndWork[i].inUse = 0;
+    }
+}
+
+void _sndInitStack(void)
+{
+    u32 i;
+
+    for (i = 0; i < _maxStack; i++) {
+        _sndStack[i] = 0;
+    }
+}
+
+void _sndInitListener(void)
+{
+    u32 i;
+
+    for (i = 0; i < _maxListener; i++) {
+        _sndListener[i].inUse = 0;
+    }
+}
+
+void _sndInitEmitter(void)
+{
+    u32 i;
+
+    for (i = 0; i < _maxEmitter; i++) {
+        _sndEmitter[i].inUse = 0;
+    }
+}
+
+GSsndWork* _sndGetNewSndWork(void)
+{
+    u32 level;
+    GSsndWork* work;
+    u32 i;
+
+    level = OSDisableInterrupts();
+    work = 0;
+    for (i = 0; i < _maxSndWork; i++) {
+        if (_sndWork[i].inUse != 1) {
+            _sndWork[i].inUse = 1;
+            work = &_sndWork[i];
+            break;
+        }
+    }
+    OSRestoreInterrupts(level);
+    return work;
+}
+
+GSsndListener* _sndGetNewListener(void)
+{
+    u32 level;
+    GSsndListener* listener;
+    u32 i;
+
+    level = OSDisableInterrupts();
+    listener = 0;
+    for (i = 0; i < _maxListener; i++) {
+        if (_sndListener[i].inUse != 1) {
+            _sndListener[i].inUse = 1;
+            listener = &_sndListener[i];
+            break;
+        }
+    }
+    OSRestoreInterrupts(level);
+    return listener;
+}
+
+GSsndEmitter* _sndGetNewEmitter(void)
+{
+    u32 level;
+    GSsndEmitter* emitter;
+    u32 i;
+
+    level = OSDisableInterrupts();
+    emitter = 0;
+    for (i = 0; i < _maxEmitter; i++) {
+        if (_sndEmitter[i].inUse != 1) {
+            _sndEmitter[i].inUse = 1;
+            emitter = &_sndEmitter[i];
+            break;
+        }
+    }
+    OSRestoreInterrupts(level);
+    return emitter;
+}
+
+GSsndStream* _sndGetNewStream(void)
+{
+    u32 level;
+    GSsndStream* stream;
+    u32 i;
+
+    level = OSDisableInterrupts();
+    stream = 0;
+    for (i = 0; i < _maxStreaming; i++) {
+        if (_sndStreaming[i].state == GSSND_STREAM_FREE) {
+            _sndStreaming[i].state = GSSND_STREAM_OPEN;
+            stream = &_sndStreaming[i];
+            break;
+        }
+    }
+    OSRestoreInterrupts(level);
+    return stream;
+}
+
+void _sndFreeSndWork(GSsndWork* work)
+{
+    u32 level;
+    level = OSDisableInterrupts();
+    work->inUse = 0;
+    OSRestoreInterrupts(level);
+}
+
+void _sndFreeListener(GSsndListener* listener)
+{
+    u32 level;
+    level = OSDisableInterrupts();
+    listener->inUse = 0;
+    OSRestoreInterrupts(level);
+}
+
+void _sndFreeEmitter(GSsndEmitter* emitter)
+{
+    u32 level;
+    level = OSDisableInterrupts();
+    emitter->inUse = 0;
+    OSRestoreInterrupts(level);
+}
+
+void _sndFreeStream(GSsndStream* stream)
+{
+    u32 level;
+    level = OSDisableInterrupts();
+    stream->state = GSSND_STREAM_FREE;
+    stream->fileNo = 0;
+    OSRestoreInterrupts(level);
+}
+
+u32 _sndDesc2Id(SND_VOICEID voiceID)
+{
+    GSsndWork* work;
+    s32 i;
+
+    for (i = 0; i < _maxSoundID; i++) {
+        work = snd_data[i].work;
+        if (work != 0) {
+            if (!snd_data[i].stream) {
+                if (work->playbackID == voiceID) return i;
+            }
+        }
+    }
+    return 0;
+}
+
+u32 _sndPlayBGM(GSsndSEEntry* entry, u32 soundID, u32 time, u8 volume, u32 mode)
+{
+    void* sequence;
+    GSsndWork* work;
+    SND_PLAYPARA para;
+
+    if (entry->open != 1) {
+        if (entry->seqID >= *snd_file_number) return 0;
+        GSsndOpen(soundID, snd_file[entry->seqID].fileNo, snd_file[entry->seqID].argument);
+    }
+    work = entry->work;
+    if (work == 0) return 0;
+    if (entry->open != 1) return 0;
+    if (work->playbackID != GSSND_INVALID_ID) return 0;
+    sequence = GSresGetResource(work->resourceGroup, work->resourceID);
+    if (sequence == 0) return 0;
+    GSsndUpdateSettingsReverbHI(entry->reverb & GSSND_REVERB_PRESET_MASK);
+    para.flags = SND_PLAYPARA_VOLUME;
+    para.trackMute[0] = 0;
+    para.trackMute[1] = 0;
+    para.speed = GSSND_SEQ_SPEED_NORMAL;
+    para.volume.time = 0;
+    para.volume.target = 0;
+    para.numSeqVolDef = 0;
+    para.seqVolDef = 0;
+    para.numFaded = 0;
+    para.faded = 0;
+    work->volume = volume;
+    work->playbackID = sndSeqPlayEx((entry->reverb >> GSSND_SOUND_GROUP_SHIFT) & GSSND_SOUND_GROUP_MASK,
+                                    entry->fxID,
+                                    sequence, &para, SND_STUDIO_DEFAULT);
+    sndSeqVolume(volume, time, work->playbackID, SND_SEQVOL_CONTINUE);
+    return 1;
+}
+
+u32 _sndPlaySE(GSsndSEEntry* entry, u32 soundID, u8 volume)
+{
+    GSsndWork* work;
+
+    if (entry->open != 1) {
+        GSsndOpen(soundID, 0, 0);
+    }
+    work = entry->work;
+    if (work == 0) return 0;
+    work->volume = volume;
+    work->playbackID = sndFXStartEx(entry->fxID, volume, work->pan, SND_STUDIO_DEFAULT);
+    sndFXCtrl(work->playbackID, SND_MIDICTRL_VOLUME, volume);
+    return 1;
+}
+
+GSsndStream* _sndGetStream(u32 fileNo)
+{
+    u32 i;
+
+    for (i = 0; i < _maxStreaming; i++) {
+        if (_sndStreaming[i].state == GSSND_STREAM_FREE) continue;
+        if (_sndStreaming[i].fileNo == fileNo) return &_sndStreaming[i];
+    }
+    return 0;
+}
+
+u32 _sndPlaySTREAM(GSsndSEEntry* entry, u32 soundID, u32 time, u8 volume, u32 mode)
+{
+    GSsndWork* work;
+    GSsndStream* first;
+    GSsndStream* second;
+    u32 fileNo;
+    u32 resourceID;
+    u32 argument;
+
+    if (entry->open != 1) {
+        GSsndOpen(soundID, 0, 0);
+    }
+    work = entry->work;
+    if (work == 0) return 0;
+    if (!entry->soundEffect && work->playbackID != GSSND_INVALID_ID) return 0;
+    fileNo = snd_file[entry->seqID].fileNo;
+    resourceID = snd_file[entry->seqID].resourceID;
+    argument = snd_file[entry->seqID].argument;
+    if (_sndStreamGetValid(fileNo) == 1) {
+        GSfsysWait(fileNo);
+        GSsndClose(_sndStreamGetSndID(fileNo));
+        GSfsysWait(fileNo);
+        GSsndOpen(soundID, 0, 0);
+        work = entry->work;
+        if (work == 0) return 0;
+    } else {
+        GSfsysCancel(fileNo);
+        GSfsysWait(fileNo);
+    }
+    first = _sndGetNewStream();
+    if (first == 0) {
+        _sndClose(soundID, 0);
+        return 0;
+    }
+    first->next = 0;
+    first->chain = 0;
+    first->state = GSSND_STREAM_READY;
+    first->fileNo = fileNo;
+    first->argument = argument;
+    first->volume = 0;
+    first->volumeStart = 0;
+    first->volumeTarget = volume;
+    first->fadeStep = 0;
+    first->bufferIndex = 0;
+    first->halfIndex = 0;
+    first->readSamplePosition = 0;
+    first->playbackSamplePosition = 0;
+    first->fileReadOffset = 0;
+    first->channelReadComplete = 0;
+    first->fadeEnable = 0;
+    first->driveUnavailable = 0;
+    first->soundID = soundID;
+    first->time = time;
+    first->mode = GSSND_STREAM_FADE_VOLUME;
+    second = _sndGetNewStream();
+    if (second == 0) {
+        _sndClose(soundID, 0);
+        _sndFreeStream(first);
+        return 0;
+    }
+    second->next = 0;
+    second->chain = 0;
+    second->state = GSSND_STREAM_READY;
+    second->fileNo = 0;
+    second->argument = 0;
+    second->volume = 0;
+    second->volumeStart = 0;
+    second->volumeTarget = volume;
+    second->fadeStep = 0;
+    second->bufferIndex = 1;
+    second->halfIndex = 0;
+    second->readSamplePosition = 0;
+    second->playbackSamplePosition = 0;
+    second->fileReadOffset = 0;
+    second->channelReadComplete = 0;
+    second->fadeEnable = 0;
+    second->driveUnavailable = 0;
+    second->soundID = soundID;
+    second->time = time;
+    second->mode = GSSND_STREAM_FADE_VOLUME;
+    first->chain = second;
+    second->next = first;
+    if (resourceID == 0) {
+        resourceID = GSfsysGetInvalidID();
+    }
+    if (GSfsysReadStreamingEX(fileNo, resourceID, argument) == 0) {
+        _sndClose(soundID, 0);
+        _sndFreeStream(first);
+        _sndFreeStream(second);
+        return 0;
+    }
+    work->volume = volume;
+    work->playbackID = fileNo;
+    return 1;
+}
+
+u8 _sndGetProperVolume(GSsndSEEntry* entry, u8 volume)
+{
+    if (volume == SND_FX_DEFVOL) {
+        if (entry->soundEffect == 1) {
+            volume = GSSND_DEFAULT_SE_VOLUME;
+        } else {
+            volume = GSSND_MAX_VOLUME;
+        }
+    }
+    if (volume > GSSND_MAX_VOLUME) {
+        volume = GSSND_MAX_VOLUME;
+    }
+    return volume;
+}
+
+u32 _sndPlay(u32 soundID, u32 time, u8 volume, u32 mode)
+{
+    GSsndSEEntry* entry;
+
+    if (!gSoundStreamReady) return 0;
+    if (soundID == GSSND_INVALID_ID || soundID >= *snd_data_number) return 0;
+    entry = &snd_data[soundID];
+    volume = _sndGetProperVolume(entry, volume);
+    if (entry->stream == 1) {
+        return _sndPlaySTREAM(entry, soundID, time, volume, mode);
+    }
+    if (entry->soundEffect == 1) {
+        return _sndPlaySE(entry, soundID, volume);
+    }
+    return _sndPlayBGM(entry, soundID, time, volume, mode);
+}
+
+u32 _sndStopBGM(GSsndSEEntry* entry, u32 time, u32 mode)
+{
+    GSsndWork* work = entry->work;
+
+    if (work == 0) return 0;
+    if (entry->open != 1) return 0;
+    if (work->playbackID == GSSND_INVALID_ID) return 0;
+    sndSeqVolume(0, time, work->playbackID, SND_SEQVOL_STOP);
+    work->playbackID = GSSND_INVALID_ID;
+    return 1;
+}
+
+u32 _sndStopSE(GSsndSEEntry* entry, u32 time, u32 mode)
+{
+    GSsndWork* work = entry->work;
+    u32 result;
+
+    if (work == 0) return 0;
+    if (work->playbackID == GSSND_INVALID_ID) return 0;
+    if (sndFXCheck(work->playbackID) != GSSND_INVALID_ID) {
+        result = sndFXKeyOff(work->playbackID);
+    } else {
+        result = 0;
+    }
+    work->playbackID = GSSND_INVALID_ID;
+    return result;
+}
+
+u32 _sndStopSTREAM(GSsndSEEntry* entry, u32 time, u32 mode)
+{
+    GSsndWork* work = entry->work;
+    GSsndStream* stream;
+    GSsndStream* first;
+    GSsndStream* second;
+
+    if (work == 0) return 0;
+    if (work->playbackID == GSSND_INVALID_ID) return 0;
+    GSfsysCancel(work->playbackID);
+    work->playbackID = GSSND_INVALID_ID;
+    stream = _sndGetStream(snd_file[entry->seqID].fileNo);
+    if (stream == 0) return 0;
+    if (stream->next != 0) {
+        first = stream->next;
+        second = stream;
+    } else {
+        first = stream;
+        second = stream->chain;
+    }
+    sndStreamDeactivate(first->streamID);
+    sndStreamDeactivate(second->streamID);
+    _sndFreeStream(first);
+    _sndFreeStream(second);
+    return 1;
+}
+
+u32 _sndSetVolumeWork(u32 soundID, u8 volume)
+{
+    GSsndSEEntry* entry;
+    GSsndWork* work;
+
+    entry = &snd_data[soundID];
+    if (entry->open != 1) {
+        if (entry->soundEffect == 1) {
+            GSsndOpen(soundID, 0, 0);
+        } else {
+            return 0;
+        }
+    }
+    work = entry->work;
+    if (work != 0) {
+        work->volume = volume & GSSND_MAX_VOLUME;
+    }
+    return 1;
+}
+
+u32 _sndSetVolume(GSsndSEEntry* entry, s32 time, s32 volume)
+{
+    GSsndWork* work = entry->work;
+
+    if (work == 0) return 0;
+    work->volume = _sndGetProperVolume(entry, volume);
+    if (work->playbackID != GSSND_INVALID_ID) {
+        if (entry->stream == 1) {
+            _sndStreamVolume(work->volume, time, work->playbackID, GSSND_STREAM_FADE_VOLUME);
+        } else if (entry->soundEffect == 1) {
+            sndFXCtrl(work->playbackID, SND_MIDICTRL_VOLUME, work->volume);
+        } else {
+            sndSeqVolume(work->volume, time, work->playbackID, SND_SEQVOL_CONTINUE);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+void _sndCheckSndWorkALL(void)
+{
+    s32 i;
+
+    GSlogWrite("_sndCheckSndWorkALL:Start\n");
+    for (i = 0; i < _maxSoundID; i++) {
+        GSsndGetStatus((unsigned long)i);
+    }
+    GSlogWrite("_sndCheckSndWorkALL:End\n");
+}
+
+void* _sndSetSampleDataUploadCallbackFunction(u32 offset, u32 bytes)
+{
+    s32 result;
+
+    while (ARGetDMAStatus()) {
+    }
+    while (true) {
+        result = GSdvdRead(_SampleDataFileInfo, _SampleDataUploadBuffer, bytes, offset + _SampleDataFileOffset);
+        switch (result) {
+        case DVD_RESULT_CANCELED:
+        case DVD_RESULT_FATAL_ERROR:
+            continue;
+        }
+        break;
+    }
+    return _SampleDataUploadBuffer;
+}
+
+u32 _sndOpenWave(u32 waveID, u32 fromDVD, u32 dvdFileID, u32 sampleOffset, u32 resourceGroup,
+                 u32 poolResID, u32 projectResID, u32 sampDirResID)
+{
+    GSsndWaveEntry* entry;
+    void* project;
+    void* samples;
+    void* sampDir;
+    void* pool;
+
+    if (!gSoundStreamReady) return 0;
+    if (waveID >= *snd_wave_data_number) return 0;
+    entry = &snd_wave_data[waveID];
+    if (entry->open == 1) return 0;
+    project = GSresGetResource(resourceGroup, projectResID);
+    if (project == 0) return 0;
+    sampDir = GSresGetResource(resourceGroup, sampDirResID);
+    if (sampDir == 0) return 0;
+    pool = GSresGetResource(resourceGroup, poolResID);
+    if (pool == 0) return 0;
+    if (fromDVD == 1) {
+        samples = 0;
+        sndSetSampleDataUploadCallback(_sndSetSampleDataUploadCallbackFunction, ARQGetChunkSize());
+        _SampleDataFileInfo = GSdvdOpen((const char*)dvdFileID);
+        if (_SampleDataFileInfo == 0) return 0;
+        _SampleDataFileOffset = sampleOffset;
+        _SampleDataUploadBuffer = _sndDoMalloc(ARQGetChunkSize());
+        if (_SampleDataUploadBuffer == 0) {
+            GSdvdClose(_SampleDataFileInfo);
+            return 0;
+        }
+    } else {
+        samples = (void*)dvdFileID;
+        sndSetSampleDataUploadCallback(0, 0);
+    }
+    if (sndPushGroup(project, entry->groupID, samples, sampDir, pool) == FALSE) {
+        if (fromDVD == 1) {
+            GSdvdClose(_SampleDataFileInfo);
+        }
+        return 0;
+    }
+    if (fromDVD == 1) {
+        _sndDoFree(_SampleDataUploadBuffer);
+        GSdvdClose(_SampleDataFileInfo);
+    }
+    entry->open = 1;
+    return 1;
+}
+
+u32 _sndClose(u32 soundID, u8 stop)
+{
+    GSsndSEEntry* entry;
+    GSsndWork* work;
+
+    if (!gSoundStreamReady) return 0;
+    if (soundID == GSSND_INVALID_ID || soundID >= *snd_data_number) return 0;
+    entry = &snd_data[soundID];
+    if (entry->open != 1) return 0;
+    work = entry->work;
+    if (work == 0) return 0;
+    if (stop == 1) {
+        GSsndStop(soundID, 0, 0);
+    }
+    _sndInitParms(entry, work);
+    _sndFreeSndWork(work);
+    entry->work = 0;
+    entry->open = 0;
+    return 1;
+}
+
+void _sndReceiveMessage(SND_VOICEID voiceID, s32 message)
+{
+    u32 soundID = _sndDesc2Id(voiceID);
+
+    if (soundID != 0) {
+        _sndClose(soundID, 0);
+    }
+}
 
 u8 _sndStreamInit(u32 count)
 {

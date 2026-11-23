@@ -17,6 +17,13 @@ extern "C" {
 
 enum { GSSND_EMITTER_DISTANCE_FILTER = 0x80 };
 
+#define GSSND_ALLOC_ALIGNMENT 32
+#define GSSND_PAN_CENTER 64
+#define GSSND_REVERB_PARM_COUNT 6
+#define GSSND_SOUND_GROUP_SHIFT 4
+#define GSSND_SOUND_GROUP_MASK 15
+#define GSSND_SEQ_SPEED_NORMAL 256
+
 /* GSsnd state paired with the MusyX 3-D emitter and listener records. */
 typedef struct GSsndEmitter {
     u8 inUse;
@@ -48,8 +55,8 @@ typedef struct GSsndListener {
 GSsndWork* _sndGetNewSndWork(void);
 void _sndCheckSndWorkALL(void);
 void _sndInitParms(GSsndSEEntry* entry, GSsndWork* work);
-void _sndOpenWave(u32 waveID, u32 fromDVD, u32 dvdFileID, u32 sampleOffset, u32 resourceGroup,
-                  u32 poolResID, u32 projectResID, u32 sampDirResID);
+u32 _sndOpenWave(u32 waveID, u32 fromDVD, u32 dvdFileID, u32 sampleOffset, u32 resourceGroup,
+                 u32 poolResID, u32 projectResID, u32 sampDirResID);
 void _sndSetReverbParm(u32 preset);
 u32 _sndSetVolumeWork(u32 soundID, u8 volume);
 void* _sndDoMalloc(size_t size);
@@ -80,6 +87,14 @@ u32 _sndStopSTREAM(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndStopSE(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndStopBGM(GSsndSEEntry *entry, u32 time, u32 mode);
 u32 _sndPlay(u32 soundID, u32 time, u8 volume, u32 mode);
+u32 _sndPlaySTREAM(GSsndSEEntry *entry, u32 soundID, u32 time, u8 volume, u32 mode);
+u32 _sndPlaySE(GSsndSEEntry *entry, u32 soundID, u8 volume);
+u32 _sndPlayBGM(GSsndSEEntry *entry, u32 soundID, u32 time, u8 volume, u32 mode);
+u32 _sndDesc2Id(SND_VOICEID voiceID);
+GSsndStream *_sndGetNewStream(void);
+void _sndFreeStream(GSsndStream *stream);
+void _sndFreeSndWork(GSsndWork *work);
+void *_sndSetSampleDataUploadCallbackFunction(u32 offset, u32 bytes);
 void _sndStreamCtrl(GSsndStream *stream, u8 mode);
 u32 _sndStreamNibble_HeaderON2OFF(u32 nibbleCount);
 
