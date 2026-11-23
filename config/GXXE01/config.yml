@@ -169,6 +169,11 @@ block_relocations:
   - source: ".text:0x8010A224"
   - source: ".text:0x8010A3C8"
   - source: ".text:0x8010A7E4"
+  # Retained robj prefix routines retain the original SDA2 displacement of the
+  # robj.c compiler-local 0.5 literal until those routines are recovered.
+  - source: ".text:0x8025E0B8"
+  - source: ".text:0x8025E61C"
+  - source: ".text:0x8025E71C"
   # Retained tvariant.o operators retain the original SDA2 displacement of the
   # compiler-local 0.0f literal supplied by the recovered tvariant.cpp.
   - source: ".text:0x8023FABC"

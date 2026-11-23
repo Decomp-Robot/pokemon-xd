@@ -3739,6 +3739,11 @@ game/GSAPI/GSsysdolphin_baselib/baselib/random.c:
 	.sdata      start:0x804E8610 end:0x804E8618
 	.sdata2     start:0x804EF190 end:0x804EF1A0
 
+game/GSAPI/GSsysdolphin_baselib/baselib/robj.c:
+	.text       start:0x8025EA98 end:0x8025EE68
+	.bss        start:0x804B2398 end:0x804B23F0
+	.sdata2     start:0x804EF1E8 end:0x804EF1F0
+
 game/GSAPI/GSsysdolphin_baselib/baselib/spline.c:
 	.text       start:0x802601F8 end:0x80260E38
 	.sdata2     start:0x804EF258 end:0x804EF2A4

@@ -14,6 +14,11 @@ typedef union _HSD_ObjData {
 
 typedef void (*HSD_AnimUpdate)(void *object, u32 channel, HSD_ObjData *value);
 
+/* Channels of the values an animation reports to its update callback. */
+typedef enum _HSD_AnimChannel {
+    HSD_ROBJ_UPDATE_CHANNEL = 1 /* update state of a constraint */
+} HSD_AnimChannel;
+
 /* Playback states kept in the low nibble of HSD_FObj::flags. */
 typedef enum _FObjLoadState {
     FOBJ_LOAD_NONE = 0,
