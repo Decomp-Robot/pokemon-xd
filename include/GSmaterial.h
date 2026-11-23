@@ -3,24 +3,38 @@
 
 #include <types.h>
 #include <hsd/state.h>
+#include <hsd/tobj.h>
+#include <GSgfx.h>
 
-union GScolor;
 struct GStexture;
-struct _HSD_MObj;
 
 struct GSmaterial {
     u16 mSavedAlpha;
-    u16 mEnabledExtensions; // 0x002: GS_MATERIAL_EXT_* flags currently on.
-    u8 _04[4];
+    u16 mEnabledExtensions; // GS_MATERIAL_EXT_* flags currently on.
+    u32 mSavedFlags;        // Material flags saved while an extension is on.
     _HSD_MObj *mMaterial;
-    u8 _0C[40];
+    GScolor mModulate;      // Colour the texture is modulated with.
+    u8 mColorChannels[4];   // Source channel of each output colour channel.
+    _HSD_TObj *mEnvMapTexture;    // Texture object of the environment map.
+    _HSD_ImageDesc *mEnvMapImage; // Image the environment map was built from.
+    GStexture *mEnvMapSource;     // Texture the environment map was set up for.
+    s32 mEnvMapMode;        // Environment map mapping mode.
+    s32 mEnvMapType;        // Environment map blending type.
+    f32 mEnvMapBlend;       // Environment map blend factor.
+    _HSD_ImageDesc *mImageDesc; // Image the texture change put in.
+    HSD_PEDesc *mPEDesc;    // PE descriptor the material renders with.
 };
+
+/* Marks a material descriptor slot that no descriptor was installed in yet. */
+#define GS_MATERIAL_PEDESC_NONE ((HSD_PEDesc *)0xFEFEFEFE)
+#define GS_MATERIAL_IMAGEDESC_NONE ((_HSD_ImageDesc *)0xFEFEFEFE)
 
 /* Extra rendering modes a material can carry. */
 enum GSmaterialExtension {
     GS_MATERIAL_EXT_MODULATION = 0x1,
     GS_MATERIAL_EXT_COLOR_SWAP = 0x2,
-    GS_MATERIAL_EXT_ENV_MAP = 0x4
+    GS_MATERIAL_EXT_ENV_MAP = 0x4,
+    GS_MATERIAL_EXT_ALL = 0xFFFF
 };
 
 extern "C" void *GSmaterialGetTexture(void *material, void *tex);

@@ -78,7 +78,30 @@ static inline void HSD_JObjRef(_HSD_JObj *jobj)
     }
 }
 
+/* First child joint, or no joint if there is no parent to look it up on. */
+static inline _HSD_JObj *HSD_JObjGetChild(_HSD_JObj *jobj)
+{
+    if (jobj == NULL) {
+        return NULL;
+    }
+    return jobj->child;
+}
+
+/* Next sibling joint, or no joint if there is no joint to look it up on. */
+static inline _HSD_JObj *HSD_JObjGetNext(_HSD_JObj *jobj)
+{
+    if (jobj == NULL) {
+        return NULL;
+    }
+    return jobj->next;
+}
+
 _HSD_JObj *HSD_JObjLoadJoint(_HSD_Joint *joint);
+_HSD_JObj *HSD_JObjAlloc(void);
+_HSD_JObj *HSD_JObjRemove(_HSD_JObj *jobj);
+void HSD_JObjAddChild(_HSD_JObj *jobj, _HSD_JObj *child);
+void HSD_JObjAddNext(_HSD_JObj *jobj, _HSD_JObj *next);
+u32 HSD_JObjGetFlags(_HSD_JObj *jobj);
 void HSD_JObjAnim(_HSD_JObj *jobj);
 void HSD_JObjClearFlags(_HSD_JObj *jobj, u32 flags);
 void HSD_JObjSetFlags(_HSD_JObj *jobj, u32 flags);

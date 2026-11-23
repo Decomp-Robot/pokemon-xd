@@ -19,6 +19,8 @@ typedef struct _HSD_MObj _HSD_MObj;
 typedef struct _HSD_MObj HSD_MObj;
 typedef struct _HSD_TObj _HSD_TObj;
 typedef struct _HSD_TObj HSD_TObj;
+typedef struct _HSD_ImageDesc _HSD_ImageDesc;
+typedef struct _HSD_ImageDesc HSD_ImageDesc;
 typedef struct _HSD_PObj _HSD_PObj;
 typedef struct _HSD_PObj HSD_PObj;
 typedef struct _HSD_RObj _HSD_RObj;
