@@ -5,6 +5,14 @@ splits: config/GXXE01/splits.txt
 ldscript_template: config/GXXE01/ldscript.tpl
 mw_comment_version: 10
 block_relocations:
+  # Extracted memcard consumers retain the original absolute addresses of the
+  # compiler-local increment table supplied by memcard.cpp.
+  - source: ".text:0x801CA2A8"
+  - source: ".text:0x801CA2C0"
+  - source: ".text:0x801CC334"
+  - source: ".text:0x801CC350"
+  - source: ".text:0x801CD1C4"
+  - source: ".text:0x801CD1D4"
   # Extracted fade distortion consumers retain the original SDA2 displacement
   # of the compiler-local 3.0f literal supplied by fade_effect.cpp.
   - source: ".text:0x801AD94C"

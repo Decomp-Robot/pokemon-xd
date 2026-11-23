@@ -3287,6 +3287,11 @@ game/app/script/scriptModel.cpp:
 	.sbss       start:0x804EB6D8 end:0x804EB6E0
 	.sdata2     start:0x804EE790 end:0x804EE7A0
 
+game/app/memcard/memcard.cpp:
+	.text       start:0x801C9E04 end:0x801CA12C
+	.rodata     start:0x802F8708 end:0x802F8718
+	.sbss       start:0x804EB6E0 end:0x804EB6E8
+
 game/app/memcard/savedata.cpp:
 	.text       start:0x801CE8FC end:0x801CF11C
 	.rodata     start:0x802F8770 end:0x802F87E0
