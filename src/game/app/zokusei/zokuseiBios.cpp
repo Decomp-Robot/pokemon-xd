@@ -30,7 +30,7 @@ u16 zokuseiBiosGetSpriteID(u16 zokuseiDataId)
 }
 
 // Sprite ID of the small icon of the type.
-u32 zokuseiBiosGetSmallSpriteID(u16 zokuseiDataId)
+u16 zokuseiBiosGetSmallSpriteID(u16 zokuseiDataId)
 {
     if (zokuseiDataId >= *zokusei_data_number) return 0;
     return zokusei_data[zokuseiDataId].smallSpriteID;

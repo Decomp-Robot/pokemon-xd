@@ -26,7 +26,7 @@ s32 zokuseiGetAisyouValue(u16 zokuseiDataId, u8 direction, u8 filter);
 u16 zokuseiGetWazaJoutaiAsDefenseZokuseiAry(u16 zokusei, u16 *defense, u16 count);
 u16 zokuseiGetWazaJoutai(u16 zokuseiDataId, u16 defenseZokuseiDataId);
 u16 zokuseiBiosGetSpriteID(u16 zokuseiDataId);
-u32 zokuseiBiosGetSmallSpriteID(u16 zokuseiDataId);
+u16 zokuseiBiosGetSmallSpriteID(u16 zokuseiDataId);
 u32 zokuseiBiosGetName(u16 zokuseiDataId);
 extern u32 *zokusei_data_number;
 extern ZokuseiData *zokusei_data;

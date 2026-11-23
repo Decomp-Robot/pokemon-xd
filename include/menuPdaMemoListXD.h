@@ -29,6 +29,18 @@ public:
     void Sort(menuPdaMemoSort order);
     void SortPokemonID();
     void SortGojyuon();
+    void LoadHero(bool hero);
+    void InitWork();
+    void SetPokemonIDs();
+    void Release();
+    long TermThread(MENU_MODEL *model);
+    void SetHeroMotion();
+    Pokemon *GetPokemonPointer(long index);
+    long GetMenuItemNumber(tagSPRITE_WORK *sprite);
+    void ListMain(tagWINDOW_WORK *window);
+    void ListPosition();
+    void _setCursor(CURSOR pos);
+    CURSOR _getCursor();
     void Sort_Small(MemoSortBuff *entries, long count);
     void Sort_Name(MemoSortBuff *entries, long count);
     u16 SortGojyuonDataSet(u16 species);
@@ -53,17 +65,26 @@ public:
     MENU_MODEL mPokemonModel;
     MENU_MODEL mHeroModel;
     f32 mAlpha[8];
-    u8 _23c[4];
+    u8 mHeroUnloadFlag;
+    u8 mHeroLoadFlag;
+    u8 mHeroMotionFlag;
+    u8 _23f;
     CURSOR mCursor;
     f32 mScrollX;
     f32 mScrollY;
     f32 mTargetScrollX;
     f32 mTargetScrollY;
-    u8 _254[12];
+    long mScrollState;
+    long mVisibleNum;
+    long mReserved;
     GSthread *mHeroThread;
 };
 
 extern pdaMemoList *pMemoList;
+
+// Called by the hero model loader's worker thread once the model is no
+// longer needed. Its result tells the thread system whether it may finish.
+long _menuPdaMemoListThread(MENU_MODEL *model);
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,7 +92,7 @@ extern "C" {
 CURSOR *menuPdaMemoXDMain(CURSOR *cursor);
 void menuPdaMemoListDispPokemonModel(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long layout);
 MENU_MODEL *menuPdaMemoListGetMenuModelWork();
-u8 menuPdaMemoListIsLoadHero(void);
+bool menuPdaMemoListIsLoadHero(void);
 void menuPdaMemoListSetHeroMotion(void);
 u8 menuPdaMemoListIsTermModel(void);
 void menuPdaMemoListLoadHero(bool hero);
