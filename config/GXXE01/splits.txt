@@ -2516,7 +2516,7 @@ game/app/pokemon/darkPokemonList.cpp:
 	.sdata      start:0x804E83D8 end:0x804E83DC
 
 game/app/pokemon/pokemonStatusPokemon.cpp:
-	.text       start:0x8014AC54 end:0x8014B354
+	.text       start:0x8014AAE0 end:0x8014B354
 	.sdata2     start:0x804EDB88 end:0x804EDB90
 
 game/app/pokemon/darkPokemonBios.cpp:

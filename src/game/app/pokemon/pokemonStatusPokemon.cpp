@@ -1,11 +1,65 @@
 #include <Pokemon.h>
 #include <pokemonDataBios.h>
+#include <relglobal.h>
 #include <libc/memory.h>
 
 const u16 POKEMON_POOL_FRIEND_LEVEL_MAX = 255;
 
 const long POKEMON_DARK_POINT_MAX = 6553500;
 const unsigned long POKEMON_RARE_PARAM_LIMIT = 8;
+
+void Pokemon::setReversMode(bool enabled)
+{
+    DarkPokemon *darkPokemon = getDarkPokemon();
+    if (darkPokemon != 0) {
+        darkPokemon->setReversMode(enabled);
+    }
+}
+
+bool Pokemon::isReversMode() const
+{
+    const DarkPokemon *darkPokemon = getDarkPokemon();
+    if (darkPokemon == 0) {
+        return false;
+    }
+    return darkPokemon->isReversMode();
+}
+
+bool Pokemon::isLegend() const
+{
+    u16 species;
+    u32 i;
+
+    if (getPokemonDataId() == 0) {
+        return false;
+    }
+    for (i = 0; i < *legendPokemonData_number; i++) {
+        species = legendPokemonData[i];
+        if (species == 0) {
+            return false;
+        }
+        if (species == getPokemonDataId()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Pokemon::isHatena() const
+{
+    u16 species = getPokemonDataId();
+
+    if (species == 0) {
+        return true;
+    }
+    if (pokemonDB_GetName(species) == 0) {
+        return true;
+    }
+    if (species >= *pokemon_data_number) {
+        return true;
+    }
+    return false;
+}
 
 bool Pokemon::checkValid() const
 {

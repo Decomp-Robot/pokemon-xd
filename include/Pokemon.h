@@ -97,6 +97,7 @@ struct Pokemon {
 #ifdef __cplusplus
     Pokemon &operator=(const Pokemon &other);
     void setReversMode(bool enabled);
+    bool isReversMode() const;
     bool isHatena() const;
     bool isFuseiFlag() const;
     GamedataAttest *getAttest();
