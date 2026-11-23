@@ -3626,7 +3626,7 @@ game/app/d2present/d2present.cpp:
 	.sbss       start:0x804EB9B8 end:0x804EB9C0
 
 game/GSAPI/GSscript/tiga.cpp:
-	.text       start:0x80239C74 end:0x8023AACC
+	.text       start:0x80239C74 end:0x8023ACDC
 	.rodata     start:0x802F9358 end:0x802F9368
 	.sbss       start:0x804EB9C0 end:0x804EB9C8
 

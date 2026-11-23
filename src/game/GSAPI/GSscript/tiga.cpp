@@ -4,6 +4,7 @@
 #include <floor.h>
 #include <floorManager.h>
 #include <GSthread.h>
+#include <string.h>
 
 
 namespace GSscript {
@@ -176,6 +177,76 @@ void Tiga::makeStateData(GSBinWriteStream* stream)
     stream->writeU32(8);
     for (i = 0; i < 8; i++) {
         mThreadSlots[i]->makeStateData(stream);
+    }
+}
+
+int Tiga::getNameToFuncId(const char* name)
+{
+    enum { FunctionIdTag = 0x01000000 };
+    int id = 0;
+    if (mCodeCount == 0) {
+        return 0;
+    }
+    TPCFunc* func = mFuncTable;
+    while (func != &mFuncTable[mFuncCount]) {
+        if (strcmp(func->name, name) == 0) {
+            return FunctionIdTag | id;
+        }
+        func++;
+        id++;
+    }
+    return 0;
+}
+
+long Tiga::getResultValue(long threadHandle)
+{
+    if (mResultVariant != 0
+        && (mResultVariant->kind == VariantInteger || mResultVariant->kind == VariantSingle)) {
+        return mResultVariant->getInteger();
+    }
+    return 0;
+}
+
+TPCCode* Tiga::getIdToCodeAdress(int id)
+{
+    int index = id & 0xFFFF;
+    if (index < 0 || index > mFuncCount) {
+        return 0;
+    }
+    return mFuncTable[index].code;
+}
+
+GSresID* Tiga::searchResID(unsigned long groupID, unsigned long resourceID)
+{
+    GSresID* end = mPeople + mPeopleCount;
+    GSresID* res = mPeople;
+    while (res != end) {
+        if (res->groupId == groupID && res->resourceId == resourceID) {
+            return res;
+        }
+        res++;
+    }
+    return 0;
+}
+
+void Tiga::setPresetVar(tigaVariant* variant, int variable, int index)
+{
+    setExtendVariable(variant, variable, index);
+}
+
+void Tiga::getPresetVar(tigaVariant* variant, int variable, int index)
+{
+    enum { VariableThreadHandle = 5 };
+    variant->kind = VariantEmpty;
+    switch (variable) {
+    case VariableThreadHandle:
+        // The current thread reports its own handle.
+        variant->kind = VariantInteger;
+        variant->value = mCurrentThread != 0 ? mCurrentThread->mHandle : 0;
+        break;
+    default:
+        getExtendVariable(variant, variable, index);
+        break;
     }
 }
 

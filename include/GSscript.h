@@ -17,6 +17,12 @@ struct TPCCode {
     u8 operand;
     u16 immediate;
 };
+// Entry of the function table of a mapped script: the code a script function
+// starts at and the name it is registered under.
+struct TPCFunc {
+    TPCCode* code;
+    char* name;
+};
 
 namespace GSscript {
 void tigaErrMessage(const char*);
@@ -169,17 +175,24 @@ public:
     bool mSaveFlag;
     u32 mUnknownStateAfterSaveFlag;
     int mLiveWaza;
-    u8 mUnknownStateAfterCounter[0xC];
+    tigaVariant* mResultVariant;
+    int mCodeCount;
+    u8* mHead;
     TPCCode* mCodeSection;
     int mVariantCount;
     tigaVariant* mVariants;
-    u8 mUnknownStateAfterVariants[0x4];
+    int mStringCount;
     char* mStringBuffer;
-    u8 mUnknownStateAfterStringBuffer[0xc];
+    int mVectorCount;
+    GSvec* mVectors;
+    int mPeopleCount;
     GSresID* mPeople;
     int mArrayCount;
     tigaArrayFixed** mArrays;
-    u8 mUnknownStateAfterArrays[0x10];
+    int mFuncCount;
+    TPCFunc* mFuncTable;
+    u32 mUnknownStateAfterFuncTable;
+    u8 mUnknownFlagAfterFuncTable;
     TigaThread* mCurrentThread;
 
     unsigned long getStateSize();
@@ -188,6 +201,7 @@ public:
 
     bool isMapping();
     int getNameToFuncId(const char* name);
+    TPCCode* getIdToCodeAdress(int id);
     GSresID* searchResID(unsigned long groupID, unsigned long resourceID);
     long runParams(int functionID, tigaVariant* parameters, int count, bool newThread);
     long getResultValue(long threadHandle);
@@ -196,6 +210,8 @@ public:
     void unblockThread(long threadHandle);
     void setRpVec(const GSvec*);
     bool runParamsWait(int, tigaVariant*, int, tigaVariant*);
+    void getPresetVar(tigaVariant* variant, int variable, int index);
+    void setPresetVar(tigaVariant* variant, int variable, int index);
     int cmpArray(int, tigaVariant*, tigaVariant*);
     int cmpVector(int, tigaVariant*, tigaVariant*);
     bool cmpThread(int, tigaVariant*, tigaVariant*);
