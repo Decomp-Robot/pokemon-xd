@@ -27,6 +27,9 @@ GSmemCell* DLInsert(GSmemCell* list, GSmemCell* cell, GSmemHeapDesc* hd);
 GSmemCell* DLExtract(GSmemCell* list, GSmemCell* cell);
 GSmemCell* DLAddFront(GSmemCell* list, GSmemCell* cell);
 
+extern "C" void GSmemDumpHeapInfo(void) {
+}
+
 extern "C" s32 OSSetAllocMethodHeap(s32 heap, s32 method) {
     GSmemHeapDesc* hd;
     s32 prev;
