@@ -202,6 +202,17 @@ block_relocations:
   - source: ".text:0x80241DB4"
   - source: ".text:0x80241E28"
   - source: ".text:0x80242058"
+  # The Mew tutor templates pack wildcard move IDs as plain numeric fields;
+  # they do not reference the nearby GXSetVtxDesc or menuCBBios RuleConst code.
+  - source: ".data:0x8041C904"
+  - source: ".data:0x8041C940"
+  - source: ".data:0x8041C94C"
+  - source: ".data:0x8041C9F4"
+  - source: ".data:0x8041CA50"
+  - source: ".data:0x8041CA54"
+  - source: ".data:0x8041CA78"
+  - source: ".data:0x8041CAB4"
+  - source: ".data:0x8041CAC0"
 add_relocations:
   - source: .text:0x801265E8
     type: ha

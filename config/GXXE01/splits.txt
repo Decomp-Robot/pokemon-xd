@@ -3858,6 +3858,9 @@ game/app/people/peopleInfoBios.cpp:
 	.data       start:0x8041A8B0 end:0x8041A8D4
 	.sdata2     start:0x804EF798 end:0x804EF7A4
 
+game/app/mewwaza/mewwazadata.cpp:
+	.data       start:0x8041C780 end:0x8041CBA0
+
 game/app/people/peopleBios.cpp:
 	.text       start:0x80297054 end:0x802979AC
 	.sbss       start:0x804EBBB8 end:0x804EBBC0
