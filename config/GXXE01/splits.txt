@@ -2183,6 +2183,10 @@ game/GSmodelRender.cpp:
 	.rodata     start:0x802ED0C0 end:0x802ED0F4
 	.sdata2     start:0x804ED498 end:0x804ED4D0
 
+game/GSAPI/GSmodel/part.cpp:
+	.text       start:0x800FC8A8 end:0x800FC9D0
+	.sbss       start:0x804EAF30 end:0x804EAF40
+
 game/GSAPI/GSmodel/save_state.cpp:
 	.text       start:0x800FC9D0 end:0x800FCD04
 	.rodata     start:0x802ED130 end:0x802ED140
