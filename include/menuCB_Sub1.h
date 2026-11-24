@@ -20,6 +20,7 @@ enum {
 
 #ifdef __cplusplus
 class Hero;
+u8 _menuCBPokemon_ErrorDispSet(long slot);
 long _menuCB_NotDarkWaza(long wazaID);
 void _menuCB_ErrorTAMAGOCheck(void);
 void _menuCBGCDelPokemon(void);

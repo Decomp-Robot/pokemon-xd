@@ -1299,6 +1299,8 @@ u16 *pokemon_GetNickname(Pokemon *pokemon);
 /* Item pocket, submenus and the entry screens' sources. */
 FightRuleData *menuCBBios_CurrentRule(void);
 u8 menuCBPokemonGetDataId(s32 port, s32 slot);
+u8 menuCBPokemonGetDataId_NULL(s32 port, s32 slot);
+u8 menuCBPokemonGetItemDataId(s32 port, s32 slot);
 s32 menuCBBattleStartGetStatus(void);
 u32 menuCBBios_ParticipationPokemonMax(void);
 u16 toolentryTaisenGetPokemonNum(s32 port);
@@ -2833,5 +2835,84 @@ void menuCBBattleStartDispTrainerFaceSub(tagWINDOW_WORK *window,
         GXWGFifo.f32 = one;
         layer.endSurface();
     }
+}
+
+void menuCBPokemonMaruWaku_ErrorSet(tagSPRITE_WORK *sprite, long slot)
+{
+    if (menuCBEntrySlotConditionGet(slot, MENU_CB_ENTRY_CONDITION_ANY) == 0) {
+        winSpriteSetDisp(sprite, false);
+        return;
+    }
+
+    if (menuCBPokemonGetDataId(_CB.mEntry.entryNo, slot) != 0) {
+        sprite->mRgba.mRed = 191;
+        sprite->mRgba.mGreen = 0;
+        sprite->mRgba.mBlue = 0;
+        winSpriteSetDisp(sprite, true);
+    } else if (menuCBPokemonGetDataId_NULL(_CB.mEntry.entryNo, slot) != 0) {
+        sprite->mRgba.mRed = 191;
+        sprite->mRgba.mGreen = 0;
+        sprite->mRgba.mBlue = 0;
+        winSpriteSetDisp(sprite, true);
+    } else {
+        winSpriteSetDisp(sprite, false);
+    }
+}
+
+void menuCBPokemonItem_ErrorSet(tagSPRITE_WORK *sprite, long slot)
+{
+    if (menuCBPokemonGetItemDataId(_CB.mEntry.entryNo, slot) != 0) {
+        s32 error = menuCBEntrySlotConditionGet(slot, MENU_CB_ENTRY_HELD_ITEM_NOT_ALLOWED);
+        error += menuCBEntrySlotConditionGet(slot, MENU_CB_ENTRY_PROHIBITED_ITEM);
+        error += menuCBEntrySlotConditionGet(slot, MENU_CB_ENTRY_DUPLICATE_HELD_ITEM);
+        error += menuCBEntrySlotConditionGet(slot, MENU_CB_ENTRY_ILLEGAL_HELD_ITEM);
+        if (error != 0) {
+            sprite->mRgba.mRed = 191;
+            sprite->mRgba.mGreen = 0;
+            sprite->mRgba.mBlue = 0;
+        }
+        winSpriteSetDisp(sprite, true);
+    } else {
+        winSpriteSetDisp(sprite, false);
+    }
+}
+
+}
+
+u8 _menuCBPokemon_ErrorDispSet(long slot)
+{
+    if (menuCBPokemonGetDataId(_CB.mEntry.entryNo, slot) == 0) {
+        return menuCBPokemonGetDataId_NULL(_CB.mEntry.entryNo, slot) != 0;
+    }
+    return true;
+}
+
+extern "C" {
+
+u8 menuCBPokemon_ErrorDispSet(tagSPRITE_WORK *sprite, long slot)
+{
+    if (menuCBPokemonGetDataId(_CB.mEntry.entryNo, slot) != 0) {
+        winSpriteSetDisp(sprite, true);
+    } else if (menuCBPokemonGetDataId_NULL(_CB.mEntry.entryNo, slot) != 0) {
+        winSpriteSetDisp(sprite, true);
+        return true;
+    } else {
+        winSpriteSetDisp(sprite, false);
+        return false;
+    }
+    return true;
+}
+
+bool toolBattle_tunaideMenu02menuTempBuffGet(u32 mask)
+{
+    return (_CB.mEntry.mTunaide02TempBuff & mask) != 0;
+}
+
+void toolBattle_tunaideMenu02menuTempBuffSet(u32 mask)
+{
+    if ((_CB.mEntry.mTunaide02TempBuff & mask) != 0) {
+        return;
+    }
+    _CB.mEntry.mTunaide02TempBuff |= mask;
 }
 }
