@@ -3,7 +3,6 @@
 
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
-#include <hsd/objalloc.h>
 
 typedef struct _HSD_Chan {
     struct _HSD_Chan *next;
@@ -60,22 +59,14 @@ void _HSD_StateInvalidateTevRegister(void);
 void _HSD_StateInvalidateTevStage(void);
 void _HSD_StateInvalidateColorChannel(void);
 int HSD_StateGetNumTevStages(void);
-void HSD_StateInitTev(void);
 GXTevStageID HSD_StateAssignTev(void);
-GXTevStageID HSD_Index2TevStage(int index);
 void HSD_StateSetNumTevStages(void);
 void HSD_StateSetNumTexGens(void);
-void HSD_StateRegisterTexGen(GXTexCoordID texgen);
 void HSD_SetTevRegAll(void);
 void HSD_SetupTevStage(HSD_TevDesc *desc);
 void HSD_SetupChannel(HSD_Chan *chan);
-void HSD_SetupChannelAll(HSD_Chan *chan);
 void HSD_DisableChannelLighting(GXChannelID chan);
 void HSD_StateSetNumChans(int num_chans);
-void HSD_RenderInitAllocData(void);
-HSD_ObjAllocData *HSD_RenderGetAllocData(void);
-HSD_ObjAllocData *HSD_TevRegGetAllocData(void);
-HSD_ObjAllocData *HSD_ChanGetAllocData(void);
 #ifdef __cplusplus
 }
 #endif
