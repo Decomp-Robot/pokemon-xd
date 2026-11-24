@@ -519,7 +519,7 @@ game/dbgMenuSub.cpp:
 	.text       start:0x80066C48 end:0x80067594
 
 game/dbgMenuSubHero.cpp:
-	.text       start:0x80067594 end:0x80067624
+	.text       start:0x80067594 end:0x80067670
 
 game/dbgMenuSubPartner.cpp:
 	.text       start:0x80067670 end:0x80067764
