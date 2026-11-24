@@ -153,6 +153,10 @@ enum PeopleGroupID {
     PEOPLE_GROUP_GLOBAL = 0
 };
 
+struct MotionTable {
+    long motions[5];
+};
+
 extern "C" {
 tagPeopleWork* peopleGet(unsigned long group, unsigned long id);
 unsigned long peopleGetHumanID(unsigned long group, unsigned long id);
@@ -213,5 +217,51 @@ float peopleInfoBiosGetColBallSize(tagPeopleInfoBios* info);
 void peopleGetNeckPos(u32 group,u32 id,GSvec* pos);
 float peopleVecCalcRotY(const GSvec* a,const GSvec* b,float yaw);
 u8 peopleInsideCheck(const GSvec* a,const GSvec* b,GSvec* c,float radius);
+void peopleSpeakStop(u32 group, u32 id);
+void peopleBlinkStart(u32 group, u32 id);
+void peopleBlinkStop(u32 group, u32 id);
+void peopleBlinkOnce(u32 group, u32 id);
+void peopleTaskSwich(u32 group, u32 id);
+void peopleSetFlagOff(u32 group, u32 id, u32 flags);
+void peopleSetRotXYZ(u32 group, u32 id, float x, float y, float z);
+void peopleWalkToXYZ(u32 group, u32 id, u8 keepMoving, float x, float y, float z);
+void peopleWalkToTarget(u32 group, u32 id, u32 targetGroup, u32 targetId, float speed, u8 keepMoving);
+void peopleSetNeckTargetXYZ(u32 group, u32 id, long x, long y, long z);
+void peopleRemoveNeckTarget(u32 group, u32 id, float speed);
+void peopleRotateTo(u32 group, u32 id, float angle);
+void peopleRotateToXYZ(u32 group, u32 id, float x, float y, float z, float speed);
+void peopleRotateStop(u32 group, u32 id);
+void peopleSetSpeedRate(u32 group, u32 id, float rate);
+void peopleInitEvent(u32 group, u32 id);
+void peopleTermEvent(u32 group, u32 id);
+void peopleFallAppear(u32 group, u32 id, float height);
+void peopleDispMark(u32 group, u32 id, u32 markType);
+void peopleSetCollision(u32 group, u32 id, u8 enable);
+u8 peopleGazeHeroCheck(u32 group, u32 id);
+u8 peopleSetAnimBlend(u32 group, u32 id, long motion, long frame, long frames);
+u8 peopleWaitSyncMotionBlend(u32 group, u32 id, bool wait);
+long peopleWalkPause(u32 group, u32 id, u8 pause);
+u8 peopleWalkPauseTalkMode(u32 group, u32 id, u8 talkMode);
+u32 peopleRunOrNot(u32 group, u32 id);
+float peopleGetSpeed(u32 group, u32 id);
+void peopleSetDefaultMotionTable(u32 group, u32 id);
+void peopleSetMotionTable(u32 group, u32 id, MotionTable table);
+void peopleSpeedSlowDownOn(u32 group, u32 id);
+void peopleSpeedSlowDownOff(u32 group, u32 id);
+void peopleSetRot(u32 group, u32 id, GSvec* rotation);
+void peopleMoveNeckTargetHero(u32 group, u32 id, float speed);
+void peopleSetNeckTargetHero(u32 group, u32 id);
+void peopleSetNeckTarget(u32 group, u32 id, u32 targetGroup, u32 targetId);
+void peopleMoveNeckTarget(u32 group, u32 id, u32 targetGroup, u32 targetId, float speed);
+void peopleMoveNeckAngle(u32 group, u32 id, float yaw, float pitch, float speed);
+void peopleMoveNeckAngleWorld(u32 group, u32 id, float yaw, float pitch, float speed);
+void peopleMoveNeckTargetXYZ(u32 group, u32 id, long x, long y, long z, float speed);
+float peopleGetYDegreeRotation(u32 group, u32 id);
+void peopleAutoAnimation(u32 group, u32 id);
+void peopleManualAnimation(u32 group, u32 id);
+void peopleSetWalkSpeed(u32 group, u32 id, float speed, long animation);
+void peopleAttachWithMode(u32 group, u32 id, u32 parentGroup, long partIndex, long mode, u8 keepTransform);
+void peopleSetWaitAnimation(u32 group, u32 id);
+void peopleUnsetWaitAnimation(u32 group, u32 id);
 }
 #endif

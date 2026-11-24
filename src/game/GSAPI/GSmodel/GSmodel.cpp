@@ -337,7 +337,7 @@ extern "C" GSbound *GSmodelGetBound(_GSmodel *model)
     return &model->mBound;
 }
 
-extern "C" void GSmodelSetBoundCheck(_GSmodel *model, u8 enabled)
+extern "C" void GSmodelSetBoundCheck(_GSmodel *model, bool enabled)
 {
     if (enabled) {
         model->mFlags |= MODEL_FLAG_CHECK_BOUND;

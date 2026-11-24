@@ -33,6 +33,7 @@ void scriptGlowStart(float, u8, u8, u8, u8, u8);
 void scriptGlowEnd(void);
 void scriptSetLensFlare(int, u8, float, float, float);
 int scriptGetDarkPointZeroPokemonNum(void);
+int scriptSetEndedMotion(unsigned long group, unsigned long id, long motion, u8 wait);
 #ifdef __cplusplus
 }
 #endif

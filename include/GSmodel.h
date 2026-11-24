@@ -184,7 +184,7 @@ void GSmodelSetPosition(_GSmodel *model, GSvec *position);
 void GSmodelSetVisibility(_GSmodel *model, bool visible);
 void GSmodelSetRenderLayer(_GSmodel *model, s32 count, GSgfxLayerID *layers);
 void GSmodelSetRenderCamera(_GSmodel *model, _GScamera *camera);
-void GSmodelSetBoundCheck(_GSmodel *model, u8 enabled);
+void GSmodelSetBoundCheck(_GSmodel *model, bool enabled);
 void GSmodelSetShadowFlags(_GSmodel *model, u32 flags);
 void GSmodelSetShadowLight(_GSmodel *model, GSlight *light);
 void GSmodelSetShadowSurface(_GSmodel *model, s32 count, _GSmodel **surfaces);
