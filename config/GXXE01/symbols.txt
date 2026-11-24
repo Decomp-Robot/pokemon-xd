@@ -10861,7 +10861,7 @@ cmpVector__Q28GSscript4TigaFiPQ28GSscript11tigaVariantPQ28GSscript11tigaVariant 
 cmpThread__Q28GSscript4TigaFiPQ28GSscript11tigaVariantPQ28GSscript11tigaVariant = .text:0x80243098; // type:function size:0x450
 GSnetworkSetIP = .text:0x802434E8; // type:function size:0x4
 GSnetworkInit = .text:0x802434EC; // type:function size:0x4
-zz_02434f0_ = .text:0x802434F0; // type:function size:0xC
+effectViewerGetFloorModule = .text:0x802434F0; // type:function size:0xC
 WObjInfoInit = .text:0x802434FC; // type:function size:0x80
 WObjAmnesia = .text:0x8024357C; // type:function size:0x48
 WObjRelease = .text:0x802435C4; // type:function size:0x54
@@ -16260,7 +16260,7 @@ lbl_804B178C = .bss:0x804B178C; // type:object size:0x100
 lbl_804B188C = .bss:0x804B188C; // type:object size:0xC align:4 data:float
 lbl_804B1898 = .bss:0x804B1898; // type:object size:0x100
 lbl_804B1998 = .bss:0x804B1998; // type:object size:0x400 data:byte
-lbl_804B1D98 = .bss:0x804B1D98; // type:object size:0x30
+_floorModuleEffectViewer = .bss:0x804B1D98; // type:object size:0x2C
 debug_context = .bss:0x804B1DC8; // type:object size:0x2C8 scope:local
 alloc_data = .bss:0x804B2090; // type:object size:0x2C scope:local
 default_table = .bss:0x804B20C0; // type:object size:0x194 scope:local

@@ -3701,6 +3701,10 @@ game/GSAPI/GSscript/defobj.cpp:
 game/GSAPI/GSnetwork/GSnetwork.c:
 	.text       start:0x802434E8 end:0x802434F0
 
+game/app/effectEditor/effectEditor.cpp:
+	.text       start:0x802434F0 end:0x802434FC
+	.bss        start:0x804B1D98 end:0x804B1DC8
+
 game/GSAPI/GSsysdolphin_baselib/baselib/wobj.c:
 	.text       start:0x802434FC end:0x80243E38
 	.rodata     start:0x802F9770 end:0x802F97B0

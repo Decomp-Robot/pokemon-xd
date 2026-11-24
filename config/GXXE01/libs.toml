@@ -7581,6 +7581,17 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib]]
+name = "effectEditor"
+mw_version = "GC/2.6"
+cflags_preset = "game"
+progress_category = "game"
+cflags_extra = ["-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/app/effectEditor/effectEditor.cpp"
+completed = true
+
+[[lib]]
 name = "GSdvd"
 mw_version = "GC/2.6"
 cflags_preset = "game"
