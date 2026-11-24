@@ -3,35 +3,7 @@
 #include <GSlog.h>
 #include <GSvec.h>
 
-/* Interpolation modes accepted by GSsplineCreate. */
-enum {
-    GSSPLINE_LINEAR = 0,
-    GSSPLINE_CUBIC = 1,
-    GSSPLINE_CUBIC_ALT = 2,
-    GSSPLINE_LAGRANGE = 3
-};
-
-/* Value types stored by a spline. */
-enum {
-    GSSPLINE_FLOAT = 0,
-    GSSPLINE_VECTOR = 1
-};
-
-typedef struct GSspline {
-    s32 interpolation;
-    s32 dataType;
-    u8 capacity;
-    u8 count;
-    u8 reserved;
-    u8 timeCount;
-    void *values;
-    f32 *auxiliary;
-    f32 *times;
-    f32 startTime;
-    f32 endTime;
-    void *allocation;
-    void *controlAllocation;
-} GSspline;
+#include <GSspline.h>
 
 /* Diagnostics reported by the GSspline module. */
 static const char splineVectorNotInitialised[] = "GSsplineGetVectorValue: spline parameters not initialised!";
@@ -97,7 +69,7 @@ void GSsplineAddControlVectorValue(GSspline *spline, struct GSvec *value, f32 ti
     }
 }
 
-GSspline *GSsplineCreate(s32 interpolation, s32 dataType, u8 count)
+GSspline *GSsplineCreate(enum GSsplineInterpolation interpolation, enum GSsplineDataType dataType, u8 count)
 {
     GSspline *spline = 0;
     void *data;

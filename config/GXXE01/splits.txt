@@ -499,8 +499,9 @@ game/menuSub.cpp:
 	.sdata2     start:0x804EC5D0 end:0x804EC600
 
 game/menuPdaMemoWaveXD.cpp:
-	.text       start:0x80065854 end:0x80065B20
+	.text       start:0x80065854 end:0x80066594
 	.sbss       start:0x804EA940 end:0x804EA944
+	.sdata2     start:0x804EC600 end:0x804EC638
 
 game/menuPdaMemoWaveXDWaveData.cpp:
 	.text       start:0x80066594 end:0x800665F4
