@@ -16,6 +16,11 @@
 
 extern "C" {
 
+u16 fightOutPokemon_GetKanseiSndId(FightOutPokemon *pokemon)
+{
+    return pokemonDB_GetShout(figthOutPokemonGetPokemonDataId(pokemon));
+}
+
 // Move slots of a Pokemon record. Counting walks the four slots of a Pokemon
 // and reports how many of them hold a move; forgetting drops the move of one
 // slot and moves the moves behind it down, so the slots stay packed; copying

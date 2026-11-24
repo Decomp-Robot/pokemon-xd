@@ -144,6 +144,7 @@ enum PokemonDataID {
     POKEMON_DATA_ID_ANORITH = 390
 };
 u32 pokemonDB_GetName(u16);
+u32 pokemonDB_GetShout(u16 pokemonDataId);
 bool pokemonDB_GetTeachWaza(u16, u16);
 u32 pokemonDB_GetPokebodyId(u16 species, u8 shiny);
 
