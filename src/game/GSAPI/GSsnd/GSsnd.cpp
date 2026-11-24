@@ -1050,38 +1050,38 @@ GSsndEmitter* GSsndCreateEmitter(s32 soundID, GSsndVec3* position)
     return GSsndCreateEmitterParam(soundID, position, &velocity, 10000.0f, 0.0f, GSSND_MAX_VOLUME, 0);
 }
 
-u8 GSsndFreeEmitter(GSsndEmitter* emitter)
+bool GSsndFreeEmitter(GSsndEmitter* emitter)
 {
-    if (!gSoundStreamReady) return 0;
-    if (emitter == 0) return 0;
-    if (!emitter->inUse) return 1;
+    if (!gSoundStreamReady) return false;
+    if (emitter == 0) return false;
+    if (!emitter->inUse) return true;
     SND_VOICEID voiceID = sndEmitterVoiceID(&emitter->emitter);
     if (voiceID != GSSND_INVALID_ID) sndFXKeyOff(voiceID);
     sndRemoveEmitter(&emitter->emitter);
     _sndFreeEmitter(emitter);
-    return 1;
+    return true;
 }
 
-u8 GSsndUpdateEmitter(GSsndEmitter* emitter, GSsndVec3* position)
+bool GSsndUpdateEmitter(GSsndEmitter* emitter, GSsndVec3* position)
 {
-    if (!gSoundStreamReady) return 0;
-    if (emitter == 0) return 0;
-    if (!_sndCheckEmitter(emitter)) return 0;
+    if (!gSoundStreamReady) return false;
+    if (emitter == 0) return false;
+    if (!_sndCheckEmitter(emitter)) return false;
     GSsndVec3 velocity;
     PSVECSubtract((const Vec*)&emitter->position, (const Vec*)position, (Vec*)&velocity);
     if (sndUpdateEmitter(&emitter->emitter, (SND_FVECTOR*)position, (SND_FVECTOR*)&velocity,
                          emitter->maxVolume, 0)) {
         emitter->position = *position;
         emitter->velocity = velocity;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
-u8 GSsndCheckEmitter(GSsndEmitter* emitter)
+bool GSsndCheckEmitter(GSsndEmitter* emitter)
 {
-    if (!gSoundStreamReady) return 0;
-    if (emitter == 0) return 0;
+    if (!gSoundStreamReady) return false;
+    if (emitter == 0) return false;
     return _sndCheckEmitter(emitter) != 0;
 }
 

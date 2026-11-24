@@ -2,6 +2,7 @@
 #define GSTHREAD_H
 
 #include <types.h>
+#include <bool.h>
 
 typedef struct GSthread GSthread;
 
@@ -25,7 +26,7 @@ void GSthreadTerminate(GSthread *thread);
 void GSthreadTerminateGroup(u32 groupId);
 void GSthreadSwitch(void);
 long GSthreadClose(GSthread *thread);
-u8 GSthreadIsRunning(GSthread *thread);
+bool GSthreadIsRunning(GSthread *thread);
 
 #ifdef __cplusplus
 }

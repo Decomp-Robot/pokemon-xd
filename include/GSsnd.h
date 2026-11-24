@@ -2,6 +2,7 @@
 #define GSSND_H
 
 #include <GSsndPlayback.h>
+#include <bool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -240,9 +241,9 @@ void GSsndGetPushVolumeID(long soundID, GSsndVolumeStack* stack);
 long GSsndGetVolume(long soundID);
 unsigned long GSsndPopVolumeID(unsigned long soundID, long time);
 unsigned long GSsndPushVolumeID(unsigned long soundID, long time, long volume);
-unsigned char GSsndCheckEmitter(GSsndEmitter* emitter);
-unsigned char GSsndUpdateEmitter(GSsndEmitter* emitter, GSsndVec3* position);
-unsigned char GSsndFreeEmitter(GSsndEmitter* emitter);
+bool GSsndCheckEmitter(GSsndEmitter* emitter);
+bool GSsndUpdateEmitter(GSsndEmitter* emitter, GSsndVec3* position);
+bool GSsndFreeEmitter(GSsndEmitter* emitter);
 GSsndEmitter* GSsndCreateEmitter(long soundID, GSsndVec3* position);
 GSsndEmitter* GSsndCreateEmitterParam(long soundID, GSsndVec3* position, GSsndVec3* velocity,
                                       float maxDistance, float compression,
