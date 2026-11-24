@@ -134,7 +134,7 @@ FsysBlock* _fsysAllocBlock(void)
             candidate->data = _fsysBlock + i * _fsysBlockByteSize;
             candidate->prev = 0;
             candidate->next = 0;
-            candidate->size = 0;
+            candidate->offset = 0;
             block = candidate;
         }
         i++;
@@ -180,7 +180,7 @@ u8 _fsysInitBlock(u32 size)
         _fsysBlockManage[i].prev = 0;
         _fsysBlockManage[i].next = 0;
         _fsysBlockManage[i].data = 0;
-        _fsysBlockManage[i].size = 0;
+        _fsysBlockManage[i].offset = 0;
     }
     return 1;
 }

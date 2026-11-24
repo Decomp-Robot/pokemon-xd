@@ -32,7 +32,7 @@ struct FsysBlock {
     FsysBlock* prev;
     FsysBlock* next;
     void* data;
-    u32 size;
+    u32 offset;
 };
 
 struct FsysFile;
@@ -119,6 +119,54 @@ struct FsysHeader {
 };
 #define FSYS_HEADER_KEEP_CACHE 0x40000000
 
+/*! Set in an archive header whose resources may be taken from files under
+ *  debug/ on the disc instead of out of the archive. */
+#define FSYS_HEADER_DEBUG_OVERRIDE 1
+
+/*! Resource type words an archive header records for a resource and the
+ *  selector the type-hook table is looked up with. */
+typedef enum FsysDataTypeID {
+    FSYS_DATA_TYPE_NORMAL,
+    FSYS_DATA_TYPE_MAP,
+    FSYS_DATA_TYPE_OBJ,
+    FSYS_DATA_TYPE_COL,
+    FSYS_DATA_TYPE_BGM,
+    FSYS_DATA_TYPE_MSG,
+    FSYS_DATA_TYPE_FONT,
+    FSYS_DATA_TYPE_SCRIPT,
+    FSYS_DATA_TYPE_UNUSED_8,
+    FSYS_DATA_TYPE_TEX,
+    FSYS_DATA_TYPE_PARTICLE,
+    FSYS_DATA_TYPE_UNUSED_11,
+    FSYS_DATA_TYPE_CAMERA,
+    FSYS_DATA_TYPE_UNUSED_13,
+    FSYS_DATA_TYPE_OSLINK,
+    FSYS_DATA_TYPE_PKX,
+    FSYS_DATA_TYPE_WZX,
+    FSYS_DATA_TYPE_GFL,
+    FSYS_DATA_TYPE_NOT_LINKED_PARTICLE,
+    FSYS_DATA_TYPE_ENCODE_REL,
+    FSYS_DATA_TYPE_SOUND_STREAM_HEADER,
+    FSYS_DATA_TYPE_SOUND_STREAM,
+    FSYS_DATA_TYPE_MOVIE_STREAM_HEADER,
+    FSYS_DATA_TYPE_MOVIE_STREAM,
+    FSYS_DATA_TYPE_GSW,
+    FSYS_DATA_TYPE_ANT,
+    FSYS_DATA_TYPE_DECK
+} FsysDataTypeID;
+
+typedef enum FsysResTask {
+    FSYS_RES_TASK_ERROR_READDATAEXEC = -3,
+    FSYS_RES_TASK_ERROR_EXPANDFILE,
+    FSYS_RES_TASK_ERROR_STREAMING,
+    FSYS_RES_TASK_NONE,
+    FSYS_RES_TASK_READY,
+    FSYS_RES_TASK_STREAMING_COMPLETE,
+    FSYS_RES_TASK_READ_DATA,
+    FSYS_RES_TASK_EXPAND_DATA,
+    FSYS_RES_TASK_READ_CACHE_GATED
+} FsysResTask;
+
 /*! One resource of an open file. */
 struct FsysResHeader {
     u32 resourceId;
@@ -136,8 +184,8 @@ struct FsysResHeader {
     FsysBlock* blockList; /* staging blocks the readers keep */
     FsysBlock* spareBlockList; /* staging blocks queued behind the list above */
     GSdvdFile* dvdHandle;
-    s32 taskStatus;          /* task the file system is carrying out for the resource */
-    s32 requestedTaskStatus; /* task a caller has asked for; 0xFFFF while none is pending */
+    FsysResTask taskStatus;          /* task the file system is carrying out for the resource */
+    s32 requestedTaskStatus;         /* task a caller has asked for; 0xFFFF while none is pending */
     u32 readRemain;
     u32 blockByteOffset; /* byte offset advanced by each cache block */
     u32 readBlockFlags;
@@ -250,6 +298,25 @@ struct FsysBGWork {
 /*! Set in a resource header once its data is in place; the expand pass takes
  *  it as expanded and stops polling the resource. */
 #define FSYS_RES_STATUS_EXPANDED 0x8
+
+/*! Set in a resource header while the data-type hook of the resource has run. */
+#define FSYS_RES_STATUS_PREPARED 0x80000
+
+/*! Set in a streaming read once the resource has been recognised as a stream
+ *  header; its data is expanded into the streaming cache of the group. */
+#define FSYS_RES_STATUS_STREAM_HEADER 0x40000
+
+/*! Set in a resource header while the resource sits in the ARAM cache of its
+ *  group. */
+#define FSYS_RES_STATUS_IN_CACHE 0x20000
+
+/*! Set in a resource header once the cache address of the resource is
+ *  settled. */
+#define FSYS_RES_STATUS_CACHE_ADDRESS 0x10000
+
+/*! Set in a resource header when the resource does not loop.  Stream reads
+ *  that reach the loop end with this bit set stop instead of wrapping. */
+#define FSYS_RES_STATUS_NO_LOOP 0x800
 
 /*! Task states of an open file. */
 #define FSYS_TASK_NONE 0
@@ -409,11 +476,59 @@ u8 _fsysInitTOC(void);
 /* Resource data-type hooks used by the TOC table and filesystem task engine. */
 typedef void* (*FsysDataTypeFunc)(u32 groupID, u32 resourceID, u32 size);
 typedef struct FsysDataType {
-    u32 pad00;
+    u32 priority;
     u32 typeID;
     FsysDataTypeFunc preFunc;
     FsysDataTypeFunc postFunc;
 } FsysDataType;
+
+void* floorReadNormalPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadMapPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadMapPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadObjPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadObjPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadColPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadColPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadBGMPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadBGMPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadMsgPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadMsgPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadFontPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadFontPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadScriptPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadScriptPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadTexPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadTexPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadParticlePreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadParticlePostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadCameraPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadCameraPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadPKXPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadPKXPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadWZXPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadWZXPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadGFLPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadGFLPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadNotLinkedParticlePreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadNotLinkedParticlePostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadEncodeRelPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadEncodeRelPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadGSWPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadGSWPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadAntPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadAntPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadDeckPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* floorReadDeckPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysOSLinkPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamHeaderPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamHeaderPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamMovieHeaderPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamMovieHeaderPostFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamPreFunc(u32 groupID, u32 resourceID, u32 size);
+void* GSfsysStreamMoviePreFunc(u32 groupID, u32 resourceID, u32 size);
+
+extern FsysDataType fsys_datatype[];
+extern u32 fsys_datatype_number;
 
 /* Cross-module request/read helpers. */
 void _fsysSeekRequest(FsysFile* work);
@@ -428,7 +543,7 @@ void* _fsysAlloc(u32 size);
 FsysGroup* _fsysGetGROUP(unsigned int groupID);
 FsysFile* _fsysInfo2Work(GSdvdFile* file);
 void _fsysWorkSetTaskStatus(FsysFile* file, s32 status);
-void _fsysResHeaderSetTaskStatus(FsysResHeader* header, s32 status);
+void _fsysResHeaderSetTaskStatus(FsysResHeader* header, FsysResTask status);
 s32 _fsysGetActiveTask(s32 fileMode);
 FsysFile* _fsysGetNewWork(void);
 FsysFile* _fsysGetNewWork_Sub(s32 ignoreDone);

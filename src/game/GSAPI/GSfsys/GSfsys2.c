@@ -46,14 +46,6 @@
 #define FSYS_LZ_STATE_MATCH_LOW 3
 #define FSYS_LZ_STATE_MATCH_HIGH 4
 
-/*! Task states of a resource, as the work status report names them. */
-#define FSYS_RES_TASK_ERROR_READDATAEXEC (-3)
-#define FSYS_RES_TASK_ERROR_EXPANDFILE (-2)
-#define FSYS_RES_TASK_ERROR_STREAMING (-1)
-#define FSYS_RES_TASK_STREAMING_COMPLETE 2
-#define FSYS_RES_TASK_READY 1
-#define FSYS_RES_TASK_NONE 0
-
 /*! A request filed with the queue engine. */
 typedef struct FsysQueManage FsysQueManage;
 struct FsysQueManage {
@@ -1122,3 +1114,35 @@ FsysQueManage* _fsysQueManageRoot[FSYS_QUEUE_ROOT_MAX];
 
 /*! Name of the catalog file on the disc. */
 char const fsysTOCFilename[] = "gsfsys.toc";
+
+u32 fsys_datatype_number = 27;
+
+FsysDataType fsys_datatype[] = {
+    {800, FSYS_DATA_TYPE_NORMAL, floorReadNormalPreFunc, NULL},
+    {600, FSYS_DATA_TYPE_MAP, floorReadMapPreFunc, floorReadMapPostFunc},
+    {700, FSYS_DATA_TYPE_OBJ, floorReadObjPreFunc, floorReadObjPostFunc},
+    {800, FSYS_DATA_TYPE_COL, floorReadColPreFunc, floorReadColPostFunc},
+    {300, FSYS_DATA_TYPE_BGM, floorReadBGMPreFunc, floorReadBGMPostFunc},
+    {400, FSYS_DATA_TYPE_MSG, floorReadMsgPreFunc, floorReadMsgPostFunc},
+    {500, FSYS_DATA_TYPE_FONT, floorReadFontPreFunc, floorReadFontPostFunc},
+    {200, FSYS_DATA_TYPE_SCRIPT, floorReadScriptPreFunc, floorReadScriptPostFunc},
+    {800, FSYS_DATA_TYPE_UNUSED_8, NULL, NULL},
+    {900, FSYS_DATA_TYPE_TEX, floorReadTexPreFunc, floorReadTexPostFunc},
+    {800, FSYS_DATA_TYPE_PARTICLE, floorReadParticlePreFunc, floorReadParticlePostFunc},
+    {800, FSYS_DATA_TYPE_UNUSED_11, NULL, NULL},
+    {800, FSYS_DATA_TYPE_CAMERA, floorReadCameraPreFunc, floorReadCameraPostFunc},
+    {800, FSYS_DATA_TYPE_UNUSED_13, NULL, NULL},
+    {100, FSYS_DATA_TYPE_OSLINK, GSfsysOSLinkPreFunc, GSfsysOSLinkPostFunc},
+    {700, FSYS_DATA_TYPE_PKX, floorReadPKXPreFunc, floorReadPKXPostFunc},
+    {800, FSYS_DATA_TYPE_WZX, floorReadWZXPreFunc, floorReadWZXPostFunc},
+    {950, FSYS_DATA_TYPE_GFL, floorReadGFLPreFunc, floorReadGFLPostFunc},
+    {800, FSYS_DATA_TYPE_NOT_LINKED_PARTICLE, floorReadNotLinkedParticlePreFunc, floorReadNotLinkedParticlePostFunc},
+    {100, FSYS_DATA_TYPE_ENCODE_REL, floorReadEncodeRelPreFunc, floorReadEncodeRelPostFunc},
+    {100, FSYS_DATA_TYPE_SOUND_STREAM_HEADER, GSfsysStreamHeaderPreFunc, GSfsysStreamHeaderPostFunc},
+    {200, FSYS_DATA_TYPE_SOUND_STREAM, GSfsysStreamPreFunc, NULL},
+    {100, FSYS_DATA_TYPE_MOVIE_STREAM_HEADER, GSfsysStreamMovieHeaderPreFunc, GSfsysStreamMovieHeaderPostFunc},
+    {200, FSYS_DATA_TYPE_MOVIE_STREAM, GSfsysStreamMoviePreFunc, NULL},
+    {900, FSYS_DATA_TYPE_GSW, floorReadGSWPreFunc, floorReadGSWPostFunc},
+    {700, FSYS_DATA_TYPE_ANT, floorReadAntPreFunc, floorReadAntPostFunc},
+    {800, FSYS_DATA_TYPE_DECK, floorReadDeckPreFunc, floorReadDeckPostFunc},
+};

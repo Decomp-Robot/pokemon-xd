@@ -10,19 +10,6 @@
 
 #include <GSAPI/GSfsys/fsys.h>
 
-/*! Task states a work slot files on itself.  The slots in one of these states
- *  carry no running task; the pending states a running read or expand pass
- *  files are the ones fsys.h names. */
-
-/*! Task states the expand pass stages a resource through; the task field of
- *  a resource says which pass runs the next time its group is polled. */
-#define FSYS_RES_TASK_NONE 0 /* no task queued for the resource */
-#define FSYS_RES_TASK_EXPAND_BLOCKS 1 /* the expand pass was started for it */
-#define FSYS_RES_TASK_CHECK_CANCEL 2
-#define FSYS_RES_TASK_READ_DATA 3
-#define FSYS_RES_TASK_EXPAND_DATA 4
-#define FSYS_RES_TASK_READ_CACHE_GATED 5
-
 /*! Finish a header-size read: file the table offset the disc header carried
  *  with the group entry the file was opened for, and drop the staging buffer
  *  when the read went wrong. */
@@ -147,7 +134,7 @@ u8 _fsysCheckExpandComplete(FsysFile* file, u32 index)
         switch (header->taskStatus) {
         default:
         case FSYS_RES_TASK_NONE:
-        case FSYS_RES_TASK_EXPAND_BLOCKS:
+        case FSYS_RES_TASK_READY:
             break;
         case FSYS_RES_TASK_READ_DATA:
             _fsysReadDataExec(file, header);
@@ -160,7 +147,7 @@ u8 _fsysCheckExpandComplete(FsysFile* file, u32 index)
         case FSYS_RES_TASK_READ_CACHE_GATED:
             if (file->cancelRequest == 1) {
                 _fsysWorkSetTaskStatus(file, FSYS_TASK_READ_COMPLETE);
-                _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_EXPAND_BLOCKS);
+                _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_READY);
                 break;
             }
             /* wait behind the tasks the two queue roots carry */
@@ -176,10 +163,10 @@ u8 _fsysCheckExpandComplete(FsysFile* file, u32 index)
                 }
             }
             break;
-        case FSYS_RES_TASK_CHECK_CANCEL:
+        case FSYS_RES_TASK_STREAMING_COMPLETE:
             if (file->cancelRequest == 1) {
                 _fsysWorkSetTaskStatus(file, FSYS_TASK_READ_COMPLETE);
-                _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_EXPAND_BLOCKS);
+                _fsysResHeaderSetTaskStatus(header, FSYS_RES_TASK_READY);
             }
             break;
         }

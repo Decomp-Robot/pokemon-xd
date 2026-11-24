@@ -155,9 +155,9 @@ extern "C" void *floorRegisterLight(u32 group, u32 res)
     return scene;
 }
 
-// floorReadDeckPostFunc(u32, u32): hands the DECK data that was read into
+// floorReadDeckPostFunc(u32, u32, u32): hands the DECK data that was read into
 // memory over to the deck subsystem.
-extern "C" void *floorReadDeckPostFunc(u32 group, u32 res)
+extern "C" void *floorReadDeckPostFunc(u32 group, u32 res, u32 size)
 {
     void *resource;
 
@@ -224,9 +224,9 @@ bool _unloadTextureForAnt(void *data, u32 group, u32 res)
     return true;
 }
 
-// floorReadGSWPostFunc(u32, u32): hands a GSW file that was read into memory
-// over to the flash filesystem.
-extern "C" void *floorReadGSWPostFunc(u32 group, u32 res)
+// floorReadGSWPostFunc(u32, u32, u32): hands a GSW file that was read into
+// memory over to the flash filesystem.
+extern "C" void *floorReadGSWPostFunc(u32 group, u32 res, u32 size)
 {
     void *resource;
 

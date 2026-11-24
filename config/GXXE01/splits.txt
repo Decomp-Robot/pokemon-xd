@@ -3208,6 +3208,10 @@ game/GSAPI/GSfsys/fsysCache.c:
 	.bss        start:0x80475940 end:0x80478140
 	.sbss       start:0x804EB600 end:0x804EB638
 
+game/GSAPI/GSfsys/fsysRead.c:
+	.text       start:0x8019C130 end:0x8019D10C
+	.rodata     start:0x802F44B8 end:0x802F44C8
+
 game/GSAPI/GSfsys/fsysAlloc.c:
 	.text       start:0x8019D10C end:0x8019D5F4
 	.sbss       start:0x804EB638 end:0x804EB640
@@ -3216,7 +3220,9 @@ game/GSAPI/GSfsys/fsysAlloc.c:
 game/GSAPI/GSfsys/GSfsys2.c:
 	.text       start:0x8019DD18 end:0x8019F5EC
 	.rodata     start:0x802F44C8 end:0x802F47E0
+	.data       start:0x8040B2F0 end:0x8040B4A0
 	.bss        start:0x80478140 end:0x80478170
+	.sdata      start:0x804E84B8 end:0x804E84BC
 	.sbss       start:0x804EB640 end:0x804EB680
 	.sdata2     start:0x804EE1D0 end:0x804EE1E0
 
