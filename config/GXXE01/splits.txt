@@ -3843,6 +3843,10 @@ game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x802723FC end:0x80272BA4
 	.sdata2     start:0x804EF3D0 end:0x804EF3F8
 
+game/app/flashmenu/vecGraph.cpp:
+	.text       start:0x8027607C end:0x80276370
+	.sdata      start:0x804E8630 end:0x804E8650
+
 game/app/flashmenu/flashsystem.cpp:
 	.text       start:0x80276370 end:0x80277BB4
 	.bss        start:0x804DFC28 end:0x804DFC78

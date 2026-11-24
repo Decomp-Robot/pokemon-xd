@@ -12,6 +12,25 @@ struct _PLACEOBJECT2;
 
 struct FlashDisplayObject;
 
+struct _FILLSTYLE;
+struct _LINESTYLE;
+
+struct _FILLSTYLEARRAY {
+    u32 count;
+    _FILLSTYLE* styles;
+};
+
+struct _LINESTYLEARRAY {
+    u32 count;
+    _LINESTYLE* styles;
+};
+
+struct _SHAPERECORD {
+    u8 code;
+    void* data;
+    _SHAPERECORD* next;
+};
+
 struct FlashSpriteState {
     u16 frameCount;
     u16 unknown;

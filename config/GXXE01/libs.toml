@@ -7084,6 +7084,11 @@ name = "game/app/flashmenu/flashcalc.cpp"
 completed = true
 
 [[lib.object]]
+name = "game/app/flashmenu/vecGraph.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/flashmenu/flashsystem.cpp"
 completed = true
 
