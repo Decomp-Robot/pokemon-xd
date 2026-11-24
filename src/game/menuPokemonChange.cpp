@@ -2028,26 +2028,27 @@ extern "C" long menuPokemonChangeWindowHook(tagWINDOW_WORK* window)
 extern "C" void menuPokemonChangeWindowCursor(tagWINDOW_WORK* window)
 {
     if (!winSeqCheckMove(window->mMenuID)) {
-        u16 primary = winSysWork.mDirectionRepeat;
-        u16 secondary = winSysWork2.mDirectionRepeat;
+        u16 primary = winSysWork.mKey.mKeyOn;
+        u16 secondary = winSysWork2.mKey.mKeyOn;
         u16 combined = primary | secondary;
-        if ((combined & 12) != 0 && (combined & 3) != 0) {
-            u16 primaryStick = winSysWork.mStickDirectionRepeat;
-            u16 secondaryStick = winSysWork2.mStickDirectionRepeat;
-            winSysWork.mDirectionRepeat = primary & 12;
-            winSysWork.mStickDirectionRepeat = primaryStick & 12;
-            winSysWork2.mDirectionRepeat = secondary & 12;
-            winSysWork2.mStickDirectionRepeat = secondaryStick & 12;
+        if ((combined & WINDOW_KEY_DIRECTION_HORIZONTAL) != 0 &&
+            (combined & WINDOW_KEY_DIRECTION_VERTICAL) != 0) {
+            u16 primaryRepeat = winSysWork.mKey.mKeyRepeat;
+            u16 secondaryRepeat = winSysWork2.mKey.mKeyRepeat;
+            winSysWork.mKey.mKeyOn = primary & WINDOW_KEY_DIRECTION_HORIZONTAL;
+            winSysWork.mKey.mKeyRepeat = primaryRepeat & WINDOW_KEY_DIRECTION_HORIZONTAL;
+            winSysWork2.mKey.mKeyOn = secondary & WINDOW_KEY_DIRECTION_HORIZONTAL;
+            winSysWork2.mKey.mKeyRepeat = secondaryRepeat & WINDOW_KEY_DIRECTION_HORIZONTAL;
             menuCursorNormal(window, 1);
-            winSysWork.mDirectionRepeat = primary & 3;
-            winSysWork.mStickDirectionRepeat = primaryStick & 3;
-            winSysWork2.mDirectionRepeat = secondary & 3;
-            winSysWork2.mStickDirectionRepeat = secondaryStick & 3;
+            winSysWork.mKey.mKeyOn = primary & WINDOW_KEY_DIRECTION_VERTICAL;
+            winSysWork.mKey.mKeyRepeat = primaryRepeat & WINDOW_KEY_DIRECTION_VERTICAL;
+            winSysWork2.mKey.mKeyOn = secondary & WINDOW_KEY_DIRECTION_VERTICAL;
+            winSysWork2.mKey.mKeyRepeat = secondaryRepeat & WINDOW_KEY_DIRECTION_VERTICAL;
             menuCursorNormal(window, 1);
-            winSysWork.mDirectionRepeat = primary;
-            winSysWork.mStickDirectionRepeat = primaryStick;
-            winSysWork2.mDirectionRepeat = secondary;
-            winSysWork2.mStickDirectionRepeat = secondaryStick;
+            winSysWork.mKey.mKeyOn = primary;
+            winSysWork.mKey.mKeyRepeat = primaryRepeat;
+            winSysWork2.mKey.mKeyOn = secondary;
+            winSysWork2.mKey.mKeyRepeat = secondaryRepeat;
         } else {
             menuCursorNormal(window, 1);
         }
