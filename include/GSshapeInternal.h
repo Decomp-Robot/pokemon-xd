@@ -68,6 +68,7 @@ class GsShapeObject {
 public:
     u8 CreateShapeDrawBuffer(s16 index);
     u8 FreeShapeDrawBuffer(s16 index);
+    void MakeShapeGfxDL();
 
 private:
     struct GsShapeTextureColor {
