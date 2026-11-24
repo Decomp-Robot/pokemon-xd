@@ -7,6 +7,45 @@
 extern "C" {
 #endif
 
+/* How many of a trainer's Pokemon a registered combo needs. */
+enum FightAiComboKind {
+    FIGHT_AI_COMBO_KIND_NONE = 0,
+    FIGHT_AI_COMBO_KIND_ONE_POKEMON = 1,
+    FIGHT_AI_COMBO_KIND_TWO_POKEMON = 2
+};
+
+enum FightAiComboPartnerResult {
+    FIGHT_AI_COMBO_PARTNER_NONE = 0,
+    FIGHT_AI_COMBO_PARTNER_MATCH = 1,
+    FIGHT_AI_COMBO_PARTNER_RESTRICTED = 2
+};
+
+enum FightAiComboRole {
+    FIGHT_AI_COMBO_ROLE_SECOND = 0,
+    FIGHT_AI_COMBO_ROLE_FIRST = 1
+};
+
+/* Which role assignment a combo entry accepts. */
+enum FightAiComboOrder {
+    FIGHT_AI_COMBO_ORDER_EITHER = 0,
+    FIGHT_AI_COMBO_ORDER_RESTRICTED = 1
+};
+
+typedef u8 (*FightAiComboFunc)(FIGHT_TRAINER *trainer, FightOutPokemon **allies,
+    u16 allyCount, FightOutPokemon **enemies, u16 enemyCount,
+    AI_ALLWAZA_VALID_TBL *output, u8 activation);
+typedef u8 (*FightAiComboContinueFunc)(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
+    FightOutPokemon **enemies, u16 enemyCount);
+
+typedef struct FightAiComboData {
+    u8 mKind;
+    u8 mOrder;
+    FightAiComboFunc mFunc;
+    FightAiComboContinueFunc mContinue;
+} FightAiComboData;
+
+extern FightAiComboData comboid[];
+
 u8 fightAiCombo_Kinokonohousi_Kiaipanti_2(FIGHT_TRAINER *trainer, FightOutPokemon **allies,
     u16 allyCount, FightOutPokemon **enemies, u16 enemyCount,
     AI_ALLWAZA_VALID_TBL *output, u8 activation);
@@ -58,7 +97,7 @@ u8 fightAiCombo_Amaikaori_Hubuki_Continue(FIGHT_TRAINER *trainer, FightOutPokemo
 u8 fightAiCombo_null_Continue(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, FightOutPokemon **enemies,
     u16 enemyCount);
 
-s16 fightTrainerAiSelectIrekaeDasuFightPokemon(FIGHT_TRAINER *trainer, u8 fightType, u8 selectType, FightOutPokemon *pokemon);
+s16 fightTrainerAiSelectIrekaeDasuFightPokemon(FIGHT_TRAINER *trainer, u16 fightType, s32 selectType, FightOutPokemon *pokemon);
 
 u8 fightAi_CanMoveAppointWaza(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon, u16 wazaDataId);
 u8 fightAi_CreateFightActionAttckWaza(FightOutPokemon *pokemon, FightOutPokemon *target,

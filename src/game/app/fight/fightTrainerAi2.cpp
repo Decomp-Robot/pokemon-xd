@@ -39,7 +39,7 @@ extern "C" u8 _fightTrainerAiSawaguCheckSub(void *target, u16 fightType, void *a
     if (!fightOutPokemonCheckFightOut(pokemon)) {
         return 1;
     }
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, pokemon, JOUTAI_ID_UPROAR) == 1
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, pokemon, JOUTAI_UPROAR) == 1
         && fightTrainerAiIsFightOutPokemonTokuseiDataId(trainer, sleepTarget, TOKUSEI_DATA_ID_SOUNDPROOF) == 0) {
         return 0;
     }
@@ -137,7 +137,7 @@ u8 fightTrainerAiCheckAbiCnt(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, 
     statusId = fightSeqCondChgActTypeToPokemonStatusId(actType);
     stage = pokemonGetStatus(target, 0, statusId, 0);
     if (fightSeqCondChgActParaIdToValue(paraId) < 0) {
-        if (fightSideIsJoutaiDataId(side, JOUTAI_ID_MIST) == 1
+        if (fightSideIsJoutaiDataId(side, JOUTAI_MIST) == 1
             && !ignoreStatDownPrevention
             && wazaDataId != WAZA_DATA_ID_CURSE) {
             return 0;
@@ -202,7 +202,7 @@ extern "C" u8 _fightTrainerAiCheckHorobinoutaSub(void *target, u16 fightType, vo
     if (fightTrainerIsAllyFightTargetPtr(trainer, pokemon, fightType) == 1) {
         return 1;
     }
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, pokemon, JOUTAI_ID_PERISH_SONG) != 1
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, pokemon, JOUTAI_PERISH_SONG) != 1
         && fightTrainerAiIsFightOutPokemonTokuseiDataId(trainer, pokemon, TOKUSEI_DATA_ID_SOUNDPROOF) != 1) {
         work->mCount++;
     }
@@ -223,17 +223,17 @@ u8 fightTrainerAiCheckJoutaiKieWazaHitWazaDataId(FIGHT_TRAINER *trainer, u16 jou
 {
     u16 seqId = wazaDB_GetSeqId(wazaDataId);
 
-    if (joutaiDataId == JOUTAI_ID_FLYING
+    if (joutaiDataId == JOUTAI_FLYING
         && (seqId == WAZA_SEQUENCE_ID_TWISTER
             || seqId == WAZA_SEQUENCE_ID_GUST
             || seqId == WAZA_SEQUENCE_ID_THUNDER
             || seqId == WAZA_SEQUENCE_ID_SKY_UPPERCUT)) {
         return 1;
     }
-    if (joutaiDataId == JOUTAI_ID_DIGGING && seqId == WAZA_SEQUENCE_ID_EARTHQUAKE) {
+    if (joutaiDataId == JOUTAI_DIGGING && seqId == WAZA_SEQUENCE_ID_EARTHQUAKE) {
         return 1;
     }
-    if (joutaiDataId == JOUTAI_ID_DIVING
+    if (joutaiDataId == JOUTAI_DIVING
         && (wazaDataId == WAZA_DATA_ID_SURF || wazaDataId == WAZA_DATA_ID_WHIRLPOOL)) {
         return 1;
     }

@@ -52,7 +52,7 @@ u8 fightTrainerAiWazaHit180(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
 
 u8 fightTrainerAiWazaHit181(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender)
 {
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_ID_INGRAIN) == 1) {
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_INGRAIN) == 1) {
         return 0;
     }
     return 1;
@@ -105,7 +105,7 @@ u8 fightTrainerAiWazaHit187(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
     if (fightTrainerAiCheckSawagu(trainer, defender) == 1) {
         return 0;
     }
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_ID_DROWSY) == 1) {
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_DROWSY) == 1) {
         return 0;
     }
     if (fightTrainerAiIsFightOutPokemonJoutaiNormal(trainer, defender) == 0) {
@@ -183,7 +183,7 @@ u8 fightTrainerAiWazaHit192(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
     fightTrainerAiGetFightOutPokemonWazaDataIdAry(trainer, attacker, wazaDataIdAry, NULL, AI_IMPRISON_CHECK_CAN_USE);
     // Gather deployed opponents rather than allies.
     fightFloorGetFightTrainerFightOutPokemonPtrAry(NULL, trainer, enemyPokemonPtrAry, AI_IMPRISON_SELECT_ALLIES, AI_IMPRISON_ONLY_DEPLOYED);
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_ID_IMPRISON) == 1) {
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_IMPRISON) == 1) {
         return 0;
     }
     return 1;
@@ -202,7 +202,7 @@ u8 fightTrainerAiWazaHit193(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
 
 u8 fightTrainerAiWazaHit194(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender)
 {
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_ID_GRUDGE) == 1) {
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_GRUDGE) == 1) {
         return 0;
     }
     return 1;
@@ -263,7 +263,7 @@ u8 fightTrainerAiWazaHit200(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u
 
 u8 fightTrainerAiWazaHit201(FIGHT_TRAINER *trainer, FightOutPokemon *attacker, u16 wazaDataId, FightOutPokemon *defender)
 {
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_ID_MUD_SPORT) == 1) {
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, attacker, JOUTAI_MUD_SPORT) == 1) {
         return 0;
     }
     return 1;

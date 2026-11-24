@@ -4102,6 +4102,10 @@ game/GSAPI/GSgfx/reset.cpp:
 game/app/fight/fightTrainerAi.cpp:
 	.sbss       start:0x804EBDB0 end:0x804EBDB4
 
+game/app/fight/fightTrainerAiIrekae.cpp:
+	.text       start:0x802CB068 end:0x802CC6E4
+	.rodata     start:0x802FBEC8 end:0x802FBEE0
+
 game/app/fight/fightTrainerAiComboFunc.cpp:
 	.text       start:0x802D6C68 end:0x802D8AA8
 

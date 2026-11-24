@@ -8,7 +8,7 @@ s32 _fightTrainerAiWazaDamageNormal(FIGHT_TRAINER *trainer, u16 wazaDataId, Figh
 s32 fightTrainerAiWazaDamage000(FIGHT_TRAINER *trainer, FightOutPokemon *attacker,
                                             u16 wazaDataId, FightOutPokemon *defender) {
     s32 damage = _fightTrainerAiWazaDamageNormal(trainer, wazaDataId, attacker, defender);
-    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_ID_DIVING) == 1
+    if (fightTrainerAiIsFightOutPokemonJoutaiDataId(trainer, defender, JOUTAI_DIVING) == 1
         && wazaDataId == WAZA_DATA_ID_SURF) {
         damage *= 2;
     }

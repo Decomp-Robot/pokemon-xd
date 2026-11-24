@@ -234,7 +234,7 @@ extern "C" void fightWazaWzxTypeFuncMagiccort(u16 wazaId, FightOutPokemon *attac
                                               u16, u8 variation)
 {
     fightOutPokemonLoadWazaEffect(attacker, wazaId, WAZA_EFFECT_SLOT_ATK, variation);
-    if (fightOutPokemonIsJoutaiDataId(defender, JOUTAI_ID_MAGIC_COAT) == 1) {
+    if (fightOutPokemonIsJoutaiDataId(defender, JOUTAI_MAGIC_COAT) == 1) {
         _fightWazaWxzfightOutPokemonWazaEffectAtk(attacker, wazaId, false);
     }
 }
@@ -351,7 +351,7 @@ extern "C" u8 fightWazaWzxVariationFuncTripleKick(u16, FightOutPokemon *attacker
 
 extern "C" u8 fightWazaWzxVariationFuncKorogaru(u16, FightOutPokemon *attacker, FightOutPokemon *, u16)
 {
-    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT)) {
+    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ROLLOUT)) {
     case 1: return 0;
     case 2: return 1;
     case 3: return 2;
@@ -363,7 +363,7 @@ extern "C" u8 fightWazaWzxVariationFuncKorogaru(u16, FightOutPokemon *attacker, 
 
 extern "C" u8 fightWazaWzxVariationFuncRenzokugiri(u16, FightOutPokemon *attacker, FightOutPokemon *, u16)
 {
-    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER)) {
+    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_FURY_CUTTER)) {
     case 1: return 0;
     case 2: return 1;
     case 3: return 2;
@@ -468,7 +468,7 @@ extern "C" u8 fightWazaWzxVariationFuncKawarawari(u16, FightOutPokemon *, FightO
 
 extern "C" u8 fightWazaWzxVariationFuncIceball(u16, FightOutPokemon *attacker, FightOutPokemon *, u16)
 {
-    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT)) {
+    switch (fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ROLLOUT)) {
     case 1: return 0;
     case 2: return 1;
     case 3: return 2;

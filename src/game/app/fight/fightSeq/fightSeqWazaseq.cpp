@@ -218,10 +218,10 @@ u8 _fightSeqWsHorobinoutaSub(void *pokemon, u16 index, void *arg)
         return 1;
     }
     ability = fightOutPokemonGetTokuseiDataId(target);
-    if (fightOutPokemonCheckWriteJoutaiDataId(target, JOUTAI_ID_PERISH_SONG) != JOUTAI_WRITE_ACCEPT || ability == TOKUSEI_DATA_ID_SOUNDPROOF) {
+    if (fightOutPokemonCheckWriteJoutaiDataId(target, JOUTAI_PERISH_SONG) != JOUTAI_WRITE_ACCEPT || ability == TOKUSEI_DATA_ID_SOUNDPROOF) {
         return 1;
     }
-    fightOutPokemonWriteJoutaiDataId(target, JOUTAI_ID_PERISH_SONG, 0);
+    fightOutPokemonWriteJoutaiDataId(target, JOUTAI_PERISH_SONG, 0);
     (*count)++;
     return 1;
 }
@@ -276,19 +276,19 @@ extern "C" void WS_KOROGARU(void)
         fightSeq_JumpWazaSeq(fightSeqContinueMoveMissWazaSeq);
         return;
     }
-    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT) == JOUTAI_WRITE_ACCEPT) {
-        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT, 0);
+    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ROLLOUT) == JOUTAI_WRITE_ACCEPT) {
+        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ROLLOUT, 0);
         if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_CONTINUING_MOVE) == 0) {
             fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_CONTINUING_MOVE, 0);
             fightWazaBiosCopy(keepWaza, waza);
         }
     }
     count = 1;
-    if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT) == 1) {
-        maxCount = joutaiDataBiosGetMaxCount(JOUTAI_ID_ROLLOUT);
-        count = fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT);
+    if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ROLLOUT) == 1) {
+        maxCount = joutaiDataBiosGetMaxCount(JOUTAI_ROLLOUT);
+        count = fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ROLLOUT);
         if (count == maxCount) {
-            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ID_ROLLOUT);
+            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ROLLOUT);
             fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_CONTINUING_MOVE);
         }
     }
@@ -342,16 +342,16 @@ extern "C" void WS_RENZOKUGIRI(void)
     waza = fightOutPokemon_GetFightWazaPtr(attacker);
     move = fightOutPokemon_GetUseWazaDataId(attacker);
     if (fightWazaIsHit(waza) == 0) {
-        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER) == 1) {
-            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER);
+        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_FURY_CUTTER) == 1) {
+            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_FURY_CUTTER);
         }
         fightSeq_JumpWazaSeq(fightSeqContinueMoveMissWazaSeq);
         return;
     }
-    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER) == JOUTAI_WRITE_ACCEPT) {
-        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER, 0);
+    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_FURY_CUTTER) == JOUTAI_WRITE_ACCEPT) {
+        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_FURY_CUTTER, 0);
     }
-    count = fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_ID_FURY_CUTTER);
+    count = fightOutPokemonGetCountAsJoutaiDataId(attacker, JOUTAI_FURY_CUTTER);
     power = (u16)wazaDB_GetIryoku(move);
     for (i = 1; i < count; i++) {
         power *= 2;
@@ -757,7 +757,7 @@ extern "C" void WS_MIRAIYOCHI(void)
     fightOutPokemonWriteJoutaiDataId(defender, JOUTAI_FUTURE_SIGHT, targetId);
     fightOutPokemonSetIdBuffJoutaiDataId(defender, JOUTAI_FUTURE_SIGHT, wazaDataId);
     damage = fightSeqWazaDamageCalc(attacker, defender, defenderSide, wazaDataId, iryoku, zokusei);
-    if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_HELPING_HAND) == 1) {
+    if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_HELPING_HAND) == 1) {
         damage = damage * 15 / 10;
     }
     fightOutPokemonSetBuffJoutaiDataId(defender, JOUTAI_FUTURE_SIGHT, damage);
@@ -842,7 +842,7 @@ extern "C" void WS_HUKURODATAKI(void)
         defenderLevel = figthOutPokemonGetLevel(defender);
         fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (unsigned long)pokemon_GetName(pokemon));
         damage = fightSeqGetHukuroDatakiDamage(wazaDataId, attackerDataId, level, defenderDataId, defenderLevel);
-        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_HELPING_HAND) == 1) {
+        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_HELPING_HAND) == 1) {
             damage = damage * 15 / 10;
         }
         fightWaza_SetDamage(waza, damage);
@@ -869,18 +869,18 @@ extern "C" void WS_KIERUTAME(void)
     switch (move) {
     case WAZA_DATA_ID_FLY:
     case WAZA_DATA_ID_BOUNCE:
-        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_FLYING) == JOUTAI_WRITE_ACCEPT) {
-            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_FLYING, 0);
+        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_FLYING) == JOUTAI_WRITE_ACCEPT) {
+            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_FLYING, 0);
         }
         break;
     case WAZA_DATA_ID_DIG:
-        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_DIGGING) == JOUTAI_WRITE_ACCEPT) {
-            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_DIGGING, 0);
+        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_DIGGING) == JOUTAI_WRITE_ACCEPT) {
+            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_DIGGING, 0);
         }
         break;
     case WAZA_DATA_ID_DIVE:
-        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_DIVING) == JOUTAI_WRITE_ACCEPT) {
-            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_DIVING, 0);
+        if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_DIVING) == JOUTAI_WRITE_ACCEPT) {
+            fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_DIVING, 0);
         }
         break;
     }
@@ -901,18 +901,18 @@ extern "C" void WS_KIERUTAME_AFTAR(void)
     switch (move) {
     case WAZA_DATA_ID_FLY:
     case WAZA_DATA_ID_BOUNCE:
-        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_FLYING) == 1) {
-            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ID_FLYING);
+        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_FLYING) == 1) {
+            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_FLYING);
         }
         break;
     case WAZA_DATA_ID_DIG:
-        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_DIGGING) == 1) {
-            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ID_DIGGING);
+        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_DIGGING) == 1) {
+            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_DIGGING);
         }
         break;
     case WAZA_DATA_ID_DIVE:
-        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_ID_DIVING) == 1) {
-            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_ID_DIVING);
+        if (fightOutPokemonIsJoutaiDataId(attacker, JOUTAI_DIVING) == 1) {
+            fightOutPokemonInitJoutaiDataId(attacker, JOUTAI_DIVING);
         }
         break;
     }
@@ -981,9 +981,9 @@ extern "C" void WS_KONOYUBITOMARE(void)
     fightSeq_GetWazaSeq();
     attacker = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_ATTACKER, 0);
     side = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_OWN_SIDE, attacker);
-    if (fightSideCheckWriteJoutaiDataId(side, JOUTAI_ID_FOLLOW_ME) == JOUTAI_WRITE_ACCEPT) {
+    if (fightSideCheckWriteJoutaiDataId(side, JOUTAI_FOLLOW_ME) == JOUTAI_WRITE_ACCEPT) {
         targetId = fightTargetGetTragetPtrToRelativeHostSideFightTargetId(attacker, fightFloor_GetFightType(0));
-        fightSideWriteJoutaiDataId(side, JOUTAI_ID_FOLLOW_ME, targetId);
+        fightSideWriteJoutaiDataId(side, JOUTAI_FOLLOW_ME, targetId);
     }
     fightSeq_NextWazaSeq(1);
 }
@@ -996,8 +996,8 @@ extern "C" void WS_JUUDEN(void)
 
     fightSeq_GetWazaSeq();
     attacker = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_ATTACKER, 0);
-    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_ID_CHARGE) == JOUTAI_WRITE_ACCEPT) {
-        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_ID_CHARGE, 0);
+    if (fightOutPokemonCheckWriteJoutaiDataId(attacker, JOUTAI_CHARGE) == JOUTAI_WRITE_ACCEPT) {
+        fightOutPokemonWriteJoutaiDataId(attacker, JOUTAI_CHARGE, 0);
     }
     fightSeq_NextWazaSeq(1);
 }

@@ -188,19 +188,19 @@ extern "C" void WS_WKC_ACT(void)
             if ((ServerStatusFlag & FIGHT_SEQ_FLAG_ACTION_IN_PROGRESS) != 0 &&
                 heldItem == SOUBI_CHOICE_BAND &&
                 useWaza != WAZA_DATA_ID_STRUGGLE &&
-                fightOutPokemonCheckWriteJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK) == JOUTAI_WRITE_ACCEPT) {
+                fightOutPokemonCheckWriteJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK) == JOUTAI_WRITE_ACCEPT) {
                 if (useWaza == WAZA_DATA_ID_BATON_PASS &&
                     fightWazaIsJoutaiDataId(waza, JOUTAI_MOVE_RESULT_FAILED) == 1) {
                     fightSeqWkcActStep++;
                     break;
                 }
-                fightOutPokemonWriteJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK, 0);
-                fightOutPokemonSetIdBuffJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK, useWaza);
+                fightOutPokemonWriteJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK, 0);
+                fightOutPokemonSetIdBuffJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK, useWaza);
             }
-            if (fightOutPokemonIsJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK) == 1) {
-                u16 param = fightOutPokemonGetIdBuffJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK);
+            if (fightOutPokemonIsJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK) == 1) {
+                u16 param = fightOutPokemonGetIdBuffJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK);
                 if (pokemonSearchWazaDataId(fightOutPokemonGetPokemonPtr(atk), param) < 0)
-                    fightOutPokemonInitJoutaiDataId(atk, JOUTAI_ID_CHOICE_ITEM_LOCK);
+                    fightOutPokemonInitJoutaiDataId(atk, JOUTAI_CHOICE_ITEM_LOCK);
             }
             fightSeqWkcActStep++;
             break;
@@ -220,7 +220,7 @@ extern "C" void WS_WKC_ACT(void)
             if (fightOutPokemonCheckFightOut(atk) == 1) {
                 u16 kie = fightOutPokemonIsJoutaiKie(atk);
                 if (kie != 0) {
-                    if (kie != JOUTAI_ID_FLYING)
+                    if (kie != JOUTAI_FLYING)
                         fightOutPokemonSetVisibility(atk, 0);
                     else
                         Sequence_SetStatus(fightOutPokemon_GetSequencePtr(atk), MODEL_SEQUENCE_STATUS_FLYING);
