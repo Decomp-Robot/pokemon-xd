@@ -168,7 +168,7 @@ extra_cflags = ["-opt nopeephole", "-inline noauto", "-str reuse,readonly"]
 [[lib.object]]
 name = "game/window.cpp"
 completed = true
-extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-opt nopeephole", "-str reuse,readonly", "-inline noauto", "-inline deferred"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include/libc", "-i src/ext/dolphin_sdk/include", "-opt nopeephole"]
 
 [[lib.object]]
 name = "game/app/effects/filter.cpp"
@@ -1727,10 +1727,6 @@ cflags = [
 name = "game/menuPocket.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole", "-use_lmw_stmw on", "-lang=c++"]
-
-[[lib.object]]
-name = "game/menuItemTool.cpp"
-completed = true
 
 [[lib.object]]
 name = "game/menuSaveLoad.cpp"
@@ -3606,6 +3602,11 @@ extra_cflags = ["-O0,p", "-opt peephole", "-schedule on", "-inline auto,deferred
 name = "game/app/zokusei/zokuseiBios.cpp"
 completed = true
 extra_cflags = ["-O0,p", "-opt peephole", "-schedule on", "-inline auto,deferred"]
+
+[[lib.object]]
+name = "game/menu/window.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline deferred"]
 
 [[lib.object]]
 name = "game/menuToolBattle.cpp"
