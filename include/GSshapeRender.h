@@ -7,15 +7,18 @@ extern u32 g_instancedMemorySizeAll;
 
 class GsShapeRender {
 public:
+    void InitShapeRender();
+    void LoadShapeRender(void *data);
+    void FreeShapeRender();
     void ExecuteFreeInstance();
     void SwapBuffers();
+    void Update(f32 time, s16 instance);
+    void Render(s16 instance, GSgfxLayerID layer);
     GSgfxLayerID GetLayerId() const;
     u32 GetInstancedMemorySizeAll();
     u32 GetUsedMemorySizeAll();
     void FreeShapeRenderDrawBuffer(s16 instance);
     s16 CreateShapeRenderDrawBuffer();
-
-private:
     void FreeInstance();
 
     u8 mEnable;

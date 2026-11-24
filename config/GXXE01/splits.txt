@@ -3840,6 +3840,13 @@ game/GSAPI/GSshape/shapeRender.cpp:
 	.text       start:0x80287C00 end:0x802883B0
 	.sbss       start:0x804EBB40 end:0x804EBB48
 
+game/GSAPI/GSshape/GSshape.cpp:
+	.text       start:0x8028A1D4 end:0x8028ABF4
+	.rodata     start:0x802FACC8 end:0x802FACE8
+	.sdata      start:0x804E8670 end:0x804E8678
+	.sbss       start:0x804EBB48 end:0x804EBB58
+	.sdata2     start:0x804EF630 end:0x804EF658
+
 game/app/deck/deck.cpp:
 	.text       start:0x8028B348 end:0x8028BFB8
 	.sbss       start:0x804EBB60 end:0x804EBB74

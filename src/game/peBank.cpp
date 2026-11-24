@@ -2,6 +2,7 @@
 #include <peParticle.h>
 #include <peBankData.h>
 #include <HSDArchive.h>
+#include <GSshape.h>
 #include <dolphin/os/OSFastCast.h>
 
 extern "C" {
@@ -10,10 +11,6 @@ void GSboundFree(GSbound *bound);
 s32 GSboundIsInViewFast(GSbound *bound);
 bool GSgfxTokenCleared(u16 token);
 void GSgfxTokenWaitForClear(u16 token);
-u16 shapeGenerateIndex();
-bool shapeLoad(u16 shape, void *data);
-u32 shapeGetUsedMemorySize(u16 shape);
-void shapeRelease(u16 shape);
 f32 HSD_Randf();
 }
 void GSboundDraw(GSbound *bound, GSgfxLayer *layer);

@@ -113,6 +113,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSAPI/GSshape/GSshape.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-inline deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/deck/deck.cpp"
 completed = true
 

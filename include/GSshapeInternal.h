@@ -13,6 +13,12 @@ struct tagGScol4ub {
     u8 a;
 };
 
+enum GsShapePlayMode {
+    GS_SHAPE_PLAY_ONCE,
+    GS_SHAPE_PLAY_LOOP,
+    GS_SHAPE_PLAY_CLAMP,
+};
+
 struct tagGsFilePrimShapeData {
     u32 mFlags;
     u32 mFrameCount;
