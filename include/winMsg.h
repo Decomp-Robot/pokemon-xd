@@ -13,6 +13,10 @@ enum WinMsgWindow {
     WINMSG_WINDOW_FIGHT = 4
 };
 
+enum WinMsgMessage {
+    WINMSG_MESSAGE_CONTINUE_SAVE = 1
+};
+
 #ifdef __cplusplus
 typedef bool WinMsgBool;
 extern "C" {

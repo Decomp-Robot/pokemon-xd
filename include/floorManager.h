@@ -3,6 +3,11 @@
 #include <types.h>
 
 struct FloorModuleInterface;
+
+enum FloorId {
+    FLOOR_ID_VS_LOBBY = 917
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

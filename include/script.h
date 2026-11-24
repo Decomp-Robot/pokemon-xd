@@ -12,6 +12,7 @@ void scriptOpenItemMenu(void);
 void scriptLightSetDisp(unsigned long resourceId, int display);
 void scriptPlayPokemonNakigoe(u16);
 long scriptContinueSave(void);
+long scriptBattleMountainEnd(void);
 bool scriptSoundOpenPlayME(int, int, u8);
 int controlTV(int);
 int controlTVScreen(void);
