@@ -14,6 +14,7 @@ extern "C" {
 
 typedef struct FightPokemon FightPokemon;
 typedef struct FightOutPokemon FightOutPokemon;
+struct FIGHT_SIDE;
 struct NullSequence;
 struct MENU_POKEMON_STATUS;
 
@@ -100,6 +101,10 @@ void fightOutPokemonLoadWazaEffect(FightOutPokemon *pokemon, u16 wazaId, u8 slot
 void fightOutPokemonWazaEffect(FightOutPokemon *pokemon, u16 wazaId, u8 slot, bool wait, s32 statusMenuSelector);
 void fightOutPokemonFreeWazaEffect(FightOutPokemon *pokemon, u32 effect, u32 slot);
 u8 fightOutPokemonGetFightOutPokemonEnemyOumuWazaDataIdAry(FightOutPokemon *pokemon, u16 *moves);
+void fightOutPokemonCreateFightPokemonEnemyAryEnemySideAll(FightOutPokemon *pokemon, struct FIGHT_SIDE *side);
+void fightOutPokemonInitFightPokemonEnemyAry(FightOutPokemon *pokemon, FightOutPokemon *target);
+struct FightOutPokemonEnemy *fightOutPokemonCreateFightPokemonEnemyAry(FightOutPokemon *pokemon,
+                                                                       FightOutPokemon *target);
 
 void fightOutPokemonSetTokuseiDataId(FightOutPokemon *pokemon, u16 abilityId);
 u16 fightOutPokemonGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);

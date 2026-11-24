@@ -1,4 +1,13 @@
 #include <fightPokemon.h>
+#include <fightFloor.h>
+#include <fightPokemonBios.h>
+#include <fightPokemonEnemy.h>
+#include <fightSeq.h>
+#include <fightSide.h>
+#include <fightTarget.h>
+#include <fightTrainer.h>
+#include <pokemonDB.h>
+#include <waza.h>
 
 extern "C" {
 
@@ -183,6 +192,109 @@ void fightPokemonInitJoutaiDataId(FightPokemon *pokemon, u16 dataId)
     } else if (joutaiDataBiosGetStatus(dataId) == POKEMON_STATUS_FIELD_FIGHT_JOUTAI) {
         joutaiInitJoutaiDataId(pokemon, dataId);
     }
+}
+
+u8 fightOutPokemonIsAlly(FightOutPokemon *pokemon, FightOutPokemon *other)
+{
+    u16 fightType = fightFloor_GetFightType(0);
+    void *pokemonSide;
+    void *otherSide;
+
+    if (pokemon == 0) {
+        return 0;
+    }
+    if (other == 0) {
+        return 0;
+    }
+    pokemonSide = fightTargetGetPtr(FIGHT_TARGET_ID_OWN_SIDE, pokemon, fightType);
+    otherSide = fightTargetGetPtr(FIGHT_TARGET_ID_OWN_SIDE, other, fightType);
+    return pokemonSide == otherSide;
+}
+
+void fightOutPokemonCreateFightPokemonEnemyAryEnemySideAll(FightOutPokemon *pokemon, FIGHT_SIDE *side)
+{
+    FIGHT_TRAINER *trainer;
+    FightOutPokemon *target;
+    u16 i;
+    u16 j;
+    u16 trainerNum;
+    u16 pokemonNum;
+
+    fightFloor_GetFightType(0);
+    trainerNum = fightFloor_GetFightTypeTrainerNum(0);
+    pokemonNum = fightFloor_GetFightTypeFightoutPokemonNum(0);
+    for (i = 0; i < trainerNum; i++) {
+        trainer = fightSide_GetFightTrainerPtr(side, i);
+        if (fightTrainerCheckValid(trainer)) {
+            for (j = 0; j < pokemonNum; j++) {
+                target = fightTrainer_GetFightoutPokemonPtr(trainer, j);
+                if (fightOutPokemonCheckFightOut(target)) {
+                    fightOutPokemonCreateFightPokemonEnemyAry(pokemon, target);
+                }
+            }
+        }
+    }
+}
+
+void fightOutPokemonInitFightPokemonEnemyAry(FightOutPokemon *pokemon, FightOutPokemon *target)
+{
+    FightOutPokemonEnemy *enemy;
+    u16 wazaDataId;
+
+    if (pokemon == 0) {
+        return;
+    }
+    enemy = fightOutPokemonEnemySearchAry(fightOutPokemon_GetFightOutPokemonEnemyPtr(pokemon, 0), 4,
+                                         target);
+    if (enemy == 0) {
+        return;
+    }
+    wazaDataId = fightOutPokemonEnemyBiosGetOumuWazaDataId(enemy);
+    fightOutPokemonEnemyInit(enemy);
+    if (wazaDataId == WAZA_DATA_ID_NONE) {
+        return;
+    }
+    if (wazaDataId == WAZA_SHADOW_SPECIAL) {
+        return;
+    }
+    if (wazaDataId == WAZA_DATA_ID_INVALID) {
+        return;
+    }
+    if (fightOutPokemon_GetOumuWazaDataId(pokemon) != WAZA_DATA_ID_NONE) {
+        return;
+    }
+    if (fightOutPokemonGetFightOutPokemonEnemyOumuWazaDataIdAry(pokemon, 0)) {
+        return;
+    }
+    fightOutPokemon_SetOumuWazaDataId(pokemon, wazaDataId);
+}
+
+FightOutPokemonEnemy *fightOutPokemonCreateFightPokemonEnemyAry(FightOutPokemon *pokemon,
+                                                                FightOutPokemon *target)
+{
+    FightOutPokemonEnemy *enemyAry;
+    FightOutPokemonEnemy *enemy;
+    u16 i;
+
+    if (pokemon == 0) {
+        return 0;
+    }
+    if (!fightOutPokemonCheckValid(target)) {
+        return 0;
+    }
+    enemyAry = fightOutPokemon_GetFightOutPokemonEnemyPtr(pokemon, 0);
+    enemy = fightOutPokemonEnemySearchAry(enemyAry, 4, target);
+    if (enemy != 0) {
+        return enemy;
+    }
+    for (i = 0; i < 4; i++) {
+        enemy = &enemyAry[i];
+        if (!fightOutPokemonEnemyCheckValid(enemy)) {
+            fightOutPokemonEnemyCreate(enemy, target);
+            return enemy;
+        }
+    }
+    return 0;
 }
 
 } // extern "C"

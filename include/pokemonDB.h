@@ -114,6 +114,9 @@ FIGHT_WAZA *fightOutPokemon_GetKeepFightWazaPtr(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetNamakeFlag(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetMotoWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetOumuWazaDataId(FightOutPokemon *pokemon);
+struct FightOutPokemonEnemy *fightOutPokemon_GetFightOutPokemonEnemyPtr(FightOutPokemon *pokemon,
+                                                                       u16 index);
+void fightOutPokemon_SetOumuWazaDataId(FightOutPokemon *pokemon, u16 wazaDataId);
 u16 fightOutPokemon_GetOumuWazaAllyDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetNoPressureFlag(FightOutPokemon *pokemon, u32 flag);
 u16 fightOutPokemon_GetLastUseWazaDataId(FightOutPokemon *pokemon);
