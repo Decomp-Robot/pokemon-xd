@@ -2,6 +2,7 @@
 #include <types.h>
 #include <fightSeq.h>
 #include <fightTarget.h>
+#include <fightSide.h>
 #include <fightFloor.h>
 #include <fightMenu.h>
 #include <pokemonDB.h>
@@ -44,9 +45,203 @@ struct MOVE_ROUTINE_STEP {
     u8 opcode;
     u8 mode;
     u8 value;
+    u8 flags;
 };
 
+extern "C" u8 fightSeqCondChgEffectPlayed;
 
+enum FightSeqCondChgFlag {
+    COND_CHG_FLAG_LOWER = 1,
+    COND_CHG_FLAG_MULTIPLE = 2,
+    COND_CHG_FLAG_ONLY_MULTIPLE = 4,
+    COND_CHG_FLAG_IGNORE_GUARD = 8
+};
+
+extern "C" void WS_COND_CHG_WORK_SET(void)
+{
+    u8 message = 0;
+    u8 action;
+
+    fightSeq_GetWazaSeq();
+    action = UserWork[FIGHT_SEQ_WORK_STAT_ACTION];
+    switch (action & FIGHT_STAT_ACTION_KIND_MASK) {
+    case FIGHT_STAT_ACTION_RAISE_ONE:
+        message = FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_ATTACK;
+        break;
+    case FIGHT_STAT_ACTION_RAISE_TWO:
+        message = FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_ATTACK;
+        break;
+    case FIGHT_STAT_ACTION_LOWER_ONE:
+        message = FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_ATTACK;
+        break;
+    case FIGHT_STAT_ACTION_LOWER_TWO:
+        message = FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_ATTACK;
+        break;
+    }
+    UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = message + (action & FIGHT_STAT_ACTION_STAT_MASK) - FIGHT_STAT_ATTACK;
+    UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE_MODE] = 0;
+    fightSeq_NextWazaSeq(1);
+}
+
+void _fightSeqStatusUpDownEffect(u16 messageId, u8 target)
+{
+    FightOutPokemon *pokemon = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(target, 0);
+
+    if (messageId == FIGHT_STAT_MESSAGE_RAISE_MANY || messageId == FIGHT_STAT_MESSAGE_RAISE_MANY_MORE) {
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ACCURACY_UP, pokemon, 0, 1);
+        return;
+    }
+    if (messageId == FIGHT_STAT_MESSAGE_LOWER_MANY || messageId == FIGHT_STAT_MESSAGE_LOWER_MANY_MORE) {
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ACCURACY_DOWN, pokemon, 0, 1);
+        return;
+    }
+
+    switch (messageId) {
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_ATTACK:
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_SPECIAL_ATTACK:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_ATTACK:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_SPECIAL_ATTACK:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ATTACK_UP, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_DEFENSE:
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_SPECIAL_DEFENSE:
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_EVASION:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_DEFENSE:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_SPECIAL_DEFENSE:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_EVASION:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_DEFENSE_UP, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_SPEED:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_SPEED:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_SPEED_UP, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_RAISE_ONE + FIGHT_STAT_ACCURACY:
+    case FIGHT_STAT_MESSAGE_RAISE_MULTIPLE + FIGHT_STAT_ACCURACY:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ACCURACY_UP, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_ATTACK:
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_SPECIAL_ATTACK:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_ATTACK:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_SPECIAL_ATTACK:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ATTACK_DOWN, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_DEFENSE:
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_SPECIAL_DEFENSE:
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_EVASION:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_DEFENSE:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_SPECIAL_DEFENSE:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_EVASION:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_DEFENSE_DOWN, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_SPEED:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_SPEED:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_SPEED_DOWN, pokemon, 0, 1);
+        break;
+    case FIGHT_STAT_MESSAGE_LOWER_ONE + FIGHT_STAT_ACCURACY:
+    case FIGHT_STAT_MESSAGE_LOWER_MULTIPLE + FIGHT_STAT_ACCURACY:
+        fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_ACCURACY_DOWN, pokemon, 0, 1);
+        break;
+    }
+}
+
+extern "C" void WS_COND_CHG_BIT_CHECK(void)
+{
+    MOVE_ROUTINE_STEP *pos;
+    FightOutPokemon *pokemon;
+    FIGHT_SIDE *side;
+    u16 tokusei;
+    u16 base;
+    u8 flags;
+    u8 mask;
+    u8 stage;
+    u16 statusId;
+    u8 idx;
+    u16 message;
+    s32 count;
+
+    idx = 0;
+    message = 0;
+    count = 0;
+    pos = (MOVE_ROUTINE_STEP *)fightSeq_GetWazaSeq();
+    pokemon = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(pos->mode, 0);
+    side = (FIGHT_SIDE *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_OWN_SIDE, pokemon);
+    tokusei = fightOutPokemonGetTokuseiDataId(pokemon);
+    mask = pos->value;
+    flags = pos->flags;
+
+    if ((flags & COND_CHG_FLAG_LOWER) != 0) {
+        if ((flags & COND_CHG_FLAG_MULTIPLE) != 0)
+            base = FIGHT_STAT_MESSAGE_LOWER_MULTIPLE;
+        else
+            base = FIGHT_STAT_MESSAGE_LOWER_ONE;
+        while (mask != 0) {
+            if ((mask & 1) != 0) {
+                statusId = fightSeqCondChgActTypeToPokemonStatusId(idx);
+                stage = pokemonGetStatus(pokemon, 0, statusId, 0);
+                if ((flags & COND_CHG_FLAG_IGNORE_GUARD) != 0) {
+                    if (stage != 0) {
+                        count++;
+                        message = base + idx;
+                    }
+                } else if (fightSideIsJoutaiDataId(side, JOUTAI_MIST) == 0 &&
+                           tokusei != TOKUSEI_DATA_ID_CLEAR_BODY &&
+                           tokusei != TOKUSEI_DATA_ID_WHITE_SMOKE &&
+                           (tokusei != TOKUSEI_DATA_ID_KEEN_EYE ||
+                            statusId != POKEMON_STATUS_FIELD_ACCURACY_STAGE) &&
+                           (tokusei != TOKUSEI_DATA_ID_HYPER_CUTTER ||
+                            statusId != POKEMON_STATUS_FIELD_ATTACK_STAGE) &&
+                           stage != 0) {
+                    count++;
+                    message = base + idx;
+                }
+            }
+            idx++;
+            mask = mask >> 1;
+        }
+        if (count > 1) {
+            if ((flags & COND_CHG_FLAG_MULTIPLE) != 0)
+                message = FIGHT_STAT_MESSAGE_LOWER_MANY_MORE;
+            else
+                message = FIGHT_STAT_MESSAGE_LOWER_MANY;
+        }
+    } else {
+        if ((flags & COND_CHG_FLAG_MULTIPLE) != 0)
+            base = FIGHT_STAT_MESSAGE_RAISE_MULTIPLE;
+        else
+            base = FIGHT_STAT_MESSAGE_RAISE_ONE;
+        while (mask != 0) {
+            if ((mask & 1) != 0) {
+                statusId = fightSeqCondChgActTypeToPokemonStatusId(idx);
+                stage = pokemonGetStatus(pokemon, 0, statusId, 0);
+                if (stage < FIGHT_STAT_STAGE_LIMIT) {
+                    count++;
+                    message = base + idx;
+                }
+            }
+            idx++;
+            mask = mask >> 1;
+        }
+        if (count > 1) {
+            if ((flags & COND_CHG_FLAG_MULTIPLE) != 0)
+                message = FIGHT_STAT_MESSAGE_RAISE_MANY_MORE;
+            else
+                message = FIGHT_STAT_MESSAGE_RAISE_MANY;
+        }
+    }
+
+    if ((flags & COND_CHG_FLAG_ONLY_MULTIPLE) != 0 && count < 2) {
+        fightSeq_NextWazaSeq(sizeof(MOVE_ROUTINE_STEP));
+        return;
+    }
+    if (count != 0 && fightSeqCondChgEffectPlayed == 0) {
+        _fightSeqStatusUpDownEffect(message, pos->mode);
+        if ((flags & COND_CHG_FLAG_ONLY_MULTIPLE) != 0 && count > 1)
+            fightSeqCondChgEffectPlayed = 1;
+        fightSeq_NextWazaSeq(sizeof(MOVE_ROUTINE_STEP));
+        return;
+    }
+    fightSeq_NextWazaSeq(sizeof(MOVE_ROUTINE_STEP));
+}
 
 static u8 _WsWkcActSubSetStockItem(void *data, u16, void *)
 {

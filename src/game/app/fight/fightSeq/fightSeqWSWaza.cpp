@@ -60,7 +60,6 @@ enum FightEscapeResult {
     FIGHT_ESCAPE_BLOCKED_BY_STATUS = 1,
     FIGHT_ESCAPE_BLOCKED_BY_ABILITY = 2
 };
-enum { FIGHT_STAT_SELECTOR_MASK = 0x0F };
 
 // Selectors stored in the item-effect sequence work slot.
 enum FightSeqItemEffectSelector {
@@ -644,8 +643,8 @@ extern "C" void fightSeqItemExec(FIGHT_ACTION *action, u16 itemID)
     count = fightItem_GetCount(fightItem);
     flag = (fightItem_GetBuff(fightItem) != 0);
     param = (ITEM_PARAM *)itemParamGetPtr(itemDataBiosGetItemEffectParam(itemDataBiosGetPtr(itemID)));
-    savedStatSelector = UserWork[SEQ_WORK_STAT_ACTION];
-    savedMessageEffectId = UserWork[SEQ_WORK_STAT_MESSAGE];
+    savedStatSelector = UserWork[FIGHT_SEQ_WORK_STAT_ACTION];
+    savedMessageEffectId = UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE];
     fightSeqSpecificationActionCounterInit(user);
 
     if (flag == 1) {
@@ -710,27 +709,27 @@ extern "C" void fightSeqItemExec(FIGHT_ACTION *action, u16 itemID)
         up = itemParamGetAttackUp(param);
         if (up > 0) {
             fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (u32)GSmsgGetStringPtr(AbiCntMsgTbl[FIGHT_STAT_ATTACK]));
-            UserWork[SEQ_WORK_STAT_ACTION] = FIGHT_STAT_ATTACK;
+            UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = FIGHT_STAT_ATTACK;
         } else {
             up = itemParamGetDefenceUp(param);
             if (up > 0) {
                 fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (u32)GSmsgGetStringPtr(AbiCntMsgTbl[FIGHT_STAT_DEFENSE]));
-                UserWork[SEQ_WORK_STAT_ACTION] = FIGHT_STAT_DEFENSE;
+                UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = FIGHT_STAT_DEFENSE;
             } else {
                 up = itemParamGetQuickUp(param);
                 if (up > 0) {
                     fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (u32)GSmsgGetStringPtr(AbiCntMsgTbl[FIGHT_STAT_SPEED]));
-                    UserWork[SEQ_WORK_STAT_ACTION] = FIGHT_STAT_SPEED;
+                    UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = FIGHT_STAT_SPEED;
                 } else {
                     up = itemParamGetHitUp(param);
                     if (up > 0) {
                         fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (u32)GSmsgGetStringPtr(AbiCntMsgTbl[FIGHT_STAT_ACCURACY]));
-                        UserWork[SEQ_WORK_STAT_ACTION] = FIGHT_STAT_ACCURACY;
+                        UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = FIGHT_STAT_ACCURACY;
                     } else {
                         up = itemParamGetSpAttackUp(param);
                         if (up > 0) {
                             fightMsgctrlSetValue(FIGHT_MSG_STATUS_NAME, (u32)GSmsgGetStringPtr(AbiCntMsgTbl[FIGHT_STAT_SPECIAL_ATTACK]));
-                            UserWork[SEQ_WORK_STAT_ACTION] = FIGHT_STAT_SPECIAL_ATTACK;
+                            UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = FIGHT_STAT_SPECIAL_ATTACK;
                         }
                     }
                 }
@@ -739,19 +738,19 @@ extern "C" void fightSeqItemExec(FIGHT_ACTION *action, u16 itemID)
         if (up < 0) {
             if (up == 1 || up == -1) {
                 fightMsgctrlSetValue(FIGHT_MSG_STATUS_DEGREE, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_ONE_STAGE));
-                UserWork[SEQ_WORK_STAT_ACTION] = (UserWork[SEQ_WORK_STAT_ACTION] & FIGHT_STAT_SELECTOR_MASK) + FIGHT_STAT_MESSAGE_LOWER_ONE;
+                UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = (UserWork[FIGHT_SEQ_WORK_STAT_ACTION] & FIGHT_STAT_ACTION_STAT_MASK) + FIGHT_STAT_MESSAGE_LOWER_ONE;
             } else {
                 fightMsgctrlSetValue(FIGHT_MSG_STATUS_DEGREE, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_LOWER_MULTIPLE));
-                UserWork[SEQ_WORK_STAT_MESSAGE] = (UserWork[SEQ_WORK_STAT_ACTION] & FIGHT_STAT_SELECTOR_MASK) + FIGHT_STAT_MESSAGE_LOWER_MULTIPLE;
+                UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = (UserWork[FIGHT_SEQ_WORK_STAT_ACTION] & FIGHT_STAT_ACTION_STAT_MASK) + FIGHT_STAT_MESSAGE_LOWER_MULTIPLE;
             }
             fightMsgctrlSetValue(FIGHT_MSG_STATUS_DIRECTION, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_LOWER_DIRECTION));
         } else {
             if (up == 1 || up == -1) {
                 fightMsgctrlSetValue(FIGHT_MSG_STATUS_DEGREE, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_ONE_STAGE));
-                UserWork[SEQ_WORK_STAT_MESSAGE] = (UserWork[SEQ_WORK_STAT_ACTION] & FIGHT_STAT_SELECTOR_MASK) + FIGHT_STAT_MESSAGE_RAISE_ONE;
+                UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = (UserWork[FIGHT_SEQ_WORK_STAT_ACTION] & FIGHT_STAT_ACTION_STAT_MASK) + FIGHT_STAT_MESSAGE_RAISE_ONE;
             } else {
                 fightMsgctrlSetValue(FIGHT_MSG_STATUS_DEGREE, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_RAISE_MULTIPLE));
-                UserWork[SEQ_WORK_STAT_MESSAGE] = (UserWork[SEQ_WORK_STAT_ACTION] & FIGHT_STAT_SELECTOR_MASK) + FIGHT_STAT_MESSAGE_RAISE_MULTIPLE;
+                UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = (UserWork[FIGHT_SEQ_WORK_STAT_ACTION] & FIGHT_STAT_ACTION_STAT_MASK) + FIGHT_STAT_MESSAGE_RAISE_MULTIPLE;
             }
             fightMsgctrlSetValue(FIGHT_MSG_STATUS_DIRECTION, (u32)GSmsgGetStringPtr(FIGHT_STAT_TEXT_RAISE_DIRECTION));
         }
@@ -775,8 +774,8 @@ skip:
     if (flag == 0 && heroItemDecItemDataId(itemOwner, itemID, 1, count) < 0) {
         heroItemDecItemDataId(itemOwner, itemID, 1, -1);
     }
-    UserWork[SEQ_WORK_STAT_ACTION] = savedStatSelector;
-    UserWork[SEQ_WORK_STAT_MESSAGE] = savedMessageEffectId;
+    UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = savedStatSelector;
+    UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = savedMessageEffectId;
     wazaSequenceSysFreeAllWaza();
     fightMenuAllFightTrainerCloseStatusMenu(0);
     fightMenuAllFightOutPokemonCloseStatusMenu(0);

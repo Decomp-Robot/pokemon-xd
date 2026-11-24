@@ -18,10 +18,6 @@ enum {
 };
 
 enum {
-    FIGHT_EFFECT_DRAIN_RECOVERY = 50
-};
-
-enum {
     WAZA_EFFECT_INVOCATION_INITIAL = 0,
     WAZA_EFFECT_INVOCATION_FOLLOWUP = 1
 };
@@ -117,7 +113,7 @@ extern "C" void fightWazaWzxTypeFuncVampire(u16 wazaId, FightOutPokemon *attacke
     } else if (invocation == WAZA_EFFECT_INVOCATION_FOLLOWUP) {
         fightOutPokemonLoadWazaEffect(attacker, wazaId, WAZA_EFFECT_SLOT_SPE, variation);
         if (damage > 0) {
-            fightSeqFightOutPokemonEffect(FIGHT_EFFECT_DRAIN_RECOVERY, attacker, false, true);
+            fightSeqFightOutPokemonEffect(FIGHT_SEQ_FIGHT_EFFECT_DRAIN_RECOVERY, attacker, false, true);
         } else {
             _fightWazaWxzfightOutPokemonWazaEffectSpe(attacker, wazaId, false);
         }

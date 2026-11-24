@@ -121,7 +121,6 @@ enum {
 };
 
 enum {
-    SEQ_WORK_STAT_MESSAGE_MODE = 0x160A5,
     TOKUSEI_SYNCHRONIZE = 28,
     SEQ_SYNCHRONIZE_PENDING = 0x4000,
     SEQ_SYNCHRONIZE_ACTIVE = 0x2000,
@@ -132,8 +131,6 @@ enum {
     SEQ_STATUS_FLINCH = 8,
     STAT_STAGE_NORMAL = 6,
     STAT_STAGE_MAX = 12,
-    STAT_ACTION_RAISE_ONE = 0x10,
-    STAT_ACTION_RAISE_TWO = 0x20,
     STAT_MESSAGE_ATTACK = 0x0F,
     STAT_MESSAGE_DEFENSE = 0x10,
     STAT_MESSAGE_SPEED = 0x11,
@@ -460,9 +457,9 @@ u8 *_fightSeqSoubiItemCheckTurnSubAbiCntUp(FightOutPokemon *pokemon, u8 mode, lo
         u16 statusId = fightSeqCondChgActTypeToPokemonStatusId(type);
         u8 stage = pokemonGetStatus(pokemon, 0, statusId, 0);
         if (fightOutPokemonIsNokoriHpFollowing(pokemon, (u16)divisor) && stage < STAT_STAGE_MAX) {
-            UserWork[SEQ_WORK_STAT_ACTION] = type + actionBase;
-            UserWork[SEQ_WORK_STAT_MESSAGE] = message;
-            UserWork[SEQ_WORK_STAT_MESSAGE_MODE] = 0;
+            UserWork[FIGHT_SEQ_WORK_STAT_ACTION] = type + actionBase;
+            UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE] = message;
+            UserWork[FIGHT_SEQ_WORK_STAT_MESSAGE_MODE] = 0;
             sequence = seqSoubiStatUp;
         }
     }
@@ -597,23 +594,23 @@ extern "C" u8 fightSeqSoubiItemCheckTurn(FightOutPokemon *pokemon, u8 mode)
         if (sequence) category = ITEM_CHECK_HP;
         break;
     case SOUBI_ATTACK:
-        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_ATTACK, STAT_ACTION_RAISE_ONE, STAT_MESSAGE_ATTACK);
+        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_ATTACK, FIGHT_STAT_ACTION_RAISE_ONE, STAT_MESSAGE_ATTACK);
         if (sequence) category = ITEM_CHECK_STAT;
         break;
     case SOUBI_DEFENSE:
-        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_DEFENSE, STAT_ACTION_RAISE_ONE, STAT_MESSAGE_DEFENSE);
+        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_DEFENSE, FIGHT_STAT_ACTION_RAISE_ONE, STAT_MESSAGE_DEFENSE);
         if (sequence) category = ITEM_CHECK_STAT;
         break;
     case SOUBI_SPEED:
-        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPEED, STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPEED);
+        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPEED, FIGHT_STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPEED);
         if (sequence) category = ITEM_CHECK_STAT;
         break;
     case SOUBI_SPECIAL_ATTACK:
-        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPECIAL_ATTACK, STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPECIAL_ATTACK);
+        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPECIAL_ATTACK, FIGHT_STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPECIAL_ATTACK);
         if (sequence) category = ITEM_CHECK_STAT;
         break;
     case SOUBI_SPECIAL_DEFENSE:
-        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPECIAL_DEFENSE, STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPECIAL_DEFENSE);
+        sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter, FIGHT_STAT_SPECIAL_DEFENSE, FIGHT_STAT_ACTION_RAISE_ONE, STAT_MESSAGE_SPECIAL_DEFENSE);
         if (sequence) category = ITEM_CHECK_STAT;
         break;
     case SOUBI_CRITICAL:
@@ -644,7 +641,7 @@ extern "C" u8 fightSeqSoubiItemCheckTurn(FightOutPokemon *pokemon, u8 mode)
             if (candidateList[selected] == -1) break;
             type = candidateList[selected];
             sequence = _fightSeqSoubiItemCheckTurnSubAbiCntUp(pokemon, mode, parameter,
-                type, STAT_ACTION_RAISE_TWO, type + STAT_MESSAGE_RAISE_TWO_BASE);
+                type, FIGHT_STAT_ACTION_RAISE_TWO, type + STAT_MESSAGE_RAISE_TWO_BASE);
             if (sequence) category = ITEM_CHECK_STAT;
         }
         break;
