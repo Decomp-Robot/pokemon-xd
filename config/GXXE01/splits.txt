@@ -3764,6 +3764,9 @@ game/GSAPI/GSsysdolphin_baselib/baselib/id.c:
 	.bss        start:0x804B20C0 end:0x804B2280
 	.sdata2     start:0x804EEF18 end:0x804EEF28
 
+game/GSAPI/GSsysdolphin_baselib/baselib/jobj.c:
+	.text       start:0x8024F6D8 end:0x8024F6F0
+
 game/GSAPI/GSsysdolphin_baselib/baselib/list.c:
 	.text       start:0x80253338 end:0x80253594
 	.bss        start:0x804B2298 end:0x804B22F0

@@ -6321,6 +6321,11 @@ completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/jobj.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly"]
+
+[[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/list.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-inline auto,deferred"]
