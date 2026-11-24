@@ -404,7 +404,7 @@ void menuPokemonDrawItem(tagWINDOW_WORK *win, tagSPRITE_WORK *sprite)
                 msgId = MSG_TM_CANT;
             } else {
                 u8 order[TUTOR_MOVE_INDEX_MAX] = {7, 10, 2, 0, 5, 1, 4, 3, 6, 9, 11, 8};
-                moveId = pokemonTutorMoveTable[order[_menuPokemon.mItemId]].mMoveId;
+                moveId = wazaoshie_data[order[_menuPokemon.mItemId]].mMoveId;
                 for (tutorIndex = 0; tutorIndex < PARTY_MOVE_SLOT_MAX; tutorIndex++) {
                     if ((u16)pokemonBiosGetPokemonWazaDataId(pokemon, tutorIndex) == moveId)
                         break;

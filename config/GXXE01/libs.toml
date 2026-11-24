@@ -713,7 +713,7 @@ extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/includ
 [[lib.object]]
 name = "game/menuScript.cpp"
 completed = true
-extra_cflags = ["-opt nopeephole"]
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-opt nopeephole", "-inline noauto,deferred", "-pragma \"force_active on\""]
 
 [[lib.object]]
 name = "game/menuReliveMeter.cpp"

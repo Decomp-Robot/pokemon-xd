@@ -3,7 +3,7 @@
 
 #include <types.h>
 
-struct PokemonData;
+struct POKEMON_DATA_dd_;
 
 enum { ZOKUSEI_DATA_ID_COUNT = 18 };
 
@@ -18,7 +18,7 @@ typedef struct ZokuseiData {
 #ifdef __cplusplus
 extern "C" {
 #endif
-u16 zokuseiGetPokemonSpriteID(struct PokemonData *data, u16 index);
+u16 zokuseiGetPokemonSpriteID(POKEMON_DATA_dd_ *data, u16 index);
 u8 zokuseiBiosGetWazaKind(u16 zokuseiDataId);
 u16 zokuseiBiosGetWazaJoutai(u32 zokuseiDataId, u32 defenseZokuseiDataId);
 u16 zokuseiGetWazaJoutai_PokemonId(u16 zokusei, u16 pokemonID);

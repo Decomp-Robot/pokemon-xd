@@ -3,7 +3,8 @@
 
 #include <types.h>
 
-typedef struct PokemonData PokemonData;
+typedef struct POKEMON_DATA_dd_ POKEMON_DATA_dd_;
+typedef POKEMON_DATA_dd_ PokemonData;
 typedef PokemonData PokemonSpeciesStats;
 
 enum PokemonDataLimits {
@@ -57,7 +58,7 @@ typedef struct PokemonBody {
     u32 mPokebodyId;
 } PokemonBody;
 
-struct PokemonData {
+struct POKEMON_DATA_dd_ {
     u8 mGrowDataId;
     u8 mCatchRate;
     u8 mSexRatio;
@@ -105,7 +106,7 @@ typedef struct PokemonTutorMove {
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern const PokemonTutorMove *pokemonTutorMoveTable;
+extern const PokemonTutorMove *wazaoshie_data;
 u16 pokemonDataBiosGetHeight(PokemonSpeciesStats *data);
 u16 pokemonDataBiosGetWeight(PokemonSpeciesStats *data);
 u32 pokemonDataBiosGetTypeName(PokemonSpeciesStats *data);

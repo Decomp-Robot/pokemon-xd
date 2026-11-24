@@ -49,6 +49,8 @@ enum ItemID {
     ITEM_JOY_SCENT = 513,
     ITEM_EXCITE_SCENT = 514,
     ITEM_VIVID_SCENT = 515,
+    ITEM_EEVEE_NO_HELD_ITEM_ICON = 516,
+    ITEM_EEVEE_HELD_ITEM_ICON = 517,
 
     // The battle disk case opens the disk list; the disks follow it,
     // one item ID per disk, in disk order.

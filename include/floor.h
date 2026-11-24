@@ -40,6 +40,7 @@ GSgfxLayerID floorGetMenuLayerID(void);
 s32 floorGetNextFloorID(void);
 s32 floorGetPrevFloorID(void);
 u32 floorGetCurrentGroupID(void);
+u32 floorGetPlaceName(u32 place);
 void floorLink(s32 floorID, s32 mode);
 void floorSetFadeScript(s32 scriptID, s32 fadeID);
 GSfloor_dd_* floorDataBiosGetPtr(u32 floorID);

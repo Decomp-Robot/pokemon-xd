@@ -60,6 +60,15 @@ extern u32 *waza_data_number;
 /* Loaded move records. */
 extern struct WazaData *waza_data;
 
+/* Count of tutorial records. */
+extern u32 *tutorialdata_number;
+
+/* Tutorial records. */
+extern u16 *tutorialdata;
+
+/* Count of records in the move tutor table. */
+extern s32 *wazaoshie_data_number;
+
 /* Count of entries in the pokemon nature (seikaku) table. */
 extern u32 *pokemon_seikaku_data_number;
 

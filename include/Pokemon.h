@@ -25,7 +25,7 @@ typedef struct PokemonExpandStatus {
 
 // Pokemon -- party/battle pokemon record.
 typedef struct Pokemon Pokemon;
-typedef struct PokemonData PokemonData;
+typedef struct POKEMON_DATA_dd_ PokemonData;
 typedef struct PokemonRibbon PokemonRibbon;
 
 // Move record of a Pokemon. The move data ID names the move in the slot, the
@@ -188,11 +188,14 @@ enum POKEMON_SPECIES_ID {
     POKEMON_SPECIES_EEVEE = 133,
     POKEMON_SPECIES_VAPOREON = 134,
     POKEMON_SPECIES_JOLTEON = 135,
+    POKEMON_SPECIES_FLAREON = 136,
     POKEMON_SPECIES_ARTICUNO = 144,
     POKEMON_SPECIES_MEWTWO = 150,
     POKEMON_SPECIES_MEW = 151,
     POKEMON_SPECIES_PICHU = 172,
     POKEMON_SPECIES_TOGEPI = 175,
+    POKEMON_SPECIES_ESPEON = 196,
+    POKEMON_SPECIES_UMBREON = 197,
     POKEMON_SPECIES_ANNON = 201,
     POKEMON_SPECIES_STEELIX = 208,
     POKEMON_SPECIES_RAIKOU = 243,

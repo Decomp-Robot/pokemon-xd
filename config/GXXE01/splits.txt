@@ -462,8 +462,13 @@ game/pokecolo.cpp:
 	.sdata2     start:0x804EC528 end:0x804EC53C
 
 game/menuScript.cpp:
-	.text       start:0x8005E794 end:0x8005E95C
-	.bss        start:0x80435528 end:0x80435540 align:4
+	.text       start:0x8005CC74 end:0x8005F524
+	.rodata     start:0x802EB230 end:0x802EB320
+	.data       start:0x803C2418 end:0x803C2594
+	.bss        start:0x80435528 end:0x80435570 align:4
+	.sdata      start:0x804E7FA8 end:0x804E7FB0
+	.sbss       start:0x804EA8D8 end:0x804EA8F0
+	.sdata2     start:0x804EC560 end:0x804EC578
 
 game/menuReliveMeter.cpp:
 	.text       start:0x8005F524 end:0x800605B8

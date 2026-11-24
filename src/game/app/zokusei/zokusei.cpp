@@ -123,7 +123,7 @@ s32 zokuseiGetAisyouValue(u16 zokuseiDataId, u8 direction, u8 filter)
 }
 
 // Sprite of one of a species' two types, or 0 when the slot is unused.
-u16 zokuseiGetPokemonSpriteID(PokemonData *data, u16 index)
+u16 zokuseiGetPokemonSpriteID(POKEMON_DATA_dd_ *data, u16 index)
 {
     if (index >= POKEMON_DATA_TYPE_COUNT) return 0;
     return zokuseiBiosGetSpriteID((u8)pokemonDataBiosGetZokuseiDataId(data, index));
