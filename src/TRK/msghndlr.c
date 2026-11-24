@@ -10,7 +10,6 @@ typedef struct CommandReply {
 } CommandReply;
 
 enum {
-    kDSReplyACK = 128,
     kDSReplyNoError = 0,
     kDSReplyError = 1,
     kDSReplyPacketSizeError = 2,

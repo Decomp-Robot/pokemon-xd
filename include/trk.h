@@ -46,6 +46,7 @@ typedef u32 NubEventID;
 
 /* Status codes reported by the queue and buffer routines. */
 #define DS_NoError                  0
+#define DS_InvalidArgument          2
 #define DS_EventQueueFull            0x100
 #define DS_NoMessageBufferAvailable 0x300
 #define DS_MessageBufferOverflow    0x301
@@ -71,6 +72,7 @@ typedef enum {
 
 enum {
     kDSCommandOffset = 4,
+    kDSReplyErrorOffset = 8,
     kDSOptionsOffset = 8,
     kDSLengthOffset = 12,
     kDSAddressOffset = 16,
@@ -104,6 +106,7 @@ enum {
 #define DS_InvalidProcessId 0x704
 #define DS_InvalidThreadId 0x705
 #define DS_OsError 0x706
+#define DS_NoResponse 0x800
 
 /* Event queue slots.  Events of type NUBEVENT_Null are never posted; the
    switch in TRKNubMainLoop falls through and drops such an event.  A step
@@ -217,8 +220,14 @@ extern DSError TRKReleaseMutex(void *lock);
 extern DSError TRKInitializeMutex(void *lock);
 
 typedef enum {
+    kDSReplyACK = 128,
     kDSNotifyStopped = 144,
-    kDSNotifyException = 145
+    kDSNotifyException = 145,
+    kTRKFileWrite = 208,
+    kTRKFileRead,
+    kTRKFileOpen,
+    kTRKFileClose,
+    kTRKFilePosition
 } MessageCommandID;
 
 extern DSError TRKDoNotifyStopped(MessageCommandID command);
@@ -226,6 +235,13 @@ extern DSError TRKTargetAddStopInfo(TRKBuffer *buffer);
 extern DSError TRKTargetAddExceptionInfo(TRKBuffer *buffer);
 extern DSError TRKRequestSend(TRKBuffer *request, MessageBufferID *replyID,
                              u32 minReplySize, u32 retryCount, BOOL useTimeout);
+extern DSError HandleOpenFileSupportRequest(const char *path, u8 flags,
+                                            u32 *fileId, DSError *ioResult);
+extern DSError HandleCloseFileSupportRequest(u32 fileHandle, DSError *ioResult);
+extern DSError HandlePositionFileSupportRequest(u32 fileHandle, u32 *position,
+                                                u8 mode, DSError *ioResult);
+extern DSError TRKSuppAccessFile(u32 fileHandle, u8 *data, u32 *length,
+                                 DSError *ioResult, BOOL needReply, BOOL read);
 
 extern TRKEventQueue gTRKEventQueue;
 extern TRKBuffer gTRKMessageBuffers[kMessageBufferCount];
