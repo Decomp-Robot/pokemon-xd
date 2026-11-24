@@ -811,7 +811,7 @@ void CInfoWindow::initTutorialTalk()
     mMenuID = MENU_TUTORIAL_TALK;
     tagSPRITE_WORK *work = menuPtGetSpriteWorkByHookFunction(windowSearchID(mMenuID), (void *)winMsgDraw, 0, 0);
     work->mHookFunction = 0;
-    work->_05 = 0;
+    work->mTypeFlags = 0;
     mItemID = work->mItemID;
     close();
 }

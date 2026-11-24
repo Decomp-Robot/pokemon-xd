@@ -4,6 +4,7 @@
 #include <types.h>
 #include <cursorBios.h>
 #include <GSgfxTypes.h>
+#include <menuItemBios.h>
 
 // Usable from C as well as C++.
 typedef struct tagSPRITE_WORK tagSPRITE_WORK;
@@ -24,7 +25,9 @@ enum WindowSequenceState {
     WINDOW_SEQUENCE_CLOSE = WINDOW_STATE_CLOSING
 };
 
-enum {
+enum WindowStateFlags {
+    WINDOW_STATE_FLAG_INUSE = 1,
+    WINDOW_STATE_FLAG_DISP = 2,
     // Set in tagWINDOW_WORK::mStateFlags while the window is running: it keeps
     // the window's per-frame update and its message printer advancing.
     WINDOW_RUN_UPDATE = 4
@@ -38,32 +41,45 @@ typedef struct WINDOW_SEQUENCE {
     u8 _06[54];
 } WINDOW_SEQUENCE;
 
+typedef struct WINDOW_FREE_WORK WINDOW_FREE_WORK;
+struct WINDOW_FREE_WORK {
+    u32 mMessageID;
+    u8 mKeyWait;
+    u8 mSound;
+    u8 mUnknown06[2];
+    u32 mKeyTrigger;
+    s16 mMessageWidth;
+    s16 mMessageHeight;
+};
+
 // Per-window drawing and input state.
 struct tagWINDOW_WORK {
     s8 mStateFlags;              // Window state flags.
     s8 mState;                   // Menu sequence step.
     s8 mFlag;                    // Set by the step's hook, cleared when the step advances.
     u8 _03;
-    long mMenuID;                // menu data id used for item lookups.
+    s32 mMenuID;                 // menu data id used for item lookups.
     u8 _08;
-    u8 mOpenPriority;            // window ordering priority.
+    s8 mOpenPriority;            // window ordering priority.
     u8 mCloseRequested;
-    u8 _0B;
+    u8 mEnablePortMask;
     tagWINDOW_WORK *mParent;
     tagWINDOW_WORK *mNext;       // next window in the window list.
-    u8 _14[4];
+    tagWINDOW_WORK *mPrevious;
     u8 mInactive;
-    u8 _19[3];
+    u8 mShownItemCount;
+    u8 mCursorMode;
+    u8 mOpenFlags;
     GSgfxLayerID mLayerID;               // GSgfx layer the window draws on.
-    u8 _20[4];
+    u8 mItemTable;
     tagSPRITE_WORK *mSpriteWork; // head of the window sprite-work list.
-    u8 _28[4];
+    tagSPRITE_WORK *mCursorSpriteWork;
     WINDOW_SEQUENCE mSeq;       // Sequence record of the menu the window runs.
     union {
         u32 mArgs[8];
         NAME_ENTRY_ARG *mArg;        // argument the custom menu was opened with.
     };
-    long mCursorIndex;
+    s32 mCursorIndex;
     s16 mScrollX;                // horizontal content offset.
     s16 mScrollY;
     union {
@@ -75,27 +91,40 @@ struct tagWINDOW_WORK {
             u8 mColorA; // alpha channel; also read on its own.
         } mRgba;
     };
-    u8 _94[8];
+    f32 mScaleX;
+    f32 mScaleY;
     CURSOR mCursor;              // cursor position in the window.
     CURSOR mPreviousCursor;
     u8 mAccept;                  // set when the menu is confirmed.
     u8 mCancel;                  // set when the menu is cancelled.
+    u8 _A6[2];
+    WINDOW_FREE_WORK mFreeWork;
+    void *mAllocMemory;
 };
 
 // Flag bits of tagSPRITE_WORK::mFlags.
-enum {
+enum SpriteFlags {
+    SPRITE_FLAG_INUSE = 1,
     SPRITE_FLAG_DISP = 2, // set while the node is drawn.
+    SPRITE_FLAG_UNUSED = 4
+};
+
+enum SpriteTypeFlags {
+    SPRITE_TYPE_TEXTURE = 0x1,
+    SPRITE_TYPE_PRIMITIVE = 0x2,
+    SPRITE_TYPE_HOOK = 0x8,
+    SPRITE_TYPE_FLASH = 0x10
 };
 
 // Sprite work node used by menu entries.
 struct tagSPRITE_WORK {
     tagSPRITE_WORK *mNext; // next node in the list.
     s8 mFlags;             // node flags, see SPRITE_FLAG_*.
-    u8 _05;
+    u8 mTypeFlags;
     s16 mItemID;           // item id the node displays for the menu.
-    u8 _08[4];
+    u32 mDrawID;
     WINDOW_SEQUENCE mSeq;  // sequence the node's row hook plays.
-    void *mHookFunction;   // hook the node was registered with.
+    MENU_ITEM_HOOK mHookFunction; // hook the node was registered with.
     u32 mMsgID;            // message id the node prints.
     s16 mX;                // x position the row hooks place the sprite at.
     s16 mY;                // y position the row hooks place the sprite at.
@@ -137,6 +166,9 @@ enum WindowKeyMask {
     WINDOW_KEY_TRIGGER_L = 0x200,
     WINDOW_KEY_TRIGGER_R = 0x400,
     WINDOW_KEY_START = 0x800,
+    WINDOW_KEY_DIRECTION_VERTICAL = WINDOW_KEY_UP | WINDOW_KEY_DOWN,
+    WINDOW_KEY_DIRECTION_HORIZONTAL = WINDOW_KEY_LEFT | WINDOW_KEY_RIGHT,
+    WINDOW_KEY_DIRECTION = WINDOW_KEY_DIRECTION_VERTICAL | WINDOW_KEY_DIRECTION_HORIZONTAL,
 };
 
 // Key state read by windowGetKeyOn/windowGetKeyTrg/windowGetKeyRepeat and by the debug menus.
@@ -165,6 +197,9 @@ tagWINDOW_WORK *windowSearchID(s32 windowID);
 GSgfxLayerID winSpriteGetLayerID(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 #ifdef __cplusplus
 u8 winSpriteGetDisp(tagSPRITE_WORK* sprite);
+void winSpriteRelease(tagSPRITE_WORK **list);
+tagSPRITE_WORK *winSpriteAdd(tagSPRITE_WORK **list);
+void winSpriteInit(void);
 void winSpriteSetDisp(tagSPRITE_WORK* sprite, bool visible);
 #endif
 

@@ -1,11 +1,19 @@
 #ifndef MENUDATABIOS_H
 #define MENUDATABIOS_H
 #include <types.h>
+#include <GSgfxTypes.h>
 struct tagWINDOW_WORK;
 
 // mCursorMode / mButtonMode value that makes the window call the handler
 // stored in the menu's MenuData entry instead of the built-in behaviour.
 enum { MENU_DATA_MODE_CALLBACK = 4 };
+
+enum MenuWindowValueMode {
+    WINDOW_VALUE_NONE = 0,
+    WINDOW_VALUE_CURSOR = 1,
+    WINDOW_VALUE_INDEX = 2,
+    WINDOW_VALUE_ITEM = 3
+};
 
 typedef struct MenuData {
     u8 mItemTable : 3;

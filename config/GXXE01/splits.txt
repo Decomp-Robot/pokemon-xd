@@ -307,6 +307,9 @@ game/menuPokemonStatus.cpp:
 	.bss        start:0x804297C8 end:0x80429900
 	.sdata2     start:0x804EC190 end:0x804EC1BC
 
+game/menuItemTool.cpp:
+	.data       start:0x80322CE8 end:0x8032E4E0
+
 game/menuSaveLoad.cpp:
 	.text       start:0x80037A48 end:0x80038104
 	.data       start:0x8032E4E0 end:0x8032E508
@@ -2278,12 +2281,12 @@ game/app/menu/menuOffScreen.cpp:
 	.sdata2     start:0x804ED6E0 end:0x804ED708
 
 game/window.cpp:
-	.text       start:0x80115938 end:0x80115B90
-
-game/menu/window.cpp:
-	.text       start:0x80116698 end:0x801169C8
-	.bss        start:0x80445BA8 end:0x80445BE0
-	.sdata2     start:0x804ED708 end:0x804ED710
+	.text       start:0x80114D30 end:0x80116A90
+	.rodata     start:0x802F2F80 end:0x802F3028
+	.data       start:0x803FC058 end:0x803FC070
+	.bss        start:0x80445A68 end:0x80445BE0
+	.sdata2     start:0x804ED708 end:0x804ED718
+	.sbss2      start:0x804EFCF8 end:0x804EFD00
 
 game/app/menu/cursorBios.cpp:
 	.text       start:0x80116A90 end:0x80116BD4

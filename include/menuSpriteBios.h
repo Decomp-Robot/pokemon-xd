@@ -11,8 +11,22 @@ struct MenuSpriteValue {
     u32 mDrawValue;
 };
 
+enum MenuSpriteValueType {
+    MENU_SPRITE_VALUE_TEXTURE = 1,
+    MENU_SPRITE_VALUE_PRIMITIVE = 2,
+    MENU_SPRITE_VALUE_FLASH = 3
+};
+
 struct MenuSpriteData {
-    u8 _00[8];
+    u16 mChainEndFlag : 1;
+    u16 mUseWindowSize : 1;
+    u16 mValueType : 2;
+    u16 mSequenceID : 12;
+    u8 _02;
+    s8 mOffsetX;
+    s8 mOffsetY;
+    u8 mAlpha;
+    u8 _06[2];
     struct MenuSpriteValue mValue[5];
     s16 mNextID;
     u8 _46[2];
