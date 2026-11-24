@@ -3826,6 +3826,10 @@ game/GSAPI/GSprim/text.cpp:
 	.sdata      start:0x804E8660 end:0x804E8670
 	.sdata2     start:0x804EF550 end:0x804EF560
 
+game/GSAPI/GSshape/shapeRender.cpp:
+	.text       start:0x80287C00 end:0x802883B0
+	.sbss       start:0x804EBB40 end:0x804EBB48
+
 game/app/deck/deck.cpp:
 	.text       start:0x8028B348 end:0x8028BFB8
 	.sbss       start:0x804EBB60 end:0x804EBB74
