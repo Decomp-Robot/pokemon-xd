@@ -3973,7 +3973,8 @@ game/app/underTaker/undertakerBios.cpp:
 	.text       start:0x802966C0 end:0x8029677C
 
 game/app/bingo/bingoBios.cpp:
-	.text       start:0x80296B3C end:0x80296CB0
+	.text       start:0x80296B3C end:0x80296D4C
+	.sbss       start:0x804EBBB0 end:0x804EBBB8
 
 game/app/people/peopleInfoBios.cpp:
 	.text       start:0x80296D4C end:0x80297054

@@ -43,6 +43,11 @@ extern struct MenuSeData *menu_se;
 extern u32 *mball_data_number;
 extern u16 *mball_data;
 
+struct BINGO_DATA_dd_;
+
+extern u32 *bingo_data_number;
+extern struct BINGO_DATA_dd_ *bingo_data;
+
 /* Count of entries in the item data index table. */
 extern u32 *item_data_index_number;
 

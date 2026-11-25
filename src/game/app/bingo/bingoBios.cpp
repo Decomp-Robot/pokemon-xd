@@ -1,4 +1,10 @@
 #include <app/bingo/bingoBios.h>
+#include <relglobal.h>
+
+u8 bingo_bios::mStaticNo;
+u8 bingo_bios::mStaticBall;
+u8 bingo_bios::mStaticIdx[STATIC_IDX_COUNT];
+u8 bingo_bios::mStaticResult;
 
 u16 bingo_bios::getScore(BINGO_DATA_dd_* sheet, u8 index)
 {
@@ -94,4 +100,58 @@ u8 bingo_bios::getNo(BINGO_DATA_dd_* sheet)
         return sheet->number;
     }
     return 0;
+}
+
+u8 bingo_bios::getStaticIdx(u8 index)
+{
+    if (index >= STATIC_IDX_COUNT) {
+        return 0;
+    }
+    return mStaticIdx[index];
+}
+
+void bingo_bios::setStaticIdx(u8 idx0, u8 idx1)
+{
+    mStaticIdx[0] = idx0;
+    mStaticIdx[1] = idx1;
+}
+
+u8 bingo_bios::getStaticResult()
+{
+    return mStaticResult;
+}
+
+void bingo_bios::setStaticResult(u8 result)
+{
+    mStaticResult = result;
+}
+
+void bingo_bios::decStaticBall()
+{
+    if (mStaticBall != 0) {
+        mStaticBall--;
+    }
+}
+
+u8 bingo_bios::getStaticBall()
+{
+    return mStaticBall;
+}
+
+void bingo_bios::setStaticBall(u8 ball)
+{
+    mStaticBall = ball;
+}
+
+BINGO_DATA_dd_* bingo_bios::getStaticSheet()
+{
+    if (*bingo_data_number <= mStaticNo) {
+        return 0;
+    }
+    return &bingo_data[mStaticNo];
+}
+
+void bingo_bios::setStaticNo(u8 no)
+{
+    mStaticNo = no;
 }

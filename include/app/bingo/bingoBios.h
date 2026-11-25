@@ -55,8 +55,22 @@ public:
     u32 getLevel(BINGO_DATA_dd_* sheet);
     u8 getNo(BINGO_DATA_dd_* sheet);
 
-    static BINGO_DATA_dd_* getStaticSheet();
+    static u8 getStaticIdx(u8 index);
+    static void setStaticIdx(u8 idx0, u8 idx1);
     static u8 getStaticResult();
+    static void setStaticResult(u8 result);
+    static void decStaticBall();
+    static u8 getStaticBall();
+    static void setStaticBall(u8 ball);
+    static BINGO_DATA_dd_* getStaticSheet();
+    static void setStaticNo(u8 no);
+
+private:
+    static const u32 STATIC_IDX_COUNT = 2;
+    static u8 mStaticNo;
+    static u8 mStaticBall;
+    static u8 mStaticIdx[STATIC_IDX_COUNT];
+    static u8 mStaticResult;
 };
 
 #endif
