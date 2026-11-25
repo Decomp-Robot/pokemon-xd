@@ -15,6 +15,7 @@ u32 floorGetCurrent(void);
 u32 floorGetCurrentFloorGroupID(void);
 u8 floorIsFloorPushed(void);
 u8 floorIsPop(void);
+void GSfloorSetData(void);
 u32 GSfloorGetCurrent(void);
 u32 GSfloorGetCurrentFloorGroupID(void);
 u8 GSfloorIsPop(void);

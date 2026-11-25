@@ -2401,7 +2401,7 @@ game/app/floor/floorOffscreen.cpp:
 	.sbss       start:0x804EB138 end:0x804EB150
 
 game/app/floor/floorManager.cpp:
-	.text       start:0x80125AE4 end:0x80126048
+	.text       start:0x80125AE0 end:0x80126048
 	.rodata     start:0x802F32A8 end:0x802F32BC
 	.sbss       start:0x804EB150 end:0x804EB154
 

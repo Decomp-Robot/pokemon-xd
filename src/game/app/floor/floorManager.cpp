@@ -6,6 +6,10 @@
 
 FloorManager* _floorManager;
 
+void GSfloorSetData(void)
+{
+}
+
 u32 GSfloorGetCurrent(void)
 {
     return floorGetCurrent();
