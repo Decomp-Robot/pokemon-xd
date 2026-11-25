@@ -116,7 +116,9 @@ struct CCD_TRIMDL_HEAD {
 
 /* One CCD object record (64 bytes). */
 struct CCD_OBJECT {
-    u8 _00[36];
+    GSvec mPosition;
+    GSvec mRotation;
+    GSvec mScale;
     CCD_WALKMDL_HEAD* mWalkMdl;
     CCD_HITMDL_HEAD* mHitMdl;
     CCD_THRUMDL_HEAD* mThruMdl;
@@ -141,7 +143,7 @@ public:
  * (GScolsys2LoadCCD stores the loaded file here). */
 struct CCD_FILEHEAD {
     CCD_OBJECT* mObject;
-    s32 mObjectCount;
+    u32 mObjectCount;
 };
 
 /* Human-table registration and collision-enable flags. */
@@ -155,6 +157,7 @@ struct CCD_FILEHEAD {
 enum GSCOLSYS2_RESULT {
     GSCOLSYS2_SUCCESS = 0,
     GSCOLSYS2_NO_CURRENT_FLOOR = 1,
+    GSCOLSYS2_INVALID_OBJECT = 2,
     GSCOLSYS2_INVALID_HUMAN = 4,
     GSCOLSYS2_HUMAN_TABLE_FULL = 5,
     GSCOLSYS2_COLLISION = 6,
@@ -212,7 +215,7 @@ struct GSCOLSYS2_WALK_HEIGHT {
 
 extern "C" {
 s32 GScolsys2GetObjEnable(s32 index, u8* enable);
-s32 GScolsys2SetObjEnable(s32 index, s32 enable);
+s32 GScolsys2SetObjEnable(s32 index, u8 enable);
 s32 GScolsys2GetObjRotMatrix(GSmtx* out, s32 index);
 s32 GScolsys2GetObjMatrix(GSmtx* out, s32 index);
 GSCOLSYS2_FLOOR* GScolsys2GetCurFloor(void);
@@ -232,7 +235,7 @@ f32 GScolsys2UtilGetCpLinePoint(GSvec* out, GSvec* a, GSvec* b, GSvec* p);
 void GScolsy2UtilGetPointExtentionLine(GSvec* out, GSvec* start, f32 len, GSvec* end);
 void GScolsy2UtilGetCpPlanePoint(GSvec* cp, GSvec* normal, GSvec* tri, GSvec* pos);
 s32 GScolsy2UtilChkInTri(f32* p, f32* tri, GSvec* normal);
-f32 GScolsy2UtilGetSidePlanePoint(GSvec* normal, void* tri, GSvec* pos);
+f32 GScolsy2UtilGetSidePlanePoint(GSvec* normal, GSvec* tri, GSvec* pos);
 
 f32 GScolsys2HumanGetHumanRadius(s32 index);
 void GScolsys2HumanDispColision(void);
