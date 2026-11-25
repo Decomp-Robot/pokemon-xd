@@ -43,12 +43,10 @@ enum ItemUse2PokemonLog {
     ITEMUSE2POKEMON_LOG_MAX = 32
 };
 
-/* One entry of the log itemUse2Pokemon fills in with what an item did to a
- * pokemon. An item logs at most 32 entries, the count is kept separately. */
 struct ITEMUSE2POKEMON_LOG1 {
-    s32 mEffect; // 0x00: the effect the item had.
-    s16 mValue;  // 0x04: first value the effect message prints.
-    s16 mValue2; // 0x06: second value the effect message prints.
+    ITEMUSE2POKEMON_EFFECT mEffect;
+    s16 mValue;
+    s16 mValue2;
 };
 
 extern "C" s16 itemUse2PokemonSimulation(ITEMUSE2POKEMON_LOG1 *log,
