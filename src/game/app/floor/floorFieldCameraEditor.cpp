@@ -20,8 +20,8 @@ struct FieldCameraEditorData {
     FloorFieldCameraRecord *selectedRecord;
     FloorFieldCameraList *cameraList;
     u32 recordCount;
-    void *listAllocation;
-    void *recordAllocation;
+    FloorFieldCameraList *listAllocation;
+    FloorFieldCameraRecord *recordAllocation;
     u32 floorID;
     FloorFieldCameraList **originalList;
     u32 app;
@@ -31,11 +31,9 @@ struct FieldCameraEditorData {
 
 FieldCameraEditorData gFieldCameraEditorData;
 
-enum {
-    EDITOR_APP_MAIN = 1,
-    EDITOR_PRIORITY = 127,
-    CIRCLE_SEGMENTS = 16
-};
+static const u32 EDITOR_APP_MAIN = 1;
+static const u32 EDITOR_PRIORITY = 127;
+static const s32 CIRCLE_SEGMENTS = 16;
 
 u8 floorFieldCameraEditorGetMode(void)
 {
@@ -56,45 +54,42 @@ void floorReleaseFieldCameraEditor(void)
 void floorInitFieldCameraEditor(u32 floorID)
 {
     u32 size;
-    GSfloor_dd_ *floor;
+    GSfloor_dd_ *floor = floorDataBiosGetPtr(floorID);
     u32 count;
-    floor = floorDataBiosGetPtr(floorID);
     floorReleaseFieldCameraEditor();
-    if (!floor) goto error;
-    gFieldCameraEditorData.app = GSgappCreate(EDITOR_APP_MAIN, EDITOR_PRIORITY, 0, floorUpdateFieldCameraEditor);
-    if (!gFieldCameraEditorData.app) goto error;
-    {
-        FloorFieldCameraList *list = (FloorFieldCameraList *)GSmemAlloc(sizeof(FloorFieldCameraList));
-        if (!list) goto error;
-        gFieldCameraEditorData.cameraList = list;
-        gFieldCameraEditorData.listAllocation = list;
-        FloorFieldCameraList *original = floorDataBiosGetFieldCameraListPtr(floor);
-        gFieldCameraEditorData.floorID = floorID;
-        gFieldCameraEditorData.originalList = floor->fieldCameraList;
-        gFieldCameraEditorData.mode = floorFieldCameraGetMode();
-        gFieldCameraEditorData.cameraList->count = &gFieldCameraEditorData.recordCount;
-        if (original) {
-            count = *original->count;
-            if (count) {
+    if (floor) {
+        gFieldCameraEditorData.app = GSgappCreate(EDITOR_APP_MAIN, EDITOR_PRIORITY, 0, floorUpdateFieldCameraEditor);
+        if (gFieldCameraEditorData.app) {
+            FloorFieldCameraList *list = (FloorFieldCameraList *)GSmemAlloc(sizeof(FloorFieldCameraList));
+            if (list) {
+                gFieldCameraEditorData.cameraList = list;
+                gFieldCameraEditorData.listAllocation = list;
+                FloorFieldCameraList *original = floorDataBiosGetFieldCameraListPtr(floor);
+                gFieldCameraEditorData.floorID = floorID;
+                gFieldCameraEditorData.originalList = floor->fieldCameraList;
+                gFieldCameraEditorData.mode = floorFieldCameraGetMode();
+                gFieldCameraEditorData.cameraList->count = &gFieldCameraEditorData.recordCount;
+                if (!original) return;
+                count = *original->count;
+                if (!count) return;
                 size = count * sizeof(FloorFieldCameraRecord);
                 FloorFieldCameraRecord *records = (FloorFieldCameraRecord *)GSmemAlloc(size);
-                if (!records) goto error;
-                gFieldCameraEditorData.recordCount = count;
-                gFieldCameraEditorData.recordAllocation = records;
-                gFieldCameraEditorData.cameraList->records = records;
-                memcpy(gFieldCameraEditorData.cameraList->records, original->records, size);
+                if (records) {
+                    gFieldCameraEditorData.recordCount = count;
+                    gFieldCameraEditorData.recordAllocation = records;
+                    gFieldCameraEditorData.cameraList->records = records;
+                    memcpy(gFieldCameraEditorData.cameraList->records, original->records, size);
+                    return;
+                }
             }
         }
     }
-    return;
-error:
     floorReleaseFieldCameraEditor();
 }
 
 void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
 {
     s32 i;
-    GSgfxLayer *layer;
     FloorFieldCameraRecord *record = gFieldCameraEditorData.selectedRecord;
     GSfloor_dd_ *floor = floorDataBiosGetPtr(GSfloorGetCurrent());
     GSfloor_dd_ *editedFloor = floorDataBiosGetPtr(gFieldCameraEditorData.floorID);
@@ -119,7 +114,7 @@ void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
             u32 pressed = GSinputButtonsPressed(GS_INPUT_PORT_1);
             u32 triggered = pressed & changed;
             if (triggered & PAD_TRIGGER_Z) {
-                record->rectangular = (u8)(record->rectangular ^ 1);
+                record->rectangular ^= 1;
             }
             f32 adjustmentStep = 1.0f;
             if (record->rectangular) {
@@ -148,7 +143,7 @@ void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
                     if (record->radius < 5.0f) record->radius = 5.0f;
                 }
             }
-            layer = GSgfxLayerFindByID(GSGFX_LAYER_DEFAULT);
+            GSgfxLayer *layer = GSgfxLayerFindByID(GSGFX_LAYER_DEFAULT);
             if (layer) {
                 GScameraLoadActiveCameraMatrix(GSGFX_LAYER_DEFAULT);
                 layer->pixelMode(true, true, false);
@@ -180,7 +175,7 @@ void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
                     layer->beginSurface(CIRCLE_SEGMENTS + 2);
                     layer->vertex3f(target.x, 0.1f + (target.y - offset.y), target.z);
                     layer->color4u8(128, 128, 128, 128);
-                    const f32 segmentAngle = 0.3926991f;
+                    const f32 segmentAngle = 2.0f * 3.1415927f / CIRCLE_SEGMENTS;
                     for (i = 0; i < CIRCLE_SEGMENTS + 1; i++) {
                         f32 angle = segmentAngle * i;
                         layer->vertex3f(record->radius * std::cosf(angle) + target.x,
