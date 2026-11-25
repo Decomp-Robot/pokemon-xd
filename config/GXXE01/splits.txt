@@ -3904,6 +3904,14 @@ game/app/deck/deck.cpp:
 game/app/deck/deckDataVirtualBios.cpp:
 	.text       start:0x8028BFB8 end:0x8028C400
 
+game/app/reliveHall/reliveHall.cpp:
+	.text       start:0x8028C400 end:0x8028E7E4
+	.rodata     start:0x802FAD00 end:0x802FAD38
+	.data       start:0x8041A7B0 end:0x8041A890
+	.sdata      start:0x804E8680 end:0x804E86A0
+	.sbss       start:0x804EBB80 end:0x804EBB88
+	.sdata2     start:0x804EF690 end:0x804EF6A0
+
 game/app/ant/ant.cpp:
 	.text       start:0x8028E7E4 end:0x80292298
 	.rodata     start:0x802FAD38 end:0x802FAE18
