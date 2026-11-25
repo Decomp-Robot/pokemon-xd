@@ -135,7 +135,7 @@ u8 fightOutPokemonIsAlly(FightOutPokemon *a, FightOutPokemon *b);
 u16 fightOutPokemonIsJoutaiKie(FightOutPokemon *pokemon);
 u8 fightOutPokemonCheckNoAttackFlag(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetVanishoffFlag(FightOutPokemon *pokemon);
-u8 fightOutPokemon_GetTameWazaFlag(FightOutPokemon *pokemon);
+u8 fightOutPokemon_GetKonranMyselfAttackFlag(FightOutPokemon *pokemon);
 void fightOutPokemonInitJoutaiKie(FightOutPokemon *pokemon);
 void fightOutPokemon_SetVanishoffFlag(FightOutPokemon *pokemon, u8 flag);
 void fightOutPokemon_SetLastReceiveWazaTargetDataId(FightOutPokemon *pokemon, u16 targetId);

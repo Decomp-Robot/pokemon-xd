@@ -511,15 +511,6 @@ void *fightFloorGetNowPtr(void)
     return (void *)fightFloorGetStatus(0, 0, 0, 0);
 }
 
-/* Which combatants _fightFloorCreateFightOutPokemonPtrAry collects, relative
- * to the reference Pokemon. */
-enum FightFloorSideFilter {
-    FIGHT_FLOOR_SIDE_FILTER_ALL = 0,
-    FIGHT_FLOOR_SIDE_FILTER_OWN_SIDE = 1,
-    FIGHT_FLOOR_SIDE_FILTER_OPPOSING_SIDE = 2,
-    FIGHT_FLOOR_SIDE_FILTER_EXCLUDE_REFERENCE = 3
-};
-
 s32 _fightFloorCreateFightOutPokemonPtrAry(FIGHT_FLOOR *floor, FightOutPokemon **pokemonArray, bool deployedOnly, u8 sideFilter, FightOutPokemon *referencePokemon)
 {
     _fightFloorInitFightOutPokemonPtrAry(pokemonArray);

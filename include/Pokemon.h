@@ -345,6 +345,7 @@ u32 pokemon_GetExp(Pokemon *pokemon);
 u16 pokemon_GetItemDataId(Pokemon *pokemon);
 void pokemon_SetHp(Pokemon *pokemon, u16 hp);
 void pokemonInitJoutai(Pokemon *pokemon);
+u32 pokemonGetJoutaiMsgId(Pokemon *pokemon);
 void pokemonInitJoutaiDataId(Pokemon *pokemon, u16 joutaiID);
 
 /* pokemonGetStatus query IDs. POKEMON_STATUS_SPECIES reads the record's

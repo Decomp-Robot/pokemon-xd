@@ -20,6 +20,20 @@ enum FightWeather {
     FIGHT_WEATHER_SHADOW_SKY = 5
 };
 
+enum FightFloorValidOnly {
+    FIGHT_FLOOR_VALID_ONLY_ALL = 0,
+    FIGHT_FLOOR_VALID_ONLY_DEPLOYED = 1
+};
+
+/* Which combatants _fightFloorCreateFightOutPokemonPtrAry collects, relative
+ * to the reference Pokemon. */
+enum FightFloorSideFilter {
+    FIGHT_FLOOR_SIDE_FILTER_ALL = 0,
+    FIGHT_FLOOR_SIDE_FILTER_OWN_SIDE = 1,
+    FIGHT_FLOOR_SIDE_FILTER_OPPOSING_SIDE = 2,
+    FIGHT_FLOOR_SIDE_FILTER_EXCLUDE_REFERENCE = 3
+};
+
 /* Status selectors for battle floor records. Selectors below the data limit
  * address the floor data table record passed as floorDataId; the rest address
  * the running floor, which is resolved through the current fight when the
@@ -394,6 +408,8 @@ u8 fightFloorCheckWriteJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId);
 void fightFloorWriteJoutaiDataId(FIGHT_FLOOR *floor, u16 joutaiDataId, u16 value);
 void fightFloorSetFightResultId(FIGHT_FLOOR *floor, u16 resultId);
 FightOutPokemon *fightFloorGetFightOutBanmeToValidFightOutPokemon(FIGHT_FLOOR *floor, u16 banme);
+FightOutPokemon *fightFloorGetFightOutPokemonPtrRandom(FIGHT_FLOOR *floor, u8 validOnly,
+    u8 sideFilter, FightOutPokemon *referencePokemon);
 FIGHT_TRAINER *fightFloorGetFightOutPokemonPtrToFightTrainerPtr(FIGHT_FLOOR *floor, FightOutPokemon *pokemon);
 u8 fightFloorLoopValidFightOutPokemon(FIGHT_FLOOR *floor, u8 (*callback)(void *, u16, void *), void *argument, u32 mode);
 void fightFloor_SetAttackPokemonFightWazaJoutaiDataId(FIGHT_FLOOR *floor, u16 status);

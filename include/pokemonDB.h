@@ -551,6 +551,8 @@ u16 fightOutPokemon_GetFightoutTurnCount(FightOutPokemon *pokemon);
 void fightOutPokemon_SetFightoutTurnCount(FightOutPokemon *pokemon, u16 count);
 FIGHT_WAZA *fightOutPokemon_GetKeepFightWazaPtr(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetNamakeFlag(FightOutPokemon *pokemon);
+u8 fightOutPokemon_GetTameWazaFlag(FightOutPokemon *pokemon);
+u8 fightOutPokemon_GetDamageSpeTargetId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetMotoWazaDataId(FightOutPokemon *pokemon);
 u16 fightOutPokemon_GetOumuWazaDataId(FightOutPokemon *pokemon);
 struct FightOutPokemonEnemy *fightOutPokemon_GetFightOutPokemonEnemyPtr(FightOutPokemon *pokemon,
@@ -565,7 +567,7 @@ void fightOutPokemon_SetSuccessCnt(FightOutPokemon *pokemon, u8 count);
 void fightOutPokemon_SetZokuseiDataId(FightOutPokemon *pokemon, u8 index, u16 typeId);
 void fightOutPokemon_SetMeetEnemyFightPokemonEntryId(FightOutPokemon *pokemon, u8 index, u16 entryId);
 void fightOutPokemon_SetUsedItemDataId(FightOutPokemon *pokemon, u16 itemDataId);
-void fightOutPokemon_SetNamakeFlag(FightOutPokemon *pokemon, u8 flag);
+void fightOutPokemon_SetNamakeFlag(FightOutPokemon *pokemon, u32 flag);
 void fightOutPokemon_SetGamanDamageTargetId(FightOutPokemon *pokemon, u16 targetId);
 void fightOutPokemon_SetGamanDamageValue(FightOutPokemon *pokemon, s16 damage);
 void fightOutPokemon_SetFightPokemonPtr(FightOutPokemon *pokemon, FightPokemon *fightPokemon);

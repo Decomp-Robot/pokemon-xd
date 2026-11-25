@@ -54,7 +54,7 @@ void fightOutPokemon_SetUsedItemDataId(FightOutPokemon *pokemon, u16 itemDataId)
     pokemon->mUsedItemDataId = itemDataId;
 }
 
-void fightOutPokemon_SetNamakeFlag(FightOutPokemon *pokemon, u8 flag)
+void fightOutPokemon_SetNamakeFlag(FightOutPokemon *pokemon, u32 flag)
 {
     if (pokemon == 0) {
         return;

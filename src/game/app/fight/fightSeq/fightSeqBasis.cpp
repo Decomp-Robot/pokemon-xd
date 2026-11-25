@@ -528,7 +528,7 @@ extern "C" void WS_WKC_ACT(void)
         case FIGHT_SEQ_AFTER_MOVE_OTHER_TARGET:
             if ((ServerStatusFlag & FIGHT_SEQ_FLAG_BADGE_CHECK_ABORTED) == 0 &&
                 fightFloor_GetFightSideFightOutPokemonSideMax(0) >= 2 &&
-                !fightOutPokemon_GetTameWazaFlag(atk) &&
+                !fightOutPokemon_GetKonranMyselfAttackFlag(atk) &&
                 targets == WAZA_RANGE_OTHER_POKEMON_ON_SIDE &&
                 (ServerStatusFlag & FIGHT_SEQ_FLAG_REPLAYING_MOVE_ON_OTHER_BATTLER) == 0) {
                 FightOutPokemon *target = (FightOutPokemon *)fightTargetGetPtrAsNowFightType(FIGHT_TARGET_ID_OTHER_POKEMON_ON_SIDE, def);

@@ -265,6 +265,19 @@ extern u8 fightSeqWkcActStep;
 extern u8 fightSeqJoutaiWazaSeq[];
 extern u8 fightSeqHensinWazaSeq[];
 extern u8 fightSeqHitWazaSeq[];
+extern u8 seqTokuseiIkakuMessage[];
+extern u8 seqTokuseiIkakuAttackDown[];
+extern u8 seqTokuseiTrace[];
+extern u8 seqTokuseiRainDish[];
+extern u8 seqTokuseiShedSkin[];
+extern u8 seqTokuseiSpeedBoost[];
+extern u8 seqTokuseiAbsorbPpDecOff[];
+extern u8 seqTokuseiAbsorbPpDecOn[];
+extern u8 seqTokuseiAbsorbFullHpPpDecOff[];
+extern u8 seqTokuseiAbsorbFullHpPpDecOn[];
+extern u8 seqTokuseiFlashFirePpDecOff[];
+extern u8 seqTokuseiFlashFirePpDecOn[];
+extern u8 seqTokuseiSoundproof[];
 extern FIGHT_ACTION *fight_seq_now_fight_action_ptr;
 u8 *fightSeq_GetWazaSeq(void);
 void fightSeq_CallWazaSeq(u8 *sequence);
@@ -282,6 +295,14 @@ s32 fightSeqWazaDamageCalcHikaePokemon(FightOutPokemon *attacker, FightPokemon *
 u8 fightSeqSoubiItemCheckWazaHitAfter(FightOutPokemon *attacker, FightOutPokemon *defender);
 void fightSeqFightOutPokemonTokuseiCheckSinkuroAtk(FightOutPokemon *attacker, FightOutPokemon *defender);
 void fightSeqFightOutPokemonTokuseiCheckSinkuroDef(FightOutPokemon *attacker, FightOutPokemon *defender);
+u8 fightSeqFightOutPokemonTokuseiCheckWazaHit(FightOutPokemon *attacker, FightOutPokemon *defender, u16 wazaDataId);
+u8 fightSeqFightOutPokemonTokuseiCheckWazaHitBefore(FightOutPokemon *attacker, FightOutPokemon *defender);
+void fightSeqFightOutPokemonTokuseiCheckTrace(void);
+enum FightSeqIkakuMode {
+    FIGHT_SEQ_IKAKU_MODE_ATTACK_DOWN = 0,
+    FIGHT_SEQ_IKAKU_MODE_MESSAGE = 1
+};
+void fightSeqFightOutPokemonTokuseiCheckIkaku(u8 mode);
 u8 fightSeqFightOutPokemonTokuseiCheckWazaHitAfter(FightOutPokemon *attacker, FightOutPokemon *defender);
 void fightSeqFightOutPokemonTokuseiCheckWazaHitAfterAll(void);
 void fightSeqSoubiItemCheckWazaHitAfterAll(void);
