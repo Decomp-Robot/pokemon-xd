@@ -110,6 +110,9 @@ extern SHOP_DATA *shopData;
 extern u32 *ribbon_data_number;
 extern RibbonData *ribbon_data;
 
+extern u32 *peopleInfoData_number;
+extern struct tagPeopleInfoBios *peopleInfoData;
+
 struct DeckDataVirtual;
 extern u32 *deckdata_virtual_number;
 extern struct DeckDataVirtual *deckdata_virtual;

@@ -3964,7 +3964,7 @@ game/app/bingo/bingoBios.cpp:
 	.text       start:0x80296B3C end:0x80296CB0
 
 game/app/people/peopleInfoBios.cpp:
-	.text       start:0x80296D4C end:0x80296FF0
+	.text       start:0x80296D4C end:0x80297054
 	.data       start:0x8041A8B0 end:0x8041A8D4
 	.sdata2     start:0x804EF798 end:0x804EF7A4
 

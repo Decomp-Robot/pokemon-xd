@@ -1,5 +1,6 @@
 #include <peopleInfoBios.h>
 #include <gimmickBox.h>
+#include <relglobal.h>
 
 static const float degreesToRadians = 0.017453292f;
 
@@ -125,5 +126,24 @@ s8 peopleInfoBiosGetChestIndex(PeopleInfo* info)
 unsigned long peopleInfoBiosGetModelResID(PeopleInfo* info)
 {
     if (info) return info->modelResID;
+    return 0;
+}
+
+PeopleInfo* peopleInfoBiosGetPtrFromIndex(unsigned long index)
+{
+    if (index >= *peopleInfoData_number) return 0;
+    return &peopleInfoData[index];
+}
+
+PeopleInfo* peopleInfoBiosGetPtr(unsigned long id)
+{
+    PeopleInfo* info = peopleInfoData;
+    unsigned long count = *peopleInfoData_number;
+
+    while (count != 0) {
+        if (info->modelResID == id) return info;
+        info++;
+        count--;
+    }
     return 0;
 }
