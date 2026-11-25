@@ -108,65 +108,59 @@ GStexture* _pachiruEffectCreateTexture(GStexture* baseTexture,
                               GStextureGetTlutFormat(baseTexture),
                               GStextureGetMiplevels(baseTexture));
     destImage = (u16*)GStextureLockImage(texture, 0);
-    if (destImage == NULL) {
-        goto failed;
-    }
-    sourceImage = (u16*)GStextureLockImage(baseTexture, 0);
-    if (sourceImage == NULL) {
-        goto failed;
-    }
-    pixelCount = width * height;
-    memcpy(destImage, sourceImage, pixelCount * sizeof(u16));
-    DCFlushRange(destImage, pixelCount * sizeof(u16));
-    GStextureUnlockImage(baseTexture);
-    GStextureConvertFromHW(texture);
-    GStextureConvertFromHW(spotTexture);
-    sourceImage = (u16*)GStextureLockImage(spotTexture, 0);
-    if (sourceImage == NULL) {
-        goto failed;
-    }
-    spotWidth = GStextureGetXsize(spotTexture);
-    spotHeight = GStextureGetYsize(spotTexture);
-    if (spotWidth > (width >> 2)) {
-        goto failed;
-    }
-    if (spotHeight > (height >> 2)) {
-        goto failed;
-    }
-    last = destImage + (pixelCount - 1);
-    for (spotIndex = 0; spotIndex < pachiruSpotCount; spotIndex++) {
-        s16 dx = (s16)(personality & 0xF) - 8;
-        s16 dy = (s16)((personality >> 4) & 0xF) - 8;
-        x = 3.4f * dx;
-        y = 3.4f * dy;
-        personality >>= 8;
-        x += pachiruSpotOrigins[spotIndex].x;
-        y += pachiruSpotOrigins[spotIndex].y;
-        origin = y * width + x;
-        for (row = 0; row < spotHeight; row++) {
-            s16 rowStart = row * spotWidth;
-            s16 line = origin + row * width;
-            if (line >= 0) {
-                dest = &destImage[line];
-                if (dest <= last) {
-                    source = &sourceImage[rowStart];
-                    for (column = 0; column < spotWidth; column++, dest++,
-                        source++) {
-                        if (dest <= last && *source > *dest) {
-                            *dest = *source;
+    if (destImage != NULL) {
+        sourceImage = (u16*)GStextureLockImage(baseTexture, 0);
+        if (sourceImage != NULL) {
+            pixelCount = width * height;
+            memcpy(destImage, sourceImage, pixelCount * sizeof(u16));
+            DCFlushRange(destImage, pixelCount * sizeof(u16));
+            GStextureUnlockImage(baseTexture);
+            GStextureConvertFromHW(texture);
+            GStextureConvertFromHW(spotTexture);
+            sourceImage = (u16*)GStextureLockImage(spotTexture, 0);
+            if (sourceImage != NULL) {
+                spotWidth = GStextureGetXsize(spotTexture);
+                spotHeight = GStextureGetYsize(spotTexture);
+                if (spotWidth <= (width >> 2)) {
+                    if (spotHeight <= (height >> 2)) {
+                        last = destImage + (pixelCount - 1);
+                        for (spotIndex = 0; spotIndex < pachiruSpotCount;
+                             spotIndex++) {
+                            s16 dx = (s16)(personality & 0xF) - 8;
+                            s16 dy = (s16)((personality >> 4) & 0xF) - 8;
+                            x = 3.4f * dx;
+                            y = 3.4f * dy;
+                            personality >>= 8;
+                            x += pachiruSpotOrigins[spotIndex].x;
+                            y += pachiruSpotOrigins[spotIndex].y;
+                            origin = y * width + x;
+                            for (row = 0; row < spotHeight; row++) {
+                                s16 rowStart = row * spotWidth;
+                                s16 line = origin + row * width;
+                                if (line >= 0) {
+                                    dest = &destImage[line];
+                                    if (dest <= last) {
+                                        source = &sourceImage[rowStart];
+                                        for (column = 0; column < spotWidth;
+                                             column++, dest++, source++) {
+                                            if (dest <= last && *source > *dest) {
+                                                *dest = *source;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        GStextureUnlockImage(texture);
+                        GStextureUnlockImage(spotTexture);
+                        GStextureConvertToHW(spotTexture);
+                        GStextureConvertToHW(texture);
+                        return texture;
                     }
                 }
             }
         }
     }
-    GStextureUnlockImage(texture);
-    GStextureUnlockImage(spotTexture);
-    GStextureConvertToHW(spotTexture);
-    GStextureConvertToHW(texture);
-    return texture;
-
-failed:
     GSlogWrite("Failed to create Patchiru texture\n");
     if (destImage != NULL) {
         GStextureUnlockImage(texture);
