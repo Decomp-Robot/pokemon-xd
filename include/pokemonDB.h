@@ -143,7 +143,7 @@ u16 fightOutPokemonGetMotoWazaDataId(FightOutPokemon *pokemon);
 void fightOutPokemon_SetUseWazaDataId(FightOutPokemon *pokemon, u16 wazaDataId);
 void fightOutPokemon_SetMotoWazaDataId(FightOutPokemon *pokemon, u16 wazaDataId);
 void fightOutPokemon_SetWazaDamageValue(FightOutPokemon *pokemon, u8 damage);
-void fightOutPokemon_SetWazaCritical(FightOutPokemon *pokemon, u8 critical);
+void fightOutPokemon_SetWazaCritical(FightOutPokemon *pokemon, u32 critical);
 void fightOutPokemon_SetWazaJoutaiDataId(FightOutPokemon *pokemon, u16 joutaiDataId);
 void fightOutPokemon_SetWazaInitJoutaiDataId(FightOutPokemon *pokemon, u16 joutaiDataId);
 void fightOutPokemon_SetWazaDamage(FightOutPokemon *pokemon, s32 damage);
@@ -176,6 +176,35 @@ void fightOutPokemon_SetNoPressureFlag(FightOutPokemon *pokemon, u32 flag);
 u16 fightOutPokemon_GetLastUseWazaDataId(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetSuccessCnt(FightOutPokemon *pokemon);
 void fightOutPokemon_SetSuccessCnt(FightOutPokemon *pokemon, u8 count);
+
+void fightOutPokemon_SetZokuseiDataId(FightOutPokemon *pokemon, u8 index, u16 typeId);
+void fightOutPokemon_SetMeetEnemyFightPokemonEntryId(FightOutPokemon *pokemon, u8 index, u16 entryId);
+void fightOutPokemon_SetUsedItemDataId(FightOutPokemon *pokemon, u16 itemDataId);
+void fightOutPokemon_SetNamakeFlag(FightOutPokemon *pokemon, u8 flag);
+void fightOutPokemon_SetGamanDamageTargetId(FightOutPokemon *pokemon, u16 targetId);
+void fightOutPokemon_SetGamanDamageValue(FightOutPokemon *pokemon, s16 damage);
+void fightOutPokemon_SetFightPokemonPtr(FightOutPokemon *pokemon, FightPokemon *fightPokemon);
+void fightOutPokemon_SetMotoFightPokemonPtr(FightOutPokemon *pokemon, FightPokemon *fightPokemon);
+void fightPokemon_SetAiDamage(FightPokemon *pokemon, u16 index, u16 target, s32 damage);
+void fightPokemon_SetHokakuFlag(FightPokemon *pokemon, u8 flag);
+void fightPokemon_SetDarkOutFlag(FightPokemon *pokemon, u8 flag);
+void fightPokemon_SetLevelUpFlag(FightPokemon *pokemon, u8 flag);
+void fightPokemon_SetCatchEntryFlag(FightPokemon *pokemon, u8 flag);
+void fightPokemon_SetEntryId(FightPokemon *pokemon, s16 entryId);
+void fightPokemon_SetMotoPokemonPtr(FightPokemon *pokemon, Pokemon *original);
+void pokemon_SetComboPartnerAll(Pokemon *pokemon, u8 value);
+void pokemon_SetPoolFriend(Pokemon *pokemon, u16 level);
+void pokemon_SetPoolExp(Pokemon *pokemon, u32 exp);
+void pokemon_SetFightTrainerPokemonDataId(Pokemon *pokemon, u16 dataId);
+void pokemon_SetAmari(Pokemon *pokemon, u16 value);
+void pokemon_SetPara1Amari(Pokemon *pokemon, u16 value);
+void pokemon_SetMailId(Pokemon *pokemon, u8 value);
+void pokemon_SetPcboxMark(Pokemon *pokemon, u8 value);
+void pokemon_SetFlagAmari(Pokemon *pokemon, u8 value);
+void pokemon_SetFuseiFlag(Pokemon *pokemon, u8 flag);
+void pokemon_SetTokuseiFlag(Pokemon *pokemon, u8 flag);
+void pokemon_SetTamagoFlag(Pokemon *pokemon, u8 flag);
+void pokemon_SetPokerus(Pokemon *pokemon, u8 value);
 
 // Contest medals and ribbons of a Pokemon; each setter writes one field of the
 // medal record or of the ribbon word and leaves the others alone.

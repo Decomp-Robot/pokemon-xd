@@ -18,6 +18,10 @@ struct FIGHT_SIDE;
 struct NullSequence;
 struct MENU_POKEMON_STATUS;
 
+enum {
+    FIGHT_POKEMON_AI_DAMAGE_MAX = 64
+};
+
 // A Pokemon of a trainer's party: the Pokemon the record was made from, the
 // working copy the fight runs on, the status it carries into the fight, the
 // fight entry it is booked with and the damage the trainer AI has recorded
@@ -34,7 +38,7 @@ struct FightPokemon {
     u8 mDarkOutFlag;
     u8 mHokakuFlag;
     u8 _0DE[34];
-    s32 mAiDamage[64][2];     // damage the AI has recorded per attack.
+    s32 mAiDamage[FIGHT_POKEMON_AI_DAMAGE_MAX][2];     // damage the AI has recorded per attack.
 };
 
 Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);

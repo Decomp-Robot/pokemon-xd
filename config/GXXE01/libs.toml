@@ -133,6 +133,11 @@ completed = true
 extra_cflags = ["-str reuse,readonly", "-inline deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/reliveHall/reliveHall.cpp"
+completed = true
+extra_cflags = ["-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/deck/deck.cpp"
 completed = true
 
@@ -3106,6 +3111,7 @@ completed = true
 [[lib.object]]
 name = "game/app/pokemon/pokemonDB.cpp"
 completed = true
+extra_cflags = ["-O4,s"]
 
 [[lib.object]]
 name = "game/app/pokemon/pokemonEvolution.cpp"
@@ -6411,6 +6417,11 @@ extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i 
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/state.c"
 completed = true
 extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline auto,deferred", "-use_lmw_stmw on"]
+
+[[lib.object]]
+name = "game/GSAPI/GSsysdolphin_baselib/baselib/tev.c"
+completed = true
+extra_cflags = ["-i src/ext/msl/include", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-str reuse,readonly", "-inline auto,deferred", "-use_lmw_stmw on"]
 
 [[lib.object]]
 name = "game/GSAPI/GSsysdolphin_baselib/baselib/util.c"

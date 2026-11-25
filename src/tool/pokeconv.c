@@ -39,7 +39,7 @@ struct GbaPokemon;
 
 extern "C" {
 void gbaPokemonToGC(Pokemon *pokemon, GbaPokemon *gbaRecord);
-void pokemon_SetFightTrainerPokemonDataId(Pokemon *pokemon, u16 dataId);
+void pokemonBiosSetFightTrainerPokemonDataId(Pokemon *pokemon, u16 dataId);
 }
 
 static u32 _swap32(u32 value);
@@ -85,7 +85,7 @@ extern "C" void pokeconv(Hero *hero, u8 *packet)
 
         gbaPokemonToGC(pokemon, (GbaPokemon *)(packet + GBA_HERO_POKEMON_OFFSET +
                                                 i * GBA_POKEMON_RECORD_SIZE));
-        pokemon_SetFightTrainerPokemonDataId(pokemon, i);
+        pokemonBiosSetFightTrainerPokemonDataId(pokemon, i);
     }
     for (i = 0; i < GBA_RIBBON_MAX; i++) {
         exribbonSetNo(i, packet[GBA_HERO_RIBBON_OFFSET + i]);

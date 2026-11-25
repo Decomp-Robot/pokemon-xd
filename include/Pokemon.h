@@ -92,7 +92,8 @@ struct Pokemon {
     PokemonExpandStatus mExpandStatus[POKEMON_EXPAND_STATUS_COUNT]; // 0xAE: contest values and medals.
     u16 mFightTrainerPokemonDataId; // 0xB8: trainer Pokemon record ID.
     u16 mDarkPokemonDataId; // 0xBA
-    u8 _BC[8];
+    u8 mComboPartnerAll; // 0xBC
+    u8 _BD[7];
 
 #ifdef __cplusplus
     Pokemon &operator=(const Pokemon &other);
