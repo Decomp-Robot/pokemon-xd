@@ -21,6 +21,7 @@ extra_cflags = ["-O4,s"]
 [[lib.object]]
 name = "game/app/fight/fightTrainerAi.cpp"
 completed = true
+extra_cflags = ["-O4,s"]
 
 [[lib.object]]
 name = "game/app/fight/fightTrainerAiWazaDamage.cpp"

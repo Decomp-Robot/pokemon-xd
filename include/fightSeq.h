@@ -289,6 +289,8 @@ u16 fightSeqCondChgActTypeToPokemonStatusId(u8 type);
 s8 fightSeqCondChgActParaIdToValue(u8 paraId);
 u8 fightSeqGetTextureZokuseiAry(FightOutPokemon *pokemon, s32 *zokuseiAry);
 u8 fightSeqIsGuard(FightOutPokemon *pokemon, u16 wazaDataId);
+u8 fightSeqIsTenkouHit(u16 wazaDataId);
+u8 fightSeqIsAllwaysHit(u16 wazaDataId);
 void fightSeq_NextWazaSeq(s32 count);
 void fightSeq_JumpWazaSeq(u8 *sequence);
 void fightSeqCheckSetHensinBuffToMotoPokemon(FightOutPokemon *pokemon, u32 field);

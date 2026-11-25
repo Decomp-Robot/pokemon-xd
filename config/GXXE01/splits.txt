@@ -4127,6 +4127,7 @@ game/GSAPI/GSgfx/reset.cpp:
 	.sdata2     start:0x804EFBE0 end:0x804EFC00
 
 game/app/fight/fightTrainerAi.cpp:
+	.text       start:0x802C8374 end:0x802C8994
 	.sbss       start:0x804EBDB0 end:0x804EBDB4
 
 game/app/fight/fightTrainerAiIrekae.cpp:

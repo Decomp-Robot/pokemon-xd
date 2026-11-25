@@ -13,6 +13,18 @@ extern "C" {
 enum { FIGHT_AI_MAX_COMBINATIONS = 64 };
 enum { FIGHT_AI_COMBO_ID_NONE = 0 };
 
+enum FightAiValueBound {
+    FIGHT_AI_VALUE_MAX = 200,
+    FIGHT_AI_VALUE_MIN = -200
+};
+
+static const s32 FIGHT_AI_MAX_CANDIDATES = 16;
+
+enum FightAiRate {
+    FIGHT_AI_RATE_PERCENT = 100,
+    FIGHT_AI_RATE_NEUTRAL = 50
+};
+
 enum FightAiZokuseiAisyouMode {
     FIGHT_AI_ZOKUSEI_AISYOU_MODE_WEAKNESS = 2
 };
@@ -224,7 +236,15 @@ void fightAi_AllWazaValid_DelComboList(FIGHT_TRAINER *trainer, AI_ALLWAZA_VALID_
     u8 firstKind, s32 firstValue, u8 secondKind, s32 secondValue, u8 keepMatches);
 void fightAi_AllWazaValid_DelListFromSpeed(FIGHT_TRAINER *trainer, AI_ALLWAZA_VALID_TBL *records,
     u8 *count, u16 wazaDataId, u8 requireMoveFirst);
+u8 fightTrainerAiGetWazaAvg(FIGHT_TRAINER *trainer, u16 wazaDataId);
+u8 fightTrainerAiGetWazaRiskFlag(FIGHT_TRAINER *trainer, u16 wazaDataId);
+u8 fightTrainerAiGetWazaPp(FIGHT_TRAINER *trainer, u16 wazaDataId);
+u8 fightTrainerAiGetWazaRangeId(FIGHT_TRAINER *trainer, u16 wazaDataId);
+bool fightTrainerAiIsWazaAvgTakai(FIGHT_TRAINER *trainer, u16 wazaDataId);
+u8 fightTrainerAiGetWazaTypeId(FIGHT_TRAINER *trainer, u16 wazaDataId, u8 index);
+u8 fightTrainerAiGetWazaAddKoukaAvg(FIGHT_TRAINER *trainer, u16 wazaDataId);
 s32 fightTrainerAiAddValueByAddsubDataId(s32 value, FIGHT_TRAINER *trainer, u16 addsubDataId);
+s32 fightTrainerAiReviseValue(s32 value, u8 rate, s32 addValue);
 s32 fightTrainerAiAddValue(s32 value, s32 addValue);
 u16 fightTrainerAiGetFightOutPokemonWazaDataIdAry(FIGHT_TRAINER *trainer, FightOutPokemon *pokemon,
     u16 *wazaDataIdAry, s16 *wazaBanmeAry, u8 checkCanUse);
