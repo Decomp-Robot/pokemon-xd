@@ -12,6 +12,7 @@
 #include <menu.h>
 #include <libc/memory.h>
 #include <libc/math.h>
+#include <math.h>
 #include <dolphin/pad.h>
 #include <dolphin/gx/GXEnum.h>
 #include <app/camera/CameraType.h>
@@ -87,7 +88,7 @@ void floorInitFieldCameraEditor(u32 floorID)
     floorReleaseFieldCameraEditor();
 }
 
-void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
+void floorUpdateFieldCameraEditor(u32 appID, u32 userData)
 {
     s32 i;
     FloorFieldCameraRecord *record = gFieldCameraEditorData.selectedRecord;
@@ -175,7 +176,7 @@ void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData)
                     layer->beginSurface(CIRCLE_SEGMENTS + 2);
                     layer->vertex3f(target.x, 0.1f + (target.y - offset.y), target.z);
                     layer->color4u8(128, 128, 128, 128);
-                    const f32 segmentAngle = 2.0f * 3.1415927f / CIRCLE_SEGMENTS;
+                    const f32 segmentAngle = 2.0f * M_PI / CIRCLE_SEGMENTS;
                     for (i = 0; i < CIRCLE_SEGMENTS + 1; i++) {
                         f32 angle = segmentAngle * i;
                         layer->vertex3f(record->radius * std::cosf(angle) + target.x,

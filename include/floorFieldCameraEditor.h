@@ -10,7 +10,7 @@ extern "C" {
 u8 floorFieldCameraEditorGetMode(void);
 void floorReleaseFieldCameraEditor(void);
 void floorInitFieldCameraEditor(u32 floorID);
-void floorUpdateFieldCameraEditor(unsigned long appID, unsigned long userData);
+void floorUpdateFieldCameraEditor(u32 appID, u32 userData);
 void floorFieldCameraEditorStopTest(void);
 u32 floorFieldCameraEditorGetFloorID(void);
 
