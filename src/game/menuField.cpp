@@ -23,11 +23,7 @@
 #include <sound.h>
 #include <menuOffScreen.h>
 
-// Field menu item drawing, cursor effects and selection-bar animation.
-
-// Whether the field menu is open; the open check reports this flag.
 u8 menuFieldOpen;
-// Time the field menu cursor animation has run; the animation update wraps it.
 f32 _fieldMenuTimer;
 
 enum { FIELD_MENU_ROW_COUNT = 5 };
@@ -71,14 +67,13 @@ enum FieldMenuSpriteID {
     FIELD_MENU_ALT_CURSOR_3 = 1651,
 };
 
-enum {
-    FIELD_MENU_TEXT_SELECTED = 0xF0F0F0FF,
-    FIELD_MENU_TEXT_UNSELECTED = 0xF0F0F080
-};
+#define FIELD_MENU_RGBA(r, g, b, a) (((u32)(r) << 24) | ((u32)(g) << 16) | ((u32)(b) << 8) | (u32)(a))
 
-// Per-row pulse used by the field-menu item sprites.
+static const u32 FIELD_MENU_TEXT_SELECTED = FIELD_MENU_RGBA(240, 240, 240, 255);
+static const u32 FIELD_MENU_TEXT_UNSELECTED = FIELD_MENU_RGBA(240, 240, 240, 128);
+
 f32 _menuFiledAlpha[FIELD_MENU_ROW_COUNT];
-u32 barcolor = 0xC0C0D000;
+u32 barcolor = FIELD_MENU_RGBA(192, 192, 208, 0);
 static f32 _cursorSec = 0.8f;
 static f32 _max_alpha = 255.0f;
 static f32 _min_alpha = 200.0f;
@@ -208,9 +203,6 @@ void menuFieldDrawItem2(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     }
 }
 
-// Row hook of the field menu cursor sprites: the sprite shows the row the
-// window's cursor is on, and the cursor animation restarts whenever the cursor
-// has moved off the row the window is scrolled to.
 void _menuFieldMenuCursor(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long row)
 {
     s16 cursorY = window->mCursor.y;
@@ -280,8 +272,8 @@ void _menuFieldDrawItemSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long 
 f32 _animAlpha(long row)
 {
     _fieldMenuTimer += 3.1415927f * (2.0f * menuGetLastTime()) / _cursorSec;
-    if (_fieldMenuTimer >= 6.2831855f) {
-        _fieldMenuTimer -= 6.2831855f;
+    if (_fieldMenuTimer >= 2.0f * 3.1415927f) {
+        _fieldMenuTimer -= 2.0f * 3.1415927f;
     }
     f32 range = _max_alpha - _min_alpha;
     f32 alpha = (1.0f + (f32)sin(_fieldMenuTimer)) / 2.0f;
@@ -294,30 +286,27 @@ f32 _animAlpha(long row)
     return alpha;
 }
 
-// Window sequence steps played when the field menu opens and closes.
 enum FieldMenuSequence {
     FIELD_MENU_SEQUENCE_OPEN = 1,
     FIELD_MENU_SEQUENCE_CLOSE = 7,
 };
 
-// Values of tagWINDOW_WORK::mState handled here.
 enum FieldMenuWindowState {
     FIELD_MENU_WINDOW_STATE_INIT = WINDOW_STATE_INIT,
     FIELD_MENU_WINDOW_STATE_CLOSING = WINDOW_STATE_CLOSING,
 };
 
-// Ways the field menu can be entered.
 enum FieldMenuMode {
     FIELD_MENU_MODE_NORMAL = 0,
     FIELD_MENU_MODE_DIRECT_ITEM = 1,
+    FIELD_MENU_MODE_UNUSED_2 = 2,
+    FIELD_MENU_MODE_UNUSED_3 = 3,
 };
 
-// Event scripts queued for the hero's nearby collision before the menu opens.
 enum FloorEventScriptKind {
     FLOOR_EVENT_SCRIPT_KIND_PRE_MENU = 4,
 };
 
-// Shared flags consulted by the field menu and the PDA availability check.
 enum FieldMenuFlag {
     FIELD_MENU_FLAG_NON_STORY_MODE = 781,
     FIELD_MENU_FLAG_PDA = 1009,
@@ -330,8 +319,6 @@ enum FieldMenuSelection {
     FIELD_MENU_SELECT_REPORT = 3,
 };
 
-// Window step control: start the opening/closing sprite sequence once, and
-// initialize the selection bars to the row the cursor starts on.
 extern "C" s32 menuFieldMainCtrl(tagWINDOW_WORK *window)
 {
     s32 row;
@@ -369,9 +356,6 @@ extern "C" s32 menuFieldMainCtrl(tagWINDOW_WORK *window)
 s32 _menuFieldCheckCursor(s32 cursor);
 bool _menuFieldCheckPDA(void);
 
-// Run one field-menu session. The session repeatedly opens the menu until an
-// entry is chosen, then tears down the camera, model, sound and off-screen
-// state it installed on entry.
 s32 menuFieldMain(u8 mode)
 {
     HeroMoveEventList eventList;
@@ -448,14 +432,14 @@ s32 menuFieldMain(u8 mode)
                         scriptID = menuPocket2GetItemScript(itemID);
                         if (scriptID != -1)
                             heroMoveAddAutoEvent(scriptID, itemID, slot, 0, 0);
-                        goto cleanup;
+                        break;
                     }
                     continue;
                 } else if (selection == FIELD_MENU_SELECT_REPORT) {
                     menuCloseCustom(menuID, 0, true);
                     menuReport();
                 } else {
-                    goto cleanup;
+                    break;
                 }
                 GSthreadSwitch();
             }
@@ -473,7 +457,7 @@ s32 menuFieldMain(u8 mode)
                     menuFieldOpen = 0;
                     GSthreadSwitch();
                 } else {
-                    goto cleanup;
+                    break;
                 }
             }
         }
@@ -488,12 +472,11 @@ s32 menuFieldMain(u8 mode)
         }
         break;
 
-    case 2:
-    case 3:
+    case FIELD_MENU_MODE_UNUSED_2:
+    case FIELD_MENU_MODE_UNUSED_3:
         break;
     }
 
-cleanup:
     menuPocket2GetItemScript(itemID);
     GSsndPopVolumeALL(500, 1, 1);
     if (_soundEnvID == soundGetEnvID())
