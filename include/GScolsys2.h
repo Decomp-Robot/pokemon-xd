@@ -221,7 +221,7 @@ s32 GScolsys2GetObjMatrix(GSmtx* out, s32 index);
 GSCOLSYS2_FLOOR* GScolsys2GetCurFloor(void);
 s32 GScolsys2UnloadCCD(void);
 /* Takes the collision file the loader of a stage read in. */
-s32 GScolsys2LoadCCD(void* resource);
+s32 GScolsys2LoadCCD(CCD_FILEHEAD* resource);
 
 void GScolsys2Draw(void);
 s32 GScolsys2WalkGetLayer(GSvec* pos, u8* color0, u8* color1);

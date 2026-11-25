@@ -46,7 +46,7 @@ extern "C" void *floorReadColPostFunc(u32 group, u32 res, u32 size)
 
     GSresUnlockResource(group, res);
     resource = GSresGetResource(group, res);
-    GScolsys2LoadCCD(resource);
+    GScolsys2LoadCCD((CCD_FILEHEAD*)resource);
     return resource;
 }
 

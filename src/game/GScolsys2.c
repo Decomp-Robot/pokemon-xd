@@ -4,8 +4,6 @@
 #include <app/floor/floorModule.h>
 #include <string.h>
 
-/* The collision system's core state: the loaded CCD file head, the current
- * floor's object and human tables, and the debug drawing resources. */
 GScolsys2State GScolsys2;
 
 FloorModuleInterface _floorModuleColsys;
@@ -15,6 +13,10 @@ unsigned long _hModuleField;
 static const unsigned long GSCOLSYS2_MODULE_PRIORITY = 20;
 static const unsigned long GSCOLSYS2_MODULE_UID = 20;
 static const u16 GSCOLSYS2_SAVE_MAGIC = 0xAA55;
+
+enum {
+    GSCOLSYS2_FLOOR_TABLE_COUNT = sizeof(GScolsys2.mFloor) / sizeof(GScolsys2.mFloor[0])
+};
 
 struct GScolsys2SaveHead {
     u16 mMagic;
@@ -152,7 +154,8 @@ CCD_FILEHEAD* GScolsys2GetCCDFileHead(void)
 
 GSCOLSYS2_FLOOR* GScolsys2GetCurFloor(void)
 {
-    if (GScolsys2.mTableIndex < 0 || GScolsys2.mTableIndex >= 1) {
+    if (GScolsys2.mTableIndex < 0 ||
+        GScolsys2.mTableIndex >= GSCOLSYS2_FLOOR_TABLE_COUNT) {
         return 0;
     }
     return &GScolsys2.mFloor[GScolsys2.mTableIndex];
@@ -247,7 +250,7 @@ void _offsetCCD(CCD_FILEHEAD* file)
     }
 }
 
-s32 GScolsys2LoadCCD(void* resource)
+s32 GScolsys2LoadCCD(CCD_FILEHEAD* resource)
 {
     CCD_FILEHEAD* file;
     CCD_FILEHEAD* ccdFile;
