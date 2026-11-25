@@ -4,6 +4,45 @@
 #include <Pokemon.h>
 #include <battlePokemon.h>
 
+enum ITEMUSE2POKEMON_EFFECT {
+    ITEMUSE_EFFECT_CURE_INFATUATION,
+    ITEMUSE_EFFECT_FOCUS_ENERGY,
+    ITEMUSE_EFFECT_ATTACK_UP,
+    ITEMUSE_EFFECT_DEFENCE_UP,
+    ITEMUSE_EFFECT_SPEED_UP,
+    ITEMUSE_EFFECT_ACCURACY_UP,
+    ITEMUSE_EFFECT_SP_ATTACK_UP,
+    ITEMUSE_EFFECT_GUARD,
+    ITEMUSE_EFFECT_LEVEL_UP,
+    ITEMUSE_EFFECT_SLEEP_CURED,
+    ITEMUSE_EFFECT_SLEEP_CURED_BATTLE,
+    ITEMUSE_EFFECT_POISON_CURED,
+    ITEMUSE_EFFECT_BAD_POISON_CURED,
+    ITEMUSE_EFFECT_POISON_CURED_UNKNOWN,
+    ITEMUSE_EFFECT_BURN_CURED,
+    ITEMUSE_EFFECT_FREEZE_CURED,
+    ITEMUSE_EFFECT_PARALYZE_CURED,
+    ITEMUSE_EFFECT_CONFUSE_CURED,
+    ITEMUSE_EFFECT_PP_MAX_UP,
+    ITEMUSE_EFFECT_EFFORT_MAX_HP_UP,
+    ITEMUSE_EFFECT_EFFORT_ATTACK_UP,
+    ITEMUSE_EFFECT_HP_RECOVERED,
+    ITEMUSE_EFFECT_RECOVERED_FROM_FAINT,
+    ITEMUSE_EFFECT_PP_RESTORED,
+    ITEMUSE_EFFECT_EVOLUTION,
+    ITEMUSE_EFFECT_EFFORT_DEFENCE_UP,
+    ITEMUSE_EFFECT_EFFORT_SPEED_UP,
+    ITEMUSE_EFFECT_EFFORT_SP_DEFENCE_UP,
+    ITEMUSE_EFFECT_EFFORT_SP_ATTACK_UP,
+    ITEMUSE_EFFECT_PP_MAX_FULL,
+    ITEMUSE_EFFECT_FRIEND_UP,
+    ITEMUSE_EFFECT_FRIEND_UP_MAIN
+};
+
+enum ItemUse2PokemonLog {
+    ITEMUSE2POKEMON_LOG_MAX = 32
+};
+
 /* One entry of the log itemUse2Pokemon fills in with what an item did to a
  * pokemon. An item logs at most 32 entries, the count is kept separately. */
 struct ITEMUSE2POKEMON_LOG1 {
@@ -11,6 +50,9 @@ struct ITEMUSE2POKEMON_LOG1 {
     s16 mValue;  // 0x04: first value the effect message prints.
     s16 mValue2; // 0x06: second value the effect message prints.
 };
+
+extern "C" s16 itemUse2PokemonSimulation(ITEMUSE2POKEMON_LOG1 *log,
+    Pokemon *pokemon, FightPokemon *fightPokemon, u16 itemID, u8 moveIndex);
 
 extern "C" s16 itemUse2Pokemon(ITEMUSE2POKEMON_LOG1 *log, Pokemon *pokemon,
     FightPokemon *fightPokemon, u16 itemID, u8 moveIndex);

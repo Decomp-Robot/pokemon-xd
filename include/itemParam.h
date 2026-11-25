@@ -93,7 +93,7 @@ u8 itemParamGetEvolutionFlag(ITEM_PARAM *param);
 u8 itemParamGetPPUp(ITEM_PARAM *param);
 u8 itemParamGetPPSelectFlag(ITEM_PARAM *param);
 u8 itemParamGetHPUp(ITEM_PARAM *param);
-u8 itemParamGetReviveFlag(ITEM_PARAM *param);
+bool itemParamGetReviveFlag(ITEM_PARAM *param);
 u8 itemParamGetAttackEffortUp(ITEM_PARAM *param);
 u8 itemParamGetHPEffortUp(ITEM_PARAM *param);
 u8 itemParamGetPPMaxUpFlag(ITEM_PARAM *param);

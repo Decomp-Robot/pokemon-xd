@@ -183,41 +183,6 @@ enum {
 #define FIELD_LOG_GROUP_INFATUATION 6   // infatuation cured
 #define FIELD_LOG_GROUP_HP 7       // the HP restoring effect
 
-/* First column of the two log tables: the effect ids itemUse2Pokemon and
- * hpRecover write into the log, named after what the item did. */
-#define ITEMUSE_EFFECT_CURE_INFATUATION 0x00          // infatuation cured
-#define ITEMUSE_EFFECT_FOCUS_ENERGY 0x01   // raises the critical-hit ratio
-#define ITEMUSE_EFFECT_ATTACK_UP 0x02       // its attack is raised
-#define ITEMUSE_EFFECT_DEFENCE_UP 0x03      // its defence is raised
-#define ITEMUSE_EFFECT_SPEED_UP 0x04        // its speed is raised
-#define ITEMUSE_EFFECT_ACCURACY_UP 0x05     // the accuracy of its moves is raised
-#define ITEMUSE_EFFECT_SP_ATTACK_UP 0x06    // its sp. attack is raised
-#define ITEMUSE_EFFECT_GUARD 0x07           // it guards itself
-#define ITEMUSE_EFFECT_LEVEL_UP 0x08        // it gains a level
-#define ITEMUSE_EFFECT_SLEEP_CURED 0x09     // it is woken up
-#define ITEMUSE_EFFECT_SLEEP_CURED_BATTLE 0x0A // the pokemon fighting is woken up
-#define ITEMUSE_EFFECT_POISON_CURED 0x0B    // it is cured of poison
-#define ITEMUSE_EFFECT_POISON_CURED_BATTLE 0x0C // the pokemon fighting is cured
-/* Reported with the other poison curing effects. */
-#define ITEMUSE_EFFECT_POISON_CURED_UNKNOWN 0x0D
-#define ITEMUSE_EFFECT_BURN_CURED 0x0E     // it is cured of its burn
-#define ITEMUSE_EFFECT_FREEZE_CURED 0x0F   // it is thawed
-#define ITEMUSE_EFFECT_PARALYZE_CURED 0x10 // it is cured of paralysis
-#define ITEMUSE_EFFECT_CONFUSE_CURED 0x11  // it is snapped out of confusion
-#define ITEMUSE_EFFECT_PP_MAX_UP 0x12      // the PP of one of its moves grows
-#define ITEMUSE_EFFECT_EFFORT_MAX_HP_UP 0x13    // its max HP effort grows
-#define ITEMUSE_EFFECT_EFFORT_ATTACK_UP 0x14   // its attack effort grows
-#define ITEMUSE_EFFECT_HP_RECOVERED 0x15   // HP is restored, value the amount
-#define ITEMUSE_EFFECT_RECOVERED_FROM_FAINT 0x16 // a fainted pokemon is revived
-#define ITEMUSE_EFFECT_PP_RESTORED_SELECT 0x17  // the PP of the chosen move
-#define ITEMUSE_EFFECT_EVOLUTION 0x18      // it evolves
-#define ITEMUSE_EFFECT_EFFORT_DEFENCE_UP 0x19   // its defence effort grows
-#define ITEMUSE_EFFECT_EFFORT_SPEED_UP 0x1A     // its speed effort grows
-#define ITEMUSE_EFFECT_EFFORT_SP_DEFENCE_UP 0x1B // its sp. defence effort grows
-#define ITEMUSE_EFFECT_EFFORT_SP_ATTACK_UP 0x1C  // its sp. attack effort grows
-#define ITEMUSE_EFFECT_PP_FULLY_RESTORED 0x1D    // the PP of every move is full
-#define ITEMUSE_EFFECT_FRIEND_UP 0x1E      // it grows closer to its trainer
-
 /* Messages the field log table prints, named after the effect they report. */
 #define MSG_HP_RECOVERED 0xC351
 #define MSG_RECOVERED_FROM_FAINT 0xC352
@@ -310,7 +275,7 @@ static const FIELD_LOG_TABLE cFieldLogMsgs = {
         {ITEMUSE_EFFECT_SLEEP_CURED, MSG_SLEEP_CURED, FIELD_LOG_GROUP_SLEEP},
         {ITEMUSE_EFFECT_SLEEP_CURED_BATTLE, MSG_SLEEP_CURED, FIELD_LOG_GROUP_SLEEP},
         {ITEMUSE_EFFECT_POISON_CURED, MSG_POISON_CURED, FIELD_LOG_GROUP_POISON},
-        {ITEMUSE_EFFECT_POISON_CURED_BATTLE, MSG_POISON_CURED, FIELD_LOG_GROUP_POISON},
+        {ITEMUSE_EFFECT_BAD_POISON_CURED, MSG_POISON_CURED, FIELD_LOG_GROUP_POISON},
         {ITEMUSE_EFFECT_POISON_CURED_UNKNOWN, MSG_POISON_CURED, FIELD_LOG_GROUP_POISON},
         {ITEMUSE_EFFECT_BURN_CURED, MSG_BURN_CURED, FIELD_LOG_GROUP_BURN},
         {ITEMUSE_EFFECT_FREEZE_CURED, MSG_FREEZE_CURED, FIELD_LOG_GROUP_FREEZE},
@@ -326,8 +291,8 @@ static const FIELD_LOG_TABLE cFieldLogMsgs = {
         {ITEMUSE_EFFECT_EFFORT_SPEED_UP, MSG_EFFORT_SPEED_UP, FIELD_LOG_GROUP_NONE},
         {ITEMUSE_EFFECT_EFFORT_DEFENCE_UP, MSG_EFFORT_DEFENCE_UP, FIELD_LOG_GROUP_NONE},
         {ITEMUSE_EFFECT_PP_MAX_UP, MSG_PP_RESTORED, FIELD_LOG_GROUP_NONE},
-        {ITEMUSE_EFFECT_PP_FULLY_RESTORED, MSG_PP_RESTORED, FIELD_LOG_GROUP_NONE},
-        {ITEMUSE_EFFECT_PP_RESTORED_SELECT, MSG_PP_RESTORED_SELECT, FIELD_LOG_GROUP_NONE},
+        {ITEMUSE_EFFECT_PP_MAX_FULL, MSG_PP_RESTORED, FIELD_LOG_GROUP_NONE},
+        {ITEMUSE_EFFECT_PP_RESTORED, MSG_PP_RESTORED_SELECT, FIELD_LOG_GROUP_NONE},
     },
 };
 

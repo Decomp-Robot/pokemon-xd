@@ -2660,6 +2660,10 @@ game/app/item/itemBios.cpp:
 game/app/item/itemDB.cpp:
 	.text       start:0x8015EB84 end:0x8015EFB0
 
+game/app/item/itemUse2Pokemon.cpp:
+	.text       start:0x8015EFB0 end:0x80161268
+	.sdata      start:0x804E8440 end:0x804E8448
+
 game/app/item/itemFightItem.cpp:
 	.text       start:0x80161268 end:0x80161308
 

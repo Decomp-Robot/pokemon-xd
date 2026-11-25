@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 s16 fightPokemonBiosGetEntryId(FightPokemon *pokemon);
+Pokemon *fightPokemonBiosGetMotoPokemonPtr(FightPokemon *pokemon);
 
 void fightOutPokemonBiosSetFightActionFlag(FightOutPokemon *pokemon, u8 flag);
 u16 fightOutPokemonBiosGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);

@@ -93,6 +93,7 @@ enum TOKUSEI_DATA_ID {
 };
 
 u16 pokemon_GetInitDp(Pokemon *pokemon);
+u16 pokemon_GetPoolFriend(Pokemon *pokemon);
 u16 pokemon_GetDarkpokemonDataId(Pokemon *pokemon);
 void pokemon_SetDarkpokemonDataId(Pokemon *pokemon, u16 darkID);
 u8 pokemon_GetDarkFlag(Pokemon *pokemon);

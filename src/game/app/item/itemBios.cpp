@@ -707,10 +707,10 @@ u8 itemParamGetAttackEffortUp(ITEM_PARAM *data)
     return data->mAttackEffortUp;
 }
 
-u8 itemParamGetReviveFlag(ITEM_PARAM *data)
+bool itemParamGetReviveFlag(ITEM_PARAM *data)
 {
     if (data == 0) {
-        return 0;
+        return false;
     }
     return data->mReviveFlag != 0;
 }

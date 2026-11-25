@@ -7,6 +7,11 @@
 #include <pokemonDataBios.h>
 typedef struct PokemonTokuseiData PokemonTokuseiData;
 
+typedef struct PokemonGrowData PokemonGrowData;
+struct PokemonGrowData {
+    u32 mExp[101];
+};
+
 // Ribbon word of a Pokemon record (0x7C). Each of the twelve contest ribbons
 // takes one flag in the top twelve bits of the word; the amari ribbon count
 // follows at bit 12 and spans eight bits, so it shares the second and third
@@ -31,6 +36,8 @@ typedef struct PokemonRibbon {
 extern "C" {
 #endif
 void pokemonBiosSetFriend(Pokemon* pokemon, unsigned short level);
+PokemonGrowData *pokemonGrowDataBiosGetPtr(u8 growDataID);
+u32 pokemonGrowDataBiosGetExp(PokemonGrowData *growData, u8 level);
 u32 pokemonBiosGetPoolExp(Pokemon *pokemon);
 u16 pokemonBiosGetPoolFriend(Pokemon *pokemon);
 void pokemonBiosSetPoolFriend(Pokemon *pokemon, u16 level);

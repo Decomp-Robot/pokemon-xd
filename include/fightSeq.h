@@ -294,6 +294,7 @@ u8 fightSeqIsAllwaysHit(u16 wazaDataId);
 void fightSeq_NextWazaSeq(s32 count);
 void fightSeq_JumpWazaSeq(u8 *sequence);
 void fightSeqCheckSetHensinBuffToMotoPokemon(FightOutPokemon *pokemon, u32 field);
+void fightSeqCheckSetMotoPokemonToHensinBuff(FightOutPokemon *pokemon, u32 field);
 void fightSeqTuikaAct(u8 action, u8 mode);
 bool fightSeqGetEffectAminFlag(void);
 void fightSeqSetEffectAminFlag(u8 enabled);

@@ -37,6 +37,15 @@ typedef struct PokemonWaza {
     u8 ppCount; // 0x3
 } PokemonWaza;
 
+enum PokemonLimit {
+    POKEMON_LEVEL_LIMIT = 100,
+    POKEMON_FRIEND_LIMIT = 255,
+    POKEMON_EFFORT_LIMIT = 100,
+    POKEMON_TOTAL_EFFORT_LIMIT = 510,
+    POKEMON_WAZA_COUNT = 4,
+    POKEMON_PP_UP_LIMIT = 3
+};
+
 struct FightPokemon;
 struct Pokemon {
     u16 mPokemonDataId; // 0x00: species data ID.
@@ -293,6 +302,10 @@ enum POKEMON_STATUS_FIELD {
     POKEMON_STATUS_FIELD_LEVEL_UP_FLAG = 208, // fight record: set once the pokemon has gained a level.
     POKEMON_STATUS_FIELD_IS_HIT = 224, // result of the current Pokemon's move hit check.
     POKEMON_STATUS_FIELD_ATTACK_STAGE = 230,
+    POKEMON_STATUS_FIELD_DEFENSE_STAGE = 231,
+    POKEMON_STATUS_FIELD_SP_ATTACK_STAGE = 232,
+    POKEMON_STATUS_FIELD_SP_DEFENSE_STAGE = 233,
+    POKEMON_STATUS_FIELD_SPEED_STAGE = 234,
     POKEMON_STATUS_FIELD_ACCURACY_STAGE = 235,
 };
 
