@@ -919,7 +919,8 @@ s32 _colosseumbattlemenu_duel(s32 menuID)
             break;
         }
         if (_CB.mMenuResult.mEntryDecision == 1) {
-            if (_CB.mVersus.mTunaideRow == 0 || _CB.mVersus.mTunaideRow == 2) {
+            if (_CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_VS_GBA ||
+                _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_GBA_VS_GBA_GBA) {
                 if (!memcardIsMemCardValid()) {
                     winMsgOpen(WINMSG_WINDOW_MENU, CB_MSG_NO_MEMORY_CARD, 1, 0);
                     winMsgClose(1);
@@ -942,27 +943,27 @@ s32 _colosseumbattlemenu_duel(s32 menuID)
             }
             winMsgClose(0);
 
-            _CB.battleMode = tunaide_select[_CB.mVersus.mTunaideRow].battleMode;
+            _CB.battleMode = tunaide_select[_CB.mVersus.mTunaideOpponents].battleMode;
             if (_CB.mVersus.mStageMode.battleStageMode == 6) {
                 _CB.mVsStage = 0;
             } else {
                 _CB.mVsStage = tunaide_select_field[_CB.mVersus.mStageMode.battleStageMode];
             }
             menuCBTrainerBios_SetHomePlace(&_CB.mTrainerImmediately[0],
-                                           tunaide_select[_CB.mVersus.mTunaideRow].homePlace);
+                                           tunaide_select[_CB.mVersus.mTunaideOpponents].homePlace);
             menuCBTrainerBios_SetControlerID(&_CB.mTrainerImmediately[0],
-                                             tunaide_select[_CB.mVersus.mTunaideRow].controlerId[0]);
+                                             tunaide_select[_CB.mVersus.mTunaideOpponents].controlerId[0]);
             for (j = 1; j < 4; j++) {
                 menuCBTrainerBios_SetHomePlace(&_CB.mTrainerImmediately[j], 1);
                 menuCBTrainerBios_SetControlerID(&_CB.mTrainerImmediately[j],
-                                                 tunaide_select[_CB.mVersus.mTunaideRow].controlerId[j]);
+                                                 tunaide_select[_CB.mVersus.mTunaideOpponents].controlerId[j]);
             }
-            if (_CB.mVersus.mTunaideDoubleBattle == 0) {
+            if (_CB.mVersus.mTunaideBattleStyle == TUNAIDE_BATTLE_STYLE_SINGLE) {
                 _CB.battleMode = 0;
             } else {
                 _CB.battleMode = 1;
             }
-            if (_CB.mVersus.mTunaideRow >= 2) {
+            if (_CB.mVersus.mTunaideOpponents >= TUNAIDE_OPPONENTS_GCN_GBA_VS_GBA_GBA) {
                 _CB.battleMode = 2;
             }
             result = CB_MENU_GBA_CONNECT;

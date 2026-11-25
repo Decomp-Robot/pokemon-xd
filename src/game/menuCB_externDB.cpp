@@ -305,7 +305,7 @@ enum RuleMenuItem {
     RULE_TRAINER_NAME_5 = 1004
 };
 
-enum { RULE_SECOND_OPTION = 1, RULE_SUBMENU_CURSOR = 3 };
+enum { RULE_SECOND_OPTION = 1 };
 
 enum {
     MENU_ID_CB_ERROR01 = 167, // per-slot error detail window opened from error00
@@ -2232,7 +2232,7 @@ extern "C" void menuTool_tunaide01_4_Ctrl(tagWINDOW_WORK *window)
 {
     menuCB_DispEffect(window);
     menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
-    menuCB_MenuDispCheckONorOFF_TUNAIDESUB(window, RULE_SUBMENU_CURSOR);
+    menuCB_MenuDispCheckONorOFF_TUNAIDESUB(window, TUNAIDE01_RULE_PAGE);
 }
 
 extern "C" {
@@ -2388,4 +2388,125 @@ void menuCB_Tunaide01_3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
         }
         break;
     }
+}
+
+extern "C" void menuTool_tunaide01_3_Button(tagWINDOW_WORK *)
+{
+}
+
+extern "C" void menuTool_tunaide01_3_Ctrl(tagWINDOW_WORK *window)
+{
+    menuCB_DispEffect(window);
+    menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
+    menuCB_MenuDispCheckONorOFF_TUNAIDESUB(window, TUNAIDE01_FIELD_PAGE);
+}
+
+extern "C" void menuCB_Tunaide01_2_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    switch (sprite->mItemID) {
+    case TOOL_ITEM_DUEL_AUX_1_01:
+    case TOOL_ITEM_DUEL_AUX_1_02:
+    case TOOL_ITEM_DUEL_AUX_1_03:
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTunaideBattleStyle == TUNAIDE_BATTLE_STYLE_SINGLE);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_DUEL_AUX_1_04:
+    case TOOL_ITEM_DUEL_AUX_1_05:
+    case TOOL_ITEM_DUEL_AUX_1_06:
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTunaideBattleStyle == TUNAIDE_BATTLE_STYLE_DOUBLE);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_RULE_HELP_G3_00:
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mTunaideBattleStyle == TUNAIDE_BATTLE_STYLE_SINGLE);
+        break;
+    case TOOL_ITEM_DUEL_AUX_2_00:
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mTunaideBattleStyle == TUNAIDE_BATTLE_STYLE_DOUBLE);
+        break;
+    }
+}
+
+extern "C" void menuTool_tunaide01_2_Button(tagWINDOW_WORK *)
+{
+}
+
+extern "C" void menuTool_tunaide01_2_Ctrl(tagWINDOW_WORK *window)
+{
+    menuCB_DispEffect(window);
+    menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
+    menuCB_MenuDispCheckONorOFF_TUNAIDESUB(window, TUNAIDE01_BATTLE_STYLE_PAGE);
+}
+
+extern "C" void menuCB_Tunaide01_1_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
+{
+    switch (sprite->mItemID) {
+    case TOOL_ITEM_DUEL_HELP_17:
+    case TOOL_ITEM_DUEL_HELP_18:
+    case TOOL_ITEM_DUEL_HELP_19:
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_VS_GBA);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_DUEL_HELP_20:
+    case TOOL_ITEM_DUEL_HELP_21:
+    case TOOL_ITEM_DUEL_HELP_22:
+        menuCB_SpriteDispCheckONorOFF(sprite, _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GBA_VS_GBA);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_DUEL_HELP_23:
+    case TOOL_ITEM_DUEL_HELP_24:
+    case TOOL_ITEM_DUEL_HELP_25:
+        menuCB_SpriteDispCheckONorOFF(sprite,
+                                      _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_GBA_VS_GBA_GBA);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_DUEL_HELP_26:
+    case TOOL_ITEM_DUEL_HELP_27:
+    case TOOL_ITEM_DUEL_PANEL_00:
+        menuCB_SpriteDispCheckONorOFF(sprite,
+                                      _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GBA_GBA_VS_GBA_GBA);
+        menuCB_Cursol_Disp_AlphaSet(window, sprite, _CB.mEntry.mRuleSelect == TUNAIDE_RULE_SELECT_LAST);
+        break;
+    case TOOL_ITEM_DUEL_HELP_01:
+    case TOOL_ITEM_DUEL_HELP_14:
+    case TOOL_ITEM_DUEL_HELP_16:
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_VS_GBA);
+        break;
+    case TOOL_ITEM_DUEL_HELP_02:
+    case TOOL_ITEM_DUEL_HELP_05:
+    case TOOL_ITEM_DUEL_HELP_06:
+        menuCBRuleSetSpriteColor(sprite, _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GBA_VS_GBA);
+        break;
+    case TOOL_ITEM_DUEL_HELP_03:
+    case TOOL_ITEM_DUEL_HELP_07:
+    case TOOL_ITEM_DUEL_HELP_08:
+    case TOOL_ITEM_DUEL_HELP_09:
+    case TOOL_ITEM_DUEL_HELP_15:
+        menuCBRuleSetSpriteColor(sprite,
+                                 _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GCN_GBA_VS_GBA_GBA);
+        break;
+    case TOOL_ITEM_DUEL_HELP_04:
+    case TOOL_ITEM_DUEL_HELP_10:
+    case TOOL_ITEM_DUEL_HELP_11:
+    case TOOL_ITEM_DUEL_HELP_12:
+    case TOOL_ITEM_DUEL_HELP_13:
+        menuCBRuleSetSpriteColor(sprite,
+                                 _CB.mVersus.mTunaideOpponents == TUNAIDE_OPPONENTS_GBA_GBA_VS_GBA_GBA);
+        break;
+    }
+}
+
+extern "C" void menuTool_tunaide01_1_Button(tagWINDOW_WORK *)
+{
+}
+
+extern "C" void menuTool_tunaide01_1_Ctrl(tagWINDOW_WORK *window)
+{
+    menuCB_DispEffect(window);
+    menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
+    menuCB_MenuDispCheckONorOFF_TUNAIDESUB(window, TUNAIDE01_OPPONENTS_PAGE);
+}
+
+extern "C" void menuTool_tunaide_back_Ctrl(tagWINDOW_WORK *window)
+{
+    menuCB_DispEffect(window);
+    menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
 }

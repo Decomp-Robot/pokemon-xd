@@ -45,6 +45,25 @@ enum MenuCBEntryOrder {
     ENTRY_ORDER_UNUSED = 15
 };
 
+enum TunaideBattleStyle {
+    TUNAIDE_BATTLE_STYLE_SINGLE,
+    TUNAIDE_BATTLE_STYLE_DOUBLE
+};
+
+enum TunaideOpponents {
+    TUNAIDE_OPPONENTS_GCN_VS_GBA,
+    TUNAIDE_OPPONENTS_GBA_VS_GBA,
+    TUNAIDE_OPPONENTS_GCN_GBA_VS_GBA_GBA,
+    TUNAIDE_OPPONENTS_GBA_GBA_VS_GBA_GBA
+};
+
+enum Tunaide01Page {
+    TUNAIDE01_OPPONENTS_PAGE,
+    TUNAIDE01_BATTLE_STYLE_PAGE,
+    TUNAIDE01_FIELD_PAGE,
+    TUNAIDE01_RULE_PAGE
+};
+
 // Trainer records entered through the link-battle menus.
 struct _MENUCBTRAINER {
     _MENUCBTRAINER() {}
@@ -92,8 +111,8 @@ struct _MENUCBVersusState {
     s32 mReserved0[1];
     /* 0xAFEC */ s32 mTeamSelect;
     /* 0xAFF0 */ s32 mSubmenuConfirm; // set while the entry submenu asks a yes/no question.
-    /* 0xAFF4 */ s32 mTunaideRow;
-    /* 0xAFF8 */ s32 mTunaideDoubleBattle;
+    /* 0xAFF4 */ TunaideOpponents mTunaideOpponents;
+    /* 0xAFF8 */ TunaideBattleStyle mTunaideBattleStyle;
     union {
         /* 0xAFFC */ s32 battleStageMode;
         /* 0xAFFC */ s32 tunaideSelect;
