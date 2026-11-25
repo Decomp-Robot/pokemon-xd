@@ -5,7 +5,7 @@
 #include <float.h>
 
 #define HSD_MTX_EPSILON 1e-10f
-#define HSD_HALF_PI (3.14159265358979323846f / 2.0f)
+#define HSD_HALF_PI (M_PI / 2.0f)
 
 static HSD_ObjAllocData mtx_alloc_data;
 static HSD_ObjAllocData vec_alloc_data;
@@ -434,29 +434,24 @@ void HSD_MtxGetRotation(Mtx m, Vec* rotate)
     f32 scale_z;
 
     scale_x = sqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
-    if (scale_x < FLT_MIN) {
-        goto degenerate;
-    }
-    scale_y = sqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
-    if (scale_y < FLT_MIN) {
-        goto degenerate;
-    }
-    scale_z = sqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
-    if (scale_z < FLT_MIN) {
-        goto degenerate;
+    if (!(scale_x < FLT_MIN)) {
+        scale_y = sqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
+        if (!(scale_y < FLT_MIN)) {
+            scale_z = sqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
+            if (!(scale_z < FLT_MIN)) {
+                rotate->y = HSD_SafeAsin(-m[2][0] / scale_x);
+                if ((f32)cos(rotate->y) >= FLT_MIN) {
+                    rotate->x = HSD_SafeAtan2(m[2][1] / scale_y, m[2][2] / scale_z);
+                    rotate->z = HSD_SafeAtan2(m[1][0], m[0][0]);
+                } else {
+                    rotate->x = HSD_SafeAtan2(m[0][1], m[1][1]);
+                    rotate->z = 0.0f;
+                }
+                return;
+            }
+        }
     }
 
-    rotate->y = HSD_SafeAsin(-m[2][0] / scale_x);
-    if ((f32)cos(rotate->y) >= FLT_MIN) {
-        rotate->x = HSD_SafeAtan2(m[2][1] / scale_y, m[2][2] / scale_z);
-        rotate->z = HSD_SafeAtan2(m[1][0], m[0][0]);
-    } else {
-        rotate->x = HSD_SafeAtan2(m[0][1], m[1][1]);
-        rotate->z = 0.0f;
-    }
-    return;
-
-degenerate:
     rotate->x = 0.0f;
     rotate->y = 0.0f;
     rotate->z = 0.0f;
