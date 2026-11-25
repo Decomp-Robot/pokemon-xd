@@ -40,6 +40,9 @@ extern u32 *menu_se_number;
 /* Records of the menu sound-effect table. */
 extern struct MenuSeData *menu_se;
 
+extern u32 *mball_data_number;
+extern u16 *mball_data;
+
 /* Count of entries in the item data index table. */
 extern u32 *item_data_index_number;
 
