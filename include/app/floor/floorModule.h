@@ -45,6 +45,13 @@ struct FloorModuleInterface {
     unsigned long (*getStateSize)(FloorStateMode);
     unsigned long (*getUID)();
 };
+
+class FloorModuleEntry {
+public:
+    FloorModuleEntry* getNext() const;
+    FloorModuleInterface* getModuleInterface();
+};
+
 extern "C" {
 void FloorModuleInterface_clear(FloorModuleInterface* interface);
 }
@@ -58,7 +65,14 @@ public:
     void blockModule(unsigned long moduleHandle);
 
 private:
-    unsigned long unknown[6];
+    unsigned long unknown[3];
+    FloorModuleEntry* mHead;
+    unsigned long mPushStateSize;
+    unsigned long unknownTail;
+
+public:
+    void dumpModule();
+    void* makePushState(FloorStateMode mode);
 };
 
 #endif

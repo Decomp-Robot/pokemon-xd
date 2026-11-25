@@ -2407,6 +2407,9 @@ game/app/floor/floorManager.cpp:
 	.rodata     start:0x802F32A8 end:0x802F32BC
 	.sbss       start:0x804EB150 end:0x804EB154
 
+game/app/floor/floorModule.cpp:
+	.text       start:0x80128108 end:0x8012829C
+
 game/app/floor/floorStack.cpp:
 	.text       start:0x801296C0 end:0x80129E00
 
