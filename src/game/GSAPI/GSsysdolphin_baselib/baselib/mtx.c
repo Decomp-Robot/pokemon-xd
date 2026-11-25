@@ -5,7 +5,7 @@
 #include <float.h>
 
 #define HSD_MTX_EPSILON 1e-10f
-#define HSD_HALF_PI 1.5707964f
+#define HSD_HALF_PI (3.14159265358979323846f / 2.0f)
 
 static HSD_ObjAllocData mtx_alloc_data;
 static HSD_ObjAllocData vec_alloc_data;
