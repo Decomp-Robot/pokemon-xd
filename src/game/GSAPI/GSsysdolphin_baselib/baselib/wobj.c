@@ -49,7 +49,7 @@ static inline void WObjPositionToWorld(_HSD_WObj *wobj)
     if (wobj->flags & WOBJ_POSITION_JOINT) {
         if (wobj->aobj && (jobj = wobj->aobj->mObject)) {
             HSD_JObjSetupMatrix(jobj);
-            PSMTXMultVec(jobj->mMatrix, (Vec *)&wobj->position, (Vec *)&wobj->position);
+            PSMTXMultVec(jobj->mtx, (Vec *)&wobj->position, (Vec *)&wobj->position);
         }
         wobj->flags &= ~WOBJ_POSITION_JOINT;
     }

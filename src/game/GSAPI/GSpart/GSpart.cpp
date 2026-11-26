@@ -374,17 +374,17 @@ void GSpartGetTransform(GSpart *part, GSvec *position, GSvec *rotation, GSvec *s
     GSmodelUpdate(part->mModel);
     if (!GSmodelIsBlending(part->mModel)) {
         HSD_JObjSetupMatrix(joint);
-        x = joint->mMatrix[0][3];
-        y = joint->mMatrix[1][3];
-        z = joint->mMatrix[2][3];
+        x = joint->mtx[0][3];
+        y = joint->mtx[1][3];
+        z = joint->mtx[2][3];
     } else if (joint->flags & HSD_JOBJ_TYPE_MASK) {
         x = joint->mTrans[0];
         y = joint->mTrans[1];
         z = joint->mTrans[2];
     } else {
-        x = joint->mMatrix[0][3];
-        y = joint->mMatrix[1][3];
-        z = joint->mMatrix[2][3];
+        x = joint->mtx[0][3];
+        y = joint->mtx[1][3];
+        z = joint->mtx[2][3];
     }
 
     if (rotation != NULL || scale != NULL) {

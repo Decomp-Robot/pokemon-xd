@@ -207,7 +207,7 @@ bool GSmodelGetVisibility(_GSmodel *model);
 GSvec *GSmodelGetRotationPtr(_GSmodel *model);
 void GSmodelGetRotation(_GSmodel *model, GSvec *rotation);
 void GSmodelSetRotation(_GSmodel *model, GSvec *rotation);
-void GSmodelParse(_GSmodel *model, s32 mode, GSmodelParseCb cb, void *userContext);
+void GSmodelParse(_GSmodel *model, bool instance, GSmodelParseCb cb, void *userContext);
 u8 GSmodelCanShapeAnimate(_GSmodel *model);
 u8 GSmodelCanTexAnimate(_GSmodel *model);
 u8 GSmodelCanAnimate(_GSmodel *model);

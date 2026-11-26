@@ -2199,8 +2199,15 @@ game/GSAPI/GSmodel/GSmodel.cpp:
 
 game/GSmodelRender.cpp:
 	.text       start:0x800F8998 end:0x800FB3A4
-	.rodata     start:0x802ED0C0 end:0x802ED0F4
+	.rodata     start:0x802ED0C0 end:0x802ED0F8
 	.sdata2     start:0x804ED498 end:0x804ED4D0
+
+game/GSAPI/GSmodel/parse.cpp:
+	.text       start:0x800FB3A4 end:0x800FC8A8
+	.rodata     start:0x802ED0F8 end:0x802ED130
+	.bss        start:0x80443148 end:0x80443358
+	.sbss       start:0x804EAF28 end:0x804EAF30
+	.sdata2     start:0x804ED4D0 end:0x804ED4F0
 
 game/GSAPI/GSmodel/part.cpp:
 	.text       start:0x800FC8A8 end:0x800FC9D0

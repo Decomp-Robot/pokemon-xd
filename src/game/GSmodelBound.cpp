@@ -39,7 +39,7 @@ extern "C" void GSmodelRecalculateBound(_GSmodel *model)
     model->mScale.y = 1.0f;
     model->mScale.z = 1.0f;
     GSmodelForceAnimTransformUpdate(model);
-    GSmodelParse(model, 1, _modelBoundPObj, model);
+    GSmodelParse(model, true, _modelBoundPObj, model);
     model->mLinkedParticleBank = particleBank;
     model->mPosition.x = positionX;
     model->mPosition.y = positionY;

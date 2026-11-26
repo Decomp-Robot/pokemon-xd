@@ -10,6 +10,18 @@ struct _HSD_DObj {
     _HSD_MObj *mMaterial;
     _HSD_PObj *mPrimitive;
     _HSD_AObj *mAObj;
+    u32 mFlags;
 };
+
+#define HSD_DOBJ_HIDDEN 0x1
+#define HSD_DOBJ_TRSP_SHIFT 1
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void HSD_DObjSetCurrent(_HSD_DObj *dobj);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

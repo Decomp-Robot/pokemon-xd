@@ -482,7 +482,7 @@ extern "C" void GSmodelSetPosition(_GSmodel *model, GSvec *position)
 extern "C" GSmtx *GSmodelGetMatrixPtr(_GSmodel *model)
 {
     HSD_JObjSetupMatrix(model->mJObj);
-    return (GSmtx *)&model->mJObj->mMatrix;
+    return (GSmtx *)&model->mJObj->mtx;
 }
 
 extern "C" void GSmodelSetMatrix(_GSmodel *model, GSmtx *matrix)

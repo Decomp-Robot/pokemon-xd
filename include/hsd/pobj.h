@@ -10,8 +10,14 @@
 #include <hsd/list.h>
 
 #define HSD_POBJ_TYPE_MASK 0x3000
-#define HSD_POBJ_SHAPE_ANIM 0x1000
+#define HSD_POBJ_HIDDEN 0x0800
 #define HSD_POBJ_ANIM_MASK 0x8
+
+enum HSD_PObjType {
+    HSD_POBJ_SKIN = 0x0000,
+    HSD_POBJ_SHAPE_ANIM = 0x1000,
+    HSD_POBJ_ENVELOPE = 0x2000
+};
 
 #define HSD_SHAPE_SET_WEIGHTS 0x2
 #define HSD_SHAPE_WEIGHT_CHANNEL_BASE 2
@@ -85,6 +91,12 @@ typedef union _HSD_PObjData {
     HSD_SList *envelope_list;
 } HSD_PObjData;
 
+typedef struct _HSD_Envelope {
+    struct _HSD_Envelope *next;
+    _HSD_JObj *jobj;
+    f32 weight;
+} HSD_Envelope;
+
 /* A primitive object: one display list plus its vertex description. */
 struct _HSD_PObj {
     _HSD_PObjInfo *class_info;
@@ -97,6 +109,17 @@ struct _HSD_PObj {
     _HSD_AObj *mAObj;
 };
 
+typedef enum {
+    HSD_POBJ_MTX_MARK_POSITION,
+    HSD_POBJ_MTX_MARK_JOINT
+} HSD_PObjMtxMark;
+
+typedef enum {
+    HSD_POBJ_MTX_MARK_NONE,
+    HSD_POBJ_MTX_MARK_VALID,
+    HSD_POBJ_MTX_MARK_INVALID
+} HSD_PObjMtxMarkState;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,6 +128,9 @@ void HSD_PObjAnimAll(HSD_PObj *pobj);
 void HSD_PObjReqAnimAllByFlags(HSD_PObj *pobj, u32 flags, f32 frame);
 void HSD_PObjAddAnimAll(HSD_PObj *pobj, HSD_ShapeAnim *shape_anim);
 void HSD_PObjRemoveAnimAllByFlags(HSD_PObj *pobj, u32 flags);
+void HSD_PObjGetMtxMark(HSD_PObjMtxMark index, void **obj, HSD_PObjMtxMarkState *mark);
+void HSD_PObjSetMtxMark(HSD_PObjMtxMark index, void *obj, HSD_PObjMtxMarkState mark);
+void HSD_PObjClearMtxMark(void *obj, HSD_PObjMtxMarkState mark);
 #ifdef __cplusplus
 }
 #endif

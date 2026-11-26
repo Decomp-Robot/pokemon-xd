@@ -7529,6 +7529,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/GSAPI/GSmodel/parse.cpp"
+completed = true
+extra_cflags = ["-str reuse,readonly", "-inline auto,deferred", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/GSAPI/GSmodel/save_state.cpp"
 completed = true
 mw_version = "GC/2.6"
