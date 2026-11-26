@@ -2661,6 +2661,12 @@ game/app/effects/blur.cpp:
 	.data       start:0x80404EE8 end:0x80404F14
 	.sdata2     start:0x804EDCB0 end:0x804EDCDC
 
+game/app/effects/glow.cpp:
+	.text       start:0x80159F74 end:0x8015A328
+	.sdata      start:0x804E8410 end:0x804E8418
+	.sbss       start:0x804EB2F0 end:0x804EB2F8
+	.sdata2     start:0x804EDCE0 end:0x804EDCF4
+
 game/app/item/item.cpp:
 	.text       start:0x8015D75C end:0x8015D960
 	.data       start:0x804059F8 end:0x80405A80

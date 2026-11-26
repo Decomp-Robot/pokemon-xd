@@ -243,6 +243,7 @@ block_relocations:
   - source: ".data:0x8032BE98"
   - source: ".data:0x8032BEB4"
   - source: ".data:0x8032BED0"
+  - source: ".text:0x8015A70C"
 add_relocations:
   - source: .text:0x801265E8
     type: ha
