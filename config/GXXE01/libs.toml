@@ -7152,7 +7152,7 @@ cflags_extra = ["-inline auto,deferred", "-opt nopeephole", "-use_lmw_stmw on"]
 
 [[lib.object]]
 name = "game/app/flashmenu/flashmenu.cpp"
-extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+extra_cflags = ["-str readonly", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
 completed = true
 
 [[lib.object]]

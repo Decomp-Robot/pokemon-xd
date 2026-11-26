@@ -3884,8 +3884,10 @@ game/GSAPI/GSsysdolphin_baselib/baselib/aobj.c:
 	.sdata2     start:0x804EF388 end:0x804EF3A0
 
 game/app/flashmenu/flashmenu.cpp:
-	.text       start:0x8026F478 end:0x8026F684
-	.sdata2     start:0x804EF3A8 end:0x804EF3B8
+	.text       start:0x8026F478 end:0x8026FF90
+	.rodata     start:0x802FA940 end:0x802FAC20 align:4
+	.data       start:0x80419FB8 end:0x8041A100
+	.sdata2     start:0x804EF3A0 end:0x804EF3B8
 
 game/app/flashmenu/flashcalc.cpp:
 	.text       start:0x802723FC end:0x80272BA4

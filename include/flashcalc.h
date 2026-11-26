@@ -50,6 +50,7 @@ s32 flcalcBlend(s32 first, s32 second, f32 t);
 void flcalcCreateCxform(FLASHCXFORM* transform, u32 color);
 u32 flcalcMultiTransformColor(const FLASHCXFORM* transform, u32 color);
 void flcalcUnitCxform(FLASHCXFORM* transform);
+void flcalcUnitMatrix2(FLASHMATRIX* matrix);
 void flcalcMulCxform(FLASHCXFORM* destination, FLASHCXFORM* first, FLASHCXFORM* second);
 
 #ifdef __cplusplus

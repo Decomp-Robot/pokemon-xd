@@ -9,8 +9,65 @@ struct GStexture;
 struct tagWINDOW_WORK;
 struct tagSPRITE_WORK;
 struct _PLACEOBJECT2;
+struct FlashTag;
 
 struct FlashDisplayObject;
+
+enum FlashTagID {
+    stagEnd = 0,
+    stagShowFrame = 1,
+    stagDefineShape = 2,
+    stagFreeCharacter = 3,
+    stagPlaceObject = 4,
+    stagRemoveObject = 5,
+    stagDefineBits = 6,
+    stagDefineButton = 7,
+    stagJPEGTables = 8,
+    stagSetBackgroundColor = 9,
+    stagDefineFont = 10,
+    stagDefineText = 11,
+    stagDoAction = 12,
+    stagDefineFontInfo = 13,
+    stagDefineSound = 14,
+    stagDefineButtonSound = 17,
+    stagSoundStreamHead = 18,
+    stagSoundStreamBlock = 19,
+    stagDefineBitsLossless = 20,
+    stagDefineBitsJPEG2 = 21,
+    stagDefineShape2 = 22,
+    stagDefineButtonCxform = 23,
+    stagProtect = 24,
+    stagPlaceObject2 = 26,
+    stagRemoveObject2 = 28,
+    stagDefineShape3 = 32,
+    stagDefineText2 = 33,
+    stagDefineButton2 = 34,
+    stagDefineBitsJPEG3 = 35,
+    stagDefineBitsLossless2 = 36,
+    stagDefineEditText = 37,
+    stagDefineSprite = 39,
+    stagNameCharacter = 40,
+    stagFrameLabel = 43,
+    stagSoundStreamHead2 = 45,
+    stagDefineMorphShape = 46,
+    stagDefineFont2 = 48,
+    stagExportAssets = 56,
+    stagImportAssets = 57,
+};
+
+enum FlashDefinitionKind {
+    FLASH_DEFINITION_NONE = 0,
+    FLASH_DEFINITION_MORPH_SHAPE = 1,
+    FLASH_DEFINITION_SHAPE = 2,
+    FLASH_DEFINITION_SPRITE = 4,
+    FLASH_DEFINITION_FONT = 8,
+    FLASH_DEFINITION_EDIT_TEXT = 16,
+    FLASH_DEFINITION_TEXT = 32,
+};
+
+enum { FLASH_TEXTURE_BINDING_COUNT = 30 };
+enum { FLASH_DEFINITION_MAX = 200 };
+enum { FLASH_DEFAULT_CAPACITY = 40 };
 
 struct _FILLSTYLE;
 struct _LINESTYLE;
@@ -38,12 +95,13 @@ struct FlashSpriteState {
 };
 
 struct FlashMovieHeader {
-    u8 unknownMovieHeader[6];
+    u8 reserved0[6];
     u16 frameCount;
-    u8 unknownMovieHeader2[16];
+    u8 reserved1[12];
+    FlashTag* tagTable;
     u16 spriteCapacity;
     u16 depthCapacity;
-    u8 unknownMovieData[20];
+    u8 reserved2[20];
 };
 
 struct FlashDefinition {
@@ -57,7 +115,7 @@ struct FlashDisplayObject {
     FLASHMATRIX matrix;
     f32 morphRatio;
     FLASHCXFORM colorTransform;
-    void* unknownPlacement;
+    _PLACEOBJECT2* previousPlacement;
     _PLACEOBJECT2* placement;
     u16* spriteFrames;
     u8 placementFlags;
@@ -83,6 +141,8 @@ public:
     void Update();
     void Draw(tagWINDOW_WORK* window, tagSPRITE_WORK* sprite);
     void DrawSub(GSgfxLayerID layer, tagWINDOW_WORK* window, tagSPRITE_WORK* sprite);
+    u8 ParseTag(u32 tagID, u32 tagLength, bool ignorePlayFrame, bool unused, bool registerDefinitions);
+    void InitDataPointer();
     GStexture* GetGStexture(s32 textureID);
     u16 GetFrameFromLabel(char* label);
     u32 GetPlayFrame();
@@ -90,7 +150,13 @@ public:
 
 private:
     void ResetDisplays();
+    void ResetPlacements();
+    void ResetPlayback();
+    void ResetSpriteDisplay(u32 sprite, u32 depth);
+    void ParseMovie(FlashTag* tag);
     void AdvanceFrame();
+    FlashMovieHeader* GetMovieHeader() { return movie; }
+    void SetSpriteFrameCount(u32 sprite, u16 count) { sprites[sprite].frameCount = count; }
 
 public:
     u32 tagOffset;
@@ -115,7 +181,7 @@ public:
     FlashSpriteState* sprites;
     u32 playFrame;
     f32 playbackRate;
-    FlashTextureBinding textures[30];
+    FlashTextureBinding textures[FLASH_TEXTURE_BINDING_COUNT];
     FlashFrameLabel* labels;
 };
 
