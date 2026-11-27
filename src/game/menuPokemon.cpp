@@ -9,6 +9,7 @@
 #include <winSpriteDisplay.h>
 #include <menu.h>
 #include <menuFace.h>
+#include <menuFight.h>
 #include <menuPokemon.h>
 #include <menuCBBios.h>
 #include <fightTrainerPokemon.h>

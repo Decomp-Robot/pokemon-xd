@@ -1,4 +1,5 @@
 #include <types.h>
+#include <menuIds.h>
 #include <menuGBA.h>
 #include <gbaAgb.h>
 #include <gbaCommand.h>
@@ -80,8 +81,7 @@ enum {
 
 enum {
     MENU_ID_PAD_ERROR = 42,
-    MENU_ID_GBA_CONNECT = 176
-};
+    };
 
 enum {
     SE_GBAC_OPEN = 20,

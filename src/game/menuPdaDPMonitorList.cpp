@@ -351,7 +351,7 @@ void menuPdaDPMonList(void)
     list->InitWork();
     cursor.y = 0;
     cursor.x = 0;
-    menuOpen(MENU_ID_PDA_DPMON_LIST_FRAME, 0);
+    menuOpen(MENU_ID_PDA_MAIL_LIST, 0);
     do {
         result = pDPMList->Main(result, &cursor);
         if (result < 0) {
@@ -369,7 +369,7 @@ void menuPdaDPMonList(void)
         pDPMList->CalcPosition(&cursor);
         pDPMList->mScrollY = pDPMList->mTargetScrollY;
     } while (true);
-    pDPMList->_menuClose(MENU_ID_PDA_DPMON_LIST_FRAME);
+    pDPMList->_menuClose(MENU_ID_PDA_MAIL_LIST);
     delete pDPMList;
     pDPMList = 0;
 }

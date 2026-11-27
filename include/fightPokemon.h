@@ -112,6 +112,7 @@ u8 fightOutPokemonIsFightActionUseItemKind(FightOutPokemon *pokemon, u8 itemKind
                                              u8 matchKind, u8 unused);
 u16 fightOutPokemonGetFightActionUseItemDataId(FightOutPokemon *pokemon);
 u16 *fightOutPokemonGetNicknamePtr(FightOutPokemon *pokemon);
+u16 *fightPokemonGetNicknamePtr(FightPokemon *pokemon);
 u8 fightOutPokemonCheckWriteJoutaiDataId(FightOutPokemon *pokemon, u16 status);
 void fightOutPokemonWriteJoutaiDataId(FightOutPokemon *pokemon, u16 status, u16 targetId);
 u16 fightOutPokemonGetIdBuffJoutaiDataId(FightOutPokemon *pokemon, u16 id);

@@ -16,11 +16,13 @@
 #include <fightAction.h>
 #include <fightEncount.h>
 #include <fightFloor.h>
+#include <fightMenu.h>
 #include <fightPokemon.h>
 #include <fightSeq.h>
 #include <fightSide.h>
 #include <fightTrainer.h>
 #include <floor.h>
+#include <menuFight.h>
 #include <sequence.h>
 #include <sound.h>
 #include <waza.h>
@@ -43,10 +45,6 @@ void fightTimerCommandInit(void);
 void fightTimerCommandStart(void);
 u8 fightTimerCommandBlock(void);
 void fightTimerCommandTerminate(void);
-void fightMenuOpenInfoMenu(s8 menu);
-void fightMenuCloseInfoMenu(u8 menu);
-void menuFightOpenTimeup(void);
-s32 menuFightChkSeq(void);
 void menuGetKeyInfo(tagWINDOW_KEY *key, u32 port);
 u32 wazaSequenceSysGetWazaGroupID(u16 wazaNo, u16 resourceCategory);
 u8 battleCameraIsSimple(void);
@@ -63,8 +61,6 @@ void fightMainDebugMenu(void);
 }
 
 void _fightMainWaitFrameSub(u32 frames);
-
-enum FightMainInfoMenu { FIGHT_MAIN_INFO_MENU_COUNTDOWN = -1 };
 
 enum { FIGHT_MAIN_ENCOUNT_VIRTUAL_BATTLE = 217 };
 enum { FIGHT_MAIN_COMM_ERROR_MESSAGE = 20497 };
@@ -319,7 +315,7 @@ void fightMain(void)
             battleGridUpdate();
             fightMainAllCamera(0, 1);
             if (fightFloor_GetEncountDataId(0) != FIGHT_MAIN_ENCOUNT_VIRTUAL_BATTLE) {
-                fightMenuOpenInfoMenu(FIGHT_MAIN_INFO_MENU_COUNTDOWN);
+                fightMenuOpenInfoMenu(FIGHT_MENU_INFO_MENU_COUNTDOWN);
             }
             if (dbgMenuFightGetFightPokeStMenuOpenFlag() == 0) {
                 fightMainWaitFrame(600);

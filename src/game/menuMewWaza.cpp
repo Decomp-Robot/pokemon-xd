@@ -1,4 +1,5 @@
 #include "GSgfx.h"
+#include <menuIds.h>
 #include "winSprite.h"
 #include "window.h"
 #include "GSmsg.h"
@@ -7,9 +8,6 @@
 #include "menuSub.h"
 #include "menuMewWaza.h"
 #include "waza.h"
-
-// Menu data id of the move list this window draws.
-enum { MENU_ID_MEW_WAZA = 268 };
 
 // Message value slot the move name is written to before the window is printed.
 enum { MSG_VALUE_MOVE_NAME = 0x4D };

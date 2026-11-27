@@ -195,20 +195,13 @@ game/menuFightStatus.cpp:
 	.sdata2     start:0x804EBF80 end:0x804EBFE0
 
 game/menuFight.cpp:
-	.text       start:0x800178FC end:0x8001B370
-	.data       start:0x80321FB8 end:0x80322320
+	.text       start:0x800178FC end:0x8001EC10
+	.rodata     start:0x802EA430 end:0x802EA4C8
+	.data       start:0x80321F98 end:0x80322460
 	.bss        start:0x80428250 end:0x80428260
+	.sdata      start:0x804E7EB8 end:0x804E7ED8
 	.sbss       start:0x804EA728 end:0x804EA741
-	.sdata2     start:0x804EBFE0 end:0x804EBFE4
-
-game/menuFightSecretWaza.cpp:
-	.text       start:0x8001B370 end:0x8001C054
-
-game/menuFightSecretWazaTop.cpp:
-	.text       start:0x8001C054 end:0x8001C0B4
-
-game/menuFightTarget/menuFight.c:
-	.text       start:0x8001D934 end:0x8001D9A8
+	.sdata2     start:0x804EBFE0 end:0x804EC010
 
 game/menuPocketTool.cpp:
 	.text       start:0x8001EC10 end:0x8002208C

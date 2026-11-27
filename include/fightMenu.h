@@ -5,11 +5,17 @@
 #include <bool.h>
 #include <types.h>
 
+enum FightMenuInfoMenu {
+    FIGHT_MENU_INFO_MENU_COUNTDOWN = -1
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 void fightMsgctrlSetValue(u32 selector, unsigned long value);
 void fightMenuCloseMsg(void);
+void fightMenuOpenInfoMenu(s8 menu);
+void fightMenuCloseInfoMenu(u8 menu);
 void fightMenuAllFightTrainerCloseStatusMenu(u8 waitForClose);
 void fightMenuAllFightOutPokemonCloseStatusMenu(u8 waitForClose);
 u8 fightMenuOpenMsg(s32 msgId);

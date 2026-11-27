@@ -50,4 +50,12 @@ struct MenuBattleDiskWork {
 };
 extern MenuBattleDiskWork gBDisk;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+long menuBattleDiskOpenDocPush(u8 disk);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

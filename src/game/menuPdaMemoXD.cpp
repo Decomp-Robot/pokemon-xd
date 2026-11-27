@@ -1,4 +1,5 @@
 #include <menuPdaMemoXD.h>
+#include <menuIds.h>
 #include <menuPdaMemoListXD.h>
 #include <menuPdaMemoWaveXD.h>
 #include <menuPda.h>
@@ -21,12 +22,6 @@
 #include <math.h>
 
 extern u8 memoUsePokemonAisyou;
-
-enum {
-    MENU_ID_PDA_MEMO = 124,
-    MENU_ID_PDA_MEMO_MODEL = 125,
-    MENU_ID_PDA_MEMO_STATUS = 126,
-};
 
 enum {
     MEMO_PAGE_LIST = 0,

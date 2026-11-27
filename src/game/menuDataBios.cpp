@@ -1,4 +1,5 @@
 #include <menu.h>
+#include <menuIds.h>
 #include <menuDataBios.h>
 #include <menuItemBios.h>
 #include <menuSeBios.h>
@@ -19,13 +20,6 @@ enum {
     MENU_ITEM_TABLE_PDA = 4,
     MENU_ITEM_TABLE_BT = 5,
     MENU_ITEM_TABLE_XD = 6,
-};
-
-// Records menuDataBiosGetPtr falls back to when a caller names a menu that is
-// out of range: the empty menu, and the debug menu.
-enum {
-    MENU_ID_EMPTY_MENU = 0,
-    MENU_ID_DEBUG_MENU = 1,
 };
 
 extern "C" {

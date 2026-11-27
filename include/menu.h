@@ -33,6 +33,8 @@ void menuIntUnderTakerMenuClose(void);
 u8 menuSetEnablePort(u8 portMask);
 u8 menuGetEnablePort(void);
 s32 menuGetLastError(void);
+s32 menuGetSelectItemNum(s32 menuID);
+s32 menuGetCursorFromItemID(s32 menuID, s32 itemID);
 s32 menuGetCursor(s32 menuID);
 s32 menuSetCursor(s32 menuID, s32 cursor);
 s32 menuGetCursorItemID(s32 menuID);
@@ -70,6 +72,11 @@ s32 menuOpenCustom(s32 menuID, s32 parentID, void *result, u32 flags,
                    bool wait,
                    s32 argCount, ...);
 s32 menuClose(s32 menuID);
+
+enum MenuCloseMode {
+    MENU_CLOSE_IMMEDIATE = 2
+};
+
 s32 menuCloseCustom(s32 menuID, s32 arg, bool wait);
 s32 menuCloseSync(s32 menuID, bool wait);
 u16 windowGetKeyRepeat(void);

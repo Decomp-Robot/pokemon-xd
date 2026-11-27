@@ -1,4 +1,5 @@
 #include <mail.h>
+#include <menuIds.h>
 #include <menuPdaMailXD.h>
 #include <menuPdaMailListSort.h>
 #include <menu.h>
@@ -20,8 +21,6 @@ long _mailHonbun(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 
 // Menus, rows and sounds of the mail reader window.
 enum {
-    MENU_ID_PDA_MAIL_CONTENTS = 111, // reader window opened over the mail list.
-    MENU_ID_PDA_MAIL_LIST = 119,     // mail list the reader is opened on top of.
     MAIL_PDA_SUBRES = 2,
     MAIL_CONTENTS_VISIBLE_COUNT = 5, // mail rows the reader shows at once.
     MAIL_SOUND_CURSOR = 1104,

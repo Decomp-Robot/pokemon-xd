@@ -7,12 +7,6 @@
 #include <menuModel.h>
 #include <darkPokemon.h>
 
-enum {
-    MENU_ID_PDA_DPMON_LIST = 116,
-    MENU_ID_PDA_DPMON = 117,
-    MENU_ID_PDA_DPMON_LIST_FRAME = 119,
-};
-
 extern "C" {
 CURSOR *menuPdaDPMon(CURSOR *cursor);
 void menuPdaDPMonList(void);

@@ -3,14 +3,8 @@
 
 #include "GSgfx.h"
 #include "types.h"
+#include <menuIds.h>
 #include "winSprite.h"
-
-enum {
-    MENU_ID_PDA_TOP = 0x6B,
-    MENU_ID_PDA_FRAME = 0x6C,
-    MENU_ID_PDA_BACKDROP = 0xA8,
-    MENU_ID_PDA_SCRIPT_INPUT = 0x107,
-};
 
 // Ids of the PDA top menu entries. The rows currently shown are listed in
 // _cursor_index; the entries open:

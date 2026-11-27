@@ -2,6 +2,7 @@
 #define MENU_POKEMON_H
 
 #include <types.h>
+#include <menuIds.h>
 #include <fightTrainer.h>
 #include <fightPokemon.h>
 #include <menuPokemonStatus.h>
@@ -93,24 +94,6 @@ enum MenuPokemonFadeState {
     PARTY_FADE_NORMAL = 0,
     PARTY_FADE_FIGHT = 1,
     PARTY_FADE_OFFSCREEN = 2,
-};
-
-// Menu ids the party menu opens (menu data table entries).
-enum MenuPokemonMenuId {
-    MENU_ID_WAZA_LIGHT     = 18, // move-panel light window closed with the menu
-    MENU_ID_PARTY_RESERVE_FOURTH = 70,
-    MENU_ID_PARTY_RESERVE_THIRD = 71,
-    MENU_ID_PARTY_RESERVE_SECOND = 72,
-    MENU_ID_PARTY_RESERVE_FIRST = 73,
-    MENU_ID_PARTY_SECOND_PRIMARY = 74,
-    MENU_ID_PARTY_RESERVE_FIFTH = 77,
-    MENU_ID_PARTY_PRIMARY  = 75, // first primary party panel
-    MENU_ID_PARTY_LIST     = 76, // the party list window
-    MENU_ID_PARTY_FIELD_A  = 79, // party field menu, first hero variant
-    MENU_ID_PARTY_FIGHT_A  = 80, // party fight menu, first variant
-    MENU_ID_PARTY_FIGHT_B  = 81, // party fight menu, second variant
-    MENU_ID_PARTY_FIELD_B  = 90, // party field menu, second hero variant
-    MENU_ID_PARTY_HELD_ITEM      = 93, // held-item commands
 };
 
 
@@ -250,7 +233,6 @@ void pokemonToMenuPokemonStatusSubBar(Pokemon *pokemon, MENU_POKEMON_STATUS *sta
 void menuPokemonInitWork(void);
 s32 menuPokemonOpenItemGive(u8 bagPocket, u8 bagSlot, u16 itemId, FIGHT_TRAINER *trainer);
 s32 menuPokemonOpenItemUse(u8 mode, bool listEnabled, u16 itemId, FIGHT_TRAINER *trainer);
-u8 menuPokemonCheckPokemonChange(FightOutPokemon *outgoingPokemon, FIGHT_TRAINER *trainer, s32 index);
 s32 menuPokemonOpenFight(u8 flag, u8 battleSelection, FIGHT_TRAINER *trainer, FightOutPokemon *outgoingPokemon);
 s32 menuPokemonOpen(u8 mode, u16 itemId, FIGHT_TRAINER *trainer);
 void menuPokemonClose(void);
