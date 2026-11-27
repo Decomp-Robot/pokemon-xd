@@ -3,6 +3,7 @@
 #include <GSinput.h>
 #include <GSthread.h>
 #include <winSprite.h>
+#include <menuSpriteBios.h>
 #include <window.h>
 #include <GSgfx.h>
 #include <menu.h>
@@ -38,6 +39,67 @@ enum MenuSubColosseumItem {
     MENU_SUB_COLOSSEUM_ITEM_SECOND = 53,
     MENU_SUB_COLOSSEUM_ITEM_THIRD = 54
 };
+
+enum menuSubCursorBackColor {
+    MENU_SUB_CURSOR_BACK_COLOR_REGULAR,
+    MENU_SUB_CURSOR_BACK_COLOR_EXCHANGE
+};
+
+void _menuSubDrawCursorBackSub(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
+                               u32 color, u8 alpha, u8 style, menuSubCursorBackColor backColor,
+                               bool animeOnOff)
+{
+    _animAlpha();
+    u8 anim;
+    if (animeOnOff) {
+        anim = _animAlpha();
+    } else {
+        anim = MENU_ITEM_ALPHA_OPAQUE;
+    }
+    u8 drawAlpha = (u16)(anim * alpha) / MENU_ITEM_ALPHA_OPAQUE;
+    if (GSgfxLayerFindByID(layer) == 0) {
+        return;
+    }
+
+    MenuSpriteData *capData;
+    MenuSpriteData *middleData;
+    if (style == MENU_SUB_CURSOR_BACK_STYLE_PLAIN) {
+        GSivec2 cursor;
+        cursor.x = x;
+        cursor.y = y;
+        capData = menuSpriteBiosGetPtr(TOOL_SPRITE_CURSOR_BACK_CAP);
+        middleData = menuSpriteBiosGetPtr(TOOL_SPRITE_CURSOR_BACK_MIDDLE);
+        MenuSpriteValue *cap = menuSpriteBiosGetValPtr(capData);
+        MenuSpriteValue *middle = menuSpriteBiosGetValPtr(middleData);
+        s32 middleWidth = width - cap->mWidth - cap->mWidth;
+        windowDrawSprite2(cursor.x, cursor.y, cap->mWidth, cap->mHeight, color | drawAlpha, 0, TOOL_SPRITE_CURSOR_BACK_CAP, 0, layer);
+        cursor.x += cap->mWidth;
+        windowDrawSprite2(cursor.x, cursor.y, middleWidth, middle->mHeight, color | drawAlpha, 0, TOOL_SPRITE_CURSOR_BACK_MIDDLE, 0, layer);
+        cursor.x += middleWidth;
+        windowDrawSprite2(cursor.x, cursor.y, cap->mWidth, cap->mHeight, color | drawAlpha, 0, TOOL_SPRITE_CURSOR_BACK_CAP, WINDOW_DRAW_FLIP_X, layer);
+    } else {
+        s16 xpos = x;
+        s16 ypos = y;
+        u16 spriteIds[2];
+        if (backColor == MENU_SUB_CURSOR_BACK_COLOR_REGULAR) {
+            spriteIds[0] = TOOL_SPRITE_CURSOR_BACK_VARIANT_CAP;
+            spriteIds[1] = TOOL_SPRITE_CURSOR_BACK_VARIANT_MIDDLE;
+        } else {
+            spriteIds[0] = TOOL_SPRITE_CURSOR_BACK_EXCHANGE_CAP;
+            spriteIds[1] = TOOL_SPRITE_CURSOR_BACK_EXCHANGE_MIDDLE;
+        }
+        capData = menuSpriteBiosGetPtr(spriteIds[0]);
+        middleData = menuSpriteBiosGetPtr(spriteIds[1]);
+        MenuSpriteValue *cap = menuSpriteBiosGetValPtr(capData);
+        MenuSpriteValue *middle = menuSpriteBiosGetValPtr(middleData);
+        s32 middleWidth = width - cap->mWidth - cap->mWidth;
+        windowDrawSprite2(xpos, ypos, cap->mWidth, cap->mHeight, color | drawAlpha, 0, spriteIds[0], 0, layer);
+        xpos += cap->mWidth;
+        windowDrawSprite2(xpos, ypos, middleWidth, middle->mHeight, color | drawAlpha, 0, spriteIds[1], 0, layer);
+        xpos += middleWidth;
+        windowDrawSprite2(xpos, ypos, cap->mWidth, cap->mHeight, color | drawAlpha, 0, spriteIds[0], WINDOW_DRAW_FLIP_X, layer);
+    }
+}
 
 u8 menuSubAnimAlpha(void)
 {

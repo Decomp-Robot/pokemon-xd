@@ -32,11 +32,6 @@ void _winCalcWindowSize(s32 menuID, const MENU_ITEM_dd_ *item, s16 *width, s16 *
 s32 _winInsertWork(tagWINDOW_WORK *window, s8 priority);
 tagWINDOW_WORK *_winGetNewWork(void);
 
-enum WindowDrawFlags {
-    WINDOW_DRAW_FLIP_X = 0x1,
-    WINDOW_DRAW_FLIP_Y = 0x2
-};
-
 const s8 SPRITE_FLAGS_INITIAL = SPRITE_FLAG_INUSE | SPRITE_FLAG_DISP | SPRITE_FLAG_INITIALIZED;
 
 u8 _windowCheckParent(tagWINDOW_WORK *window, tagWINDOW_WORK *parent);

@@ -39,6 +39,10 @@ s32 windowGetParam(tagWINDOW_WORK *window, s32 index);
 CURSOR windowGetCursor(s32 windowID);
 u16 windowGetKeyTrg(void);
 u16 windowGetKeyRepeat(void);
+enum WindowDrawFlags {
+    WINDOW_DRAW_FLIP_X = 0x1,
+    WINDOW_DRAW_FLIP_Y = 0x2
+};
 void windowDrawSprite(s16 x, s16 y, tagWINDOW_WORK *window, u16 textureId,
                          s32 drawMode, GSgfxLayerID layer);
 void windowDrawSprite2(s16 x, s16 y, s16 width, s16 height, u32 color,
