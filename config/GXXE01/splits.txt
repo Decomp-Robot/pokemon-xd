@@ -3352,6 +3352,10 @@ game/app/script/objPeople.cpp:
 	.sbss       start:0x804EB6C8 end:0x804EB6D0
 	.sdata2     start:0x804EE718 end:0x804EE730
 
+game/app/script/script.cpp:
+	.text       start:0x801C8BF0 end:0x801C9018
+	.sdata2     start:0x804EE740 end:0x804EE744
+
 game/app/script/scriptModel.cpp:
 	.text       start:0x801C9018 end:0x801C986C
 	.sbss       start:0x804EB6D8 end:0x804EB6E0

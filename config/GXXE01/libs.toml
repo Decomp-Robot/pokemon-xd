@@ -3747,6 +3747,40 @@ cflags = [
 ]
 
 [[lib.object]]
+name = "game/app/script/script.cpp"
+completed = true
+cflags = [
+    "-i src/ext/dolphin_sdk/include",
+    "-i src/ext/dolphin_sdk/include/libc",
+
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,s",
+    "-inline noauto",
+    "-pragma \"cats off\"",
+    "-pragma \"warn_notinlined off\"",
+    "-maxerrors 1",
+    "-W error",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse,readonly",
+    "-multibyte",
+    "-i include",
+    "-i build/GXXE01/include",
+    "-DBUILD_VERSION=0",
+    "-DVERSION_GXXE01",
+    "-DNDEBUG=1",
+    "-opt nopeephole",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+]
+
+[[lib.object]]
 name = "game/app/script/scriptModel.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-O4,s", "-inline noauto", "-opt nopeephole"]

@@ -1,4 +1,5 @@
 #include <types.h>
+#include <etctools.h>
 #include <pokemonDataBios.h>
 #include <GSsndPlayback.h>
 
