@@ -1024,4 +1024,105 @@ u16 pokemonBiosGetMaxHp(Pokemon *pokemon)
     if (pokemon == 0) return 0;
     return pokemon->getMaxHp();
 }
+
+PokemonWaza _pokemon_waza_darkwaza[] = {
+    { WAZA_DATA_ID_DARK_BLITZ, 5, 0 },
+    { WAZA_DATA_ID_DARK_RUSH, 5, 0 },
+    { WAZA_DATA_ID_DARK_BREAK, 5, 0 },
+    { WAZA_DATA_ID_DARK_END, 5, 0 },
+    { WAZA_DATA_ID_DARK_WAVE, 5, 0 },
+    { WAZA_DATA_ID_DARK_RAVE, 5, 0 },
+    { WAZA_DATA_ID_DARK_STORM, 5, 0 },
+    { WAZA_DATA_ID_DARK_FIRE, 5, 0 },
+    { WAZA_DATA_ID_DARK_BOLT, 5, 0 },
+    { WAZA_DATA_ID_DARK_CHILL, 5, 0 },
+    { WAZA_DATA_ID_DARK_BLAST, 5, 0 },
+    { WAZA_DATA_ID_DARK_SKY, 5, 0 },
+    { WAZA_DATA_ID_DARK_HOLD, 5, 0 },
+    { WAZA_DATA_ID_DARK_MIST, 5, 0 },
+    { WAZA_DATA_ID_DARK_PANIC, 5, 0 },
+    { WAZA_DATA_ID_DARK_DOWN, 5, 0 },
+    { WAZA_DATA_ID_DARK_SHED, 5, 0 },
+    { WAZA_DATA_ID_DARK_HALF, 5, 0 },
+};
+
+u16 pokemonBiosGetHp(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mHp;
+}
+
+u16 pokemonBiosGetItemDataId(Pokemon *pokemon)
+{
+    if (pokemon == 0) return 0;
+    return pokemon->mItemDataId;
+}
+
+u8 pokemonBiosGetPokemonWazaPpCount(Pokemon *pokemon, u16 slot)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, true);
+    if (waza == 0) return 0;
+    return waza->ppCount;
+}
+
+u8 pokemonBiosGetPokemonWazaPp(Pokemon *pokemon, u16 slot)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, true);
+    if (waza == 0) return 0;
+    return waza->pp;
+}
+
+u16 pokemonBiosGetPokemonWazaDataId(Pokemon *pokemon, u16 slot)
+{
+    PokemonWaza *waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, true);
+    if (waza == 0) return 0;
+    return waza->dataId;
+}
+
+PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, bool)
+{
+    static PokemonWaza emptyWaza[] = {
+        { WAZA_SHADOW_SPECIAL, 5, 0 },
+        { WAZA_DATA_ID_NONE, 0, 0 },
+    };
+    u8 usable = 0;
+    u8 slotUsable[POKEMON_WAZA_COUNT] = { 0 };
+    u8 i;
+    WAZA_DATA_ID waza;
+    u8 level;
+
+    if (pokemon == 0) return 0;
+
+    level = pokemonGetDarkPokemonLevel(pokemon);
+    if (level >= POKEMON_DARK_LEVEL_FIFTH) {
+        usable = 3;
+    } else if (level >= POKEMON_DARK_LEVEL_FOURTH) {
+        usable = 2;
+    } else if (level >= POKEMON_DARK_LEVEL_SECOND) {
+        usable = 1;
+    }
+
+    for (i = 0; i < POKEMON_WAZA_COUNT; i++) {
+        slotUsable[i] = 0;
+        waza = static_cast<WAZA_DATA_ID>(darkPokemonBiosGetTemotiDarkWaza(pokemonBiosGetDarkpokemonDataId(pokemon), i));
+        if (waza < WAZA_DATA_ID_NORMAL_END && usable != 0) {
+            slotUsable[i] = 1;
+            usable--;
+        }
+    }
+
+    if (slot >= POKEMON_WAZA_COUNT) {
+        slot -= POKEMON_WAZA_COUNT;
+        if (slot >= POKEMON_WAZA_COUNT) return 0;
+    } else if (pokemonBiosGetDarkFlag(pokemon) == 1) {
+        waza = static_cast<WAZA_DATA_ID>(darkPokemonBiosGetTemotiDarkWaza(pokemonBiosGetDarkpokemonDataId(pokemon), slot));
+        if (waza > WAZA_DATA_ID_NORMAL_END && waza < WAZA_SHADOW_SPECIAL) {
+            return &_pokemon_waza_darkwaza[waza - WAZA_SHADOW_FIRST];
+        }
+        if (slotUsable[slot] == 0) {
+            return emptyWaza;
+        }
+    }
+    return &pokemon->mWaza[slot];
+}
 }

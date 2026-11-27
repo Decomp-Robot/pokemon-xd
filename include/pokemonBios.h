@@ -121,9 +121,9 @@ u32 pokemonBiosGetExp(Pokemon *pokemon);
 u16 pokemonBiosGetPara1Amari(Pokemon *pokemon);
 u8 pokemonBiosGetPokemonWazaPpCount(Pokemon *pokemon, u16 slot);
 #ifdef __cplusplus
-PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, bool flag);
+PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, bool);
 #else
-PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, u8 flag);
+PokemonWaza *pokemonBiosGetPokemonWazaPtr(Pokemon *pokemon, u16 slot, u8);
 #endif
 void pokemonWazaBiosCopy(PokemonWaza *destination, PokemonWaza *source);
 u16 pokemonBiosGetCatchFloorId(Pokemon *pokemon);
