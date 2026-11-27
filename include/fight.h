@@ -2,6 +2,7 @@
 #define FIGHT_H
 
 #include <types.h>
+#include <fightAction.h>
 #include <fightResource.h>
 #include <GSthread.h>
 
@@ -16,6 +17,10 @@ extern "C" {
 
 void fightSoundOpenPlayInit(void);
 extern s8 fightColosseumTrainerIndex;
+extern u8 fightResultReadyFlag;
+extern u8 fightMenuCancelFlag;
+extern u8 fightNekoniKobanFlag;
+u8 fightActionFlowSyuuryouPost(FIGHT_ACTION *action);
 u8 fightIsFight(void);
 void fightSetFightResultId(u16 result);
 u16 fightGetFightResultId(void);
@@ -39,6 +44,7 @@ FloorModuleInterface *fightGetFloorModule(void);
 
 u8 fightMainAllCamera(u8 simpleCamera, u8 stopCamera);
 void fightMainWaitFrame(s32 frameCount);
+void fightMainWaitFrameEffect(u32 frames);
 
 #ifdef __cplusplus
 }

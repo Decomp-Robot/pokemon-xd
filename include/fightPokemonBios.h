@@ -14,6 +14,7 @@ Pokemon *fightPokemonBiosGetMotoPokemonPtr(FightPokemon *pokemon);
 void fightOutPokemonBiosSetFightActionFlag(FightOutPokemon *pokemon, u8 flag);
 u16 fightOutPokemonBiosGetZokuseiDataId(FightOutPokemon *pokemon, u8 index);
 u8 fightPokemonBiosGetHokakuFlag(FightPokemon *pokemon);
+u8 fightPokemonBiosGetLevelUpFlag(FightPokemon *pokemon);
 
 void fightOutPokemonBiosCopy(FightOutPokemon *dst, const FightOutPokemon *src);
 

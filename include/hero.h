@@ -5,6 +5,7 @@
 #include <item.h>
 
 enum { HERO_PTR_FLAG = 0x30D };
+enum { HERO_PARTY_POKEMON_COUNT = 6 };
 
 enum { HERO_STYLE_NORMAL = 0,
 HERO_STYLE_VISOR = 1,
@@ -245,6 +246,7 @@ void heroAddPokedoru(Hero* hero, u32 amount);
 u32 heroGetPokeomCount(Hero* hero);
 void heroDecPokedoru(Hero *hero, u32 amount);
 u32 heroGetStatus(Hero* hero, u16 statusID, u16 slot);
+void heroCheckSetMonohiroiAllTemotiPokemon(Hero *hero);
 u8 heroAddPokemon(Hero *hero, const Pokemon *pokemon);
 void heroSetStatus(Hero* hero, u16 statusID, u32 value);
 u16* heroBiosGetNamePtr(Hero* hero);

@@ -126,6 +126,7 @@ FightPokemon *fightTrainerCheckTemotiPokemonFightEntry(FIGHT_TRAINER *trainer,
                                                        Pokemon *pokemon);
 u8 fightTrainerCheckValid(FIGHT_TRAINER *trainer);
 u8 fightTrainerCheckDoFight(FIGHT_TRAINER *trainer);
+u8 fightTrainerCheckCanGetExp(FIGHT_TRAINER *trainer);
 s32 fightTrainerGetHikaeFightPokemonNum(
     FIGHT_TRAINER *trainer, u16 pokemonNum, u16 fightoutPokemonNum);
 void fightTrainerInitAry(FIGHT_TRAINER *trainerAry, u16 trainerNum);
