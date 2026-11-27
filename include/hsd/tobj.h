@@ -7,7 +7,9 @@
 struct _HSD_TObj {
     u8 _00[8];
     _HSD_TObj *mNext;
-    u8 _0C[88];
+    u8 _0C[68];
+    f32 mBlending;
+    u8 _54[16];
     _HSD_AObj *mAObj;
 };
 

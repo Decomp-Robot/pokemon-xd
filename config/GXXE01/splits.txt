@@ -2127,6 +2127,9 @@ game/GSlight.cpp:
 	.sbss       start:0x804EAEF0 end:0x804EAF00
 	.sdata2     start:0x804ED358 end:0x804ED388
 
+game/GSAPI/GSmaterial/GSmaterial.cpp:
+	.text       start:0x800EEEB4 end:0x800EEF28
+
 game/GSmtx.cpp:
 	.text       start:0x800EF95C end:0x800EF9F8
 	.ctors      start:0x802E9FB0 end:0x802E9FB4
