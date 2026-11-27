@@ -48,8 +48,31 @@ struct FloorModuleInterface {
 
 class FloorModuleEntry {
 public:
+    FloorModuleEntry* mPrev;
+    FloorModuleEntry* mNext;
+    unsigned long mHandle;
+    FloorState mScriptState;
+    FloorModuleType mModuleType;
+    unsigned long mGroupID;
+    unsigned char mPriority;
+    unsigned char mBlocked;
+    unsigned char mExecuted;
+    unsigned char mReserved;
+    FloorModuleInterface mInterface;
+
     FloorModuleEntry* getNext() const;
     FloorModuleInterface* getModuleInterface();
+    unsigned long getGroupID() const;
+    unsigned long getHandle() const;
+    void setHandle(unsigned long handle);
+    void init();
+    void kill();
+    void unblock();
+    void block();
+    void terminate();
+    void setScriptModule(unsigned char priority, unsigned long groupID,
+        unsigned long preID, unsigned long updateID, unsigned long postID);
+    void setModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface);
 };
 
 extern "C" {
@@ -58,21 +81,35 @@ void FloorModuleInterface_clear(FloorModuleInterface* interface);
 
 class FloorModuleList {
 public:
+    void killModuleGroup(unsigned long groupID);
+    void unblockModuleGroup(unsigned long groupID);
+    void blockModuleGroup(unsigned long groupID);
+    void unregisterModuleGroup(unsigned long groupID);
+    void killModule(unsigned long moduleHandle);
+    void unblockModule(unsigned long moduleHandle);
+    void blockModule(unsigned long moduleHandle);
+    void unregisterModule(unsigned long moduleHandle);
     unsigned long registerScriptModule(unsigned char priority, unsigned long groupID,
         unsigned long preID, unsigned long updateID, unsigned long postID);
     unsigned long registerModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface);
-    void unblockModule(unsigned long moduleHandle);
-    void blockModule(unsigned long moduleHandle);
 
 private:
-    unsigned long unknown[3];
+    FloorModuleEntry* mEntries;
+    unsigned long mEntryCount;
+    unsigned long mNextHandle;
     FloorModuleEntry* mHead;
     unsigned long mPushStateSize;
-    unsigned long unknownTail;
+
+    FloorModuleEntry* findHandle(unsigned long moduleHandle);
+    FloorModuleEntry* findFree();
+    void insertFuncIntoList(FloorModuleEntry* entry);
+    void removeFuncFromList(FloorModuleEntry* entry);
+    unsigned long getNewHandle();
 
 public:
     void dumpModule();
     void* makePushState(FloorStateMode mode);
+    virtual ~FloorModuleList();
 };
 
 #endif

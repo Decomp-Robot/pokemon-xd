@@ -1,4 +1,6 @@
 #include <app/floor/floorModule.h>
+#include <floor.h>
+#include <GSscript.h>
 #include <GSmem.h>
 
 struct FloorPushModuleHeader {
@@ -63,4 +65,125 @@ void* FloorModuleList::makePushState(FloorStateMode mode)
         cursor = data + alignedSize;
     }
     return state;
+}
+
+void FloorModuleList::killModuleGroup(unsigned long groupID)
+{
+    FloorModuleEntry* entry;
+
+    for (entry = mHead; entry; entry = entry->getNext()) {
+        if (entry->getGroupID() == groupID) {
+            killModule(entry->getHandle());
+        }
+    }
+    floorGetCommonScript()->deleteThreadGroup(groupID);
+    floorGetCurentScript()->deleteThreadGroup(groupID);
+}
+
+void FloorModuleList::unblockModuleGroup(unsigned long groupID)
+{
+    FloorModuleEntry* entry;
+
+    for (entry = mHead; entry; entry = entry->getNext()) {
+        if (entry->getGroupID() == groupID) {
+            unblockModule(entry->getHandle());
+        }
+    }
+    floorGetCommonScript()->unblockThreadGroup(groupID);
+    floorGetCurentScript()->unblockThreadGroup(groupID);
+}
+
+void FloorModuleList::blockModuleGroup(unsigned long groupID)
+{
+    FloorModuleEntry* entry;
+
+    for (entry = mHead; entry; entry = entry->getNext()) {
+        if (entry->getGroupID() == groupID) {
+            blockModule(entry->getHandle());
+        }
+    }
+    floorGetCommonScript()->blockThreadGroup(groupID);
+    floorGetCurentScript()->blockThreadGroup(groupID);
+}
+
+void FloorModuleList::unregisterModuleGroup(unsigned long groupID)
+{
+    FloorModuleEntry* entry;
+
+    for (entry = mEntries; entry != mEntries + mEntryCount; entry++) {
+        if (entry->getGroupID() == groupID) {
+            unregisterModule(entry->getHandle());
+        }
+    }
+}
+
+void FloorModuleList::killModule(unsigned long moduleHandle)
+{
+    FloorModuleEntry* entry = findHandle(moduleHandle);
+
+    if (entry) {
+        entry->kill();
+    }
+}
+
+void FloorModuleList::unblockModule(unsigned long moduleHandle)
+{
+    FloorModuleEntry* entry = findHandle(moduleHandle);
+
+    if (entry) {
+        entry->unblock();
+    }
+}
+
+void FloorModuleList::blockModule(unsigned long moduleHandle)
+{
+    FloorModuleEntry* entry = findHandle(moduleHandle);
+
+    if (entry) {
+        entry->block();
+    }
+}
+
+void FloorModuleList::unregisterModule(unsigned long moduleHandle)
+{
+    FloorModuleEntry* entry = findHandle(moduleHandle);
+
+    if (entry) {
+        entry->terminate();
+        removeFuncFromList(entry);
+        entry->init();
+    }
+}
+
+unsigned long FloorModuleList::registerScriptModule(unsigned char priority, unsigned long groupID,
+    unsigned long preID, unsigned long updateID, unsigned long postID)
+{
+    FloorModuleEntry* entry = findFree();
+
+    if (!entry) {
+        return 0;
+    }
+    entry->init();
+    entry->setScriptModule(priority, groupID, preID, updateID, postID);
+    insertFuncIntoList(entry);
+    entry->setHandle(getNewHandle());
+    return entry->getHandle();
+}
+
+unsigned long FloorModuleList::registerModule(unsigned char priority, unsigned long groupID, FloorModuleInterface* interface)
+{
+    FloorModuleEntry* entry;
+
+    if (!interface) {
+        return 0;
+    }
+    entry = findFree();
+    if (!entry) {
+        return 0;
+    }
+    entry->init();
+    entry->setModule(priority, groupID, interface);
+    insertFuncIntoList(entry);
+    entry->setHandle(getNewHandle());
+    return entry->getHandle();
 }

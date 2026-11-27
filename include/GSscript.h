@@ -208,6 +208,9 @@ public:
     bool isRunningThread(long threadHandle);
     void blockThread(long threadHandle);
     void unblockThread(long threadHandle);
+    void blockThreadGroup(unsigned long groupID);
+    void unblockThreadGroup(unsigned long groupID);
+    void deleteThreadGroup(unsigned long groupID);
     void setRpVec(const GSvec*);
     bool runParamsWait(int, tigaVariant*, int, tigaVariant*);
     void getPresetVar(tigaVariant* variant, int variable, int index);

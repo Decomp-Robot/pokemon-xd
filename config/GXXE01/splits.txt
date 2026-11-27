@@ -2414,7 +2414,7 @@ game/app/floor/floorManager.cpp:
 	.sbss       start:0x804EB150 end:0x804EB154
 
 game/app/floor/floorModule.cpp:
-	.text       start:0x80128108 end:0x8012829C
+	.text       start:0x80128108 end:0x801286F0
 
 game/app/floor/floorStack.cpp:
 	.text       start:0x801296C0 end:0x80129E00
