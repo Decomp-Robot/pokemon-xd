@@ -45,6 +45,11 @@ enum MenuCBEntryOrder {
     ENTRY_ORDER_UNUSED = 15
 };
 
+enum MenuCBConnectionMode {
+    MENU_CB_CONNECTION_LINK_BATTLE,
+    MENU_CB_CONNECTION_VS_BATTLE
+};
+
 enum TunaideBattleStyle {
     TUNAIDE_BATTLE_STYLE_SINGLE,
     TUNAIDE_BATTLE_STYLE_DOUBLE

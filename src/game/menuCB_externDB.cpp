@@ -509,6 +509,27 @@ static s16 gbaIconShake[4] = {-1, 0, 1, 0};
 s32 tunaide02_last_kakunin_flag;
 s32 _ruleCursol2;
 
+extern "C" void menuTool_BattleBA04_Button(tagWINDOW_WORK *window)
+{
+    if (pauseIsPause() == 0 && menuCBBattleBANextMenu(window) != 0 &&
+        (windowGetKeyInfo()->mKeyTrg & WINDOW_KEY_CANCEL) != 0) {
+        window->mAccept = 1;
+    }
+}
+
+extern "C" void menuTool_BattleBA04_Ctrl(tagWINDOW_WORK *window)
+{
+    menuCB_DispEffect(window);
+    menuSetStatus(window->mMenuID, MENU_STATUS_NO_DEFAULT_INPUT);
+    if (_CB.connectMode == MENU_CB_CONNECTION_LINK_BATTLE &&
+        menuCBBattleStartGetStatus() == MENU_CB_BATTLE_START_PARTY &&
+        menuCB_GetDisconnectedGBA() != 0) {
+        _CB.mGba.battleDisconnected = 1;
+        window->mAccept = 1;
+        window->mCancel = 1;
+    }
+}
+
 extern "C" void menuCB_BattleBeforeAfter3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
 {
     s32 itemID = sprite->mItemID;

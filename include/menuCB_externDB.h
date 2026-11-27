@@ -11,6 +11,8 @@ void menuCB_BattleBeforeAfter3_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *spri
 void menuCB_BattleBeforeAfter4_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuCB_BattleBeforeAfter5_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
 void menuCB_BattleBeforeAfter6_Disp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite);
+void menuTool_BattleBA04_Button(tagWINDOW_WORK *window);
+void menuTool_BattleBA04_Ctrl(tagWINDOW_WORK *window);
 void menuTool_BattleBA03_Button(tagWINDOW_WORK *window);
 void menuTool_BattleBA03_Ctrl(tagWINDOW_WORK *window);
 void menuTool_BattleBA01_Button(tagWINDOW_WORK *window);
