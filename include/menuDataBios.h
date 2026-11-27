@@ -4,6 +4,16 @@
 #include <GSgfxTypes.h>
 struct tagWINDOW_WORK;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+s32 menuBiosGetCursorSize(struct tagWINDOW_WORK *window);
+
+#ifdef __cplusplus
+}
+#endif
+
 // mCursorMode / mButtonMode value that makes the window call the handler
 // stored in the menu's MenuData entry instead of the built-in behaviour.
 enum { MENU_DATA_MODE_CALLBACK = 4 };

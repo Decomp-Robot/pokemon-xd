@@ -562,7 +562,7 @@ game/menuCB_externDB.cpp:
 	.sdata2     start:0x804EC6D0 end:0x804EC6EC
 
 game/menuDataBios.cpp:
-	.text       start:0x8007C8E8 end:0x8007CD64
+	.text       start:0x8007C870 end:0x8007CD64
 
 game/menuPanel.cpp:
 	.text       start:0x8007CD64 end:0x8007E350

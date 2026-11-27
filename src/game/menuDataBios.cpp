@@ -9,6 +9,20 @@
 #include <pokecolo.h>
 #include <dbgMenu.h>
 #include <GSgfxTypes.h>
+#include <winSprite.h>
+
+extern "C" s32 menuBiosGetCursorSize(tagWINDOW_WORK *window) {
+    tagMENU_ITEM_DATA *item = windowGetCursorToItem(window);
+    menuSpriteBiosGetValPtr(menuSpriteBiosGetPtr(item->mCursorSpriteID));
+    s32 size = 0;
+    switch (item->mCursorSpriteID) {
+    case TOOL_SPRITE_VS_START_CURSOR:
+    case TOOL_SPRITE_UNK_190: size = 327; break;
+    case TOOL_SPRITE_UNK_193:
+    case TOOL_SPRITE_LIST_CURSOR: size = 333; break;
+    }
+    return size;
+}
 
 // mItemTable selects which of the item tables linked into the menu system
 // holds the rows of a menu.
