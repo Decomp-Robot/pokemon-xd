@@ -45,14 +45,35 @@ typedef struct {
     unsigned long dvdFileID;     // 0x14 DVD file the sample data is read from
 } GSsndWaveEntry;
 
+enum GSsndStreamBufferState {
+    GSSND_BUFFER_UNUSED,
+    GSSND_BUFFER_READY,
+    GSSND_BUFFER_READING,
+    GSSND_BUFFER_STAGED,
+    GSSND_BUFFER_COPYING
+};
+
+enum GSsndStreamAramState {
+    GSSND_ARAM_EMPTY,
+    GSSND_ARAM_FILLED
+};
+
 /* Stream buffer descriptor. */
 typedef struct {
     unsigned char  unk00[0x2E]; // 0x00: transfer bookkeeping owned by the stream engine
     unsigned char  aramState[2]; // 0x2E: ARAM transfer state, one byte per stream half
     unsigned long halfWriteOffset[2]; // 0x30: bytes filled in each encoded half-buffer
     unsigned long stagingReadOffset;  // 0x38: unconsumed staging-buffer position
-    unsigned long state;       // 0x3C: transfer state the engine switches on
+    enum GSsndStreamBufferState state; // 0x3C: transfer state the engine switches on
 } GSsndStreamBuffer;
+
+typedef struct GSsndStreamHeader {
+    unsigned long reserved00[2];
+    unsigned long sampleRate;
+    unsigned long sampleCount;
+    unsigned long dataSize;
+    unsigned long reserved14[2];
+} GSsndStreamHeader;
 
 /* Per-file stream control block. */
 typedef struct GSsndStream {
@@ -81,7 +102,7 @@ typedef struct GSsndStream {
     unsigned char  driveUnavailable;        // 0x3E disc drive cannot supply stream data
     unsigned char  halfIndex;               // 0x3F which of the descriptor's two aramState
                                  // bytes the engine is working on
-    unsigned char  prefetch[0x1C];          // 0x40: descriptor the pre-callback hands to the file system
+    GSsndStreamHeader prefetch;
     long loopFlag;                // 0x5C
     unsigned long loopStartNibble;         // 0x60
     unsigned long loopEndNibble;           // 0x64

@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include <musyx/musyx.h>
 #include <GSsnd.h>
+#include <GSAPI/GSsnd/sndStream.h>
 
 #ifndef SND_EMITTER_DISTANCEFILTER
 #define SND_EMITTER_DISTANCEFILTER 0x00000080
@@ -67,13 +68,7 @@ void _sndInitListener(void);
 void _sndInitEmitter(void);
 u8 _sndStreamInit(u32 count);
 void _sndReceiveMessage(SND_VOICEID voiceID, s32 message);
-u32 _sndStreamCallback(void* buffer1, u32 len1, void* buffer2, u32 len2, u32 user);
 
-void _sndStreamPrepareGetData(GSsndStream *stream);
-u32 _sndStreamGetData(GSsndStream *stream, GSsndStreamDataCallback callback);
-void _sndStreamGetDataCallback_START(u32 fileNo, u32 arg, GSsndStream *stream);
-void _sndStreamGetDataCallback_ACTIVATE(u32 fileNo, u32 arg, GSsndStream *stream);
-void _sndStreamGetDataCallback_EXEC_UPDATE(u32 fileNo, u32 arg, GSsndStream *stream);
 GSsndStream *_sndGetStream(u32 fileNo);
 u8 _sndCheckEmitter(GSsndEmitter *emitter);
 GSsndEmitter *_sndGetNewEmitter(void);
@@ -95,8 +90,6 @@ GSsndStream *_sndGetNewStream(void);
 void _sndFreeStream(GSsndStream *stream);
 void _sndFreeSndWork(GSsndWork *work);
 void *_sndSetSampleDataUploadCallbackFunction(u32 offset, u32 bytes);
-void _sndStreamCtrl(GSsndStream *stream, u8 mode);
-u32 _sndStreamNibble_HeaderON2OFF(u32 nibbleCount);
 
 #ifdef __cplusplus
 }

@@ -1371,7 +1371,7 @@ void* GSsndStreamPreFunc(u32 fileNo)
     if (stream == 0) {
         return 0;
     }
-    return stream->prefetch;
+    return &stream->prefetch;
 }
 
 void GSsndStreamPostFunc(u32 fileNo, u32 arg)
@@ -1395,12 +1395,12 @@ void GSsndStreamPostFunc(u32 fileNo, u32 arg)
     GSfsysStreamSetLoopFlag(fileNo, arg, stream->loopFlag & 0xFF);
 
     for (i = 0; i < 2; i++) {
-        stream->buffer[i].aramState[0] = 0;
-        stream->buffer[i].aramState[1] = 0;
+        stream->buffer[i].aramState[0] = GSSND_ARAM_EMPTY;
+        stream->buffer[i].aramState[1] = GSSND_ARAM_EMPTY;
         stream->buffer[i].halfWriteOffset[0] = 0;
         stream->buffer[i].halfWriteOffset[1] = 0;
         stream->buffer[i].stagingReadOffset = 0;
-        stream->buffer[i].state = 1;
+        stream->buffer[i].state = GSSND_BUFFER_READY;
     }
     stream->loopReached = 0;
     stream->bufferFlag[0] = 0;

@@ -3546,6 +3546,11 @@ extra_cflags = [
 ]
 
 [[lib.object]]
+name = "game/GSAPI/GSsnd/sndStream.c"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/people/peopleBios.cpp"
 completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]

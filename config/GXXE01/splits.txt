@@ -3185,6 +3185,10 @@ game/GSAPI/GSsnd/GSsnd.cpp:
 	.sbss       start:0x804EB4E8 end:0x804EB4F4
 	.sdata2     start:0x804EDF40 end:0x804EDF60
 
+game/GSAPI/GSsnd/sndStream.c:
+	.text       start:0x80186BC0 end:0x8018711C
+	.sdata2     start:0x804EDF60 end:0x804EDF80
+
 game/GSAPI/GSdvd/GSdvd.c:
 	.text       start:0x801879A4 end:0x8018838C
 	.rodata     start:0x802F3E40 end:0x802F3E88
