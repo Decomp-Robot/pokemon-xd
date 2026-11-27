@@ -318,6 +318,10 @@ completed = true
 extra_cflags = ["-O4,s", "-inline noauto"]
 
 [[lib.object]]
+name = "game/app/fight/fightActionData_waza.cpp"
+completed = true
+
+[[lib.object]]
 name = "game/app/fight/fightActionData_kaisi.cpp"
 completed = true
 

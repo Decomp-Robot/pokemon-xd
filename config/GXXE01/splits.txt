@@ -3620,6 +3620,9 @@ game/app/fight/fightTargetData.cpp:
 	.data       start:0x804139B8 end:0x80413AA8
 	.sdata      start:0x804E8588 end:0x804E8590
 
+game/app/fight/fightActionData_waza.cpp:
+	.data       start:0x80413B98 end:0x80413BA8
+
 game/app/fight/fightActionData_kaisi.cpp:
 	.data       start:0x80413BB8 end:0x80413C00
 

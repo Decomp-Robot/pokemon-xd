@@ -33,6 +33,7 @@ struct FIGHT_KIND_DATA {
 };
 
 enum FightActionKind {
+    FIGHT_ACTION_KIND_END = 0,
     FIGHT_ACTION_KIND_KAIJOU = 1,
     FIGHT_ACTION_KIND_KAISI_PRE = 2,
     FIGHT_ACTION_KIND_KAISI_NYUUJOU_TRAINER = 3,
@@ -62,6 +63,7 @@ extern "C" {
 extern FIGHT_ACTION_DATA_dd_ fight_action_data_kaisi[];
 extern FIGHT_ACTION_DATA_dd_ fight_action_data_turn[];
 extern FIGHT_ACTION_DATA_dd_ fight_action_data_syuuryou[];
+extern FIGHT_ACTION_DATA_dd_ fight_action_data_waza[2];
 
 u16 fightActionGetKindDataId(FIGHT_ACTION *action);
 s8 fightActionGetPri(FIGHT_ACTION *action);

@@ -103,7 +103,6 @@ enum { POKEMON_RELIVE_FILTER_CALL = 2 };
 extern u8 fightSeqWazaEffectFlag;
 extern u8 fightSeqWazaHitFlag;
 extern u8 fightSeqAttackJoutaiStep;
-extern FIGHT_ACTION_DATA_dd_ fight_action_data_waza[2];
 extern u8 fightSeqEndFlag;
 extern FIGHT_ACTION_DATA_dd_ fight_action_data_turn[8];
 extern u8 fightSeqTurnWazaSeq[];
