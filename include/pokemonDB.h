@@ -649,7 +649,20 @@ u16 pokemon_GetPokemonWazaDataId(Pokemon *pokemon, u16 slot);
 u16 pokemon_GetFightTrainerPokemonDataId(Pokemon *pokemon);
 u8 pokemon_GetComboPartner(Pokemon *pokemon, u8 index, u8 mode);
 u8 pokemon_GetPokemonWazaPp(Pokemon *pokemon, u16 slot);
+void pokemon_SetPokemonWazaDataId(Pokemon *pokemon, u16 slot, u16 dataId);
+void pokemon_SetPokemonWazaPpCount(Pokemon *pokemon, u16 slot, u8 count);
 void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp);
+
+void pokemon_SetConditionAmari(Pokemon *pokemon, u32 value);
+void pokemon_SetLevel(Pokemon *pokemon, u8 level);
+void pokemon_SetExp(Pokemon *pokemon, u32 exp);
+void pokemon_SetNicknamePtr(Pokemon *pokemon, const u16 *name);
+void pokemon_SetCatchTrainerNamePtr(Pokemon *pokemon, const u16 *name);
+void pokemon_SetCatchTrainerSex(Pokemon *pokemon, u8 sex);
+void pokemon_SetCatchBallId(Pokemon *pokemon, u8 ballId);
+void pokemon_SetCatchLevel(Pokemon *pokemon, u8 level);
+void pokemon_SetCatchFloorId(Pokemon *pokemon, u16 floorId);
+void pokemon_SetPokemonDataId(Pokemon *pokemon, u16 dataId);
 
 u32 pokemon_GetTokuseiFlag(void *pokemonData);
 u16 pokemonDB_GetBasisPhyAtk(u16 pokemonDataId);
@@ -660,6 +673,9 @@ Pokemon *fightPokemon_GetMotoPokemonPtr(FightPokemon *pokemon);
 Pokemon *fightPokemon_GetPokemonBuffPtr(FightPokemon *pokemon);
 u8 fightPokemon_GetCatchEntryFlag(FightPokemon *pokemon);
 void pokemon_SetItemDataId(Pokemon *pokemon, u16 itemDataId);
+
+void pokemonDB_SetTukamaetaFlag(u16 species, u32 value);
+void pokemonDB_SetMitaFlag(u16 species, u32 value);
 
 #ifdef __cplusplus
 }

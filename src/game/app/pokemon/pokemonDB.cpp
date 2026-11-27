@@ -1,9 +1,15 @@
 #include <types.h>
 #include <Pokemon.h>
+#include <GSflag.h>
+#include <GSmsg.h>
 #include <pokemonBios.h>
 #include <pokemonDB.h>
+#include <waza.h>
 
 static const u16 POKEMON_FRIEND_LEVEL_MAX = 255;
+static const u8 POKEMON_PP_UP_COUNT_MAX = 3;
+static const u8 POKEMON_PP_UP_BASE_PP_CUTOFF = 4;
+static const u8 POKEMON_LEVEL_MAX = 100;
 
 extern "C" {
 
@@ -917,6 +923,195 @@ void pokemon_SetHp(Pokemon *pokemon, u16 hp)
     if (maxHp < pokemon->mHp) {
         pokemon->mHp = maxHp;
     }
+}
+
+void pokemon_SetItemDataId(Pokemon *pokemon, u16 itemDataId)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mItemDataId = itemDataId;
+}
+
+void pokemon_SetPokemonWazaPpCount(Pokemon *pokemon, u16 slot, u8 count)
+{
+    PokemonWaza *waza;
+    WazaData *data;
+
+    if (pokemon == 0) {
+        return;
+    }
+    waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza == 0) {
+        return;
+    }
+    if (count > POKEMON_PP_UP_COUNT_MAX) {
+        count = POKEMON_PP_UP_COUNT_MAX;
+    }
+    if (pokemonWazaCheckValid(pokemon, slot) == 1) {
+        data = wazaDataBiosGetPtr(pokemonBiosGetPokemonWazaDataId(pokemon, slot));
+        if (wazaDataBiosGetPp(data) <= POKEMON_PP_UP_BASE_PP_CUTOFF) {
+            return;
+        }
+    }
+    waza->ppCount = count;
+}
+
+void pokemon_SetPokemonWazaPp(Pokemon *pokemon, u16 slot, u8 pp)
+{
+    PokemonWaza *waza;
+    u8 maxPp;
+
+    if (pokemon == 0) {
+        return;
+    }
+    waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza == 0) {
+        return;
+    }
+    maxPp = pokemonWazaGetMaxPP(pokemon, slot);
+    if (maxPp < pp) {
+        pp = maxPp;
+    }
+    waza->pp = pp;
+}
+
+void pokemon_SetPokemonWazaDataId(Pokemon *pokemon, u16 slot, u16 dataId)
+{
+    PokemonWaza *waza;
+
+    if (pokemon == 0) {
+        return;
+    }
+    waza = pokemonBiosGetPokemonWazaPtr(pokemon, slot, false);
+    if (waza == 0) {
+        return;
+    }
+    waza->dataId = dataId;
+}
+
+void pokemon_SetConditionAmari(Pokemon *pokemon, u32 value)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mConditionAmari = value;
+}
+
+void pokemon_SetLevel(Pokemon *pokemon, u8 level)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    if (level > POKEMON_LEVEL_MAX) {
+        return;
+    }
+    pokemon->mLevel = level;
+}
+
+void pokemon_SetExp(Pokemon *pokemon, u32 exp)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mExp = exp;
+}
+
+void pokemon_SetNicknamePtr(Pokemon *pokemon, const u16 *name)
+{
+    if (pokemon == 0 || name == 0) {
+        return;
+    }
+    GScharLenCpy(pokemon->mNickname, name,
+                 sizeof(pokemon->mNickname) / sizeof(pokemon->mNickname[0]));
+    pokemonBiosSetNicknameOrgPtr(pokemon, name);
+}
+
+void pokemon_SetCatchTrainerNamePtr(Pokemon *pokemon, const u16 *name)
+{
+    if (pokemon == 0 || name == 0) {
+        return;
+    }
+    GScharLenCpy(pokemon->mTrainerName, name,
+                 sizeof(pokemon->mTrainerName) / sizeof(pokemon->mTrainerName[0]));
+}
+
+void pokemon_SetCatchTrainerRnd(Pokemon *pokemon, u32 rnd)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mCatchTrainerRnd = rnd;
+}
+
+void pokemon_SetCatchTrainerSex(Pokemon *pokemon, u8 sex)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mCatchTrainerSex = sex;
+}
+
+void pokemon_SetCatchBallId(Pokemon *pokemon, u8 ballId)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mCatchBallId = ballId;
+}
+
+void pokemon_SetCatchLevel(Pokemon *pokemon, u8 level)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mCatchLevel = level;
+}
+
+void pokemon_SetCatchFloorId(Pokemon *pokemon, u16 floorId)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mCatchFloorId = floorId;
+}
+
+void pokemon_SetRnd(Pokemon *pokemon, u32 rnd)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mPersonality = rnd;
+}
+
+void pokemon_SetPokemonDataId(Pokemon *pokemon, u16 dataId)
+{
+    if (pokemon == 0) {
+        return;
+    }
+    pokemon->mPokemonDataId = dataId;
+}
+
+void pokemonDB_SetTukamaetaFlag(u16 species, u32 value)
+{
+    PokemonData *data;
+
+    data = pokemonDataBiosGetPtr(species);
+    if (data == 0) {
+        return;
+    }
+    GSflagSet(data->mTukamaetaFlagId, value);
+}
+
+void pokemonDB_SetMitaFlag(u16 species, u32 value)
+{
+    PokemonData *data;
+
+    data = pokemonDataBiosGetPtr(species);
+    if (data == 0) {
+        return;
+    }
+    GSflagSet(data->mMitaFlagId, value);
 }
 
 }
