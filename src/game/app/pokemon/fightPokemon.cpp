@@ -297,4 +297,38 @@ FightOutPokemonEnemy *fightOutPokemonCreateFightPokemonEnemyAry(FightOutPokemon 
     return 0;
 }
 
+void fightPokemonGetFriendFormPokemonFriendFilterId(FightPokemon *pokemon, u32 filterID)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+    u16 heldEffectID;
+
+    if (record == 0) {
+        return;
+    }
+    heldEffectID = fightPokemonGetSoubiItemSoubiDataId(pokemon);
+    pokemonGetFriendFormPokemonFriendFilterId(record, heldEffectID, filterID);
+}
+
+void fightPokemonGetEffortFromPokemon(FightPokemon *pokemon, u8 pokerus, u16 speciesID)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+    u16 heldEffectID;
+
+    if (record == 0) {
+        return;
+    }
+    heldEffectID = fightPokemonGetSoubiItemSoubiDataId(pokemon);
+    pokemonGetEffortFromPokemon(record, heldEffectID, pokerus, speciesID);
+}
+
+s32 fightPokemonGetLevelToExp(FightPokemon *pokemon, u8 level)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return 0;
+    }
+    return pokemonGetLevelToExp(record, level);
+}
+
 } // extern "C"

@@ -447,6 +447,7 @@ u16 pokemonGetSoubiItemDataId(Pokemon *pokemon);
 // Held item's equipment effect id.
 u16 pokemonGetSoubiItemSoubiDataId(Pokemon *pokemon);
 void pokemonGetFriendFormPokemonFriendFilterId(Pokemon *pokemon, u16 heldEffectID, u32 filterID);
+void pokemonGetEffortFromPokemon(Pokemon *pokemon, u16 heldEffectID, u8 pokerus, u16 speciesID);
 // Removes and returns the held item when apply is zero; otherwise equips itemID.
 u16 pokemonDoItemSoubi(Pokemon *pokemon, u16 itemID, u8 apply);
 
