@@ -283,7 +283,7 @@ void *wazaDB_GetFightTrainerAiWazaDamageFuncPtr(u16 move)
     return funcData->mFightTrainerAiWazaDamageFunc;
 }
 
-void *wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move)
+FightTrainerAiWazaHitFunc wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move)
 {
     struct WazaData *data;
     struct WazaFuncData *funcData;

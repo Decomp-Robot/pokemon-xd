@@ -4160,6 +4160,12 @@ game/app/fight/fightTrainerAi.cpp:
 	.text       start:0x802C8374 end:0x802C8994
 	.sbss       start:0x804EBDB0 end:0x804EBDB4
 
+game/app/fight/fightTrainerAiCombo.cpp:
+	.text       start:0x802C93D4 end:0x802C9B8C
+	.data       start:0x8041F828 end:0x8041F924
+	.sdata      start:0x804E8740 end:0x804E87B0
+	.sbss2      start:0x804EFD78 end:0x804EFD84
+
 game/app/fight/fightTrainerAiIrekae.cpp:
 	.text       start:0x802CB068 end:0x802CC6E4
 	.rodata     start:0x802FBEC8 end:0x802FBEE0

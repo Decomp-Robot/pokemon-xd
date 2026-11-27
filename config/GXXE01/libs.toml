@@ -9,6 +9,11 @@ progress_category = "game"
 cflags_extra = ["-use_lmw_stmw on"]
 
 [[lib.object]]
+name = "game/app/fight/fightTrainerAiCombo.cpp"
+completed = true
+extra_cflags = ["-O4,s"]
+
+[[lib.object]]
 name = "game/app/fight/fightTrainerAiComboFunc.cpp"
 completed = true
 extra_cflags = ["-O4,s"]

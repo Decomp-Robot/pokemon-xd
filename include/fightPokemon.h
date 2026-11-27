@@ -41,6 +41,26 @@ struct FightPokemon {
     s32 mAiDamage[FIGHT_POKEMON_AI_DAMAGE_MAX][2];     // damage the AI has recorded per attack.
 };
 
+enum FIGHT_AI_FIX_WAZA {
+    FIGHT_AI_FIX_WAZA_CLEAR,
+    FIGHT_AI_FIX_WAZA_SLOT_1,
+    FIGHT_AI_FIX_WAZA_SLOT_2,
+    FIGHT_AI_FIX_WAZA_SLOT_3,
+    FIGHT_AI_FIX_WAZA_SLOT_4,
+    FIGHT_AI_FIX_WAZA_FREE,
+    FIGHT_AI_FIX_WAZA_DONE,
+    FIGHT_AI_FIX_WAZA_REPEAT
+};
+
+enum FIGHT_AI_FIX_DEF {
+    FIGHT_AI_FIX_DEF_CLEAR,
+    FIGHT_AI_FIX_DEF_SELF,
+    FIGHT_AI_FIX_DEF_PARTNER,
+    FIGHT_AI_FIX_DEF_OPPONENT_FIRST,
+    FIGHT_AI_FIX_DEF_OPPONENT_SECOND,
+    FIGHT_AI_FIX_DEF_FREE
+};
+
 Pokemon *fightPokemonGetPokemonPtr(FightPokemon *pokemon);
 void fightPokemonSetBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId, u32 buff);
 u32 fightPokemonGetBuffJoutaiDataId(FightPokemon *pokemon, u16 dataId);
@@ -130,6 +150,11 @@ u16 fightOutPokemon_GetTokuseiDataId(FightOutPokemon *pokemon);
 u8 fightOutPokemon_GetAbicntAverage(FightOutPokemon *pokemon);
 void fightOutPokemon_SetAbicntAverage(FightOutPokemon *pokemon, u8 abicnt);
 u8 fightOutPokemonIsGcHeroFightOutPokemon(FightOutPokemon *pokemon);
+u8 fightOutPokemonIsHinsi(FightOutPokemon *pokemon);
+u8 fightOutPokemon_GetFixAiWaza(FightOutPokemon *pokemon);
+u8 fightOutPokemon_GetFixAiDef(FightOutPokemon *pokemon);
+void fightOutPokemon_SetFixAiWaza(FightOutPokemon *pokemon, u8 fixAiWaza);
+void fightOutPokemon_SetFixAiDef(FightOutPokemon *pokemon, u8 fixAiDef);
 u8 fightOutPokemonCheckValid(FightOutPokemon *pokemon);
 u8 fightOutPokemonIsAlly(FightOutPokemon *a, FightOutPokemon *b);
 u16 fightOutPokemonIsJoutaiKie(FightOutPokemon *pokemon);

@@ -641,7 +641,7 @@ void fightWazaWzxTypeFuncNull(u16 move, FightOutPokemon *attackPokemon,
     FightOutPokemon *defensePokemon, u16 invocation, u8 variation);
 void *wazaDB_GetFightTrainerAiWazaDamageFightPokemonFuncPtr(u16 move);
 void *wazaDB_GetFightTrainerAiWazaDamageFuncPtr(u16 move);
-void *wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move);
+FightTrainerAiWazaHitFunc wazaDB_GetFightTrainerAiWazaHitFuncPtr(u16 move);
 void *wazaDB_GetFightTrainerAiWazaValueFuncPtr(u16 move);
 
 void wazaDataBiosSetName(struct WazaData *data, u32 value);

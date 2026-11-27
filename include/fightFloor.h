@@ -436,6 +436,8 @@ u16 fightFloorGetFightTrainerFightOutPokemonPtrAry(FIGHT_FLOOR *floor, void *tra
 u8 fightFloorGetFightTrainerFightOutPokemonIsFightActionAttackWazaOut(FIGHT_FLOOR *floor, void *trainer, u8 allies, u8 deployedOnly, u16 wazaDataId, FightOutPokemon *target);
 u16 fightFloorGetFightTrainerFightPokemonPtrAry(FIGHT_FLOOR *floor, void *trainer, FightPokemon **pokemonArray, u8 allies, u8 deployedOnly);
 u16 fightFloor_GetTurnCount(FIGHT_FLOOR *floor);
+u8 fightFloorIsNowEncountVirtualBattle(FIGHT_FLOOR *floor);
+u8 fightFloorCmpfightOutPokemonNimbleness(FIGHT_FLOOR *floor, FightOutPokemon *a, FightOutPokemon *b, u8 checkJoutai);
 void fightFloor_SetTurnCount(FIGHT_FLOOR *floor, u16 count);
 void fightFloor_SetEncountDataId(FIGHT_FLOOR *floor, u16 dataId);
 u32 fightFloor_GetEncountFloorId(void);
