@@ -9,10 +9,10 @@ extern "C" {
 }
 
 #include <people.h>
+#include <gimmickBox.h>
 
 extern "C" {
 bool gimmickBoxFixDistanceForPushBox(f32* reach, void* work, f32 dx, f32 dz);
-u8 gimmickBoxIsBox(void* work);
 GSvec* peopleBiosGetPosPtr(tagPeopleWork* work);
 }
 

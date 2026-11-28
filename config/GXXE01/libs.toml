@@ -14,6 +14,11 @@ completed = true
 extra_cflags = ["-O4,s"]
 
 [[lib.object]]
+name = "game/app/gimmick/gimmickBox.cpp"
+completed = true
+extra_cflags = ["-opt nopeephole", "-schedule off", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
+
+[[lib.object]]
 name = "game/app/fight/fightTrainerAiComboFunc.cpp"
 completed = true
 extra_cflags = ["-O4,s"]

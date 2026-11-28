@@ -3912,6 +3912,9 @@ game/app/flashmenu/flashsystem.cpp:
 	.text       start:0x80276370 end:0x80277BB4
 	.bss        start:0x804DFC28 end:0x804DFC78
 
+game/app/gimmick/gimmickBox.cpp:
+	.text       start:0x80277BB4 end:0x80277C44
+
 game/GSAPI/GSprim/GSprim.cpp:
 	.text       start:0x8027C208 end:0x8027C920
 	.bss        start:0x804DFDD8 end:0x804DFDF0
