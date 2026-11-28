@@ -27,6 +27,13 @@ u32 menuShopGetCouponMsgID(u8 *soundEffect, s32 shopID, s32 messageCode, s32 val
 
 #ifdef __cplusplus
 }
+
+void addItem(u16 itemID, int num);
+int getCouponPoint(u8 mode);
+int getMoney();
+int getItemCouponPoint(u16 itemID);
+int getItemPrice(u16 itemID);
+int getNbHaveItem(u16 itemID);
 #endif
 
 #endif

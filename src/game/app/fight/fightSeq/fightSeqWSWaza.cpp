@@ -80,11 +80,6 @@ enum FightStatMessageResource {
     FIGHT_STAT_TEXT_RAISE_DIRECTION = 20240
 };
 
-enum FightSeqItemDataId {
-    ITEM_DATA_ID_FULL_RESTORE = 19,
-    ITEM_DATA_ID_POKE_DOLL = 80,
-    ITEM_DATA_ID_FLUFFY_TAIL = 81
-};
 enum FightSeqCallMessageId {
     FIGHT_CALL_MSG_CAME_TO_SENSES = 20434,
     FIGHT_CALL_MSG_EAGER_RESPONSE = 20435,
@@ -593,7 +588,7 @@ extern "C" u8 fightSeqGetItemType(u16 itemID, FightOutPokemon *pokemon)
     if (param == 0) {
         return FIGHT_SEQ_ITEM_TYPE_NONE;
     }
-    if (itemID == ITEM_DATA_ID_FULL_RESTORE) {
+    if (itemID == ITEM_FULL_RESTORE) {
         return FIGHT_SEQ_ITEM_TYPE_SPECIAL;
     }
     if (itemParamGetHPUp(param) != 0) {
@@ -654,7 +649,7 @@ extern "C" void fightSeqItemExec(FIGHT_ACTION *action, u16 itemID)
         info = fightSeqItemWazaSeqTbl[itemID];
         goto skip;
     }
-    if (itemID == ITEM_DATA_ID_POKE_DOLL || itemID == ITEM_DATA_ID_FLUFFY_TAIL) {
+    if (itemID == ITEM_POKE_DOLL || itemID == ITEM_FLUFFY_TAIL) {
         info = fightSeqItemSpecialWazaSeqTbl[0];
         goto skip;
     }

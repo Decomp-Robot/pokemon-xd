@@ -1033,8 +1033,8 @@ void menuScriptEeveeHook(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite)
     case EEVEE_ITEM_HELD_ITEM:
         if (cursor.y >= EEVEE_ITEM_HELD_ITEM_ROW) {
             winSpriteSetDisp(sprite, true);
-            u16 itemName = cursor.y == EEVEE_ITEM_HELD_ITEM_ROW ? ITEM_EEVEE_HELD_ITEM_ICON : ITEM_EEVEE_NO_HELD_ITEM_ICON;
-            msgctrlSetValue(MSGCTRL_NUM_ITEM, itemName);
+            u16 itemID = cursor.y == EEVEE_ITEM_HELD_ITEM_ROW ? ITEM_MOON_SHARD : ITEM_SUN_SHARD;
+            msgctrlSetValue(MSGCTRL_NUM_ITEM, itemID);
             msgctrlSetValue(MSGCTRL_VALUE_POKEMON_ID, POKEMON_SPECIES_EEVEE);
             sprite->mMsgID = MSG_EEVEE_HELD_ITEM;
         } else {

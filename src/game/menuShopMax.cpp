@@ -1,12 +1,4 @@
-#include <types.h>
-
-// Price and balance helpers of the shop window: the coupon price and
-// balance for exchange, and the ordinary price and money for buying.
-
-s32 getItemCouponPoint(u16 itemId);
-s32 getCouponPoint(u8 mode);
-s32 getMoney();
-s32 getItemPrice(u16 itemId);
+#include <menuShop.h>
 
 // Largest item count the current coupon balance can exchange for. A
 // non-positive price returns the cap without reading the balance.

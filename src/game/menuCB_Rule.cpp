@@ -30,7 +30,6 @@ extern const FightRuleData oreRule;
 enum {
     MAX_TOTAL_EFFORT = 510,
     MAX_STAT_EFFORT = 255,
-    ITEM_ID_SOUL_DEW = 191,
     MSG_RULE_TITLE_3 = 17290,
     MSG_RULE_TITLE_4 = 17291,
     MSG_RULE_TITLE_5 = 17292
@@ -871,7 +870,7 @@ extern "C" FightRuleData *menuCBRule_ConstantRule2(s32 ruleId)
 
     if (ruleId != 0) {
         for (i = 0; i < itemtoolbattle_number; i++) {
-            if (menuCBRule_RegulationItemID(i) == ITEM_ID_SOUL_DEW) {
+            if (menuCBRule_RegulationItemID(i) == ITEM_SOUL_DEW) {
                 ruleTempBuff.mRegulationItemFlags[i] = 1;
             }
         }

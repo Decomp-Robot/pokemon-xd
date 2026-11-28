@@ -71,8 +71,6 @@ enum SHOP_MODE {
 
 const int SHOP_MAX_COUPON_POINT = 9999999;
 
-void addItem(u16 itemID, int num);
-int getItemCouponPoint(u16 itemID);
 u16 *getGoodsList(int shopID, int *count);
 u32 _msgIdWazaMachineChange(u16 itemID, u32 msgID);
 
@@ -525,4 +523,55 @@ int inputBuyNum(int initialValue, int max, int unitPrice, int couponPrice)
         return -1;
     }
     return NumValue;
+}
+
+void addItem(u16 itemID, int num)
+{
+    heroItemAddItemDataId(NULL, itemID, num, -1);
+}
+
+int getCouponPoint(u8 mode)
+{
+    switch (mode) {
+    case SHOP_MODE_PCBOX:
+        return heroGetStatus(NULL, HERO_STATUS_POKECOUPON, 0);
+    default:
+        return heroGetStatus(NULL, HERO_STATUS_POKECOUPON, 0);
+    }
+}
+
+int getMoney()
+{
+    return heroGetStatus(NULL, HERO_STATUS_POKEDORU, 0);
+}
+
+int getItemCouponPoint(u16 itemID)
+{
+    return itemDataBiosGetCoupon(itemDataBiosGetPtr(itemID));
+}
+
+int getItemPrice(u16 itemID)
+{
+    return itemDataBiosGetPrice(itemDataBiosGetPtr(itemID));
+}
+
+int getNbHaveItem(u16 itemID)
+{
+    u16 num;
+    ItemSlot *ary;
+    int i;
+    int count = 0;
+
+    if (itemID == ITEM_NONE) {
+        return 0;
+    }
+    ary = heroItemGetItemKindToItemAryPtr(
+        NULL, itemDataBiosGetKind(itemDataBiosGetPtr(itemID)), &num, NULL, NULL, NULL);
+    for (i = 0; i < num; i++, ary++) {
+        u16 id = itemGetStatus(ary, 0, ITEM_STATUS_ITEM_DATA_ID, 0);
+        if (id == itemID) {
+            count += itemGetStatus(ary, 0, ITEM_STATUS_NUM, 0);
+        }
+    }
+    return count;
 }

@@ -142,27 +142,6 @@ enum {
 #define WAZA_POINT_UP_LAST_ALLOWED 0x163
 #define WAZA_POINT_UP_RESTRICTED_END WAZA_SHADOW_SPECIAL
 
-/* The cologne scents: each entry below pairs one scent item with the two
- * messages it prints while it is sprayed. */
-#define ITEM_JOY_SCENT 0x201
-#define ITEM_EXCITE_SCENT 0x202
-#define ITEM_VIVID_SCENT 0x203
-
-/* The crane memos: the memo number in the table below is the entry's own
- * index, so the items are named by the memo they print. */
-#define ITEM_CRANE_MEMO_FIRST 0x20B
-#define ITEM_CRANE_MEMO_SECOND 0x20C
-#define ITEM_CRANE_MEMO_THIRD 0x20D
-#define ITEM_CRANE_MEMO_FOURTH 0x20E
-#define ITEM_CRANE_MEMO_FIFTH 0x20F
-
-/* The flutes: recovery items that stay in the pocket when they are used. */
-#define ITEM_BLUE_FLUTE 0x27
-#define ITEM_YELLOW_FLUTE 0x28
-#define ITEM_RED_FLUTE 0x29
-#define ITEM_BLACK_FLUTE 0x2A
-#define ITEM_WHITE_FLUTE 0x2B
-
 /* Entry counts of the tables the item handlers scan, and of the item id list
  * the recover items are read from. */
 #define COLOGNE_TABLE_COUNT 3
@@ -580,11 +559,11 @@ extern "C" int menuUseItemEventMirraboradar(unsigned long itemID, int *consumed)
 
 /* Table of the crane memos and the message each one plays. */
 ITEM_CRANE_MEMO item_crane_memo[5] = {
-    {ITEM_CRANE_MEMO_FIRST, 0, MSG_CRANE_MEMO_FIRST},
-    {ITEM_CRANE_MEMO_SECOND, 1, MSG_CRANE_MEMO_SECOND},
-    {ITEM_CRANE_MEMO_THIRD, 2, MSG_CRANE_MEMO_THIRD},
-    {ITEM_CRANE_MEMO_FOURTH, 3, MSG_CRANE_MEMO_FOURTH},
-    {ITEM_CRANE_MEMO_FIFTH, 4, MSG_CRANE_MEMO_FIFTH},
+    {ITEM_KRANE_MEMO_1, 0, MSG_CRANE_MEMO_FIRST},
+    {ITEM_KRANE_MEMO_2, 1, MSG_CRANE_MEMO_SECOND},
+    {ITEM_KRANE_MEMO_3, 2, MSG_CRANE_MEMO_THIRD},
+    {ITEM_KRANE_MEMO_4, 3, MSG_CRANE_MEMO_FOURTH},
+    {ITEM_KRANE_MEMO_5, 4, MSG_CRANE_MEMO_FIFTH},
 };
 
 extern "C" int menuUseItemEventCraneMemo(unsigned long itemID, int *consumed)
