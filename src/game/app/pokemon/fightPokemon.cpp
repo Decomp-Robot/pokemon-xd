@@ -1,3 +1,4 @@
+#include <GSmsg.h>
 #include <fightPokemon.h>
 #include <fightFloor.h>
 #include <fightPokemonBios.h>
@@ -329,6 +330,71 @@ s32 fightPokemonGetLevelToExp(FightPokemon *pokemon, u8 level)
         return 0;
     }
     return pokemonGetLevelToExp(record, level);
+}
+
+void figthPokemonSetExp(FightPokemon *pokemon, u32 exp)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return;
+    }
+    pokemon_SetExp(record, exp);
+}
+
+u32 figthPokemonGetExp(FightPokemon *pokemon)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return 0;
+    }
+    return pokemon_GetExp(record);
+}
+
+void fightPokemonGrowBasisStatus(FightPokemon *pokemon, u32 exp)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return;
+    }
+    pokemonGrowBasisStatus(record, exp);
+}
+
+u32 fightOutPokemonGetVoiceSndId(FightOutPokemon *pokemon)
+{
+    return pokemonDB_GetVoice(pokemon_GetPokemonDataId(fightOutPokemonGetPokemonPtr(pokemon)));
+}
+
+u16 *fightOutPokemonGetNamePtr(FightOutPokemon *pokemon)
+{
+    return fightPokemonGetNamePtr(fightOutPokemon_GetFightPokemonPtr(pokemon));
+}
+
+u16 *fightPokemonGetNamePtr(FightPokemon *pokemon)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return 0;
+    }
+    return GSmsgGetStringPtr(pokemonDB_GetName(pokemon_GetPokemonDataId(record)));
+}
+
+u16 *fightOutPokemonGetNicknamePtr(FightOutPokemon *pokemon)
+{
+    return fightPokemonGetNicknamePtr(fightOutPokemon_GetFightPokemonPtr(pokemon));
+}
+
+u16 *fightPokemonGetNicknamePtr(FightPokemon *pokemon)
+{
+    Pokemon *record = fightPokemonGetPokemonPtr(pokemon);
+
+    if (record == 0) {
+        return 0;
+    }
+    return pokemon_GetName(record);
 }
 
 } // extern "C"

@@ -514,11 +514,13 @@ enum PokemonDataID {
 };
 u32 pokemonDB_GetName(u16);
 u32 pokemonDB_GetShout(u16 pokemonDataId);
+u32 pokemonDB_GetVoice(u16 pokemonDataId);
 bool pokemonDB_GetTeachWaza(u16, u16);
 u32 pokemonDB_GetPokebodyId(u16 species, u8 shiny);
 
 void fightOutPokemon_SetSequencePtr(FightOutPokemon *pokemon, struct NullSequence *sequence);
 FightPokemon *fightOutPokemon_GetMotoFightPokemonPtr(FightOutPokemon *pokemon);
+FightPokemon *fightOutPokemon_GetFightPokemonPtr(FightOutPokemon *pokemon);
 FIGHT_WAZA *fightOutPokemon_GetFightWazaPtr(FightOutPokemon *pokemon);
 FIGHT_ITEM *fightOutPokemon_GetFightItemPtr(FightOutPokemon *pokemon);
 FIGHT_ACTION *fightOutPokemon_GetFightActionBuffPtr(FightOutPokemon *pokemon);

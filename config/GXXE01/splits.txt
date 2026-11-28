@@ -3564,7 +3564,7 @@ game/app/item/fightItem.cpp:
 	.text       start:0x8020058C end:0x80200644
 
 game/app/pokemon/fightPokemon.cpp:
-	.text       start:0x802027C8 end:0x80203414
+	.text       start:0x802027C8 end:0x802035A0
 
 game/app/pokemon/fightPokemonBios.cpp:
 	.text       start:0x80207448 end:0x8020769C
