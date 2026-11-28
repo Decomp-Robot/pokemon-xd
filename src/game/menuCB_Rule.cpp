@@ -43,7 +43,6 @@ extern u16 *legendPokemonData;
 extern "C" {
 extern bool menuCBRule_CheckRegulationItem(u16 itemID);
 extern u32 menuCBRule_RegulationItems(void);
-extern void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 }
 
 /* -------------------------------------------------------------------------

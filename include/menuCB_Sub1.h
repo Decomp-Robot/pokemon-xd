@@ -6,12 +6,34 @@
 #include <winSprite.h>
 #include <window.h>
 
-enum MenuCBEntryCondition {
-    MENU_CB_ENTRY_CONDITION_ANY = -1,
-    MENU_CB_ENTRY_HELD_ITEM_NOT_ALLOWED = 8,
-    MENU_CB_ENTRY_PROHIBITED_ITEM = 9,
-    MENU_CB_ENTRY_DUPLICATE_HELD_ITEM = 10,
-    MENU_CB_ENTRY_ILLEGAL_HELD_ITEM = 11,
+enum MenuCBEntryErrorMessage {
+    menuCBMsgDuplicateSpecies = 17314,
+    menuCBMsgShadowPokemonNotAllowed = 17317,
+    menuCBMsgEggNotAllowed = 17318,
+    menuCBMsgUnknownMove = 17319,
+    menuCBMsgInvalidPokemonData = 17320,
+    menuCBMsgHeldItemNotAllowed = 17321,
+    menuCBMsgProhibitedHeldItem = 17322,
+    menuCBMsgDuplicateHeldItem = 17323,
+    menuCBMsgIllegalHeldItem = 17324,
+    menuCBMsgCombinedLevelTooHigh = 17325,
+    menuCBMsgIncorrectEntryCount = 17326,
+    menuCBMsgProhibitedSpecies = 17327,
+    menuCBMsgLevelOutsideAllowedRange = 17328,
+    menuCBMsgEntryErrorListExit = 17246,
+    menuCBMsgEntryLabelProhibitedSpecies = 17405,
+    menuCBMsgEntryLabelDuplicateSpecies,
+    menuCBMsgEntryLabelLevelOutOfRange,
+    menuCBMsgEntryLabelShadowPokemon,
+    menuCBMsgEntryLabelEgg,
+    menuCBMsgEntryLabelUnknownMove,
+    menuCBMsgEntryLabelInvalidPokemon,
+    menuCBMsgEntryLabelHeldItemNotAllowed,
+    menuCBMsgEntryLabelProhibitedHeldItem,
+    menuCBMsgEntryLabelDuplicateHeldItem,
+    menuCBMsgEntryLabelIllegalHeldItem,
+    menuCBMsgEntryLabelLevelSumTooHigh,
+    menuCBMsgEntryLabelIncorrectEntryCount,
 };
 
 enum {

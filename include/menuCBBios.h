@@ -86,26 +86,51 @@ struct _MENUCBTRAINER {
     u8 _131E[2];
 };
 
+enum MenuCBEntryCondition {
+    MENU_CB_ENTRY_CONDITION_ANY = -1,
+    MENU_CB_ENTRY_LEGEND_POKEMON,
+    MENU_CB_ENTRY_DUPLICATE_SPECIES,
+    MENU_CB_ENTRY_LEVEL_BELOW_MINIMUM,
+    MENU_CB_ENTRY_LEVEL_ABOVE_MAXIMUM,
+    MENU_CB_ENTRY_SHADOW_POKEMON,
+    MENU_CB_ENTRY_EGG_OR_INVALID_POKEMON,
+    MENU_CB_ENTRY_INVALID_MOVE,
+    MENU_CB_ENTRY_ILLEGAL_POKEMON,
+    MENU_CB_ENTRY_HELD_ITEM_NOT_ALLOWED,
+    MENU_CB_ENTRY_PROHIBITED_ITEM,
+    MENU_CB_ENTRY_DUPLICATE_HELD_ITEM,
+    MENU_CB_ENTRY_ILLEGAL_HELD_ITEM,
+    MENU_CB_ENTRY_PARTY_LEVEL_SUM_EXCEEDED,
+    MENU_CB_ENTRY_INSUFFICIENT_POKEMON,
+    MENU_CB_ENTRY_INVALID_POKEMON,
+};
+
 /* Entry restrictions for one Pokemon. Only the first failed check is reported. */
-typedef struct MenuCBEntrySlotFlags {
-    u8 legendPokemon : 1;
-    u8 duplicateSpecies : 1;
-    u8 levelBelowMinimum : 1;
-    u8 levelAboveMaximum : 1;
-    u8 shadowPokemon : 1;
-    u8 eggOrInvalidPokemon : 1;
-    u8 invalidMove : 1;
-    u8 illegalPokemon : 1;
-    u8 heldItemForbidden : 1;
-    u8 heldItemRestricted : 1;
-    u8 duplicateHeldItem : 1;
-    u8 invalidHeldItem : 1;
-    u8 partyLevelSumExceeded : 1;
-    u8 insufficientPokemon : 1;
-    u8 invalidPokemon : 1;
-    u8 unusedFlag : 1;
-    u16 pad;
+#pragma push
+#pragma cpp_extensions on
+typedef union MenuCBEntrySlotFlags {
+    struct {
+        u8 legendPokemon : 1;
+        u8 duplicateSpecies : 1;
+        u8 levelBelowMinimum : 1;
+        u8 levelAboveMaximum : 1;
+        u8 shadowPokemon : 1;
+        u8 eggOrInvalidPokemon : 1;
+        u8 invalidMove : 1;
+        u8 illegalPokemon : 1;
+        u8 heldItemForbidden : 1;
+        u8 heldItemRestricted : 1;
+        u8 duplicateHeldItem : 1;
+        u8 invalidHeldItem : 1;
+        u8 partyLevelSumExceeded : 1;
+        u8 insufficientPokemon : 1;
+        u8 invalidPokemon : 1;
+        u8 unusedFlag : 1;
+        u16 pad;
+    };
+    u32 all;
 } MenuCBEntrySlotFlags;
+#pragma pop
 
 struct _MENUCBVersusState {
     /* 0xAFD4 */ s32 mVsBattleKind;
@@ -226,9 +251,8 @@ struct _MENUCBWORK {
     /* 0x9C78 */ FightRuleData *mEntryRule; // regulation record the entry screens show.
     /* 0x9C7C */ u32 mVsBgmIndex;
     /* 0x9C80 */ s32 mReserved0;
-    /* Flags for each entry's six Pokemon slots. */
-    /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[70][6];
-    /* 0xA314 */ u8 _A314[0xA65C - 0xA314];
+    /* 0x9C84 */ MenuCBEntrySlotFlags entryFlags[4][6];
+    /* 0x9CE4 */ Hero mHeroBackup;
     /* 0xA65C */ Hero mHero; // hero snapshot the entry screens work on.
     /* 0xAFD4 */ union {
         _MENUCBVersusState mVersus;
@@ -332,6 +356,8 @@ void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *pokemon, s32 i
 void menuCBRule_GetTaikaiFieldFirstDraw(Hero *hero);
 void menuCBRule_ErrorFlagSetItemGetTiming(Hero *hero, Pokemon *pokemon, s32 slot);
 void menuCBEntrySlotConditionsBuildAll(Hero *hero, s32 entry);
+void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
+u8 menuCBEntrySlotConditionGet(s32 slot, MenuCBEntryCondition condition);
 }
 
 void _menuCBBios_RecoverAllPokemons(Hero *hero);

@@ -580,9 +580,9 @@ game/floorLayerConfig.cpp:
 	.sdata2     start:0x804EC700 end:0x804EC718
 
 game/menuCB_Sub1.cpp:
-	.text       start:0x8007E5AC end:0x80084AA0
+	.text       start:0x8007E5AC end:0x80085854
 	.rodata     start:0x802EB920 end:0x802EB93C
-	.data       start:0x803C7790 end:0x803C7914
+	.data       start:0x803C7790 end:0x803C7954
 	.bss        start:0x80435C48 end:0x80436FC8
 	.sbss       start:0x804EA9D0 end:0x804EA9D8
 	.sdata2     start:0x804EC718 end:0x804EC764

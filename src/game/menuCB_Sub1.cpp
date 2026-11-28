@@ -45,19 +45,6 @@
 
 enum {
     menuCBDisplayEntryError = 2,
-    menuCBMsgProhibitedSpecies = 0x43AF,
-    menuCBMsgDuplicateSpecies = 0x43A2,
-    menuCBMsgLevelOutsideAllowedRange = 0x43B0,
-    menuCBMsgShadowPokemonNotAllowed = 0x43A5,
-    menuCBMsgEggNotAllowed = 0x43A6,
-    menuCBMsgUnknownMove = 0x43A7,
-    menuCBMsgInvalidPokemonData = 0x43A8,
-    menuCBMsgHeldItemNotAllowed = 0x43A9,
-    menuCBMsgProhibitedHeldItem = 0x43AA,
-    menuCBMsgDuplicateHeldItem = 0x43AB,
-    menuCBMsgIllegalHeldItem = 0x43AC,
-    menuCBMsgCombinedLevelTooHigh = 0x43AD,
-    menuCBMsgIncorrectEntryCount = 0x43AE,
     menuCBMsgConfirmHeldItemReplacement = 0x3ACA,
     menuCBMsgHeldItemReplaced = 0x3ACB,
     menuCBMsgHeldItemGiven = 0x3ACC,
@@ -145,10 +132,6 @@ void menuTopJumpVSMode(void);
 void menuCB2DPokemonSetSource(void);
 // Return the Pokemon the 2D screen has selected to its party.
 void menuCBGCDelPokemon(void);
-// One condition bit of one entry slot; the index selects which condition.
-u8 menuCBEntrySlotConditionGet(s32 slot, s32 condition);
-// Drop every condition of one entry slot before its Pokemon is re-checked.
-void menuCBEntrySlotFlagsClear(s32 entry, s32 slot);
 // Run the current rule set's checks over `src` against the party based at
 // `hero` and record them as the conditions of entry slot `index`.
 void menuCBRule_ErrorFlagSetPokemonGetTiming(Hero *hero, Pokemon *src, s32 index);
@@ -2915,4 +2898,242 @@ void toolBattle_tunaideMenu02menuTempBuffSet(u32 mask)
     }
     _CB.mEntry.mTunaide02TempBuff |= mask;
 }
+}
+
+extern u32 err_msgID[14];
+extern u32 err_msgID2[14];
+
+static const u32 menuCBTextWhite = (255u << 24) | (255u << 16) | (255u << 8);
+
+void menuCBPokemon_ErrorListDisp(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite,
+                                 long slot, long column)
+{
+    s32 i;
+
+    for (i = 0; i < 14; i++) {
+        err_msgID[i] = 0;
+        err_msgID2[i] = 0;
+    }
+
+    _CB.mEntry.error01LastItem = 0;
+
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].legendPokemon) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelProhibitedSpecies;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgProhibitedSpecies;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].duplicateSpecies) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelDuplicateSpecies;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgDuplicateSpecies;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].levelBelowMinimum ||
+        _CB.entryFlags[_CB.mEntry.entryNo][slot].levelAboveMaximum) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelLevelOutOfRange;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgLevelOutsideAllowedRange;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].shadowPokemon) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelShadowPokemon;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgShadowPokemonNotAllowed;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].eggOrInvalidPokemon) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelEgg;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgEggNotAllowed;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].invalidMove) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelUnknownMove;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgUnknownMove;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].illegalPokemon ||
+        _CB.entryFlags[_CB.mEntry.entryNo][slot].invalidPokemon) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelInvalidPokemon;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgInvalidPokemonData;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].heldItemForbidden) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelHeldItemNotAllowed;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgHeldItemNotAllowed;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].heldItemRestricted) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelProhibitedHeldItem;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgProhibitedHeldItem;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].duplicateHeldItem) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelDuplicateHeldItem;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgDuplicateHeldItem;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].invalidHeldItem) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelIllegalHeldItem;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgIllegalHeldItem;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].partyLevelSumExceeded) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelLevelSumTooHigh;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgCombinedLevelTooHigh;
+        _CB.mEntry.error01LastItem++;
+    }
+    if (_CB.entryFlags[_CB.mEntry.entryNo][slot].insufficientPokemon) {
+        err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryLabelIncorrectEntryCount;
+        err_msgID2[_CB.mEntry.error01LastItem] = menuCBMsgIncorrectEntryCount;
+        _CB.mEntry.error01LastItem++;
+    }
+
+    err_msgID[_CB.mEntry.error01LastItem] = menuCBMsgEntryErrorListExit;
+    err_msgID2[_CB.mEntry.error01LastItem] = 0;
+
+    switch (column) {
+    case 0:
+        slot = 0;
+        break;
+    case 1:
+        slot = 7;
+        break;
+    }
+
+    sprite->mMsgID = err_msgID[slot];
+
+    if (err_msgID[slot + 1] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 32,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 1]);
+    }
+    if (err_msgID[slot + 2] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 64,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 2]);
+    }
+    if (err_msgID[slot + 3] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 96,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 3]);
+    }
+    if (err_msgID[slot + 4] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 128,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 4]);
+    }
+    if (err_msgID[slot + 5] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 160,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 5]);
+    }
+    if (err_msgID[slot + 6] != 0) {
+        GSmsgPrint2(window->mLayerID, 0, 192,
+                    window->mRgba.mColorA | menuCBTextWhite, err_msgID[slot + 6]);
+    }
+}
+
+void menuCBEntrySlotFlagsClear(s32 entry, s32 slot)
+{
+    MenuCBEntrySlotFlags *flags = &_CB.entryFlags[entry][slot];
+    flags->all = 0;
+}
+
+u8 menuCBEntrySlotConditionGet(s32 slot, MenuCBEntryCondition condition)
+{
+    switch (condition) {
+    case MENU_CB_ENTRY_LEGEND_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].legendPokemon != 0;
+    case MENU_CB_ENTRY_DUPLICATE_SPECIES:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].duplicateSpecies != 0;
+    case MENU_CB_ENTRY_LEVEL_BELOW_MINIMUM:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].levelBelowMinimum != 0;
+    case MENU_CB_ENTRY_LEVEL_ABOVE_MAXIMUM:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].levelAboveMaximum != 0;
+    case MENU_CB_ENTRY_SHADOW_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].shadowPokemon != 0;
+    case MENU_CB_ENTRY_EGG_OR_INVALID_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].eggOrInvalidPokemon != 0;
+    case MENU_CB_ENTRY_INVALID_MOVE:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].invalidMove != 0;
+    case MENU_CB_ENTRY_ILLEGAL_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].illegalPokemon != 0;
+    case MENU_CB_ENTRY_HELD_ITEM_NOT_ALLOWED:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].heldItemForbidden != 0;
+    case MENU_CB_ENTRY_PROHIBITED_ITEM:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].heldItemRestricted != 0;
+    case MENU_CB_ENTRY_DUPLICATE_HELD_ITEM:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].duplicateHeldItem != 0;
+    case MENU_CB_ENTRY_ILLEGAL_HELD_ITEM:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].invalidHeldItem != 0;
+    case MENU_CB_ENTRY_PARTY_LEVEL_SUM_EXCEEDED:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].partyLevelSumExceeded != 0;
+    case MENU_CB_ENTRY_INSUFFICIENT_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].insufficientPokemon != 0;
+    case MENU_CB_ENTRY_INVALID_POKEMON:
+        return _CB.entryFlags[_CB.mEntry.entryNo][slot].invalidPokemon != 0;
+    case MENU_CB_ENTRY_CONDITION_ANY: {
+        MenuCBEntrySlotFlags *flags = &_CB.entryFlags[_CB.mEntry.entryNo][slot];
+        return flags->all != 0;
+    }
+    default:
+        return 1;
+    }
+}
+
+void menuCB_ShowPartyErrors(Hero *hero, s32 entry)
+{
+    _CB.mEntry.entryNo = (s8)entry;
+    menuCBPokemonEntryPokemonFaceFree();
+    menuCBBattleStartSetStatus(0);
+
+    heroBiosCopy(&_CB.mHeroBackup, &_CB.mTrainer[entry].mBattleHero);
+    heroBiosCopy(&_CB.mTrainer[entry].mBattleHero, hero);
+    menuCBPokemonEntryLoadTex();
+    menuCBpokemonFaceReadWait();
+
+    _CB.mMenuResult.error00Confirmed = 0;
+    _CB.mVersus.error00Cursor = 0;
+    _menuCB_ErrorTAMAGOCheck();
+
+    _CB.mEntry.error00LastCursor = 5;
+    if (!_menuCBPokemon_ErrorDispSet(5)) {
+        _CB.mEntry.error00LastCursor = 4;
+    }
+    if (!_menuCBPokemon_ErrorDispSet(4)) {
+        _CB.mEntry.error00LastCursor = 3;
+    }
+    if (!_menuCBPokemon_ErrorDispSet(3)) {
+        _CB.mEntry.error00LastCursor = 2;
+    }
+    if (!_menuCBPokemon_ErrorDispSet(2)) {
+        _CB.mEntry.error00LastCursor = 1;
+    }
+    if (!_menuCBPokemon_ErrorDispSet(1)) {
+        _CB.mEntry.error00LastCursor = 0;
+    }
+    if (!_menuCBPokemon_ErrorDispSet(0)) {
+        _CB.mEntry.error00LastCursor = -1;
+    }
+
+    menuCB_SE_Play(CB_SOUND_MENU_TRANSITION);
+
+    while (true) {
+        menuOpen(MENU_ID_TOOL_ERROR00, 1);
+        if (_CB.mVersus.error00Cursor == 6 || _CB.mMenuResult.error00Confirmed == 1) {
+            break;
+        }
+
+        _CB.mMenuResult.error01Confirmed = 0;
+        _CB.mVersus.error01SelectedItem = 0;
+
+        while (true) {
+            s32 active = windowGetActiveID();
+            menuOpenCustom(MENU_ID_TOOL_ERROR01, active, &_CB.mVersus.error01SelectedItem, 0, 1, 0);
+            if (_CB.mVersus.error01SelectedItem == _CB.mEntry.error01LastItem ||
+                _CB.mMenuResult.error01Confirmed == 1) {
+                break;
+            }
+            _menuCB_errorMsgDisp(err_msgID2[_CB.mVersus.error01SelectedItem]);
+        }
+
+        menuCloseCustom(MENU_ID_TOOL_ERROR01, 0, 1);
+    }
+
+    menuCB_SE_Play(CB_SOUND_MENU_CLOSE);
+    menuCloseCustom(MENU_ID_TOOL_ERROR00, 0, 1);
+    menuCBPokemonEntryPokemonFaceFree();
+    heroBiosCopy(&_CB.mTrainer[entry].mBattleHero, &_CB.mHeroBackup);
 }
