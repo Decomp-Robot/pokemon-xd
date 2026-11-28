@@ -33,6 +33,14 @@ void menuIntUnderTakerMenuClose(void);
 u8 menuSetEnablePort(u8 portMask);
 u8 menuGetEnablePort(void);
 s32 menuGetLastError(void);
+
+enum MenuResult {
+    MENU_RESULT_NO_DATA = -3,
+    MENU_RESULT_NOT_FOUND = -2,
+    MENU_RESULT_INVALID = -1,
+    MENU_RESULT_OK = 0
+};
+
 s32 menuGetSelectItemNum(s32 menuID);
 s32 menuGetCursorFromItemID(s32 menuID, s32 itemID);
 s32 menuGetCursor(s32 menuID);
@@ -50,8 +58,10 @@ u8 menuDataBiosGetDispMax(s32 id);
 
 void windowCloseMain(struct tagWINDOW_WORK *window);
 #ifdef __cplusplus
+bool menuGetDisp(s32 menuID);
 void menuSetDisp(s32 menuID, bool visible);
 #else
+u8 menuGetDisp(s32 menuID);
 void menuSetDisp(s32 menuID, u8 visible);
 #endif
 u16 windowGetKeyOn(void);

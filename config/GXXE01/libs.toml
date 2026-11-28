@@ -3535,6 +3535,11 @@ completed = true
 extra_cflags = ["-i src/ext/dolphin_sdk/include", "-inline noauto,deferred", "-i src/ext/dolphin_sdk/include/libc"]
 
 [[lib.object]]
+name = "game/app/menu/menu.cpp"
+completed = true
+extra_cflags = ["-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc", "-inline noauto", "-opt nopeephole"]
+
+[[lib.object]]
 name = "game/app/menu/menuFace.cpp"
 completed = true
 extra_cflags = ["-inline noauto,deferred", "-opt nopeephole", "-lang=c++", "-i src/ext/dolphin_sdk/include", "-i src/ext/dolphin_sdk/include/libc"]
