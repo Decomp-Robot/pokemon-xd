@@ -1134,7 +1134,8 @@ extern "C" void menuFightDrawWaza(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite
             winSpriteSetDisp(sprite, 0);
             tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
             menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0,
-                item->mWidth, item->mHeight, MENU_FIGHT_CURSOR_BACK_ALPHA_OPAQUE, 1, 1);
+                item->mWidth, item->mHeight, MENU_FIGHT_CURSOR_BACK_ALPHA_OPAQUE,
+                1, MENU_SUB_CURSOR_BACK_COLOR_EXCHANGE);
         }
         else {
             winSpriteSetDisp(sprite, 0);

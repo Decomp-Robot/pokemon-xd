@@ -2217,7 +2217,7 @@ extern "C" int menuPocket2DrawLineCursor(tagWINDOW_WORK *window, tagSPRITE_WORK 
         if (Data.mExchangeSlot >= 0) {
             winSpriteSetDisp(sprite, 0);
             tagMENU_ITEM_DATA *item = menuItemBiosGetPtr(window->mMenuID, sprite->mItemID);
-            menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0, item->mWidth, item->mHeight, sprite->mRgba.mAlpha, 1, 1);
+            menuSubDrawCursorBack2(winSpriteGetLayerID(window, sprite), 0, 0, item->mWidth, item->mHeight, sprite->mRgba.mAlpha, 1, MENU_SUB_CURSOR_BACK_COLOR_EXCHANGE);
         } else {
             winSpriteSetDisp(sprite, 1);
         }

@@ -32,6 +32,11 @@ enum MenuSubCursorBackStyle {
     MENU_SUB_CURSOR_BACK_STYLE_VARIANT = 1,
 };
 
+typedef enum menuSubCursorBackColor {
+    MENU_SUB_CURSOR_BACK_COLOR_REGULAR,
+    MENU_SUB_CURSOR_BACK_COLOR_EXCHANGE
+} menuSubCursorBackColor;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -88,9 +93,11 @@ void menuSubCursorAnimeMain(void);
 void menuSubDrawCursorBackAnimeOnOffAuto(struct tagWINDOW_WORK *window,
     GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height, u8 alpha,
     u8 style);
+void menuSubDrawCursorBackAnimeOnOff(GSgfxLayerID layer, s32 x, s32 y,
+    s32 width, s32 height, u8 alpha, u8 style, bool animeOnOff);
 void menuSubCursorAnimeStart(void);
-void menuSubDrawCursorBack2(s32 layer, s32 x, s32 y, s32 width, s32 height,
-                            u8 alpha, s32 leftStyle, s32 rightStyle);
+void menuSubDrawCursorBack2(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
+                            u8 alpha, u8 style, menuSubCursorBackColor backColor);
 // Cursor-back highlight drawn behind a menu entry in the given style.
 void menuSubDrawCursorBack(GSgfxLayerID layer, s32 x, s32 y, s32 width,
                            s32 height, u8 alpha, u8 style);

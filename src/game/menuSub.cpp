@@ -24,6 +24,8 @@ static f32 _max_alpha = 255.0f;
 static f32 _min_alpha = 128.0f;
 static f32 _cursorTimer;
 
+static const u32 COLOR_WHITE_RGB = (255u << 24) | (255u << 16) | (255u << 8);
+
 u8 _animAlpha(void);
 void menuSubCheckSelectSub(tagWINDOW_WORK *window, tagSPRITE_WORK *sprite, long row);
 
@@ -40,10 +42,43 @@ enum MenuSubColosseumItem {
     MENU_SUB_COLOSSEUM_ITEM_THIRD = 54
 };
 
-enum menuSubCursorBackColor {
-    MENU_SUB_CURSOR_BACK_COLOR_REGULAR,
-    MENU_SUB_CURSOR_BACK_COLOR_EXCHANGE
-};
+void _menuSubDrawCursorBackSub(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
+                               u32 color, u8 alpha, u8 style, menuSubCursorBackColor backColor,
+                               bool animeOnOff);
+
+void menuSubDrawCursorBack2(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
+                            u8 alpha, u8 style, menuSubCursorBackColor backColor)
+{
+    _menuSubDrawCursorBackSub(layer, x, y, width, height, COLOR_WHITE_RGB, alpha,
+                              style, backColor, true);
+}
+
+void menuSubDrawCursorBackAnimeOnOffAuto(tagWINDOW_WORK *window, GSgfxLayerID layer,
+                                         s32 x, s32 y, s32 width, s32 height,
+                                         u8 alpha, u8 style)
+{
+    if (window == windowSearchID(windowGetActiveID())) {
+        _menuSubDrawCursorBackSub(layer, x, y, width, height, COLOR_WHITE_RGB, alpha, style,
+                                  MENU_SUB_CURSOR_BACK_COLOR_REGULAR, true);
+    } else {
+        _menuSubDrawCursorBackSub(layer, x, y, width, height, COLOR_WHITE_RGB, alpha, style,
+                                  MENU_SUB_CURSOR_BACK_COLOR_REGULAR, false);
+    }
+}
+
+void menuSubDrawCursorBackAnimeOnOff(GSgfxLayerID layer, s32 x, s32 y, s32 width,
+                                     s32 height, u8 alpha, u8 style, bool animeOnOff)
+{
+    _menuSubDrawCursorBackSub(layer, x, y, width, height, COLOR_WHITE_RGB, alpha, style,
+                              MENU_SUB_CURSOR_BACK_COLOR_REGULAR, animeOnOff);
+}
+
+void menuSubDrawCursorBack(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
+                           u8 alpha, u8 style)
+{
+    _menuSubDrawCursorBackSub(layer, x, y, width, height, COLOR_WHITE_RGB, alpha, style,
+                              MENU_SUB_CURSOR_BACK_COLOR_REGULAR, true);
+}
 
 void _menuSubDrawCursorBackSub(GSgfxLayerID layer, s32 x, s32 y, s32 width, s32 height,
                                u32 color, u8 alpha, u8 style, menuSubCursorBackColor backColor,
